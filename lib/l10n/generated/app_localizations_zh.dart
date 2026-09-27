@@ -673,6 +673,9 @@ class L10nZh extends L10n {
   String get ui_favorites => '收藏夹';
 
   @override
+  String get ui_favorites_swipe_hint => '从屏幕底部上滑即可打开收藏夹';
+
+  @override
   String get ui_new_favorite => '新建收藏';
 
   @override
@@ -8309,6 +8312,9 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_favorites => '收藏夾';
+
+  @override
+  String get ui_favorites_swipe_hint => '從螢幕底部上滑即可開啟收藏夾';
 
   @override
   String get ui_new_favorite => '新增收藏';

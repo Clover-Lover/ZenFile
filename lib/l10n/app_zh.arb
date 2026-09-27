@@ -815,7 +815,10 @@
     "description": "ui\\screens\\directory_screen.dart"
   },
   "ui_favorites": "收藏夹",
-  "@ui_favorites": {
+  "ui_favorites_swipe_hint": "从屏幕底部上滑即可打开收藏夹",
+  "@ui_favorites_swipe_hint": {
+    "description": "ui\\widgets\\favorites_sheet.dart"
+  },  "@ui_favorites": {
     "description": "zenfile_end_drawer.dart"
   },
   "ui_new_favorite": "新建收藏",

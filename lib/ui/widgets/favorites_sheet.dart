@@ -147,31 +147,47 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
     );
   }
 
-  /// 面板标题行：图标 + 「收藏夹」+ 新建收藏按钮。
+  /// 面板标题行：图标 + 「收藏夹」+ 新建收藏按钮 + 上滑提示小字。
   Widget _buildHeader(BuildContext context, ThemeData theme, L10n l10n) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 6, 12, 8),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Broken.folder_favorite, color: theme.colorScheme.primary, size: 26),
-          const SizedBox(width: 14),
-          Expanded(
+          Row(
+            children: [
+              Icon(Broken.folder_favorite, color: theme.colorScheme.primary, size: 26),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  l10n.ui_favorites,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurface,
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Broken.add_circle, color: theme.colorScheme.primary, size: 26),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                tooltip: l10n.ui_new_favorite,
+                onPressed: () => _showAddFavoriteDialog(context),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
             child: Text(
-              l10n.ui_favorites,
+              l10n.ui_favorites_swipe_hint,
               style: TextStyle(
-                color: theme.colorScheme.onSurface,
-                fontSize: 21,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
+                color: theme.colorScheme.onSurface.withOpacity(0.55),
+                fontSize: 12,
               ),
             ),
-          ),
-          IconButton(
-            icon: Icon(Broken.add_circle, color: theme.colorScheme.primary, size: 26),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            tooltip: l10n.ui_new_favorite,
-            onPressed: () => _showAddFavoriteDialog(context),
           ),
         ],
       ),

@@ -809,7 +809,10 @@
     "description": "zenfile_end_drawer.dart"
   },
   "ui_favorites": "收藏夾",
-  "@ui_new_favorite": {
+  "ui_favorites_swipe_hint": "從螢幕底部上滑即可開啟收藏夾",
+  "@ui_favorites_swipe_hint": {
+    "description": "ui\\widgets\\favorites_sheet.dart"
+  },  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "新增收藏",

@@ -785,7 +785,10 @@
     "description": "zenfile_end_drawer.dart"
   },
   "ui_favorites": "Favoris",
-  "@ui_new_favorite": {
+  "ui_favorites_swipe_hint": "Balayez vers le haut depuis le bas de l’écran pour ouvrir les favoris",
+  "@ui_favorites_swipe_hint": {
+    "description": "ui\\widgets\\favorites_sheet.dart"
+  },  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "Ajouter aux favoris",

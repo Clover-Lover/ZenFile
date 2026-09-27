@@ -720,6 +720,10 @@ class L10nRu extends L10n {
   String get ui_favorites => 'Избранное';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'Проведите вверх от нижнего края экрана, чтобы открыть «Избранное»';
+
+  @override
   String get ui_new_favorite => 'Добавить в избранное';
 
   @override

@@ -724,6 +724,10 @@ class L10nEs extends L10n {
   String get ui_favorites => 'Favoritos';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'Desliza hacia arriba desde la parte inferior de la pantalla para abrir los favoritos';
+
+  @override
   String get ui_new_favorite => 'Agregar a favoritos';
 
   @override

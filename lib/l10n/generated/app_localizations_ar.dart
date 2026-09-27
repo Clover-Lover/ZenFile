@@ -706,6 +706,10 @@ class L10nAr extends L10n {
   String get ui_favorites => 'المفضلات';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'اسحب لأعلى من أسفل الشاشة لفتح المفضلة';
+
+  @override
   String get ui_new_favorite => 'إضافة إلى المفضلات';
 
   @override

@@ -674,6 +674,9 @@ class L10nKo extends L10n {
   String get ui_favorites => '즐겨찾기';
 
   @override
+  String get ui_favorites_swipe_hint => '화면 하단에서 위로 스와이프하여 즐겨찾기를 엽니다';
+
+  @override
   String get ui_new_favorite => '즐겨찾기에 추가';
 
   @override

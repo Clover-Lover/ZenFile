@@ -1354,6 +1354,12 @@ abstract class L10n {
   /// **'收藏夹'**
   String get ui_favorites;
 
+  /// ui\widgets\favorites_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'从屏幕底部上滑即可打开收藏夹'**
+  String get ui_favorites_swipe_hint;
+
   /// directory_screen.dart
   ///
   /// In zh, this message translates to:

@@ -675,6 +675,9 @@ class L10nJa extends L10n {
   String get ui_favorites => 'お気に入り';
 
   @override
+  String get ui_favorites_swipe_hint => '画面の下から上にスワイプして「お気に入り」を開けます';
+
+  @override
   String get ui_new_favorite => 'お気に入りに追加';
 
   @override
