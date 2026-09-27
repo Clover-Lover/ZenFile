@@ -2996,7 +2996,20 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
           }
         }
 
-        if (matchedUrl != null) {
+        // Pinggy 管理后台/登录域（dashboard.pinggy.io 等）：打开只会进登录页，
+        // 不是可访问的隧道地址。Pinggy 服务端会在隧道输出里打印
+        // 「Sign in to https://dashboard.pinggy.io ...」引导横幅，兜底正则可能
+        // 先抓到它 ⇒ 必须过滤，不锁定 linkResolved，继续等待真实 xxx.a.pinggy.link。
+        bool isTunnelAdminUrl(String url) {
+          try {
+            final host = Uri.parse(url).host.toLowerCase();
+            return host == 'pinggy.io' || host.endsWith('.pinggy.io');
+          } catch (_) {
+            return false;
+          }
+        }
+
+        if (matchedUrl != null && !isTunnelAdminUrl(matchedUrl)) {
           linkResolved = true;
           _internetShareLink = matchedUrl;
           notifyListeners();
