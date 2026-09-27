@@ -234,6 +234,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         if (!mounted) return;
         final path = _currentStreamUrl ?? widget.videoPath;
         if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
+        WebdavDebugLog.log('[vp] postFrame 自动 attach 后台播放（偏好粘性）');
         unawaited(_attachToBackgroundHandler());
       });
     }
@@ -1652,6 +1653,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   Future<void> _switchHwdec(bool useHardware) async {
     if (useHardware == _useHardwareDecode) return;
     if (!mounted) return;
+    // 崩溃定位哨兵：本方法会销毁旧 player，而旧的 player 上可能还挂着
+    // 「延迟回读 mpv 属性」的诊断任务 ⇒ 是原生崩溃的高频路径
+    WebdavDebugLog.log('[vp] switchHwdec → 硬件=$useHardware（将销毁旧 player）');
     final oldPlayer = player;
     final pos = oldPlayer.state.position;
     final wasPlaying = oldPlayer.state.playing;
@@ -1694,6 +1698,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // ⚠️ 必须等解绑真正完成再 dispose，否则 setProperty 与 dispose 并发 ⇒
       // native use-after-free。这条路正是「黑屏自动软解回退」
       // （_autoFallbackToSoftDecode → _switchHwdec），是原生崩溃的高频路径。
+      //
+      // ⚠️⚠️ 而且**必须先声明作废**：起播时 `schedulePlaybackDiagnostics` 挂了一个
+      // 「3s / 8s 后回读 mpv 属性」的诊断任务，持有的是**这个 oldPlayer**。本回调
+      // 发生在起播后 5s（黑屏检测）──与诊断窗口**正面相撞**：旧 player 一销毁，
+      // 诊断任务恢复后就是对着已释放的 mpv ctx 调 getProperty ⇒ use-after-free
+      // ⇒ CRASH_NATIVE（Dart 侧无栈）。这是「开启视频播放后闪退」的根因。
+      MpvAudioOutputService.abandon(oldPlayer);
       final oldPlatform = oldPlayer.platform;
       if (oldPlatform is NativePlayer) {
         unawaited(
@@ -2612,6 +2623,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   @override
   void dispose() {
+    // 崩溃定位哨兵：`dispose` 是本页释放 player 前的最后一段 Dart 代码，
+    // 若日志停在这一行之后没有更多内容，则崩溃发生在释放链里（见
+    // `_disposePlayerAfterEqDetach` 与 `MpvAudioOutputService.abandon`）。
+    WebdavDebugLog.log('[vp] dispose 开始（bgMode=$_isBackgroundMode）');
     _hideTimer?.cancel();
     _positionSub?.cancel();
     _tracksSub?.cancel();
@@ -3056,6 +3071,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   /// 就是 use-after-free ⇒ `CRASH_NATIVE`（native 段错误，Dart 侧拿不到任何栈，
   /// 崩溃取证报告因此只会写「系统未提供 trace」）。
   void _disposePlayerAfterEqDetach(Player target) {
+    // ⚠️ 先把 player 声明作废，再走上「解绑均衡器 → dispose」的异步链：
+    // `MpvAudioOutputService` 里的延迟诊断（3s/8s 后回读 mpv 属性）可能正持有
+    // 这个 player，它们发的是**裸原生调用**，销毁后调用即 use-after-free
+    // ⇒ CRASH_NATIVE（Dart 侧拿不到栈）。abandon 是它们唯一的拦阻点。
+    MpvAudioOutputService.abandon(target);
     unawaited(
       _eqService.detach().whenComplete(() {
         try {

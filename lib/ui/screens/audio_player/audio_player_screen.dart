@@ -1875,6 +1875,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
   /// ⇒ CRASH_NATIVE（Dart 侧拿不到栈，报告只写「系统未提供 trace」）。
   void _disposePlayerAfterEqDetach() {
     final target = player;
+    // ⚠️ 先声明作废再异步销毁：`MpvAudioOutputService` 的延迟诊断（3s/8s 后回读
+    // mpv 属性）可能正持有这个 player，销毁后它发的**裸原生调用**就是
+    // use-after-free ⇒ CRASH_NATIVE（Dart 侧无栈，报告只写「系统未提供 trace」）。
+    MpvAudioOutputService.abandon(target);
     unawaited(
       _eqService.detach().whenComplete(() {
         try {

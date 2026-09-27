@@ -58,6 +58,38 @@ class WebdavDebugLog {
     }
   }
 
+  /// 启动时把**上一次运行**的日志另存为 `webdav_debug.log.prev`。
+  ///
+  /// ## 为什么必须保全现场
+  ///
+  /// 本项目要定位的崩溃是 **native 段错误**（`CRASH_NATIVE`），进程当场死掉，
+  /// 系统不给 trace —— 此时**日志的最后一行就是崩溃前最后执行的语句**，是
+  /// 无 adb 环境下唯一能回答「崩在哪一步」的依据。
+  ///
+  /// 但崩溃后用户必然会**重新打开应用**看结果，而 `[boot]` 序列会立刻往同一个
+  /// 文件继续追加，把真正的现场越埋越深（2026-09-27 真机里就出现过「日志里只剩
+  /// 一次 boot、`[bg]` 一行都没有」的情况，导致这一轮只能靠推理定位）。
+  /// 于是每次启动先把现有内容**复制**一份到 `.prev`：
+  /// * `.log` 保持连续（不丢历史，也不会让文件管理器看不到主日志）；
+  /// * `.prev` 恒为「**本次启动之前**那一段」，即崩溃现场。
+  ///
+  /// 只保留一代（每次都覆盖）。取日志时请把 `webdav_debug.log` 与
+  /// `webdav_debug.log.prev` **一起**取走。
+  static void snapshotPrevious() {
+    if (!enabled) return;
+    try {
+      final file = File(filePath);
+      if (!file.existsSync() || file.lengthSync() == 0) return;
+      final prev = File('$filePath.prev');
+      if (prev.existsSync()) {
+        prev.deleteSync();
+      }
+      file.copySync(prev.path);
+    } catch (_) {
+      // 日志绝不能影响主流程
+    }
+  }
+
   /// 清空日志（每次开始新的排查时可调用）。
   static void clear() {
     try {

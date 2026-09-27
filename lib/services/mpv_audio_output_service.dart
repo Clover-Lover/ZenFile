@@ -211,6 +211,38 @@ class MpvAudioOutputService {
   /// 只应在状态**翻转**时各发一次，否则效果类应用会被反复重建会话。
   static final Expando<bool> _fxAnnounced = Expando<bool>('zenfile.fxSessionAnnounced');
 
+  /// 已被调用方声明「**作废**」的 [Player]：之后任何延迟任务都不得再碰它。
+  ///
+  /// ## 为什么必须有（2026-09-27 真机崩溃的根因）
+  ///
+  /// 本服务的诊断几乎全是「**延迟 N 秒后回读 mpv 属性**」——因为 AO 要等起播才
+  /// 建得起来。而这些回读（[NativePlayer.getProperty]）是**裸原生调用**。
+  /// 这段时间里调用方完全可能已经 `player.dispose()`：
+  /// * 用户退出播放页（`_disposePlayerAfterEqDetach`）；
+  /// * 打开/切换视频（handler `_retirePlayer` 退役上一个 player）；
+  /// * **「黑屏自动软解回退」** —— 起播后 5 秒触发 `_switchHwdec` 销毁旧 player，
+  ///   与诊断的 3s / 8s 窗口**正面相撞**，是本项目原生崩溃的高频路径。
+  ///
+  /// mpv ctx 一旦释放，后续 `getProperty` 就是 use-after-free ⇒ SIGSEGV ⇒
+  /// `CRASH_NATIVE`（native 段错误，Dart 侧拿不到任何栈，崩溃报告只写
+  /// 「系统未提供 trace」）。**`try/catch` 抓不住 native 段错误** —— 唯一有效的
+  /// 防线就是发原生调用**之前**查这道登记。
+  ///
+  /// 生命周期：调用方在销毁 player **之前**调 [abandon]；条目用 `Expando` 存
+  /// （不持有强引用，player 被 GC 后自动消失，不会泄漏）。
+  static final Expando<bool> _abandoned = Expando<bool>('zenfile.aoAbandoned');
+
+  /// 声明 [player] 已作废（**必须在 `player.dispose()` 之前调用**）。
+  ///
+  /// 全库 `Player.dispose()` 只有 5 处，均已接入；新增销毁点时**必须一并接入**，
+  /// 否则该路径上的延迟诊断又会变成悬垂原生调用。
+  static void abandon(Player player) {
+    _abandoned[player] = true;
+  }
+
+  /// [player] 是否已被声明作废（延迟任务执行前必须先查）。
+  static bool isAbandoned(Player player) => _abandoned[player] == true;
+
   /// 在 `player.open()` **之前**完成 AO 相关配置。
   ///
   /// [tag] 仅用于日志区分调用方（`audio` / `video` / `video-switch`）。
@@ -264,7 +296,7 @@ class MpvAudioOutputService {
     final platform = player.platform;
     if (platform is! NativePlayer) return;
 
-    final before = await _tryGetProperty(platform, 'current-ao');
+    final before = await _tryGetProperty(player, 'current-ao');
     final sessionId = mode.usesSessionId ? await _generateAudioSessionId() : null;
 
     await applyAudioOutputConfig(
@@ -278,20 +310,22 @@ class MpvAudioOutputService {
     if (sessionId != null) _sessionIdOf[player] = sessionId;
     attachEffectSessionNotifier(player, isVideo: tag.startsWith('video'), tag: tag);
     _reannounceIfPlaying(player, isVideo: tag.startsWith('video'), tag: tag);
-    _verifyHotSwitch(platform, tag: tag, mode: mode, before: before);
+    _verifyHotSwitch(player, tag: tag, mode: mode, before: before);
   }
 
   /// 热切换后回读 `current-ao` —— 判断「档位到底有没有生效」的**唯一客观依据**
   /// （耳朵听不出来，见 [applyToRunningPlayer] 的注释）。
   static void _verifyHotSwitch(
-    NativePlayer platform, {
+    Player player, {
     required String tag,
     required MpvAoMode mode,
     required String before,
   }) {
     Future<void>.delayed(const Duration(milliseconds: 900), () async {
+      // 900ms 内 player 可能已被销毁（退出播放页 / 换解码）⇒ 先查作废登记
+      if (isAbandoned(player)) return;
       try {
-        final after = await _tryGetProperty(platform, 'current-ao');
+        final after = await _tryGetProperty(player, 'current-ao');
         final same = before == after;
         WebdavDebugLog.log(
           '[AO/$tag] hot-switch mode=${mode.key} chain="${mode.aoChain}" '
@@ -433,6 +467,8 @@ class MpvAudioOutputService {
       sub = player.stream.playing.listen((playing) {
         if (!playing) return;
         sub.cancel();
+        // player 可能已经换掉/销毁（页面里换了播放器但事件晚到）⇒ 丢弃
+        if (isAbandoned(player)) return;
         _runDiagnostics(player, tag);
       });
     } catch (_) {
@@ -442,7 +478,12 @@ class MpvAudioOutputService {
     // ② 定时兜底：`playing` 事件不一定会到（复用已有 player 时它可能早已为 true
     //    且不再重复发射、远程流起播慢、用户没真的播……），8s 后无条件采一次。
     //    没有这一层，「日志里什么都没有」就永远是个无法收敛的疑问。
-    Future<void>.delayed(const Duration(seconds: 8), () => _runDiagnostics(player, tag));
+    // ⚠️ 8 秒足够用户退出播放页 / 让「黑屏自动软解回退」换掉播放器，
+    //    [isAbandoned] 必须在这一刻再查一次（`_runDiagnostics` 内部还会再查）。
+    Future<void>.delayed(const Duration(seconds: 8), () {
+      if (isAbandoned(player)) return;
+      _runDiagnostics(player, tag);
+    });
   }
 
   /// 把 mpv 自身的日志（AO 相关）转存到落盘日志。
@@ -516,6 +557,8 @@ class MpvAudioOutputService {
     _fxNotifier[player] = true;
     try {
       player.stream.playing.listen((playing) {
+        // player 可能已被销毁（本监听绑定的是它的 stream，事件可能晚到）
+        if (isAbandoned(player)) return;
         final last = _fxAnnounced[player];
         if (last == playing) return; // 只认状态翻转
         // 从未宣告过 OPEN 就不必发 CLOSE（避免给一个没人知道的会话发关闭）。
@@ -544,6 +587,7 @@ class MpvAudioOutputService {
     required String tag,
   }) {
     try {
+      if (isAbandoned(player)) return;
       if (!player.state.playing) return;
       _fxAnnounced[player] = true;
       unawaited(_announceEffectSession(
@@ -565,6 +609,8 @@ class MpvAudioOutputService {
     required String tag,
   }) async {
     try {
+      // 本方法**跨多个 await**（下面还有 1s×3 的重试），全程可能被 dispose 掉
+      if (isAbandoned(player)) return;
       final sid = _sessionIdOf[player];
       if (sid == null || sid == 0) return; // 会话号由系统分配 → 无从宣告
       final platform = player.platform;
@@ -576,12 +622,13 @@ class MpvAudioOutputService {
         //
         // `playing` 事件可能早于 AO 初始化（远程流首帧更慢），所以给几次机会：
         // 否则会静默丢掉这一次宣告，而这正是整条链路的起点。
-        var ao = await _tryGetProperty(platform, 'current-ao');
+        var ao = await _tryGetProperty(player, 'current-ao');
         for (var attempt = 0;
             attempt < 3 && !ao.toLowerCase().contains('audiotrack');
             attempt++) {
           await Future<void>.delayed(const Duration(seconds: 1));
-          ao = await _tryGetProperty(platform, 'current-ao');
+          if (isAbandoned(player)) return; // 已作废，别再空等
+          ao = await _tryGetProperty(player, 'current-ao');
         }
         if (!shouldAnnounceOpen(sessionId: sid, currentAo: ao)) {
           WebdavDebugLog.log(
@@ -645,21 +692,28 @@ class MpvAudioOutputService {
   }
 
   static void _runDiagnostics(Player player, String tag) {
+    // ⚠️ player 已作废（调用方即将/已经 dispose）⇒ 一次原生调用都不能发
+    if (isAbandoned(player)) return;
     if (_diagnosed[player] == true) return; // 事件与定时兜底二选一，只采一组
     _diagnosed[player] = true;
     Future<void>(() async {
       try {
         // 等 AO 真正建起来（远程流首帧可能较慢），3s 后回读。
         await Future<void>.delayed(const Duration(seconds: 3));
+        // ⚠️ 这 3 秒里 player 完全可能已被销毁 —— 退出播放页、打开下一部视频、
+        //    或「黑屏自动软解回退」（起播后 5s 触发 `_switchHwdec` 销毁旧 player）
+        //    都会走到 dispose。对已释放的 mpv ctx 取属性 = use-after-free ⇒
+        //    CRASH_NATIVE（Dart 侧无栈）。所以**每个 await 之后都要重查**。
+        if (isAbandoned(player)) return;
         final platform = player.platform;
         if (platform is! NativePlayer) return;
 
-        final current = await _tryGetProperty(platform, 'current-ao');
-        final requested = await _tryGetProperty(platform, 'ao');
+        final current = await _tryGetProperty(player, 'current-ao');
+        final requested = await _tryGetProperty(player, 'ao');
         // `audio-params` = 解码后送进 AO 的参数，`audio-out-params` = 真正
         // 送到设备的参数（采样率/声道/格式）—— fast 路径对三者都有要求。
-        final params = await _tryGetProperty(platform, 'audio-params');
-        final outParams = await _tryGetProperty(platform, 'audio-out-params');
+        final params = await _tryGetProperty(player, 'audio-params');
+        final outParams = await _tryGetProperty(player, 'audio-out-params');
         WebdavDebugLog.log(
           '[AO/$tag] ACTUAL current-ao="$current" requested-ao="$requested"',
         );
@@ -694,11 +748,24 @@ class MpvAudioOutputService {
   }
 
   /// 单条属性回读失败（老版本 mpv 无此属性等）不应中断整段诊断。
-  static Future<String> _tryGetProperty(
-    NativePlayer platform,
-    String key,
-  ) async {
+  ///
+  /// ⚠️ **收 [Player] 而不是 [NativePlayer]，是为了在发原生调用前查 [isAbandoned]**：
+  /// 本方法的调用点几乎都在 `Future.delayed` 之后，而玩家可能早已 `dispose()`。
+  /// 对已释放的 mpv ctx 调 `getProperty` 是 use-after-free ⇒ `CRASH_NATIVE`，
+  /// 且 `try/catch` **抓不住** native 段错误 —— 只有这道显式检查能拦住它。
+  /// 这里**每次调用都重新取 `player.platform`**，不缓存旧引用。
+  static Future<String> _tryGetProperty(Player player, String key) async {
+    if (isAbandoned(player)) return '?';
     try {
+      final platform = player.platform;
+      if (platform is! NativePlayer) return '?';
+      if (isAbandoned(player)) return '?';
+      // 崩溃定位哨兵：本行之后就是**裸原生调用**。若进程崩在这里（native 段错误，
+      // Dart 侧拿不到栈），这行就是 webdav_debug.log 的**最后一行** —— 无 adb 时
+      // 唯一能把「崩溃」钉到具体语句上的证据。
+      WebdavDebugLog.log(
+        '[AO] → getProperty "$key" (#${identityHashCode(player)})',
+      );
       return await platform.getProperty(key);
     } catch (_) {
       return '?';

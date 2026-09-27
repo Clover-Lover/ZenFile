@@ -104,6 +104,10 @@ void main() {
     } catch (e) {
       debugPrint('[ZenFile] MediaKit.ensureInitialized failed: $e');
     }
+    // 崩溃现场保全：把上一次运行的日志另存为 `webdav_debug.log.prev`，
+    // 再开始写本次的 `[boot]` 序列（否则现场会被本进程的日志淹没）。
+    // 同步 IO 且已有上限（2MB），放在 MediaKit 初始化之后、首条日志之前。
+    WebdavDebugLog.snapshotPrevious();
     WebdavDebugLog.log('[boot] MediaKit ok');
 
     try {

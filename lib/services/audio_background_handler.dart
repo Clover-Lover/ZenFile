@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../ui/screens/audio_player/audio_artwork_widget.dart';
 import 'desktop_lyric_controller.dart';
+import 'mpv_audio_output_service.dart';
 import 'preferences_service.dart';
 import 'power_management_service.dart';
 import 'webdav_debug_log.dart';
@@ -116,6 +117,11 @@ class ZenFileAudioHandler extends BaseAudioHandler
       return;
     }
     _retiring.add(p);
+    // ⚠️ 先声明作废，再排队销毁：本服务（`MpvAudioOutputService`）里有多个
+    // 「延迟 N 秒后回读 mpv 属性」的诊断任务**正持有同一个 player**，它们发的是
+    // 裸原生调用。不先声明作废，销毁后这些任务会对着已释放的 mpv ctx 调
+    // `getProperty` ⇒ use-after-free ⇒ CRASH_NATIVE（Dart 侧无栈）。
+    MpvAudioOutputService.abandon(p);
     WebdavDebugLog.log('[bg] retire($reason, #${identityHashCode(p)}) 入队');
     _retireQueue = _retireQueue.then((_) async {
       try {
