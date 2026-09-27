@@ -324,6 +324,31 @@ final Map<String, RcloneDerivedKeys> _keyCache = {};
 /// 清空密钥派生缓存（保险箱锁定、或密码/盐变更时调用）
 void clearDerivedKeyCache() => _keyCache.clear();
 
+/// 密钥派生缓存的键。
+///
+/// 抽成函数是**故意的**：缓存键由「密码长度 + 密码 + 盐」拼成，散落写成
+/// 字面量的话，一旦有人在某一处改了格式，预热就会静默失效（不报错，
+/// 只是白算一次 Scrypt —— 那正是最贵的一步）。
+String derivedKeyCacheKey(String password, String? salt) =>
+    '${password.length}:$password\x00${salt ?? ''}';
+
+/// 该 (密码, 盐) 的派生结果是否已在缓存里。
+bool hasDerivedKeys(String password, {String? salt}) =>
+    _keyCache.containsKey(derivedKeyCacheKey(password, salt));
+
+/// 把**在别处算好的**派生结果登记进缓存。
+///
+/// 用途：Scrypt 冷启动在纯 Dart 上要 700~800 ms（实测），把它放进 isolate
+/// 算完再回填，之后主 isolate 同步构造 `RcloneCrypt` 就能命中缓存
+///（实测 ~16 µs），从而避免解锁时卡住 UI。
+void putDerivedKeysIntoCache(
+  String password, {
+  String? salt,
+  required RcloneDerivedKeys keys,
+}) {
+  _keyCache[derivedKeyCacheKey(password, salt)] = keys;
+}
+
 /// 从密码和盐值派生 rclone crypt 密钥
 ///
 /// 严格对齐 rclone `Cipher.Key()`：
@@ -332,7 +357,7 @@ void clearDerivedKeyCache() => _keyCache.clear();
 /// - scrypt(N=16384, r=8, p=1, keyLen=80)
 /// - 切分：dataKey = [0,32)，nameKey = [32,64)，nameTweak = [64,80)
 RcloneDerivedKeys deriveRcloneKeys(String password, {String? salt}) {
-  final cacheKey = '${password.length}:$password ${salt ?? ''}';
+  final cacheKey = derivedKeyCacheKey(password, salt);
   final cached = _keyCache[cacheKey];
   if (cached != null) return cached;
 

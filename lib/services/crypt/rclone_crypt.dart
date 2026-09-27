@@ -43,6 +43,7 @@
 /// ```
 library;
 
+import 'dart:isolate';
 import 'dart:typed_data';
 import 'crypt_config.dart';
 import 'scrypt.dart';
@@ -50,7 +51,15 @@ import 'filename_cipher.dart';
 import 'stream_cipher.dart';
 
 export 'crypt_config.dart';
-export 'scrypt.dart' show RcloneDerivedKeys, deriveRcloneKeys, scrypt, Hkdf;
+export 'scrypt.dart'
+    show
+        RcloneDerivedKeys,
+        deriveRcloneKeys,
+        derivedKeyCacheKey,
+        hasDerivedKeys,
+        putDerivedKeysIntoCache,
+        scrypt,
+        Hkdf;
 export 'filename_cipher.dart' show FilenameCipher, encodeFilename, decodeFilename;
 export 'stream_cipher.dart' show
     RcloneFileHeader,
@@ -85,13 +94,37 @@ class RcloneCrypt {
     );
   }
 
-  /// 异步创建加密器（在 isolate 中执行 Scrypt 密钥派生，不阻塞 UI）
+  /// 异步创建加密器：**Scrypt 密钥派生在 isolate 中执行**，不阻塞 UI。
+  ///
+  /// 实测纯 Dart 的 Scrypt(N=16384, r=8, p=1) 冷启动要 **700~800 ms**，
+  /// 而命中缓存只要 **16 µs**（见 `scrypt.dart` 的 `_keyCache`）。解锁保险箱
+  /// 时那一顿卡，主要就来自这里。
   static Future<RcloneCrypt> createAsync({
     required RcloneCryptConfig config,
   }) async {
-    // 对于大参数的 Scrypt，建议使用 Isolate.run
-    // 这里先同步创建，后续可优化为 isolate
+    await prewarmAsync(config);
     return RcloneCrypt(config: config);
+  }
+
+  /// 预热密钥派生：在 isolate 里跑 Scrypt，并把结果**回填主 isolate 的缓存**。
+  ///
+  /// 回填是关键 —— 只把结果返回给调用方是不够的：真正构造 `RcloneCrypt`
+  /// 的是主 isolate 的**同步**构造函数，它会去查 `_keyCache`；不回填就等于
+  /// 白白算两遍。
+  ///
+  /// 已经缓存过则直接返回（幂等，可安全重复调用）。
+  ///
+  /// ⚠️ 这**不会**让解锁变快，只是把「UI 冻结 0.8 秒」换成「异步等 0.8 秒」。
+  /// 要真正提速得换掉纯 Dart 的 Scrypt 实现。
+  static Future<void> prewarmAsync(RcloneCryptConfig config) async {
+    if (hasDerivedKeys(config.password, salt: config.salt)) return;
+    // 只捕获两个字符串：避免把整个 config 对象送过 isolate 边界。
+    final password = config.password;
+    final salt = config.salt;
+    final keys = await Isolate.run(
+      () => deriveRcloneKeys(password, salt: salt),
+    );
+    putDerivedKeysIntoCache(password, salt: salt, keys: keys);
   }
 
   /// 获取派生的密钥（仅供高级用法，一般不需要直接访问）
