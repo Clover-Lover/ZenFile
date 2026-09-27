@@ -2973,33 +2973,19 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
         final patterns = [
           // Standard domain pattern: xxx.localhost.run or xxx.lhr.life
           RegExp(r'(https?://[a-zA-Z0-9.-]+\.(localhost\.run|lhr\.life))'),
-          // Pinggy: xxx.a.pinggy.link
-          RegExp(r'(https?://[a-zA-Z0-9.-]+\.pinggy\.link)'),
+          // Pinggy 隧道域：旧 xxx.a.pinggy.link；2026-09 起免费档实际输出
+          // xxx.run.pinggy-free.link / xxx.free.pinggy.net（probe 实测）
+          RegExp(r'(https?://[a-zA-Z0-9.-]+\.(pinggy\.link|pinggy-free\.link|pinggy\.net))'),
           // Domain without protocol
-          RegExp(r'([a-zA-Z0-9-]+\.(localhost\.run|lhr\.life|pinggy\.link))'),
+          RegExp(r'([a-zA-Z0-9-]+\.(localhost\.run|lhr\.life|pinggy\.link|pinggy-free\.link|pinggy\.net))'),
           // Any https URL in the output
           RegExp(r'(https://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})'),
           // Generic URL pattern
           RegExp(r'(https?://[^\s]+)'),
         ];
 
-        String? matchedUrl;
-        for (final pattern in patterns) {
-          final match = pattern.firstMatch(stdoutBuffer);
-          if (match != null) {
-            matchedUrl = match.group(1)!;
-            // Ensure URL starts with https://
-            if (!matchedUrl.startsWith('http')) {
-              matchedUrl = 'https://$matchedUrl';
-            }
-            break;
-          }
-        }
-
         // Pinggy 管理后台/登录域（dashboard.pinggy.io 等）：打开只会进登录页，
-        // 不是可访问的隧道地址。Pinggy 服务端会在隧道输出里打印
-        // 「Sign in to https://dashboard.pinggy.io ...」引导横幅，兜底正则可能
-        // 先抓到它 ⇒ 必须过滤，不锁定 linkResolved，继续等待真实 xxx.a.pinggy.link。
+        // 不是可访问的隧道地址，必须过滤。
         bool isTunnelAdminUrl(String url) {
           try {
             final host = Uri.parse(url).host.toLowerCase();
@@ -3009,7 +2995,27 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
           }
         }
 
-        if (matchedUrl != null && !isTunnelAdminUrl(matchedUrl)) {
+        String? matchedUrl;
+        // ⚠️ 不能用 firstMatch：Pinggy 输出里「dashboard.pinggy.io」横幅在真实
+        // 隧道 URL 之前，firstMatch 永远命中横幅（黑名单过滤后返回 null，
+        // 后面的真实 URL 也被跳过 ⇒ 一直显示占位文本）。
+        // 改为按正则优先级扫描全部候选（allMatches），跳过管理后台域，
+        // 取第一个有效隧道地址。
+        for (final pattern in patterns) {
+          final matches = pattern.allMatches(stdoutBuffer);
+          for (final match in matches) {
+            var cand = match.group(1) ?? match.group(0)!;
+            if (!cand.startsWith('http')) {
+              cand = 'https://$cand';
+            }
+            if (isTunnelAdminUrl(cand)) continue;
+            matchedUrl = cand;
+            break;
+          }
+          if (matchedUrl != null) break;
+        }
+
+        if (matchedUrl != null) {
           linkResolved = true;
           _internetShareLink = matchedUrl;
           notifyListeners();
