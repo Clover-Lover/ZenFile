@@ -8086,4 +8086,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "하단 항목은 모든 바로가기로 바꿀 수 있습니다",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "클래식 아이콘",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

@@ -8155,4 +8155,7 @@ class L10nDe extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Untereinträge können durch beliebige Verknüpfungen ersetzt werden';
+
+  @override
+  String get app_icon_original => 'Klassisches Symbol';
 }

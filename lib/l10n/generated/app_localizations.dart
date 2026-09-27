@@ -14331,6 +14331,12 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'底部入口可替换为任意快捷方式'**
   String get ui_bottom_tab_custom_hint;
+
+  /// Classic app icon
+  ///
+  /// In zh, this message translates to:
+  /// **'经典图标'**
+  String get app_icon_original;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

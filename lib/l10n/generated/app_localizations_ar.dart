@@ -8036,4 +8036,7 @@ class L10nAr extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'يمكن استبدال العناصر السفلية بأي اختصار';
+
+  @override
+  String get app_icon_original => 'أيقونة كلاسيكية';
 }

@@ -8190,4 +8190,7 @@ class L10nFr extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Les entrées inférieures peuvent être remplacées par n\'importe quel raccourci';
+
+  @override
+  String get app_icon_original => 'Icône classique';
 }

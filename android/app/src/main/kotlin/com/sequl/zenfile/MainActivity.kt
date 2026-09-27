@@ -235,7 +235,9 @@ class MainActivity : AudioServiceFragmentActivity() {
                 "paper_gray" to "com.sequl.zenfile.MainActivityPaperGray",
                 "metal_frost" to "com.sequl.zenfile.MainActivityMetalFrost",
                 "blue_folder" to "com.sequl.zenfile.MainActivityBlueFolder",
-                "blue_gold" to "com.sequl.zenfile.MainActivityBlueGold",
+                // 深蓝鎏金已升级为默认图标（application icon + MainActivityDefault），
+                // 不再作为备选 alias；原默认图标改为备选（MainActivityOriginal）。
+                "original" to "com.sequl.zenfile.MainActivityOriginal",
                 "m3_expressive" to "com.sequl.zenfile.MainActivityM3Expressive",
                 "minimal_flat" to "com.sequl.zenfile.MainActivityMinimalFlat",
                 "neumorphism" to "com.sequl.zenfile.MainActivityNeumorphism",
@@ -2892,6 +2894,7 @@ class MainActivity : AudioServiceFragmentActivity() {
         "com.sequl.zenfile.MainActivityMetalFrost",
         "com.sequl.zenfile.MainActivityBlueFolder",
         "com.sequl.zenfile.MainActivityBlueGold",
+        "com.sequl.zenfile.MainActivityOriginal",
         "com.sequl.zenfile.MainActivityM3Expressive",
         "com.sequl.zenfile.MainActivityMinimalFlat",
         "com.sequl.zenfile.MainActivityNeumorphism"

@@ -8171,4 +8171,7 @@ class L10nEs extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Las entradas inferiores pueden reemplazarse por cualquier acceso directo';
+
+  @override
+  String get app_icon_original => 'Icono clásico';
 }

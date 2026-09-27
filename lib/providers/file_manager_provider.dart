@@ -508,7 +508,9 @@ class FileManagerProvider extends ChangeNotifier {
       'paper_gray' => 'com.sequl.zenfile.MainActivityPaperGray',
       'metal_frost' => 'com.sequl.zenfile.MainActivityMetalFrost',
       'blue_folder' => 'com.sequl.zenfile.MainActivityBlueFolder',
-      'blue_gold' => 'com.sequl.zenfile.MainActivityBlueGold',
+      // 深蓝鎏金已升级为默认图标（application icon + MainActivityDefault），
+      // 不再作为备选 alias；原默认图标改为备选（MainActivityOriginal）。
+      'original' => 'com.sequl.zenfile.MainActivityOriginal',
       'm3_expressive' => 'com.sequl.zenfile.MainActivityM3Expressive',
       'minimal_flat' => 'com.sequl.zenfile.MainActivityMinimalFlat',
       'neumorphism' => 'com.sequl.zenfile.MainActivityNeumorphism',

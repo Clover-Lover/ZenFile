@@ -8090,4 +8090,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "下部エントリは任意のショートカットに置き換えられます",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "クラシックアイコン",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

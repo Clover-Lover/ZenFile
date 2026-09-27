@@ -8065,4 +8065,7 @@ class L10nEn extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Bottom entries can be replaced with any shortcut';
+
+  @override
+  String get app_icon_original => 'Classic Icon';
 }

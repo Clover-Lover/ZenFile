@@ -8383,4 +8383,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "底部入口可替换为任意快捷方式",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "经典图标",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

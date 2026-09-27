@@ -8086,4 +8086,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "Las entradas inferiores pueden reemplazarse por cualquier acceso directo",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "Icono clásico",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

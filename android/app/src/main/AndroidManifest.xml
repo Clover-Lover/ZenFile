@@ -45,7 +45,7 @@
     <application
         android:label="ZenFile"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher_blue_gold"
         android:requestLegacyExternalStorage="true"
         android:enableOnBackInvokedCallback="true"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -124,6 +124,20 @@
         <activity-alias
             android:name=".MainActivityDefault"
             android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_blue_gold"
+            android:label="ZenFile"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- 原默认图标（经典样式）作为备选图标 -->
+        <activity-alias
+            android:name=".MainActivityOriginal"
+            android:enabled="false"
             android:exported="true"
             android:icon="@drawable/ic_launcher_default"
             android:label="ZenFile"

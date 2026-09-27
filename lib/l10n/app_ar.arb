@@ -8086,4 +8086,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "يمكن استبدال العناصر السفلية بأي اختصار",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "أيقونة كلاسيكية",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

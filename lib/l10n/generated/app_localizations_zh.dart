@@ -7648,6 +7648,9 @@ class L10nZh extends L10n {
 
   @override
   String get ui_bottom_tab_custom_hint => '底部入口可替换为任意快捷方式';
+
+  @override
+  String get app_icon_original => '经典图标';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -15264,4 +15267,7 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_bottom_tab_custom_hint => '底部入口可替換為任何快捷方式';
+
+  @override
+  String get app_icon_original => '經典圖示';
 }

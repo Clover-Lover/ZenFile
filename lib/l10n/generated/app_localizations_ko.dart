@@ -7824,4 +7824,7 @@ class L10nKo extends L10n {
 
   @override
   String get ui_bottom_tab_custom_hint => '하단 항목은 모든 바로가기로 바꿀 수 있습니다';
+
+  @override
+  String get app_icon_original => '클래식 아이콘';
 }

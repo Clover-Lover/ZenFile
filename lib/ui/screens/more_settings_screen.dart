@@ -3154,7 +3154,15 @@ void _showAppIconPickerDialog(BuildContext context, FileManagerProvider fileMana
                                 fileManager,
                                 theme,
                                 id: 'default',
-                                title: L10n.of(context).msg64a6476a,
+                                title: L10n.of(context).app_icon_blue_gold,
+                                imagePath: 'assets/logo/zf_blue_gold.webp',
+                              ),
+                              _buildIconOptionCard(
+                                context,
+                                fileManager,
+                                theme,
+                                id: 'original',
+                                title: L10n.of(context).app_icon_original,
                                 imagePath: 'assets/logo/zf_Classic1.webp',
                               ),
                               _buildIconOptionCard(
@@ -3260,14 +3268,6 @@ void _showAppIconPickerDialog(BuildContext context, FileManagerProvider fileMana
                                 id: 'blue_folder',
                                 title: L10n.of(context).app_icon_blue_folder,
                                 imagePath: 'assets/logo/zf_blue_folder.webp',
-                              ),
-                              _buildIconOptionCard(
-                                context,
-                                fileManager,
-                                theme,
-                                id: 'blue_gold',
-                                title: L10n.of(context).app_icon_blue_gold,
-                                imagePath: 'assets/logo/zf_blue_gold.webp',
                               ),
                               _buildCustomIconOptionCard(
                                 context,

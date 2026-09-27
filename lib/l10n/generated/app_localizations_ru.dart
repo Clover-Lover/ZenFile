@@ -8143,4 +8143,7 @@ class L10nRu extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Элементы внизу можно заменить любым ярлыком';
+
+  @override
+  String get app_icon_original => 'Классическая иконка';
 }

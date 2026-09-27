@@ -7818,4 +7818,7 @@ class L10nJa extends L10n {
 
   @override
   String get ui_bottom_tab_custom_hint => '下部エントリは任意のショートカットに置き換えられます';
+
+  @override
+  String get app_icon_original => 'クラシックアイコン';
 }
