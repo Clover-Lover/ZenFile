@@ -11,6 +11,7 @@ import 'package:path/path.dart' as p;
 import '../../../core/icon_fonts/broken_icons.dart';
 import '../../../core/utils.dart';
 import '../../../services/audio_background_handler.dart';
+import '../../../services/background_play_permission.dart';
 import '../../../services/desktop_lyric_service.dart';
 import '../../../services/desktop_lyric_controller.dart';
 import '../../../services/preferences_service.dart';
@@ -202,7 +203,11 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       // ⚠️ 复用已有播放器**不会**走下面 else 分支的 configureBeforeOpen，
       // 档位会完全失效（从播放列表/通知栏返回正是这条路径）。补一次热应用。
       _applyAudioOutputToReusedPlayer('audio-reuse');
-    } else if (_isBackgroundMode && getAudioHandler().hasActivePlayer) {
+    } else if (_isBackgroundMode &&
+        getAudioHandler().hasActivePlayer &&
+        // ⚠️ 排除视频后台会话：handler 里挂的是视频的 player，拿它播音频会让
+        // UI 与播放状态完全错位（用户反馈 2026-09-27 的同源问题）。
+        !getAudioHandler().videoSession) {
       // 后台播放中从通知栏返回：复用 handler 的 player，避免新建导致 UI 与播放状态脱节
       player = getAudioHandler().currentPlayer!;
       _shuffleQueue = List.generate(_allSongs.length, (i) => i);
@@ -2194,32 +2199,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
     }
 
     // Turn on — request notification permission dynamically on Android 13+
-    bool notifGranted = true;
-    try {
-      final status = await Permission.notification.request();
-      notifGranted = status.isGranted;
-    } catch (e) {
-      debugPrint('[ZenFile] Error requesting notification permission: $e');
-      notifGranted = false;
-    }
-
-    if (!notifGranted && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(L10n.of(context).msg_notification_permission_denied),
-          backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          duration: const Duration(seconds: 6),
-          action: SnackBarAction(
-            label: L10n.of(context).msg_open_settings,
-            textColor: Colors.white,
-            onPressed: () async {
-              await openAppSettings();
-            },
-          ),
-        ),
-      );
+    // 与视频播放器共用 [BackgroundPlayPermission]（权限申请 + 未授予提示），
+    // 保证两端文案与判定一致。
+    final notifGranted = await BackgroundPlayPermission.ensureGranted(context);
+    if (!notifGranted) {
       // 标记等待权限授予；用户从系统设置返回后会复检并自动开启
       _backgroundPlayPendingPermission = true;
       return;
@@ -2278,149 +2261,17 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
     _diagnoseNotificationEffectiveness();
   }
 
-  /// 诊断通知栏是否实际生效
+  /// 诊断通知栏是否实际生效。
   ///
-  /// 检查逻辑（按优先级）：
-  /// 1. AudioService 是否成功初始化（最关键，失败则通知完全无法显示）
-  ///    - 若失败，尝试重新初始化一次
-  /// 2. 通知权限是否真的授予（部分 ROM 下 Permission.notification.request 可能不弹窗）
-  /// 3. audio_service 的 playbackState 是否包含控件（确认前台服务已注册）
-  /// 若任一异常，提示用户去系统设置检查通知权限和电池优化
+  /// 实现见 [BackgroundPlayPermission.diagnose]（与视频播放器共用同一套检测），
+  /// 确保两端在「通知权限被拒 / 通知渠道被禁用 / 前台服务没起来」时的提示一致。
   Future<void> _diagnoseNotificationEffectiveness() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    if (!mounted) return;
-
-    try {
-      // 1. 检查媒体通知链路是否初始化成功
-      //    安卓 13+ 用 Media3 桥接，低版本用 audio_service。两者初始化失败都会导致不显示。
-      if (!isAudioServiceInitialized) {
-        // 尝试重新初始化一次
-        bool reInitOk = false;
-        try {
-          await AudioService.init(
-            builder: () => getAudioHandler(),
-            config: const AudioServiceConfig(
-              androidNotificationChannelId: 'com.sequl.zenfile.audio.v2',
-              androidNotificationChannelName: 'ZenFile Audio Player',
-              androidNotificationIcon: 'mipmap/ic_launcher',
-              androidShowNotificationBadge: true,
-              androidStopForegroundOnPause: false,
-              androidNotificationClickStartsActivity: false,
-              notificationColor: Color(0xFF6200EE),
-            ),
-          );
-          isAudioServiceInitialized = true;
-          reInitOk = true;
-          debugPrint('[ZenFile] Media notification re-init succeeded');
-        } catch (e) {
-          debugPrint('[ZenFile] Media notification re-init failed: $e');
-        }
-
-        if (!reInitOk) {
-          if (!mounted) return;
-          _showNotificationDiagnosticSnackBar(
-            L10n.of(context).msg_audio_service_init_failed,
-            openSettings: false,
-          );
-          return;
-        }
-
-        // 重新初始化成功后，重新 attach 播放器
-        // 因为之前的 attach 调用可能没有正确注册到 Media3 桥接
-        if (mounted) {
-          _startBackgroundMode();
-        }
-        // 等待 attach + emit 完成
-        await Future.delayed(const Duration(milliseconds: 800));
-        if (!mounted) return;
-      }
-
-      // 2. 复检通知权限
-      final notifStatus = await Permission.notification.status;
-      if (!notifStatus.isGranted) {
-        if (!mounted) return;
-        _showNotificationDiagnosticSnackBar(
-          L10n.of(context).msg_notification_not_granted,
-          openSettings: true,
-        );
-        return;
-      }
-
-      // 3. 检查 audio_service 的 playbackState 是否包含控件
-      //    若为空或无控件，说明前台服务注册失败（通常是 ROM 限制）
-      final state = getAudioHandler().playbackState.value;
-      if (state.controls.isEmpty) {
-        if (!mounted) return;
-        _showNotificationDiagnosticSnackBar(
-          L10n.of(context).msg_notification_blocked_hint,
-          openSettings: true,
-        );
-        return;
-      }
-
-      // 4. 检查通知渠道是否被系统或用户禁用（Android 8+）
-      //    即使权限已授予且 controls 非空，如果通知渠道被设为 IMPORTANCE_NONE，
-      //    系统也不会显示通知。这是之前诊断逻辑的盲区。
-      if (Platform.isAndroid) {
-        try {
-          const channel = MethodChannel('com.sequl.zenfile/notifications');
-          final result = await channel.invokeMethod<Map>('checkAudioChannelStatus');
-          if (result != null) {
-            final exists = result['exists'] as bool? ?? true;
-            final enabled = result['enabled'] as bool? ?? true;
-            if (!exists) {
-              // 渠道不存在 — audio_service 可能没有正确创建渠道
-              // 尝试重新初始化 AudioService 以触发渠道创建
-              if (mounted && isAudioServiceInitialized) {
-                _showNotificationDiagnosticSnackBar(
-                  L10n.of(context).msg_notification_blocked_hint,
-                  openSettings: true,
-                );
-              }
-              return;
-            }
-            if (!enabled) {
-              // 渠道存在但被禁用 — 用户在系统设置中关闭了通知渠道
-              if (!mounted) return;
-              _showNotificationDiagnosticSnackBar(
-                L10n.of(context).msg_notification_channel_disabled,
-                openSettings: true,
-              );
-              return;
-            }
-          }
-        } catch (e) {
-          debugPrint('[ZenFile] checkAudioChannelStatus error: $e');
-          // 原生方法调用失败，不阻塞诊断流程
-        }
-      }
-    } catch (e) {
-      debugPrint('[ZenFile] Notification diagnosis error: $e');
-    }
-  }
-
-  /// 显示通知诊断失败的 SnackBar
-  void _showNotificationDiagnosticSnackBar(String message, {bool openSettings = false}) {
-    if (!mounted) return;
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.deepOrange,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        action: openSettings
-            ? SnackBarAction(
-                label: L10n.of(context).msg_open_settings,
-                textColor: Colors.white,
-                onPressed: () async {
-                  await openAppSettings();
-                },
-              )
-            : null,
-      ),
+    await BackgroundPlayPermission.diagnose(
+      context,
+      isActive: () => mounted,
+      onReattach: () async {
+        if (mounted) _startBackgroundMode();
+      },
     );
   }
 

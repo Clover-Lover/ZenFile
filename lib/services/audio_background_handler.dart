@@ -66,6 +66,16 @@ class ZenFileAudioHandler extends BaseAudioHandler
   /// 跳过回收的旧 player 由其页面在 `dispose()` 里自行释放，不会泄漏。
   bool foregroundHoldsPlayer = false;
 
+  /// 本次后台会话是否来自**视频**播放器（由 `attach(videoSession: true)` 置位）。
+  ///
+  /// 视频后台播放时 `mediaItem` 里放的是视频（通知栏要显示视频标题），但音频类别页
+  /// 顶部的「继续播放」卡片也读 `mediaItem`/`currentMediaItem`，于是会显示成视频
+  /// 播放记录（用户反馈 2026-09-27）。**读 `currentMediaItem` 的音频侧代码必须先看
+  /// 这个标志**，为 true 时退回 `lastPlayedAudio`。
+  /// 生命周期：`attach()` 里按参数赋值、`detach()` 里复位 false（`attach` 内部先
+  /// 调 `detach()`，所以赋值必须写在 `detach()` 之后）。
+  bool videoSession = false;
+
   /// 当前关联的播放器（后台播放时可用于恢复界面）
   Player? get currentPlayer => _player;
 
@@ -102,6 +112,7 @@ class ZenFileAudioHandler extends BaseAudioHandler
     required List<MediaItem> queue,
     required int currentIndex,
     bool persistAsAudio = true,
+    bool videoSession = false,
   }) {
     final oldPlayer = _player;
     // ⚠️ 只有「旧 player 已无前台页面持有」时才回收：前台播放页（被上层页面覆盖
@@ -122,6 +133,8 @@ class ZenFileAudioHandler extends BaseAudioHandler
 
     detach();
     _player = player;
+    // 会话归属（见 videoSession 字段）。⚠️ 必须放在 detach() 之后：detach() 会复位它。
+    this.videoSession = videoSession;
 
     // Push the queue
     this.queue.add(queue);
@@ -211,6 +224,8 @@ class ZenFileAudioHandler extends BaseAudioHandler
     }
     _subs.clear();
     _player = null;
+    // 会话结束：归属标志一并复位，避免下一次会话沿用上一次的归属
+    videoSession = false;
   }
 
   /// 当用户开始播放视频时调用：立即暂停正在播放的后台音频，避免两路声音混在一起。

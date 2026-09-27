@@ -14,6 +14,7 @@ import 'package:zenfile/services/webdav_debug_log.dart';
 import 'package:zenfile/services/network_connections_service.dart';
 import 'package:zenfile/services/subtitle_parser.dart';
 import 'package:zenfile/services/audio_background_handler.dart';
+import 'package:zenfile/services/background_play_permission.dart';
 import 'package:zenfile/services/audio_equalizer_service.dart';
 import 'package:zenfile/services/mpv_audio_output_service.dart';
 import 'package:audio_service/audio_service.dart';
@@ -228,7 +229,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         if (!mounted) return;
         final path = _currentStreamUrl ?? widget.videoPath;
         if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
-        _startBackgroundMode();
+        unawaited(_startBackgroundMode());
       });
     }
 
@@ -2909,12 +2910,41 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     }
   }
 
-  /// 开启后台播放：把当前视频播放器挂到 audio_service，
+  /// 开启后台播放：**先申请通知权限**（安卓 13+ 未授予时系统会直接拦掉媒体
+  /// 通知，attach 了也什么都不显示），再把当前视频播放器挂到 audio_service，
   /// 通知栏即可播放/暂停/拖动进度。
   ///
   /// ⚠️ **绝不 pop 播放页**（2026-09-27 用户要求）：点击后台播放只是「允许后台
   /// 播放」，页面留在原地正常观看；是否离开由用户自己按返回键决定。
+  /// ⚠️ 权限申请与「通知栏是否真的生效」诊断复用 [BackgroundPlayPermission]，
+  /// 与音频播放器同一套文案与判定 —— 此前视频侧是静默失败，用户只看到「开了但
+  /// 通知栏没东西」（2026-09-27 用户反馈，要求参考音频播放器的提示）。
   Future<void> _startBackgroundMode() async {
+    final path = _currentStreamUrl ?? widget.videoPath;
+    if (path.isEmpty) return;
+
+    // 未授予时 helper 已弹「需要通知权限…（去设置）」，直接放弃，不 attach
+    final granted = await BackgroundPlayPermission.ensureGranted(context);
+    if (!granted || !mounted) return;
+
+    await _attachToBackgroundHandler();
+    if (!mounted) return;
+
+    // 诊断：部分 ROM 上 startForeground 不报错但通知不显示，主动检测并提示
+    unawaited(
+      BackgroundPlayPermission.diagnose(
+        context,
+        isActive: () => mounted,
+        onReattach: _attachToBackgroundHandler,
+      ),
+    );
+  }
+
+  /// 真正把播放器挂到通知栏媒体控制器（**不含**权限申请与诊断）。
+  ///
+  /// 单独拆出来是因为「媒体通知链路重初始化成功」后需要**只重新 attach**：
+  /// 若再走一遍 `_startBackgroundMode()`，会重跑权限申请并重复弹提示。
+  Future<void> _attachToBackgroundHandler() async {
     final handler = getAudioHandler();
     final currentPath = _currentStreamUrl ?? widget.videoPath;
     if (currentPath.isEmpty) return;
@@ -2933,6 +2963,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       currentIndex: 0,
       // 视频后台播放不写入音频"上次播放"记录
       persistAsAudio: false,
+      // 标记本次会话属于视频：音频类别页顶部卡片据此忽略 mediaItem、退回
+      // lastPlayedAudio，否则会显示视频播放记录（用户反馈 2026-09-27）。
+      videoSession: true,
     );
     // ⚠️ 必须声明「本页仍持有这个 player」：页面不再自动退出后，通知栏的
     // 「关闭」（ZenFileAudioHandler.stop）若照旧 dispose 掉 player，而本页还在
@@ -2969,9 +3002,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     handler.setSkipCallback(null);
     handler.stopNotification();
     PreferencesService.saveVideoBackgroundMode(false);
-    if (mounted) {
-      setState(() => _isBackgroundMode = false);
-    }
+    if (!mounted) return;
+    setState(() => _isBackgroundMode = false);
+    // 关闭也要给一句反馈（用户反馈 2026-09-27：开了有提示、关了没提示，会以为
+    // 没生效）。复用音频播放器同一条文案键 msg50c1b248「后台播放已停止」，
+    // 10 种语言已存在 ⇒ **零新增文案**。
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(L10n.of(context).msg50c1b248),
+        backgroundColor: Colors.blueGrey,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   /// 先等均衡器解绑完成，再销毁播放器。
