@@ -6,9 +6,11 @@ library;
 
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'crypt_batch_runner.dart';
 import 'crypt_config.dart';
 import 'crypt_mount.dart';
 import 'crypt_mount_service.dart';
+import 'crypt_tree_walker.dart';
 import 'filename_cipher.dart';
 import 'stream_cipher.dart';
 import 'rclone_crypt.dart';
@@ -756,23 +758,71 @@ class CryptOperations {
     final allFiles = await _listAllFiles(sourceDirPath);
     final total = allFiles.length;
     var processed = 0;
+    void bump() {
+      processed++;
+      onProgress?.call(processed, total);
+    }
 
-    // 递归加密（从最深层开始，避免路径变化影响）
-    await _encryptDirectoryRecursive(
-      sourceDirPath,
-      (file) async {
-        if (skipEncrypted && await _isEncryptedFile(file)) {
-          // 已加密文件：跳过，但仍计入进度，避免进度卡在中途
-          processed++;
-          onProgress?.call(processed, total);
-          return;
-        }
-        await encryptFile(file, onFileProgress: onFileProgress);
-        processed++;
-        onProgress?.call(processed, total);
-      },
-      skipEncrypted: skipEncrypted,
+    // ── 阶段 ①：算出全部加密作业（**保留原始目录路径**）──
+    //
+    // 加密一个文件只会改它自己的名字，不会动任何其它路径，所以「先把整棵树
+    // 的文件都加密完」是安全的；目录改名统一推迟到阶段 ③，顺序等价于原来的
+    // 深度优先后序（见 [_collectSubDirsPostOrder]）。
+    final jobs = <CryptBatchJob>[];
+    for (final file in allFiles) {
+      if (skipEncrypted && await _isEncryptedFile(file)) {
+        // 已加密文件：跳过，但仍计入进度，避免进度卡在中途
+        bump();
+        continue;
+      }
+      final stat = await File(file).stat();
+      final encryptedPath = p.join(
+        p.dirname(file),
+        _mount.crypt.encryptFileName(p.basename(file)),
+      );
+      jobs.add(
+        CryptBatchJob(
+          srcPath: file,
+          targetPath: encryptedPath,
+          tmpPath: '$encryptedPath$tmpSuffix',
+          readBytes: stat.size,
+          modifiedMs: stat.modified.millisecondsSinceEpoch,
+        ),
+      );
+    }
+
+    // ── 阶段 ②：并行加密文件（多 isolate；见 CryptBatchRunner 的文件头）──
+    //
+    // 数据面是纯 Dart 的 XSalsa20-Poly1305（实测 8.6 MiB/s），单线程是硬天花板，
+    // 唯一有效的手段是多核并行。
+    await CryptBatchRunner.run(
+      dataKey: _mount.crypt.derivedKeys.dataKey,
+      jobs: jobs,
+      encrypting: true,
+      onBytes: onFileProgress,
+      onJobDone: bump,
     );
+
+    // ── 阶段 ③：目录改名，**最深优先**（后序）──
+    final subDirs = <Directory>[];
+    await _collectSubDirsPostOrder(Directory(sourceDirPath), subDirs);
+    for (final dir in subDirs) {
+      final parentDir = p.dirname(dir.path);
+      final dirName = p.basename(dir.path);
+      var alreadyEncryptedDir = false;
+      if (skipEncrypted) {
+        try {
+          _mount.crypt.decryptDirName(dirName);
+          alreadyEncryptedDir = true;
+        } catch (_) {}
+      }
+      if (alreadyEncryptedDir) continue;
+      final encryptedDirPath = p.join(
+        parentDir,
+        _mount.crypt.encryptDirName(dirName),
+      );
+      await dir.rename(encryptedDirPath);
+    }
 
     // 最后加密文件夹名称本身（如果不是挂载点根目录）
     if (!p.equals(sourceDirPath, _mount.physicalPath)) {
@@ -803,40 +853,22 @@ class CryptOperations {
     }
   }
 
-  /// 递归加密目录内部的文件
-  Future<void> _encryptDirectoryRecursive(
-    String dirPath,
-    Future<void> Function(String file) processFile, {
-    bool skipEncrypted = false,
-  }) async {
-    final dir = Directory(dirPath);
-    final entities = await dir.list().toList();
-
-    for (final entity in entities) {
-      if (entity is Directory) {
-        await _encryptDirectoryRecursive(
-          entity.path,
-          processFile,
-          skipEncrypted: skipEncrypted,
-        );
-        // 加密子目录名称（已加密的跳过）
-        final parentDir = p.dirname(entity.path);
-        final dirName = p.basename(entity.path);
-        var alreadyEncryptedDir = false;
-        if (skipEncrypted) {
-          try {
-            _mount.crypt.decryptDirName(dirName);
-            alreadyEncryptedDir = true;
-          } catch (_) {}
-        }
-        if (!alreadyEncryptedDir) {
-          final encryptedDirName = _mount.crypt.encryptDirName(dirName);
-          final encryptedDirPath = p.join(parentDir, encryptedDirName);
-          await entity.rename(encryptedDirPath);
-        }
-      } else if (entity is File) {
-        await processFile(entity.path);
-      }
+  /// 收集 [dir] 下的**全部子目录**，按「后序」排列 = 最深的最先。
+  ///
+  /// 加/解密都必须**先改深层目录名、再改浅层**：改名一个子目录不会影响它
+  /// 父目录的路径，反过来就会让已收集的深层路径全部失效。改造前的递归实现
+  /// 天然满足这一点，改成「两阶段并行 + 集中改名」后必须显式保证同一个顺序。
+  /// 实现见 [CryptTreeWalker.listSubDirsDeepestFirst]。
+  ///
+  /// 注意**不包含** [dir] 自身 —— 顶层目录名由调用方单独处理
+  ///（挂载点根目录有特殊语义，不能改名）。
+  Future<void> _collectSubDirsPostOrder(
+    Directory dir,
+    List<Directory> out,
+  ) async {
+    final paths = await CryptTreeWalker.listSubDirsDeepestFirst(dir.path);
+    for (final path in paths) {
+      out.add(Directory(path));
     }
   }
 
@@ -871,13 +903,55 @@ class CryptOperations {
     final allFiles = await _listAllFiles(encryptedDirPath);
     final total = allFiles.length;
     var processed = 0;
-
-    // 递归解密
-    await _decryptDirectoryRecursive(encryptedDirPath, (file) async {
-      await decryptFile(file, onFileProgress: onFileProgress);
+    void bump() {
       processed++;
       onProgress?.call(processed, total);
-    });
+    }
+
+    // ── 阶段 ①：算出全部解密作业 ──
+    //
+    // 作业用的是**当前（仍是密文名的）目录路径**；阶段 ② 不会改任何目录名，
+    // 所以这些路径在并行解密期间始终有效。目录改名推迟到阶段 ③。
+    final jobs = <CryptBatchJob>[];
+    for (final file in allFiles) {
+      final stat = await File(file).stat();
+      final decryptedPath = p.join(
+        p.dirname(file),
+        _mount.crypt.decryptFileName(p.basename(file)),
+      );
+      jobs.add(
+        CryptBatchJob(
+          srcPath: file,
+          targetPath: decryptedPath,
+          tmpPath: '$decryptedPath$tmpSuffix',
+          readBytes: stat.size,
+          modifiedMs: stat.modified.millisecondsSinceEpoch,
+        ),
+      );
+    }
+
+    // ── 阶段 ②：并行解密文件 ──
+    await CryptBatchRunner.run(
+      dataKey: _mount.crypt.derivedKeys.dataKey,
+      jobs: jobs,
+      encrypting: false,
+      onBytes: onFileProgress,
+      onJobDone: bump,
+    );
+
+    // ── 阶段 ③：目录改名，**最深优先**（后序）──
+    final subDirs = <Directory>[];
+    await _collectSubDirsPostOrder(Directory(encryptedDirPath), subDirs);
+    for (final dir in subDirs) {
+      final parentDir = p.dirname(dir.path);
+      final encryptedDirName = p.basename(dir.path);
+      try {
+        final decryptedDirName = _mount.crypt.decryptDirName(encryptedDirName);
+        await dir.rename(p.join(parentDir, decryptedDirName));
+      } catch (_) {
+        // 解密失败，保留原名
+      }
+    }
 
     // 最后解密文件夹名称本身
     if (!p.equals(encryptedDirPath, _mount.physicalPath)) {
@@ -895,45 +969,7 @@ class CryptOperations {
     await CryptMountService.removeInPlaceContainerDir(encryptedDirPath);
   }
 
-  /// 递归解密目录内部的文件
-  Future<void> _decryptDirectoryRecursive(
-    String dirPath,
-    Future<void> Function(String file) processFile,
-  ) async {
-    final dir = Directory(dirPath);
-    final entities = await dir.list().toList();
-
-    for (final entity in entities) {
-      if (entity is Directory) {
-        await _decryptDirectoryRecursive(entity.path, processFile);
-        // 解密子目录名称
-        final parentDir = p.dirname(entity.path);
-        final encryptedDirName = p.basename(entity.path);
-        try {
-          final decryptedDirName = _mount.crypt.decryptDirName(encryptedDirName);
-          final decryptedDirPath = p.join(parentDir, decryptedDirName);
-          await entity.rename(decryptedDirPath);
-        } catch (_) {
-          // 解密失败，保留原名
-        }
-      } else if (entity is File) {
-        await processFile(entity.path);
-      }
-    }
-  }
-
-  /// 列出目录下所有文件（递归）
-  Future<List<String>> _listAllFiles(String dirPath) async {
-    final files = <String>[];
-    final dir = Directory(dirPath);
-    if (!await dir.exists()) return files;
-
-    final entities = await dir.list(recursive: true).toList();
-    for (final entity in entities) {
-      if (entity is File) {
-        files.add(entity.path);
-      }
-    }
-    return files;
-  }
+  /// 列出目录下所有文件（递归）。实现在纯 Dart 的 [CryptTreeWalker]。
+  Future<List<String>> _listAllFiles(String dirPath) =>
+      CryptTreeWalker.listFilesRecursive(dirPath);
 }

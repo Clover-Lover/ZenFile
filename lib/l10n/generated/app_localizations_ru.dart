@@ -720,6 +720,10 @@ class L10nRu extends L10n {
   String get ui_favorites => 'Избранное';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'Проведите вверх от нижнего края экрана, чтобы открыть «Избранное»';
+
+  @override
   String get ui_new_favorite => 'Добавить в избранное';
 
   @override
@@ -1209,14 +1213,14 @@ class L10nRu extends L10n {
 
   @override
   String get msg3341e3ed =>
-      'Кнопки действий отображаются в верхней части страницы';
+      'Панель навигации отображается в верхней части страницы';
 
   @override
   String get msg8c414b06 => 'Внизу';
 
   @override
   String get msg5d2c8e7f =>
-      'Кнопки действий отображаются в нижней части страницы';
+      'Панель навигации отображается в нижней части страницы';
 
   @override
   String get msg9b7639ac =>
@@ -1601,6 +1605,18 @@ class L10nRu extends L10n {
   String get app_icon_glossy_blue => 'Глянцевый синий';
 
   @override
+  String get app_icon_paper_gray => 'Светло-серый';
+
+  @override
+  String get app_icon_metal_frost => 'Матовый металл';
+
+  @override
+  String get app_icon_blue_folder => 'Синяя папка';
+
+  @override
+  String get app_icon_blue_gold => 'Тёмно-синий с золотом';
+
+  @override
   String title(Object title) {
     return 'Значок приложения изменён на $title';
   }
@@ -1736,6 +1752,10 @@ class L10nRu extends L10n {
   @override
   String get androidnn =>
       'Это необходимо для Android, чтобы выбирать и монтировать каталоги.\n\n';
+
+  @override
+  String get saf_enable_docs =>
+      'или включите его, чтобы использовать функцию каталогов SAF.';
 
   @override
   String get msgb2af4e30 =>
@@ -2290,6 +2310,11 @@ class L10nRu extends L10n {
 
   @override
   String get msg6466e61e => 'Активировать Ссылку Интернет Доступа';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '袧械 褍写邪谢芯褋褜 邪泻褌懈胁懈褉芯胁邪褌褜 褋褋褘谢泻褍 写谢褟 懈薪褌械褉薪械褌-写芯褋褌褍锌邪: $error';
+  }
 
   @override
   String get msg67bd9375 => 'Обработка...';
@@ -8102,7 +8127,7 @@ class L10nRu extends L10n {
   String get ui_text_editor_import => 'Импортировать текстовый файл';
 
   @override
-  String get ui_bottom_tab_bar => 'Показать панель навигации';
+  String get ui_bottom_tab_bar => 'Панель навигации';
 
   @override
   String get ui_pick_bottom_tab => 'Выберите элемент внизу';
@@ -8118,4 +8143,7 @@ class L10nRu extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Элементы внизу можно заменить любым ярлыком';
+
+  @override
+  String get app_icon_original => 'Классическая иконка';
 }

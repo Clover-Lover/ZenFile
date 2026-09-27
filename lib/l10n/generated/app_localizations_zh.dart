@@ -673,6 +673,9 @@ class L10nZh extends L10n {
   String get ui_favorites => '收藏夹';
 
   @override
+  String get ui_favorites_swipe_hint => '从屏幕底部上滑即可打开收藏夹';
+
+  @override
   String get ui_new_favorite => '新建收藏';
 
   @override
@@ -1139,13 +1142,13 @@ class L10nZh extends L10n {
   String get msge34c23ff => '顶部';
 
   @override
-  String get msg3341e3ed => '操作按钮显示在页面顶部';
+  String get msg3341e3ed => '导航栏显示在页面顶部';
 
   @override
   String get msg8c414b06 => '底部';
 
   @override
-  String get msg5d2c8e7f => '操作按钮显示在页面底部';
+  String get msg5d2c8e7f => '导航栏显示在页面底部';
 
   @override
   String get msg9b7639ac => '在浏览和媒体页面的选择操作栏中仅显示图标';
@@ -1500,6 +1503,18 @@ class L10nZh extends L10n {
   String get app_icon_glossy_blue => '光泽蓝';
 
   @override
+  String get app_icon_paper_gray => '浅灰纸纹';
+
+  @override
+  String get app_icon_metal_frost => '磨砂金属';
+
+  @override
+  String get app_icon_blue_folder => '蓝色文件夹';
+
+  @override
+  String get app_icon_blue_gold => '深蓝鎏金';
+
+  @override
   String title(Object title) {
     return '应用图标已切换为 $title';
   }
@@ -1625,6 +1640,9 @@ class L10nZh extends L10n {
 
   @override
   String get androidnn => '这是 Android 选择和挂载目录所必需的。\\n\\n';
+
+  @override
+  String get saf_enable_docs => '或启用它以使用 SAF 目录功能。';
 
   @override
   String get msgb2af4e30 => '请检查\"文件\"或\"文档\"系统应用是否在设备设置中被禁用，';
@@ -2165,6 +2183,11 @@ class L10nZh extends L10n {
 
   @override
   String get msg6466e61e => '激活互联网分享链接';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error';
+  }
 
   @override
   String get msg67bd9375 => '正在处理...';
@@ -7610,7 +7633,7 @@ class L10nZh extends L10n {
   String get ui_text_editor_import => '导入文本文件';
 
   @override
-  String get ui_bottom_tab_bar => '显示导航栏';
+  String get ui_bottom_tab_bar => '导航栏';
 
   @override
   String get ui_pick_bottom_tab => '选择底部入口';
@@ -7625,6 +7648,9 @@ class L10nZh extends L10n {
 
   @override
   String get ui_bottom_tab_custom_hint => '底部入口可替换为任意快捷方式';
+
+  @override
+  String get app_icon_original => '经典图标';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -8296,6 +8322,9 @@ class L10nZhTw extends L10nZh {
   String get ui_favorites => '收藏夾';
 
   @override
+  String get ui_favorites_swipe_hint => '從螢幕底部上滑即可開啟收藏夾';
+
+  @override
   String get ui_new_favorite => '新增收藏';
 
   @override
@@ -8762,13 +8791,13 @@ class L10nZhTw extends L10nZh {
   String get msge34c23ff => '頂部';
 
   @override
-  String get msg3341e3ed => '操作按鈕顯示在頁面頂部';
+  String get msg3341e3ed => '導覽列顯示在頁面頂部';
 
   @override
   String get msg8c414b06 => '底部';
 
   @override
-  String get msg5d2c8e7f => '操作按鈕顯示在頁面底部';
+  String get msg5d2c8e7f => '導覽列顯示在頁面底部';
 
   @override
   String get msg9b7639ac => '在瀏覽和媒體頁面的選擇操作欄中僅顯示圖示';
@@ -9123,6 +9152,18 @@ class L10nZhTw extends L10nZh {
   String get app_icon_glossy_blue => '光澤藍';
 
   @override
+  String get app_icon_paper_gray => '淺灰紙紋';
+
+  @override
+  String get app_icon_metal_frost => '磨砂金屬';
+
+  @override
+  String get app_icon_blue_folder => '藍色資料夾';
+
+  @override
+  String get app_icon_blue_gold => '深藍鎏金';
+
+  @override
   String title(Object title) {
     return '應用圖示已切換為 $title';
   }
@@ -9248,6 +9289,9 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get androidnn => '這是 Android 選擇和掛載目錄所必需的。\\n\\n';
+
+  @override
+  String get saf_enable_docs => '或啟用它以使用 SAF 目錄功能。';
 
   @override
   String get msgb2af4e30 => '請檢查\"檔案\"或\"檔案\"系統應用是否在裝置設定中被禁用，';
@@ -9782,6 +9826,11 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get msg6466e61e => '啟用網際網路分享連結';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '鍟熺敤缍查殯缍茶矾鍒嗕韩閫ｇ祼澶辨晽锛歿error';
+  }
 
   @override
   String get msg67bd9375 => '正在處理...';
@@ -15203,7 +15252,7 @@ class L10nZhTw extends L10nZh {
   String get ui_text_editor_import => '匯入文字檔';
 
   @override
-  String get ui_bottom_tab_bar => '顯示導覽列';
+  String get ui_bottom_tab_bar => '導覽列';
 
   @override
   String get ui_pick_bottom_tab => '選擇底部入口';
@@ -15218,4 +15267,7 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_bottom_tab_custom_hint => '底部入口可替換為任何快捷方式';
+
+  @override
+  String get app_icon_original => '經典圖示';
 }

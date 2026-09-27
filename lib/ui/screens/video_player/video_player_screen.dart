@@ -14,6 +14,7 @@ import 'package:zenfile/services/webdav_debug_log.dart';
 import 'package:zenfile/services/network_connections_service.dart';
 import 'package:zenfile/services/subtitle_parser.dart';
 import 'package:zenfile/services/audio_background_handler.dart';
+import 'package:zenfile/services/background_play_permission.dart';
 import 'package:zenfile/services/audio_equalizer_service.dart';
 import 'package:zenfile/services/mpv_audio_output_service.dart';
 import 'package:audio_service/audio_service.dart';
@@ -217,14 +218,24 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _volume = PreferencesService.getVideoVolume();
     _isBackgroundMode = PreferencesService.getVideoBackgroundMode();
     if (_isBackgroundMode) {
-      // 记住的后台播放偏好：首帧后若当前视频未在后台播放，自动进入后台；
-      // 若已在后台播放（用户从通知栏返回界面），保持界面显示，不重复 attach/不自动退出。
+      // 记住的后台播放偏好（开关状态已持久化）：首帧后把播放器挂到通知栏媒体
+      // 控制器，离开页面即继续后台播放。
+      // ⚠️ 这里**绝不能自动 pop 播放页**：旧实现调的是 `_startBackgroundMode()`，
+      // 而它内部含 `Navigator.pop` + 「已进入后台播放」提示 ⇒ 只要开过一次后台
+      // 播放（偏好被持久化为 true 且全库再无写 false 的地方），之后打开**任何**
+      // 视频都会立刻退出播放页、画面根本没出现过，用户只看到一句提示。
+      // 已经挂着同一个视频时（从通知栏返回 / 重复打开同一部）不重复 attach。
+      // ⚠️ 这里走**纯 attach**、**不申请权限也不诊断**：偏好是粘性的，用户开过一次
+      // 后台播放后，之后每打开一部视频都会进到这里；若走 `_startBackgroundMode()`，
+      // 每次打开视频都会弹一次系统通知权限框（打断刚开播的画面，并让 Activity 反复
+      // 切前后台）。权限提示只在用户**主动**点「后台播放」时给
+      // （`_toggleBackgroundMode` → `_startBackgroundMode`）。
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         final path = _currentStreamUrl ?? widget.videoPath;
-        if (path.isNotEmpty && !getAudioHandler().isPlayingPath(path)) {
-          _startBackgroundMode();
-        }
+        if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
+        WebdavDebugLog.log('[vp] postFrame 自动 attach 后台播放（偏好粘性）');
+        unawaited(_attachToBackgroundHandler());
       });
     }
 
@@ -1642,11 +1653,24 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   Future<void> _switchHwdec(bool useHardware) async {
     if (useHardware == _useHardwareDecode) return;
     if (!mounted) return;
+    // 崩溃定位哨兵：本方法会销毁旧 player，而旧的 player 上可能还挂着
+    // 「延迟回读 mpv 属性」的诊断任务 ⇒ 是原生崩溃的高频路径
+    WebdavDebugLog.log('[vp] switchHwdec → 硬件=$useHardware（将销毁旧 player）');
     final oldPlayer = player;
     final pos = oldPlayer.state.position;
     final wasPlaying = oldPlayer.state.playing;
     // 已解析的可播放地址：远程流优先 _currentStreamUrl，本地优先 _currentFilePath，否则原始路径
     final uri = _currentStreamUrl ?? _currentFilePath ?? widget.videoPath;
+
+    // ⚠️ 后台播放中换 player：通知栏 handler 里挂的还是 `oldPlayer`，而 `player`
+    // 马上被替换、oldPlayer 随后在 postFrame 里被销毁 ⇒ 销毁完成后通知栏按一下
+    // 播放就是 use-after-free ⇒ CRASH_NATIVE。所以先解绑：`stopNotification()`
+    // 只 emit idle + detach，**不** dispose（旧的仍由本页按「先解绑均衡器再销毁」
+    // 的顺序释放），换完再把新 player 重新挂上去。
+    final wasBackgroundMode = _isBackgroundMode;
+    if (wasBackgroundMode) {
+      getAudioHandler().stopNotification();
+    }
 
     setState(() => _isBuffering = true);
 
@@ -1668,13 +1692,33 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     //（VideoController 本身无 dispose() 方法），与本项目 dispose() 约定一致。
     setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 释放旧播放器前先把均衡器从旧 player 解绑，避免 _eqService 仍指向已销毁对象
-      try {
-        _eqService.detach();
-      } catch (_) {}
-      try {
-        oldPlayer.dispose();
-      } catch (_) {}
+      // 释放旧播放器前先把均衡器从**这一个**旧 player 上解绑：既避免 _eqService
+      // 仍指向已销毁对象，也避免无条件 detach 把**新**播放器的 af 一起清掉
+      // （本回调在 `_eqService.attach(新 player)` 之后才跑）。
+      // ⚠️ 必须等解绑真正完成再 dispose，否则 setProperty 与 dispose 并发 ⇒
+      // native use-after-free。这条路正是「黑屏自动软解回退」
+      // （_autoFallbackToSoftDecode → _switchHwdec），是原生崩溃的高频路径。
+      //
+      // ⚠️⚠️ 而且**必须先声明作废**：起播时 `schedulePlaybackDiagnostics` 挂了一个
+      // 「3s / 8s 后回读 mpv 属性」的诊断任务，持有的是**这个 oldPlayer**。本回调
+      // 发生在起播后 5s（黑屏检测）──与诊断窗口**正面相撞**：旧 player 一销毁，
+      // 诊断任务恢复后就是对着已释放的 mpv ctx 调 getProperty ⇒ use-after-free
+      // ⇒ CRASH_NATIVE（Dart 侧无栈）。这是「开启视频播放后闪退」的根因。
+      MpvAudioOutputService.abandon(oldPlayer);
+      final oldPlatform = oldPlayer.platform;
+      if (oldPlatform is NativePlayer) {
+        unawaited(
+          _eqService.detachIfAttached(oldPlatform).whenComplete(() {
+            try {
+              oldPlayer.dispose();
+            } catch (_) {}
+          }),
+        );
+      } else {
+        try {
+          oldPlayer.dispose();
+        } catch (_) {}
+      }
     });
 
     // 复用初始化的网络超时/字幕属性（不设置 sub-ass-override，避免破坏 VOBSub 渲染）
@@ -1748,6 +1792,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         _useHardwareDecode = useHardware;
         _isBuffering = false;
       });
+    }
+    // 换完 player 重新挂回通知栏（内部会 markForegroundHolds(新 player)）。
+    // silent：这是内部重建，不是用户主动开启后台播放，不弹「已进入后台播放」。
+    if (wasBackgroundMode && mounted) {
+      unawaited(_attachToBackgroundHandler(silent: true));
     }
   }
 
@@ -2574,6 +2623,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   @override
   void dispose() {
+    // 崩溃定位哨兵：`dispose` 是本页释放 player 前的最后一段 Dart 代码，
+    // 若日志停在这一行之后没有更多内容，则崩溃发生在释放链里（见
+    // `_disposePlayerAfterEqDetach` 与 `MpvAudioOutputService.abandon`）。
+    WebdavDebugLog.log('[vp] dispose 开始（bgMode=$_isBackgroundMode）');
     _hideTimer?.cancel();
     _positionSub?.cancel();
     _tracksSub?.cancel();
@@ -2589,17 +2642,29 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _stopBlackScreenCheck();
     _saveCurrentPlaybackPosition();
     _controlsAnimController.dispose();
+    // 本页即将销毁、不再持有 player ⇒ 撤销登记，之后通知栏的「关闭」/换绑可以安全
+    // 退役它（见 ZenFileAudioHandler._foregroundPlayer 的注释）。
+    // ⚠️ 必须**带 player 身份**撤销：多播放页叠加时无条件清空会误伤另一页仍在用的
+    // player，导致它被当成无主对象回收 ⇒ CRASH_NATIVE。
+    getAudioHandler().clearForegroundHolds(player);
     if (_isBackgroundMode) {
       // 后台播放：保留 player、均衡器与远程流会话，由通知栏媒体控制器继续控制。
       // 不清除 skip 回调（无队列时通知栏不会触发切歌）。
-      getAudioHandler().setSkipCallback(null);
+      final handler = getAudioHandler();
+      handler.setSkipCallback(null);
+      // 挂在通知栏上的**不是**本页这个 player（例如「重复打开同一部视频」时本页
+      // 新建的 player 并没有被 attach，`currentPlayer` 仍是上一部）：本页仍要负责
+      // 释放它，否则每打开一次就泄漏一个 mpv 实例（原生内存 + 解码线程）。
+      if (handler.currentPlayer != player) {
+        _disposePlayerAfterEqDetach(player);
+      }
     } else {
       // 清理远程流式会话：fire-and-forget 但确保异步执行。
       // dispose() 不能是 async（Framework 要求 void），
       // 但 stopStreaming 内部会调用 client.disconnect() 取消下载。
       _stopCurrentStream();
-      _eqService.detach();
-      player.dispose();
+      // ⚠️ 先等均衡器解绑完成再销毁播放器（原因见 _disposePlayerAfterEqDetach）。
+      _disposePlayerAfterEqDetach(player);
       getAudioHandler().detach();
     }
     // 离开播放页复位 edge-to-edge，避免影响其它页面布局。
@@ -2869,10 +2934,60 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   // ─── 后台播放：复用 audio_service 通知栏媒体控制器 ────────────────────────
 
-  /// 进入后台播放：将当前视频播放器挂到 audio_service，
-  /// 关闭页面后通知栏仍可播放/暂停/拖动进度。
+  /// 「后台播放」菜单项：**开关** —— 已开启则关闭，未开启则开启。
+  ///
+  /// 用户反馈（2026-09-27）：此前只能开不能关（`saveVideoBackgroundMode` 全库
+  /// 只写 true），菜单标题因此恒高亮；且点一下就直接退出播放页。
+  /// 现按要求改为「开关 + 不退出页面」。
+  Future<void> _toggleBackgroundMode() async {
+    if (_isBackgroundMode) {
+      _stopBackgroundMode();
+    } else {
+      await _startBackgroundMode();
+    }
+  }
+
+  /// 开启后台播放：**先申请通知权限**（安卓 13+ 未授予时系统会直接拦掉媒体
+  /// 通知，attach 了也什么都不显示），再把当前视频播放器挂到 audio_service，
+  /// 通知栏即可播放/暂停/拖动进度。
+  ///
+  /// ⚠️ **绝不 pop 播放页**（2026-09-27 用户要求）：点击后台播放只是「允许后台
+  /// 播放」，页面留在原地正常观看；是否离开由用户自己按返回键决定。
+  /// ⚠️ 权限申请与「通知栏是否真的生效」诊断复用 [BackgroundPlayPermission]，
+  /// 与音频播放器同一套文案与判定 —— 此前视频侧是静默失败，用户只看到「开了但
+  /// 通知栏没东西」（2026-09-27 用户反馈，要求参考音频播放器的提示）。
   Future<void> _startBackgroundMode() async {
-    final l10n = L10n.of(context);
+    final path = _currentStreamUrl ?? widget.videoPath;
+    if (path.isEmpty) return;
+
+    // 未授予时 helper 已弹「需要通知权限…（去设置）」，直接放弃，不 attach
+    final granted = await BackgroundPlayPermission.ensureGranted(context);
+    if (!granted || !mounted) return;
+
+    await _attachToBackgroundHandler();
+    if (!mounted) return;
+
+    // 诊断：部分 ROM 上 startForeground 不报错但通知不显示，主动检测并提示
+    unawaited(
+      BackgroundPlayPermission.diagnose(
+        context,
+        isActive: () => mounted,
+        // 显式闭包（不直接传方法引用）：`_attachToBackgroundHandler` 现在带可选命名
+        // 参数 `silent`，用闭包让类型匹配一目了然，不必依赖「带可选参数的函数可赋给
+        // 参数更少的函数类型」这条子类型规则。
+        onReattach: () => _attachToBackgroundHandler(),
+      ),
+    );
+  }
+
+  /// 真正把播放器挂到通知栏媒体控制器（**不含**权限申请与诊断）。
+  ///
+  /// 单独拆出来是因为「媒体通知链路重初始化成功」后需要**只重新 attach**：
+  /// 若再走一遍 `_startBackgroundMode()`，会重跑权限申请并重复弹提示。
+  ///
+  /// [silent] 为 true 时不弹「已进入后台播放」提示 —— 用于**内部重建播放器**
+  /// （如切换解码方式）后的重新挂载，那不是用户主动开启后台播放，弹提示会莫名其妙。
+  Future<void> _attachToBackgroundHandler({bool silent = false}) async {
     final handler = getAudioHandler();
     final currentPath = _currentStreamUrl ?? widget.videoPath;
     if (currentPath.isEmpty) return;
@@ -2891,13 +3006,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       currentIndex: 0,
       // 视频后台播放不写入音频"上次播放"记录
       persistAsAudio: false,
+      // 标记本次会话属于视频：音频类别页顶部卡片据此忽略 mediaItem、退回
+      // lastPlayedAudio，否则会显示视频播放记录（用户反馈 2026-09-27）。
+      videoSession: true,
     );
+    // ⚠️ 必须声明「本页仍持有这个 player」：页面不再自动退出后，通知栏的
+    // 「关闭」（ZenFileAudioHandler.stop）或**换绑其它播放器**（attach 回收 oldPlayer，
+    // 例如「音频后台播放中再开视频后台播放」）若照旧销毁 player，而本页还在用它解码，
+    // 就是 use-after-free ⇒ CRASH_NATIVE（Dart 侧拿不到任何栈）。
+    // 带 player 身份登记，避免误伤其它页面正在用的 player。
+    handler.markForegroundHolds(player);
     handler.setSkipCallback(null);
     if (!mounted) return;
 
     setState(() => _isBackgroundMode = true);
     PreferencesService.saveVideoBackgroundMode(true);
-    Navigator.pop(context);
+    if (silent) return;
+    final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -2909,6 +3034,54 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         duration: const Duration(seconds: 2),
       ),
+    );
+  }
+
+  /// 关闭后台播放：清掉通知栏媒体控件并解除关联，但**保留 player** —— 页面还
+  /// 活着，播放继续由本页负责（这正是「开关」关掉后应有的状态）。
+  ///
+  /// 因此复用 `stopNotification()`：它只 emit idle + `detach()`，从不 dispose；
+  /// 而 `stop()` 会 dispose player —— 那是「彻底停止播放」的语义，用于页面已
+  /// 销毁的音频后台场景，这里绝不能调。
+  void _stopBackgroundMode() {
+    final handler = getAudioHandler();
+    handler.setSkipCallback(null);
+    handler.stopNotification();
+    PreferencesService.saveVideoBackgroundMode(false);
+    if (!mounted) return;
+    setState(() => _isBackgroundMode = false);
+    // 关闭也要给一句反馈（用户反馈 2026-09-27：开了有提示、关了没提示，会以为
+    // 没生效）。复用音频播放器同一条文案键 msg50c1b248「后台播放已停止」，
+    // 10 种语言已存在 ⇒ **零新增文案**。
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(L10n.of(context).msg50c1b248),
+        backgroundColor: Colors.blueGrey,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
+  /// 先等均衡器解绑完成，再销毁播放器。
+  ///
+  /// ⚠️ 顺序铁律：`AudioEqualizerService.detach()` 内部要 `setProperty('af','')`，
+  /// 而 media_kit 的 `setProperty` 有内部 `await`（等待播放器初始化）且**不持锁**；
+  /// 一旦与 `player.dispose()` 并发，mpv ctx 可能已被提前释放，恢复后的原生调用
+  /// 就是 use-after-free ⇒ `CRASH_NATIVE`（native 段错误，Dart 侧拿不到任何栈，
+  /// 崩溃取证报告因此只会写「系统未提供 trace」）。
+  void _disposePlayerAfterEqDetach(Player target) {
+    // ⚠️ 先把 player 声明作废，再走上「解绑均衡器 → dispose」的异步链：
+    // `MpvAudioOutputService` 里的延迟诊断（3s/8s 后回读 mpv 属性）可能正持有
+    // 这个 player，它们发的是**裸原生调用**，销毁后调用即 use-after-free
+    // ⇒ CRASH_NATIVE（Dart 侧拿不到栈）。abandon 是它们唯一的拦阻点。
+    MpvAudioOutputService.abandon(target);
+    unawaited(
+      _eqService.detach().whenComplete(() {
+        try {
+          target.dispose();
+        } catch (_) {}
+      }),
     );
   }
 
@@ -3489,7 +3662,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                     onSelectAudioTrack: _showAudioTrackSelector,
                     onSelectSubtitleTrack: _showSubtitleTrackSelector,
                     onOpenPlaylist: _showPlaylist,
-                    onBackground: _startBackgroundMode,
+                    onBackground: _toggleBackgroundMode,
                     onSleepTimer: _showSleepTimerDialog,
                     subtitleEnabled: _subtitleEnabled,
                     subtitlePath: _subtitlePath,

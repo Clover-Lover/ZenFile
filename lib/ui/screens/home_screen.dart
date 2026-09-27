@@ -10,7 +10,7 @@ import '../widgets/quick_categories_grid.dart';
 import 'all_recent_files_screen.dart';
 import '../../services/preferences_service.dart';
 import '../widgets/zenfile_drawer.dart';
-import '../widgets/zenfile_end_drawer.dart';
+import '../widgets/favorites_sheet.dart';
 import '../widgets/sort_modal.dart';
 import 'directory_screen.dart';
 import 'transfers_screen.dart';
@@ -321,23 +321,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
           toggleTheme: widget.toggleTheme,
           onNavigateTab: (index) => _switchTab(index),
           width: _screenW * 0.675,
+          // 左抽屉「收藏夹」一项：先收起抽屉，等关闭动画走完再弹底部面板。
+          onOpenFavorites: _openFavoritesFromDrawer,
         ),
-        endDrawer: Drawer(
-          width: _screenW * 0.675,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(28), bottomLeft: Radius.circular(28)),
-          ),
-          child: ZenFileEndDrawer(
-            onNavigateToBrowse: () => _switchTab(1),
-            // 不传 searchFolderPath：让 GlobalSearchScreen 在 initState 用
-            // fileProvider.currentPath 作为搜索范围（与 ES 一致：在当前文件夹内
-            // 打开搜索即搜该目录）。原先传 rootPath（恒为 /storage/emulated/0）
-            // 会导致搜索范围永远是存储根，vivo 隐私系统等隔离挂载点的文件
-            // 从根递归访问不到，搜不到。
-            provider: context.read<FileManagerProvider>(),
-          ),
-        ),
+        // 右侧抽屉（endDrawer）已下线：收藏夹改为底部半屏面板。入口为
+        // 左抽屉「收藏夹」一项 / 底部导航栏上滑（导航栏开启时）/
+        // 浏览页底部操作栏上滑，统一走 FavoritesSheet.show。
         bottomNavigationBar: _buildNavBottomBar(provider.showBottomActionBar),
         body: Consumer<FileManagerProvider>(
           builder: (context, provider, _) {
@@ -411,12 +400,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                     );
                     final deltaX = endCenter.dx - _dualFingerStartCenter!.dx;
                     if (deltaX < -_dualFingerSwipeThreshold) {
-                      // 向左滑动：分类→浏览；已在浏览页则打开右侧抽屉（滑动仅四态：
-                      // 左抽屉→分类→浏览→右抽屉，传输/设置等自定义槽位不参与滑动）
+                      // 向左滑动：分类→浏览（滑动仅三态：左抽屉→分类→浏览，传输/设置
+                      // 等自定义槽位不参与滑动）。浏览页再左滑不动作 —— 右侧抽屉已下线，
+                      // 收藏夹改由「底部导航栏 / 浏览页底部操作栏」上滑唤起。
                       if (_currentIndex < 1) {
                         _switchTab(_currentIndex + 1);
-                      } else {
-                        _scaffoldKey.currentState?.openEndDrawer();
                       }
                     } else if (deltaX > _dualFingerSwipeThreshold) {
                       // 向右滑动：分类页开左抽屉，浏览页切回分类
@@ -460,12 +448,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                         // 快速轻扫 或 慢速长划（位移够大即忽略速度门槛）
                         if (velocity.abs() >= _swipeMinVelocity || dx.abs() >= _swipeLongDistance) {
                           if (dx < 0) {
-                            // 向左滑动：分类→浏览；已在浏览页则打开右侧抽屉（滑动仅四态：
-                            // 左抽屉→分类→浏览→右抽屉，传输/设置等自定义槽位不参与滑动）
+                            // 向左滑动：分类→浏览（滑动仅三态：左抽屉→分类→浏览，传输/
+                            // 设置等自定义槽位不参与滑动）。浏览页再左滑不动作。
                             if (_currentIndex < 1) {
                               _switchTab(_currentIndex + 1);
-                            } else {
-                              _scaffoldKey.currentState?.openEndDrawer();
                             }
                           } else {
                             // 向右滑动：分类页开左抽屉，浏览页切回分类
@@ -549,16 +535,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                         toggleTheme: widget.toggleTheme,
                         onNavigateTab: (index) => _switchTab(index),
                         onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
-                        onOpenEndDrawer: () => _scaffoldKey.currentState?.openEndDrawer(),
-                        onEndDrawerCustomize: () {
-                          _switchTab(0);
-                          Future.delayed(const Duration(milliseconds: 300), () {
-                            QuickCategoriesGrid.showCustomizeDialog(context, (index) {
-                              if (!mounted) return;
-                              _switchTab(index);
-                            });
-                          });
-                        },
                         onRefresh: () => _handleRefresh(),
                       ),
                       TransfersScreen(onNavigateTab: (index) => _switchTab(index)),
@@ -592,26 +568,88 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     );
   }
 
-  /// 顶部栏：位置=底部时显示 3 按钮行（左抽屉 / 中全局搜索 / 右快捷操作），
+  /// 顶栏：位置=底部时显示工具按钮行（左抽屉 / 全局搜索 / 常用功能 5 项 / 设置），
   /// 位置=顶部时显示 4-tab 导航。
+  ///
+  /// 「导航栏」总开关只隐藏 **4-tab 那条** —— 工具按钮行永远保留，它是抽屉 /
+  /// 搜索 / 刷新等操作的唯一入口。原实现只按底栏判开关，于是「位置=顶部 + 关闭
+  /// 导航栏」会把底栏的工具按钮行藏掉、4-tab 反而留在顶部。
   Widget _buildNavTopBar(bool bottomTabs) {
-    return bottomTabs ? _buildTopBarRow() : _buildBottomTabs();
-  }
-
-  /// 底部栏：与顶部栏按「导航栏位置」设置互换。
-  Widget _buildNavBottomBar(bool bottomTabs) {
-    // 底部导航栏总开关（自定义快捷方式页配置）：关闭时折叠隐藏（provider 监听实时生效）
+    if (bottomTabs) return _buildTopBarRow();
+    // 4-tab 在顶栏：关闭时整条收起，只留状态栏高度的空白，
+    // 免得下面的内容被状态栏压住。
     if (!context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled)) {
-      return const SizedBox.shrink();
+      return SizedBox(height: MediaQuery.of(context).padding.top);
     }
-    return bottomTabs ? _buildBottomTabs() : _buildTopBarRow();
+    return _buildBottomTabs();
   }
 
-  /// 顶部图标行：左抽屉 / 全局搜索 / 常用功能 5 项(刷新/自定义/排序/主题/单双窗口) / 收藏夹。
+  /// 底栏：与顶部栏按「导航栏位置」设置互换。
+  /// 导航栏开启且 4-tab 落在底栏时，整条栏支持**上滑**唤起收藏夹面板
+  /// （对齐 MT / NP 管理器书签的手势）。
+  ///
+  /// 导航栏关闭时**不再补那条「贴底透明上滑热区」**：它正好落在系统手势导航的
+  /// 底部边缘识别区里，上滑会被系统抢走（真机实测：收藏夹弹不出来，还会误触系统
+  /// 手势）。收藏夹入口因此改为：
+  ///   · 分类页 → 只保留左抽屉「收藏夹」一项；
+  ///   · 浏览页 → 底部操作栏上滑（见 DirectoryScreen._buildCollapsibleBrowseActionBar）。
+  /// 这里只留「系统手势条高度」的空白，避免浏览操作栏被系统手势条压住。
+  Widget _buildNavBottomBar(bool bottomTabs) {
+    final navEnabled =
+        context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled);
+    // 位置=顶部：4-tab 在顶栏，底栏固定是工具按钮行。它不受总开关影响，
+    // 否则「关掉导航栏」会把工具按钮行一起藏掉（它没有第二入口）。
+    if (!bottomTabs) {
+      final bar = _buildTopBarRow();
+      if (!navEnabled) return bar;
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragEnd: _handleSwipeUpForFavorites,
+        child: bar,
+      );
+    }
+    if (!navEnabled) {
+      return SizedBox(height: MediaQuery.of(context).padding.bottom);
+    }
+    return GestureDetector(
+      // translucent：不拦截子级命中测试，图标 / 标签仍可正常点按。
+      behavior: HitTestBehavior.translucent,
+      onVerticalDragEnd: _handleSwipeUpForFavorites,
+      child: _buildBottomTabs(),
+    );
+  }
+
+  /// 底部导航栏上滑唤起收藏夹：
+  /// 只认「向上」的快速滑动 —— 向下滑、慢速拖都不触发，避免和点按、横向切页抢手势。
+  void _handleSwipeUpForFavorites(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    if (velocity < -260) _openFavoritesSheet();
+  }
+
+  /// 从左抽屉打开收藏夹：先收起抽屉，等关闭动画走完再弹面板，
+  /// 否则抽屉收起与面板弹出两段动画会叠在一起。
+  void _openFavoritesFromDrawer() {
+    _scaffoldKey.currentState?.closeDrawer();
+    Future.delayed(const Duration(milliseconds: 220), () {
+      if (!mounted) return;
+      _openFavoritesSheet();
+    });
+  }
+
+  /// 弹出收藏夹面板（左抽屉「收藏夹」一项 / 底部导航栏上滑手势共用）。
+  void _openFavoritesSheet() {
+    if (!mounted) return;
+    FavoritesSheet.show(
+      context,
+      provider: context.read<FileManagerProvider>(),
+      onNavigateToBrowse: () => _switchTab(1),
+    );
+  }
+
+  /// 顶部图标行：左抽屉 / 全局搜索 / 常用功能 5 项(刷新/排序/主题/单双窗口) / 设置。
   /// 全部只显示图标（紧凑按钮），文案以 tooltip 呈现。
   Widget _buildTopBarRow() {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
     return Material(
       color: theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface,
       elevation: 0,
@@ -686,14 +724,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                     tooltip: context.read<FileManagerProvider>().enableSplitScreen
                         ? L10n.of(context).ui_single_window
                         : L10n.of(context).ui_dual_window,
-                    onPressed: () =>
-                        context.read<FileManagerProvider>().toggleSplitScreen(),
+                    onPressed: () {
+                      // 切换单/双窗口前先跳到文件浏览页，方便用户直接看到布局
+                      // 变化（参考排序按钮：_switchTab(1) 切到浏览页）。
+                      _switchTab(1);
+                      context.read<FileManagerProvider>().toggleSplitScreen();
+                    },
                   ),
-                  // 右抽屉：收藏夹入口
+                  // 设置：顶栏最右一格（原收藏夹的位置）。收藏夹已移出顶栏，
+                  // 改由左抽屉「收藏夹」一项 + 上滑手势唤起（导航栏开启时滑底栏，
+                  // 导航栏关闭时滑浏览页底部操作栏）。
                   IconButton(
-                    icon: Icon(Broken.folder_favorite, color: theme.colorScheme.primary),
-                    tooltip: L10n.of(context).ui_favorites,
-                    onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                    icon: Icon(Broken.setting_2, color: theme.colorScheme.primary),
+                    tooltip: L10n.of(context).ui_personalize_settings,
+                    onPressed: () => _switchTab(_settingsTabIndex),
                   ),
                 ],
               ),
@@ -705,10 +749,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     );
   }
 
-  /// 底部导航 4 个槽位全部可自定义（默认 分类/文件/传输/设置），可被自定义快捷方式页
+  /// 底部导航 4 个槽位全部可自定义（默认 分类/文件/传输/最近），可被自定义快捷方式页
   /// 中的任意入口替换（长按槽位或在该页配置区选择），替换后点击打开对应入口（push 页面）。
   /// 滑动切页与底部 tab 解耦：IndexedStack 第 0/1 页恒为分类页/浏览页（滑动轴心），
-  /// 滑动链路固定为 左抽屉→分类页→浏览页→右抽屉，即使底部 tab 被替换也始终可达。
+  /// 滑动链路固定为 左抽屉→分类页→浏览页，即使底部 tab 被替换也始终可达。
   Widget _buildBottomTabs() {
     final theme = Theme.of(context);
     final l10n = L10n.of(context);

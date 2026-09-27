@@ -5,6 +5,7 @@ import '../../providers/file_manager_provider.dart';
 import '../../core/icon_fonts/broken_icons.dart';
 import '../../core/utils.dart';
 import '../widgets/quick_categories_grid.dart';
+import '../widgets/nav_bar_settings_sheet.dart';
 import '../../services/preferences_service.dart';
 import '../../services/cache_clean_service.dart';
 import '../../services/app_manager_service.dart';
@@ -273,7 +274,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
     final hideTimeDateVis = _shouldShow(L10n.of(context).msg25ee6612, L10n.of(context).msg337359a6);
     final folderContentsVis = _shouldShow(L10n.of(context).ui_show_folder_contents_count, L10n.of(context).msga517863e);
     final folderSizesVis = _shouldShow(L10n.of(context).ui_show_folder_size, L10n.of(context).msg59a24fcb);
-    final bottomActionBarVis = _shouldShow(L10n.of(context).ui_show_bottom_action_bar, L10n.of(context).msg309e2a28);
+    final navBarVis = _shouldShow(L10n.of(context).ui_bottom_tab_bar, L10n.of(context).msg309e2a28);
     final hideActionTextVis = _shouldShow(L10n.of(context).ui_hide_action_text, L10n.of(context).msg9b7639ac);
     final highlightFolderVis = _shouldShow(L10n.of(context).msgd33e3082, L10n.of(context).msgdd69671b);
     final mediaPreviewsVis = _shouldShow(L10n.of(context).ui_show_media_previews, L10n.of(context).msg57736228);
@@ -320,7 +321,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
     ];
 
     final selectionActionBarList = [
-      bottomActionBarVis,
+      navBarVis,
       hideActionTextVis,
     ];
 
@@ -579,15 +580,19 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
                         onTap: () => _showSwipeModeDialog(context, fileManager),
                       ),
-                    if (bottomActionBarVis)
+                    if (navBarVis)
                       SettingsTile(
                         icon: Broken.menu,
-                        title: L10n.of(context).ui_show_bottom_action_bar,
-                        subtitle: fileManager.showBottomActionBar
-                            ? L10n.of(context).msg8c414b06
-                            : L10n.of(context).msge34c23ff,
+                        title: L10n.of(context).ui_bottom_tab_bar,
+                        // 副标题同时表达「开 / 关」与「位置」：关闭时复用通用的「关闭 / Off」
+                        // 文案（crypt_filename_enc_off，与其 crypt 用途无关），免得为 10 种语言新增键。
+                        subtitle: !fileManager.bottomNavBarEnabled
+                            ? L10n.of(context).crypt_filename_enc_off
+                            : (fileManager.showBottomActionBar
+                                ? L10n.of(context).msg8c414b06
+                                : L10n.of(context).msge34c23ff),
                         trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
-                        onTap: () => _showBottomActionBarDialog(context, fileManager),
+                        onTap: () => _showNavBarDialog(context),
                       ),
                     if (rememberLastFolderVis)
                       SettingsTile(
@@ -1194,12 +1199,16 @@ class GeneralSettingsScreen extends StatelessWidget {
             ),
             SettingsTile(
               icon: Broken.menu,
-              title: L10n.of(context).ui_show_bottom_action_bar,
-              subtitle: fileManager.showBottomActionBar
-                  ? L10n.of(context).msg8c414b06
-                  : L10n.of(context).msge34c23ff,
+              title: L10n.of(context).ui_bottom_tab_bar,
+              // 副标题同时表达「开 / 关」与「位置」：关闭时复用通用的「关闭 / Off」
+              // 文案（crypt_filename_enc_off，与其 crypt 用途无关），免得为 10 种语言新增键。
+              subtitle: !fileManager.bottomNavBarEnabled
+                  ? L10n.of(context).crypt_filename_enc_off
+                  : (fileManager.showBottomActionBar
+                      ? L10n.of(context).msg8c414b06
+                      : L10n.of(context).msge34c23ff),
               trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
-              onTap: () => _showBottomActionBarDialog(context, fileManager),
+              onTap: () => _showNavBarDialog(context),
             ),
             SettingsTile(
               icon: Broken.folder_open,
@@ -2538,45 +2547,14 @@ void _showSwipeModeDialog(BuildContext context, FileManagerProvider fileManager)
   );
 }
 
-void _showBottomActionBarDialog(BuildContext context, FileManagerProvider fileManager) {
-  final theme = Theme.of(context);
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: theme.scaffoldBackgroundColor,
-    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-    builder: (ctx) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(width: 36, height: 4,
-                decoration: BoxDecoration(color: theme.colorScheme.onSurface.withOpacity(0.15), borderRadius: BorderRadius.circular(2)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(L10n.of(context).ui_show_bottom_action_bar, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'LexendDeca')),
-            const SizedBox(height: 6),
-            Text(L10n.of(context).msg309e2a28, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.5))),
-            const SizedBox(height: 20),
-            _buildSelectionTile(
-              ctx, theme, Broken.arrow_square_up, L10n.of(context).msge34c23ff, L10n.of(context).msg3341e3ed,
-              selected: !fileManager.showBottomActionBar,
-              onTap: () { Navigator.pop(ctx); fileManager.setBottomActionBar(false); },
-            ),
-            const SizedBox(height: 8),
-            _buildSelectionTile(
-              ctx, theme, Broken.arrow_square_down, L10n.of(context).msg8c414b06, L10n.of(context).msg5d2c8e7f,
-              selected: fileManager.showBottomActionBar,
-              onTap: () { Navigator.pop(ctx); fileManager.setBottomActionBar(true); },
-            ),
-          ],
-        ),
-      );
-    },
-  );
+/// 「导航栏」设置入口：开关与位置统一交给 [NavBarSettingsSheet]（底部面板）。
+///
+/// 它与「自定义快捷方式」页的「导航栏」开关共用同一份状态
+/// （[FileManagerProvider.bottomNavBarEnabled] 与 `showBottomActionBar`，各自落盘
+/// 到 PreferencesService），所以两处永远一致 —— 面板里改完回到自定义页就是新值，
+/// 反之亦然。
+void _showNavBarDialog(BuildContext context) {
+  NavBarSettingsSheet.show(context);
 }
 
 Widget _buildSelectionTile(
@@ -3176,7 +3154,15 @@ void _showAppIconPickerDialog(BuildContext context, FileManagerProvider fileMana
                                 fileManager,
                                 theme,
                                 id: 'default',
-                                title: L10n.of(context).msg64a6476a,
+                                title: L10n.of(context).app_icon_blue_gold,
+                                imagePath: 'assets/logo/zf_blue_gold.webp',
+                              ),
+                              _buildIconOptionCard(
+                                context,
+                                fileManager,
+                                theme,
+                                id: 'original',
+                                title: L10n.of(context).app_icon_original,
                                 imagePath: 'assets/logo/zf_Classic1.webp',
                               ),
                               _buildIconOptionCard(
@@ -3259,6 +3245,30 @@ void _showAppIconPickerDialog(BuildContext context, FileManagerProvider fileMana
                                 title: L10n.of(context).app_icon_glossy_blue,
                                 imagePath: 'assets/logo/zf_glossy_blue.webp',
                               ),
+                              _buildIconOptionCard(
+                                context,
+                                fileManager,
+                                theme,
+                                id: 'paper_gray',
+                                title: L10n.of(context).app_icon_paper_gray,
+                                imagePath: 'assets/logo/zf_paper_gray.webp',
+                              ),
+                              _buildIconOptionCard(
+                                context,
+                                fileManager,
+                                theme,
+                                id: 'metal_frost',
+                                title: L10n.of(context).app_icon_metal_frost,
+                                imagePath: 'assets/logo/zf_metal_frost.webp',
+                              ),
+                              _buildIconOptionCard(
+                                context,
+                                fileManager,
+                                theme,
+                                id: 'blue_folder',
+                                title: L10n.of(context).app_icon_blue_folder,
+                                imagePath: 'assets/logo/zf_blue_folder.webp',
+                              ),
                               _buildCustomIconOptionCard(
                                 context,
                                 fileManager,
@@ -3308,8 +3318,12 @@ Widget _buildIconOptionCard(
       ),
     ),
     child: InkWell(
-      onTap: () {
-        fileManager.setActiveAppIcon(id);
+      onTap: () async {
+        final ok = await fileManager.setActiveAppIcon(id);
+        if (!context.mounted) return;
+        // 切换失败（原生拒绝，如 alias 未在 AndroidManifest.xml 声明）时不弹提示：
+        // 选中态已由 provider 回滚，再弹「已切换」反而误导。
+        if (!ok) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context).title(title)),

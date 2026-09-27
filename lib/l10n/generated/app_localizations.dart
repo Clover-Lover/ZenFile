@@ -1354,6 +1354,12 @@ abstract class L10n {
   /// **'收藏夹'**
   String get ui_favorites;
 
+  /// ui\widgets\favorites_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'从屏幕底部上滑即可打开收藏夹'**
+  String get ui_favorites_swipe_hint;
+
   /// directory_screen.dart
   ///
   /// In zh, this message translates to:
@@ -2245,7 +2251,7 @@ abstract class L10n {
   /// ui\screens\more_settings_screen.dart
   ///
   /// In zh, this message translates to:
-  /// **'操作按钮显示在页面顶部'**
+  /// **'导航栏显示在页面顶部'**
   String get msg3341e3ed;
 
   /// ui\screens\more_settings_screen.dart
@@ -2257,7 +2263,7 @@ abstract class L10n {
   /// ui\screens\more_settings_screen.dart
   ///
   /// In zh, this message translates to:
-  /// **'操作按钮显示在页面底部'**
+  /// **'导航栏显示在页面底部'**
   String get msg5d2c8e7f;
 
   /// ui\screens\more_settings_screen.dart
@@ -2959,6 +2965,30 @@ abstract class L10n {
   /// ui\screens\more_settings_screen.dart
   ///
   /// In zh, this message translates to:
+  /// **'浅灰纸纹'**
+  String get app_icon_paper_gray;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'磨砂金属'**
+  String get app_icon_metal_frost;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'蓝色文件夹'**
+  String get app_icon_blue_folder;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'深蓝鎏金'**
+  String get app_icon_blue_gold;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
   /// **'应用图标已切换为 {title}'**
   String title(Object title);
 
@@ -3183,6 +3213,12 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'这是 Android 选择和挂载目录所必需的。\\n\\n'**
   String get androidnn;
+
+  /// ui\screens\network_connection_wizard_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'或启用它以使用 SAF 目录功能。'**
+  String get saf_enable_docs;
 
   /// ui\screens\network_connection_wizard_screen.dart
   ///
@@ -4161,6 +4197,12 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'激活互联网分享链接'**
   String get msg6466e61e;
+
+  /// web_sharing_screen.dart internet tunnel activation failure toast
+  ///
+  /// In zh, this message translates to:
+  /// **'婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error}'**
+  String web_share_internet_failed(String error);
 
   /// ui\widgets\background_operation_progress_dialog.dart
   ///
@@ -14260,10 +14302,10 @@ abstract class L10n {
   /// **'导入文本文件'**
   String get ui_text_editor_import;
 
-  /// Bottom navigation bar
+  /// Navigation bar (visibility + position)
   ///
   /// In zh, this message translates to:
-  /// **'显示导航栏'**
+  /// **'导航栏'**
   String get ui_bottom_tab_bar;
 
   /// Choose bottom entry
@@ -14289,6 +14331,12 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'底部入口可替换为任意快捷方式'**
   String get ui_bottom_tab_custom_hint;
+
+  /// Classic app icon
+  ///
+  /// In zh, this message translates to:
+  /// **'经典图标'**
+  String get app_icon_original;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

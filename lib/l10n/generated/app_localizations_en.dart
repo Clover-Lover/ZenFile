@@ -709,6 +709,10 @@ class L10nEn extends L10n {
   String get ui_favorites => 'Favorites';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'Swipe up from the bottom of the screen to open Favorites';
+
+  @override
   String get ui_new_favorite => 'Add to Favorites';
 
   @override
@@ -1191,14 +1195,14 @@ class L10nEn extends L10n {
   String get msge34c23ff => 'Top';
 
   @override
-  String get msg3341e3ed => 'Action buttons displayed at the top of the page';
+  String get msg3341e3ed => 'Navigation bar displayed at the top of the page';
 
   @override
   String get msg8c414b06 => 'Bottom';
 
   @override
   String get msg5d2c8e7f =>
-      'Action buttons displayed at the bottom of the page';
+      'Navigation bar displayed at the bottom of the page';
 
   @override
   String get msg9b7639ac =>
@@ -1571,6 +1575,18 @@ class L10nEn extends L10n {
   String get app_icon_glossy_blue => 'Glossy Blue';
 
   @override
+  String get app_icon_paper_gray => 'Paper Gray';
+
+  @override
+  String get app_icon_metal_frost => 'Frosted Metal';
+
+  @override
+  String get app_icon_blue_folder => 'Blue Folder';
+
+  @override
+  String get app_icon_blue_gold => 'Deep Blue Gold';
+
+  @override
   String title(Object title) {
     return 'App icon switched to $title';
   }
@@ -1701,6 +1717,10 @@ class L10nEn extends L10n {
   @override
   String get androidnn =>
       'This is required for Android to select and mount directories.\n\n';
+
+  @override
+  String get saf_enable_docs =>
+      'or enable it to use the SAF directory feature.';
 
   @override
   String get msgb2af4e30 =>
@@ -2253,6 +2273,11 @@ class L10nEn extends L10n {
 
   @override
   String get msg6466e61e => 'Activate Internet Share Link';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return 'Failed to activate Internet share link: $error';
+  }
 
   @override
   String get msg67bd9375 => 'Processing...';
@@ -8024,7 +8049,7 @@ class L10nEn extends L10n {
   String get ui_text_editor_import => 'Import text file';
 
   @override
-  String get ui_bottom_tab_bar => 'Show Navigation Bar';
+  String get ui_bottom_tab_bar => 'Navigation Bar';
 
   @override
   String get ui_pick_bottom_tab => 'Choose bottom entry';
@@ -8040,4 +8065,7 @@ class L10nEn extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Bottom entries can be replaced with any shortcut';
+
+  @override
+  String get app_icon_original => 'Classic Icon';
 }

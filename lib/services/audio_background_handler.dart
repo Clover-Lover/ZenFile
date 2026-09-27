@@ -6,8 +6,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../ui/screens/audio_player/audio_artwork_widget.dart';
+import 'desktop_lyric_controller.dart';
+import 'mpv_audio_output_service.dart';
 import 'preferences_service.dart';
 import 'power_management_service.dart';
+import 'webdav_debug_log.dart';
 
 /// Global singleton handler instance
 ZenFileAudioHandler? _audioHandlerInstance;
@@ -54,6 +57,106 @@ class ZenFileAudioHandler extends BaseAudioHandler
   final List<StreamSubscription<dynamic>> _subs = [];
   Timer? _positionSaveTimer;
 
+  /// 当前**被前台播放页持有**的那个 player（原为全局单布尔 `foregroundHoldsPlayer`）。
+  ///
+  /// ⚠️ 为什么必须**按 player 身份**记，而不是「有没有人持有任意 player」的全局布尔：
+  /// 音频播放页与视频播放页会叠加（音频在后台播、用户再打开视频），此时 A 页
+  /// `dispose()` 会把全局布尔无条件置 false ⇒ **B 页仍在用的 player 被误判为无主**
+  /// ⇒ 被回收 ⇒ 返回 B 页时一次原生调用就是 use-after-free ⇒ `CRASH_NATIVE`。
+  ///
+  /// 语义：非 null ⇔「handler 当前关联的 player 正被某个前台页持有，两条路径都
+  /// **绝不能** dispose 它」（1. `stop()`；2. `attach()` 换绑时回收 oldPlayer）。
+  /// 由播放页在 attach 成功后 `markForegroundHolds(player)`、在 `dispose()` 时
+  /// `clearForegroundHolds(player)`（**带身份**，只撤销自己的登记）。
+  Player? _foregroundPlayer;
+
+  /// 兼容旧读法：是否有 player 正被前台页持有。
+  bool get foregroundHoldsPlayer => _foregroundPlayer != null;
+
+  /// [p] 是否正被前台播放页持有（回收前的判据）。
+  bool isForegroundHeld(Player p) => _foregroundPlayer == p;
+
+  /// 登记「本页仍持有 [p]」。
+  void markForegroundHolds(Player p) {
+    _foregroundPlayer = p;
+    WebdavDebugLog.log('[bg] markForegroundHolds(#${identityHashCode(p)})');
+  }
+
+  /// 撤销登记（页面销毁时调用）。
+  ///
+  /// ⚠️ 必须带 player 身份：只有当登记的正是 [p] 才清空，否则「视频页退出」会把
+  /// 「音频页的登记」一起清掉，音频的 player 又变成可被误回收。
+  void clearForegroundHolds(Player p) {
+    if (_foregroundPlayer == p) {
+      _foregroundPlayer = null;
+      WebdavDebugLog.log('[bg] clearForegroundHolds(#${identityHashCode(p)})');
+    }
+  }
+
+  /// 正在退役 / 已退役的 player，防止**重复 dispose**（重复销毁同样是 native 崩溃源）。
+  final Set<Player> _retiring = {};
+
+  /// 退役串行队列 —— 「停 → 销毁」全程排队执行，避免与其它原生调用并发。
+  Future<void> _retireQueue = Future<void>.value();
+
+  /// 优雅退役一个不再需要的 player。
+  ///
+  /// ⚠️ 铁律（本项目已多次踩坑，详见技能 `zenfile-crash-forensics`）：
+  /// **绝不能对正在播放 / 仍可能被原生调用的 player 直接 `dispose()`。**
+  /// `dispose()` 会立刻释放 mpv native 上下文，而此刻它的 AO 线程、解码线程、
+  /// MediaCodec 可能仍在跑，任何 pending 的 `setProperty` / `open` 恢复后就是
+  /// use-after-free ⇒ SIGSEGV ⇒ `CRASH_NATIVE`（Dart 侧拿不到栈，崩溃报告只写
+  /// 「系统未提供 trace」）。
+  ///
+  /// 正确顺序（本方法职责）：先 `stop()` 让 mpv 正常收尾、**await 完成**，再
+  /// `dispose()`；顺便让桌面歌词控制器停止跟踪该 player；整个过程**串行 + 去重**。
+  /// 调用方无需 await（fire-and-forget，不阻塞当前操作）。
+  void _retirePlayer(Player p, {required String reason}) {
+    if (_retiring.contains(p)) {
+      WebdavDebugLog.log('[bg] retire($reason, #${identityHashCode(p)}) 已在队列，跳过');
+      return;
+    }
+    _retiring.add(p);
+    // ⚠️ 先声明作废，再排队销毁：本服务（`MpvAudioOutputService`）里有多个
+    // 「延迟 N 秒后回读 mpv 属性」的诊断任务**正持有同一个 player**，它们发的是
+    // 裸原生调用。不先声明作废，销毁后这些任务会对着已释放的 mpv ctx 调
+    // `getProperty` ⇒ use-after-free ⇒ CRASH_NATIVE（Dart 侧无栈）。
+    MpvAudioOutputService.abandon(p);
+    WebdavDebugLog.log('[bg] retire($reason, #${identityHashCode(p)}) 入队');
+    _retireQueue = _retireQueue.then((_) async {
+      try {
+        await p.stop();
+      } catch (e) {
+        debugPrint('[ZenFile] retire stop failed: $e');
+      }
+      try {
+        DesktopLyricController.instance.stopIfPlayer(p);
+      } catch (_) {}
+      try {
+        await p.dispose();
+        WebdavDebugLog.log('[bg] retire($reason, #${identityHashCode(p)}) 已销毁');
+      } catch (e) {
+        debugPrint('[ZenFile] retire dispose failed: $e');
+      } finally {
+        _retiring.remove(p);
+      }
+    }).catchError((Object e) {
+      // 兜底：任何意外都不能让队列停在 error 态 —— 一旦停在 error，后续所有
+      // `.then` 都不会再执行 ⇒ 之后每个要退役的 player 都永远不释放（泄漏）。
+      debugPrint('[ZenFile] retire queue error: $e');
+    });
+  }
+
+  /// 本次后台会话是否来自**视频**播放器（由 `attach(videoSession: true)` 置位）。
+  ///
+  /// 视频后台播放时 `mediaItem` 里放的是视频（通知栏要显示视频标题），但音频类别页
+  /// 顶部的「继续播放」卡片也读 `mediaItem`/`currentMediaItem`，于是会显示成视频
+  /// 播放记录（用户反馈 2026-09-27）。**读 `currentMediaItem` 的音频侧代码必须先看
+  /// 这个标志**，为 true 时退回 `lastPlayedAudio`。
+  /// 生命周期：`attach()` 里按参数赋值、`detach()` 里复位 false（`attach` 内部先
+  /// 调 `detach()`，所以赋值必须写在 `detach()` 之后）。
+  bool videoSession = false;
+
   /// 当前关联的播放器（后台播放时可用于恢复界面）
   Player? get currentPlayer => _player;
 
@@ -90,20 +193,34 @@ class ZenFileAudioHandler extends BaseAudioHandler
     required List<MediaItem> queue,
     required int currentIndex,
     bool persistAsAudio = true,
+    bool videoSession = false,
   }) {
     final oldPlayer = _player;
+    WebdavDebugLog.log(
+      '[bg] attach(new=#${identityHashCode(player)}, '
+      'old=${oldPlayer == null ? 'null' : '#${identityHashCode(oldPlayer)}'}, '
+      'videoSession=$videoSession, fgHeld=$foregroundHoldsPlayer)',
+    );
+    // ⚠️ 只有「旧 player **本身**已无前台页面持有」时才回收。这里有两个踩过的坑：
+    // 1. 判据必须按 player 身份（`isForegroundHeld`）—— 不能用「有没有人持有任意
+    //    player」的全局布尔（多播放页叠加时会被别的页面误清，见 `_foregroundPlayer`）；
+    // 2. 回收**绝不能**裸 `dispose()`（哪怕丢进 `Future.microtask`）：那是在
+    //    mpv 的 AO / 解码线程仍活跃时直接释放 native 上下文，与任何 pending 的
+    //    setProperty / open 并发就是 SIGSEGV ⇒ CRASH_NATIVE（Dart 侧无栈）。
+    //    统一走 [_retirePlayer]：先 stop 收尾、再 dispose。
     if (oldPlayer != null && oldPlayer != player) {
-      Future.microtask(() async {
-        try {
-          await oldPlayer.dispose();
-        } catch (e) {
-          debugPrint('[ZenFile] Error disposing old player: $e');
-        }
-      });
+      if (isForegroundHeld(oldPlayer)) {
+        debugPrint('[ZenFile] 跳过回收旧 player：仍被前台页面持有');
+        WebdavDebugLog.log('[bg] attach 跳过回收：old 仍被前台页持有');
+      } else {
+        _retirePlayer(oldPlayer, reason: 'attach-swap');
+      }
     }
 
     detach();
     _player = player;
+    // 会话归属（见 videoSession 字段）。⚠️ 必须放在 detach() 之后：detach() 会复位它。
+    this.videoSession = videoSession;
 
     // Push the queue
     this.queue.add(queue);
@@ -186,6 +303,11 @@ class ZenFileAudioHandler extends BaseAudioHandler
   }
 
   void detach() {
+    if (_player != null) {
+      WebdavDebugLog.log(
+        '[bg] detach(#${identityHashCode(_player!)}, videoSession=$videoSession)',
+      );
+    }
     _positionSaveTimer?.cancel();
     _positionSaveTimer = null;
     for (final s in _subs) {
@@ -193,6 +315,8 @@ class ZenFileAudioHandler extends BaseAudioHandler
     }
     _subs.clear();
     _player = null;
+    // 会话结束：归属标志一并复位，避免下一次会话沿用上一次的归属
+    videoSession = false;
   }
 
   /// 当用户开始播放视频时调用：立即暂停正在播放的后台音频，避免两路声音混在一起。
@@ -226,13 +350,12 @@ class ZenFileAudioHandler extends BaseAudioHandler
       processingState: AudioProcessingState.idle,
     ));
 
+    // 只有「彻底停止」才回收；前台页面仍持有 player 时（视频后台播放且播放页
+    // 未退出）只清通知，否则会把页面正在用的对象销毁 ⇒ use-after-free。
+    // 回收同样走 [_retirePlayer]（先 stop 再 dispose），绝不裸 dispose。
     final playerToDispose = _player;
-    if (playerToDispose != null) {
-      try {
-        await playerToDispose.dispose();
-      } catch (e) {
-        debugPrint('[ZenFile] Error disposing player on stop: $e');
-      }
+    if (playerToDispose != null && !isForegroundHeld(playerToDispose)) {
+      _retirePlayer(playerToDispose, reason: 'stop');
     }
 
     detach();

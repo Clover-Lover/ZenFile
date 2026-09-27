@@ -33,6 +33,19 @@ class WebdavDebugLog {
   /// 「实际生效的 mpv 音频输出（AO）」等运行期证据（见
   /// `MpvAudioOutputService`）。⚠️ **发版前必须改回 false**。
   /// 2026-09-23 v2.1.6 发版：已改回 false。
+  /// 2026-09-27「音频和视频都开启后台播放后，播放视频会崩溃闪退」排查期间**再次
+  /// 开启**：10 份崩溃报告全是 `CRASH_NATIVE` 且系统不提供 trace（无 adb），只能靠
+  /// `ZenFileAudioHandler` 在 attach / 退役 / detach 各关键动作落盘的 `[bg]` 序列，
+  /// 判断崩溃前**最后执行到哪一步**。⚠️ **发版前必须改回 false**。
+  /// 2026-09-28 v3.2.0 发版：已改回 false。
+  /// 🔴 **血的教训（务必看完再动这个开关）**：本开关不只是「要不要往 SD 卡写日志」，
+  /// 它还决定了 `MpvAudioOutputService` 的 **AO 延迟回读诊断**是否运行 —— 该诊断走
+  /// **裸原生 `getProperty`**，且有「8s 兜底 + 内层 3s」的最长 **11 秒窗口**；player
+  /// 一旦在此期间被销毁就是 use-after-free（`CRASH_NATIVE` 且无栈，`try/catch` 抓不住）。
+  /// ⇒ **开着它发布出去的每一个包，都自带「播放中偶发闪退」的悬垂窗口**，
+  /// 而它的存在感又极低（只在本文件的 webdav_debug.log 里留痕）。
+  /// ⇒ 任何情况下：**发版前必须回到 false，且要 grep 复核，
+  ///   不要相信 WORKLOG / memory 里「应该已经关了」的文字描述。**
   static bool enabled = false;
 
   /// 写入一行日志（同步落盘，保证崩溃前也已写入）。
@@ -49,6 +62,38 @@ class WebdavDebugLog {
       final ts = DateTime.now().toIso8601String();
       final line = '[$ts] $msg\n';
       file.writeAsStringSync(line, mode: FileMode.append, flush: true);
+    } catch (_) {
+      // 日志绝不能影响主流程
+    }
+  }
+
+  /// 启动时把**上一次运行**的日志另存为 `webdav_debug.log.prev`。
+  ///
+  /// ## 为什么必须保全现场
+  ///
+  /// 本项目要定位的崩溃是 **native 段错误**（`CRASH_NATIVE`），进程当场死掉，
+  /// 系统不给 trace —— 此时**日志的最后一行就是崩溃前最后执行的语句**，是
+  /// 无 adb 环境下唯一能回答「崩在哪一步」的依据。
+  ///
+  /// 但崩溃后用户必然会**重新打开应用**看结果，而 `[boot]` 序列会立刻往同一个
+  /// 文件继续追加，把真正的现场越埋越深（2026-09-27 真机里就出现过「日志里只剩
+  /// 一次 boot、`[bg]` 一行都没有」的情况，导致这一轮只能靠推理定位）。
+  /// 于是每次启动先把现有内容**复制**一份到 `.prev`：
+  /// * `.log` 保持连续（不丢历史，也不会让文件管理器看不到主日志）；
+  /// * `.prev` 恒为「**本次启动之前**那一段」，即崩溃现场。
+  ///
+  /// 只保留一代（每次都覆盖）。取日志时请把 `webdav_debug.log` 与
+  /// `webdav_debug.log.prev` **一起**取走。
+  static void snapshotPrevious() {
+    if (!enabled) return;
+    try {
+      final file = File(filePath);
+      if (!file.existsSync() || file.lengthSync() == 0) return;
+      final prev = File('$filePath.prev');
+      if (prev.existsSync()) {
+        prev.deleteSync();
+      }
+      file.copySync(prev.path);
     } catch (_) {
       // 日志绝不能影响主流程
     }

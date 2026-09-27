@@ -721,6 +721,10 @@ class L10nDe extends L10n {
   String get ui_favorites => 'Favoriten';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'Wischen Sie vom unteren Bildschirmrand nach oben, um die Favoriten zu öffnen';
+
+  @override
   String get ui_new_favorite => 'Zu Favoriten hinzufügen';
 
   @override
@@ -1209,15 +1213,13 @@ class L10nDe extends L10n {
   String get msge34c23ff => 'Oben';
 
   @override
-  String get msg3341e3ed =>
-      'Aktionsschaltflächen werden oben auf der Seite angezeigt';
+  String get msg3341e3ed => 'Navigationsleiste oben auf der Seite angezeigt';
 
   @override
   String get msg8c414b06 => 'Unten';
 
   @override
-  String get msg5d2c8e7f =>
-      'Aktionsschaltflächen werden unten auf der Seite angezeigt';
+  String get msg5d2c8e7f => 'Navigationsleiste unten auf der Seite angezeigt';
 
   @override
   String get msg9b7639ac =>
@@ -1597,6 +1599,18 @@ class L10nDe extends L10n {
   String get app_icon_glossy_blue => 'Glänzendes Blau';
 
   @override
+  String get app_icon_paper_gray => 'Hellgrau';
+
+  @override
+  String get app_icon_metal_frost => 'Mattiertes Metall';
+
+  @override
+  String get app_icon_blue_folder => 'Blauer Ordner';
+
+  @override
+  String get app_icon_blue_gold => 'Tiefblau Gold';
+
+  @override
   String title(Object title) {
     return 'App-Symbol gewechselt zu $title';
   }
@@ -1730,6 +1744,10 @@ class L10nDe extends L10n {
   @override
   String get androidnn =>
       'Dies ist erforderlich, damit Android Verzeichnisse auswählen und einbinden kann.\n\n';
+
+  @override
+  String get saf_enable_docs =>
+      'oder aktivieren Sie es, um die SAF-Ordnerfunktion zu nutzen.';
 
   @override
   String get msgb2af4e30 =>
@@ -2285,6 +2303,11 @@ class L10nDe extends L10n {
 
   @override
   String get msg6466e61e => 'Internet-Freigabelink aktivieren';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return 'Aktivierung des Internet-Freigabelinks fehlgeschlagen: $error';
+  }
 
   @override
   String get msg67bd9375 => 'Verarbeitung...';
@@ -8116,7 +8139,7 @@ class L10nDe extends L10n {
   String get ui_text_editor_import => 'Textdatei importieren';
 
   @override
-  String get ui_bottom_tab_bar => 'Navigationsleiste anzeigen';
+  String get ui_bottom_tab_bar => 'Navigationsleiste';
 
   @override
   String get ui_pick_bottom_tab => 'Untereintrag wählen';
@@ -8132,4 +8155,7 @@ class L10nDe extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Untereinträge können durch beliebige Verknüpfungen ersetzt werden';
+
+  @override
+  String get app_icon_original => 'Klassisches Symbol';
 }

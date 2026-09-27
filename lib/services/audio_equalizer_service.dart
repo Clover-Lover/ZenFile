@@ -95,12 +95,32 @@ class AudioEqualizerService {
   }
 
   /// 释放均衡器（清除滤波器）。
+  ///
+  /// ⚠️ 两条必须遵守的约束，否则会 native 崩溃（Dart 侧拿不到任何栈）：
+  /// 1. **先解引用再 await**：`applyPreset` 只在入口处判空，若 await 期间
+  ///    `_nativePlayer` 仍指着旧对象，并发的 preset 会直接写到已销毁的 mpv 上；
+  /// 2. **调用方必须等 `detach()` 完成后才 `player.dispose()`**：media_kit 的
+  ///    `setProperty` 内部有 await（等待播放器初始化）且**不持锁**，与 `dispose()`
+  ///    并发时 mpv ctx 可能已被释放，恢复后的 `mpv_set_property_string` 就是
+  ///    use-after-free ⇒ CRASH_NATIVE（系统未提供 trace 的那类崩溃）。
   Future<void> detach() async {
     _isEnabled = false;
-    try {
-      await _nativePlayer?.setProperty('af', '');
-    } catch (_) {}
+    final player = _nativePlayer;
     _nativePlayer = null;
+    if (player == null) return;
+    try {
+      await player.setProperty('af', '');
+    } catch (_) {}
+  }
+
+  /// 仅当当前关联的就是 [player] 时才解除关联并清除滤波器。
+  ///
+  /// 供「重建播放器」场景使用（如视频软/硬解切换）：那条路上新播放器可能已经
+  /// `attach` 完毕，无条件 `detach()` 会把**新**播放器的 `af` 一起清掉，
+  /// 表现为「切换解码后均衡器神秘失效」。
+  Future<void> detachIfAttached(NativePlayer player) async {
+    if (!identical(_nativePlayer, player)) return;
+    await detach();
   }
 
   /// 应用预设。

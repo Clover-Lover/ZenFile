@@ -478,8 +478,11 @@ class FileManagerProvider extends ChangeNotifier {
   String _activeAppIcon = 'default';
   String get activeAppIcon => _activeAppIcon;
 
-  Future<void> setActiveAppIcon(String val) async {
-    if (_activeAppIcon == val) return;
+  Future<bool> setActiveAppIcon(String val) async {
+    // ⚠️ 刻意不做「同值直接 return」的早退：prefs 里记录的值可能与系统实际生效的
+    // alias 不一致（覆盖安装会把组件 enabled 状态重置回 manifest 声明值），此时用户
+    // 再点同一张卡片必须真正重新应用一次，否则表现为「点了没反应」。
+    final previous = _activeAppIcon;
     _activeAppIcon = val;
     await PreferencesService.saveActiveAppIcon(val);
 
@@ -488,7 +491,7 @@ class FileManagerProvider extends ChangeNotifier {
     // from an alias android:icon attribute.
     if (val == 'custom') {
       notifyListeners();
-      return;
+      return true;
     }
 
     // 预设备用图标 → 切换对应 activity-alias（桌面图标随 alias 启用状态变化）。
@@ -502,13 +505,26 @@ class FileManagerProvider extends ChangeNotifier {
       'glassmorphism' => 'com.sequl.zenfile.MainActivityGlassmorphism',
       '3d_gradient' => 'com.sequl.zenfile.MainActivity3DGradient',
       'glossy_blue' => 'com.sequl.zenfile.MainActivityGlossyBlue',
+      'paper_gray' => 'com.sequl.zenfile.MainActivityPaperGray',
+      'metal_frost' => 'com.sequl.zenfile.MainActivityMetalFrost',
+      'blue_folder' => 'com.sequl.zenfile.MainActivityBlueFolder',
+      // 深蓝鎏金已升级为默认图标（application icon + MainActivityDefault），
+      // 不再作为备选 alias；原默认图标改为备选（MainActivityOriginal）。
+      'original' => 'com.sequl.zenfile.MainActivityOriginal',
       'm3_expressive' => 'com.sequl.zenfile.MainActivityM3Expressive',
       'minimal_flat' => 'com.sequl.zenfile.MainActivityMinimalFlat',
       'neumorphism' => 'com.sequl.zenfile.MainActivityNeumorphism',
       _ => 'com.sequl.zenfile.MainActivityDefault',
     };
-    await AppManagerService.changeAppIcon(alias);
+    final ok = await AppManagerService.changeAppIcon(alias);
+    if (!ok) {
+      // 原生侧拒绝（例如 alias 未在 AndroidManifest.xml 声明）⇒ 回滚，
+      // 避免「设置页显示已切换、桌面图标其实没变」的不一致状态。
+      _activeAppIcon = previous;
+      await PreferencesService.saveActiveAppIcon(previous);
+    }
     notifyListeners();
+    return ok;
   }
 
   String _fontFamilyOption = 'default';
@@ -10363,6 +10379,16 @@ class FileManagerProvider extends ChangeNotifier {
     final ext = FileUtils.effectiveExtensionWithDot(realName ?? path);
     const docExts = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.epub', '.odt'];
 
+    // 「是否按远程占位文件交给播放器」：只有**远程标签页下的远程路径**才需要播放器等缓存落盘。
+    // ⚠️ 不能单看 `activeTab.isRemote`：用户停在远程标签页时，「最近」页 / 分类页 / 收藏夹 /
+    // 全局搜索等入口传进来的仍是**本地绝对路径**；误标 isRemote 会让播放器进入
+    // 「等待下载完成」的轮询（video_player_screen.dart:428 / audio_player_screen.dart:389），
+    // 而那个下载永远不会发生 ⇒ 本地音视频一直「缓存中」/ 黑屏（用户反馈的
+    // 「视频和音频都是缓存/加载错误」）。本地存储卷上、或本机确实存在的文件一律按本地处理。
+    final isRemotePlaceholder = activeTab.isRemote &&
+        !_isPathOnLocalStorage(path) &&
+        !File(path).existsSync();
+
     if (FileUtils.isArchive(path)) {
       if (!context.mounted) return true;
       Navigator.push(
@@ -10419,7 +10445,7 @@ class FileManagerProvider extends ChangeNotifier {
             playlist: hasPlaylist ? decryptedVideoFiles : [path],
             playlistTitles: videoTitles,
             initialIndex: initialIndex,
-            isRemote: activeTab.isRemote,
+            isRemote: isRemotePlaceholder,
           ),
         ),
       );
@@ -10483,7 +10509,7 @@ class FileManagerProvider extends ChangeNotifier {
             title: realName ?? p.basename(originalPath),
             allSongs: allSongs,
             initialIndex: initialIndex,
-            isRemote: activeTab.isRemote,
+            isRemote: isRemotePlaceholder,
           ),
         ),
       );
@@ -10592,6 +10618,15 @@ class FileManagerProvider extends ChangeNotifier {
 
   /// 按指定内置类型（text/audio/video/image）以应用内查看器/播放器打开文件
   Future<void> _openBuiltInByType(BuildContext context, String path, String type) async {
+    // 「是否按远程占位文件交给播放器」：只有**远程标签页下的远程路径**才需要播放器等缓存落盘。
+    // ⚠️ 不能单看 `activeTab.isRemote`：用户停在远程标签页时，「最近」页 / 分类页 / 收藏夹 /
+    // 全局搜索等入口传进来的仍是**本地绝对路径**；误标 isRemote 会让播放器进入
+    // 「等待下载完成」的轮询（video_player_screen.dart:428 / audio_player_screen.dart:389），
+    // 而那个下载永远不会发生 ⇒ 本地音视频一直「缓存中」/ 黑屏（用户反馈的
+    // 「视频和音频都是缓存/加载错误」）。本地存储卷上、或本机确实存在的文件一律按本地处理。
+    final isRemotePlaceholder = activeTab.isRemote &&
+        !_isPathOnLocalStorage(path) &&
+        !File(path).existsSync();
     switch (type) {
       case 'text':
         Navigator.push(context, MaterialPageRoute(builder: (_) => TextEditorScreen(filePath: path)));
@@ -10649,7 +10684,7 @@ class FileManagerProvider extends ChangeNotifier {
               videoPath: path,
               playlist: [path],
               initialIndex: 0,
-              isRemote: activeTab.isRemote,
+              isRemote: isRemotePlaceholder,
             ),
           ),
         );
@@ -10694,7 +10729,7 @@ class FileManagerProvider extends ChangeNotifier {
             builder: (_) => AudioPlayerScreen(
               audioPath: path,
               title: p.basename(path),
-              isRemote: activeTab.isRemote,
+              isRemote: isRemotePlaceholder,
             ),
           ),
         );
@@ -11816,8 +11851,21 @@ class FileManagerProvider extends ChangeNotifier {
       }
     }
 
-    // 远程文件：使用流式播放代理服务器实现边缓存边播放
-    if (activeTab.isRemote && activeTab.remoteClient != null) {
+    // 远程文件：使用流式播放代理服务器实现边缓存边播放。
+    //
+    // ⚠️ 判据不能只看 `activeTab.isRemote`：用户停留在远程标签页时，「最近」页 /
+    // 分类页 / 全局搜索等入口传进来的仍然是**本地绝对路径**，会被误当成远程文件：
+    //   · 本地 pdf/txt → 弹「打开方式」→ 拿该路径去远程下载 → 0 字节 →
+    //     「打开失败：远程文件下载不完整（本地 0 字节），无法打开」；
+    //   · 本地音视频 → 走本地代理流式播放 → 代理永远等不到数据 → 一直「缓存中」/黑屏。
+    // 本地真实存在的文件一律走本地链路（远程路径形如 /media/... ，本地不会存在）。
+    // 判据 = 「语义上是本地存储卷」（复用 `_isPathOnLocalStorage`，与 loadDirectory
+    // 的远程→本地翻转护栏同一套口径）**或**「本机确实存在这个文件」。
+    final isLocalFile = _isPathOnLocalStorage(path) ||
+        (!path.startsWith('remote://') &&
+            !path.startsWith('http') &&
+            File(path).existsSync());
+    if (!isLocalFile && activeTab.isRemote && activeTab.remoteClient != null) {
       try {
         final fileMime = lookupMimeType(ext) ?? '';
         final isVideoFile = fileMime.startsWith('video/');

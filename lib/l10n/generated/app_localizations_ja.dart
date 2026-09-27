@@ -675,6 +675,9 @@ class L10nJa extends L10n {
   String get ui_favorites => 'お気に入り';
 
   @override
+  String get ui_favorites_swipe_hint => '画面の下から上にスワイプして「お気に入り」を開けます';
+
+  @override
   String get ui_new_favorite => 'お気に入りに追加';
 
   @override
@@ -1142,13 +1145,13 @@ class L10nJa extends L10n {
   String get msge34c23ff => '上部';
 
   @override
-  String get msg3341e3ed => 'アクションボタンはページの上部に表示されます';
+  String get msg3341e3ed => 'ナビゲーションバーはページの上部に表示されます';
 
   @override
   String get msg8c414b06 => '下部';
 
   @override
-  String get msg5d2c8e7f => 'アクションボタンはページの下部に表示されます';
+  String get msg5d2c8e7f => 'ナビゲーションバーはページの下部に表示されます';
 
   @override
   String get msg9b7639ac => 'ブラウズとメディアページの選択アクションバーにアイコンのみを表示';
@@ -1503,6 +1506,18 @@ class L10nJa extends L10n {
   String get app_icon_glossy_blue => 'グロッシーブルー';
 
   @override
+  String get app_icon_paper_gray => 'ペーパーグレー';
+
+  @override
+  String get app_icon_metal_frost => 'つや消しメタル';
+
+  @override
+  String get app_icon_blue_folder => '青いフォルダ';
+
+  @override
+  String get app_icon_blue_gold => 'ダークブルーゴールド';
+
+  @override
   String title(Object title) {
     return 'アプリアイコンを$titleに切り替えました';
   }
@@ -1629,6 +1644,9 @@ class L10nJa extends L10n {
 
   @override
   String get androidnn => 'これはAndroidがディレクトリを選択してマウントするために必要です。\n\n';
+
+  @override
+  String get saf_enable_docs => 'または有効にして SAF ディレクトリ機能を使用してください。';
 
   @override
   String get msgb2af4e30 =>
@@ -2174,6 +2192,11 @@ class L10nJa extends L10n {
 
   @override
   String get msg6466e61e => 'インターネット共有リンクを有効化';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '銈ゃ兂銈裤兗銉嶃儍銉堝叡鏈夈儶銉炽偗銇湁鍔瑰寲銇け鏁椼仐銇俱仐銇? $error';
+  }
 
   @override
   String get msg67bd9375 => '処理中...';
@@ -7780,7 +7803,7 @@ class L10nJa extends L10n {
   String get ui_text_editor_import => 'テキストファイルを読み込む';
 
   @override
-  String get ui_bottom_tab_bar => 'ナビゲーションバーを表示';
+  String get ui_bottom_tab_bar => 'ナビゲーションバー';
 
   @override
   String get ui_pick_bottom_tab => '下部エントリを選択';
@@ -7795,4 +7818,7 @@ class L10nJa extends L10n {
 
   @override
   String get ui_bottom_tab_custom_hint => '下部エントリは任意のショートカットに置き換えられます';
+
+  @override
+  String get app_icon_original => 'クラシックアイコン';
 }

@@ -706,6 +706,10 @@ class L10nAr extends L10n {
   String get ui_favorites => 'المفضلات';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'اسحب لأعلى من أسفل الشاشة لفتح المفضلة';
+
+  @override
   String get ui_new_favorite => 'إضافة إلى المفضلات';
 
   @override
@@ -1186,13 +1190,13 @@ class L10nAr extends L10n {
   String get msge34c23ff => 'الأعلى';
 
   @override
-  String get msg3341e3ed => 'أزرار الإجراءات معروضة في أعلى الصفحة';
+  String get msg3341e3ed => 'شريط التنقل معروض في أعلى الصفحة';
 
   @override
   String get msg8c414b06 => 'الأسفل';
 
   @override
-  String get msg5d2c8e7f => 'أزرار الإجراءات معروضة في أسفل الصفحة';
+  String get msg5d2c8e7f => 'شريط التنقل معروض في أسفل الصفحة';
 
   @override
   String get msg9b7639ac =>
@@ -1565,6 +1569,18 @@ class L10nAr extends L10n {
   String get app_icon_glossy_blue => 'أزرق لامع';
 
   @override
+  String get app_icon_paper_gray => 'رمادي فاتح';
+
+  @override
+  String get app_icon_metal_frost => 'معدن مصنفر';
+
+  @override
+  String get app_icon_blue_folder => 'مجلد أزرق';
+
+  @override
+  String get app_icon_blue_gold => 'أزرق داكن ذهبي';
+
+  @override
   String title(Object title) {
     return 'تم تغيير أيقونة التطبيق إلى $title';
   }
@@ -1693,6 +1709,9 @@ class L10nAr extends L10n {
 
   @override
   String get androidnn => 'هذا مطلوب لنظام Android لاختيار وتركيب الأدلة.\n\n';
+
+  @override
+  String get saf_enable_docs => 'أو قم بتمكينه لاستخدام ميزة مجلد SAF.';
 
   @override
   String get msgb2af4e30 =>
@@ -2246,6 +2265,11 @@ class L10nAr extends L10n {
 
   @override
   String get msg6466e61e => 'تفعيل رابط مشاركة الإنترنت';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '賮卮賱 鬲賮毓賷賱 乇丕亘胤 丕賱賲卮丕乇賰丞 毓亘乇 丕賱廿賳鬲乇賳鬲: $error';
+  }
 
   @override
   String get msg67bd9375 => 'جارٍ المعالجة...';
@@ -7996,7 +8020,7 @@ class L10nAr extends L10n {
   String get ui_text_editor_import => 'استيراد ملف نصي';
 
   @override
-  String get ui_bottom_tab_bar => 'إظهار شريط التنقل';
+  String get ui_bottom_tab_bar => 'شريط التنقل';
 
   @override
   String get ui_pick_bottom_tab => 'اختيار عنصر سفلي';
@@ -8012,4 +8036,7 @@ class L10nAr extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'يمكن استبدال العناصر السفلية بأي اختصار';
+
+  @override
+  String get app_icon_original => 'أيقونة كلاسيكية';
 }

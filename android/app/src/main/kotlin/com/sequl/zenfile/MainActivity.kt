@@ -232,24 +232,23 @@ class MainActivity : AudioServiceFragmentActivity() {
                 "glassmorphism" to "com.sequl.zenfile.MainActivityGlassmorphism",
                 "3d_gradient" to "com.sequl.zenfile.MainActivity3DGradient",
                 "glossy_blue" to "com.sequl.zenfile.MainActivityGlossyBlue",
+                "paper_gray" to "com.sequl.zenfile.MainActivityPaperGray",
+                "metal_frost" to "com.sequl.zenfile.MainActivityMetalFrost",
+                "blue_folder" to "com.sequl.zenfile.MainActivityBlueFolder",
+                // 深蓝鎏金已升级为默认图标（application icon + MainActivityDefault），
+                // 不再作为备选 alias；原默认图标改为备选（MainActivityOriginal）。
+                "original" to "com.sequl.zenfile.MainActivityOriginal",
                 "m3_expressive" to "com.sequl.zenfile.MainActivityM3Expressive",
                 "minimal_flat" to "com.sequl.zenfile.MainActivityMinimalFlat",
                 "neumorphism" to "com.sequl.zenfile.MainActivityNeumorphism",
             )
             val target = aliasMap[saved] ?: "com.sequl.zenfile.MainActivityDefault"
-            val allAliases = listOf(
-                "com.sequl.zenfile.MainActivityDefault",
-                "com.sequl.zenfile.MainActivityClassic2",
-                "com.sequl.zenfile.MainActivityClassic3",
-                "com.sequl.zenfile.MainActivityClassic4",
-                "com.sequl.zenfile.MainActivityCyberpunk",
-                "com.sequl.zenfile.MainActivityGlassmorphism",
-                "com.sequl.zenfile.MainActivity3DGradient",
-                "com.sequl.zenfile.MainActivityGlossyBlue",
-                "com.sequl.zenfile.MainActivityM3Expressive",
-                "com.sequl.zenfile.MainActivityMinimalFlat",
-                "com.sequl.zenfile.MainActivityNeumorphism",
-            )
+            // ⚠️ 2026-09-27 事故：新增 4 个备选图标时这里漏同步，切新图标后 saved 在
+            // aliasMap 查不到 ⇒ target 回落 default ⇒ 每次启动把 default 重新 ENABLED，
+            // 而新 alias 又不在禁用列表里 ⇒ 桌面出现「新图标 + 默认图标」两个入口。
+            // allAliases 直接复用 legacyIconAliases()（与 changeAppIcon 同一真源），
+            // 以后新增图标只需同步 aliasMap 一处（manifest + legacy 名单）。
+            val allAliases = legacyIconAliases()
             for (alias in allAliases) {
                 val componentName = android.content.ComponentName(this, alias)
                 val state = if (alias == target) {
@@ -790,37 +789,105 @@ class MainActivity : AudioServiceFragmentActivity() {
                     val iconAlias = call.argument<String>("alias") ?: "com.sequl.zenfile.MainActivityDefault"
                     executor.execute {
                         try {
-                            // 预设备用图标别名（classic2/classic3/cyberpunk/glassmorphism/
-                            // m3_expressive/minimal_flat/neumorphism）；自定义图标走桌面快捷方式，
-                            // 不注册 activity-alias（Android 无法在 alias 的 android:icon 引用运行时文件）。
-                            val aliases = listOf(
-                                "com.sequl.zenfile.MainActivityDefault",
-                                "com.sequl.zenfile.MainActivityClassic2",
-                                "com.sequl.zenfile.MainActivityClassic3",
-                                "com.sequl.zenfile.MainActivityClassic4",
-                                "com.sequl.zenfile.MainActivityCyberpunk",
-                                "com.sequl.zenfile.MainActivityGlassmorphism",
-                                "com.sequl.zenfile.MainActivity3DGradient",
-                                "com.sequl.zenfile.MainActivityGlossyBlue",
-                                "com.sequl.zenfile.MainActivityM3Expressive",
-                                "com.sequl.zenfile.MainActivityMinimalFlat",
-                                "com.sequl.zenfile.MainActivityNeumorphism"
-                            )
+                            // 候选别名 = 硬编码兜底名单 ∪ 动态枚举到的本包 activity-alias。
+                            // ⚠️ 历史事故（2026-09-27）：新增 4 个备选图标时只改了 Dart 映射与
+                            //    AndroidManifest，漏了这份名单 ⇒ 切到新图标时循环里没有任何一项
+                            //    命中目标，于是**全部 alias 被 DISABLED**（含 MainActivityDefault）
+                            //    ⇒ 应用再无任何桌面入口，点图标只能进「应用详情」页，只能重装。
+                            //    动态枚举让 AndroidManifest 成为唯一真源，以后新增图标不必改这里。
+                            val candidates = LinkedHashSet<String>(legacyIconAliases())
+                            candidates.addAll(declaredLauncherAliases())
 
-                            for (alias in aliases) {
-                                val componentName = android.content.ComponentName(packageName, alias)
-                                val state = if (alias == iconAlias) {
-                                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                                } else {
-                                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                            // 目标 alias 未声明 ⇒ 直接失败，**绝不执行 disable**：
+                            // 宁可这一次切换无效，也不能把启动入口全关掉。
+                            if (!candidates.contains(iconAlias)) {
+                                runOnUiThread {
+                                    result.error(
+                                        "ICON_ERROR",
+                                        "alias not declared: $iconAlias",
+                                        null
+                                    )
                                 }
+                                return@execute
+                            }
+
+                            // 顺序：先把目标打开，再关掉其余的。这样即使中途异常或进程被杀，
+                            // 应用也一定还有可用的桌面入口。
+                            packageManager.setComponentEnabledSetting(
+                                ComponentName(packageName, iconAlias),
+                                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
+                            for (alias in candidates) {
+                                if (alias == iconAlias) continue
+                                try {
+                                    packageManager.setComponentEnabledSetting(
+                                        ComponentName(packageName, alias),
+                                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                        PackageManager.DONT_KILL_APP
+                                    )
+                                } catch (e: Exception) {
+                                    // 单个组件失败不影响其余，更不会影响已经打开的入口。
+                                    e.printStackTrace()
+                                }
+                            }
+
+                            // —— 回读核验（防御部分 ROM 的 PackageManager 异步滞后/竞态）——
+                            // 目标必须处于 ENABLED，其余候选（含 MainActivityDefault）必须处于
+                            // DISABLED。不一致说明本轮设置没有全部落盘，自动重试一轮；
+                            // 重试后仍不一致 ⇒ 报错回滚（Dart 侧恢复旧图标），避免桌面出现
+                            // 「新图标 + 旧图标」并存的状态。
+                            fun iconEnabled(a: String): Boolean =
+                                packageManager.getComponentEnabledSetting(
+                                    ComponentName(packageName, a)
+                                ) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+
+                            fun othersDisabled(): Boolean {
+                                for (alias in candidates) {
+                                    if (alias == iconAlias) continue
+                                    if (packageManager.getComponentEnabledSetting(
+                                            ComponentName(packageName, alias)
+                                        ) != PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                                    ) {
+                                        return false
+                                    }
+                                }
+                                return true
+                            }
+
+                            var verified = iconEnabled(iconAlias) && othersDisabled()
+                            if (!verified) {
+                                // 重试一轮：目标 ENABLED、其余 DISABLED（与首次相同顺序）。
                                 packageManager.setComponentEnabledSetting(
-                                    componentName,
-                                    state,
+                                    ComponentName(packageName, iconAlias),
+                                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                                     PackageManager.DONT_KILL_APP
                                 )
+                                for (alias in candidates) {
+                                    if (alias == iconAlias) continue
+                                    try {
+                                        packageManager.setComponentEnabledSetting(
+                                            ComponentName(packageName, alias),
+                                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                            PackageManager.DONT_KILL_APP
+                                        )
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                }
+                                verified = iconEnabled(iconAlias) && othersDisabled()
                             }
-                            
+                            if (!verified) {
+                                runOnUiThread {
+                                    result.error(
+                                        "ICON_ERROR",
+                                        "icon state verification failed after retry",
+                                        null
+                                    )
+                                }
+                                return@execute
+                            }
+
                             runOnUiThread { result.success(true) }
                         } catch (e: Exception) {
                             runOnUiThread { result.error("ICON_ERROR", e.message, null) }
@@ -2807,6 +2874,54 @@ class MainActivity : AudioServiceFragmentActivity() {
             null
         }
     }
+
+    /**
+     * 硬编码兜底别名（与 AndroidManifest.xml 的 activity-alias 一一对应）。
+     *
+     * 与 [declaredLauncherAliases] 取并集使用：动态枚举依赖 PackageManager 的返回，
+     * 极少数 ROM 有可能不列出「已禁用」的组件，两者合并才真正稳。
+     */
+    private fun legacyIconAliases(): List<String> = listOf(
+        "com.sequl.zenfile.MainActivityDefault",
+        "com.sequl.zenfile.MainActivityClassic2",
+        "com.sequl.zenfile.MainActivityClassic3",
+        "com.sequl.zenfile.MainActivityClassic4",
+        "com.sequl.zenfile.MainActivityCyberpunk",
+        "com.sequl.zenfile.MainActivityGlassmorphism",
+        "com.sequl.zenfile.MainActivity3DGradient",
+        "com.sequl.zenfile.MainActivityGlossyBlue",
+        "com.sequl.zenfile.MainActivityPaperGray",
+        "com.sequl.zenfile.MainActivityMetalFrost",
+        "com.sequl.zenfile.MainActivityBlueFolder",
+        "com.sequl.zenfile.MainActivityBlueGold",
+        "com.sequl.zenfile.MainActivityOriginal",
+        "com.sequl.zenfile.MainActivityM3Expressive",
+        "com.sequl.zenfile.MainActivityMinimalFlat",
+        "com.sequl.zenfile.MainActivityNeumorphism"
+    )
+
+    /**
+     * 动态枚举本包在 AndroidManifest.xml 里声明的全部 activity-alias（桌面图标入口）。
+     *
+     * 只认 `targetActivity != null` 的组件：MainActivity **本体**的名字同样以
+     * `$packageName.MainActivity` 开头，但它不是 alias（targetActivity 为空），
+     * 且一旦把它禁用，所有 alias 都会失效 —— 必须排除。
+     */
+    @Suppress("DEPRECATION")
+    private fun declaredLauncherAliases(): List<String> {
+        return try {
+            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+            info.activities
+                ?.filter {
+                    it.name.startsWith("$packageName.MainActivity") && it.targetActivity != null
+                }
+                ?.map { it.name }
+                ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
 
     private fun isUsageStatsPermissionGranted(): Boolean {
         return try {

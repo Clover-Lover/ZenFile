@@ -6052,8 +6052,13 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           return StreamBuilder<MediaItem?>(
             stream: handler.mediaItem,
             builder: (context, itemSnapshot) {
-              // 优先使用后台播放器的当前曲目，确保切歌后按钮立即同步
-              final activeItem = handler.hasActivePlayer
+              // 优先使用后台播放器的当前曲目，确保切歌后按钮立即同步。
+              // ⚠️ 但**视频**后台播放（videoSession）时 handler 里挂的是视频，
+              // 音频卡片必须忽略它、退回 lastPlayedAudio —— 否则从视频播放页退出
+              // 进音频类别页，卡片会显示视频的播放记录（用户反馈 2026-09-27）。
+              final audioSessionActive =
+                  handler.hasActivePlayer && !handler.videoSession;
+              final activeItem = audioSessionActive
                   ? (itemSnapshot.data ?? handler.currentMediaItem)
                   : null;
               final Map<String, String>? info;
@@ -6078,10 +6083,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               final artist = info['artist']!;
               final isCurrentTrack = handler.isPlayingPath(path);
               // 仅在后台播放器活跃时使用流中的 position/duration，否则用 0 避免残留旧值
-              final position = handler.hasActivePlayer
+              final position = audioSessionActive
                   ? (playingSnapshot.data?.updatePosition ?? Duration.zero)
                   : Duration.zero;
-              final duration = handler.hasActivePlayer
+              final duration = audioSessionActive
                   ? (itemSnapshot.data?.duration ?? Duration.zero)
                   : Duration.zero;
               final savedMs = PreferencesService.getPlaybackPosition(path);

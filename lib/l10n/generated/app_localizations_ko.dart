@@ -674,6 +674,9 @@ class L10nKo extends L10n {
   String get ui_favorites => '즐겨찾기';
 
   @override
+  String get ui_favorites_swipe_hint => '화면 하단에서 위로 스와이프하여 즐겨찾기를 엽니다';
+
+  @override
   String get ui_new_favorite => '즐겨찾기에 추가';
 
   @override
@@ -1140,13 +1143,13 @@ class L10nKo extends L10n {
   String get msge34c23ff => '상단';
 
   @override
-  String get msg3341e3ed => '작업 버튼이 페이지 상단에 표시됩니다';
+  String get msg3341e3ed => '탐색 모음이 페이지 상단에 표시됩니다';
 
   @override
   String get msg8c414b06 => '하단';
 
   @override
-  String get msg5d2c8e7f => '작업 버튼이 페이지 하단에 표시됩니다';
+  String get msg5d2c8e7f => '탐색 모음이 페이지 하단에 표시됩니다';
 
   @override
   String get msg9b7639ac => '탐색 및 미디어 페이지의 선택 액션 바에 아이콘만 표시';
@@ -1502,6 +1505,18 @@ class L10nKo extends L10n {
   String get app_icon_glossy_blue => '글로시 블루';
 
   @override
+  String get app_icon_paper_gray => '페이퍼 그레이';
+
+  @override
+  String get app_icon_metal_frost => '무광 메탈';
+
+  @override
+  String get app_icon_blue_folder => '파란 폴더';
+
+  @override
+  String get app_icon_blue_gold => '딥 블루 골드';
+
+  @override
   String title(Object title) {
     return '앱 아이콘이 $title(으)로 전환되었습니다';
   }
@@ -1627,6 +1642,9 @@ class L10nKo extends L10n {
 
   @override
   String get androidnn => 'Android에서 디렉토리를 선택하고 마운트하려면 이 기능이 필요합니다.\n\n';
+
+  @override
+  String get saf_enable_docs => '또는 활성화하여 SAF 디렉터리 기능을 사용하세요.';
 
   @override
   String get msgb2af4e30 => '기기 설정에서 \'파일\' 또는 \'문서\' 시스템 앱이 비활성화되어 있는지 확인하세요,';
@@ -2170,6 +2188,11 @@ class L10nKo extends L10n {
 
   @override
   String get msg6466e61e => '인터넷 공유 링크 활성화';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '鞚疙劙雱?瓿奠湢 毵來伂 頇滌劚頇?鞁ろ尐: $error';
+  }
 
   @override
   String get msg67bd9375 => '처리 중...';
@@ -7786,7 +7809,7 @@ class L10nKo extends L10n {
   String get ui_text_editor_import => '텍스트 파일 가져오기';
 
   @override
-  String get ui_bottom_tab_bar => '탐색 모음 표시';
+  String get ui_bottom_tab_bar => '탐색 모음';
 
   @override
   String get ui_pick_bottom_tab => '하단 항목 선택';
@@ -7801,4 +7824,7 @@ class L10nKo extends L10n {
 
   @override
   String get ui_bottom_tab_custom_hint => '하단 항목은 모든 바로가기로 바꿀 수 있습니다';
+
+  @override
+  String get app_icon_original => '클래식 아이콘';
 }

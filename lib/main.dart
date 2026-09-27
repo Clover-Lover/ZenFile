@@ -104,6 +104,10 @@ void main() {
     } catch (e) {
       debugPrint('[ZenFile] MediaKit.ensureInitialized failed: $e');
     }
+    // 崩溃现场保全：把上一次运行的日志另存为 `webdav_debug.log.prev`，
+    // 再开始写本次的 `[boot]` 序列（否则现场会被本进程的日志淹没）。
+    // 同步 IO 且已有上限（2MB），放在 MediaKit 初始化之后、首条日志之前。
+    WebdavDebugLog.snapshotPrevious();
     WebdavDebugLog.log('[boot] MediaKit ok');
 
     try {
@@ -575,6 +579,12 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
           final item = handler.currentMediaItem;
           final player = handler.currentPlayer;
           if (item == null || player == null) return;
+
+          // ⚠️ 视频后台播放（videoSession）时 mediaItem 里装的是**视频**：点通知栏
+          // 绝不能打开音频播放页 —— 那会拿视频的 player 去播音频，UI 与播放状态
+          // 完全错位（用户反馈 2026-09-27 的同源问题）。视频会话暂不响应，
+          // 「点通知栏回到视频播放页」待确认后再做。
+          if (handler.videoSession) return;
 
           // 后台恢复时首帧 navigator 可能尚未就绪，延迟重试一次再跳转，
           // 避免直接 return 导致点击通知后停在「最后使用的页面」而非正在播放页。

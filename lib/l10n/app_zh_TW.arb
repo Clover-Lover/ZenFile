@@ -809,7 +809,10 @@
     "description": "zenfile_end_drawer.dart"
   },
   "ui_favorites": "收藏夾",
-  "@ui_new_favorite": {
+  "ui_favorites_swipe_hint": "從螢幕底部上滑即可開啟收藏夾",
+  "@ui_favorites_swipe_hint": {
+    "description": "ui\\widgets\\favorites_sheet.dart"
+  },  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "新增收藏",
@@ -1422,7 +1425,7 @@
   "@msge34c23ff": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "操作按鈕顯示在頁面頂部",
+  "msg3341e3ed": "導覽列顯示在頁面頂部",
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1430,7 +1433,7 @@
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "操作按鈕顯示在頁面底部",
+  "msg5d2c8e7f": "導覽列顯示在頁面底部",
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1897,6 +1900,22 @@
   "app_icon_glossy_blue": "光澤藍",
   "@app_icon_glossy_blue": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_paper_gray": "淺灰紙紋",
+  "@app_icon_paper_gray": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_metal_frost": "磨砂金屬",
+  "@app_icon_metal_frost": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder": "藍色資料夾",
+  "@app_icon_blue_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_gold": "深藍鎏金",
+  "@app_icon_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@msg64a6476a": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -2053,6 +2072,10 @@
   },
   "androidnn": "這是 Android 選擇和掛載目錄所必需的。\\n\\n",
   "@androidnn": {
+    "description": "ui\\screens\\network_connection_wizard_screen.dart"
+  },
+  "saf_enable_docs": "或啟用它以使用 SAF 目錄功能。",
+  "@saf_enable_docs": {
     "description": "ui\\screens\\network_connection_wizard_screen.dart"
   },
   "msgb2af4e30": "請檢查\"檔案\"或\"檔案\"系統應用是否在裝置設定中被禁用，",
@@ -2739,6 +2762,7 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "啟用網際網路分享連結",
+  "web_share_internet_failed": "鍟熺敤缍查殯缍茶矾鍒嗕韩閫ｇ祼澶辨晽锛歿error}",
   "@msg6466e61e": {
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
@@ -8200,8 +8224,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "顯示導覽列",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "導覽列",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "選擇底部入口",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "長按可替換",
@@ -8210,4 +8234,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "底部入口可替換為任何快捷方式",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "經典圖示",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

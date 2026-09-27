@@ -785,7 +785,10 @@
     "description": "zenfile_end_drawer.dart"
   },
   "ui_favorites": "المفضلات",
-  "@ui_new_favorite": {
+  "ui_favorites_swipe_hint": "اسحب لأعلى من أسفل الشاشة لفتح المفضلة",
+  "@ui_favorites_swipe_hint": {
+    "description": "ui\\widgets\\favorites_sheet.dart"
+  },  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "إضافة إلى المفضلات",
@@ -1390,7 +1393,7 @@
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "أزرار الإجراءات معروضة في أعلى الصفحة",
+  "msg3341e3ed": "شريط التنقل معروض في أعلى الصفحة",
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1398,7 +1401,7 @@
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "أزرار الإجراءات معروضة في أسفل الصفحة",
+  "msg5d2c8e7f": "شريط التنقل معروض في أسفل الصفحة",
   "@msg9b7639ac": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1863,6 +1866,22 @@
   "app_icon_glossy_blue": "أزرق لامع",
   "@app_icon_glossy_blue": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_paper_gray": "رمادي فاتح",
+  "@app_icon_paper_gray": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_metal_frost": "معدن مصنفر",
+  "@app_icon_metal_frost": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder": "مجلد أزرق",
+  "@app_icon_blue_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_gold": "أزرق داكن ذهبي",
+  "@app_icon_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },
@@ -2012,6 +2031,10 @@
   },
   "documentsui": "جهازك لا يحتوي على تطبيق النظام الافتراضي للملفات/المستندات (DocumentsUI) مفعل،",
   "@androidnn": {
+    "description": "ui\\screens\\network_connection_wizard_screen.dart"
+  },
+  "saf_enable_docs": "أو قم بتمكينه لاستخدام ميزة مجلد SAF.",
+  "@saf_enable_docs": {
     "description": "ui\\screens\\network_connection_wizard_screen.dart"
   },
   "androidnn": "هذا مطلوب لنظام Android لاختيار وتركيب الأدلة.\n\n",
@@ -2685,6 +2708,7 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "تفعيل رابط مشاركة الإنترنت",
+  "web_share_internet_failed": "賮卮賱 鬲賮毓賷賱 乇丕亘胤 丕賱賲卮丕乇賰丞 毓亘乇 丕賱廿賳鬲乇賳鬲: {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },
@@ -8052,8 +8076,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "إظهار شريط التنقل",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "شريط التنقل",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "اختيار عنصر سفلي",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "اضغط مطولاً للتغيير",
@@ -8062,4 +8086,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "يمكن استبدال العناصر السفلية بأي اختصار",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "أيقونة كلاسيكية",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

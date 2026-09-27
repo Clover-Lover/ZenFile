@@ -792,7 +792,10 @@
     "description": "zenfile_end_drawer.dart"
   },
   "ui_favorites": "Favorites",
-  "@ui_new_favorite": {
+  "ui_favorites_swipe_hint": "Swipe up from the bottom of the screen to open Favorites",
+  "@ui_favorites_swipe_hint": {
+    "description": "ui\\widgets\\favorites_sheet.dart"
+  },  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "Add to Favorites",
@@ -1397,7 +1400,7 @@
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "Action buttons displayed at the top of the page",
+  "msg3341e3ed": "Navigation bar displayed at the top of the page",
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1405,7 +1408,7 @@
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "Action buttons displayed at the bottom of the page",
+  "msg5d2c8e7f": "Navigation bar displayed at the bottom of the page",
   "@msg9b7639ac": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1870,6 +1873,22 @@
   "app_icon_glossy_blue": "Glossy Blue",
   "@app_icon_glossy_blue": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_paper_gray": "Paper Gray",
+  "@app_icon_paper_gray": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_metal_frost": "Frosted Metal",
+  "@app_icon_metal_frost": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder": "Blue Folder",
+  "@app_icon_blue_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_gold": "Deep Blue Gold",
+  "@app_icon_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },
@@ -2019,6 +2038,10 @@
   },
   "documentsui": "Your device does not have the default system file/document app (DocumentsUI) enabled,",
   "@androidnn": {
+    "description": "ui\\screens\\network_connection_wizard_screen.dart"
+  },
+  "saf_enable_docs": "or enable it to use the SAF directory feature.",
+  "@saf_enable_docs": {
     "description": "ui\\screens\\network_connection_wizard_screen.dart"
   },
   "androidnn": "This is required for Android to select and mount directories.\n\n",
@@ -2692,6 +2715,7 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "Activate Internet Share Link",
+  "web_share_internet_failed": "Failed to activate Internet share link: {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },
@@ -8118,8 +8142,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "Show Navigation Bar",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "Navigation Bar",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "Choose bottom entry",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Long press to change",
@@ -8128,4 +8152,9 @@
   "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
   "ui_bottom_tab_custom_hint": "Bottom entries can be replaced with any shortcut",
   "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
+,
+  "app_icon_original": "Classic Icon",
+  "@app_icon_original": {
+    "description": "Classic app icon"
+  }
 }

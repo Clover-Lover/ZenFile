@@ -723,6 +723,10 @@ class L10nFr extends L10n {
   String get ui_favorites => 'Favoris';
 
   @override
+  String get ui_favorites_swipe_hint =>
+      'Balayez vers le haut depuis le bas de l’écran pour ouvrir les favoris';
+
+  @override
   String get ui_new_favorite => 'Ajouter aux favoris';
 
   @override
@@ -1213,15 +1217,13 @@ class L10nFr extends L10n {
   String get msge34c23ff => 'En haut';
 
   @override
-  String get msg3341e3ed =>
-      'Les boutons d\'action sont affichés en haut de la page';
+  String get msg3341e3ed => 'Barre de navigation affichée en haut de la page';
 
   @override
   String get msg8c414b06 => 'En bas';
 
   @override
-  String get msg5d2c8e7f =>
-      'Les boutons d\'action sont affichés en bas de la page';
+  String get msg5d2c8e7f => 'Barre de navigation affichée en bas de la page';
 
   @override
   String get msg9b7639ac =>
@@ -1606,6 +1608,18 @@ class L10nFr extends L10n {
   String get app_icon_glossy_blue => 'Bleu brillant';
 
   @override
+  String get app_icon_paper_gray => 'Gris papier';
+
+  @override
+  String get app_icon_metal_frost => 'Métal givré';
+
+  @override
+  String get app_icon_blue_folder => 'Dossier bleu';
+
+  @override
+  String get app_icon_blue_gold => 'Bleu profond doré';
+
+  @override
   String title(Object title) {
     return 'Icône de l\'application changée en $title';
   }
@@ -1740,6 +1754,10 @@ class L10nFr extends L10n {
   @override
   String get androidnn =>
       'Ceci est nécessaire pour qu\'Android puisse sélectionner et monter des répertoires.\n\n';
+
+  @override
+  String get saf_enable_docs =>
+      'ou activez-le pour utiliser la fonctionnalité de dossier SAF.';
 
   @override
   String get msgb2af4e30 =>
@@ -2299,6 +2317,11 @@ class L10nFr extends L10n {
 
   @override
   String get msg6466e61e => 'Activer le lien de partage Internet';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '脡chec de l\'activation du lien de partage Internet : $error';
+  }
 
   @override
   String get msg67bd9375 => 'Traitement en cours...';
@@ -8151,7 +8174,7 @@ class L10nFr extends L10n {
   String get ui_text_editor_import => 'Importer un fichier texte';
 
   @override
-  String get ui_bottom_tab_bar => 'Afficher la barre de navigation';
+  String get ui_bottom_tab_bar => 'Barre de navigation';
 
   @override
   String get ui_pick_bottom_tab => 'Choisir une entrée en bas';
@@ -8167,4 +8190,7 @@ class L10nFr extends L10n {
   @override
   String get ui_bottom_tab_custom_hint =>
       'Les entrées inférieures peuvent être remplacées par n\'importe quel raccourci';
+
+  @override
+  String get app_icon_original => 'Icône classique';
 }
