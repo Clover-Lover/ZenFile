@@ -10377,6 +10377,16 @@ class FileManagerProvider extends ChangeNotifier {
     final ext = FileUtils.effectiveExtensionWithDot(realName ?? path);
     const docExts = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.epub', '.odt'];
 
+    // 「是否按远程占位文件交给播放器」：只有**远程标签页下的远程路径**才需要播放器等缓存落盘。
+    // ⚠️ 不能单看 `activeTab.isRemote`：用户停在远程标签页时，「最近」页 / 分类页 / 收藏夹 /
+    // 全局搜索等入口传进来的仍是**本地绝对路径**；误标 isRemote 会让播放器进入
+    // 「等待下载完成」的轮询（video_player_screen.dart:428 / audio_player_screen.dart:389），
+    // 而那个下载永远不会发生 ⇒ 本地音视频一直「缓存中」/ 黑屏（用户反馈的
+    // 「视频和音频都是缓存/加载错误」）。本地存储卷上、或本机确实存在的文件一律按本地处理。
+    final isRemotePlaceholder = activeTab.isRemote &&
+        !_isPathOnLocalStorage(path) &&
+        !File(path).existsSync();
+
     if (FileUtils.isArchive(path)) {
       if (!context.mounted) return true;
       Navigator.push(
@@ -10433,7 +10443,7 @@ class FileManagerProvider extends ChangeNotifier {
             playlist: hasPlaylist ? decryptedVideoFiles : [path],
             playlistTitles: videoTitles,
             initialIndex: initialIndex,
-            isRemote: activeTab.isRemote,
+            isRemote: isRemotePlaceholder,
           ),
         ),
       );
@@ -10497,7 +10507,7 @@ class FileManagerProvider extends ChangeNotifier {
             title: realName ?? p.basename(originalPath),
             allSongs: allSongs,
             initialIndex: initialIndex,
-            isRemote: activeTab.isRemote,
+            isRemote: isRemotePlaceholder,
           ),
         ),
       );
@@ -10606,6 +10616,15 @@ class FileManagerProvider extends ChangeNotifier {
 
   /// 按指定内置类型（text/audio/video/image）以应用内查看器/播放器打开文件
   Future<void> _openBuiltInByType(BuildContext context, String path, String type) async {
+    // 「是否按远程占位文件交给播放器」：只有**远程标签页下的远程路径**才需要播放器等缓存落盘。
+    // ⚠️ 不能单看 `activeTab.isRemote`：用户停在远程标签页时，「最近」页 / 分类页 / 收藏夹 /
+    // 全局搜索等入口传进来的仍是**本地绝对路径**；误标 isRemote 会让播放器进入
+    // 「等待下载完成」的轮询（video_player_screen.dart:428 / audio_player_screen.dart:389），
+    // 而那个下载永远不会发生 ⇒ 本地音视频一直「缓存中」/ 黑屏（用户反馈的
+    // 「视频和音频都是缓存/加载错误」）。本地存储卷上、或本机确实存在的文件一律按本地处理。
+    final isRemotePlaceholder = activeTab.isRemote &&
+        !_isPathOnLocalStorage(path) &&
+        !File(path).existsSync();
     switch (type) {
       case 'text':
         Navigator.push(context, MaterialPageRoute(builder: (_) => TextEditorScreen(filePath: path)));
@@ -10663,7 +10682,7 @@ class FileManagerProvider extends ChangeNotifier {
               videoPath: path,
               playlist: [path],
               initialIndex: 0,
-              isRemote: activeTab.isRemote,
+              isRemote: isRemotePlaceholder,
             ),
           ),
         );
@@ -10708,7 +10727,7 @@ class FileManagerProvider extends ChangeNotifier {
             builder: (_) => AudioPlayerScreen(
               audioPath: path,
               title: p.basename(path),
-              isRemote: activeTab.isRemote,
+              isRemote: isRemotePlaceholder,
             ),
           ),
         );
