@@ -724,8 +724,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                     tooltip: context.read<FileManagerProvider>().enableSplitScreen
                         ? L10n.of(context).ui_single_window
                         : L10n.of(context).ui_dual_window,
-                    onPressed: () =>
-                        context.read<FileManagerProvider>().toggleSplitScreen(),
+                    onPressed: () {
+                      // 切换单/双窗口前先跳到文件浏览页，方便用户直接看到布局
+                      // 变化（参考排序按钮：_switchTab(1) 切到浏览页）。
+                      _switchTab(1);
+                      context.read<FileManagerProvider>().toggleSplitScreen();
+                    },
                   ),
                   // 设置：顶栏最右一格（原收藏夹的位置）。收藏夹已移出顶栏，
                   // 改由左抽屉「收藏夹」一项 + 上滑手势唤起（导航栏开启时滑底栏，
