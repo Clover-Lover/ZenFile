@@ -1209,15 +1209,13 @@ class L10nDe extends L10n {
   String get msge34c23ff => 'Oben';
 
   @override
-  String get msg3341e3ed =>
-      'Aktionsschaltflächen werden oben auf der Seite angezeigt';
+  String get msg3341e3ed => 'Navigationsleiste oben auf der Seite angezeigt';
 
   @override
   String get msg8c414b06 => 'Unten';
 
   @override
-  String get msg5d2c8e7f =>
-      'Aktionsschaltflächen werden unten auf der Seite angezeigt';
+  String get msg5d2c8e7f => 'Navigationsleiste unten auf der Seite angezeigt';
 
   @override
   String get msg9b7639ac =>
@@ -8132,7 +8130,7 @@ class L10nDe extends L10n {
   String get ui_text_editor_import => 'Textdatei importieren';
 
   @override
-  String get ui_bottom_tab_bar => 'Navigationsleiste anzeigen';
+  String get ui_bottom_tab_bar => 'Navigationsleiste';
 
   @override
   String get ui_pick_bottom_tab => 'Untereintrag wählen';

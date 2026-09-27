@@ -1422,7 +1422,7 @@
   "@msge34c23ff": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "操作按鈕顯示在頁面頂部",
+  "msg3341e3ed": "導覽列顯示在頁面頂部",
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1430,7 +1430,7 @@
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "操作按鈕顯示在頁面底部",
+  "msg5d2c8e7f": "導覽列顯示在頁面底部",
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -8220,8 +8220,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "顯示導覽列",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "導覽列",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "選擇底部入口",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "長按可替換",

@@ -1209,14 +1209,14 @@ class L10nRu extends L10n {
 
   @override
   String get msg3341e3ed =>
-      'Кнопки действий отображаются в верхней части страницы';
+      'Панель навигации отображается в верхней части страницы';
 
   @override
   String get msg8c414b06 => 'Внизу';
 
   @override
   String get msg5d2c8e7f =>
-      'Кнопки действий отображаются в нижней части страницы';
+      'Панель навигации отображается в нижней части страницы';
 
   @override
   String get msg9b7639ac =>
@@ -8118,7 +8118,7 @@ class L10nRu extends L10n {
   String get ui_text_editor_import => 'Импортировать текстовый файл';
 
   @override
-  String get ui_bottom_tab_bar => 'Показать панель навигации';
+  String get ui_bottom_tab_bar => 'Панель навигации';
 
   @override
   String get ui_pick_bottom_tab => 'Выберите элемент внизу';

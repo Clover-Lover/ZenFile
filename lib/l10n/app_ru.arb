@@ -1390,7 +1390,7 @@
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "Кнопки действий отображаются в верхней части страницы",
+  "msg3341e3ed": "Панель навигации отображается в верхней части страницы",
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1398,7 +1398,7 @@
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "Кнопки действий отображаются в нижней части страницы",
+  "msg5d2c8e7f": "Панель навигации отображается в нижней части страницы",
   "@msg9b7639ac": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -8072,8 +8072,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "Показать панель навигации",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "Панель навигации",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "Выберите элемент внизу",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Долгое нажатие — замена",

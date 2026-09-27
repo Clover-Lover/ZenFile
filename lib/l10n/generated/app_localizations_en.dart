@@ -1191,14 +1191,14 @@ class L10nEn extends L10n {
   String get msge34c23ff => 'Top';
 
   @override
-  String get msg3341e3ed => 'Action buttons displayed at the top of the page';
+  String get msg3341e3ed => 'Navigation bar displayed at the top of the page';
 
   @override
   String get msg8c414b06 => 'Bottom';
 
   @override
   String get msg5d2c8e7f =>
-      'Action buttons displayed at the bottom of the page';
+      'Navigation bar displayed at the bottom of the page';
 
   @override
   String get msg9b7639ac =>
@@ -8040,7 +8040,7 @@ class L10nEn extends L10n {
   String get ui_text_editor_import => 'Import text file';
 
   @override
-  String get ui_bottom_tab_bar => 'Show Navigation Bar';
+  String get ui_bottom_tab_bar => 'Navigation Bar';
 
   @override
   String get ui_pick_bottom_tab => 'Choose bottom entry';

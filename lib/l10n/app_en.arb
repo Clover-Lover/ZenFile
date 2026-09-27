@@ -1397,7 +1397,7 @@
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "Action buttons displayed at the top of the page",
+  "msg3341e3ed": "Navigation bar displayed at the top of the page",
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1405,7 +1405,7 @@
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "Action buttons displayed at the bottom of the page",
+  "msg5d2c8e7f": "Navigation bar displayed at the bottom of the page",
   "@msg9b7639ac": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -8138,8 +8138,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "Show Navigation Bar",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "Navigation Bar",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "Choose bottom entry",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Long press to change",

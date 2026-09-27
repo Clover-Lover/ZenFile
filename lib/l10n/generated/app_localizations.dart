@@ -2245,7 +2245,7 @@ abstract class L10n {
   /// ui\screens\more_settings_screen.dart
   ///
   /// In zh, this message translates to:
-  /// **'操作按钮显示在页面顶部'**
+  /// **'导航栏显示在页面顶部'**
   String get msg3341e3ed;
 
   /// ui\screens\more_settings_screen.dart
@@ -2257,7 +2257,7 @@ abstract class L10n {
   /// ui\screens\more_settings_screen.dart
   ///
   /// In zh, this message translates to:
-  /// **'操作按钮显示在页面底部'**
+  /// **'导航栏显示在页面底部'**
   String get msg5d2c8e7f;
 
   /// ui\screens\more_settings_screen.dart
@@ -14290,10 +14290,10 @@ abstract class L10n {
   /// **'导入文本文件'**
   String get ui_text_editor_import;
 
-  /// Bottom navigation bar
+  /// Navigation bar (visibility + position)
   ///
   /// In zh, this message translates to:
-  /// **'显示导航栏'**
+  /// **'导航栏'**
   String get ui_bottom_tab_bar;
 
   /// Choose bottom entry

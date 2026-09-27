@@ -1387,7 +1387,7 @@
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "Aktionsschaltflächen werden oben auf der Seite angezeigt",
+  "msg3341e3ed": "Navigationsleiste oben auf der Seite angezeigt",
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1395,7 +1395,7 @@
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "Aktionsschaltflächen werden unten auf der Seite angezeigt",
+  "msg5d2c8e7f": "Navigationsleiste unten auf der Seite angezeigt",
   "@msg9b7639ac": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -8069,8 +8069,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "Navigationsleiste anzeigen",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "Navigationsleiste",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "Untereintrag wählen",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Lange drücken zum Ändern",

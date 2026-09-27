@@ -568,32 +568,54 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     );
   }
 
-  /// 顶部栏：位置=底部时显示 3 按钮行（左抽屉 / 中全局搜索 / 右快捷操作），
+  /// 顶栏：位置=底部时显示工具按钮行（左抽屉 / 全局搜索 / 常用功能 5 项 / 设置），
   /// 位置=顶部时显示 4-tab 导航。
+  ///
+  /// 「导航栏」总开关只隐藏 **4-tab 那条** —— 工具按钮行永远保留，它是抽屉 /
+  /// 搜索 / 刷新等操作的唯一入口。原实现只按底栏判开关，于是「位置=顶部 + 关闭
+  /// 导航栏」会把底栏的工具按钮行藏掉、4-tab 反而留在顶部。
   Widget _buildNavTopBar(bool bottomTabs) {
-    return bottomTabs ? _buildTopBarRow() : _buildBottomTabs();
+    if (bottomTabs) return _buildTopBarRow();
+    // 4-tab 在顶栏：关闭时整条收起，只留状态栏高度的空白，
+    // 免得下面的内容被状态栏压住。
+    if (!context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled)) {
+      return SizedBox(height: MediaQuery.of(context).padding.top);
+    }
+    return _buildBottomTabs();
   }
 
-  /// 底部栏：与顶部栏按「导航栏位置」设置互换。
-  /// 导航栏开启时，整条栏支持**上滑**唤起收藏夹面板（对齐 MT / NP 管理器书签的手势）。
+  /// 底栏：与顶部栏按「导航栏位置」设置互换。
+  /// 导航栏开启且 4-tab 落在底栏时，整条栏支持**上滑**唤起收藏夹面板
+  /// （对齐 MT / NP 管理器书签的手势）。
   ///
-  /// 导航栏关闭时**不再补那条「贴底透明上滑热区」**：它正好落在系统手势导航的底部
-  /// 边缘识别区里，上滑会被系统抢走（真机实测：收藏夹弹不出来，还会误触系统手势）。
-  /// 收藏夹入口因此改为：
+  /// 导航栏关闭时**不再补那条「贴底透明上滑热区」**：它正好落在系统手势导航的
+  /// 底部边缘识别区里，上滑会被系统抢走（真机实测：收藏夹弹不出来，还会误触系统
+  /// 手势）。收藏夹入口因此改为：
   ///   · 分类页 → 只保留左抽屉「收藏夹」一项；
   ///   · 浏览页 → 底部操作栏上滑（见 DirectoryScreen._buildCollapsibleBrowseActionBar）。
   /// 这里只留「系统手势条高度」的空白，避免浏览操作栏被系统手势条压住。
   Widget _buildNavBottomBar(bool bottomTabs) {
-    // 底部导航栏总开关（自定义快捷方式页配置）：关闭时折叠隐藏（provider 监听实时生效）
-    if (!context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled)) {
+    final navEnabled =
+        context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled);
+    // 位置=顶部：4-tab 在顶栏，底栏固定是工具按钮行。它不受总开关影响，
+    // 否则「关掉导航栏」会把工具按钮行一起藏掉（它没有第二入口）。
+    if (!bottomTabs) {
+      final bar = _buildTopBarRow();
+      if (!navEnabled) return bar;
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragEnd: _handleSwipeUpForFavorites,
+        child: bar,
+      );
+    }
+    if (!navEnabled) {
       return SizedBox(height: MediaQuery.of(context).padding.bottom);
     }
-    final bar = bottomTabs ? _buildBottomTabs() : _buildTopBarRow();
     return GestureDetector(
       // translucent：不拦截子级命中测试，图标 / 标签仍可正常点按。
       behavior: HitTestBehavior.translucent,
       onVerticalDragEnd: _handleSwipeUpForFavorites,
-      child: bar,
+      child: _buildBottomTabs(),
     );
   }
 

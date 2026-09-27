@@ -1214,14 +1214,14 @@ class L10nEs extends L10n {
 
   @override
   String get msg3341e3ed =>
-      'Los botones de acción se muestran en la parte superior de la página';
+      'Barra de navegación en la parte superior de la página';
 
   @override
   String get msg8c414b06 => 'Abajo';
 
   @override
   String get msg5d2c8e7f =>
-      'Los botones de acción se muestran en la parte inferior de la página';
+      'Barra de navegación en la parte inferior de la página';
 
   @override
   String get msg9b7639ac =>
@@ -8146,7 +8146,7 @@ class L10nEs extends L10n {
   String get ui_text_editor_import => 'Importar archivo de texto';
 
   @override
-  String get ui_bottom_tab_bar => 'Mostrar barra de navegación';
+  String get ui_bottom_tab_bar => 'Barra de navegación';
 
   @override
   String get ui_pick_bottom_tab => 'Elegir entrada inferior';

@@ -1142,13 +1142,13 @@ class L10nJa extends L10n {
   String get msge34c23ff => '上部';
 
   @override
-  String get msg3341e3ed => 'アクションボタンはページの上部に表示されます';
+  String get msg3341e3ed => 'ナビゲーションバーはページの上部に表示されます';
 
   @override
   String get msg8c414b06 => '下部';
 
   @override
-  String get msg5d2c8e7f => 'アクションボタンはページの下部に表示されます';
+  String get msg5d2c8e7f => 'ナビゲーションバーはページの下部に表示されます';
 
   @override
   String get msg9b7639ac => 'ブラウズとメディアページの選択アクションバーにアイコンのみを表示';
@@ -7795,7 +7795,7 @@ class L10nJa extends L10n {
   String get ui_text_editor_import => 'テキストファイルを読み込む';
 
   @override
-  String get ui_bottom_tab_bar => 'ナビゲーションバーを表示';
+  String get ui_bottom_tab_bar => 'ナビゲーションバー';
 
   @override
   String get ui_pick_bottom_tab => '下部エントリを選択';

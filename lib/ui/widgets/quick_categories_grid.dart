@@ -10,6 +10,7 @@ import '../screens/internal_file_picker_screen.dart';
 import '../screens/storage_analyzer/app_manager_screen.dart';
 import '../../models/media_type.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
+import 'nav_bar_settings_sheet.dart';
 import '../../core/utils.dart';
 
 import '../screens/all_recent_files_screen.dart';
@@ -2380,6 +2381,29 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                                   setModalState(() {});
                                 },
                               ),
+                            ],
+                          ),
+                        ),
+                        // ===== 导航栏位置（顶部 / 底部）=====
+                        // 与「设置 → 常规与行为 → 导航栏」面板共用同一份 provider 状态，
+                        // 所以它和上面的开关、以及设置页那边的面板永远一致（双向同步）。
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 4.0,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  L10n.of(context).ui_show_bottom_action_bar,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              const NavBarPositionSegments(),
                             ],
                           ),
                         ),

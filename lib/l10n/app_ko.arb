@@ -1390,7 +1390,7 @@
   "@msg3341e3ed": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg3341e3ed": "작업 버튼이 페이지 상단에 표시됩니다",
+  "msg3341e3ed": "탐색 모음이 페이지 상단에 표시됩니다",
   "@msg8c414b06": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -1398,7 +1398,7 @@
   "@msg5d2c8e7f": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
-  "msg5d2c8e7f": "작업 버튼이 페이지 하단에 표시됩니다",
+  "msg5d2c8e7f": "탐색 모음이 페이지 하단에 표시됩니다",
   "@msg9b7639ac": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -8072,8 +8072,8 @@
   "@ui_text_editor_import": {
     "description": "text editor: import text file"
   },
-  "ui_bottom_tab_bar": "탐색 모음 표시",
-  "@ui_bottom_tab_bar": {"description": "Bottom navigation bar"},
+  "ui_bottom_tab_bar": "탐색 모음",
+  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
   "ui_pick_bottom_tab": "하단 항목 선택",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "길게 누르면 변경할 수 있습니다",

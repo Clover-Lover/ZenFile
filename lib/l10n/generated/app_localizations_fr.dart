@@ -1213,15 +1213,13 @@ class L10nFr extends L10n {
   String get msge34c23ff => 'En haut';
 
   @override
-  String get msg3341e3ed =>
-      'Les boutons d\'action sont affichés en haut de la page';
+  String get msg3341e3ed => 'Barre de navigation affichée en haut de la page';
 
   @override
   String get msg8c414b06 => 'En bas';
 
   @override
-  String get msg5d2c8e7f =>
-      'Les boutons d\'action sont affichés en bas de la page';
+  String get msg5d2c8e7f => 'Barre de navigation affichée en bas de la page';
 
   @override
   String get msg9b7639ac =>
@@ -8167,7 +8165,7 @@ class L10nFr extends L10n {
   String get ui_text_editor_import => 'Importer un fichier texte';
 
   @override
-  String get ui_bottom_tab_bar => 'Afficher la barre de navigation';
+  String get ui_bottom_tab_bar => 'Barre de navigation';
 
   @override
   String get ui_pick_bottom_tab => 'Choisir une entrée en bas';

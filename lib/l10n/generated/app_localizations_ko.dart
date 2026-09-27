@@ -1140,13 +1140,13 @@ class L10nKo extends L10n {
   String get msge34c23ff => '상단';
 
   @override
-  String get msg3341e3ed => '작업 버튼이 페이지 상단에 표시됩니다';
+  String get msg3341e3ed => '탐색 모음이 페이지 상단에 표시됩니다';
 
   @override
   String get msg8c414b06 => '하단';
 
   @override
-  String get msg5d2c8e7f => '작업 버튼이 페이지 하단에 표시됩니다';
+  String get msg5d2c8e7f => '탐색 모음이 페이지 하단에 표시됩니다';
 
   @override
   String get msg9b7639ac => '탐색 및 미디어 페이지의 선택 액션 바에 아이콘만 표시';
@@ -7801,7 +7801,7 @@ class L10nKo extends L10n {
   String get ui_text_editor_import => '텍스트 파일 가져오기';
 
   @override
-  String get ui_bottom_tab_bar => '탐색 모음 표시';
+  String get ui_bottom_tab_bar => '탐색 모음';
 
   @override
   String get ui_pick_bottom_tab => '하단 항목 선택';

@@ -1139,13 +1139,13 @@ class L10nZh extends L10n {
   String get msge34c23ff => '顶部';
 
   @override
-  String get msg3341e3ed => '操作按钮显示在页面顶部';
+  String get msg3341e3ed => '导航栏显示在页面顶部';
 
   @override
   String get msg8c414b06 => '底部';
 
   @override
-  String get msg5d2c8e7f => '操作按钮显示在页面底部';
+  String get msg5d2c8e7f => '导航栏显示在页面底部';
 
   @override
   String get msg9b7639ac => '在浏览和媒体页面的选择操作栏中仅显示图标';
@@ -7625,7 +7625,7 @@ class L10nZh extends L10n {
   String get ui_text_editor_import => '导入文本文件';
 
   @override
-  String get ui_bottom_tab_bar => '显示导航栏';
+  String get ui_bottom_tab_bar => '导航栏';
 
   @override
   String get ui_pick_bottom_tab => '选择底部入口';
@@ -8777,13 +8777,13 @@ class L10nZhTw extends L10nZh {
   String get msge34c23ff => '頂部';
 
   @override
-  String get msg3341e3ed => '操作按鈕顯示在頁面頂部';
+  String get msg3341e3ed => '導覽列顯示在頁面頂部';
 
   @override
   String get msg8c414b06 => '底部';
 
   @override
-  String get msg5d2c8e7f => '操作按鈕顯示在頁面底部';
+  String get msg5d2c8e7f => '導覽列顯示在頁面底部';
 
   @override
   String get msg9b7639ac => '在瀏覽和媒體頁面的選擇操作欄中僅顯示圖示';
@@ -15233,7 +15233,7 @@ class L10nZhTw extends L10nZh {
   String get ui_text_editor_import => '匯入文字檔';
 
   @override
-  String get ui_bottom_tab_bar => '顯示導覽列';
+  String get ui_bottom_tab_bar => '導覽列';
 
   @override
   String get ui_pick_bottom_tab => '選擇底部入口';

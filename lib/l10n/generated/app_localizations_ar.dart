@@ -1186,13 +1186,13 @@ class L10nAr extends L10n {
   String get msge34c23ff => 'الأعلى';
 
   @override
-  String get msg3341e3ed => 'أزرار الإجراءات معروضة في أعلى الصفحة';
+  String get msg3341e3ed => 'شريط التنقل معروض في أعلى الصفحة';
 
   @override
   String get msg8c414b06 => 'الأسفل';
 
   @override
-  String get msg5d2c8e7f => 'أزرار الإجراءات معروضة في أسفل الصفحة';
+  String get msg5d2c8e7f => 'شريط التنقل معروض في أسفل الصفحة';
 
   @override
   String get msg9b7639ac =>
@@ -8011,7 +8011,7 @@ class L10nAr extends L10n {
   String get ui_text_editor_import => 'استيراد ملف نصي';
 
   @override
-  String get ui_bottom_tab_bar => 'إظهار شريط التنقل';
+  String get ui_bottom_tab_bar => 'شريط التنقل';
 
   @override
   String get ui_pick_bottom_tab => 'اختيار عنصر سفلي';
