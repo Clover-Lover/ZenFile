@@ -609,6 +609,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // 本页即将销毁、不再持有 player ⇒ 撤销登记（**带 player 身份**）。之后通知栏
+    // 的「关闭」或换绑其它播放器才可以安全退役它；若还留着登记，player 会被当成
+    // 「有人持有」而永远不回收（泄漏一个 mpv 实例 + 解码线程）。
+    getAudioHandler().clearForegroundHolds(player);
     // 保存当前播放进度
     if (position.inMilliseconds > 0) {
       PreferencesService.savePlaybackPosition(_currentPath, position.inMilliseconds);
@@ -2149,6 +2153,11 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       queue: queue,
       currentIndex: _currentIndex,
     );
+    // ⚠️ 必须登记「本页仍持有这个 player」。音频页此前从不登记（只有视频页登记），
+    // 于是视频侧开启后台播放时 attach 换绑旧 player 会把它当成「无主对象」直接销毁，
+    // 而音频页 / 桌面歌词仍在用它 ⇒ use-after-free ⇒ CRASH_NATIVE
+    // （用户反馈 2026-09-27：「音频和视频都开启后台播放后，播放视频会崩溃闪退」）。
+    handler.markForegroundHolds(player);
     // Skip callback so notification controls update the screen's index
     handler.setSkipCallback(_onBackgroundSkip);
 

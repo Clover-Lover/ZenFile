@@ -225,11 +225,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // 播放（偏好被持久化为 true 且全库再无写 false 的地方），之后打开**任何**
       // 视频都会立刻退出播放页、画面根本没出现过，用户只看到一句提示。
       // 已经挂着同一个视频时（从通知栏返回 / 重复打开同一部）不重复 attach。
+      // ⚠️ 这里走**纯 attach**、**不申请权限也不诊断**：偏好是粘性的，用户开过一次
+      // 后台播放后，之后每打开一部视频都会进到这里；若走 `_startBackgroundMode()`，
+      // 每次打开视频都会弹一次系统通知权限框（打断刚开播的画面，并让 Activity 反复
+      // 切前后台）。权限提示只在用户**主动**点「后台播放」时给
+      // （`_toggleBackgroundMode` → `_startBackgroundMode`）。
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         final path = _currentStreamUrl ?? widget.videoPath;
         if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
-        unawaited(_startBackgroundMode());
+        unawaited(_attachToBackgroundHandler());
       });
     }
 
@@ -1653,6 +1658,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // 已解析的可播放地址：远程流优先 _currentStreamUrl，本地优先 _currentFilePath，否则原始路径
     final uri = _currentStreamUrl ?? _currentFilePath ?? widget.videoPath;
 
+    // ⚠️ 后台播放中换 player：通知栏 handler 里挂的还是 `oldPlayer`，而 `player`
+    // 马上被替换、oldPlayer 随后在 postFrame 里被销毁 ⇒ 销毁完成后通知栏按一下
+    // 播放就是 use-after-free ⇒ CRASH_NATIVE。所以先解绑：`stopNotification()`
+    // 只 emit idle + detach，**不** dispose（旧的仍由本页按「先解绑均衡器再销毁」
+    // 的顺序释放），换完再把新 player 重新挂上去。
+    final wasBackgroundMode = _isBackgroundMode;
+    if (wasBackgroundMode) {
+      getAudioHandler().stopNotification();
+    }
+
     setState(() => _isBuffering = true);
 
     player = Player(
@@ -1766,6 +1781,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         _useHardwareDecode = useHardware;
         _isBuffering = false;
       });
+    }
+    // 换完 player 重新挂回通知栏（内部会 markForegroundHolds(新 player)）。
+    // silent：这是内部重建，不是用户主动开启后台播放，不弹「已进入后台播放」。
+    if (wasBackgroundMode && mounted) {
+      unawaited(_attachToBackgroundHandler(silent: true));
     }
   }
 
@@ -2607,9 +2627,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _stopBlackScreenCheck();
     _saveCurrentPlaybackPosition();
     _controlsAnimController.dispose();
-    // 本页即将销毁、不再持有 player ⇒ 之后通知栏的「关闭」可以安全地 dispose
-    // 它（见 ZenFileAudioHandler.foregroundHoldsPlayer 的注释）。
-    getAudioHandler().foregroundHoldsPlayer = false;
+    // 本页即将销毁、不再持有 player ⇒ 撤销登记，之后通知栏的「关闭」/换绑可以安全
+    // 退役它（见 ZenFileAudioHandler._foregroundPlayer 的注释）。
+    // ⚠️ 必须**带 player 身份**撤销：多播放页叠加时无条件清空会误伤另一页仍在用的
+    // player，导致它被当成无主对象回收 ⇒ CRASH_NATIVE。
+    getAudioHandler().clearForegroundHolds(player);
     if (_isBackgroundMode) {
       // 后台播放：保留 player、均衡器与远程流会话，由通知栏媒体控制器继续控制。
       // 不清除 skip 回调（无队列时通知栏不会触发切歌）。
@@ -2935,7 +2957,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       BackgroundPlayPermission.diagnose(
         context,
         isActive: () => mounted,
-        onReattach: _attachToBackgroundHandler,
+        // 显式闭包（不直接传方法引用）：`_attachToBackgroundHandler` 现在带可选命名
+        // 参数 `silent`，用闭包让类型匹配一目了然，不必依赖「带可选参数的函数可赋给
+        // 参数更少的函数类型」这条子类型规则。
+        onReattach: () => _attachToBackgroundHandler(),
       ),
     );
   }
@@ -2944,7 +2969,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   ///
   /// 单独拆出来是因为「媒体通知链路重初始化成功」后需要**只重新 attach**：
   /// 若再走一遍 `_startBackgroundMode()`，会重跑权限申请并重复弹提示。
-  Future<void> _attachToBackgroundHandler() async {
+  ///
+  /// [silent] 为 true 时不弹「已进入后台播放」提示 —— 用于**内部重建播放器**
+  /// （如切换解码方式）后的重新挂载，那不是用户主动开启后台播放，弹提示会莫名其妙。
+  Future<void> _attachToBackgroundHandler({bool silent = false}) async {
     final handler = getAudioHandler();
     final currentPath = _currentStreamUrl ?? widget.videoPath;
     if (currentPath.isEmpty) return;
@@ -2968,14 +2996,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       videoSession: true,
     );
     // ⚠️ 必须声明「本页仍持有这个 player」：页面不再自动退出后，通知栏的
-    // 「关闭」（ZenFileAudioHandler.stop）若照旧 dispose 掉 player，而本页还在
-    // 用它解码，就是 use-after-free ⇒ CRASH_NATIVE（Dart 侧拿不到任何栈）。
-    handler.foregroundHoldsPlayer = true;
+    // 「关闭」（ZenFileAudioHandler.stop）或**换绑其它播放器**（attach 回收 oldPlayer，
+    // 例如「音频后台播放中再开视频后台播放」）若照旧销毁 player，而本页还在用它解码，
+    // 就是 use-after-free ⇒ CRASH_NATIVE（Dart 侧拿不到任何栈）。
+    // 带 player 身份登记，避免误伤其它页面正在用的 player。
+    handler.markForegroundHolds(player);
     handler.setSkipCallback(null);
     if (!mounted) return;
 
     setState(() => _isBackgroundMode = true);
     PreferencesService.saveVideoBackgroundMode(true);
+    if (silent) return;
     final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

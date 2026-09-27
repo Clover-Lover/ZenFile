@@ -33,7 +33,11 @@ class WebdavDebugLog {
   /// 「实际生效的 mpv 音频输出（AO）」等运行期证据（见
   /// `MpvAudioOutputService`）。⚠️ **发版前必须改回 false**。
   /// 2026-09-23 v2.1.6 发版：已改回 false。
-  static bool enabled = false;
+  /// 2026-09-27「音频和视频都开启后台播放后，播放视频会崩溃闪退」排查期间**再次
+  /// 开启**：10 份崩溃报告全是 `CRASH_NATIVE` 且系统不提供 trace（无 adb），只能靠
+  /// `ZenFileAudioHandler` 在 attach / 退役 / detach 各关键动作落盘的 `[bg]` 序列，
+  /// 判断崩溃前**最后执行到哪一步**。⚠️ **发版前必须改回 false**。
+  static bool enabled = true;
 
   /// 写入一行日志（同步落盘，保证崩溃前也已写入）。
   static void log(String msg) {

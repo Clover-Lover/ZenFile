@@ -74,6 +74,15 @@ class DesktopLyricController {
     _player = null;
   }
 
+  /// 若正在跟踪的正是 [player]，停止跟踪（**不动悬浮窗显示**）。
+  ///
+  /// 由 `ZenFileAudioHandler._retirePlayer` 在退役（销毁）一个 player 时调用：
+  /// 音频后台播放被视频会话接管后，本控制器可能仍持有那个已被销毁的 player。
+  /// 带身份判断是为了避免误停**新** player 的跟踪（例如页面已切到新曲目）。
+  void stopIfPlayer(Player player) {
+    if (identical(_player, player)) stop();
+  }
+
   /// 彻底停止并重置所有状态
   void reset() {
     stop();
