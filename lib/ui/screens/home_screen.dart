@@ -709,12 +709,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                     tooltip: Theme.of(context).brightness == Brightness.dark
                         ? L10n.of(context).msg8755e992
                         : L10n.of(context).ui_dark_mode,
-                    onPressed: () {
-                      // 切换主题后自动跳到文件浏览页，方便用户直接看到深浅色
-                      // 的差异（参考排序按钮：_switchTab(1) 切到浏览页）。
-                      widget.toggleTheme();
-                      _switchTab(1);
-                    },
+                    onPressed: widget.toggleTheme,
                   ),
                   // 常用功能：单/双窗口
                   IconButton(
