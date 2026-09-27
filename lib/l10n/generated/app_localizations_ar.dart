@@ -2267,6 +2267,11 @@ class L10nAr extends L10n {
   String get msg6466e61e => 'تفعيل رابط مشاركة الإنترنت';
 
   @override
+  String web_share_internet_failed(String error) {
+    return '賮卮賱 鬲賮毓賷賱 乇丕亘胤 丕賱賲卮丕乇賰丞 毓亘乇 丕賱廿賳鬲乇賳鬲: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'جارٍ المعالجة...';
 
   @override

@@ -2776,6 +2776,11 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "激活互联网分享链接",
+  "web_share_internet_failed": "婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error}",
+  "@web_share_internet_failed": {
+    "description": "web_sharing_screen.dart internet tunnel activation failure toast",
+    "placeholders": { "error": { "type": "String" } }
+  },
   "@msg6466e61e": {
     "description": "ui\\screens\\web_sharing_screen.dart"
   },

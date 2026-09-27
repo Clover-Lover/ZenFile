@@ -2185,6 +2185,11 @@ class L10nZh extends L10n {
   String get msg6466e61e => '激活互联网分享链接';
 
   @override
+  String web_share_internet_failed(String error) {
+    return '婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error';
+  }
+
+  @override
   String get msg67bd9375 => '正在处理...';
 
   @override
@@ -9818,6 +9823,11 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get msg6466e61e => '啟用網際網路分享連結';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '鍟熺敤缍查殯缍茶矾鍒嗕韩閫ｇ祼澶辨晽锛歿error';
+  }
 
   @override
   String get msg67bd9375 => '正在處理...';

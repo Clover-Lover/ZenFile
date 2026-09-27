@@ -4198,6 +4198,12 @@ abstract class L10n {
   /// **'激活互联网分享链接'**
   String get msg6466e61e;
 
+  /// web_sharing_screen.dart internet tunnel activation failure toast
+  ///
+  /// In zh, this message translates to:
+  /// **'婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error}'**
+  String web_share_internet_failed(String error);
+
   /// ui\widgets\background_operation_progress_dialog.dart
   ///
   /// In zh, this message translates to:

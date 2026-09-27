@@ -2275,6 +2275,11 @@ class L10nEn extends L10n {
   String get msg6466e61e => 'Activate Internet Share Link';
 
   @override
+  String web_share_internet_failed(String error) {
+    return 'Failed to activate Internet share link: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Processing...';
 
   @override

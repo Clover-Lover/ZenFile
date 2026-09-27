@@ -2319,6 +2319,11 @@ class L10nEs extends L10n {
   String get msg6466e61e => 'Activar Enlace de Compartición por Internet';
 
   @override
+  String web_share_internet_failed(String error) {
+    return 'Error al activar el enlace para compartir por Internet: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Procesando...';
 
   @override

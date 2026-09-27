@@ -2708,6 +2708,7 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "Активировать Ссылку Интернет Доступа",
+  "web_share_internet_failed": "袧械 褍写邪谢芯褋褜 邪泻褌懈胁懈褉芯胁邪褌褜 褋褋褘谢泻褍 写谢褟 懈薪褌械褉薪械褌-写芯褋褌褍锌邪: {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },

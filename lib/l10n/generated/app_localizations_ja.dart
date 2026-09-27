@@ -2194,6 +2194,11 @@ class L10nJa extends L10n {
   String get msg6466e61e => 'インターネット共有リンクを有効化';
 
   @override
+  String web_share_internet_failed(String error) {
+    return '銈ゃ兂銈裤兗銉嶃儍銉堝叡鏈夈儶銉炽偗銇湁鍔瑰寲銇け鏁椼仐銇俱仐銇? $error';
+  }
+
+  @override
   String get msg67bd9375 => '処理中...';
 
   @override

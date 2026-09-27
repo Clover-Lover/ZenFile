@@ -2762,6 +2762,7 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "啟用網際網路分享連結",
+  "web_share_internet_failed": "鍟熺敤缍查殯缍茶矾鍒嗕韩閫ｇ祼澶辨晽锛歿error}",
   "@msg6466e61e": {
     "description": "ui\\screens\\web_sharing_screen.dart"
   },

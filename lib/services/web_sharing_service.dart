@@ -273,9 +273,11 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
         return p.basename(a.path).toLowerCase().compareTo(p.basename(b.path).toLowerCase());
       });
 
-      // Detect if accessed via localhost.run tunnel or local network
+      // Detect if accessed via public tunnel (localhost.run / Pinggy) or local network
       final host = request.headers.value(HttpHeaders.hostHeader) ?? '';
-      final isInternet = host.contains('lhr.life') || host.contains('localhost.run');
+      final isInternet = host.contains('lhr.life') ||
+          host.contains('localhost.run') ||
+          host.contains('pinggy.link');
 
       final html = await _generateExplorerHtml(uriPath, items, rootDir, isInternet);
       response.headers.contentType = ContentType.html;
@@ -2883,37 +2885,26 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
         debugPrint('Failed to start native web sharing service for tunnel: $e');
       }
 
-      // 2. Connect to localhost.run SSH server
-      SSHSocket socket;
-      try {
-        socket = await SSHSocket.connect('localhost.run', 22, timeout: const Duration(seconds: 15));
-      } catch (e) {
-        debugPrint('SSH connection to localhost.run failed: $e');
-        _internetShareLink = localServerUrl;
-        notifyListeners();
-        rethrow;
+      // 2. 依次尝试公共隧道节点：localhost.run（主，22 端口）→ Pinggy（备，443 端口）。
+      //    22 端口在部分运营商网络下会被阻断/QoS，备用节点走 443 提高连通率。
+      //    全部失败时才抛出携带节点名的最后一次错误，由 UI 透传真实原因。
+      Object? lastError;
+      for (final provider in _kTunnelProviders) {
+        try {
+          await _establishTunnel(provider);
+          lastError = null;
+          break;
+        } catch (e) {
+          debugPrint('Tunnel via ${provider.name} failed: $e');
+          lastError = e;
+          _cleanupTunnelConnection();
+        }
       }
-      final keys = SSHKeyPair.fromPem(_ed25519PrivateKeyPem);
-      _sshClient = SSHClient(
-        socket,
-        username: 'nokey',
-        identities: keys,
-      );
-      await _sshClient!.authenticated;
-
-      // 3. Request remote port forwarding
-      try {
-        _sshForward = await _sshClient!.forwardRemote(port: 80);
-      } catch (e) {
-        debugPrint('Remote port forwarding failed: $e');
+      if (lastError != null) {
         _internetShareLink = localServerUrl;
         notifyListeners();
-        rethrow;
-      }
-      if (_sshForward == null) {
-        _internetShareLink = localServerUrl;
-        notifyListeners();
-        throw Exception('Remote port forwarding request denied by proxy server.');
+        throw Exception(
+            'all tunnel nodes failed, last (${_kTunnelProviders.last.name}): $lastError');
       }
 
       // 4. Listen to incoming connection stream and pipe it to local HTTP Server (port 8080)
@@ -2982,8 +2973,10 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
         final patterns = [
           // Standard domain pattern: xxx.localhost.run or xxx.lhr.life
           RegExp(r'(https?://[a-zA-Z0-9.-]+\.(localhost\.run|lhr\.life))'),
+          // Pinggy: xxx.a.pinggy.link
+          RegExp(r'(https?://[a-zA-Z0-9.-]+\.pinggy\.link)'),
           // Domain without protocol
-          RegExp(r'([a-zA-Z0-9-]+\.(localhost\.run|lhr\.life))'),
+          RegExp(r'([a-zA-Z0-9-]+\.(localhost\.run|lhr\.life|pinggy\.link))'),
           // Any https URL in the output
           RegExp(r'(https://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})'),
           // Generic URL pattern
@@ -3040,6 +3033,52 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
       stopInternetTunnel();
       rethrow;
     }
+  }
+
+  /// 建立到指定公共隧道节点的 SSH 连接并完成远程端口转发。
+  /// 成功后 [_sshClient] / [_sshForward] 可用，调用方继续接管流量转发与域名解析。
+  /// 任何阶段失败都抛携带节点名的异常，供多节点回退逻辑记录并尝试下一个。
+  Future<void> _establishTunnel(_TunnelProvider provider) async {
+    SSHSocket socket;
+    try {
+      socket = await SSHSocket.connect(provider.host, provider.port,
+          timeout: const Duration(seconds: 15));
+    } catch (e) {
+      throw Exception('${provider.name}: SSH connect failed: $e');
+    }
+
+    // localhost.run 用内置密钥对（nokey 用户）；Pinggy 免费档免密（free 用户，空密码应答）。
+    _sshClient = SSHClient(
+      socket,
+      username: provider.username,
+      identities:
+          provider.useKeyAuth ? SSHKeyPair.fromPem(_ed25519PrivateKeyPem) : null,
+      onPasswordRequest: provider.useKeyAuth ? null : () => '',
+    );
+    try {
+      await _sshClient!.authenticated;
+    } catch (e) {
+      throw Exception('${provider.name}: SSH auth failed: $e');
+    }
+
+    try {
+      _sshForward = await _sshClient!.forwardRemote(port: provider.remotePort);
+    } catch (e) {
+      throw Exception('${provider.name}: remote forward failed: $e');
+    }
+    if (_sshForward == null) {
+      throw Exception('${provider.name}: remote forward denied by server');
+    }
+  }
+
+  /// 清理失败的隧道连接，供回退到下一个备用节点前调用（不影响本地 HTTP 服务）。
+  void _cleanupTunnelConnection() {
+    // 与 stopInternetTunnel 一致：_sshForward 直接置空即可，无需显式 close
+    _sshForward = null;
+    try {
+      _sshClient?.close();
+    } catch (_) {}
+    _sshClient = null;
   }
 
   void _startSpeedTimer() {
@@ -3384,3 +3423,45 @@ class ActiveClient {
     required this.totalBytes,
   }) : lastActivityTime = DateTime.now();
 }
+
+// --------------------------------------------------------------------------
+// 公共隧道节点配置（localhost.run 主节点 + Pinggy 备用节点）
+// --------------------------------------------------------------------------
+class _TunnelProvider {
+  final String name;
+  final String host;
+  final int port;
+  final int remotePort;
+  final String username;
+  final bool useKeyAuth;
+
+  const _TunnelProvider({
+    required this.name,
+    required this.host,
+    required this.port,
+    this.remotePort = 80,
+    required this.username,
+    this.useKeyAuth = true,
+  });
+}
+
+const List<_TunnelProvider> _kTunnelProviders = [
+  // 主节点：经典 SSH 反向隧道，22 端口，内置 ED25519 密钥对免注册
+  _TunnelProvider(
+    name: 'localhost.run',
+    host: 'localhost.run',
+    port: 22,
+    username: 'nokey',
+    useKeyAuth: true,
+  ),
+  // 备用节点：走 443 端口（同 HTTPS 流量），对防火墙/运营商封锁更友好；
+  // 免费档免密（free 用户，空密码即可）；远程端口 0 = 由服务器动态分配。
+  _TunnelProvider(
+    name: 'pinggy',
+    host: 'a.pinggy.io',
+    port: 443,
+    remotePort: 0,
+    username: 'free',
+    useKeyAuth: false,
+  ),
+];

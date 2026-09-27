@@ -2312,6 +2312,11 @@ class L10nRu extends L10n {
   String get msg6466e61e => 'Активировать Ссылку Интернет Доступа';
 
   @override
+  String web_share_internet_failed(String error) {
+    return '袧械 褍写邪谢芯褋褜 邪泻褌懈胁懈褉芯胁邪褌褜 褋褋褘谢泻褍 写谢褟 懈薪褌械褉薪械褌-写芯褋褌褍锌邪: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Обработка...';
 
   @override

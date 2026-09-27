@@ -2190,6 +2190,11 @@ class L10nKo extends L10n {
   String get msg6466e61e => '인터넷 공유 링크 활성화';
 
   @override
+  String web_share_internet_failed(String error) {
+    return '鞚疙劙雱?瓿奠湢 毵來伂 頇滌劚頇?鞁ろ尐: $error';
+  }
+
+  @override
   String get msg67bd9375 => '처리 중...';
 
   @override

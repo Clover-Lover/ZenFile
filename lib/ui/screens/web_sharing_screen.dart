@@ -200,9 +200,11 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
             ),
           );
         } catch (e) {
+          // 透传真实失败原因（含隧道节点名），不再用「无效的端口号」误导用户
+          final errText = e.toString().replaceFirst('Exception: ', '');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(L10n.of(context).msg8a0b5bf5),
+              content: Text(L10n.of(context).web_share_internet_failed(errText)),
               behavior: SnackBarBehavior.floating,
               backgroundColor: Colors.redAccent,
             ),

@@ -2305,6 +2305,11 @@ class L10nDe extends L10n {
   String get msg6466e61e => 'Internet-Freigabelink aktivieren';
 
   @override
+  String web_share_internet_failed(String error) {
+    return 'Aktivierung des Internet-Freigabelinks fehlgeschlagen: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Verarbeitung...';
 
   @override
