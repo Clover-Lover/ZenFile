@@ -230,7 +230,16 @@ void main() {
       try {
         for (final base in [seqRoot, parRoot]) {
           for (final e in original.entries) {
-            final dst = File(p.join(base.path, p.joinAll(e.key.split('/'))));
+            // ⚠️ 复制时必须保留【密文文件名】：这两个目录接下来要走
+            // buildJobs(encrypting: false)，会对文件名做 base32 解密。
+            // 若沿用明文名，buildJobs 会把明文名喂进 decryptFileName
+            // ⇒ base32 解码直接抛 FormatException（例如字符 'F' 非法）。
+            final parts = e.key.split('/');
+            final relEncrypted = p.joinAll([
+              ...parts.sublist(0, parts.length - 1),
+              crypt.encryptFileName(parts.last),
+            ]);
+            final dst = File(p.join(base.path, relEncrypted));
             dst.parent.createSync(recursive: true);
             File(encryptedPathOf(root.path, e.key)).copySync(dst.path);
           }
