@@ -11830,8 +11830,21 @@ class FileManagerProvider extends ChangeNotifier {
       }
     }
 
-    // 远程文件：使用流式播放代理服务器实现边缓存边播放
-    if (activeTab.isRemote && activeTab.remoteClient != null) {
+    // 远程文件：使用流式播放代理服务器实现边缓存边播放。
+    //
+    // ⚠️ 判据不能只看 `activeTab.isRemote`：用户停留在远程标签页时，「最近」页 /
+    // 分类页 / 全局搜索等入口传进来的仍然是**本地绝对路径**，会被误当成远程文件：
+    //   · 本地 pdf/txt → 弹「打开方式」→ 拿该路径去远程下载 → 0 字节 →
+    //     「打开失败：远程文件下载不完整（本地 0 字节），无法打开」；
+    //   · 本地音视频 → 走本地代理流式播放 → 代理永远等不到数据 → 一直「缓存中」/黑屏。
+    // 本地真实存在的文件一律走本地链路（远程路径形如 /media/... ，本地不会存在）。
+    // 判据 = 「语义上是本地存储卷」（复用 `_isPathOnLocalStorage`，与 loadDirectory
+    // 的远程→本地翻转护栏同一套口径）**或**「本机确实存在这个文件」。
+    final isLocalFile = _isPathOnLocalStorage(path) ||
+        (!path.startsWith('remote://') &&
+            !path.startsWith('http') &&
+            File(path).existsSync());
+    if (!isLocalFile && activeTab.isRemote && activeTab.remoteClient != null) {
       try {
         final fileMime = lookupMimeType(ext) ?? '';
         final isVideoFile = fileMime.startsWith('video/');

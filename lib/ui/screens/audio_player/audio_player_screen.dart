@@ -628,10 +628,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       // 非后台模式：停止控制器并隐藏悬浮窗
       DesktopLyricController.instance.stop();
       DesktopLyricService.instance.hide();
-      player.dispose();
+      // ⚠️ 先解绑均衡器、等它完成后再销毁播放器（见 _disposePlayerAfterEqDetach）。
+      _disposePlayerAfterEqDetach();
       getAudioHandler().detach();
-      // 释放均衡器资源
-      _disposeEqualizer();
     }
     super.dispose();
   }
@@ -1858,9 +1857,22 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
     }
   }
 
-  /// 释放均衡器资源（仅完全停止播放时调用，后台模式保留以免变回 Flat）。
-  void _disposeEqualizer() {
-    _eqService.detach();
+  /// 释放均衡器资源并销毁播放器（仅完全停止播放时调用，后台模式保留以免变回 Flat）。
+  ///
+  /// ⚠️ 顺序铁律：必须**先等均衡器解绑完成**再 `player.dispose()`。
+  /// `detach()` 内部要 `setProperty('af','')`，而 media_kit 的 `setProperty` 有内部
+  /// `await`（等待播放器初始化）且**不持锁**；旧实现是 `player.dispose()` 之后才调
+  /// detach ⇒ 对着已被释放的 mpv ctx 发原生调用 = use-after-free
+  /// ⇒ CRASH_NATIVE（Dart 侧拿不到栈，报告只写「系统未提供 trace」）。
+  void _disposePlayerAfterEqDetach() {
+    final target = player;
+    unawaited(
+      _eqService.detach().whenComplete(() {
+        try {
+          target.dispose();
+        } catch (_) {}
+      }),
+    );
   }
 
   void _showEqualizerDialog() {

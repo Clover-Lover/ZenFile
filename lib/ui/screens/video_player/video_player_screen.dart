@@ -217,14 +217,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _volume = PreferencesService.getVideoVolume();
     _isBackgroundMode = PreferencesService.getVideoBackgroundMode();
     if (_isBackgroundMode) {
-      // 记住的后台播放偏好：首帧后若当前视频未在后台播放，自动进入后台；
-      // 若已在后台播放（用户从通知栏返回界面），保持界面显示，不重复 attach/不自动退出。
+      // 记住的后台播放偏好：首帧后把播放器挂到通知栏媒体控制器，离开页面即继续
+      // 后台播放。
+      // ⚠️ 这里**绝不能自动 pop 播放页**：旧实现调的是 `_startBackgroundMode()`，
+      // 而它内部含 `Navigator.pop` + 「已进入后台播放」提示 ⇒ 只要开过一次后台
+      // 播放（偏好被持久化为 true 且全库再无写 false 的地方），之后打开**任何**
+      // 视频都会立刻退出播放页、画面根本没出现过，用户只看到一句提示。
+      // 已经挂着同一个视频时（从通知栏返回 / 重复打开同一部）不重复 attach。
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         final path = _currentStreamUrl ?? widget.videoPath;
-        if (path.isNotEmpty && !getAudioHandler().isPlayingPath(path)) {
-          _startBackgroundMode();
-        }
+        if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
+        _startBackgroundMode(pop: false);
       });
     }
 
@@ -1668,13 +1672,26 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     //（VideoController 本身无 dispose() 方法），与本项目 dispose() 约定一致。
     setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 释放旧播放器前先把均衡器从旧 player 解绑，避免 _eqService 仍指向已销毁对象
-      try {
-        _eqService.detach();
-      } catch (_) {}
-      try {
-        oldPlayer.dispose();
-      } catch (_) {}
+      // 释放旧播放器前先把均衡器从**这一个**旧 player 上解绑：既避免 _eqService
+      // 仍指向已销毁对象，也避免无条件 detach 把**新**播放器的 af 一起清掉
+      // （本回调在 `_eqService.attach(新 player)` 之后才跑）。
+      // ⚠️ 必须等解绑真正完成再 dispose，否则 setProperty 与 dispose 并发 ⇒
+      // native use-after-free。这条路正是「黑屏自动软解回退」
+      // （_autoFallbackToSoftDecode → _switchHwdec），是原生崩溃的高频路径。
+      final oldPlatform = oldPlayer.platform;
+      if (oldPlatform is NativePlayer) {
+        unawaited(
+          _eqService.detachIfAttached(oldPlatform).whenComplete(() {
+            try {
+              oldPlayer.dispose();
+            } catch (_) {}
+          }),
+        );
+      } else {
+        try {
+          oldPlayer.dispose();
+        } catch (_) {}
+      }
     });
 
     // 复用初始化的网络超时/字幕属性（不设置 sub-ass-override，避免破坏 VOBSub 渲染）
@@ -2592,14 +2609,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     if (_isBackgroundMode) {
       // 后台播放：保留 player、均衡器与远程流会话，由通知栏媒体控制器继续控制。
       // 不清除 skip 回调（无队列时通知栏不会触发切歌）。
-      getAudioHandler().setSkipCallback(null);
+      final handler = getAudioHandler();
+      handler.setSkipCallback(null);
+      // 挂在通知栏上的**不是**本页这个 player（例如「重复打开同一部视频」时本页
+      // 新建的 player 并没有被 attach，`currentPlayer` 仍是上一部）：本页仍要负责
+      // 释放它，否则每打开一次就泄漏一个 mpv 实例（原生内存 + 解码线程）。
+      if (handler.currentPlayer != player) {
+        _disposePlayerAfterEqDetach(player);
+      }
     } else {
       // 清理远程流式会话：fire-and-forget 但确保异步执行。
       // dispose() 不能是 async（Framework 要求 void），
       // 但 stopStreaming 内部会调用 client.disconnect() 取消下载。
       _stopCurrentStream();
-      _eqService.detach();
-      player.dispose();
+      // ⚠️ 先等均衡器解绑完成再销毁播放器（原因见 _disposePlayerAfterEqDetach）。
+      _disposePlayerAfterEqDetach(player);
       getAudioHandler().detach();
     }
     // 离开播放页复位 edge-to-edge，避免影响其它页面布局。
@@ -2871,8 +2895,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   /// 进入后台播放：将当前视频播放器挂到 audio_service，
   /// 关闭页面后通知栏仍可播放/暂停/拖动进度。
-  Future<void> _startBackgroundMode() async {
-    final l10n = L10n.of(context);
+  ///
+  /// [pop] == false 用于「记住的后台播放偏好」在打开视频时**自动挂载**：只建立
+  /// 通知栏关联，留在播放页正常观看，既不退出也不弹提示；只有用户**主动**点
+  /// 「后台播放」菜单项（pop == true，默认）才挂完即退出播放页并提示。
+  Future<void> _startBackgroundMode({bool pop = true}) async {
     final handler = getAudioHandler();
     final currentPath = _currentStreamUrl ?? widget.videoPath;
     if (currentPath.isEmpty) return;
@@ -2897,6 +2924,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
     setState(() => _isBackgroundMode = true);
     PreferencesService.saveVideoBackgroundMode(true);
+    // 自动挂载（pop == false，见 initState）：只挂通知栏，留在播放页。
+    if (!pop || !mounted) return;
+    final l10n = L10n.of(context);
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -2909,6 +2939,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         duration: const Duration(seconds: 2),
       ),
+    );
+  }
+
+  /// 先等均衡器解绑完成，再销毁播放器。
+  ///
+  /// ⚠️ 顺序铁律：`AudioEqualizerService.detach()` 内部要 `setProperty('af','')`，
+  /// 而 media_kit 的 `setProperty` 有内部 `await`（等待播放器初始化）且**不持锁**；
+  /// 一旦与 `player.dispose()` 并发，mpv ctx 可能已被提前释放，恢复后的原生调用
+  /// 就是 use-after-free ⇒ `CRASH_NATIVE`（native 段错误，Dart 侧拿不到任何栈，
+  /// 崩溃取证报告因此只会写「系统未提供 trace」）。
+  void _disposePlayerAfterEqDetach(Player target) {
+    unawaited(
+      _eqService.detach().whenComplete(() {
+        try {
+          target.dispose();
+        } catch (_) {}
+      }),
     );
   }
 
