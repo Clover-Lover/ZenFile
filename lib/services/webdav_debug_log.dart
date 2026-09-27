@@ -37,7 +37,16 @@ class WebdavDebugLog {
   /// 开启**：10 份崩溃报告全是 `CRASH_NATIVE` 且系统不提供 trace（无 adb），只能靠
   /// `ZenFileAudioHandler` 在 attach / 退役 / detach 各关键动作落盘的 `[bg]` 序列，
   /// 判断崩溃前**最后执行到哪一步**。⚠️ **发版前必须改回 false**。
-  static bool enabled = true;
+  /// 2026-09-28 v3.2.0 发版：已改回 false。
+  /// 🔴 **血的教训（务必看完再动这个开关）**：本开关不只是「要不要往 SD 卡写日志」，
+  /// 它还决定了 `MpvAudioOutputService` 的 **AO 延迟回读诊断**是否运行 —— 该诊断走
+  /// **裸原生 `getProperty`**，且有「8s 兜底 + 内层 3s」的最长 **11 秒窗口**；player
+  /// 一旦在此期间被销毁就是 use-after-free（`CRASH_NATIVE` 且无栈，`try/catch` 抓不住）。
+  /// ⇒ **开着它发布出去的每一个包，都自带「播放中偶发闪退」的悬垂窗口**，
+  /// 而它的存在感又极低（只在本文件的 webdav_debug.log 里留痕）。
+  /// ⇒ 任何情况下：**发版前必须回到 false，且要 grep 复核，
+  ///   不要相信 WORKLOG / memory 里「应该已经关了」的文字描述。**
+  static bool enabled = false;
 
   /// 写入一行日志（同步落盘，保证崩溃前也已写入）。
   static void log(String msg) {
