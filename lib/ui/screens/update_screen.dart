@@ -340,7 +340,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          _buildV310Changelog(theme),
+          _buildV320Changelog(theme),
         ],
       ),
     );
@@ -683,7 +683,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
   // ── ③ 更新日志（自「关于」页迁移，硬编码中英双语，不走 l10n） ──────
 
-  Widget _buildV310Changelog(ThemeData theme) {
+  Widget _buildV320Changelog(ThemeData theme) {
     final textStyle = TextStyle(fontSize: 13.5, height: 1.6, color: theme.colorScheme.onSurface.withOpacity(0.85));
     final dividerColor = theme.colorScheme.onSurface.withOpacity(0.15);
 
@@ -733,57 +733,63 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   color: theme.colorScheme.primary.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text('v3.1.0', style: TextStyle(color: theme.colorScheme.primary, fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'LexendDeca')),
+                child: Text('v3.2.0', style: TextStyle(color: theme.colorScheme.primary, fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'LexendDeca')),
               ),
               const SizedBox(width: 10),
-              Text('2026-09-25', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.4))),
+              Text('2026-09-28', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.4))),
             ],
           ),
           gap(14),
 
           // ══════════════ 中文 ══════════════
           section('\u2728 新功能'),
-          item('底部导航栏 4 个槽位可自由定制：分类 / 文件 / 传输 / 设置都能换成你常用的任何入口，长按槽位即可更换'),
-          item('自定义快捷方式支持拖动排序，拖到哪个位置就固定在哪个位置；配置区可折叠，界面更清爽'),
-          item('不需要底部导航栏时可在同一面板一键关闭，相关配置随开关一并收起'),
-          item('顶部栏改为紧凑图标布局：左抽屉 / 全局搜索 / 刷新 / 排序 / 主题切换 / 单双窗口 / 收藏夹，长按图标可查看名称'),
-          item('右抽屉改为收藏夹：常用功能前移到顶部栏，收藏夹一键展开'),
+          item('目录加解密采用多核并行处理，速度提升约 2 倍'),
+          item('视频后台播放支持随时开启与关闭（带提示），首次开启引导通知权限，开启后播放页不再退出'),
+          item('音频播放器进度条常驻显示，支持倍速 / 音量记忆'),
+          item('图片查看器新增宽度 / 高度 / 原始三态显示切换'),
+          item('应用图标新增 4 款：浅灰纸纹、磨砂金属、蓝色文件夹、深蓝鎏金；深蓝鎏金设为默认图标，原默认图标转为备选「经典图标」'),
 
           divider(),
 
           section('\u{1f3a8} 界面与交互'),
-          item('顶部栏与底部导航重新分工，整体更紧凑，常用操作一步可达'),
-          item('主页面支持左右滑动切换（限定在分类 / 文件 / 传输 / 设置四个主页面之间）'),
+          item('新增「传输」页面：网络、FTP 共享、Web 共享入口迁入；「我的」页面入口保留'),
+          item('收藏夹改为底部半屏面板，可从底部上滑唤起，附带使用提示'),
+          item('导航栏显示 / 位置整合为统一入口并双向同步，默认显示在底部；分类页与浏览页顶部背景统一'),
+          item('单 / 双窗口切换按钮点击后自动跳转文件浏览页'),
 
           divider(),
 
           section('\u{1f41b} 问题修复'),
-          item('修复全新安装后首次启动闪退的问题（v3.0.0 上所有全新安装用户均受影响，升级后不再复现）'),
-          item('修复部分页面关闭后仍被访问而引发的偶发崩溃'),
-          item('崩溃报告自动附带版本号与机型信息，重复的同类错误自动合并，反馈问题更容易定位'),
-          item('降低亮屏待机耗电与内存占用：修复列表加载占位动画在页面不可见时仍在运行的问题，并收紧图片缓存上限'),
+          item('修复后台播放、切换软硬解码、退出播放等场景下的偶发闪退'),
+          item('互联网分享链接修复：不再被管理后台地址顶替、不再卡在占位，多节点隧道自动切换'),
+          item('修复「最近」页打开本地文件被误判为远程文件而无法打开的问题'),
+          item('远程缩略图改为按顺序单文件加载并限制带宽，打开远程目录不再卡顿、占用大量流量'),
+          item('SAF 提示与新增界面文案全部支持多语言'),
           langDivider(),
 
           section('\u2728 New Features'),
-          item('All 4 bottom navigation slots are customizable: Categories / Files / Transfers / Settings can each be replaced with any entry you use often, just long-press a slot to change it'),
-          item('Custom shortcuts can be reordered by dragging, and wherever you drop an entry is where it stays; the configuration area can be collapsed for a cleaner page'),
-          item('Turn the bottom navigation bar off entirely from the same panel when you do not need it, and its settings fold away with the switch'),
-          item('The top bar is now a compact icon row: drawer / global search / refresh / sort / theme toggle / single-dual pane / favorites, long-press an icon to see its name'),
-          item('The right drawer is now Favorites: frequent features moved up to the top bar for one-tap access'),
+          item('Directory encryption/decryption now runs on multiple CPU cores in parallel — up to ~2× faster'),
+          item('Video background playback can be toggled on/off anytime (with a toast), guides notification permission on first use, and the player page no longer closes'),
+          item('Audio player: seek bar always visible, playback speed and volume remembered'),
+          item('Image viewer: new fit modes — fit width / fit height / original size'),
+          item('4 new app icons: Light Gray Paper, Frosted Metal, Blue Folder and Blue Gold; Blue Gold is now the default icon, and the original default becomes the "Classic Icon" alternative'),
 
           divider(),
 
           section('\u{1f3a8} UI & Interaction'),
-          item('The top bar and bottom navigation now split their duties, making the UI denser with common actions one step away'),
-          item('Swipe left and right to move between the main pages (Categories / Files / Transfers / Settings)'),
+          item('New "Transfer" page hosting Network, FTP Sharing and Web Sharing entries; the "Mine" page entry is kept'),
+          item('Favorites is now a bottom half-screen panel, swipe up from the bottom edge to open, with a usage hint'),
+          item('Navigation bar visibility and position merged into one setting with two-way sync, defaulting to the bottom; unified top backgrounds for Categories and Browse pages'),
+          item('The single/dual-pane toggle now jumps to the file browser first'),
 
           divider(),
 
           section('\u{1f41b} Bug Fixes'),
-          item('Fixed a crash on the very first launch after a fresh install (affected every fresh install of v3.0.0 and is gone after upgrading)'),
-          item('Fixed occasional crashes caused by a page still being accessed after it was closed'),
-          item('Crash reports now include the app version and device model, and repeated errors are merged, making reports easier to diagnose'),
-          item('Lower idle power draw and memory usage: fixed loading placeholders that kept animating while off-screen, and tightened the image cache limit'),
+          item('Fixed occasional crashes when toggling background playback, switching hardware/software decoding, or leaving the player'),
+          item('Internet sharing link fixed: no longer hijacked by the dashboard address or stuck at the placeholder; auto-fallback between multiple tunnel nodes'),
+          item('Fixed "Recent" page misidentifying local files as remote and failing to open them'),
+          item('Remote thumbnails now load one file at a time with a bandwidth cap, so opening remote folders no longer lags or eats bandwidth'),
+          item('SAF prompts and all new UI copy are now fully translated'),
         ],
       ),
     );
