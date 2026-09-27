@@ -217,8 +217,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _volume = PreferencesService.getVideoVolume();
     _isBackgroundMode = PreferencesService.getVideoBackgroundMode();
     if (_isBackgroundMode) {
-      // 记住的后台播放偏好：首帧后把播放器挂到通知栏媒体控制器，离开页面即继续
-      // 后台播放。
+      // 记住的后台播放偏好（开关状态已持久化）：首帧后把播放器挂到通知栏媒体
+      // 控制器，离开页面即继续后台播放。
       // ⚠️ 这里**绝不能自动 pop 播放页**：旧实现调的是 `_startBackgroundMode()`，
       // 而它内部含 `Navigator.pop` + 「已进入后台播放」提示 ⇒ 只要开过一次后台
       // 播放（偏好被持久化为 true 且全库再无写 false 的地方），之后打开**任何**
@@ -228,7 +228,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         if (!mounted) return;
         final path = _currentStreamUrl ?? widget.videoPath;
         if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
-        _startBackgroundMode(pop: false);
+        _startBackgroundMode();
       });
     }
 
@@ -2606,6 +2606,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _stopBlackScreenCheck();
     _saveCurrentPlaybackPosition();
     _controlsAnimController.dispose();
+    // 本页即将销毁、不再持有 player ⇒ 之后通知栏的「关闭」可以安全地 dispose
+    // 它（见 ZenFileAudioHandler.foregroundHoldsPlayer 的注释）。
+    getAudioHandler().foregroundHoldsPlayer = false;
     if (_isBackgroundMode) {
       // 后台播放：保留 player、均衡器与远程流会话，由通知栏媒体控制器继续控制。
       // 不清除 skip 回调（无队列时通知栏不会触发切歌）。
@@ -2893,13 +2896,25 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   // ─── 后台播放：复用 audio_service 通知栏媒体控制器 ────────────────────────
 
-  /// 进入后台播放：将当前视频播放器挂到 audio_service，
-  /// 关闭页面后通知栏仍可播放/暂停/拖动进度。
+  /// 「后台播放」菜单项：**开关** —— 已开启则关闭，未开启则开启。
   ///
-  /// [pop] == false 用于「记住的后台播放偏好」在打开视频时**自动挂载**：只建立
-  /// 通知栏关联，留在播放页正常观看，既不退出也不弹提示；只有用户**主动**点
-  /// 「后台播放」菜单项（pop == true，默认）才挂完即退出播放页并提示。
-  Future<void> _startBackgroundMode({bool pop = true}) async {
+  /// 用户反馈（2026-09-27）：此前只能开不能关（`saveVideoBackgroundMode` 全库
+  /// 只写 true），菜单标题因此恒高亮；且点一下就直接退出播放页。
+  /// 现按要求改为「开关 + 不退出页面」。
+  Future<void> _toggleBackgroundMode() async {
+    if (_isBackgroundMode) {
+      _stopBackgroundMode();
+    } else {
+      await _startBackgroundMode();
+    }
+  }
+
+  /// 开启后台播放：把当前视频播放器挂到 audio_service，
+  /// 通知栏即可播放/暂停/拖动进度。
+  ///
+  /// ⚠️ **绝不 pop 播放页**（2026-09-27 用户要求）：点击后台播放只是「允许后台
+  /// 播放」，页面留在原地正常观看；是否离开由用户自己按返回键决定。
+  Future<void> _startBackgroundMode() async {
     final handler = getAudioHandler();
     final currentPath = _currentStreamUrl ?? widget.videoPath;
     if (currentPath.isEmpty) return;
@@ -2919,15 +2934,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // 视频后台播放不写入音频"上次播放"记录
       persistAsAudio: false,
     );
+    // ⚠️ 必须声明「本页仍持有这个 player」：页面不再自动退出后，通知栏的
+    // 「关闭」（ZenFileAudioHandler.stop）若照旧 dispose 掉 player，而本页还在
+    // 用它解码，就是 use-after-free ⇒ CRASH_NATIVE（Dart 侧拿不到任何栈）。
+    handler.foregroundHoldsPlayer = true;
     handler.setSkipCallback(null);
     if (!mounted) return;
 
     setState(() => _isBackgroundMode = true);
     PreferencesService.saveVideoBackgroundMode(true);
-    // 自动挂载（pop == false，见 initState）：只挂通知栏，留在播放页。
-    if (!pop || !mounted) return;
     final l10n = L10n.of(context);
-    Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -2940,6 +2956,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         duration: const Duration(seconds: 2),
       ),
     );
+  }
+
+  /// 关闭后台播放：清掉通知栏媒体控件并解除关联，但**保留 player** —— 页面还
+  /// 活着，播放继续由本页负责（这正是「开关」关掉后应有的状态）。
+  ///
+  /// 因此复用 `stopNotification()`：它只 emit idle + `detach()`，从不 dispose；
+  /// 而 `stop()` 会 dispose player —— 那是「彻底停止播放」的语义，用于页面已
+  /// 销毁的音频后台场景，这里绝不能调。
+  void _stopBackgroundMode() {
+    final handler = getAudioHandler();
+    handler.setSkipCallback(null);
+    handler.stopNotification();
+    PreferencesService.saveVideoBackgroundMode(false);
+    if (mounted) {
+      setState(() => _isBackgroundMode = false);
+    }
   }
 
   /// 先等均衡器解绑完成，再销毁播放器。
@@ -3536,7 +3568,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                     onSelectAudioTrack: _showAudioTrackSelector,
                     onSelectSubtitleTrack: _showSubtitleTrackSelector,
                     onOpenPlaylist: _showPlaylist,
-                    onBackground: _startBackgroundMode,
+                    onBackground: _toggleBackgroundMode,
                     onSleepTimer: _showSleepTimerDialog,
                     subtitleEnabled: _subtitleEnabled,
                     subtitlePath: _subtitlePath,

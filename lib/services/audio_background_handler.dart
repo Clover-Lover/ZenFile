@@ -54,6 +54,18 @@ class ZenFileAudioHandler extends BaseAudioHandler
   final List<StreamSubscription<dynamic>> _subs = [];
   Timer? _positionSaveTimer;
 
+  /// 当前关联的 player 是否仍被前台页面持有（视频后台播放且播放页未退出时为 true）。
+  ///
+  /// ⚠️ 为 true 时**两条路径都绝不能 dispose 它**：
+  /// 1. `stop()`（通知栏「关闭」）—— 页面还在用同一个对象解码；
+  /// 2. `attach()` 换绑新 player 时回收 oldPlayer —— 旧播放页可能仍留在
+  ///    Navigator 栈里（页面不再自动退出后尤其常见）。
+  /// 无论哪条，dispose 都会让它变成悬垂引用，下一次原生调用就是 use-after-free
+  /// ⇒ `CRASH_NATIVE`（Dart 侧拿不到任何栈，崩溃报告只写「系统未提供 trace」）。
+  /// 由 `VideoPlayerScreen` 在开启后台播放时置 true、在 `dispose()` 时置回 false；
+  /// 跳过回收的旧 player 由其页面在 `dispose()` 里自行释放，不会泄漏。
+  bool foregroundHoldsPlayer = false;
+
   /// 当前关联的播放器（后台播放时可用于恢复界面）
   Player? get currentPlayer => _player;
 
@@ -92,7 +104,11 @@ class ZenFileAudioHandler extends BaseAudioHandler
     bool persistAsAudio = true,
   }) {
     final oldPlayer = _player;
-    if (oldPlayer != null && oldPlayer != player) {
+    // ⚠️ 只有「旧 player 已无前台页面持有」时才回收：前台播放页（被上层页面覆盖
+    // 时仍留在 Navigator 栈里）还在用同一个对象解码，dispose 会让它变成悬垂引用
+    // ⇒ 返回该页时下一次原生调用就是 use-after-free（CRASH_NATIVE，Dart 侧无栈）。
+    // 跳过回收的旧 player 由它自己的页面在 dispose() 时释放，不会泄漏。
+    if (oldPlayer != null && oldPlayer != player && !foregroundHoldsPlayer) {
       Future.microtask(() async {
         try {
           await oldPlayer.dispose();
@@ -100,6 +116,8 @@ class ZenFileAudioHandler extends BaseAudioHandler
           debugPrint('[ZenFile] Error disposing old player: $e');
         }
       });
+    } else if (oldPlayer != null && oldPlayer != player) {
+      debugPrint('[ZenFile] 跳过回收旧 player：仍被前台页面持有');
     }
 
     detach();
@@ -226,8 +244,10 @@ class ZenFileAudioHandler extends BaseAudioHandler
       processingState: AudioProcessingState.idle,
     ));
 
+    // 只有「彻底停止」才 dispose；前台页面仍持有 player 时（视频后台播放且播放页
+    // 未退出）只清通知，否则会把页面正在用的对象销毁 ⇒ use-after-free。
     final playerToDispose = _player;
-    if (playerToDispose != null) {
+    if (!foregroundHoldsPlayer && playerToDispose != null) {
       try {
         await playerToDispose.dispose();
       } catch (e) {
