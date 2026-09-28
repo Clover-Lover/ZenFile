@@ -1637,6 +1637,18 @@ class L10nEs extends L10n {
   String get app_icon_blue_gold => 'Azul profundo dorado';
 
   @override
+  String get app_icon_blue_folder_white => 'Carpeta azul y blanca';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Carpeta azul degradada';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Carpeta azul profundo y dorado';
+
+  @override
+  String get app_icon_sunset_zf => 'Púrpura atardecer';
+
+  @override
   String title(Object title) {
     return 'Icono de la app cambiado a $title';
   }

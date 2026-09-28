@@ -1634,6 +1634,18 @@ class L10nFr extends L10n {
   String get app_icon_blue_gold => 'Bleu profond doré';
 
   @override
+  String get app_icon_blue_folder_white => 'Dossier bleu et blanc';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Dossier bleu dégradé';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Dossier bleu profond et or';
+
+  @override
+  String get app_icon_sunset_zf => 'Violet crépusculaire';
+
+  @override
   String title(Object title) {
     return 'Icône de l\'application changée en $title';
   }

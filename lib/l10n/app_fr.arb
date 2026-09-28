@@ -1886,6 +1886,22 @@
   "app_icon_blue_gold": "Bleu profond doré",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "Dossier bleu et blanc",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "Dossier bleu dégradé",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "Dossier bleu profond et or",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "Violet crépusculaire",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },

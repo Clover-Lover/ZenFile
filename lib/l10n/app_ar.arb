@@ -1886,6 +1886,22 @@
   "app_icon_blue_gold": "أزرق داكن ذهبي",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "مجلد أزرق وأبيض",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "مجلد أزرق متدرج",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "مجلد أزرق داكن وذهبي",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "بنفسجي الغروب",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },

@@ -1886,6 +1886,22 @@
   "app_icon_blue_gold": "딥 블루 골드",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "블루 화이트 폴더",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "그라데이션 블루 폴더",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "딥 블루 골드 폴더",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "선셋 퍼플",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },

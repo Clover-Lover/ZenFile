@@ -1530,6 +1530,18 @@ class L10nJa extends L10n {
   String get app_icon_blue_gold => 'ダークブルーゴールド';
 
   @override
+  String get app_icon_blue_folder_white => 'ブルーホワイトフォルダ';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'グラデーションブルーフォルダ';
+
+  @override
+  String get app_icon_deep_blue_gold => 'ディープブルーゴールドフォルダ';
+
+  @override
+  String get app_icon_sunset_zf => 'サンセットパープル';
+
+  @override
   String title(Object title) {
     return 'アプリアイコンを$titleに切り替えました';
   }

@@ -1529,6 +1529,18 @@ class L10nKo extends L10n {
   String get app_icon_blue_gold => '딥 블루 골드';
 
   @override
+  String get app_icon_blue_folder_white => '블루 화이트 폴더';
+
+  @override
+  String get app_icon_blue_folder_gradient => '그라데이션 블루 폴더';
+
+  @override
+  String get app_icon_deep_blue_gold => '딥 블루 골드 폴더';
+
+  @override
+  String get app_icon_sunset_zf => '선셋 퍼플';
+
+  @override
   String title(Object title) {
     return '앱 아이콘이 $title(으)로 전환되었습니다';
   }
