@@ -1626,6 +1626,58 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                   ],
                                                 ),
                                               ),
+                                              // 顶层：剪贴板摘要（右对齐，临时显示，覆盖计数，不随滚动消失）
+                                              if (provider.hasClipboard)
+                                                Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: GestureDetector(
+                                                    onTap: () => _showClipboardMenuSheet(context, provider),
+                                                    child: Container(
+                                                      height: 22,
+                                                      padding: const EdgeInsets.symmetric(horizontal: 7),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(11),
+                                                        color: provider.isCut
+                                                            ? Colors.orange.withOpacity(0.92)
+                                                            : theme.colorScheme.primary.withOpacity(0.92),
+                                                        border: Border.all(
+                                                          color: provider.isCut
+                                                              ? Colors.orange
+                                                              : theme.colorScheme.primary,
+                                                          width: 0.5,
+                                                        ),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Icon(
+                                                            provider.isCut ? Broken.scissor : Broken.clipboard,
+                                                            size: 11,
+                                                            color: provider.isCut
+                                                                ? Colors.white
+                                                                : theme.colorScheme.onPrimary,
+                                                          ),
+                                                          const SizedBox(width: 3),
+                                                          ConstrainedBox(
+                                                            constraints: const BoxConstraints(maxWidth: 120),
+                                                            child: Text(
+                                                              _clipboardLabel(provider),
+                                                              style: TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: provider.isCut
+                                                                    ? Colors.white
+                                                                    : theme.colorScheme.onPrimary,
+                                                              ),
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                             ],
                                           ),
                                         );
@@ -1853,14 +1905,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
         ),
       ],
     ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            // 剪贴板按钮：右下角悬浮（Scaffold FAB 位置，单/双窗口共用）
-            floatingActionButton: provider.hasClipboard
-                ? GestureDetector(
-                    onTap: () => _showClipboardMenuSheet(context, provider),
-                    child: _buildClipboardFab(theme, provider),
-                  )
-                : null,
+            floatingActionButtonLocation: null,
+            floatingActionButton: null,
             // 底部 4-tab 导航由 HomeScreen 统一提供；选择模式使用选择操作栏。
             // 非选择模式下浏览操作栏显示在 4-tab 上方（showFloatingAddButton 控制显隐），
             // 随列表滚动自动折叠/展开。
@@ -1875,59 +1921,6 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     );
   }
 
-
-  /// 剪贴板按钮（右下角悬浮）：Scaffold floatingActionButton 承载，
-  /// 自动定位在 bottomNavigationBar 上方、窗口右下角；单/双窗口共用。
-  Widget _buildClipboardFab(ThemeData theme, FileManagerProvider provider) {
-    return Container(
-      height: 40,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: provider.isCut
-            ? Colors.orange.withOpacity(0.95)
-            : theme.colorScheme.primary,
-        border: Border.all(
-          color: provider.isCut ? Colors.orange : theme.colorScheme.primary,
-          width: 0.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.18),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            provider.isCut ? Broken.scissor : Broken.clipboard,
-            size: 16,
-            color: provider.isCut
-                ? Colors.white
-                : theme.colorScheme.onPrimary,
-          ),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Text(
-              _clipboardLabel(provider),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: provider.isCut
-                    ? Colors.white
-                    : theme.colorScheme.onPrimary,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildActiveFilterBanner(BuildContext context, FileManagerProvider provider) {
     final theme = Theme.of(context);
