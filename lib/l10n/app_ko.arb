@@ -3085,7 +3085,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "네트워크",
+  "msgf13fc21c": "원격",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3134,7 @@
   "cat_downloads": "다운로드",
   "cat_screenshots": "스크린샷",
   "cat_recent": "최근",
-  "cat_network": "네트워크",
+  "cat_network": "원격",
   "cat_apps": "앱",
   "cat_settings": "설정",
   "cat_storage": "공간",
@@ -3635,7 +3635,7 @@
   "ui_back": "뒤로",
   "ui_connect": "연결",
   "ui_web_share": "웹 공유",
-  "ui_network": "네트워크",
+  "ui_network": "원격",
   "log_i18n_full": "중국어/영어 UI 완전 국제화",
   "log_fix_selection_count": "파일 선택 수 표시 안 되는 문제 수정",
   "log_fix_remote_title": "원격 연결 페이지 제목 표시 문제 수정",
@@ -8045,7 +8045,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "전송",
+  "ui_transfers": "연결",
   "ui_profile": "프로필",
   "msg_coming_soon": "곧 제공 예정",
   "toolbox_text_editor": "텍스트 편집기",

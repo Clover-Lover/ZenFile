@@ -3085,7 +3085,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Réseau",
+  "msgf13fc21c": "Distant",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3134,7 @@
   "cat_downloads": "Téléchargements",
   "cat_screenshots": "Captures d'écran",
   "cat_recent": "Récent",
-  "cat_network": "Réseau",
+  "cat_network": "Distant",
   "cat_apps": "Applications",
   "cat_settings": "Paramètres",
   "cat_storage": "Espace",
@@ -3635,7 +3635,7 @@
   "ui_back": "Retour",
   "ui_connect": "Connecter",
   "ui_web_share": "Partage Web",
-  "ui_network": "Réseau",
+  "ui_network": "Distant",
   "log_i18n_full": "Internationalisation complète pour l'interface chinoise/anglaise",
   "log_fix_selection_count": "Corrigé : le nombre de sélection de fichiers ne s'affiche pas",
   "log_fix_remote_title": "Corrigé : problème d'affichage du titre de la page de connexion distante",
@@ -8045,7 +8045,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Transferts",
+  "ui_transfers": "Connexions",
   "ui_profile": "Profil",
   "msg_coming_soon": "Bientôt disponible",
   "toolbox_text_editor": "Éditeur de texte",

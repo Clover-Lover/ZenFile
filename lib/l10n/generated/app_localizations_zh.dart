@@ -2506,7 +2506,7 @@ class L10nZh extends L10n {
   String get msg6cbbf7d9 => '输入绝对路径...';
 
   @override
-  String get msgf13fc21c => '网络';
+  String get msgf13fc21c => '远程';
 
   @override
   String get msg41e625d1 => '添加远程连接';
@@ -2619,7 +2619,7 @@ class L10nZh extends L10n {
   String get cat_recent => '最近';
 
   @override
-  String get cat_network => '网络';
+  String get cat_network => '远程';
 
   @override
   String get cat_apps => '应用';
@@ -3259,7 +3259,7 @@ class L10nZh extends L10n {
   String get ui_web_share => '网页共享';
 
   @override
-  String get ui_network => '网络';
+  String get ui_network => '远程';
 
   @override
   String get log_i18n_full => '全面国际化中英文界面';
@@ -7603,7 +7603,7 @@ class L10nZh extends L10n {
       '音效类应用（如 RootlessJamesDSP）只能接管 AudioTrack 档位；OpenSL ES 的会话号由系统分配，音效软件无法接管。切换立即生效。';
 
   @override
-  String get ui_transfers => '传输';
+  String get ui_transfers => '连接';
 
   @override
   String get ui_profile => '我的';
@@ -10146,7 +10146,7 @@ class L10nZhTw extends L10nZh {
   String get msg6cbbf7d9 => '輸入絕對路徑...';
 
   @override
-  String get msgf13fc21c => '網路';
+  String get msgf13fc21c => '遠端';
 
   @override
   String get msg41e625d1 => '新增遠端連線';
@@ -10259,7 +10259,7 @@ class L10nZhTw extends L10nZh {
   String get cat_recent => '最近';
 
   @override
-  String get cat_network => '網路';
+  String get cat_network => '遠端';
 
   @override
   String get cat_apps => '應用';
@@ -10899,7 +10899,7 @@ class L10nZhTw extends L10nZh {
   String get ui_web_share => '網頁共享';
 
   @override
-  String get ui_network => '網路';
+  String get ui_network => '遠端';
 
   @override
   String get log_i18n_full => '全面國際化中英文介面';
@@ -15222,7 +15222,7 @@ class L10nZhTw extends L10nZh {
       '音效類應用程式（如 RootlessJamesDSP）只能接管 AudioTrack 檔位；OpenSL ES 的工作階段 ID 由系統分配，音效軟體無法接管。切換立即生效。';
 
   @override
-  String get ui_transfers => '傳輸';
+  String get ui_transfers => '連線';
 
   @override
   String get ui_profile => '我的';

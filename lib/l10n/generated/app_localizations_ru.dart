@@ -2639,7 +2639,7 @@ class L10nRu extends L10n {
   String get msg6cbbf7d9 => 'Введите абсолютный путь...';
 
   @override
-  String get msgf13fc21c => 'Сеть';
+  String get msgf13fc21c => 'Удалённое';
 
   @override
   String get msg41e625d1 => 'Добавить Удалённое Подключение';
@@ -2760,7 +2760,7 @@ class L10nRu extends L10n {
   String get cat_recent => 'Недавние';
 
   @override
-  String get cat_network => 'Сеть';
+  String get cat_network => 'Удалённое';
 
   @override
   String get cat_apps => 'Приложения';
@@ -3424,7 +3424,7 @@ class L10nRu extends L10n {
   String get ui_web_share => 'Веб Доступ';
 
   @override
-  String get ui_network => 'Сеть';
+  String get ui_network => 'Удалённое';
 
   @override
   String get log_i18n_full =>
@@ -8097,7 +8097,7 @@ class L10nRu extends L10n {
       'Приложения звуковых эффектов (например, RootlessJamesDSP) могут подключаться только к режимам AudioTrack; в OpenSL ES идентификатор сеанса назначает система, поэтому подключиться к нему нельзя. Переключение применяется сразу.';
 
   @override
-  String get ui_transfers => 'Передачи';
+  String get ui_transfers => 'Подключения';
 
   @override
   String get ui_profile => 'Профиль';

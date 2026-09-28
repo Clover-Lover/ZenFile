@@ -3092,7 +3092,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Network",
+  "msgf13fc21c": "Remote",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3141,7 +3141,7 @@
   "cat_downloads": "Downloads",
   "cat_screenshots": "Screenshots",
   "cat_recent": "Recent",
-  "cat_network": "Network",
+  "cat_network": "Remote",
   "cat_apps": "Apps",
   "cat_settings": "Settings",
   "cat_storage": "Space",
@@ -3642,7 +3642,7 @@
   "ui_back": "Back",
   "ui_connect": "Connect",
   "ui_web_share": "Web Share",
-  "ui_network": "Network",
+  "ui_network": "Remote",
   "log_i18n_full": "Full internationalization for Chinese/English UI",
   "log_fix_selection_count": "Fixed file selection count not displaying",
   "log_fix_remote_title": "Fixed remote connection page title display issue",
@@ -8111,7 +8111,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Transfers",
+  "ui_transfers": "Connections",
   "ui_profile": "Profile",
   "msg_coming_soon": "Coming soon",
   "toolbox_text_editor": "Text Editor",

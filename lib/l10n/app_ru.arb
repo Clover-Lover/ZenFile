@@ -3085,7 +3085,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Сеть",
+  "msgf13fc21c": "Удалённое",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3134,7 @@
   "cat_downloads": "Загрузки",
   "cat_screenshots": "Скриншоты",
   "cat_recent": "Недавние",
-  "cat_network": "Сеть",
+  "cat_network": "Удалённое",
   "cat_apps": "Приложения",
   "cat_settings": "Настройки",
   "cat_storage": "Пространство",
@@ -3635,7 +3635,7 @@
   "ui_back": "Назад",
   "ui_connect": "Подключить",
   "ui_web_share": "Веб Доступ",
-  "ui_network": "Сеть",
+  "ui_network": "Удалённое",
   "log_i18n_full": "Полная интернационализация для китайского/английского интерфейса",
   "log_fix_selection_count": "Исправлено: количество выбранных файлов не отображается",
   "log_fix_remote_title": "Исправлено: проблема отображения заголовка страницы удалённого подключения",
@@ -8045,7 +8045,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Передачи",
+  "ui_transfers": "Подключения",
   "ui_profile": "Профиль",
   "msg_coming_soon": "Скоро",
   "toolbox_text_editor": "Текстовый редактор",

@@ -2648,7 +2648,7 @@ class L10nEs extends L10n {
   String get msg6cbbf7d9 => 'Ingrese la ruta absoluta...';
 
   @override
-  String get msgf13fc21c => 'Red';
+  String get msgf13fc21c => 'Remoto';
 
   @override
   String get msg41e625d1 => 'Añadir Conexión Remota';
@@ -2771,7 +2771,7 @@ class L10nEs extends L10n {
   String get cat_recent => 'Recientes';
 
   @override
-  String get cat_network => 'Red';
+  String get cat_network => 'Remoto';
 
   @override
   String get cat_apps => 'Aplicaciones';
@@ -3440,7 +3440,7 @@ class L10nEs extends L10n {
   String get ui_web_share => 'Compartir Web';
 
   @override
-  String get ui_network => 'Red';
+  String get ui_network => 'Remoto';
 
   @override
   String get log_i18n_full =>
@@ -8124,7 +8124,7 @@ class L10nEs extends L10n {
       'Las apps de efectos de audio (p. ej. RootlessJamesDSP) solo pueden engancharse a los modos AudioTrack; OpenSL ES usa una sesión asignada por el sistema, a la que no pueden engancharse. El cambio es inmediato.';
 
   @override
-  String get ui_transfers => 'Transferencias';
+  String get ui_transfers => 'Conexiones';
 
   @override
   String get ui_profile => 'Perfil';

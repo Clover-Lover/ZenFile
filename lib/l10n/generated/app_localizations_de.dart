@@ -2632,7 +2632,7 @@ class L10nDe extends L10n {
   String get msg6cbbf7d9 => 'Absoluten Pfad eingeben...';
 
   @override
-  String get msgf13fc21c => 'Netzwerk';
+  String get msgf13fc21c => 'Remote';
 
   @override
   String get msg41e625d1 => 'Remote-Verbindung hinzufügen';
@@ -2752,7 +2752,7 @@ class L10nDe extends L10n {
   String get cat_recent => 'Aktuell';
 
   @override
-  String get cat_network => 'Netzwerk';
+  String get cat_network => 'Remote';
 
   @override
   String get cat_apps => 'Anwendungen';
@@ -3419,7 +3419,7 @@ class L10nDe extends L10n {
   String get ui_web_share => 'Web-Freigabe';
 
   @override
-  String get ui_network => 'Netzwerk';
+  String get ui_network => 'Remote';
 
   @override
   String get log_i18n_full =>
@@ -8108,7 +8108,7 @@ class L10nDe extends L10n {
       'Sound-Apps wie RootlessJamesDSP können sich nur an AudioTrack-Modi anhängen; OpenSL ES nutzt eine vom System zugewiesene Session, an die sie sich nicht anhängen können. Umschalten wirkt sofort.';
 
   @override
-  String get ui_transfers => 'Übertragungen';
+  String get ui_transfers => 'Verbindungen';
 
   @override
   String get ui_profile => 'Profil';

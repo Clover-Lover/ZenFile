@@ -2596,7 +2596,7 @@ class L10nEn extends L10n {
   String get msg6cbbf7d9 => 'Enter absolute path...';
 
   @override
-  String get msgf13fc21c => 'Network';
+  String get msgf13fc21c => 'Remote';
 
   @override
   String get msg41e625d1 => 'Add Remote Connection';
@@ -2714,7 +2714,7 @@ class L10nEn extends L10n {
   String get cat_recent => 'Recent';
 
   @override
-  String get cat_network => 'Network';
+  String get cat_network => 'Remote';
 
   @override
   String get cat_apps => 'Apps';
@@ -3372,7 +3372,7 @@ class L10nEn extends L10n {
   String get ui_web_share => 'Web Share';
 
   @override
-  String get ui_network => 'Network';
+  String get ui_network => 'Remote';
 
   @override
   String get log_i18n_full =>
@@ -8019,7 +8019,7 @@ class L10nEn extends L10n {
       'Audio effect apps (e.g. RootlessJamesDSP) can only attach to AudioTrack modes; OpenSL ES uses a system-assigned session that they cannot attach to. Switching takes effect immediately.';
 
   @override
-  String get ui_transfers => 'Transfers';
+  String get ui_transfers => 'Connections';
 
   @override
   String get ui_profile => 'Profile';

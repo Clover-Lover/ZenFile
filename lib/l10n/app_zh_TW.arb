@@ -3153,7 +3153,7 @@
   "@msg6cbbf7d9": {
     "description": "ui\\widgets\\zenfile_address_bar.dart"
   },
-  "msgf13fc21c": "網路",
+  "msgf13fc21c": "遠端",
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3205,7 +3205,7 @@
   "cat_downloads": "下載",
   "cat_screenshots": "截圖",
   "cat_recent": "最近",
-  "cat_network": "網路",
+  "cat_network": "遠端",
   "cat_apps": "應用",
   "cat_settings": "設定",
   "cat_storage": "空間",
@@ -3706,7 +3706,7 @@
   "ui_back": "返回",
   "ui_connect": "連線",
   "ui_web_share": "網頁共享",
-  "ui_network": "網路",
+  "ui_network": "遠端",
   "log_i18n_full": "全面國際化中英文介面",
   "log_fix_selection_count": "修復檔案選擇數量不顯示的問題",
   "log_fix_remote_title": "修復遠端連線頁面標題顯示異常",
@@ -8193,7 +8193,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "傳輸",
+  "ui_transfers": "連線",
   "ui_profile": "我的",
   "msg_coming_soon": "即將推出",
   "toolbox_text_editor": "文字編輯器",

@@ -3085,7 +3085,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Red",
+  "msgf13fc21c": "Remoto",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3134,7 @@
   "cat_downloads": "Descargas",
   "cat_screenshots": "Capturas de Pantalla",
   "cat_recent": "Recientes",
-  "cat_network": "Red",
+  "cat_network": "Remoto",
   "cat_apps": "Aplicaciones",
   "cat_settings": "Configuración",
   "cat_storage": "Espacio",
@@ -3635,7 +3635,7 @@
   "ui_back": "Atrás",
   "ui_connect": "Conectar",
   "ui_web_share": "Compartir Web",
-  "ui_network": "Red",
+  "ui_network": "Remoto",
   "log_i18n_full": "Internacionalización completa para la interfaz chino/inglés",
   "log_fix_selection_count": "Corregido: el conteo de selección de archivos no se muestra",
   "log_fix_remote_title": "Corregido: problema de visualización del título de la página de conexión remota",
@@ -8045,7 +8045,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Transferencias",
+  "ui_transfers": "Conexiones",
   "ui_profile": "Perfil",
   "msg_coming_soon": "Próximamente",
   "toolbox_text_editor": "Editor de texto",

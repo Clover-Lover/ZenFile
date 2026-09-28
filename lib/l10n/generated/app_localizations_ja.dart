@@ -2515,7 +2515,7 @@ class L10nJa extends L10n {
   String get msg6cbbf7d9 => '絶対パスを入力...';
 
   @override
-  String get msgf13fc21c => 'ネットワーク';
+  String get msgf13fc21c => 'リモート';
 
   @override
   String get msg41e625d1 => 'リモート接続を追加';
@@ -2628,7 +2628,7 @@ class L10nJa extends L10n {
   String get cat_recent => '最近';
 
   @override
-  String get cat_network => 'ネットワーク';
+  String get cat_network => 'リモート';
 
   @override
   String get cat_apps => 'アプリ';
@@ -3271,7 +3271,7 @@ class L10nJa extends L10n {
   String get ui_web_share => 'Web共有';
 
   @override
-  String get ui_network => 'ネットワーク';
+  String get ui_network => 'リモート';
 
   @override
   String get log_i18n_full => '中国語/英語UIの完全な国際化';
@@ -7773,7 +7773,7 @@ class L10nJa extends L10n {
       '音響エフェクトアプリ（RootlessJamesDSP など）に対応するのは AudioTrack のみです。OpenSL ES はセッションIDをシステムが割り当てるため対応できません。切り替えは即時反映されます。';
 
   @override
-  String get ui_transfers => '転送';
+  String get ui_transfers => '接続';
 
   @override
   String get ui_profile => 'プロフィール';

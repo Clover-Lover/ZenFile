@@ -4777,7 +4777,7 @@ abstract class L10n {
   /// ui\widgets\zenfile_drawer.dart
   ///
   /// In zh, this message translates to:
-  /// **'网络'**
+  /// **'远程'**
   String get msgf13fc21c;
 
   /// ui\widgets\zenfile_drawer.dart
@@ -4999,7 +4999,7 @@ abstract class L10n {
   /// No description provided for @cat_network.
   ///
   /// In zh, this message translates to:
-  /// **'网络'**
+  /// **'远程'**
   String get cat_network;
 
   /// No description provided for @cat_apps.
@@ -6205,7 +6205,7 @@ abstract class L10n {
   /// No description provided for @ui_network.
   ///
   /// In zh, this message translates to:
-  /// **'网络'**
+  /// **'远程'**
   String get ui_network;
 
   /// No description provided for @log_i18n_full.
@@ -14245,7 +14245,7 @@ abstract class L10n {
   /// No description provided for @ui_transfers.
   ///
   /// In zh, this message translates to:
-  /// **'传输'**
+  /// **'连接'**
   String get ui_transfers;
 
   /// No description provided for @ui_profile.

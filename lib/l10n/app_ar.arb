@@ -3085,7 +3085,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "شبكة",
+  "msgf13fc21c": "بعيد",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3134,7 @@
   "cat_downloads": "التنزيلات",
   "cat_screenshots": "لقطات الشاشة",
   "cat_recent": "الأخيرة",
-  "cat_network": "الشبكة",
+  "cat_network": "بعيد",
   "cat_apps": "التطبيقات",
   "cat_settings": "الإعدادات",
   "cat_storage": "المساحة",
@@ -3635,7 +3635,7 @@
   "ui_back": "رجوع",
   "ui_connect": "اتصال",
   "ui_web_share": "مشاركة الويب",
-  "ui_network": "الشبكة",
+  "ui_network": "بعيد",
   "log_i18n_full": "تدويل كامل لواجهة الصينية/الإنجليزية",
   "log_fix_selection_count": "تم الإصلاح: عدد الملفات المحددة لا يظهر",
   "log_fix_remote_title": "تم الإصلاح: مشكلة عرض عنوان صفحة الاتصال البعيد",
@@ -8045,7 +8045,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "النقل",
+  "ui_transfers": "الاتصالات",
   "ui_profile": "الملف الشخصي",
   "msg_coming_soon": "قريباً",
   "toolbox_text_editor": "محرر النصوص",

@@ -2511,7 +2511,7 @@ class L10nKo extends L10n {
   String get msg6cbbf7d9 => '절대 경로 입력...';
 
   @override
-  String get msgf13fc21c => '네트워크';
+  String get msgf13fc21c => '원격';
 
   @override
   String get msg41e625d1 => '원격 연결 추가';
@@ -2625,7 +2625,7 @@ class L10nKo extends L10n {
   String get cat_recent => '최근';
 
   @override
-  String get cat_network => '네트워크';
+  String get cat_network => '원격';
 
   @override
   String get cat_apps => '앱';
@@ -3270,7 +3270,7 @@ class L10nKo extends L10n {
   String get ui_web_share => '웹 공유';
 
   @override
-  String get ui_network => '네트워크';
+  String get ui_network => '원격';
 
   @override
   String get log_i18n_full => '중국어/영어 UI 완전 국제화';
@@ -7779,7 +7779,7 @@ class L10nKo extends L10n {
       '사운드 효과 앱(RootlessJamesDSP 등)이 연결할 수 있는 것은 AudioTrack뿐입니다. OpenSL ES는 세션 ID를 시스템이 할당하므로 연결할 수 없습니다. 전환은 즉시 반영됩니다.';
 
   @override
-  String get ui_transfers => '전송';
+  String get ui_transfers => '연결';
 
   @override
   String get ui_profile => '프로필';

@@ -2647,7 +2647,7 @@ class L10nFr extends L10n {
   String get msg6cbbf7d9 => 'Entrez le chemin absolu...';
 
   @override
-  String get msgf13fc21c => 'Réseau';
+  String get msgf13fc21c => 'Distant';
 
   @override
   String get msg41e625d1 => 'Ajouter une connexion distante';
@@ -2770,7 +2770,7 @@ class L10nFr extends L10n {
   String get cat_recent => 'Récent';
 
   @override
-  String get cat_network => 'Réseau';
+  String get cat_network => 'Distant';
 
   @override
   String get cat_apps => 'Applications';
@@ -3440,7 +3440,7 @@ class L10nFr extends L10n {
   String get ui_web_share => 'Partage Web';
 
   @override
-  String get ui_network => 'Réseau';
+  String get ui_network => 'Distant';
 
   @override
   String get log_i18n_full =>
@@ -8143,7 +8143,7 @@ class L10nFr extends L10n {
       'Les applications d’effets audio (RootlessJamesDSP, etc.) ne peuvent s’attacher qu’aux modes AudioTrack ; OpenSL ES utilise une session attribuée par le système, à laquelle elles ne peuvent pas s’attacher. Le changement est immédiat.';
 
   @override
-  String get ui_transfers => 'Transferts';
+  String get ui_transfers => 'Connexions';
 
   @override
   String get ui_profile => 'Profil';

@@ -3082,7 +3082,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Netzwerk",
+  "msgf13fc21c": "Remote",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3131,7 +3131,7 @@
   "cat_downloads": "Downloads",
   "cat_screenshots": "Bildschirmfotos",
   "cat_recent": "Aktuell",
-  "cat_network": "Netzwerk",
+  "cat_network": "Remote",
   "cat_apps": "Anwendungen",
   "cat_settings": "Einstellungen",
   "cat_storage": "Speicherplatz",
@@ -3632,7 +3632,7 @@
   "ui_back": "Zurück",
   "ui_connect": "Verbinden",
   "ui_web_share": "Web-Freigabe",
-  "ui_network": "Netzwerk",
+  "ui_network": "Remote",
   "log_i18n_full": "Vollständige Internationalisierung für Chinesisch/Englisch-Benutzeroberfläche",
   "log_fix_selection_count": "Behoben: Datei-Auswahlanzahl wird nicht angezeigt",
   "log_fix_remote_title": "Behoben: Anzeigeproblem des Remote-Verbindungsseitentitels",
@@ -8042,7 +8042,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Übertragungen",
+  "ui_transfers": "Verbindungen",
   "ui_profile": "Profil",
   "msg_coming_soon": "Bald verfügbar",
   "toolbox_text_editor": "Texteditor",

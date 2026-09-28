@@ -2590,7 +2590,7 @@ class L10nAr extends L10n {
   String get msg6cbbf7d9 => 'أدخل المسار المطلق...';
 
   @override
-  String get msgf13fc21c => 'شبكة';
+  String get msgf13fc21c => 'بعيد';
 
   @override
   String get msg41e625d1 => 'إضافة اتصال بعيد';
@@ -2708,7 +2708,7 @@ class L10nAr extends L10n {
   String get cat_recent => 'الأخيرة';
 
   @override
-  String get cat_network => 'الشبكة';
+  String get cat_network => 'بعيد';
 
   @override
   String get cat_apps => 'التطبيقات';
@@ -3367,7 +3367,7 @@ class L10nAr extends L10n {
   String get ui_web_share => 'مشاركة الويب';
 
   @override
-  String get ui_network => 'الشبكة';
+  String get ui_network => 'بعيد';
 
   @override
   String get log_i18n_full => 'تدويل كامل لواجهة الصينية/الإنجليزية';
@@ -7990,7 +7990,7 @@ class L10nAr extends L10n {
       'لا يمكن لتطبيقات المؤثرات الصوتية (مثل RootlessJamesDSP) الارتباط إلا بأوضاع AudioTrack؛ أما OpenSL ES فيستخدم جلسة يخصصها النظام ولا يمكن الارتباط بها. يسري التبديل فورًا.';
 
   @override
-  String get ui_transfers => 'النقل';
+  String get ui_transfers => 'الاتصالات';
 
   @override
   String get ui_profile => 'الملف الشخصي';

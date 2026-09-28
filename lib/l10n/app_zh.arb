@@ -3175,7 +3175,7 @@
   "@msg6cbbf7d9": {
     "description": "ui\\widgets\\zenfile_address_bar.dart"
   },
-  "msgf13fc21c": "网络",
+  "msgf13fc21c": "远程",
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3227,7 +3227,7 @@
   "cat_downloads": "下载",
   "cat_screenshots": "截图",
   "cat_recent": "最近",
-  "cat_network": "网络",
+  "cat_network": "远程",
   "cat_apps": "应用",
   "cat_settings": "设置",
   "cat_storage": "空间",
@@ -3734,7 +3734,7 @@
   "ui_back": "返回",
   "ui_connect": "连接",
   "ui_web_share": "网页共享",
-  "ui_network": "网络",
+  "ui_network": "远程",
   "log_i18n_full": "全面国际化中英文界面",
   "log_fix_selection_count": "修复文件选择数量不显示的问题",
   "log_fix_remote_title": "修复远程连接页面标题显示异常",
@@ -8342,7 +8342,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "传输",
+  "ui_transfers": "连接",
   "ui_profile": "我的",
   "msg_coming_soon": "即将推出",
   "toolbox_text_editor": "文本编辑器",
