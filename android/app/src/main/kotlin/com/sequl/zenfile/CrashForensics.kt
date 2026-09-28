@@ -46,7 +46,18 @@ import java.util.Locale
  *
  * ## 幂等
  * 报告文件名含崩溃时间戳（`exit_<毫秒>_<reason>.txt`）。同一次崩溃在之后的每一次
- * 启动里都会被系统列出来，靠「文件已存在就跳过」天然去重，**不需要任何持久化状态**。
+ * 启动里都会被系统列出来，靠「文件已存在就跳过」天然去重。
+ *
+ * ## 「补拷」与「用户删了就别再补回来」（suppress 名单）
+ * 私有存档是**唯一真相**，公共目录只是镜像 ⇒ 公共目录里缺什么就补什么。但这带来一个
+ * 反直觉的后果：**用户把 `ZenFile/crash/` 清空后，下次启动会把旧报告原样补回来**
+ * （2026-09-28 用户实测反馈「删了又出现一堆，以为又崩了」）。清空应用数据也治不好 ——
+ * 私有文件一没，[collectViaExitInfo] 又会从系统历史里重新导入。
+ *
+ * 因此导出时接受一份 [suppress] 名单：**曾被交付过、但现在不在公共目录里**的报告名，
+ * 视为「用户主动删掉的」，**不再补拷**。名单由 Dart 侧持久化维护（见
+ * `CrashForensicsService.checkPreviousExit`），本类**不引入任何持久化状态** ——
+ * 它的失败模式必须始终是「退化成本次多拷一份」，而不是「静默丢失证据」。
  *
  * ## 安全约束
  * - 全部入口 `try/catch (Throwable)`：取证绝不能成为新的崩溃源。
@@ -72,6 +83,9 @@ object CrashForensics {
 
     /** 单次取最多回溯多少条系统退出记录。 */
     private const val MAX_EXIT_RECORDS = 25
+
+    /** 从报告文件名里抽时间戳用（见 [stampOf]）。 */
+    private val DIGITS_REGEX = Regex("\\d+")
 
     // ── ApplicationExitInfo 的 reason 常量 ─────────────────────────────
     //
@@ -147,13 +161,17 @@ object CrashForensics {
      *
      * 由 Dart 侧在启动后调用（那时存储权限的状态才是确定的）。**目标已存在就跳过**，
      * 于是返回值里的「新增份数」天然表示「本次真的冒出了新报告」，调用方据此决定
-     * 要不要提示用户 —— 无需任何持久化状态去记「上次提示过什么」。
+     * 要不要提示用户。
      *
-     * 返回：`ok:<新增>:<跳过>:<目录>` / `no-reports` / `mkdir-failed:<目录>` /
+     * [suppress] = **不要补回**的报告名（Dart 侧持久化的台账减去公共目录现状 ⇒
+     * 即「用户已删过的那些」，详见类注释）。名单里的文件明知私有目录有、也**不拷**，
+     * 并计入返回值的 `suppressed` 一项，便于事后解释「为什么我的报告没回来」。
+     *
+     * 返回：`ok:<新增>:<跳过>:<抑制>:<目录>` / `no-reports` / `mkdir-failed:<目录>` /
      * `error:<异常名>:<消息>`。**永不抛异常**。
      */
     @JvmStatic
-    fun exportToPublic(context: Context): String {
+    fun exportToPublic(context: Context, suppress: Set<String>): String {
         return try {
             val src = privateDir(context)
             if (!src.isDirectory) return "no-reports"
@@ -166,10 +184,17 @@ object CrashForensics {
             }
             var added = 0
             var skipped = 0
+            var suppressed = 0
             for (f in files) {
                 val target = File(dst, f.name)
                 if (target.exists()) {
                     skipped++
+                    continue
+                }
+                // 曾被交付、现在不在公共目录里 ⇒ 用户主动删的 ⇒ 不再补回。
+                // 判定只看**文件名**：文件名含崩溃时间戳，同一份报告恒同名。
+                if (f.name in suppress) {
+                    suppressed++
                     continue
                 }
                 try {
@@ -180,7 +205,7 @@ object CrashForensics {
                 }
             }
             trimDir(dst, MAX_PUBLIC_FILES)
-            "ok:$added:$skipped:${dst.absolutePath}"
+            "ok:$added:$skipped:$suppressed:${dst.absolutePath}"
         } catch (t: Throwable) {
             "error:${t.javaClass.simpleName}:${t.message}"
         }
@@ -220,7 +245,9 @@ object CrashForensics {
             try {
                 when (call.method) {
                     // 触发一次取证（幂等）+ 导出到公共目录，返回结果描述。
-                    "exportToPublicDir" -> result.success(exportToPublic(appCtx))
+                    // 参数 = 「不要补回」的报告名列表（用户已删过的那些），见 [exportToPublic]。
+                    "exportToPublicDir" ->
+                        result.success(exportToPublic(appCtx, readSuppressNames(call.arguments)))
                     // Dart 侧未捕获错误落盘（Dart 自己也会直接写公共目录，这里是兜底）。
                     "recordDartError" -> {
                         val args = call.arguments as? Map<*, *>
@@ -238,10 +265,32 @@ object CrashForensics {
         }
     }
 
+    /**
+     * 从通道参数里取「不要补回」的报告名集合（用户已删过的那些）。
+     *
+     * 刻意做得极其宽容：参数缺失、类型不对、甚至是别的形状，一律**退化成空集**
+     * （= 维持旧的全量补拷行为）。取证链路上「多拷一份」是可接受的，
+     * 「因为参数异常而少拷一份证据」才是不可接受的。
+     */
+    private fun readSuppressNames(args: Any?): Set<String> {
+        return try {
+            when (args) {
+                null -> emptySet()
+                // Dart 直接传 `List<String>`（最简形态）
+                is List<*> -> args.filterIsInstance<String>().toSet()
+                // 也接受 `{"suppress": [...]}`，便于将来加别的参数
+                is Map<*, *> ->
+                    (args["suppress"] as? List<*>)?.filterIsInstance<String>()?.toSet() ?: emptySet()
+                else -> emptySet()
+            }
+        } catch (_: Throwable) {
+            emptySet()
+        }
+    }
+
     // ══════════════════════════════════════════════════════════════════
     //  Java 未捕获异常兜底
     // ══════════════════════════════════════════════════════════════════
-
     private class JavaCrashHandler(
         private val appCtx: Context,
         private val previous: Thread.UncaughtExceptionHandler?,
@@ -378,8 +427,10 @@ object CrashForensics {
             }
             val name = "dart_error_${System.currentTimeMillis()}.txt"
             writeReport(ctx, name, body)
-            // 顺手尝试导出到公共目录（权限已有时立刻可见，没有也不影响私有存档）。
-            exportToPublic(ctx)
+            // ⚠️ 只镜像**这一份新报告**，刻意不做全量补拷：全量补拷必须带上 Dart 侧
+            // 维护的抑制名单，而这里拿不到它 —— 若在此处全量补拷，就会把用户已经删掉
+            // 的旧报告一并补回来，正是本次要修的那个现象。
+            mirrorToPublic(File(privateDir(ctx), name))
             "ok:$name"
         } catch (t: Throwable) {
             "error:${t.javaClass.simpleName}:${t.message}"
@@ -394,6 +445,31 @@ object CrashForensics {
 
     private fun publicDir(): File =
         File(Environment.getExternalStorageDirectory(), "ZenFile/crash")
+
+    /**
+     * 把**单个**私有报告镜像到公共目录（不触碰其余文件）。
+     *
+     * 与 [exportToPublic] 的全量补拷刻意分开：全量补拷必须携带 Dart 侧给的抑制名单
+     * （用户删过的旧报告不再补回），而「刚写下一份新证据、让它立刻可见」这条路径不需要
+     * 那个名单，也**绝不能**变成一次全量补拷 —— 否则会把用户删掉的旧报告一起带回来。
+     *
+     * 目标已存在、公共目录建不出来、单个文件拷失败，一律静默返回 false：
+     * 私有存档才是权威，镜像失败不影响取证。
+     */
+    private fun mirrorToPublic(srcFile: File): Boolean {
+        return try {
+            if (!srcFile.isFile) return false
+            val dst = publicDir()
+            if (!dst.isDirectory && !dst.mkdirs()) return false
+            val target = File(dst, srcFile.name)
+            if (target.exists()) return false
+            srcFile.copyTo(target, overwrite = false)
+            trimDir(dst, MAX_PUBLIC_FILES)
+            true
+        } catch (_: Throwable) {
+            false
+        }
+    }
 
     /** 报告统一抬头：把「哪个包、什么机型、哪个 Android」先钉死。 */
     private fun header(context: Context, title: String): String {
@@ -476,15 +552,39 @@ object CrashForensics {
         }
     }
 
-    /** 目录内 `*.txt` 超过 [max] 时删最旧的（按文件名里的时间戳无关联，直接按修改时间）。 */
+    /**
+     * 目录内 `*.txt` 超过 [max] 时删最旧的。
+     *
+     * ⚠️ **必须按文件名里的时间戳排，不能按 `lastModified()`**（2026-09-28 修）：
+     * 公共目录里的文件基本是一次性镜像补拷出来的，mtime 几乎相同 ⇒ 排序退化成任意序
+     * ⇒ 超限时可能**删掉最新那份、留下旧的**，恰好丢掉最有价值的那条证据。
+     * 「私有存档攒到 [MAX_PRIVATE_FILES] 份 + 公共目录被清空」的场景正中这一点。
+     */
     private fun trimDir(dir: File, max: Int) {
         try {
             val files = dir.listFiles { f -> f.isFile && f.name.endsWith(".txt") } ?: return
             if (files.size <= max) return
-            files.sortedBy { it.lastModified() }
+            files.sortedBy { stampOf(it) }
                 .take(files.size - max)
                 .forEach { it.delete() }
         } catch (_: Throwable) {
+        }
+    }
+
+    /**
+     * 从文件名里取毫秒时间戳，取不到时退化成文件修改时间。
+     *
+     * 报告名形如 `exit_<毫秒>_<reason>.txt` / `java_crash_<毫秒>.txt` /
+     * `dart_error_<毫秒>.txt`。**只取第一段数字**：若把后面的 reason 码也拼进来，
+     * `exit_<13位>_10` 就成了 15 位数，会排在 `exit_<13位>_5` 这种 14 位数之后 ——
+     * 于是「更旧的记录」反而被判成「更新」，排序又错回去了。
+     */
+    private fun stampOf(f: File): Long {
+        return try {
+            DIGITS_REGEX.find(f.name)?.value?.toLongOrNull() ?: f.lastModified()
+        } catch (_: Throwable) {
+            // 连 lastModified() 都抛（文件已消失等）：给 0，让它排在最前被优先删掉
+            0L
         }
     }
 

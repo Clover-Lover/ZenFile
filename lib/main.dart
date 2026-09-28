@@ -324,23 +324,46 @@ Future<void> _primeCrashEnvironment() async {
   }
 }
 
-/// 启动期崩溃取证：把「上次异常退出」的证据导出到用户随手可取的目录。
+/// 启动期崩溃取证：把「上次异常退出」的证据镜像到用户随手可取的目录。
 ///
 /// 没有 adb 的环境里（如云电脑），这是唯一能拿到崩溃现场的手段：原生侧用
 /// `ApplicationExitInfo` 在 `MainActivity.onCreate` 最早期就把系统记录的原因与
-/// trace 落盘（见 `CrashForensics.kt`），这里负责把它导出到
+/// trace 落盘（见 `CrashForensics.kt`），这里负责把它镜像到
 /// `/storage/emulated/0/ZenFile/crash/`，让用户能用任意文件管理器取出。
 ///
 /// ⚠️ 与 [_logBootFingerprint] 同样**只能在 `runApp()` 之后调用**：内部要 await
 /// 一次原生通道。它服务的是**下一次**崩溃，本次启动快慢与它无关；但它同样
 /// 不该有拖挂启动的能力，故整个函数包在 try/catch 里。
+///
+/// ## 为什么要维护「已交付台账」
+/// 私有存档才是权威、公共目录只是**镜像** ⇒ 公共目录缺什么就补什么。副作用是
+/// **用户手删后会原样复活**（2026-09-28 用户实测：「我清空了，什么都没操作，
+/// 关掉应用再打开又出现一堆日志，但没发现崩溃」）。所以：
+///   台账（曾经交付过的名字）− 公共目录现状 = **用户删过的** ⇒ 告诉原生别再补回。
 Future<void> _checkCrashForensics() async {
   try {
-    final result = await CrashForensicsService.checkPreviousExit();
+    // ① 导出**前**的公共目录现状（必须在调原生之前取，否则分不清「原本就在」与「刚补的」）
+    final before = CrashForensicsService.listAllReports().toSet();
+    // ② 已交付台账（持久化）：曾经出现在公共目录里的报告名，含后来被删掉的
+    final delivered = PreferencesService.getDeliveredCrashReports();
+    // ③ 交过、现在不在了 ⇒ 用户主动删的 ⇒ 本次不补回
+    final suppress = CrashForensicsService.selectSuppressed(delivered, before);
+    // ④ 让原生补拷（会跳过 suppress 名单）
+    final result = await CrashForensicsService.checkPreviousExit(
+      suppress: suppress,
+    );
+    // ⑤ 台账 = 旧台账 ∪ 导出后真的存在的；顺序**不能**与 ④ 颠倒
+    await PreferencesService.saveDeliveredCrashReports(
+      CrashForensicsService.mergeLedger(
+        delivered,
+        CrashForensicsService.listAllReports(),
+      ),
+    );
     if (result == null) return;
     WebdavDebugLog.log(
       '[crash] forensics new=${result.newReports} skipped=${result.skipped} '
-      'dir=${result.dir ?? "-"} error=${result.error ?? "-"}',
+      'suppressed=${result.suppressed} dir=${result.dir ?? "-"} '
+      'error=${result.error ?? "-"}',
     );
     _maybeNotifyCrashReports();
   } catch (e) {

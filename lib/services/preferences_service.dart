@@ -1106,6 +1106,13 @@ class PreferencesService {
   /// 崩溃取证：已经提示过用户的报告文件名（避免同一份报告反复提示）。
   static const String _keyNotifiedCrashReports = 'crash_notified_reports';
 
+  /// 崩溃取证：**曾经交付到公共归档目录**的报告文件名（「已交付台账」）。
+  ///
+  /// 与 `_keyNotifiedCrashReports` 是两件事，别合并：提示集合只在真正弹出提示后
+  /// 才写、且只含 `exit_*` / `java_crash_*`；台账覆盖原生镜像会拷的**全部**文件，
+  /// 用来判断「公共目录里少掉的那份是不是用户删的」—— 是的话就不再补回来。
+  static const String _keyDeliveredCrashReports = 'crash_delivered_reports';
+
   /// 自定义更新源（镜像 / 自建接口）地址。空 = 使用 GitHub 官方 API。
   static const String _keyUpdateApiUrl = 'update_api_url';
 
@@ -1194,6 +1201,19 @@ class PreferencesService {
 
   static Future<void> saveNotifiedCrashReports(List<String> names) async {
     await _prefs?.setStringList(_keyNotifiedCrashReports, names);
+  }
+
+  /// 崩溃取证的「已交付台账」：曾经出现在公共归档目录里的报告名。
+  ///
+  /// 用途只有一个：**用户删掉的报告不要再补回来**。原生每次启动都会把私有存档里
+  /// 公共目录缺的补过去（互为兜底），于是用户手删后旧报告会原样复活、看起来像
+  /// 「又崩了一堆」（2026-09-28 用户实测）。台账减去公共目录现状 = 用户删过的那些。
+  static List<String> getDeliveredCrashReports() {
+    return _prefs?.getStringList(_keyDeliveredCrashReports) ?? const <String>[];
+  }
+
+  static Future<void> saveDeliveredCrashReports(List<String> names) async {
+    await _prefs?.setStringList(_keyDeliveredCrashReports, names);
   }
 
   /// 获取远程媒体文件缩略图预览开关
