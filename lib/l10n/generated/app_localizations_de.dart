@@ -8185,4 +8185,12 @@ class L10nDe extends L10n {
   @override
   String get auto_open_created_folder_desc =>
       'Nach der Erstellung automatisch in den Ordner wechseln';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Zwischenablage nach dem Einfügen behalten';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Ohne Häkchen wird die Zwischenablage nach dem Einfügen geleert';
 }

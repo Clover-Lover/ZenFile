@@ -8116,5 +8116,14 @@
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
   }
+,
+  "paste_keep_clipboard": "貼り付け後にクリップボードを保持",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "チェックなしの場合、貼り付け後にクリップボードを自動クリア",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
 
 }

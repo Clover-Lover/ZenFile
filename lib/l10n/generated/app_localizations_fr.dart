@@ -8221,4 +8221,12 @@ class L10nFr extends L10n {
   @override
   String get auto_open_created_folder_desc =>
       'Entrer automatiquement dans le dossier après sa création';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Conserver le presse-papiers après le collage';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Le presse-papiers est vidé après le collage si non coché';
 }

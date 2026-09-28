@@ -8112,5 +8112,14 @@
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
   }
+,
+  "paste_keep_clipboard": "Сохранять буфер обмена после вставки",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "Без отметки буфер обмена очищается после вставки",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
 
 }

@@ -37,14 +37,17 @@ Future<void> showClipboardMenuSheet(
   final theme = Theme.of(context);
   final isCut = provider.isCut;
   final items = _collectClipboardItems(provider);
+  // 勾选「粘贴后保留剪贴板内容」后粘贴成功不清空剪贴板；默认不勾选（粘贴后自动清空）。
+  var keepClipboard = false;
   final prefix = isCut ? l10n.ui_cut : l10n.ui_copy;
   const maxItemHeight = 200.0;
 
   return showDialog<void>(
     context: context,
     barrierColor: Colors.black26,
-    builder: (sheetContext) => Stack(
-      children: [
+    builder: (_) => StatefulBuilder(
+      builder: (sheetContext, setSheetState) => Stack(
+        children: [
         GestureDetector(
           onTap: () => Navigator.pop(sheetContext),
           child: Container(color: Colors.transparent),
@@ -140,7 +143,7 @@ Future<void> showClipboardMenuSheet(
                   ),
                 ),
                 const SizedBox(height: 4),
-                // 操作按钮：清除 / 粘贴 / 粘贴并清除
+                // 操作按钮：清除 / 粘贴（粘贴行为由下方勾选框决定）
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
                   child: Row(
@@ -173,15 +176,17 @@ Future<void> showClipboardMenuSheet(
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // 粘贴（保留剪贴板）：连续粘到多处的入口
+                      // 粘贴：默认粘贴后自动清空；勾选「保留剪贴板」则不清空
                       Expanded(
-                        flex: isCut ? 5 : 3,
+                        flex: 4,
                         child: ElevatedButton.icon(
                           onPressed: () async {
                             Navigator.pop(sheetContext);
                             // 剪切必须清空（源已被移走，留着是死路径）；
-                            // 复制则保留，便于连续粘贴到多个目录。
-                            await onPaste(clearAfterPaste: isCut);
+                            // 复制：勾选保留则不清空，否则粘贴后自动清空。
+                            await onPaste(
+                              clearAfterPaste: isCut ? true : !keepClipboard,
+                            );
                           },
                           icon: const Icon(Icons.content_paste, size: 16),
                           label: _ButtonLabel(
@@ -202,40 +207,46 @@ Future<void> showClipboardMenuSheet(
                           ),
                         ),
                       ),
-                      // 粘贴并清除（最右）：剪切模式下不显示（与「粘贴」行为相同）
-                      if (!isCut) ...[
-                        const SizedBox(width: 8),
-                        Expanded(
-                          flex: 4,
-                          child: ElevatedButton.icon(
-                            onPressed: () async {
-                              Navigator.pop(sheetContext);
-                              await onPaste(clearAfterPaste: true);
-                            },
-                            icon: const Icon(Icons.content_paste_go, size: 16),
-                            label: _ButtonLabel(
-                              text: l10n.ui_paste_and_clear,
-                              fontSize: 14,
-                              bold: true,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              // 次强调色：避免与「粘贴」两个实心主色按钮并排、
-                              // 让用户误触「顺手清空」。
-                              backgroundColor:
-                                  theme.colorScheme.primaryContainer,
-                              foregroundColor:
-                                  theme.colorScheme.onPrimaryContainer,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 4,
+                    ],
+                  ),
+                ),
+                // 勾选保留剪贴板（复制模式可勾选；剪切模式禁用置灰）
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: keepClipboard,
+                        onChanged: isCut
+                            ? null
+                            : (v) => setSheetState(
+                                () => keepClipboard = v ?? false,
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize:
+                            MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              l10n.paste_keep_clipboard,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurface.withOpacity(0.8),
                               ),
                             ),
-                          ),
+                            Text(
+                              l10n.paste_keep_clipboard_desc,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ],
                   ),
                 ),
@@ -244,6 +255,7 @@ Future<void> showClipboardMenuSheet(
           ),
         ),
       ],
+      ),
     ),
   );
 }

@@ -8065,4 +8065,11 @@ class L10nAr extends L10n {
   @override
   String get auto_open_created_folder_desc =>
       'الدخول تلقائيًا إلى المجلد بعد إنشائه';
+
+  @override
+  String get paste_keep_clipboard => 'الاحتفاظ بالحافظة بعد اللصق';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'يتم مسح الحافظة بعد اللصق إذا لم يتم التحديد';
 }

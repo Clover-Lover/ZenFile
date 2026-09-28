@@ -8112,5 +8112,14 @@
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
   }
+,
+  "paste_keep_clipboard": "الاحتفاظ بالحافظة بعد اللصق",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "يتم مسح الحافظة بعد اللصق إذا لم يتم التحديد",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
 
 }

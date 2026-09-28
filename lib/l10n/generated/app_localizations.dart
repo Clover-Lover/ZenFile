@@ -14385,6 +14385,18 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'创建文件夹后自动进入该文件夹'**
   String get auto_open_created_folder_desc;
+
+  /// ui\widgets\clipboard_menu_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'粘贴后保留剪贴板内容'**
+  String get paste_keep_clipboard;
+
+  /// ui\widgets\clipboard_menu_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'不勾选时粘贴完成后自动清空剪贴板'**
+  String get paste_keep_clipboard_desc;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -8260,5 +8260,14 @@
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
   }
+,
+  "paste_keep_clipboard": "貼上後保留剪貼簿內容",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "未勾選時貼上完成後自動清空剪貼簿",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
 
 }

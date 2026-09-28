@@ -8202,4 +8202,12 @@ class L10nEs extends L10n {
   @override
   String get auto_open_created_folder_desc =>
       'Entrar automáticamente en la carpeta después de crearla';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Conservar el portapapeles después de pegar';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'El portapapeles se limpia después de pegar si no está marcado';
 }

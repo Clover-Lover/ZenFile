@@ -7845,4 +7845,10 @@ class L10nJa extends L10n {
 
   @override
   String get auto_open_created_folder_desc => 'フォルダー作成後に自動的にそのフォルダーへ移動';
+
+  @override
+  String get paste_keep_clipboard => '貼り付け後にクリップボードを保持';
+
+  @override
+  String get paste_keep_clipboard_desc => 'チェックなしの場合、貼り付け後にクリップボードを自動クリア';
 }

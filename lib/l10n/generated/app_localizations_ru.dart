@@ -8174,4 +8174,11 @@ class L10nRu extends L10n {
   @override
   String get auto_open_created_folder_desc =>
       'Автоматически входить в папку после её создания';
+
+  @override
+  String get paste_keep_clipboard => 'Сохранять буфер обмена после вставки';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Без отметки буфер обмена очищается после вставки';
 }

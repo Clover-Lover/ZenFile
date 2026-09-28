@@ -7851,4 +7851,10 @@ class L10nKo extends L10n {
 
   @override
   String get auto_open_created_folder_desc => '폴더 생성 후 해당 폴더로 자동 이동';
+
+  @override
+  String get paste_keep_clipboard => '붙여넣기 후 클립보드 유지';
+
+  @override
+  String get paste_keep_clipboard_desc => '체크하지 않으면 붙여넣기 후 클립보드 자동 삭제';
 }

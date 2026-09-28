@@ -8094,4 +8094,11 @@ class L10nEn extends L10n {
   @override
   String get auto_open_created_folder_desc =>
       'Automatically enter the folder after creating it';
+
+  @override
+  String get paste_keep_clipboard => 'Keep clipboard after paste';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Clipboard is cleared after paste when unchecked';
 }

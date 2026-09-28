@@ -7675,6 +7675,12 @@ class L10nZh extends L10n {
 
   @override
   String get auto_open_created_folder_desc => '创建文件夹后自动进入该文件夹';
+
+  @override
+  String get paste_keep_clipboard => '粘贴后保留剪贴板内容';
+
+  @override
+  String get paste_keep_clipboard_desc => '不勾选时粘贴完成后自动清空剪贴板';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -15318,4 +15324,10 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get auto_open_created_folder_desc => '建立資料夾後自動進入該資料夾';
+
+  @override
+  String get paste_keep_clipboard => '貼上後保留剪貼簿內容';
+
+  @override
+  String get paste_keep_clipboard_desc => '未勾選時貼上完成後自動清空剪貼簿';
 }
