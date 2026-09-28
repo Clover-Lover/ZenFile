@@ -1046,13 +1046,17 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
           final createdName = await provider.createFolder(folderName);
           if (createdName == null) {
             _showCreateFailure(context, provider);
-          } else if (createdName != folderName && context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(L10n.of(context).foldernamecreatedname(folderName, createdName)),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
+          } else {
+            if (createdName != folderName && context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(L10n.of(context).foldernamecreatedname(folderName, createdName)),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+            // 新建文件夹成功后自动打开该文件夹
+            await provider.openCreatedFolder(createdName);
           }
         }
         break;

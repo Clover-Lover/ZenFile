@@ -9992,6 +9992,17 @@ class FileManagerProvider extends ChangeNotifier {
     }
   }
 
+  /// 新建文件夹成功后自动打开该文件夹（本地 / 远程一致；远程加密目录由
+  /// createFolder 内部刷新原目录，密文路径构造复杂暂不自动进入）。
+  Future<void> openCreatedFolder(String createdName) async {
+    if (activeTab.isCryptRemote) return;
+    final parent = activeTab.currentPath;
+    final newPath = currIsRemote
+        ? _buildRemotePath(parent, createdName)
+        : p.join(parent, createdName);
+    await loadDirectory(newPath);
+  }
+
   Future<String?> createFile(String name) async {
     _lastCreateError = null;
     try {
