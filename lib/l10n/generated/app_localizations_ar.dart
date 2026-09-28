@@ -220,6 +220,18 @@ class L10nAr extends L10n {
   String get update_retry => 'إعادة المحاولة';
 
   @override
+  String get update_dialog_ignore => 'تجاهل';
+
+  @override
+  String get update_dialog_update => 'تحديث';
+
+  @override
+  String get update_changelog_empty => 'لا يوجد سجل تغييرات لهذا الإصدار';
+
+  @override
+  String get update_ignored_hint => 'تم تجاهل تنبيه بدء التشغيل لهذا الإصدار';
+
+  @override
   String get update_download_install => 'تنزيل وتثبيت';
 
   @override

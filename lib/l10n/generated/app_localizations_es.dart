@@ -225,6 +225,20 @@ class L10nEs extends L10n {
   String get update_retry => 'Reintentar';
 
   @override
+  String get update_dialog_ignore => 'Ignorar';
+
+  @override
+  String get update_dialog_update => 'Actualizar';
+
+  @override
+  String get update_changelog_empty =>
+      'No hay registro de cambios para esta versión';
+
+  @override
+  String get update_ignored_hint =>
+      'El aviso de inicio para esta versión está ignorado';
+
+  @override
   String get update_download_install => 'Descargar e instalar';
 
   @override

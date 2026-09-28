@@ -478,6 +478,30 @@ abstract class L10n {
   /// **'重试'**
   String get update_retry;
 
+  /// No description provided for @update_dialog_ignore.
+  ///
+  /// In zh, this message translates to:
+  /// **'忽略'**
+  String get update_dialog_ignore;
+
+  /// No description provided for @update_dialog_update.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新'**
+  String get update_dialog_update;
+
+  /// No description provided for @update_changelog_empty.
+  ///
+  /// In zh, this message translates to:
+  /// **'该版本未提供更新日志'**
+  String get update_changelog_empty;
+
+  /// No description provided for @update_ignored_hint.
+  ///
+  /// In zh, this message translates to:
+  /// **'已忽略该版本的启动提示'**
+  String get update_ignored_hint;
+
   /// No description provided for @update_download_install.
   ///
   /// In zh, this message translates to:

@@ -224,6 +224,20 @@ class L10nRu extends L10n {
   String get update_retry => 'Повторить';
 
   @override
+  String get update_dialog_ignore => 'Игнорировать';
+
+  @override
+  String get update_dialog_update => 'Обновить';
+
+  @override
+  String get update_changelog_empty =>
+      'Для этой версии список изменений не предоставлен';
+
+  @override
+  String get update_ignored_hint =>
+      'Уведомление при запуске для этой версии отключено';
+
+  @override
   String get update_download_install => 'Скачать и установить';
 
   @override

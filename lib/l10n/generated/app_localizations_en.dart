@@ -221,6 +221,19 @@ class L10nEn extends L10n {
   String get update_retry => 'Retry';
 
   @override
+  String get update_dialog_ignore => 'Ignore';
+
+  @override
+  String get update_dialog_update => 'Update';
+
+  @override
+  String get update_changelog_empty => 'No changelog provided for this version';
+
+  @override
+  String get update_ignored_hint =>
+      'Startup prompt for this version is ignored';
+
+  @override
   String get update_download_install => 'Download & Install';
 
   @override

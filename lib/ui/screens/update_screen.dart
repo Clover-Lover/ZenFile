@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,7 +21,8 @@ import '../../services/webdav_debug_log.dart';
 /// 结构：
 /// ① GitHub 版本检测卡片 —— 打开页面自动检测一次，失败/想重查可手动重试；
 ///    发现新版本后按设备 ABI 匹配 Release 资产，应用内下载并走统一安装链路
-///    [ApkInstallerService.installApk]（含 VirusTotal 扫描等既有逻辑）。
+///    [ApkInstallerService.installApk]（含 VirusTotal 扫描等既有逻辑）；
+///    同时展示该 Release 的**更新日志**（可滚动查看 + 一键复制，方便用户自行翻译）。
 /// ② 网盘下载链接（自「关于」页迁移）。
 /// ③ 当前版本更新日志（自「关于」页迁移，硬编码中英双语）。
 class UpdateScreen extends StatefulWidget {
@@ -44,6 +46,10 @@ class _UpdateScreenState extends State<UpdateScreen> {
   String _remoteVersion = '';
   String _pageUrl = _releasePageUrl;
   List<UpdateAsset> _assets = const <UpdateAsset>[];
+
+  /// 远端 Release 的更新日志正文（Markdown 原文）。
+  /// 只有 API 通道拿得到；网页降级通道为空 ⇒ 界面显示 [update_changelog_empty]。
+  String _releaseNotes = '';
 
   /// 失败原因与 HTTP 状态码（决定提示文案；旧实现所有失败共用一句通用文案）。
   UpdateCheckError? _error;
@@ -99,6 +105,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
       _remoteVersion = result.remoteVersion;
       _pageUrl = result.pageUrl.isNotEmpty ? result.pageUrl : _releasePageUrl;
       _assets = result.assets;
+      // GitHub 的 release body 是 CRLF 原文，统一成 LF：Flutter 的 Text 对
+      // `\r\n` 会多渲染一个空行，正文里每行之间都被拉开。
+      _releaseNotes = result.releaseNotes.replaceAll('\r\n', '\n');
       _error = result.error;
       _httpStatus = result.httpStatus;
       _usedFallback = result.usedFallback;
@@ -201,6 +210,43 @@ class _UpdateScreenState extends State<UpdateScreen> {
     try {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } catch (_) {}
+  }
+
+  /// 把更新日志正文整段写进剪贴板 —— 用户常需要拿到原文去翻译 / 转发。
+  ///
+  /// 只复制正文（不带「发现新版本 vX」之类的界面文案），这样粘出去的就是
+  /// 干净的 release notes。
+  Future<void> _copyChangelog() async {
+    if (_releaseNotes.isEmpty) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = L10n.of(context);
+    await Clipboard.setData(ClipboardData(text: _releaseNotes));
+    if (!mounted) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l10n.msg4fb42e6e), // 「已复制到剪贴板」
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  /// 清除「已忽略该版本」标记，让下次启动重新弹窗提示。
+  Future<void> _restoreIgnoredPrompt() async {
+    await PreferencesService.saveIgnoredUpdateVersion('');
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  /// 当前显示的远端版本是否已被用户「忽略」（即启动弹窗不会再提示它）。
+  ///
+  /// 判据与 [main.dart] 的启动弹窗**完全一致**（走同一个存储键、同一个比较），
+  /// 否则会出现「这里说已忽略、启动却还弹」这种自相矛盾。
+  bool _isRemoteIgnored() {
+    if (_remoteVersion.isEmpty) return false;
+    return UpdateCheckService.isVersionIgnored(
+      _remoteVersion,
+      PreferencesService.getIgnoredUpdateVersion(),
+    );
   }
 
   /// 失败提示：按原因分类。
@@ -570,6 +616,45 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 ],
               ),
             ],
+            // 用户曾在启动弹窗里点过「忽略」⇒ 给他一个恢复入口
+            // （否则「不再弹窗」是个不可逆操作，点错了没法挽回）。
+            if (_isRemoteIgnored()) ...[
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Icon(
+                    Icons.notifications_off_outlined,
+                    size: 14,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      l10n.update_ignored_hint,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: _restoreIgnoredPrompt,
+                    style: TextButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                    ),
+                    child: Text(
+                      l10n.ui_restore_default,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: 12),
+            _buildChangelogBlock(theme, l10n),
             const SizedBox(height: 12),
             if (_downloading) ...[
               LinearProgressIndicator(
@@ -611,6 +696,98 @@ class _UpdateScreenState extends State<UpdateScreen> {
           ],
         );
     }
+  }
+
+  // ── ①.5 远端 Release 的更新日志（查看 + 复制） ──────────────────────
+
+  /// 远端 Release 的更新日志：可滚动查看（正文可选中）+ 一键复制。
+  ///
+  /// 为什么按纯文本呈现而不是渲染 Markdown：**这个功能不值得新增依赖**（pubspec
+  /// 是红线）。GitHub 的 release notes 本身就是 Markdown 原文，原样展示既不失真，
+  /// 也正好方便用户整段复制出去翻译 —— 那才是本区块的主要用途。
+  Widget _buildChangelogBlock(ThemeData theme, L10n l10n) {
+    final hasNotes = _releaseNotes.isNotEmpty;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.article_outlined,
+              size: 15,
+              color: theme.colorScheme.primary,
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                l10n.msg305734ce, // 「更新日志」
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                ),
+              ),
+            ),
+            if (hasNotes)
+              TextButton.icon(
+                onPressed: _copyChangelog,
+                style: TextButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                icon: Icon(
+                  Broken.copy,
+                  size: 14,
+                  color: theme.colorScheme.primary,
+                ),
+                label: Text(
+                  l10n.ui_copy,
+                  style: const TextStyle(fontSize: 12.5),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Container(
+          width: double.infinity,
+          // ⚠️ 高度必须有界：外层是本页的 ListView，这里再套滚动容器时若不给
+          // maxHeight，会直接抛「Vertical viewport was given unbounded height」。
+          constraints: const BoxConstraints(maxHeight: 220),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+            ),
+          ),
+          child: hasNotes
+              ? Scrollbar(
+                  child: SingleChildScrollView(
+                    child: SelectableText(
+                      _releaseNotes,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.55,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.8,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Text(
+                  // 网页降级通道拿不到正文 ⇒ 明确告知，而不是给一块空白。
+                  l10n.update_changelog_empty,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    height: 1.5,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+        ),
+      ],
+    );
   }
 
   // ── ② 网盘下载链接（自「关于」页迁移） ──────────────────────────────

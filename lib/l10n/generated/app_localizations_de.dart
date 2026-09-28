@@ -225,6 +225,20 @@ class L10nDe extends L10n {
   String get update_retry => 'Wiederholen';
 
   @override
+  String get update_dialog_ignore => 'Ignorieren';
+
+  @override
+  String get update_dialog_update => 'Aktualisieren';
+
+  @override
+  String get update_changelog_empty =>
+      'Für diese Version ist kein Änderungsprotokoll verfügbar';
+
+  @override
+  String get update_ignored_hint =>
+      'Start-Hinweis für diese Version ist ignoriert';
+
+  @override
   String get update_download_install => 'Herunterladen & installieren';
 
   @override

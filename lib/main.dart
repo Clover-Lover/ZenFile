@@ -15,6 +15,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 // 映射角色与 dynamic_color 1.x 的 CorePalette→ColorScheme 官方转换逐项一致，视觉效果不变。
 import 'package:material_ui/material_ui.dart' as mui;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:audio_service/audio_service.dart';
 
 import 'core/theme.dart';
@@ -36,6 +37,9 @@ import 'ui/screens/home_screen.dart';
 import 'ui/screens/audio_player/audio_player_screen.dart';
 import 'ui/screens/remote_guard_screen.dart';
 import 'services/remote_guard_service.dart';
+import 'services/net_proxy_service.dart';
+import 'services/update_check_service.dart';
+import 'ui/screens/update_screen.dart';
 
 final GlobalKey<_ZenFileAppState> appStateKey = GlobalKey<_ZenFileAppState>();
 
@@ -427,6 +431,12 @@ Future<void> _updateSystemGestureExclusion(bool disableLeftBack, double width, d
   }
 }
 
+/// 启动「发现新版本」弹窗的返回值。
+///
+/// `null`（返回键 / 点外部关闭）刻意**不映射**到任何分支 ⇒ 不持久化忽略标记，
+/// 下次启动仍会提示。
+enum _UpdatePromptAction { ignore, update }
+
 class ZenFileApp extends StatefulWidget {
   const ZenFileApp({super.key});
 
@@ -466,6 +476,9 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   String? _lastOverlayKey;
   // 缓存上次手势排他区域参数，避免每帧调用平台通道（setSystemGestureExclusionRects）。
   String? _lastGestureKey;
+  // 启动版本检测：本进程是否已跑过（权限从设置页回来时不会重复弹）+ 弹窗是否正在显示。
+  bool _updatePromptChecked = false;
+  bool _updatePromptShowing = false;
 
   @override
   void initState() {
@@ -941,6 +954,183 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
       if (mounted) {
         setState(() => _hasPermission = true);
       }
+    }
+
+    // 权限就绪 ⇒ 触发一次启动版本检测（幂等，见 [_checkUpdateOnStartup]）。
+    // 刻意挂在权限判定**之后**：否则弹窗会盖在权限引导页 / 启动保护闸门上，
+    // 而「忽略 / 更新」在那种场景下点了也没意义。
+    if (_hasPermission == true) unawaited(_checkUpdateOnStartup());
+  }
+
+  /// 启动时静默检测新版本；发现更高版本且未被忽略时弹窗询问「忽略 / 更新」。
+  ///
+  /// 设计要点：
+  /// * **不阻塞启动**：调用方 `unawaited`，且 [UpdateCheckService.check] 契约上
+  ///   不抛异常、有总超时上限 ⇒ 最坏只是静默失败，绝不影响界面；
+  /// * **一个进程只跑一次**：`_updatePromptChecked` 置位在最前（含异常路径），
+  ///   所以「从设置页授权回来」触发的第二次权限检查不会再弹一遍；
+  /// * **纯静默成功不打扰**：只有 `hasUpdate` 才弹；「已是最新」什么都不做
+  ///   （想看结果的人自己去「版本更新」页，那里信息更全）；
+  /// * **「忽略」是持久化的**：记住被忽略的 tag，同版本 / 更低版本以后都不再弹
+  ///   （判据与「版本更新」页共用 [UpdateCheckService.isVersionIgnored]，
+  ///   保证「页面上说已忽略」与「启动不弹」永远一致）。
+  Future<void> _checkUpdateOnStartup() async {
+    if (_updatePromptChecked) return;
+    _updatePromptChecked = true;
+
+    try {
+      final info = await PackageInfo.fromPlatform();
+      final result = await UpdateCheckService(
+        apiUrlOverride: PreferencesService.getUpdateApiUrl(),
+        httpProxyProvider: NetProxyService.getHttpProxy,
+        logger: WebdavDebugLog.log,
+      ).check(info.version);
+
+      if (!result.ok || !result.hasUpdate) return;
+      if (UpdateCheckService.isVersionIgnored(
+        result.remoteVersion,
+        PreferencesService.getIgnoredUpdateVersion(),
+      )) {
+        return;
+      }
+      if (!mounted) return;
+      // 启动保护闸门还锁着 / 权限未确认 / 正在处理外部打开请求时不要插入弹窗：
+      // 会盖在闸门或引导页上，且此时点「更新」也去不了该去的地方。
+      if (_hasPermission != true || _isResolvingIntent) return;
+      if (_appLockEnabled && !_appUnlocked) return;
+
+      // 让首页先渲染完再弹，避免冷启动时与首帧争抢。
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (!mounted) return;
+      await _showUpdateDialog(result);
+    } catch (e) {
+      // 启动路径上的任何异常都不许外溢（service 已承诺不抛，这里是最后一道保险）
+      debugPrint('[ZenFile] startup update check failed: $e');
+    }
+  }
+
+  /// 启动「发现新版本」弹窗。返回后：
+  /// * 选了「忽略」 ⇒ 持久化该版本，之后同版本不再提示；
+  /// * 选了「更新」 ⇒ 跳到「版本更新」页（下载 / ABI 匹配 / 安装器链路都在那里）；
+  /// * 直接返回（返回键 / 点外部）⇒ 不持久化，下次启动仍会提示。
+  Future<void> _showUpdateDialog(UpdateCheckResult result) async {
+    if (_updatePromptShowing) return;
+    _updatePromptShowing = true;
+    try {
+      // 冷启动时 navigator 可能还没挂好：重试一次再放弃。
+      var context = navigatorKey.currentContext;
+      if (context == null || !context.mounted) {
+        await Future.delayed(const Duration(milliseconds: 400));
+        context = navigatorKey.currentContext;
+      }
+      if (context == null || !context.mounted) return;
+
+      final l10n = L10n.of(context);
+      // GitHub 的 body 是 CRLF 原文，统一成 LF（Text 对 \r\n 会多渲染一个空行）。
+      final notes = result.releaseNotes.replaceAll('\r\n', '\n');
+
+      final action = await showDialog<_UpdatePromptAction>(
+        context: context,
+        builder: (ctx) {
+          final theme = Theme.of(ctx);
+          return AlertDialog(
+            icon: Icon(
+              Icons.new_releases_rounded,
+              size: 30,
+              color: theme.colorScheme.primary,
+            ),
+            title: Text(l10n.update_new_version(result.remoteVersion)),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (notes.isNotEmpty) ...[
+                    Text(
+                      l10n.msg305734ce, // 「更新日志」
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: double.infinity,
+                      // ⚠️ 高度必须有界，否则弹窗内容会溢出屏幕（用户看不到按钮）。
+                      constraints: const BoxConstraints(maxHeight: 200),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest
+                            .withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: SelectableText(
+                            notes,
+                            style: TextStyle(
+                              fontSize: 12,
+                              height: 1.5,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.8,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ] else
+                    Text(
+                      l10n.update_changelog_empty,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.5,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, _UpdatePromptAction.ignore),
+                child: Text(l10n.update_dialog_ignore),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, _UpdatePromptAction.update),
+                child: Text(l10n.update_dialog_update),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (action == _UpdatePromptAction.ignore) {
+        await PreferencesService.saveIgnoredUpdateVersion(result.remoteVersion);
+        WebdavDebugLog.log(
+          '[update] startup prompt ignored for '
+          '${result.remoteVersion}',
+        );
+        return;
+      }
+      if (action == _UpdatePromptAction.update) {
+        // 走「版本更新」页而不是就地下载：那里有完整的 ABI 匹配、下载进度、
+        // 失败分类提示与安装器链路，也能看全更新日志。
+        navigatorKey.currentState?.push(
+          MaterialPageRoute(builder: (_) => const UpdateScreen()),
+        );
+      }
+    } finally {
+      _updatePromptShowing = false;
     }
   }
 

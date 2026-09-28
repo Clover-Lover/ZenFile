@@ -216,6 +216,18 @@ class L10nKo extends L10n {
   String get update_retry => '다시 시도';
 
   @override
+  String get update_dialog_ignore => '무시';
+
+  @override
+  String get update_dialog_update => '업데이트';
+
+  @override
+  String get update_changelog_empty => '이 버전의 변경 내역이 없습니다';
+
+  @override
+  String get update_ignored_hint => '이 버전의 시작 알림을 무시했습니다';
+
+  @override
   String get update_download_install => '다운로드 및 설치';
 
   @override

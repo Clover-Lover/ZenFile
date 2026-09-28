@@ -217,6 +217,18 @@ class L10nZh extends L10n {
   String get update_retry => '重试';
 
   @override
+  String get update_dialog_ignore => '忽略';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_changelog_empty => '该版本未提供更新日志';
+
+  @override
+  String get update_ignored_hint => '已忽略该版本的启动提示';
+
+  @override
   String get update_download_install => '下载安装';
 
   @override
@@ -7876,6 +7888,18 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get update_retry => '重試';
+
+  @override
+  String get update_dialog_ignore => '忽略';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_changelog_empty => '該版本未提供更新日誌';
+
+  @override
+  String get update_ignored_hint => '已忽略該版本的啟動提示';
 
   @override
   String get update_download_install => '下載安裝';

@@ -224,6 +224,20 @@ class L10nFr extends L10n {
   String get update_retry => 'Réessayer';
 
   @override
+  String get update_dialog_ignore => 'Ignorer';
+
+  @override
+  String get update_dialog_update => 'Mettre à jour';
+
+  @override
+  String get update_changelog_empty =>
+      'Aucun journal des modifications pour cette version';
+
+  @override
+  String get update_ignored_hint =>
+      'L\'alerte au démarrage pour cette version est ignorée';
+
+  @override
   String get update_download_install => 'Télécharger et installer';
 
   @override

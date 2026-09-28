@@ -218,6 +218,18 @@ class L10nJa extends L10n {
   String get update_retry => '再試行';
 
   @override
+  String get update_dialog_ignore => '無視';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_changelog_empty => 'このバージョンの更新履歴はありません';
+
+  @override
+  String get update_ignored_hint => 'このバージョンの起動時通知は無視されています';
+
+  @override
   String get update_download_install => 'ダウンロードしてインストール';
 
   @override
