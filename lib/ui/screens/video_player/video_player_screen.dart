@@ -240,28 +240,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // 每次打开视频都会弹一次系统通知权限框（打断刚开播的画面，并让 Activity 反复
       // 切前后台）。权限提示只在用户**主动**点「后台播放」时给
       // （`_toggleBackgroundMode` → `_startBackgroundMode`）。
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
         final handler = getAudioHandler();
         final source = widget.videoPath;
         if (source.isEmpty) return;
-        // ⚠️ 判等必须用**源路径**（`isPlayingSource`），不能用
-        // `_currentStreamUrl ?? widget.videoPath`：后者在流地址解析完成前恒为源路径、
-        // 完成后变成「带随机端口的本地代理 URL（远程/加密视频）」，于是同一个视频
-        // 的判等结果**不确定** ⇒ 偶发重复 attach ⇒ 换绑 + 退役那个仍在后台播放的
-        // 旧 player ⇒ 反复进出播放页崩溃。详见 `ZenFileAudioHandler.videoSourcePath`。
-        if (handler.isPlayingSource(source)) return;
-        final resolved = _currentStreamUrl;
-        if (resolved != null &&
-            resolved != source &&
-            handler.isPlayingSource(resolved)) {
+        // ① 幂等：**本页这个 player 已经在通知栏上**（`diagnose.onReattach`、
+        //    `_switchHwdec` 重建后的内部重挂都会再走到这里）⇒ 直接返回。
+        //    判据用**本页 player 的身份**，不用「源路径是否在播」那种猜法：后者在
+        //    流地址解析前/后结果不同（远程/加密视频会变成带随机端口的代理 URL）。
+        if (identical(handler.currentPlayer, player) && handler.videoSession)
           return;
-        }
+        // ② 后台旧会话的**接管退役**已在启动流程最开始完成（见 initState 里
+        //    「接管后台视频会话」那段注释），这里只剩「把本页 player 挂上去」。
+        //    ⚠️ 绝不能改成上一版那样「发现后台已有会话就静默跳过 attach」：那会让
+        //    第一个实例被永久霸占，每进出一次多一个存活 mpv 实例，第 3-4 次即
+        //    `CRASH_NATIVE`（2026-09-28 真机日志，硬解/软解均复现）。
         WebdavDebugLog.log('[vp] postFrame 自动 attach 后台播放（偏好粘性）');
         // ⚠️ 必须 `silent: true`：这是「偏好粘性」的自动挂载，**不是**用户主动开启
         // 后台播放，弹「已进入后台播放」会变成「每次重进播放页都弹一次」
         // （用户反馈 2026-09-28）。与 `_switchHwdec` 重建后的内部重挂保持一致。
-        unawaited(_attachToBackgroundHandler(silent: true));
+        await _attachToBackgroundHandler(silent: true);
       });
     }
 
@@ -291,6 +290,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         bufferSize: bufferSize,
       ),
     );
+    MpvAudioOutputService.notePlayerCreated(player, 'video-init');
     controller = VideoController(
       player,
       configuration: VideoControllerConfiguration(
@@ -319,6 +319,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _initListeners();
     _initTrackListeners();
     () async {
+      // 接管后台视频会话：后台还挂着**别的** player 时，先把它退役再配置/起播本页
+      // 播放器 —— 保证本页 `open()` 时进程里只有一个 mpv 实例。
+      // ⚠️ 时序很重要：放到这里（`configureBeforeOpen` 之前）而不是 postFrame，
+      // 是因为真机崩溃就发生在 `open()` 里/后不久（2026-09-28 日志：`open()` 之后
+      // 0.25s 崩、无任何日志）。旧实现让后台会话**永久霸占**第一个实例（既不退役
+      // 也没人引用），每进出一次多一个存活实例，第 3-4 次即 `CRASH_NATIVE`。
+      if (_isBackgroundMode) {
+        final h = getAudioHandler();
+        if (h.videoSession && !identical(h.currentPlayer, player)) {
+          WebdavDebugLog.log(
+            '[vp] 进场接管后台视频会话（同一部=${h.isPlayingSource(widget.videoPath)}）',
+          );
+          await h.takeOverBackgroundSession(reason: 'video-takeover');
+        }
+      }
       try {
         final platform = player.platform;
       if (platform is NativePlayer) {
@@ -493,6 +508,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         '硬解=$_useHardwareDecode voCompat=$_voCompatMode');
     _startBlackScreenCheck();
     player.open(Media(widget.videoPath), play: false);
+    // 崩溃定位哨兵：`open()` 之后紧邻的一段没有任何日志，若进程崩在这里，上面那行
+    // 「打开视频」就是日志最后一行 —— 用它把「崩在 open 里」和「崩在之后」分开。
+    WebdavDebugLog.log('[vp] open() 已发出 player=#${identityHashCode(player)}');
     _autoMatchSubtitle();
   }
 
@@ -1747,6 +1765,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         bufferSize: 64 * 1024 * 1024,
       ),
     );
+    MpvAudioOutputService.notePlayerCreated(player, 'video-switch');
     controller = VideoController(
       player,
       configuration: VideoControllerConfiguration(
@@ -3156,10 +3175,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // 这个 player，它们发的是**裸原生调用**，销毁后调用即 use-after-free
     // ⇒ CRASH_NATIVE（Dart 侧拿不到栈）。abandon 是它们唯一的拦阻点。
     MpvAudioOutputService.abandon(target);
+    WebdavDebugLog.log(
+      '[vp] disposePlayer(#${identityHashCode(target)}): abandon 完成',
+    );
     unawaited(
       _eqService.detach().whenComplete(() {
+        WebdavDebugLog.log(
+          '[vp] disposePlayer(#${identityHashCode(target)}): eq 已解绑 → 调 dispose()',
+        );
         try {
           target.dispose();
+          WebdavDebugLog.log(
+            '[vp] disposePlayer(#${identityHashCode(target)}): dispose() 已调用',
+          );
         } catch (_) {}
       }),
     );

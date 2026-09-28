@@ -232,11 +232,37 @@ class MpvAudioOutputService {
   /// （不持有强引用，player 被 GC 后自动消失，不会泄漏）。
   static final Expando<bool> _abandoned = Expando<bool>('zenfile.aoAbandoned');
 
+  /// 存活 player 的**近似**计数：每次 `Player()` 构造后调 [notePlayerCreated]，
+  /// 每个销毁点（都会先调 [abandon]）自动减一。
+  ///
+  /// ## 为什么需要（2026-09-28 真机崩溃现场）
+  ///
+  /// 「反复进出视频播放页就崩」这类问题必须回答一个数字：**同时有几个 mpv 实例活着**。
+  /// 日志里的 `[ledger] live=N` 是唯一直接证据 —— 后台会话被霸占 + media_kit 的
+  /// `dispose()` 要延迟 5s 才 `mpv_terminate_destroy`，N 会随进出次数单调上升，
+  /// 崩溃点就落在 N≥3 的时候。
+  static int _livePlayers = 0;
+
+  /// 记录一次 `Player()` 构造（**新增创建点时必须一并接入**，否则计数偏小）。
+  static void notePlayerCreated(Player player, String where) {
+    _livePlayers++;
+    WebdavDebugLog.log(
+      '[ledger] create($where, #${identityHashCode(player)}) → live=$_livePlayers',
+    );
+  }
+
   /// 声明 [player] 已作废（**必须在 `player.dispose()` 之前调用**）。
   ///
   /// 全库 `Player.dispose()` 只有 5 处，均已接入；新增销毁点时**必须一并接入**，
   /// 否则该路径上的延迟诊断又会变成悬垂原生调用。
   static void abandon(Player player) {
+    // 台账减一（幂等：同一 player 重复 abandon 不重复计数）。
+    if (_abandoned[player] != true) {
+      _livePlayers--;
+      WebdavDebugLog.log(
+        '[ledger] abandon(#${identityHashCode(player)}) → live=$_livePlayers',
+      );
+    }
     _abandoned[player] = true;
   }
 

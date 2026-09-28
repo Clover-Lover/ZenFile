@@ -263,6 +263,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
           pitch: true,
         ),
       );
+      MpvAudioOutputService.notePlayerCreated(player, 'audio-init');
       _shuffleQueue = List.generate(_allSongs.length, (i) => i);
       _initListeners();
       // 覆盖 media_kit 硬编码的 network-timeout=5s，给远程流式播放足够时间

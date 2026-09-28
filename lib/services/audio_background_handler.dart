@@ -130,11 +130,16 @@ class ZenFileAudioHandler extends BaseAudioHandler
   ///
   /// 正确顺序（本方法职责）：先 `stop()` 让 mpv 正常收尾、**await 完成**，再
   /// `dispose()`；顺便让桌面歌词控制器停止跟踪该 player；整个过程**串行 + 去重**。
-  /// 调用方无需 await（fire-and-forget，不阻塞当前操作）。
-  void _retirePlayer(Player p, {required String reason}) {
+  /// 返回**整条退役队列的尾部**：不需要排序的调用方可以忽略（fire-and-forget）；
+  /// 需要「旧实例先死、新实例再 open」的调用方（`stop()` /
+  /// [takeOverBackgroundSession]）**必须** await 它。
+  Future<void> _retirePlayer(Player p, {required String reason}) {
     if (_retiring.contains(p)) {
       WebdavDebugLog.log('[bg] retire($reason, #${identityHashCode(p)}) 已在队列，跳过');
-      return;
+      // ⚠️ 不能写裸 `return;`：本方法返回 `Future<void>`（**非 async**），
+      // 裸 return 会报 `The return value is missing after 'return'`
+      // （return_without_value，编译级错误）。返回当前队列尾部即可。
+      return _retireQueue;
     }
     _retiring.add(p);
     // ⚠️ 先声明作废，再排队销毁：本服务（`MpvAudioOutputService`）里有多个
@@ -165,6 +170,7 @@ class ZenFileAudioHandler extends BaseAudioHandler
       // `.then` 都不会再执行 ⇒ 之后每个要退役的 player 都永远不释放（泄漏）。
       debugPrint('[ZenFile] retire queue error: $e');
     });
+    return _retireQueue;
   }
 
   /// 本次后台会话是否来自**视频**播放器（由 `attach(videoSession: true)` 置位）。
@@ -468,7 +474,11 @@ class ZenFileAudioHandler extends BaseAudioHandler
     // 回收同样走 [_retirePlayer]（先 stop 再 dispose），绝不裸 dispose。
     final playerToDispose = _player;
     if (playerToDispose != null && !isForegroundHeld(playerToDispose)) {
-      _retirePlayer(playerToDispose, reason: 'stop');
+      // ⚠️ 必须 await：只有旧实例真正 stop + dispose 完，新实例才能安全 open。
+      // 「两个 mpv 实例同时活着」（各自持有 AudioTrack、独立音频会话号、
+      // `demuxer-max-bytes=300M` 缓冲）正是反复进出播放页的崩溃现场
+      // （2026-09-28 真机日志：第 3-4 次进出时 3-4 个实例并存）。
+      await _retirePlayer(playerToDispose, reason: 'stop');
     }
 
     detach();
@@ -484,6 +494,35 @@ class ZenFileAudioHandler extends BaseAudioHandler
       processingState: AudioProcessingState.idle,
     ));
     detach();
+  }
+
+  /// 接管后台会话：先把当前后台 player 解绑通知栏，再**优雅退役**，然后返回。
+  ///
+  /// ## 为什么必须有（2026-09-28 真机崩溃的现场结论）
+  ///
+  /// 视频后台播放开着时，用户「退出播放页 → 重新进入」会新建一个 mpv 实例。上一版
+  /// 修法是让重进时**静默跳过 attach**（为了不换绑退役），结果后台会话被第一个实例
+  /// **永久霸占**：既不退役、也没有页面再引用它，于是每进出一次就多一个存活的 mpv
+  /// 实例（各自 AudioTrack + 音频会话号 + `demuxer-max-bytes=300M` 缓冲），真机日志
+  /// 里第 3-4 次进出即原生崩溃（`CRASH_NATIVE`、无 trace，与硬解/软解无关）。
+  ///
+  /// 正解是**接管**：新页面进场时把旧会话显式退役，保证任一时刻只有一个实例。
+  /// 退役走 [_retirePlayer]（abandon → stop → dispose，串行去重）并且**可 await**，
+  /// 所以新实例不会与旧实例的销毁并发。
+  ///
+  /// ⚠️ 旧 player 仍被某个前台页面持有时（[isForegroundHeld]）**只解绑通知栏、不退役**
+  /// —— 那个页面还要继续用它解码，由它负责释放（见 `_foregroundPlayer` 注释）。
+  Future<void> takeOverBackgroundSession({required String reason}) async {
+    final p = _player;
+    if (p == null) return;
+    final held = isForegroundHeld(p);
+    WebdavDebugLog.log(
+      '[bg] takeOver($reason, #${identityHashCode(p)}) 仍被前台持有=$held',
+    );
+    // 先摘通知栏（只 emit idle + detach，不 dispose），再退役旧实例。
+    stopNotification();
+    if (held) return;
+    await _retirePlayer(p, reason: reason);
   }
 
   @override
