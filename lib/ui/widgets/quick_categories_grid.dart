@@ -822,7 +822,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
       menuIcon = Broken.edit_2;
     } else if (entryKey == PreferencesService.sysTransfersKey) {
       isEnabled = PreferencesService.getTransfersEntryVisible();
-      menuIcon = Broken.send_2;
+      menuIcon = Broken.link;
     } else {
       isEnabled = PreferencesService.getSettingsEntryVisible();
       menuIcon = Broken.setting_2;
@@ -1458,7 +1458,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
         widget.onNavigateTab,
       );
     } else if (key == PreferencesService.sysTransfersKey) {
-      icon = Broken.send_2;
+      icon = Broken.link;
       label = PreferencesService.getTransfersEntryLabel() ??
           L10n.of(context).ui_transfers;
       onTap = () => widget.onNavigateTab.call(2);
@@ -1884,7 +1884,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
           L10n.of(context).ui_show_custom_entry;
       visible = PreferencesService.getCustomEntryVisible();
     } else if (key == PreferencesService.sysTransfersKey) {
-      icon = Broken.send_2;
+      icon = Broken.link;
       label = PreferencesService.getTransfersEntryLabel() ??
           L10n.of(context).ui_transfers;
       visible = PreferencesService.getTransfersEntryVisible();
