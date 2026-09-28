@@ -261,7 +261,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                         ),
                         _buildDrawerTile(
                           context,
-                          icon: Broken.send_2,
+                          icon: Broken.link,
                           title: PreferencesService.getTransfersEntryLabel() ??
                               L10n.of(context).ui_transfers,
                           onTap: () {

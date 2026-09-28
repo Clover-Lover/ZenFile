@@ -395,7 +395,7 @@ class QuickCategoriesGrid extends StatefulWidget {
             'type': 'builtin',
             'key': 'tab_transfers',
             'label': l10n.ui_transfers,
-            'icon': Broken.send_2,
+            'icon': Broken.link,
           },
           {
             'type': 'builtin',
