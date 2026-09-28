@@ -7,6 +7,7 @@ import '../../core/icon_fonts/broken_icons.dart';
 import '../../core/utils.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../providers/file_manager_provider.dart';
+import '../../services/preferences_service.dart';
 
 /// 剪贴板面板（**全项目唯一实现**，单窗口 + 双窗口共用）。
 ///
@@ -38,7 +39,8 @@ Future<void> showClipboardMenuSheet(
   final isCut = provider.isCut;
   final items = _collectClipboardItems(provider);
   // 勾选「粘贴后保留剪贴板内容」后粘贴成功不清空剪贴板；默认不勾选（粘贴后自动清空）。
-  var keepClipboard = false;
+  // 勾选状态持久化记住（PreferencesService），下次打开面板保持上次选择。
+  var keepClipboard = PreferencesService.getKeepClipboardAfterPaste();
   final prefix = isCut ? l10n.ui_cut : l10n.ui_copy;
   const maxItemHeight = 200.0;
 
@@ -219,9 +221,14 @@ Future<void> showClipboardMenuSheet(
                         value: keepClipboard,
                         onChanged: isCut
                             ? null
-                            : (v) => setSheetState(
-                                () => keepClipboard = v ?? false,
-                              ),
+                            : (v) {
+                                setSheetState(
+                                  () => keepClipboard = v ?? false,
+                                );
+                                PreferencesService.saveKeepClipboardAfterPaste(
+                                  keepClipboard,
+                                );
+                              },
                         visualDensity: VisualDensity.compact,
                         materialTapTargetSize:
                             MaterialTapTargetSize.shrinkWrap,

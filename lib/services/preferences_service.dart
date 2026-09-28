@@ -12,6 +12,7 @@ class PreferencesService {
   static const String _keyAppLocale = 'app_locale';
   static const String _keyShowHiddenFiles = 'show_hidden_files';
   static const String _keyAutoOpenCreatedFolder = 'auto_open_created_folder';
+  static const String _keyKeepClipboardAfterPaste = 'keep_clipboard_after_paste';
   static const String _keyShowFloatingAddButton = 'show_floating_add_button';
   static const String _keyShowRemoteCloudBadge = 'show_remote_cloud_badge';
   static const String _keyCategoryFilter = 'category_filter';
@@ -116,6 +117,15 @@ class PreferencesService {
 
   static Future<void> saveAutoOpenCreatedFolder(bool val) async {
     await _prefs?.setBool(_keyAutoOpenCreatedFolder, val);
+  }
+
+  /// 剪贴板「粘贴后保留剪贴板内容」勾选状态（持久化记住，默认不勾选=粘贴后清空）。
+  static bool getKeepClipboardAfterPaste() {
+    return _prefs?.getBool(_keyKeepClipboardAfterPaste) ?? false;
+  }
+
+  static Future<void> saveKeepClipboardAfterPaste(bool val) async {
+    await _prefs?.setBool(_keyKeepClipboardAfterPaste, val);
   }
 
   static bool getShowFloatingAddButton() {
