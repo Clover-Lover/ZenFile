@@ -8247,5 +8247,14 @@
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "新建資料夾自動開啟",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "建立資料夾後自動進入該資料夾",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
 
 }

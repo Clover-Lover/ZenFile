@@ -8099,5 +8099,14 @@
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "생성한 폴더 자동 열기",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "폴더 생성 후 해당 폴더로 자동 이동",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
 
 }

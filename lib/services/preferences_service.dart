@@ -11,6 +11,7 @@ class PreferencesService {
   static const String _keyThemeMode = 'theme_mode';
   static const String _keyAppLocale = 'app_locale';
   static const String _keyShowHiddenFiles = 'show_hidden_files';
+  static const String _keyAutoOpenCreatedFolder = 'auto_open_created_folder';
   static const String _keyShowFloatingAddButton = 'show_floating_add_button';
   static const String _keyShowRemoteCloudBadge = 'show_remote_cloud_badge';
   static const String _keyCategoryFilter = 'category_filter';
@@ -107,6 +108,14 @@ class PreferencesService {
 
   static Future<void> saveShowHiddenFiles(bool val) async {
     await _prefs?.setBool(_keyShowHiddenFiles, val);
+  }
+
+  static bool getAutoOpenCreatedFolder() {
+    return _prefs?.getBool(_keyAutoOpenCreatedFolder) ?? true;
+  }
+
+  static Future<void> saveAutoOpenCreatedFolder(bool val) async {
+    await _prefs?.setBool(_keyAutoOpenCreatedFolder, val);
   }
 
   static bool getShowFloatingAddButton() {
@@ -1100,6 +1109,27 @@ class PreferencesService {
       await _prefs?.remove(_keyUpdateApiUrl);
     } else {
       await _prefs?.setString(_keyUpdateApiUrl, v);
+    }
+  }
+
+  /// 启动时「发现新版本」弹窗被用户点「忽略」的那一版（存远端 tag，如 `v2.1.7`）。
+  ///
+  /// 语义：**只要远端 tag 不高于这个值就不再弹窗**。用比较而非相等，
+  /// 是为了让用户忽略 2.1.7 之后，出现 2.2.0 时仍能被提示一次；
+  /// 也顺带避免「忽略某个比当前还旧的 tag」这种脏数据把后续提示全堵死。
+  static const String _keyIgnoredUpdateVersion = 'update_ignored_version';
+
+  /// 读取已忽略的版本号；空串 = 没有忽略任何版本。
+  static String getIgnoredUpdateVersion() =>
+      _prefs?.getString(_keyIgnoredUpdateVersion) ?? '';
+
+  /// 记住「已忽略该版本的启动提示」；传空串 = 清除（恢复提示）。
+  static Future<void> saveIgnoredUpdateVersion(String tag) async {
+    final v = tag.trim();
+    if (v.isEmpty) {
+      await _prefs?.remove(_keyIgnoredUpdateVersion);
+    } else {
+      await _prefs?.setString(_keyIgnoredUpdateVersion, v);
     }
   }
 

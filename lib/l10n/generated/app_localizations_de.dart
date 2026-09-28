@@ -8164,4 +8164,11 @@ class L10nDe extends L10n {
 
   @override
   String get cut_to_other_window => 'In das andere Fenster ausschneiden';
+
+  @override
+  String get auto_open_created_folder => 'Erstellte Ordner automatisch öffnen';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Nach der Erstellung automatisch in den Ordner wechseln';
 }

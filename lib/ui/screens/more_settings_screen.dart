@@ -277,6 +277,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
     final navBarVis = _shouldShow(L10n.of(context).ui_bottom_tab_bar, L10n.of(context).msg309e2a28);
     final hideActionTextVis = _shouldShow(L10n.of(context).ui_hide_action_text, L10n.of(context).msg9b7639ac);
     final highlightFolderVis = _shouldShow(L10n.of(context).msgd33e3082, L10n.of(context).msgdd69671b);
+    final autoOpenCreatedVis = _shouldShow(L10n.of(context).auto_open_created_folder, L10n.of(context).auto_open_created_folder_desc);
     final mediaPreviewsVis = _shouldShow(L10n.of(context).ui_show_media_previews, L10n.of(context).msg57736228);
     final adaptiveNamesVis = _shouldShow(L10n.of(context).ui_adaptive_multiline_names, L10n.of(context).msg1eda8a50);
     final hideActionButtonsVis = _shouldShow(L10n.of(context).ui_show_action_menu_buttons, L10n.of(context).ui_action_menu_subtitle);
@@ -762,6 +763,21 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                           ),
                         ),
                         onTap: () => fileManager.toggleHiddenFiles(),
+                      ),
+                    if (autoOpenCreatedVis)
+                      SettingsTile(
+                        icon: Broken.folder_add,
+                        title: L10n.of(context).auto_open_created_folder,
+                        subtitle: L10n.of(context).auto_open_created_folder_desc,
+                        trailing: Transform.scale(
+                          scale: 0.85,
+                          child: Switch(
+                            value: fileManager.autoOpenCreatedFolder,
+                            activeColor: theme.colorScheme.primary,
+                            onChanged: (_) => fileManager.toggleAutoOpenCreatedFolder(),
+                          ),
+                        ),
+                        onTap: () => fileManager.toggleAutoOpenCreatedFolder(),
                       ),
                     if (highlightFolderVis)
                       SettingsTile(
@@ -1419,6 +1435,20 @@ class ExplorerSettingsScreen extends StatelessWidget {
                 ),
               ),
               onTap: () => fileManager.toggleHiddenFiles(),
+            ),
+            SettingsTile(
+              icon: Broken.folder_add,
+              title: L10n.of(context).auto_open_created_folder,
+              subtitle: L10n.of(context).auto_open_created_folder_desc,
+              trailing: Transform.scale(
+                scale: 0.85,
+                child: Switch(
+                  value: fileManager.autoOpenCreatedFolder,
+                  activeColor: theme.colorScheme.primary,
+                  onChanged: (_) => fileManager.toggleAutoOpenCreatedFolder(),
+                ),
+              ),
+              onTap: () => fileManager.toggleAutoOpenCreatedFolder(),
             ),
             SettingsTile(
               icon: Broken.colorfilter,

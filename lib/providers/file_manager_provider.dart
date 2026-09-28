@@ -180,6 +180,7 @@ class FileManagerProvider extends ChangeNotifier {
     _iconScale = PreferencesService.getIconScale();
     _itemPaddingMultiplier = PreferencesService.getItemPaddingMultiplier();
     _showHiddenFiles = PreferencesService.getShowHiddenFiles();
+    _autoOpenCreatedFolder = PreferencesService.getAutoOpenCreatedFolder();
     _showFloatingAddButton = PreferencesService.getShowFloatingAddButton();
     _showRemoteCloudBadge = PreferencesService.getShowRemoteCloudBadge();
     _rememberCategoryFilter = PreferencesService.getRememberCategoryFilter();
@@ -830,6 +831,15 @@ class FileManagerProvider extends ChangeNotifier {
 
   bool _showHiddenFiles = false;
   bool get showHiddenFiles => _showHiddenFiles;
+
+  bool _autoOpenCreatedFolder = true;
+  bool get autoOpenCreatedFolder => _autoOpenCreatedFolder;
+
+  void toggleAutoOpenCreatedFolder() {
+    _autoOpenCreatedFolder = !_autoOpenCreatedFolder;
+    PreferencesService.saveAutoOpenCreatedFolder(_autoOpenCreatedFolder);
+    notifyListeners();
+  }
 
   void toggleHiddenFiles() {
     _showHiddenFiles = !_showHiddenFiles;
@@ -9995,7 +10005,7 @@ class FileManagerProvider extends ChangeNotifier {
   /// 新建文件夹成功后自动打开该文件夹（本地 / 远程一致；远程加密目录由
   /// createFolder 内部刷新原目录，密文路径构造复杂暂不自动进入）。
   Future<void> openCreatedFolder(String createdName) async {
-    if (activeTab.isCryptRemote) return;
+    if (!_autoOpenCreatedFolder || activeTab.isCryptRemote) return;
     final parent = activeTab.currentPath;
     final newPath = currIsRemote
         ? _buildRemotePath(parent, createdName)

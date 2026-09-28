@@ -8099,5 +8099,14 @@
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "فتح المجلدات التي تم إنشاؤها تلقائيًا",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "الدخول تلقائيًا إلى المجلد بعد إنشائه",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
 
 }

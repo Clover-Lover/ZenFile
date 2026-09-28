@@ -8074,4 +8074,11 @@ class L10nEn extends L10n {
 
   @override
   String get cut_to_other_window => 'Cut to other window';
+
+  @override
+  String get auto_open_created_folder => 'Auto-open created folders';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Automatically enter the folder after creating it';
 }

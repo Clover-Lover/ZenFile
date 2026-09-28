@@ -8199,4 +8199,12 @@ class L10nFr extends L10n {
 
   @override
   String get cut_to_other_window => 'Couper vers l\'autre fenêtre';
+
+  @override
+  String get auto_open_created_folder =>
+      'Ouvrir automatiquement les dossiers créés';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Entrer automatiquement dans le dossier après sa création';
 }

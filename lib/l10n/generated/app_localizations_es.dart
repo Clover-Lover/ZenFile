@@ -8180,4 +8180,12 @@ class L10nEs extends L10n {
 
   @override
   String get cut_to_other_window => 'Cortar a la otra ventana';
+
+  @override
+  String get auto_open_created_folder =>
+      'Abrir automáticamente las carpetas creadas';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Entrar automáticamente en la carpeta después de crearla';
 }

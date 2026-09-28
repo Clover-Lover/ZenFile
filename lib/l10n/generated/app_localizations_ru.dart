@@ -8152,4 +8152,12 @@ class L10nRu extends L10n {
 
   @override
   String get cut_to_other_window => 'Вырезать в другое окно';
+
+  @override
+  String get auto_open_created_folder =>
+      'Автоматически открывать созданные папки';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Автоматически входить в папку после её создания';
 }

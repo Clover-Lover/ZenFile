@@ -14349,6 +14349,18 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'剪切到另一窗口'**
   String get cut_to_other_window;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'新建文件夹自动打开'**
+  String get auto_open_created_folder;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'创建文件夹后自动进入该文件夹'**
+  String get auto_open_created_folder_desc;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

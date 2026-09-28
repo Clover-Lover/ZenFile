@@ -8045,4 +8045,12 @@ class L10nAr extends L10n {
 
   @override
   String get cut_to_other_window => 'قص إلى النافذة الأخرى';
+
+  @override
+  String get auto_open_created_folder =>
+      'فتح المجلدات التي تم إنشاؤها تلقائيًا';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'الدخول تلقائيًا إلى المجلد بعد إنشائه';
 }

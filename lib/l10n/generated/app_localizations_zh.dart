@@ -7657,6 +7657,12 @@ class L10nZh extends L10n {
 
   @override
   String get cut_to_other_window => '剪切到另一窗口';
+
+  @override
+  String get auto_open_created_folder => '新建文件夹自动打开';
+
+  @override
+  String get auto_open_created_folder_desc => '创建文件夹后自动进入该文件夹';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -15282,4 +15288,10 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get cut_to_other_window => '剪下到另一視窗';
+
+  @override
+  String get auto_open_created_folder => '新建資料夾自動開啟';
+
+  @override
+  String get auto_open_created_folder_desc => '建立資料夾後自動進入該資料夾';
 }

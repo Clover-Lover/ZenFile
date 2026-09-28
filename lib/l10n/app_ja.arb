@@ -8103,5 +8103,14 @@
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "作成したフォルダーを自動で開く",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "フォルダー作成後に自動的にそのフォルダーへ移動",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
 
 }

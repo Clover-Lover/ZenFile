@@ -7827,4 +7827,10 @@ class L10nJa extends L10n {
 
   @override
   String get cut_to_other_window => '別のウィンドウへ切り取り';
+
+  @override
+  String get auto_open_created_folder => '作成したフォルダーを自動で開く';
+
+  @override
+  String get auto_open_created_folder_desc => 'フォルダー作成後に自動的にそのフォルダーへ移動';
 }

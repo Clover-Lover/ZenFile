@@ -7833,4 +7833,10 @@ class L10nKo extends L10n {
 
   @override
   String get cut_to_other_window => '다른 창으로 잘라내기';
+
+  @override
+  String get auto_open_created_folder => '생성한 폴더 자동 열기';
+
+  @override
+  String get auto_open_created_folder_desc => '폴더 생성 후 해당 폴더로 자동 이동';
 }
