@@ -910,6 +910,56 @@ class PreferencesService {
     await _prefs?.setInt(_keyCachedUsedStorage, val);
   }
 
+  // --- 存储分析（space）扫描结果缓存 ---
+  //
+  // 目录递归统计一次要遍历整个内部存储，冷启动后必然会重跑一遍 ⇒ 用户感知
+  // 「关掉应用就重新算」。这里持久化上次的分类体积，进页面先秒开渲染缓存，
+  // 后台再静默重扫并覆盖。`updatedAt` 用于判定缓存是否足够新。
+  static const String _keySpaceScanCache = 'space_scan_cache_v1';
+
+  /// 读缓存。返回 null 表示没有可用缓存（首次安装 / 已损坏）。
+  static Map<String, dynamic>? getSpaceScanCache() {
+    final str = _prefs?.getString(_keySpaceScanCache);
+    if (str == null || str.isEmpty) return null;
+    try {
+      final decoded = jsonDecode(str);
+      if (decoded is Map) return Map<String, dynamic>.from(decoded);
+    } catch (_) {}
+    return null;
+  }
+
+  static Future<void> saveSpaceScanCache(Map<String, dynamic> data) async {
+    try {
+      await _prefs?.setString(_keySpaceScanCache, jsonEncode(data));
+    } catch (_) {}
+  }
+
+  // --- 已装应用列表缓存 ---
+  //
+  // 原生 getInstalledApps 会对每个包做 queryStatsForPackage / getPackageInfo
+  // （逐包 IPC + 磁盘 io），几百个包时是秒级开销。缓存列表后进页面先秒开，
+  // 后台再刷新。图标不入缓存（体积大且随主题变化），由内存 `_iconCache` 负责。
+  static const String _keyInstalledAppsCache = 'installed_apps_cache_v1';
+
+  static List<Map<String, dynamic>> getInstalledAppsCache() {
+    final str = _prefs?.getString(_keyInstalledAppsCache);
+    if (str == null || str.isEmpty) return [];
+    try {
+      final decoded = jsonDecode(str) as List<dynamic>;
+      return decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static Future<void> saveInstalledAppsCache(
+    List<Map<String, dynamic>> list,
+  ) async {
+    try {
+      await _prefs?.setString(_keyInstalledAppsCache, jsonEncode(list));
+    } catch (_) {}
+  }
+
   static const String _keyAdaptiveMultiLineNames = 'adaptive_multiline_names';
 
   static bool getAdaptiveMultiLineNames() {

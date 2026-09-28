@@ -31,4 +31,19 @@ class AppInfoModel {
       splitSourceDirs: List<String>.from(map['splitSourceDirs'] ?? []),
     );
   }
+
+  /// 序列化为可 JSON 化的 Map（用于「已装应用列表」持久化缓存）。
+  /// 键名与 [AppInfoModel.fromMap] 完全一致，保证读写对称。
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'packageName': packageName,
+      'version': version,
+      'apkSize': apkSize,
+      'isSystem': isSystem,
+      'installTime': installTime.millisecondsSinceEpoch,
+      'sourceDir': sourceDir,
+      'splitSourceDirs': splitSourceDirs,
+    };
+  }
 }
