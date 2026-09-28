@@ -51,10 +51,12 @@ class WebdavDebugLog {
   /// 取证构建。取完日志（`/storage/emulated/0/ZenFile/webdav_debug.log` 与
   /// `.prev` **一起**取）**必须改回 false 再发版**，并 grep 复核 ——
   /// 不要相信 WORKLOG / memory 里「应该已经关了」的文字描述。
+  /// 2026-09-28 晚：真机复测 `7204ac6`（接管退役）后**用户确认不再崩溃** ⇒
+  /// 取证结束，**已改回 false**。
   ///
   /// 与 AO 诊断**已解耦**（见 [aoDiagnostics]）：打开本开关不再顺手装上那条
   /// 11 秒的裸原生悬垂窗口，所以取证包不会再自带崩因、不会把取证引向错误结论。
-  static bool enabled = true;
+  static bool enabled = false;
 
   /// AO（音频输出）延迟回读诊断的**独立开关**，默认关闭。
   ///
