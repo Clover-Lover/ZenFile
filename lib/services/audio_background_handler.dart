@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -179,6 +180,27 @@ class ZenFileAudioHandler extends BaseAudioHandler
   /// 当前关联的播放器（后台播放时可用于恢复界面）
   Player? get currentPlayer => _player;
 
+  /// 音频后台会话的**原始歌曲队列快照**（来自播放页的 `_allSongs`）。
+  ///
+  /// 用途：从通知栏 / 类别页「继续播放」重新进入播放页时，调用方**拿不到**当初那个
+  /// 播放队列 —— 通知栏这条路只给得到「当前这一首」的路径；类别页那条给的却是
+  /// 「全盘音频列表」。于是恢复出来的播放列表与后台实际在放的队列不一致，
+  /// 下一首就跳到「播放列表之外」的歌，用户还会看到「播放列表变了」
+  /// （用户反馈 issue #34）。以本快照为准恢复，保证「后台在放什么，列表就是什么」。
+  ///
+  /// 生命周期：`attach()` 赋值、`detach()` 清空（`attach()` 内部先调 `detach()`，
+  /// 所以赋值必须写在它之后）。视频会话（videoSession）不涉及音频队列，恒为 null。
+  List<SongModel>? audioSongQueue;
+
+  /// 当前播放项在 [queue] 中的下标，由播放页通过 [updateCurrentItem] 同步。
+  ///
+  /// ⚠️ 为什么不靠 `queue.value.indexOf(mediaItem.value)`：播放页会用**带封面 artUri**
+  /// 的实例覆盖 `mediaItem`（封面是异步取回来的），而 `queue` 里存的是 `attach()` 时
+  /// 的**无 artUri** 实例。`MediaItem` 的相等性包含 artUri ⇒ `indexOf` 恒返回 **-1**
+  /// ⇒ `skipToNext()` 算出 `(-1 + 1) % n = 0` ⇒ 每次后台切歌都跳回第一首
+  /// （这正是 issue #34 里「下一首是播放列表之外的歌」的机制之一）。
+  int _queueIndex = 0;
+
   /// 当前播放的媒体项
   MediaItem? get currentMediaItem => mediaItem.value;
 
@@ -213,6 +235,7 @@ class ZenFileAudioHandler extends BaseAudioHandler
     required int currentIndex,
     bool persistAsAudio = true,
     bool videoSession = false,
+    List<SongModel>? songQueue,
   }) {
     final oldPlayer = _player;
     WebdavDebugLog.log(
@@ -240,6 +263,14 @@ class ZenFileAudioHandler extends BaseAudioHandler
     _player = player;
     // 会话归属（见 videoSession 字段）。⚠️ 必须放在 detach() 之后：detach() 会复位它。
     this.videoSession = videoSession;
+    // 原始歌曲队列快照（仅音频会话；见 audioSongQueue）。同样必须写在 detach() 之后。
+    audioSongQueue = (videoSession || songQueue == null || songQueue.isEmpty)
+        ? null
+        : songQueue;
+    // 当前下标同步登记，供后台自动切歌使用（见 _queueIndex）。
+    _queueIndex = (currentIndex >= 0 && currentIndex < queue.length)
+        ? currentIndex
+        : 0;
 
     // Push the queue
     this.queue.add(queue);
@@ -340,6 +371,9 @@ class ZenFileAudioHandler extends BaseAudioHandler
     _player = null;
     // 会话结束：归属标志一并复位，避免下一次会话沿用上一次的归属
     videoSession = false;
+    // 队列快照与下标一并复位（下一次会话由 attach() 重新赋值）
+    audioSongQueue = null;
+    _queueIndex = 0;
     // 通知推送状态一并复位 —— 若不复位，下次 attach 后「playing / position 恰好与
     // 上一次相同」的首次推送会被 _emitPlaybackState 的去重逻辑吞掉 ⇒ 通知栏不出现。
     _lastPositionEmitMs = 0;
@@ -411,11 +445,10 @@ class ZenFileAudioHandler extends BaseAudioHandler
   @override
   Future<void> skipToNext() async {
     final q = queue.value;
-    final current = mediaItem.value;
-    if (q.isEmpty || current == null) return;
-    final idx = q.indexOf(current);
-    final nextIdx = (idx + 1) % q.length;
+    if (q.isEmpty) return;
+    final nextIdx = _advanceIndex(q, 1);
     final nextItem = q[nextIdx];
+    _queueIndex = nextIdx;
     mediaItem.add(nextItem);
     _persistCurrentMediaItem();
 
@@ -431,11 +464,10 @@ class ZenFileAudioHandler extends BaseAudioHandler
   @override
   Future<void> skipToPrevious() async {
     final q = queue.value;
-    final current = mediaItem.value;
-    if (q.isEmpty || current == null) return;
-    final idx = q.indexOf(current);
-    final prevIdx = (idx - 1 + q.length) % q.length;
+    if (q.isEmpty) return;
+    final prevIdx = _advanceIndex(q, -1);
     final prevItem = q[prevIdx];
+    _queueIndex = prevIdx;
     mediaItem.add(prevItem);
     _persistCurrentMediaItem();
 
@@ -448,6 +480,24 @@ class ZenFileAudioHandler extends BaseAudioHandler
     }
   }
 
+  /// 计算「下一首 / 上一首」在队列中的下标（[step] 为 +1 / -1，循环取模）。
+  ///
+  /// 优先用 [updateCurrentItem] 同步进来的 [_queueIndex]；只有当它越界、或它指向的
+  /// 媒体项与当前播放项对不上（播放页刚重建、还没同步）时，才退回**按 id 匹配**定位。
+  ///
+  /// ⚠️ **绝不能**用 `q.indexOf(mediaItem.value)`：播放页拿到封面后会用一个带
+  /// `artUri` 的新 `MediaItem` 覆盖当前项，而队列里存的是无 `artUri` 的旧实例，
+  /// `MediaItem` 相等性包含 artUri ⇒ `indexOf` 恒为 -1 ⇒ 每次都跳第一首（issue #34）。
+  int _advanceIndex(List<MediaItem> q, int step) {
+    final curId = mediaItem.value?.id;
+    var idx = _queueIndex;
+    if (idx < 0 || idx >= q.length || (curId != null && q[idx].id != curId)) {
+      final found = curId == null ? -1 : q.indexWhere((m) => m.id == curId);
+      idx = found >= 0 ? found : 0;
+    }
+    return (idx + step + q.length) % q.length;
+  }
+
   // ─── Callback for skip (screen must update player) ──────────────────────
 
   void Function(int index)? _onSkipCallback;
@@ -457,7 +507,13 @@ class ZenFileAudioHandler extends BaseAudioHandler
   }
 
   /// Update the current media item displayed in the notification.
-  void updateCurrentItem(MediaItem item) {
+  ///
+  /// [index] 是该曲目在队列中的下标 —— **务必传**，它是后台自动切歌时唯一可靠的
+  /// 位置依据（见 [_queueIndex]：不能靠 `indexOf`，封面更新会让 `MediaItem` 实例不等）。
+  void updateCurrentItem(MediaItem item, {int? index}) {
+    if (index != null && index >= 0) {
+      _queueIndex = index;
+    }
     mediaItem.add(item);
     _persistCurrentMediaItem();
   }

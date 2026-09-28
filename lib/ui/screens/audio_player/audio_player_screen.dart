@@ -74,7 +74,16 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
   DateTime? _sleepTimerEndTime;
 
   late int _currentIndex;
-  List<SongModel> get _allSongs => widget.allSongs ?? [];
+
+  /// 本页实际使用的播放队列。
+  ///
+  /// 通常等于 `widget.allSongs`；但**复用后台播放会话**时会被 handler 里保存的原始
+  /// 队列覆盖（见 [_adoptBackgroundQueue]）—— 因为调用方重建本页时往往拿不到当初
+  /// 那个队列（从通知栏进来只给得到「当前这一首」；类别页「继续播放」给的却是
+  /// 「全盘音频列表」），不校正就会出现「下一首跳到播放列表之外」+
+  /// 「最大化后发现播放列表变了」（用户反馈 issue #34）。
+  late List<SongModel> _songs;
+  List<SongModel> get _allSongs => _songs;
   SongModel? get _currentSong =>
       _allSongs.isEmpty ? null : _allSongs[_currentIndex];
 
@@ -159,7 +168,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _currentIndex = widget.initialIndex;
+    _songs = widget.allSongs ?? const <SongModel>[];
+    _currentIndex = _safeIndex(widget.initialIndex, _songs.length);
     _isBackgroundMode = PreferencesService.getAudioBackgroundPlay();
     _desktopLyricEnabled = PreferencesService.getDesktopLyricEnabled();
 
@@ -187,6 +197,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
     if (widget.existingPlayer != null) {
       // 复用后台播放中已有的播放器，保持当前播放状态不断开
       player = widget.existingPlayer!;
+      // ⚠️ 必须先校正队列再生成随机序：否则 _shuffleQueue 会按错的长度/顺序生成
+      _adoptBackgroundQueue();
       _shuffleQueue = List.generate(_allSongs.length, (i) => i);
       _initListeners();
       setState(() {
@@ -210,6 +222,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
         !getAudioHandler().videoSession) {
       // 后台播放中从通知栏返回：复用 handler 的 player，避免新建导致 UI 与播放状态脱节
       player = getAudioHandler().currentPlayer!;
+      // ⚠️ 从通知栏进来时调用方**不传 allSongs**，必须用 handler 的快照补齐队列，
+      // 否则播放列表是空的，切歌/下一首全乱（issue #34）。同样要早于随机序生成。
+      _adoptBackgroundQueue();
       _shuffleQueue = List.generate(_allSongs.length, (i) => i);
       _initListeners();
       setState(() {
@@ -291,6 +306,36 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       // Controller 正在运行说明桌面歌词已开启（可能从后台播放恢复），同步开关状态
       setState(() => _desktopLyricEnabled = true);
     }
+  }
+
+  /// 把 [index] 收敛到 [len] 的合法区间（`_currentSong` 直接下标访问，越界会抛 RangeError）。
+  int _safeIndex(int index, int len) {
+    if (len <= 0 || index < 0) return 0;
+    return index >= len ? len - 1 : index;
+  }
+
+  /// 复用后台播放会话时，用 handler 保存的**原始队列**校正本页的队列与当前下标。
+  ///
+  /// 只在「本页复用的正是 handler 当前那个 player」时调用：此时后台真正在播的队列就在
+  /// handler 里（`audioSongQueue`），而调用方传进来的 `widget.allSongs` 可能是**另一个
+  /// 列表** —— 从通知栏进来时 `main.dart` 压根不传（`allSongs` 为 null，列表直接空掉）；
+  /// 从音频类别页「继续播放」进来时传的是 `MediaProvider.audios`（**全盘**音频列表，
+  /// 而不是当初那个文件夹）。不校正就会出现「最小化后下一首跑到播放列表之外」+
+  /// 「最大化后发现播放列表变了」（用户反馈 issue #34）。
+  void _adoptBackgroundQueue() {
+    final handler = getAudioHandler();
+    // 视频会话的队列与本页无关（此时 mediaItem 里装的是视频）
+    if (handler.videoSession) return;
+    final q = handler.audioSongQueue;
+    if (q == null || q.isEmpty) return;
+    final curId = handler.currentMediaItem?.id;
+    if (curId == null) return;
+    final idx = q.indexWhere((s) => s.data == curId);
+    // 当前播放项不在这个队列里（例如远程流的代理地址与队列项对不上）时不强行替换，
+    // 保留调用方给的列表，避免把播放位置弄丢。
+    if (idx < 0) return;
+    _songs = q;
+    _currentIndex = idx;
   }
 
   void _initListeners() {
@@ -572,6 +617,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       duration = Duration.zero;
     });
     _openTrack();
+    // 与 _playNext/_playPrevious 对齐：后台会话下必须同步通知栏与 handler 的队列下标，
+    // 否则从队列面板点歌后，通知栏显示的还是上一首，后台切歌也从旧位置算起。
+    if (_isBackgroundMode) _updateBackgroundItem();
   }
 
   void _playNext() {
@@ -637,6 +685,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       // 非后台模式：停止控制器并隐藏悬浮窗
       DesktopLyricController.instance.stop();
       DesktopLyricService.instance.hide();
+      // 同时清掉 skip 回调：后台会话已结束，残留的回调会指向已销毁的 State，
+      // 且会让 handler 的 completed 监听误判为「有页面接管」而不自动切歌。
+      getAudioHandler().setSkipCallback(null);
       // ⚠️ 先解绑均衡器、等它完成后再销毁播放器（见 _disposePlayerAfterEqDetach）。
       _disposePlayerAfterEqDetach();
       getAudioHandler().detach();
@@ -2129,7 +2180,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
 
   void _updateBackgroundItem() async {
     final baseItem = _buildMediaItem(_currentIndex);
-    getAudioHandler().updateCurrentItem(baseItem);
+    // ⚠️ 必须带上队列下标：后台自动切歌靠它定位（不能靠 MediaItem 相等性，见 handler）
+    getAudioHandler().updateCurrentItem(baseItem, index: _currentIndex);
 
     // Asynchronously fetch high-fidelity artwork and update notification once ready
     final song = _allSongs.isNotEmpty ? _allSongs[_currentIndex] : null;
@@ -2138,7 +2190,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
         final artUri = await getArtworkUri(song.id);
         if (artUri != null && mounted) {
           final updatedItem = _buildMediaItem(_currentIndex, artUri: artUri);
-          getAudioHandler().updateCurrentItem(updatedItem);
+          getAudioHandler().updateCurrentItem(
+            updatedItem,
+            index: _currentIndex,
+          );
         }
       } catch (e) {
         debugPrint('[ZenFile] Failed to load background artwork: $e');
@@ -2156,6 +2211,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       player: player,
       queue: queue,
       currentIndex: _currentIndex,
+      // 存一份原始队列快照：从通知栏 / 类别页重新进入本页时用它恢复播放列表，
+      // 避免「下一首跑到播放列表之外」（issue #34）
+      songQueue: _allSongs,
     );
     // ⚠️ 必须登记「本页仍持有这个 player」。音频页此前从不登记（只有视频页登记），
     // 于是视频侧开启后台播放时 attach 换绑旧 player 会把它当成「无主对象」直接销毁，

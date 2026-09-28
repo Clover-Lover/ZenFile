@@ -4,9 +4,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -311,6 +313,65 @@ public class AudioService extends MediaBrowserServiceCompat {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private VolumeProviderCompat volumeProvider;
 
+    /**
+     * 耳机 / 蓝牙断开（{@link AudioManager#ACTION_AUDIO_BECOMING_NOISY}）时自动暂停。
+     *
+     * 为什么必须自己注册：本应用的播放链路（media_kit → mpv）不感知系统音频路由变化，
+     * 而 audio_service 0.18.x 的原生侧也没有内置 becoming-noisy 接收器 —— 用户拔掉耳机 /
+     * 关掉 TWS 后声音会从手机外放继续播（用户反馈，issue #35）。
+     *
+     * 触发后走标准的 MediaSession 暂停回调，最终由 Dart 侧
+     * {@code ZenFileAudioHandler.pause()} 暂停播放器，通知栏状态同步更新。
+     */
+    private final BroadcastReceiver becomingNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null
+                    || !AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                return;
+            }
+            System.out.println("[ZenFileAudio] becoming noisy → pause");
+            if (mediaSessionCallback != null) {
+                mediaSessionCallback.onPause();
+            }
+        }
+    };
+
+    /** 防止重复注册 / 重复注销（onCreate 与 onDestroy 未必成对）。 */
+    private boolean becomingNoisyRegistered = false;
+
+    /**
+     * 注册「音频输出设备断开」广播接收器。
+     * 在 {@code onCreate()} 注册：Service 的生命周期与播放会话一致，比挂在 Activity 上可靠
+     * （Activity 可被回收而音乐仍在播）。
+     */
+    private void registerBecomingNoisyReceiver() {
+        if (becomingNoisyRegistered) return;
+        try {
+            IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // Android 13+ 动态注册必须显式声明导出标志。这里是系统广播，
+                // 用 NOT_EXPORTED 即可正常收到，同时不暴露给第三方应用。
+                registerReceiver(becomingNoisyReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(becomingNoisyReceiver, filter);
+            }
+            becomingNoisyRegistered = true;
+        } catch (Exception e) {
+            System.out.println("[ZenFileAudio] register becoming-noisy failed: " + e);
+        }
+    }
+
+    private void unregisterBecomingNoisyReceiver() {
+        if (!becomingNoisyRegistered) return;
+        try {
+            unregisterReceiver(becomingNoisyReceiver);
+        } catch (Exception e) {
+            System.out.println("[ZenFileAudio] unregister becoming-noisy failed: " + e);
+        }
+        becomingNoisyRegistered = false;
+    }
+
     public AudioProcessingState getProcessingState() {
         return processingState;
     }
@@ -384,6 +445,9 @@ public class AudioService extends MediaBrowserServiceCompat {
         System.out.println("[ZenFileAudio] onCreate SDK=" + Build.VERSION.SDK_INT
                 + " channelId=" + notificationChannelId
                 + " active=" + mediaSession.isActive());
+
+        // 耳机 / 蓝牙断开即暂停（issue #35）；生命周期与 Service 一致
+        registerBecomingNoisyReceiver();
     }
 
     @Override
@@ -416,6 +480,7 @@ public class AudioService extends MediaBrowserServiceCompat {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterBecomingNoisyReceiver();
         if (listener != null) {
             listener.onDestroy();
             listener = null;
