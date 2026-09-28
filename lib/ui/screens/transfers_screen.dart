@@ -21,7 +21,7 @@ class TransfersScreen extends StatelessWidget {
 
     final items = <_TransferItem>[
       _TransferItem(
-        icon: Broken.wifi,
+        icon: Broken.cloud_connection,
         title: l10n.cat_network,
         color: Colors.cyan.shade600,
         buildPage: () => NetworkCategoryScreen(

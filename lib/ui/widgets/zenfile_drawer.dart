@@ -157,7 +157,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                     _buildExpandableSection(
                       context,
                       sectionKey: 'network',
-                      icon: Broken.wifi_square,
+                      icon: Broken.cloud_connection,
                       title: L10n.of(context).msgf13fc21c,
                       children: [
                         _buildDrawerTile(
