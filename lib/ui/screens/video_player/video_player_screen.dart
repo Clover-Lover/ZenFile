@@ -242,10 +242,26 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // （`_toggleBackgroundMode` → `_startBackgroundMode`）。
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        final path = _currentStreamUrl ?? widget.videoPath;
-        if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
+        final handler = getAudioHandler();
+        final source = widget.videoPath;
+        if (source.isEmpty) return;
+        // ⚠️ 判等必须用**源路径**（`isPlayingSource`），不能用
+        // `_currentStreamUrl ?? widget.videoPath`：后者在流地址解析完成前恒为源路径、
+        // 完成后变成「带随机端口的本地代理 URL（远程/加密视频）」，于是同一个视频
+        // 的判等结果**不确定** ⇒ 偶发重复 attach ⇒ 换绑 + 退役那个仍在后台播放的
+        // 旧 player ⇒ 反复进出播放页崩溃。详见 `ZenFileAudioHandler.videoSourcePath`。
+        if (handler.isPlayingSource(source)) return;
+        final resolved = _currentStreamUrl;
+        if (resolved != null &&
+            resolved != source &&
+            handler.isPlayingSource(resolved)) {
+          return;
+        }
         WebdavDebugLog.log('[vp] postFrame 自动 attach 后台播放（偏好粘性）');
-        unawaited(_attachToBackgroundHandler());
+        // ⚠️ 必须 `silent: true`：这是「偏好粘性」的自动挂载，**不是**用户主动开启
+        // 后台播放，弹「已进入后台播放」会变成「每次重进播放页都弹一次」
+        // （用户反馈 2026-09-28）。与 `_switchHwdec` 重建后的内部重挂保持一致。
+        unawaited(_attachToBackgroundHandler(silent: true));
       });
     }
 
@@ -2693,6 +2709,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _progressSaveTimer?.cancel();
     _sleepTimer?.cancel();
     _stopBlackScreenCheck();
+    // ⚠️ 丢帧监测的 Timer.periodic 也必须停（此前只在 `_switchHwdec()` 里停，
+    // 漏了本方法）：它每个窗口都会醒一次，虽然 `_onFrameDropWindow()` 首行
+    // `if (!mounted) return` 挡住了原生调用，但**每次进出播放页都留下一个永不
+    // 取消的周期定时器**，反复进出即持续累积（软解路径才启动它）。
+    _stopFrameDropWatch();
     _saveCurrentPlaybackPosition();
     _controlsAnimController.dispose();
     // 本页即将销毁、不再持有 player ⇒ 撤销登记，之后通知栏的「关闭」/换绑可以安全
@@ -3028,7 +3049,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         // 显式闭包（不直接传方法引用）：`_attachToBackgroundHandler` 现在带可选命名
         // 参数 `silent`，用闭包让类型匹配一目了然，不必依赖「带可选参数的函数可赋给
         // 参数更少的函数类型」这条子类型规则。
-        onReattach: () => _attachToBackgroundHandler(),
+        // silent：用户上一步刚在 `_startBackgroundMode` 里拿到过「已进入后台播放」
+        // 提示，这里只是媒体通知链路重初始化后的**补挂**，再弹一次就是重复提示。
+        onReattach: () => _attachToBackgroundHandler(silent: true),
       ),
     );
   }
@@ -3062,6 +3085,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // 标记本次会话属于视频：音频类别页顶部卡片据此忽略 mediaItem、退回
       // lastPlayedAudio，否则会显示视频播放记录（用户反馈 2026-09-27）。
       videoSession: true,
+      // 视频会话身份 = **源路径**（不是解析后的代理流 URL）：供
+      // `isPlayingSource` 判断「重复打开同一部视频」时是否已在后台播放，
+      // 避免每次重进都重复 attach（见 `ZenFileAudioHandler.videoSourcePath`）。
+      videoSourcePath: widget.videoPath,
     );
     // ⚠️ 必须声明「本页仍持有这个 player」：页面不再自动退出后，通知栏的
     // 「关闭」（ZenFileAudioHandler.stop）或**换绑其它播放器**（attach 回收 oldPlayer，

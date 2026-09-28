@@ -59,7 +59,7 @@ typedef MpvPropertyGetter = Future<String> Function(String key);
 /// ## 设计约束
 ///
 /// * 所有原生调用失败一律吞掉并只记日志 —— **绝不能因为诊断让音频播不出来**；
-/// * 诊断只在 [WebdavDebugLog.enabled] 打开时才产生（订阅都省掉，零运行时开销）；
+/// * 诊断只在 [WebdavDebugLog.aoDiagnostics] 打开时才产生（订阅都省掉，零运行时开销）；
 /// * [configureBeforeOpen] **必须**在 `player.open()` 之前调用：mpv 只在初始化
 ///   AO 时读这些选项，播放开始后再设已经晚了一个 AudioTrack。
 enum MpvAoMode {
@@ -434,7 +434,8 @@ class MpvAudioOutputService {
     }
   }
 
-  /// 起播后采集一次音频输出诊断（仅在 [WebdavDebugLog.enabled] 打开时工作）。
+  /// 起播后采集一次音频输出诊断（仅在 [WebdavDebugLog.aoDiagnostics] 打开时工作；
+  /// 取证用的 [WebdavDebugLog.enabled] **不再**连带开启本诊断）。
   ///
   /// 采集三样东西，缺一不可：
   /// 1. `current-ao` —— mpv **运行时实际解析出的驱动**（`ao` 只是候选列表的
@@ -444,7 +445,9 @@ class MpvAudioOutputService {
   /// 3. **原生复刻自检**：用同一个会话号去挂 `DynamicsProcessing`（RJ 的判定
   ///    动作），直接给出「RJ 会不会判我们不兼容」的预测。
   static void schedulePlaybackDiagnostics(Player player, String tag) {
-    if (!WebdavDebugLog.enabled) return; // 未开日志则完全不订阅
+    // 🔴 两个开关都开才订阅：只开 enabled（抓崩溃）不再顺手装上那条 11 秒的
+    // 裸原生悬垂窗口；只开 aoDiagnostics 则诊断无日志可查、纯白挂窗口。
+    if (!WebdavDebugLog.enabled || !WebdavDebugLog.aoDiagnostics) return;
     _attachMpvLog(player, tag);
 
     // ⚠️ 无条件哨兵：证明这段代码**确实被执行到了**。

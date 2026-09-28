@@ -213,6 +213,47 @@ class ZenFileAudioHandler extends BaseAudioHandler
   /// 判断指定路径是否正在当前播放器中播放
   bool isPlayingPath(String path) => _player != null && mediaItem.value?.id == path;
 
+  /// 本次视频后台会话的**源路径**（`VideoPlayerScreen.widget.videoPath`）。
+  ///
+  /// ## 为什么不能只靠 [isPlayingPath]（2026-09-28 真机事故）
+  ///
+  /// `attach()` 写进 `mediaItem.id` 的是**当时**解析出的播放地址
+  /// （`_currentStreamUrl ?? widget.videoPath`）。而 `_currentStreamUrl` 对
+  /// 远程/加密视频是**本次会话专属的本地代理 URL**（`http://127.0.0.1:<随机端口>/…`），
+  /// 对本地视频也可能在起播后才被赋值。
+  ///
+  /// 播放页**重进**时判断「是否已在后台播同一视频」用的却是页面自己的
+  /// `widget.videoPath` —— 于是拿「源路径」和「曾经的会话 URL」判等：
+  /// * 解析完成前重进 ⇒ 两者都是 `widget.videoPath`，判等**成立**（不重复 attach）；
+  /// * 解析完成后重进 ⇒ 一个是 `http://127.0.0.1:端口/…`、一个是源路径，判等**不成立**
+  ///   ⇒ 每次重进都重复 `attach()`。
+  ///
+  /// 而 `attach()` 会把 handler 里那个**仍在后台播放**的旧 player 当成
+  /// `oldPlayer` 退役（`stop()` + `dispose()`）。反复进出播放页 = 反复
+  /// 「销毁仍在播的 player ＋ 挂上刚创建的新 player」，与通知栏 MediaSession、
+  /// 上一页尚未跑完的异步清理正面并发 ⇒ `CRASH_NATIVE`（native 崩溃、无栈、
+  /// 与硬解/软解无关）。用户复现：「开后台播放后反复进出播放页必崩」。
+  ///
+  /// ⇒ 用**源路径**做会话身份，判等就成了「同一源 vs 同一源」，跨页面实例稳定。
+  ///
+  /// 生命周期：`attach()` 里按参数赋值、`detach()` 里清空（同 [videoSession]）。
+  String? videoSourcePath;
+
+  /// 是否正在后台播放「同一个视频源」——[source] 传播放页的 `widget.videoPath`。
+  ///
+  /// 判据（任一成立即算在播同一视频，避免重复 `attach()` 引发的换绑/退役链）：
+  /// 1. [videoSourcePath] 相等（跨页面实例稳定，见该字段注释）；
+  /// 2. 回退到 [isPlayingPath]：兼容「源路径恰好等于会话地址」的情形
+  ///    （本地文件、以及调用方直接把流地址当 `videoPath` 传入的入口）。
+  ///
+  /// ⚠️ 不要用它取代音频侧的 [isPlayingPath]：音频会话不走本判据。
+  bool isPlayingSource(String source) {
+    if (_player == null) return false;
+    if (source.isEmpty) return false;
+    if (videoSourcePath != null && videoSourcePath == source) return true;
+    return isPlayingPath(source);
+  }
+
   /// 将当前 MediaItem 持久化为 lastPlayedAudio，确保后台切歌或界面销毁后仍能恢复
   void _persistCurrentMediaItem() {
     final item = mediaItem.value;
@@ -236,6 +277,10 @@ class ZenFileAudioHandler extends BaseAudioHandler
     bool persistAsAudio = true,
     bool videoSession = false,
     List<SongModel>? songQueue,
+    /// 视频后台会话的**源路径**（见 [videoSourcePath]）：用来判断「重复打开同一部
+    /// 视频」时是否已在后台播放，避免每次重进都重复 attach（换绑 + 退役仍在播的
+    /// 旧 player）——那是反复进出播放页崩溃的触发链。仅 [videoSession] 为 true 时有意义。
+    String? videoSourcePath,
   }) {
     final oldPlayer = _player;
     WebdavDebugLog.log(
@@ -263,6 +308,9 @@ class ZenFileAudioHandler extends BaseAudioHandler
     _player = player;
     // 会话归属（见 videoSession 字段）。⚠️ 必须放在 detach() 之后：detach() 会复位它。
     this.videoSession = videoSession;
+    // 视频会话的源路径（见 [videoSourcePath]）。同样必须写在 detach() 之后。
+    // 只认视频会话：音频会话下恒为 null，避免音频路径污染本判据。
+    this.videoSourcePath = videoSession ? videoSourcePath : null;
     // 原始歌曲队列快照（仅音频会话；见 audioSongQueue）。同样必须写在 detach() 之后。
     audioSongQueue = (videoSession || songQueue == null || songQueue.isEmpty)
         ? null
@@ -371,6 +419,9 @@ class ZenFileAudioHandler extends BaseAudioHandler
     _player = null;
     // 会话结束：归属标志一并复位，避免下一次会话沿用上一次的归属
     videoSession = false;
+    // 视频源路径一并复位（下一次会话由 attach() 重新赋值；不复位会让
+    // isPlayingSource 把「上一部视频」误判成仍在播）
+    videoSourcePath = null;
     // 队列快照与下标一并复位（下一次会话由 attach() 重新赋值）
     audioSongQueue = null;
     _queueIndex = 0;
