@@ -809,69 +809,6 @@ class _PaneBrowserState extends State<PaneBrowser> {
                               ],
                             ),
                           ),
-                          // 顶层：剪贴板摘要（右对齐，临时显示，可覆盖计数，不被挤压）
-                          if (provider.hasClipboard)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: GestureDetector(
-                                onTap: () =>
-                                    _showClipboardMenu(provider),
-                                child: Container(
-                                  height: 22,
-                                  margin: const EdgeInsets.only(left: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 7,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(11),
-                                    // 接近实色的背景，覆盖到文件计数时不透出下层文字
-                                    color: provider.isCut
-                                        ? Colors.orange.withOpacity(0.92)
-                                        : theme.colorScheme.primary.withOpacity(
-                                            0.92,
-                                          ),
-                                    border: Border.all(
-                                      color: provider.isCut
-                                          ? Colors.orange
-                                          : theme.colorScheme.primary,
-                                      width: 0.5,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        provider.isCut
-                                            ? Broken.scissor
-                                            : Broken.clipboard,
-                                        size: 11,
-                                        color: provider.isCut
-                                            ? Colors.white
-                                            : theme.colorScheme.onPrimary,
-                                      ),
-                                      const SizedBox(width: 3),
-                                      ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                          maxWidth: 80,
-                                        ),
-                                        child: Text(
-                                          _clipboardLabel(provider, context),
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            color: provider.isCut
-                                                ? Colors.white
-                                                : theme.colorScheme.onPrimary,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
                     ),
@@ -1246,6 +1183,63 @@ class _PaneBrowserState extends State<PaneBrowser> {
                       },
                     ),
                   ),
+                  // 剪贴板按钮：右下角悬浮（双窗口，本 pane）
+                  if (provider.hasClipboard)
+                    Positioned(
+                      right: 12,
+                      bottom: 12,
+                      child: GestureDetector(
+                        onTap: () => _showClipboardMenu(provider),
+                        child: Container(
+                          height: 22,
+                          margin: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(11),
+                            // 接近实色的背景，覆盖到文件计数时不透出下层文字
+                            color: provider.isCut
+                                ? Colors.orange.withOpacity(0.92)
+                                : theme.colorScheme.primary.withOpacity(0.92),
+                            border: Border.all(
+                              color: provider.isCut
+                                  ? Colors.orange
+                                  : theme.colorScheme.primary,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                provider.isCut
+                                    ? Broken.scissor
+                                    : Broken.clipboard,
+                                size: 11,
+                                color: provider.isCut
+                                    ? Colors.white
+                                    : theme.colorScheme.onPrimary,
+                              ),
+                              const SizedBox(width: 3),
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 80),
+                                child: Text(
+                                  _clipboardLabel(provider, context),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: provider.isCut
+                                        ? Colors.white
+                                        : theme.colorScheme.onPrimary,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ],

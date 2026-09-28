@@ -1517,8 +1517,10 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                   onGoBack: provider.canGoBack ? () => _goBack(provider) : null,
                                   isRootAvailable: provider.isRootAvailable,
                                 )
-                              : Column(
+                              : Stack(
                                   children: [
+                                    Column(
+                                      children: [
                                     // 顶部剪贴板栏（折叠/展开）+ 复制/剪切进度最小化浮窗（单窗口同样生效，靠左）
                                     ValueListenableBuilder<bool>(
                                       valueListenable: provider.progressMinimized,
@@ -1626,58 +1628,6 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              // 顶层：剪贴板摘要（右对齐，临时显示，覆盖计数，不随滚动消失）
-                                              if (provider.hasClipboard)
-                                                Align(
-                                                  alignment: Alignment.centerRight,
-                                                  child: GestureDetector(
-                                                    onTap: () => _showClipboardMenuSheet(context, provider),
-                                                    child: Container(
-                                                      height: 22,
-                                                      padding: const EdgeInsets.symmetric(horizontal: 7),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(11),
-                                                        color: provider.isCut
-                                                            ? Colors.orange.withOpacity(0.92)
-                                                            : theme.colorScheme.primary.withOpacity(0.92),
-                                                        border: Border.all(
-                                                          color: provider.isCut
-                                                              ? Colors.orange
-                                                              : theme.colorScheme.primary,
-                                                          width: 0.5,
-                                                        ),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          Icon(
-                                                            provider.isCut ? Broken.scissor : Broken.clipboard,
-                                                            size: 11,
-                                                            color: provider.isCut
-                                                                ? Colors.white
-                                                                : theme.colorScheme.onPrimary,
-                                                          ),
-                                                          const SizedBox(width: 3),
-                                                          ConstrainedBox(
-                                                            constraints: const BoxConstraints(maxWidth: 120),
-                                                            child: Text(
-                                                              _clipboardLabel(provider),
-                                                              style: TextStyle(
-                                                                fontSize: 10,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: provider.isCut
-                                                                    ? Colors.white
-                                                                    : theme.colorScheme.onPrimary,
-                                                              ),
-                                                              maxLines: 1,
-                                                              overflow: TextOverflow.ellipsis,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
                                             ],
                                           ),
                                         );
@@ -1899,6 +1849,61 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                     ),
                                   ],
                                 ),
+                                // 剪贴板按钮：右下角悬浮（单窗口）
+                                if (provider.hasClipboard)
+                                  Positioned(
+                                    right: 12,
+                                    bottom: 12,
+                                    child: GestureDetector(
+                                      onTap: () => _showClipboardMenuSheet(context, provider),
+                                      child: Container(
+                                        height: 22,
+                                        padding: const EdgeInsets.symmetric(horizontal: 7),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(11),
+                                          color: provider.isCut
+                                              ? Colors.orange.withOpacity(0.92)
+                                              : theme.colorScheme.primary.withOpacity(0.92),
+                                          border: Border.all(
+                                            color: provider.isCut
+                                                ? Colors.orange
+                                                : theme.colorScheme.primary,
+                                            width: 0.5,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              provider.isCut ? Broken.scissor : Broken.clipboard,
+                                              size: 11,
+                                              color: provider.isCut
+                                                  ? Colors.white
+                                                  : theme.colorScheme.onPrimary,
+                                            ),
+                                            const SizedBox(width: 3),
+                                            ConstrainedBox(
+                                              constraints: const BoxConstraints(maxWidth: 120),
+                                              child: Text(
+                                                _clipboardLabel(provider),
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: provider.isCut
+                                                      ? Colors.white
+                                                      : theme.colorScheme.onPrimary,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
               );
             },
           ),

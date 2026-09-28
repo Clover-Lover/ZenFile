@@ -54,14 +54,14 @@ Future<void> showClipboardMenuSheet(
           onTap: () => Navigator.pop(sheetContext),
           child: Container(color: Colors.transparent),
         ),
-        // 剪贴板面板位于窗口右下方（单/双窗口共用此组件，一处生效）。
-        // maxWidth 限制面板宽度，内容列自适应高度，贴右下角弹出。
+        // 剪贴板面板从底部弹出（单/双窗口共用此组件，一处生效）。
+        // 全宽贴底，内容列自适应高度。
         Positioned(
+          left: 0,
           right: 0,
           bottom: 0,
           child: Container(
             margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-            constraints: const BoxConstraints(maxWidth: 380),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
