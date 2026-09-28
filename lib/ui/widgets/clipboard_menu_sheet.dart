@@ -212,27 +212,39 @@ Future<void> showClipboardMenuSheet(
                     ],
                   ),
                 ),
-                // 勾选保留剪贴板（复制模式可勾选；剪切模式禁用置灰）
+                // 勾选保留剪贴板（复制模式可勾选；剪切模式禁用置灰；整行可点）
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: keepClipboard,
-                        onChanged: isCut
-                            ? null
-                            : (v) {
-                                setSheetState(
-                                  () => keepClipboard = v ?? false,
-                                );
-                                PreferencesService.saveKeepClipboardAfterPaste(
-                                  keepClipboard,
-                                );
-                              },
-                        visualDensity: VisualDensity.compact,
-                        materialTapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap,
-                      ),
+                  child: InkWell(
+                    onTap: isCut
+                        ? null
+                        : () {
+                            setSheetState(
+                              () => keepClipboard = !keepClipboard,
+                            );
+                            PreferencesService.saveKeepClipboardAfterPaste(
+                              keepClipboard,
+                            );
+                          },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: keepClipboard,
+                          onChanged: isCut
+                              ? null
+                              : (v) {
+                                  setSheetState(
+                                    () => keepClipboard = v ?? false,
+                                  );
+                                  PreferencesService.saveKeepClipboardAfterPaste(
+                                    keepClipboard,
+                                  );
+                                },
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                        ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Column(
@@ -254,7 +266,8 @@ Future<void> showClipboardMenuSheet(
                           ],
                         ),
                       ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
