@@ -386,7 +386,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          _buildV320Changelog(theme),
+          _buildChangelogList(theme, l10n),
         ],
       ),
     );
@@ -859,116 +859,389 @@ class _UpdateScreenState extends State<UpdateScreen> {
   }
 
   // ── ③ 更新日志（自「关于」页迁移，硬编码中英双语，不走 l10n） ──────
+  //
+  // 2026-09-28 改版（用户要求）：
+  //   · **不再「只留当前版本一张卡片」** —— 旧版本日志**保留**，只是默认**折叠**；
+  //   · 当前版本**始终展开**（用户要求「新版本日志不要折叠」）；
+  //   · 每张卡片**各带一个复制按钮**，把该版中英双语全文复制为**纯文本** ——
+  //     用户常需要粘到别处（翻译工具 / 聊天 / 论坛）阅读；
+  //   · 界面与复制文本**同源**（都自 [_Changelog] 生成）⇒ 不会出现
+  //     「界面改了、复制出去的还是旧文案」这种偏移。
+  //
+  // 换版时只做两件事：① 在 [_changelogs] **最前面**插入新版本的 [_Changelog]；
+  // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
-  Widget _buildV320Changelog(ThemeData theme) {
-    final textStyle = TextStyle(fontSize: 13.5, height: 1.6, color: theme.colorScheme.onSurface.withOpacity(0.85));
-    final dividerColor = theme.colorScheme.onSurface.withOpacity(0.15);
+  /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
+  static const String _latestChangelogVersion = 'v3.3.0';
 
-    Widget gap([double h = 6]) => SizedBox(height: h);
-    Widget item(String text) => Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text('\u00b7 $text', style: textStyle),
-    );
-    Widget section(String title) => Padding(
-      padding: const EdgeInsets.only(top: 6, bottom: 4),
-      child: Text(title, style: TextStyle(fontSize: 14, height: 1.6, color: theme.colorScheme.primary, fontWeight: FontWeight.w700)),
-    );
-    Widget divider() => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Container(height: 1, color: dividerColor),
-    );
-    Widget langDivider() => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 18),
-      child: Row(
-        children: [
-          Expanded(child: Container(height: 1, color: dividerColor)),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text('English', style: TextStyle(fontSize: 12, letterSpacing: 1.2, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withOpacity(0.5))),
-          ),
-          Expanded(child: Container(height: 1, color: dividerColor)),
-        ],
+  /// 全部版本的更新日志，**最新在最前**。
+  static const List<_Changelog> _changelogs = <_Changelog>[_v330, _v320];
+
+  /// ── 当前版本：v3.3.0 ────────────────────────────────────────────────
+  static const _Changelog _v330 = _Changelog(
+    version: 'v3.3.0',
+    date: '2026-09-28',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '剪贴板粘贴后可选「保留剪贴板」或「自动清空」，并记住上次的选择',
+        '双窗口剪切新增「剪切到另一窗口」与「剪切到剪贴板」',
+        '新建文件夹后自动进入该文件夹（设置内可关闭）',
+        '存储空间 / 应用管理的扫描结果本地缓存，重开页面秒出，下拉刷新才重新统计',
+        '「版本更新」页可查看并一键复制更新日志；启动时发现新版本会弹窗提醒，可忽略该版本',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        '底部导航「传输」改名为「连接」，「网络」改名为「远程」，图标同步更新（10 种语言）',
+        '剪贴板「粘贴后保留」勾选项改为整行可点，不再只有小方框点得中',
+        '多选操作栏不再被底部导航栏遮挡',
+        '设置新增「新建文件夹自动打开」开关',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复播放 / 切歌时闪退：通知栏小图标被资源裁剪，导致没有有效图标',
+        '修复通知栏进度刷新过于频繁造成的「无响应」（ANR）',
+        '修复后台播放：切歌偶尔跳到播放列表之外、断开耳机后音乐不暂停',
+        '修复反复进出视频播放页的闪退（后台播放会话改为接管退役，同一时刻只保留一个播放实例）',
+        '修复播放器事件订阅未释放，反复进出播放页时监听层层叠加',
+        '修复存储分析 / 应用管理点刷新仍是旧数据、必须重启应用才正确',
+        '修复已删除的崩溃报告被自动补回',
+        '修复双窗口复制 / 剪切后文件列表空白',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'Clipboard: after pasting you may keep the clipboard or clear it automatically, and the choice is remembered',
+        'Dual-pane cut now offers "Cut to the other pane" and "Cut to clipboard"',
+        'New folders open automatically right after creation (can be turned off in Settings)',
+        'Storage and Apps scan results are cached, so reopening the page is instant; pull to refresh to re-scan',
+        'The Version Update page shows the changelog with one-tap copy, and a dialog appears on startup when a new version is found (the version can be ignored)',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'Bottom navigation: "Transfer" renamed to "Connections" and "Network" renamed to "Remote", with matching new icons (10 languages)',
+        'The clipboard "keep after paste" option is now tappable across the whole row, not just the small checkbox',
+        'The multi-select action bar is no longer covered by the bottom navigation bar',
+        'New "Open new folder automatically" switch in Settings',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed crashes while playing or skipping tracks: the notification small icon was stripped by resource shrinking',
+        'Fixed "not responding" (ANR) caused by notification progress being refreshed too often',
+        'Fixed background playback: skipping a track could land outside the playlist, and unplugging headphones did not pause playback',
+        'Fixed crashes when repeatedly entering and leaving the video player (the background session now takes over and retires the old player, keeping only one instance alive)',
+        'Fixed player event subscriptions never being cancelled, which piled up listeners when entering the player repeatedly',
+        'Fixed Storage / Apps showing stale numbers after a refresh until the app was restarted',
+        'Fixed deleted crash reports being restored automatically',
+        'Fixed blank file lists after copy or cut in dual-pane mode',
+      ]),
+    ],
+  );
+
+  /// ── 上一版：v3.2.0（原文案原样保留，不再删除，改为折叠展示）──────────
+  static const _Changelog _v320 = _Changelog(
+    version: 'v3.2.0',
+    date: '2026-09-28',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '目录加解密采用多核并行处理，速度提升约 2 倍',
+        '视频后台播放支持随时开启与关闭（带提示），首次开启引导通知权限，开启后播放页不再退出',
+        '音频播放器进度条常驻显示，支持倍速 / 音量记忆',
+        '图片查看器新增宽度 / 高度 / 原始三态显示切换',
+        '应用图标新增 4 款：浅灰纸纹、磨砂金属、蓝色文件夹、深蓝鎏金；深蓝鎏金设为默认图标，原默认图标转为备选「经典图标」',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        '新增「传输」页面：网络、FTP 共享、Web 共享入口迁入；「我的」页面入口保留',
+        '收藏夹改为底部半屏面板，可从底部上滑唤起，附带使用提示',
+        '导航栏显示 / 位置整合为统一入口并双向同步，默认显示在底部；分类页与浏览页顶部背景统一',
+        '单 / 双窗口切换按钮点击后自动跳转文件浏览页',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复后台播放、切换软硬解码、退出播放等场景下的偶发闪退',
+        '互联网分享链接修复：不再被管理后台地址顶替、不再卡在占位，多节点隧道自动切换',
+        '修复「最近」页打开本地文件被误判为远程文件而无法打开的问题',
+        '远程缩略图改为按顺序单文件加载并限制带宽，打开远程目录不再卡顿、占用大量流量',
+        'SAF 提示与新增界面文案全部支持多语言',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'Directory encryption/decryption now runs on multiple CPU cores in parallel — up to ~2x faster',
+        'Video background playback can be toggled on/off anytime (with a toast), guides notification permission on first use, and the player page no longer closes',
+        'Audio player: seek bar always visible, playback speed and volume remembered',
+        'Image viewer: new fit modes — fit width / fit height / original size',
+        '4 new app icons: Light Gray Paper, Frosted Metal, Blue Folder and Blue Gold; Blue Gold is now the default icon, and the original default becomes the "Classic Icon" alternative',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'New "Transfer" page hosting Network, FTP Sharing and Web Sharing entries; the "Mine" page entry is kept',
+        'Favorites is now a bottom half-screen panel, swipe up from the bottom edge to open, with a usage hint',
+        'Navigation bar visibility and position merged into one setting with two-way sync, defaulting to the bottom; unified top backgrounds for Categories and Browse pages',
+        'The single/dual-pane toggle now jumps to the file browser first',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed occasional crashes when toggling background playback, switching hardware/software decoding, or leaving the player',
+        'Internet sharing link fixed: no longer hijacked by the dashboard address or stuck at the placeholder; auto-fallback between multiple tunnel nodes',
+        'Fixed "Recent" page misidentifying local files as remote and failing to open them',
+        'Remote thumbnails now load one file at a time with a bandwidth cap, so opening remote folders no longer lags or eats bandwidth',
+        'SAF prompts and all new UI copy are now fully translated',
+      ]),
+    ],
+  );
+
+  /// 折叠状态：旧版本卡片默认收起，键为版本号（如 `v3.2.0`）。
+  final Set<String> _expandedOldChangelogs = <String>{};
+
+  void _toggleOldChangelog(String version) {
+    setState(() {
+      if (!_expandedOldChangelogs.remove(version)) {
+        _expandedOldChangelogs.add(version);
+      }
+    });
+  }
+
+  /// 把某版本的更新日志（中英双语）复制成**纯文本**。
+  ///
+  /// 与屏幕展示同源（都从 [_Changelog] 生成）⇒ 粘出去的内容不会跟界面走偏；
+  /// 不带任何界面文案，粘出去就是干净的 release notes。
+  Future<void> _copyChangelogText(L10n l10n, _Changelog data) async {
+    final buffer = StringBuffer()
+      ..writeln('ZenFile ${data.version} (${data.date})')
+      ..writeln();
+    void writeSections(List<_ChangeSection> sections) {
+      for (var k = 0; k < sections.length; k++) {
+        if (k > 0) buffer.writeln();
+        buffer.writeln(sections[k].title);
+        for (final it in sections[k].items) {
+          buffer.writeln('\u00b7 $it');
+        }
+      }
+    }
+
+    writeSections(data.zh);
+    buffer
+      ..writeln()
+      ..writeln('---------------- English ----------------')
+      ..writeln();
+    writeSections(data.en);
+
+    final messenger = ScaffoldMessenger.of(context);
+    await Clipboard.setData(ClipboardData(text: buffer.toString().trimRight()));
+    if (!mounted) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l10n.msg4fb42e6e), // 「已复制到剪贴板」
+        behavior: SnackBarBehavior.floating,
       ),
+    );
+  }
+
+  /// 全部版本的更新日志列表：最新版展开，其余折叠。
+  Widget _buildChangelogList(ThemeData theme, L10n l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final c in _changelogs)
+          _buildChangelogCard(
+            theme: theme,
+            l10n: l10n,
+            data: c,
+            collapsible: c.version != _latestChangelogVersion,
+          ),
+      ],
+    );
+  }
+
+  /// 一张更新日志卡片。
+  ///
+  /// [collapsible] 为 true = 旧版本（默认收起，点标题行展开）；
+  /// false = 当前版本（始终展开，不给折叠入口）。
+  Widget _buildChangelogCard({
+    required ThemeData theme,
+    required L10n l10n,
+    required _Changelog data,
+    required bool collapsible,
+  }) {
+    final expanded =
+        !collapsible || _expandedOldChangelogs.contains(data.version);
+    final textStyle = TextStyle(
+      fontSize: 13.5,
+      height: 1.6,
+      color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+    );
+    final dividerColor = theme.colorScheme.onSurface.withValues(alpha: 0.15);
+
+    Widget item(String text) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text('\u00b7 $text', style: textStyle),
+        );
+    Widget section(String title) => Padding(
+          padding: const EdgeInsets.only(top: 6, bottom: 4),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.6,
+              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+    Widget divider() => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Container(height: 1, color: dividerColor),
+        );
+    Widget langDivider() => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          child: Row(
+            children: [
+              Expanded(child: Container(height: 1, color: dividerColor)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  'English',
+                  style: TextStyle(
+                    fontSize: 12,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ),
+              Expanded(child: Container(height: 1, color: dividerColor)),
+            ],
+          ),
+        );
+
+    /// 一个语言的全部分区（区间插分隔线）。
+    List<Widget> sectionsOf(List<_ChangeSection> sections) {
+      final out = <Widget>[];
+      for (var k = 0; k < sections.length; k++) {
+        if (k > 0) out.add(divider());
+        out.add(section(sections[k].title));
+        for (final t in sections[k].items) {
+          out.add(item(t));
+        }
+      }
+      return out;
+    }
+
+    final copyButton = IconButton(
+      onPressed: () => _copyChangelogText(l10n, data),
+      tooltip: l10n.ui_copy,
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.all(4),
+      constraints: const BoxConstraints(),
+      icon: Icon(Broken.copy, size: 16, color: theme.colorScheme.primary),
+    );
+
+    final title = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            data.version,
+            style: TextStyle(
+              color: theme.colorScheme.primary,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LexendDeca',
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          data.date,
+          style: TextStyle(
+            fontSize: 12,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+          ),
+        ),
+      ],
     );
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.06)),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.06),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
+          if (!collapsible)
+            Row(
+              children: [title, const Spacer(), copyButton],
+            )
+          else
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => _toggleOldChangelog(data.version),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          title,
+                          const Spacer(),
+                          Icon(
+                            expanded
+                                ? Icons.expand_less
+                                : Icons.expand_more,
+                            size: 20,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.55),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                child: Text('v3.2.0', style: TextStyle(color: theme.colorScheme.primary, fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'LexendDeca')),
-              ),
-              const SizedBox(width: 10),
-              Text('2026-09-28', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.4))),
-            ],
-          ),
-          gap(14),
-
-          // ══════════════ 中文 ══════════════
-          section('\u2728 新功能'),
-          item('目录加解密采用多核并行处理，速度提升约 2 倍'),
-          item('视频后台播放支持随时开启与关闭（带提示），首次开启引导通知权限，开启后播放页不再退出'),
-          item('音频播放器进度条常驻显示，支持倍速 / 音量记忆'),
-          item('图片查看器新增宽度 / 高度 / 原始三态显示切换'),
-          item('应用图标新增 4 款：浅灰纸纹、磨砂金属、蓝色文件夹、深蓝鎏金；深蓝鎏金设为默认图标，原默认图标转为备选「经典图标」'),
-
-          divider(),
-
-          section('\u{1f3a8} 界面与交互'),
-          item('新增「传输」页面：网络、FTP 共享、Web 共享入口迁入；「我的」页面入口保留'),
-          item('收藏夹改为底部半屏面板，可从底部上滑唤起，附带使用提示'),
-          item('导航栏显示 / 位置整合为统一入口并双向同步，默认显示在底部；分类页与浏览页顶部背景统一'),
-          item('单 / 双窗口切换按钮点击后自动跳转文件浏览页'),
-
-          divider(),
-
-          section('\u{1f41b} 问题修复'),
-          item('修复后台播放、切换软硬解码、退出播放等场景下的偶发闪退'),
-          item('互联网分享链接修复：不再被管理后台地址顶替、不再卡在占位，多节点隧道自动切换'),
-          item('修复「最近」页打开本地文件被误判为远程文件而无法打开的问题'),
-          item('远程缩略图改为按顺序单文件加载并限制带宽，打开远程目录不再卡顿、占用大量流量'),
-          item('SAF 提示与新增界面文案全部支持多语言'),
-          langDivider(),
-
-          section('\u2728 New Features'),
-          item('Directory encryption/decryption now runs on multiple CPU cores in parallel — up to ~2× faster'),
-          item('Video background playback can be toggled on/off anytime (with a toast), guides notification permission on first use, and the player page no longer closes'),
-          item('Audio player: seek bar always visible, playback speed and volume remembered'),
-          item('Image viewer: new fit modes — fit width / fit height / original size'),
-          item('4 new app icons: Light Gray Paper, Frosted Metal, Blue Folder and Blue Gold; Blue Gold is now the default icon, and the original default becomes the "Classic Icon" alternative'),
-
-          divider(),
-
-          section('\u{1f3a8} UI & Interaction'),
-          item('New "Transfer" page hosting Network, FTP Sharing and Web Sharing entries; the "Mine" page entry is kept'),
-          item('Favorites is now a bottom half-screen panel, swipe up from the bottom edge to open, with a usage hint'),
-          item('Navigation bar visibility and position merged into one setting with two-way sync, defaulting to the bottom; unified top backgrounds for Categories and Browse pages'),
-          item('The single/dual-pane toggle now jumps to the file browser first'),
-
-          divider(),
-
-          section('\u{1f41b} Bug Fixes'),
-          item('Fixed occasional crashes when toggling background playback, switching hardware/software decoding, or leaving the player'),
-          item('Internet sharing link fixed: no longer hijacked by the dashboard address or stuck at the placeholder; auto-fallback between multiple tunnel nodes'),
-          item('Fixed "Recent" page misidentifying local files as remote and failing to open them'),
-          item('Remote thumbnails now load one file at a time with a bandwidth cap, so opening remote folders no longer lags or eats bandwidth'),
-          item('SAF prompts and all new UI copy are now fully translated'),
+                copyButton,
+              ],
+            ),
+          if (expanded) ...[
+            const SizedBox(height: 14),
+            ...sectionsOf(data.zh),
+            langDivider(),
+            ...sectionsOf(data.en),
+          ],
         ],
       ),
     );
   }
+}
+
+/// 更新日志里的一个分区（标题 + 若干条目）。
+class _ChangeSection {
+  const _ChangeSection(this.title, this.items);
+
+  final String title;
+  final List<String> items;
+}
+
+/// 一个版本的完整更新日志（中文 + 英文双语，硬编码，不走 l10n）。
+///
+/// 界面与「复制按钮」的纯文本**都从这里生成** ⇒ 两处永远一致。
+class _Changelog {
+  const _Changelog({
+    required this.version,
+    required this.date,
+    required this.zh,
+    required this.en,
+  });
+
+  /// 形如 `v3.3.0`。同时用作折叠状态表的键。
+  final String version;
+
+  /// 形如 `2026-09-28`。
+  final String date;
+
+  final List<_ChangeSection> zh;
+  final List<_ChangeSection> en;
 }
