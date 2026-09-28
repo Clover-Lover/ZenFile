@@ -173,6 +173,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   StreamSubscription<Tracks>? _tracksSub;
   StreamSubscription<Track>? _trackSub;
 
+  /// 播放器事件订阅（error / playing / position / duration / buffering / completed）。
+  ///
+  /// ⚠️ 必须保存、在 `dispose()` 时取消，并让 `_initListeners()` 幂等：
+  /// `_switchHwdec()`（用户手动切硬解、或黑屏自动软解回退）会**重建 player 并再次
+  /// 调用 `_initListeners()`**；不摘掉旧订阅，旧 player 上的回调会在重建窗口内继续
+  /// 驱动本页 UI（两个 player 的事件同时打到同一个 State），而旧 player 退役后这些
+  /// 订阅再也没有机会被取消。后台播放模式下本页销毁也不销毁 player，同理。
+  final List<StreamSubscription<dynamic>> _playerSubs =
+      <StreamSubscription<dynamic>>[];
+
   // 解码方式：true=硬解(auto-safe), false=软解(no)，持久化保存
   bool _useHardwareDecode = true;
 
@@ -280,15 +290,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // 排查远程（WebDAV/OpenList 302、本地代理）播放失败：记录 libmpv 的错误事件。
     // 与 webdav_debug.log 同源，release 包同样可查；排查完毕后随 WebdavDebugLog
     // 总开关一起关闭。
-    player.stream.error.listen((err) {
-      WebdavDebugLog.log('【播放器错误】$err');
-      _maybeAutoFallbackOnError(err.toString());
-    });
-    player.stream.playing.listen((playing) {
-      if (playing) {
-        WebdavDebugLog.log('播放器开始播放 path=${WebdavDebugLog.mask(widget.videoPath)}');
-      }
-    });
+    // ⚠️ error / playing 两个监听已移入 `_initListeners()` 统一管理（见下方调用）：
+    // 它们同属「player 事件订阅」，必须与 position/duration 等一样可被取消，否则
+    // 每次 `_switchHwdec()` 重建 player 都会留下一份永不取消的旧订阅。顺带修掉一个
+    // 既有缺口 —— 原先 error 只在首次 `initState` 挂，软解重建后新 player 的错误
+    // 不再被记录，`_maybeAutoFallbackOnError` 也永远不会再触发。
 
     // 覆盖 media_kit 硬编码的 network-timeout=5s。
     // SMB/FTP/SFTP 建立连接+认证可能需要 5-10s，5s 超时会导致 libmpv
@@ -1339,41 +1345,85 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _initListeners() {
-    player.stream.playing.listen((v) {
-      if (!mounted) return;
-      setState(() => _isPlaying = v);
-    });
+    // 幂等：`_switchHwdec()` 重建 player 后会再次调用本方法，必须先摘掉旧订阅。
+    _cancelPlayerSubs();
 
-    player.stream.position.listen((p) {
-      if (!mounted || _isSeeking) return;
-      setState(() {
-        _position = p;
-        _sliderValue = p.inMilliseconds.toDouble();
-      });
-    });
+    // 排查远程（WebDAV/OpenList 302、本地代理）播放失败：记录 libmpv 的错误事件。
+    // 与 webdav_debug.log 同源，release 包同样可查；排查完毕后随 WebdavDebugLog
+    // 总开关一起关闭。
+    _playerSubs.add(
+      player.stream.error.listen((err) {
+        WebdavDebugLog.log('【播放器错误】$err');
+        _maybeAutoFallbackOnError(err.toString());
+      }),
+    );
 
-    player.stream.duration.listen((d) {
-      if (!mounted) return;
-      setState(() => _duration = d);
-      if (!_hasRestoredPosition && d > Duration.zero) {
-        _restorePlaybackPosition();
-      }
-    });
+    _playerSubs.add(
+      player.stream.playing.listen((v) {
+        if (v) {
+          WebdavDebugLog.log(
+            '播放器开始播放 path=${WebdavDebugLog.mask(widget.videoPath)}',
+          );
+        }
+        if (!mounted) return;
+        setState(() => _isPlaying = v);
+      }),
+    );
 
-    player.stream.buffering.listen((v) {
-      if (!mounted) return;
-      setState(() => _isBuffering = v);
-    });
+    _playerSubs.add(
+      player.stream.position.listen((p) {
+        if (!mounted || _isSeeking) return;
+        setState(() {
+          _position = p;
+          _sliderValue = p.inMilliseconds.toDouble();
+        });
+      }),
+    );
 
-    player.stream.completed.listen((v) {
-      if (!v || !mounted) return;
-      _clearPlaybackPosition();
-      _handlePlaybackCompleted();
-    });
+    _playerSubs.add(
+      player.stream.duration.listen((d) {
+        if (!mounted) return;
+        setState(() => _duration = d);
+        if (!_hasRestoredPosition && d > Duration.zero) {
+          _restorePlaybackPosition();
+        }
+      }),
+    );
+
+    _playerSubs.add(
+      player.stream.buffering.listen((v) {
+        if (!mounted) return;
+        setState(() => _isBuffering = v);
+      }),
+    );
+
+    _playerSubs.add(
+      player.stream.completed.listen((v) {
+        if (!v || !mounted) return;
+        _clearPlaybackPosition();
+        _handlePlaybackCompleted();
+      }),
+    );
+  }
+
+  /// 取消全部播放器事件订阅（`dispose()` 与重复 `_initListeners()` 共用）。
+  ///
+  /// 对 media_kit 的 broadcast stream 而言 `cancel()` 是**同步摘除订阅者**，无需
+  /// await；这里保持同步以贴合 `dispose()` 的 void 约束。
+  void _cancelPlayerSubs() {
+    if (_playerSubs.isEmpty) return;
+    for (final sub in _playerSubs) {
+      sub.cancel();
+    }
+    _playerSubs.clear();
   }
 
   /// 监听可用音轨/字幕轨变化与当前选中轨道，用于音轨/字幕轨选择 UI。
   void _initTrackListeners() {
+    // 幂等：`_switchHwdec()` 重建 player 后会再次调用本方法。直接覆盖字段会让
+    // **旧订阅彻底失去引用**（再也 cancel 不掉）⇒ 必须先显式取消。
+    _tracksSub?.cancel();
+    _trackSub?.cancel();
     _tracksSub = player.stream.tracks.listen((tracks) {
       if (!mounted) return;
       setState(() {
@@ -2631,6 +2681,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _positionSub?.cancel();
     _tracksSub?.cancel();
     _trackSub?.cancel();
+    // ⚠️ 摘掉挂在 player 上的事件订阅：后台播放模式下 player 会被保留（继续播），
+    // `_switchHwdec()` 还会重建 player ⇒ 不摘掉就是永久泄漏（见 _playerSubs）。
+    _cancelPlayerSubs();
     _seekIndicatorTimer?.cancel();
     _previewDebounceTimer?.cancel();
     _sliderTimer?.cancel();

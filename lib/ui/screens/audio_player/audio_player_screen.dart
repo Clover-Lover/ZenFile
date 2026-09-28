@@ -149,6 +149,16 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
   bool _desktopLyricPendingPermission = false;
   StreamSubscription<void>? _desktopLyricClickSub;
 
+  /// 播放器事件订阅（playing / position / duration / completed / buffering）。
+  ///
+  /// ⚠️ 必须显式保存、并在页面销毁时取消：**后台播放模式下本页销毁时不会销毁
+  /// player**（音乐要继续播），复用的 player 会长期存活 ⇒ 反复进出播放页（从通知栏
+  /// 返回、从音频类别页「继续播放」返回走的都是复用分支）会在同一个 player 上不断
+  /// 叠加订阅。旧 State 的回调虽然被 `mounted` 挡住不会崩，但每个事件仍要空跑一遍，
+  /// 且旧 State 连同其闭包、歌词、队列快照全部无法回收（隐性内存增长）。
+  final List<StreamSubscription<dynamic>> _playerSubs =
+      <StreamSubscription<dynamic>>[];
+
   // 远程流式播放
   String? _currentStreamUrl; // 当前远程流式播放的代理 URL
 
@@ -339,43 +349,67 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
   }
 
   void _initListeners() {
-    player.stream.playing.listen((playing) {
-      if (!mounted) return;
-      setState(() => isPlaying = playing);
-    });
-    player.stream.position.listen((p) {
-      if (!mounted || isSeeking) return;
-      setState(() => position = p);
-      // 桌面歌词由 DesktopLyricController 独立监听更新，此处仅更新内联歌词
-      _updateDesktopLyric();
-    });
-    player.stream.duration.listen((d) {
-      if (!mounted) return;
-      setState(() => duration = d);
-      // 首次获取到时长后，恢复上次播放进度
-      if (!_hasSeekedToSavedPosition && d > Duration.zero) {
-        _hasSeekedToSavedPosition = true;
-        final savedMs = PreferencesService.getPlaybackPosition(_currentPath);
-        if (savedMs != null && savedMs > 1000) {
-          final savedPos = Duration(milliseconds: savedMs);
-          // 确保保存的进度不超过总时长，且距离结尾至少3秒
-          if (savedPos < d - const Duration(seconds: 3)) {
-            player.seek(savedPos);
+    // 幂等：同一 State 重复调用（或复用了另一个 player）时先摘掉旧订阅，避免叠加。
+    _cancelPlayerSubs();
+    _playerSubs.add(
+      player.stream.playing.listen((playing) {
+        if (!mounted) return;
+        setState(() => isPlaying = playing);
+      }),
+    );
+    _playerSubs.add(
+      player.stream.position.listen((p) {
+        if (!mounted || isSeeking) return;
+        setState(() => position = p);
+        // 桌面歌词由 DesktopLyricController 独立监听更新，此处仅更新内联歌词
+        _updateDesktopLyric();
+      }),
+    );
+    _playerSubs.add(
+      player.stream.duration.listen((d) {
+        if (!mounted) return;
+        setState(() => duration = d);
+        // 首次获取到时长后，恢复上次播放进度
+        if (!_hasSeekedToSavedPosition && d > Duration.zero) {
+          _hasSeekedToSavedPosition = true;
+          final savedMs = PreferencesService.getPlaybackPosition(_currentPath);
+          if (savedMs != null && savedMs > 1000) {
+            final savedPos = Duration(milliseconds: savedMs);
+            // 确保保存的进度不超过总时长，且距离结尾至少3秒
+            if (savedPos < d - const Duration(seconds: 3)) {
+              player.seek(savedPos);
+            }
           }
         }
-      }
-      if (_isBackgroundMode) {
-        _updateBackgroundItem();
-      }
-    });
-    player.stream.completed.listen((completed) {
-      if (!completed || !mounted) return;
-      _onTrackComplete();
-    });
-    player.stream.buffering.listen((buffering) {
-      if (!mounted) return;
-      setState(() => isBuffering = buffering);
-    });
+        if (_isBackgroundMode) {
+          _updateBackgroundItem();
+        }
+      }),
+    );
+    _playerSubs.add(
+      player.stream.completed.listen((completed) {
+        if (!completed || !mounted) return;
+        _onTrackComplete();
+      }),
+    );
+    _playerSubs.add(
+      player.stream.buffering.listen((buffering) {
+        if (!mounted) return;
+        setState(() => isBuffering = buffering);
+      }),
+    );
+  }
+
+  /// 取消全部播放器事件订阅（`dispose()` 与重复 `_initListeners()` 共用）。
+  ///
+  /// 对 media_kit 的 broadcast stream 而言 `cancel()` 是**同步摘除订阅者**，无需
+  /// await；这里保持同步以贴合 `dispose()` 的 void 约束。
+  void _cancelPlayerSubs() {
+    if (_playerSubs.isEmpty) return;
+    for (final sub in _playerSubs) {
+      sub.cancel();
+    }
+    _playerSubs.clear();
   }
 
   void _onTrackComplete() {
@@ -672,6 +706,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
     // 清理桌面歌词悬浮窗
     _desktopLyricClickSub?.cancel();
     _desktopLyricClickSub = null;
+    // ⚠️ 摘掉挂在 player 上的事件订阅：后台播放模式下 player 会被保留（音乐继续
+    // 播），不摘掉就会在复用的 player 上越堆越多（见 _playerSubs 声明处）。
+    _cancelPlayerSubs();
     // 清理远程流式会话
     _stopCurrentStream();
     if (_isBackgroundMode) {
