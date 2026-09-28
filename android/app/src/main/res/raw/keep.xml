@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  资源裁剪白名单（对应 android/app/build.gradle.kts 的 isShrinkResources = true）
+  ═══════════════════════════════════════════════════════════════════════════
+
+  🔴 为什么必须有这个文件（2026-09-28 v3.2.0 线上事故根因）：
+
+  AGP 的资源裁剪只认「**代码 / AndroidManifest 里的静态引用**」，
+  它**看不见写在 Dart 字符串里的资源名**（如
+  `AudioServiceConfig.androidNotificationIcon: 'xxx/yyy'`）。
+
+  v3.2.0 把应用图标从 `@mipmap/ic_launcher` 换成了 `@drawable/ic_launcher_*`
+  （多图标切换功能），于是 `mipmap/` 整个目录失去全部静态引用 ⇒ **被裁光** ⇒
+  通知小图标 `getIdentifier("ic_launcher","mipmap",pkg)` 返回 **0** ⇒
+  `setSmallIcon(0)` ⇒ Android 11+ 在 `NotificationManager.fixNotification()`
+  直接抛 `IllegalArgumentException: Invalid notification (no valid small icon)`
+  ⇒ 主线程未捕获 ⇒ 进程被杀（用户反馈：「播放结束跳到下一首就闪退」）。
+
+  ⚠️ 因此：**凡是「只在 Dart 侧按名字引用」的资源，都必须在这里登记**。
+  新增/改名这类资源时，同步改本文件，否则线上必崩。
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_zenfile,@drawable/ic_launcher_monochrome,@mipmap/ic_launcher,@mipmap/ic_launcher_round" />

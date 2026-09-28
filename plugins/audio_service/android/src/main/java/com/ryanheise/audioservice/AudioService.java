@@ -488,10 +488,53 @@ public class AudioService extends MediaBrowserServiceCompat {
     }
 
     int getResourceId(String resource) {
+        // ⚠️ 这里必须防御：`resource` 来自 Dart 侧配置 / MediaControl 定义，
+        // 拼错（没有 "/"）或传 null 时原来会抛 ArrayIndexOutOfBounds / NPE，
+        // 把「图标名写错」升级成「服务直接崩」。
+        if (resource == null) return 0;
         String[] parts = resource.split("/");
-        String resourceType = parts[0];
-        String resourceName = parts[1];
-        return getResources().getIdentifier(resourceName, resourceType, getApplicationContext().getPackageName());
+        if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) return 0;
+        try {
+            return getResources().getIdentifier(parts[1], parts[0],
+                    getApplicationContext().getPackageName());
+        } catch (Throwable t) {
+            return 0;
+        }
+    }
+
+    /**
+     * 解析**通知小图标**，保证**永不返回 0**。
+     *
+     * 🔴 为什么不能把 {@link #getResourceId} 的结果直接交给 setSmallIcon（2026-09-28
+     * v3.2.0 线上事故）：`app/build.gradle.kts` 开了 `isShrinkResources = true`，而
+     * AGP 的资源裁剪**看不见写在 Dart 字符串里的资源名**。v3.2.0 把清单里的应用图标
+     * 从 `@mipmap/ic_launcher` 换成 `@drawable/ic_launcher_*` 之后，`mipmap/` 目录
+     * 失去全部静态引用 ⇒ 被整体裁掉 ⇒ getIdentifier 返回 0 ⇒ `setSmallIcon(0)` ⇒
+     * Android 11+ 在 `NotificationManager.fixNotification()` 抛
+     * `IllegalArgumentException: Invalid notification (no valid small icon)` ⇒
+     * 主线程未捕获 ⇒ 进程被杀（用户反馈：「播放结束跳到下一首就闪退」）。
+     *
+     * 兜底链（逐级降级，任一级命中即返回）：
+     *   1. Dart 配置里指定的资源名；
+     *   2. `mipmap/ic_launcher`（3.2.0 之前的配置名，兼容旧版 Dart 配置）；
+     *   3. 应用当前图标 `ApplicationInfo.icon`（随 activity-alias 换图标同步）；
+     *   4. 系统内置播放图标（一定存在）。
+     * ⇒ 即使将来又有人改图标 / 忘了登记 keep.xml，也只会「图标不好看」，**不会崩**。
+     */
+    int resolveSmallIcon(String resource) {
+        int id = getResourceId(resource);
+        if (id != 0) return id;
+        id = getResourceId("mipmap/ic_launcher");
+        if (id != 0) return id;
+        try {
+            android.content.pm.ApplicationInfo ai = getApplicationInfo();
+            if (ai != null && ai.icon != 0) return ai.icon;
+        } catch (Throwable ignored) {
+            // 拿不到就用系统图标兜底
+        }
+        System.out.println("[ZenFileAudio] resolveSmallIcon: 全部兜底失败，改用系统图标 resource="
+                + resource);
+        return android.R.drawable.ic_media_play;
     }
 
     NotificationCompat.Action createAction(String resource, String label, long actionCode) {
@@ -784,7 +827,9 @@ public class AudioService extends MediaBrowserServiceCompat {
                     .setDeleteIntent(buildDeletePendingIntent())
             ;
         }
-        int iconId = getResourceId(config.androidNotificationIcon);
+        // ⚠️ 必须走 resolveSmallIcon（三级兜底、永不返回 0）：
+        // setSmallIcon(0) 会让 Android 11+ 抛 IllegalArgumentException 直接杀掉进程。
+        int iconId = resolveSmallIcon(config.androidNotificationIcon);
         notificationBuilder.setSmallIcon(iconId);
         return notificationBuilder;
     }
@@ -867,7 +912,7 @@ public class AudioService extends MediaBrowserServiceCompat {
             e.printStackTrace();
             // 即使通知构建失败，也要调用 startForeground 避免系统因 5 秒规则杀服务。
             notification = new NotificationCompat.Builder(this, notificationChannelId)
-                    .setSmallIcon(getResourceId(config.androidNotificationIcon))
+                    .setSmallIcon(resolveSmallIcon(config.androidNotificationIcon))
                     .setContentTitle("ZenFile")
                     .setContentText("Media playback")
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

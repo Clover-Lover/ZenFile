@@ -176,7 +176,13 @@ void main() {
         config: const AudioServiceConfig(
           androidNotificationChannelId: 'com.sequl.zenfile.audio.v2',
           androidNotificationChannelName: 'ZenFile Audio Player',
-          androidNotificationIcon: 'mipmap/ic_launcher',
+          // ⚠️ 必须指向「确定打进 APK」的资源：本项目的 AndroidManifest 已把应用图标
+          // 换成 @drawable/ic_launcher_*（多图标切换），而 build.gradle.kts 里
+          // isShrinkResources = true ⇒ 只被 Dart 字符串引用的资源（AGP 看不见）会被裁掉，
+          // 用 'mipmap/ic_launcher' 会解析成 0 ⇒ setSmallIcon(0) ⇒ Android 11+ 抛
+          // 「Invalid notification (no valid small icon)」⇒ 播放/切歌时进程被杀。
+          // ic_stat_zenfile 已在 res/raw/keep.xml 登记，保证不被裁。
+          androidNotificationIcon: 'drawable/ic_stat_zenfile',
           androidShowNotificationBadge: true,
           androidStopForegroundOnPause: false,
           // 允许点击通知空白区域启动 MainActivity，从而跳转到音频播放页。

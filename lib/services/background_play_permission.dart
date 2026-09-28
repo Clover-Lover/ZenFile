@@ -20,7 +20,9 @@ class BackgroundPlayPermission {
   static const _audioServiceConfig = AudioServiceConfig(
     androidNotificationChannelId: 'com.sequl.zenfile.audio.v2',
     androidNotificationChannelName: 'ZenFile Audio Player',
-    androidNotificationIcon: 'mipmap/ic_launcher',
+    // ⚠️ 同上（`main.dart` 的 AudioService.init）：必须指向已登记在
+    // `res/raw/keep.xml` 的通知小图标，否则会被 shrinkResources 裁掉导致 setSmallIcon(0)。
+    androidNotificationIcon: 'drawable/ic_stat_zenfile',
     androidShowNotificationBadge: true,
     androidStopForegroundOnPause: false,
     androidNotificationClickStartsActivity: false,

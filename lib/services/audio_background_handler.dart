@@ -57,6 +57,25 @@ class ZenFileAudioHandler extends BaseAudioHandler
   final List<StreamSubscription<dynamic>> _subs = [];
   Timer? _positionSaveTimer;
 
+  /// position 推送到通知栏的最小间隔（毫秒）。
+  ///
+  /// 🔴 为什么必须节流（2026-09-28 v3.2.0 线上 ANR 事故）：media_kit 的 `position`
+  /// 流在播放期间持续推送（视频模式下尤其密），而每次 `playbackState.add(...)` 都会
+  /// 让 audio_service 走 MethodChannel 到**原生主线程**重建整条通知（4 个 action +
+  /// MediaStyle + Binder IPC）。3.2.0 让视频也走这条通知链路后，不节流等于把主线程
+  /// 泡在 IPC 里 ⇒ 用户反馈「ZenFile 没有响应，点『等待』还能继续用」（ANR，
+  /// 主线程 utm≈92s、native 栈在 libapp.so 里周期性重复）。
+  /// 通知栏进度条只需秒级精度，1 秒一次完全够用。
+  static const int _positionEmitIntervalMs = 1000;
+
+  /// 上次推送 position 的时间戳（毫秒），配合 [_positionEmitIntervalMs] 做节流。
+  int _lastPositionEmitMs = 0;
+
+  /// 上一次真正推送出去的播放状态（**去重**：状态没变就不再重建通知）。
+  /// ⚠️ 复位只在 [detach] 里做 —— 别在别处清，否则 attach 后的首次推送会被误吞。
+  bool? _lastEmittedPlaying;
+  Duration? _lastEmittedPosition;
+
   /// 当前**被前台播放页持有**的那个 player（原为全局单布尔 `foregroundHoldsPlayer`）。
   ///
   /// ⚠️ 为什么必须**按 player 身份**记，而不是「有没有人持有任意 player」的全局布尔：
@@ -236,8 +255,12 @@ class ZenFileAudioHandler extends BaseAudioHandler
       _emitPlaybackState(playing: playing);
     }));
 
-    // Mirror position
+    // Mirror position（⚠️ 必须节流，理由见 _positionEmitIntervalMs：
+    // 每次推送都会让原生主线程重建整条通知，不节流就是 ANR）
     _subs.add(player.stream.position.listen((pos) {
+      final nowMs = DateTime.now().millisecondsSinceEpoch;
+      if (nowMs - _lastPositionEmitMs < _positionEmitIntervalMs) return;
+      _lastPositionEmitMs = nowMs;
       _emitPlaybackState(playing: _player?.state.playing ?? false, position: pos);
     }));
 
@@ -317,6 +340,11 @@ class ZenFileAudioHandler extends BaseAudioHandler
     _player = null;
     // 会话结束：归属标志一并复位，避免下一次会话沿用上一次的归属
     videoSession = false;
+    // 通知推送状态一并复位 —— 若不复位，下次 attach 后「playing / position 恰好与
+    // 上一次相同」的首次推送会被 _emitPlaybackState 的去重逻辑吞掉 ⇒ 通知栏不出现。
+    _lastPositionEmitMs = 0;
+    _lastEmittedPlaying = null;
+    _lastEmittedPosition = null;
   }
 
   /// 当用户开始播放视频时调用：立即暂停正在播放的后台音频，避免两路声音混在一起。
@@ -376,6 +404,8 @@ class ZenFileAudioHandler extends BaseAudioHandler
   @override
   Future<void> seek(Duration position) async {
     await _player?.seek(position);
+    // 拖动后立刻把新进度反映到通知栏，不受 position 节流影响。
+    _lastPositionEmitMs = 0;
   }
 
   @override
@@ -449,6 +479,13 @@ class ZenFileAudioHandler extends BaseAudioHandler
     Duration? position,
   }) {
     final currentPos = position ?? _player?.state.position ?? Duration.zero;
+    // 去重：playing 与 position 都没变时不再推送 —— 每次 playbackState.add 都会经
+    // MethodChannel 到原生主线程重建通知，冗余推送正是 ANR（无响应）的直接来源。
+    if (_lastEmittedPlaying == playing && _lastEmittedPosition == currentPos) {
+      return;
+    }
+    _lastEmittedPlaying = playing;
+    _lastEmittedPosition = currentPos;
     playbackState.add(
       PlaybackState(
         controls: [
