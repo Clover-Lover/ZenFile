@@ -225,6 +225,20 @@ class L10nDe extends L10n {
   String get update_retry => 'Wiederholen';
 
   @override
+  String get update_dialog_ignore => 'Ignorieren';
+
+  @override
+  String get update_dialog_update => 'Aktualisieren';
+
+  @override
+  String get update_changelog_empty =>
+      'Für diese Version ist kein Änderungsprotokoll verfügbar';
+
+  @override
+  String get update_ignored_hint =>
+      'Start-Hinweis für diese Version ist ignoriert';
+
+  @override
   String get update_download_install => 'Herunterladen & installieren';
 
   @override
@@ -1611,6 +1625,18 @@ class L10nDe extends L10n {
   String get app_icon_blue_gold => 'Tiefblau Gold';
 
   @override
+  String get app_icon_blue_folder_white => 'Blau-Weißer Ordner';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Verlauf-blauer Ordner';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Tiefblau-Gold-Ordner';
+
+  @override
+  String get app_icon_sunset_zf => 'Abendrot-Lila';
+
+  @override
   String title(Object title) {
     return 'App-Symbol gewechselt zu $title';
   }
@@ -2632,7 +2658,7 @@ class L10nDe extends L10n {
   String get msg6cbbf7d9 => 'Absoluten Pfad eingeben...';
 
   @override
-  String get msgf13fc21c => 'Netzwerk';
+  String get msgf13fc21c => 'Remote';
 
   @override
   String get msg41e625d1 => 'Remote-Verbindung hinzufügen';
@@ -2752,7 +2778,7 @@ class L10nDe extends L10n {
   String get cat_recent => 'Aktuell';
 
   @override
-  String get cat_network => 'Netzwerk';
+  String get cat_network => 'Remote';
 
   @override
   String get cat_apps => 'Anwendungen';
@@ -3419,7 +3445,7 @@ class L10nDe extends L10n {
   String get ui_web_share => 'Web-Freigabe';
 
   @override
-  String get ui_network => 'Netzwerk';
+  String get ui_network => 'Remote';
 
   @override
   String get log_i18n_full =>
@@ -8108,7 +8134,7 @@ class L10nDe extends L10n {
       'Sound-Apps wie RootlessJamesDSP können sich nur an AudioTrack-Modi anhängen; OpenSL ES nutzt eine vom System zugewiesene Session, an die sie sich nicht anhängen können. Umschalten wirkt sofort.';
 
   @override
-  String get ui_transfers => 'Übertragungen';
+  String get ui_transfers => 'Verbindungen';
 
   @override
   String get ui_profile => 'Profil';
@@ -8158,4 +8184,25 @@ class L10nDe extends L10n {
 
   @override
   String get app_icon_original => 'Klassisches Symbol';
+
+  @override
+  String get cut_to_clipboard => 'In die Zwischenablage ausschneiden';
+
+  @override
+  String get cut_to_other_window => 'In das andere Fenster ausschneiden';
+
+  @override
+  String get auto_open_created_folder => 'Erstellte Ordner automatisch öffnen';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Nach der Erstellung automatisch in den Ordner wechseln';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Zwischenablage nach dem Einfügen behalten';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Ohne Häkchen wird die Zwischenablage nach dem Einfügen geleert';
 }

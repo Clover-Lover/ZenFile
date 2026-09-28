@@ -213,6 +213,10 @@
   "update_new_version": "Nouvelle version disponible : {version}",
   "update_check_failed": "Échec de la vérification. Vérifiez votre réseau et réessayez.",
   "update_retry": "Réessayer",
+  "update_dialog_ignore": "Ignorer",
+  "update_dialog_update": "Mettre à jour",
+  "update_changelog_empty": "Aucun journal des modifications pour cette version",
+  "update_ignored_hint": "L'alerte au démarrage pour cette version est ignorée",
   "update_download_install": "Télécharger et installer",
   "update_downloading": "Téléchargement de la mise à jour…",
   "update_download_failed": "Échec du téléchargement. Veuillez réessayer.",
@@ -1882,6 +1886,22 @@
   "app_icon_blue_gold": "Bleu profond doré",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "Dossier bleu et blanc",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "Dossier bleu dégradé",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "Dossier bleu profond et or",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "Violet crépusculaire",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },
@@ -3085,7 +3105,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Réseau",
+  "msgf13fc21c": "Distant",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3154,7 @@
   "cat_downloads": "Téléchargements",
   "cat_screenshots": "Captures d'écran",
   "cat_recent": "Récent",
-  "cat_network": "Réseau",
+  "cat_network": "Distant",
   "cat_apps": "Applications",
   "cat_settings": "Paramètres",
   "cat_storage": "Espace",
@@ -3635,7 +3655,7 @@
   "ui_back": "Retour",
   "ui_connect": "Connecter",
   "ui_web_share": "Partage Web",
-  "ui_network": "Réseau",
+  "ui_network": "Distant",
   "log_i18n_full": "Internationalisation complète pour l'interface chinoise/anglaise",
   "log_fix_selection_count": "Corrigé : le nombre de sélection de fichiers ne s'affiche pas",
   "log_fix_remote_title": "Corrigé : problème d'affichage du titre de la page de connexion distante",
@@ -8045,7 +8065,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Transferts",
+  "ui_transfers": "Connexions",
   "ui_profile": "Profil",
   "msg_coming_soon": "Bientôt disponible",
   "toolbox_text_editor": "Éditeur de texte",
@@ -8090,5 +8110,32 @@
   "app_icon_original": "Icône classique",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "Couper vers le presse-papiers",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "Couper vers l'autre fenêtre",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "Ouvrir automatiquement les dossiers créés",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "Entrer automatiquement dans le dossier après sa création",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
+,
+  "paste_keep_clipboard": "Conserver le presse-papiers après le collage",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "Le presse-papiers est vidé après le collage si non coché",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
+
 }

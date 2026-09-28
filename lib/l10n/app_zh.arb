@@ -236,6 +236,10 @@
   },
   "update_check_failed": "检查更新失败，请检查网络连接后重试",
   "update_retry": "重试",
+  "update_dialog_ignore": "忽略",
+  "update_dialog_update": "更新",
+  "update_changelog_empty": "该版本未提供更新日志",
+  "update_ignored_hint": "已忽略该版本的启动提示",
   "update_download_install": "下载安装",
   "update_downloading": "正在下载更新…",
   "update_download_failed": "下载失败，请重试",
@@ -1922,6 +1926,22 @@
   "app_icon_blue_gold": "深蓝鎏金",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "蓝白文件夹",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "渐变蓝文件夹",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "深蓝鎏金文件夹",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "暮色红紫",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@msg64a6476a": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
@@ -3175,7 +3195,7 @@
   "@msg6cbbf7d9": {
     "description": "ui\\widgets\\zenfile_address_bar.dart"
   },
-  "msgf13fc21c": "网络",
+  "msgf13fc21c": "远程",
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3227,7 +3247,7 @@
   "cat_downloads": "下载",
   "cat_screenshots": "截图",
   "cat_recent": "最近",
-  "cat_network": "网络",
+  "cat_network": "远程",
   "cat_apps": "应用",
   "cat_settings": "设置",
   "cat_storage": "空间",
@@ -3734,7 +3754,7 @@
   "ui_back": "返回",
   "ui_connect": "连接",
   "ui_web_share": "网页共享",
-  "ui_network": "网络",
+  "ui_network": "远程",
   "log_i18n_full": "全面国际化中英文界面",
   "log_fix_selection_count": "修复文件选择数量不显示的问题",
   "log_fix_remote_title": "修复远程连接页面标题显示异常",
@@ -8342,7 +8362,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "传输",
+  "ui_transfers": "连接",
   "ui_profile": "我的",
   "msg_coming_soon": "即将推出",
   "toolbox_text_editor": "文本编辑器",
@@ -8387,5 +8407,32 @@
   "app_icon_original": "经典图标",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "剪切到剪贴板",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "剪切到另一窗口",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "新建文件夹自动打开",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "创建文件夹后自动进入该文件夹",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
+,
+  "paste_keep_clipboard": "粘贴后保留剪贴板内容",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "不勾选时粘贴完成后自动清空剪贴板",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
+
 }

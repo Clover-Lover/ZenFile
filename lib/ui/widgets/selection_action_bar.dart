@@ -9,6 +9,7 @@ import '../../core/icon_fonts/broken_icons.dart';
 import '../../core/utils.dart';
 import '../../services/pin_service.dart';
 import 'file_action_dialogs.dart';
+import 'cut_destination_sheet.dart';
 import 'create_archive_dialog.dart';
 import 'batch_rename_dialog.dart';
 import '../../services/folder_share_service.dart';
@@ -86,7 +87,12 @@ class SelectionActionBar extends StatelessWidget {
                     label: L10n.of(context).ui_cut,
                     hideLabel: provider.hideActionText,
                     onTap: () {
-                      provider.cutSelected();
+                      handleCutWithDestination(
+                        context,
+                        provider,
+                        paths: provider.selectedPaths.toList(),
+                        defaultCut: () async => provider.cutSelected(),
+                      );
                       // ScaffoldMessenger.of(context).showSnackBar(
                       //   SnackBar(content: Text('Cut $selectedCount item(s)')),
                       // );

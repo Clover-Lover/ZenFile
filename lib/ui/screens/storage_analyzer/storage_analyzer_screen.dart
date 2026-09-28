@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import '../../../core/icon_fonts/broken_icons.dart';
 import '../../../providers/file_manager_provider.dart';
 import '../../../core/utils.dart';
 import '../../../services/app_manager_service.dart';
+import '../../../services/preferences_service.dart';
 import '../media_category_screen.dart';
 import '../../../models/media_type.dart';
 import 'app_manager_screen.dart';
@@ -22,7 +24,15 @@ class StorageAnalyzerScreen extends StatefulWidget {
 class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with SingleTickerProviderStateMixin {
   bool _isScanning = true;
   String _currentScanningItem = '';
-  
+
+  /// 扫描防重入：AppBar 刷新按钮可被连点，且进入页面时会自动后台重扫，
+  /// 不拦住会出现两路并发遍历同一棵树。
+  bool _scanInFlight = false;
+
+  /// 扫描进度文本的更新节流时间戳。逐文件 setState 会让一整个内部存储
+  /// （数万个文件）把 UI 线程淹掉，进度文本只需「看起来在动」即可。
+  DateTime _lastProgressTick = DateTime.fromMillisecondsSinceEpoch(0);
+
   int _appsSize = 0;
   int _imagesSize = 0;
   int _videosSize = 0;
@@ -41,7 +51,42 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
-    _startStorageScan();
+
+    // 先尝试用上次的扫描结果秒开，再在后台静默重扫校正 ⇒ 关掉应用再进来
+    // 不再从零遍历（用户反馈的「每次都花太长时间」）。
+    final cached = PreferencesService.getSpaceScanCache();
+    if (_isCacheUsable(cached)) {
+      _applyCache(cached!);
+      _isScanning = false;
+      _radialController.forward();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startStorageScan(silent: true);
+      });
+    } else {
+      _startStorageScan();
+    }
+  }
+
+  /// 缓存是否可用：路径一致 + 未超过 24 小时。（超时后仍会后台重扫覆盖。）
+  bool _isCacheUsable(Map<String, dynamic>? c) {
+    if (c == null) return false;
+    final path = widget.initialVolumePath ?? '/storage/emulated/0';
+    if ((c['path'] as String? ?? '') != path) return false;
+    final ts = c['updatedAt'] as int? ?? 0;
+    if (ts <= 0) return false;
+    final age = DateTime.now().millisecondsSinceEpoch - ts;
+    return age < const Duration(hours: 24).inMilliseconds;
+  }
+
+  void _applyCache(Map<String, dynamic> c) {
+    _appsSize = c['apps'] as int? ?? 0;
+    _imagesSize = c['images'] as int? ?? 0;
+    _videosSize = c['videos'] as int? ?? 0;
+    _audioSize = c['audio'] as int? ?? 0;
+    _docsSize = c['docs'] as int? ?? 0;
+    _systemSize = c['system'] as int? ?? 0;
+    _totalUsedSize = c['totalUsed'] as int? ?? 0;
+    _totalStorageSize = c['total'] as int? ?? 0;
   }
 
   @override
@@ -50,67 +95,75 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
     super.dispose();
   }
 
-  Future<void> _startStorageScan() async {
-    if (!mounted) return;
+  /// 执行一次完整扫描。
+  ///
+  /// [silent] 为 true 时不切到「扫描中」视图（页面上已有缓存数据），
+  /// 扫描完成后原地刷新数字，用于「秒开 + 后台校正」。
+  Future<void> _startStorageScan({bool silent = false}) async {
+    if (!mounted || _scanInFlight) return;
+    _scanInFlight = true;
     final l10n = L10n.of(context);
-    setState(() {
-      _isScanning = true;
-      _currentScanningItem = l10n.msgb1a2c3d4;
-    });
-
     final provider = context.read<FileManagerProvider>();
     final path = widget.initialVolumePath ?? '/storage/emulated/0';
 
-    // 1. Fetch total & used storage via provider
-    _totalStorageSize = provider.totalStorageBytes > 0 ? provider.totalStorageBytes : 128 * 1024 * 1024 * 1024;
-    _totalUsedSize = provider.usedStorageBytes > 0 ? provider.usedStorageBytes : 84 * 1024 * 1024 * 1024;
-
-    // 2. Fetch app sizes from App Manager Service
-    setState(() {
-      _currentScanningItem = l10n.msgc2d3e4f5;
-    });
-    try {
-      final userApps = await AppManagerService.getInstalledApps(includeSystem: false);
-      final systemApps = await AppManagerService.getInstalledApps(includeSystem: true);
-      
-      int appsSum = 0;
-      for (final app in userApps) {
-        appsSum += app.apkSize;
-      }
-      for (final app in systemApps) {
-        if (app.isSystem) {
-          appsSum += app.apkSize;
-        }
-      }
-      _appsSize = appsSum;
-    } catch (_) {
-      _appsSize = 0;
+    if (!silent) {
+      setState(() {
+        _isScanning = true;
+        _currentScanningItem = l10n.msgb1a2c3d4;
+      });
     }
 
-    // 3. Scan directories recursively in background
     try {
-      final rootDir = Directory(path);
-      if (rootDir.existsSync()) {
-        int imgBytes = 0;
-        int vidBytes = 0;
-        int audBytes = 0;
-        int docBytes = 0;
+      // 1. 实时重取总容量 / 已用容量。
+      //    此前这里只读 provider 的内存快照（仅在启动与首页下拉刷新时更新），
+      //    所以在本页点刷新按钮永远显示打开应用那一刻的旧值，重启应用才正确。
+      try {
+        await provider.updateStorageSpace();
+      } catch (_) {}
+      _totalStorageSize = provider.totalStorageBytes > 0
+          ? provider.totalStorageBytes
+          : 128 * 1024 * 1024 * 1024;
+      _totalUsedSize = provider.usedStorageBytes > 0
+          ? provider.usedStorageBytes
+          : 84 * 1024 * 1024 * 1024;
 
-        final stream = rootDir.list(recursive: true, followLinks: false);
-        await for (final entity in stream.handleError((_) {})) {
-          if (entity is File) {
-            final filePath = entity.path;
-            final fileName = filePath.split('/').last.split('\\').last;
-            
-            if (mounted) {
-              setState(() {
-                _currentScanningItem = fileName;
-              });
-            }
+      // 2. 应用占用。原生 getInstalledApps 会对每个包做 queryStatsForPackage /
+      //    loadLabel / getPackageInfo（逐包 IPC），一次调用已是秒级开销；
+      //    这里原先调用两次（includeSystem false + true）⇒ 白跑一遍全部包。
+      //    includeSystem:true 的返回已包含全部，直接在 Dart 侧求和即可。
+      if (!silent) {
+        setState(() {
+          _currentScanningItem = l10n.msgc2d3e4f5;
+        });
+      }
+      try {
+        final allApps = await AppManagerService.getInstalledApps(
+          includeSystem: true,
+        );
+        int appsSum = 0;
+        for (final app in allApps) {
+          appsSum += app.apkSize;
+        }
+        _appsSize = appsSum;
+      } catch (_) {
+        _appsSize = 0;
+      }
 
+      // 3. 递归统计各分类体积
+      try {
+        final rootDir = Directory(path);
+        if (rootDir.existsSync()) {
+          int imgBytes = 0;
+          int vidBytes = 0;
+          int audBytes = 0;
+          int docBytes = 0;
+
+          final stream = rootDir.list(recursive: true, followLinks: false);
+          await for (final entity in stream.handleError((_) {})) {
+            if (entity is! File) continue;
             try {
               final size = entity.lengthSync();
-              final lowerPath = filePath.toLowerCase();
+              final lowerPath = entity.path.toLowerCase();
 
               if (FileUtils.isImage(lowerPath)) {
                 imgBytes += size;
@@ -125,26 +178,59 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                   docBytes += size;
                 }
               }
+
+              // 进度文本节流：每 ≤200ms 才允许一次 setState
+              if (!silent) {
+                final now = DateTime.now();
+                if (now.difference(_lastProgressTick).inMilliseconds >= 200) {
+                  _lastProgressTick = now;
+                  final fileName = entity.path.split('/').last.split('\\').last;
+                  if (mounted) {
+                    setState(() {
+                      _currentScanningItem = fileName;
+                    });
+                  }
+                }
+              }
             } catch (_) {}
           }
+
+          _imagesSize = imgBytes;
+          _videosSize = vidBytes;
+          _audioSize = audBytes;
+          _docsSize = docBytes;
         }
+      } catch (_) {}
 
-        _imagesSize = imgBytes;
-        _videosSize = vidBytes;
-        _audioSize = audBytes;
-        _docsSize = docBytes;
+      // 4. 系统/其他 = 已用总量 - 各分类之和
+      final double calculatedUsed =
+          (_appsSize + _imagesSize + _videosSize + _audioSize + _docsSize)
+              .toDouble();
+      _systemSize = max(0, _totalUsedSize - calculatedUsed.toInt());
+
+      // 5. 落缓存，供下次进入秒开
+      unawaited(
+        PreferencesService.saveSpaceScanCache({
+          'path': path,
+          'apps': _appsSize,
+          'images': _imagesSize,
+          'videos': _videosSize,
+          'audio': _audioSize,
+          'docs': _docsSize,
+          'system': _systemSize,
+          'totalUsed': _totalUsedSize,
+          'total': _totalStorageSize,
+          'updatedAt': DateTime.now().millisecondsSinceEpoch,
+        }),
+      );
+    } finally {
+      _scanInFlight = false;
+      if (mounted) {
+        setState(() {
+          _isScanning = false;
+        });
+        _radialController.forward(from: 0);
       }
-    } catch (_) {}
-
-    // Adjust system/other size
-    final double calculatedUsed = (_appsSize + _imagesSize + _videosSize + _audioSize + _docsSize).toDouble();
-    _systemSize = max(0, _totalUsedSize - calculatedUsed.toInt());
-
-    if (mounted) {
-      setState(() {
-        _isScanning = false;
-      });
-      _radialController.forward();
     }
   }
 
@@ -169,7 +255,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
-            onPressed: _startStorageScan,
+            onPressed: () => _startStorageScan(),
             tooltip: L10n.of(context).msgaae779d4,
           ),
         ],

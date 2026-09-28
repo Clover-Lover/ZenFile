@@ -216,6 +216,18 @@ class L10nKo extends L10n {
   String get update_retry => '다시 시도';
 
   @override
+  String get update_dialog_ignore => '무시';
+
+  @override
+  String get update_dialog_update => '업데이트';
+
+  @override
+  String get update_changelog_empty => '이 버전의 변경 내역이 없습니다';
+
+  @override
+  String get update_ignored_hint => '이 버전의 시작 알림을 무시했습니다';
+
+  @override
   String get update_download_install => '다운로드 및 설치';
 
   @override
@@ -1517,6 +1529,18 @@ class L10nKo extends L10n {
   String get app_icon_blue_gold => '딥 블루 골드';
 
   @override
+  String get app_icon_blue_folder_white => '블루 화이트 폴더';
+
+  @override
+  String get app_icon_blue_folder_gradient => '그라데이션 블루 폴더';
+
+  @override
+  String get app_icon_deep_blue_gold => '딥 블루 골드 폴더';
+
+  @override
+  String get app_icon_sunset_zf => '선셋 퍼플';
+
+  @override
   String title(Object title) {
     return '앱 아이콘이 $title(으)로 전환되었습니다';
   }
@@ -2511,7 +2535,7 @@ class L10nKo extends L10n {
   String get msg6cbbf7d9 => '절대 경로 입력...';
 
   @override
-  String get msgf13fc21c => '네트워크';
+  String get msgf13fc21c => '원격';
 
   @override
   String get msg41e625d1 => '원격 연결 추가';
@@ -2625,7 +2649,7 @@ class L10nKo extends L10n {
   String get cat_recent => '최근';
 
   @override
-  String get cat_network => '네트워크';
+  String get cat_network => '원격';
 
   @override
   String get cat_apps => '앱';
@@ -3270,7 +3294,7 @@ class L10nKo extends L10n {
   String get ui_web_share => '웹 공유';
 
   @override
-  String get ui_network => '네트워크';
+  String get ui_network => '원격';
 
   @override
   String get log_i18n_full => '중국어/영어 UI 완전 국제화';
@@ -7779,7 +7803,7 @@ class L10nKo extends L10n {
       '사운드 효과 앱(RootlessJamesDSP 등)이 연결할 수 있는 것은 AudioTrack뿐입니다. OpenSL ES는 세션 ID를 시스템이 할당하므로 연결할 수 없습니다. 전환은 즉시 반영됩니다.';
 
   @override
-  String get ui_transfers => '전송';
+  String get ui_transfers => '연결';
 
   @override
   String get ui_profile => '프로필';
@@ -7827,4 +7851,22 @@ class L10nKo extends L10n {
 
   @override
   String get app_icon_original => '클래식 아이콘';
+
+  @override
+  String get cut_to_clipboard => '클립보드로 잘라내기';
+
+  @override
+  String get cut_to_other_window => '다른 창으로 잘라내기';
+
+  @override
+  String get auto_open_created_folder => '생성한 폴더 자동 열기';
+
+  @override
+  String get auto_open_created_folder_desc => '폴더 생성 후 해당 폴더로 자동 이동';
+
+  @override
+  String get paste_keep_clipboard => '붙여넣기 후 클립보드 유지';
+
+  @override
+  String get paste_keep_clipboard_desc => '체크하지 않으면 붙여넣기 후 클립보드 자동 삭제';
 }

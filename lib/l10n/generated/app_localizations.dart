@@ -478,6 +478,30 @@ abstract class L10n {
   /// **'重试'**
   String get update_retry;
 
+  /// No description provided for @update_dialog_ignore.
+  ///
+  /// In zh, this message translates to:
+  /// **'忽略'**
+  String get update_dialog_ignore;
+
+  /// No description provided for @update_dialog_update.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新'**
+  String get update_dialog_update;
+
+  /// No description provided for @update_changelog_empty.
+  ///
+  /// In zh, this message translates to:
+  /// **'该版本未提供更新日志'**
+  String get update_changelog_empty;
+
+  /// No description provided for @update_ignored_hint.
+  ///
+  /// In zh, this message translates to:
+  /// **'已忽略该版本的启动提示'**
+  String get update_ignored_hint;
+
   /// No description provided for @update_download_install.
   ///
   /// In zh, this message translates to:
@@ -2989,6 +3013,30 @@ abstract class L10n {
   /// ui\screens\more_settings_screen.dart
   ///
   /// In zh, this message translates to:
+  /// **'蓝白文件夹'**
+  String get app_icon_blue_folder_white;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'渐变蓝文件夹'**
+  String get app_icon_blue_folder_gradient;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'深蓝鎏金文件夹'**
+  String get app_icon_deep_blue_gold;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'暮色红紫'**
+  String get app_icon_sunset_zf;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
   /// **'应用图标已切换为 {title}'**
   String title(Object title);
 
@@ -4777,7 +4825,7 @@ abstract class L10n {
   /// ui\widgets\zenfile_drawer.dart
   ///
   /// In zh, this message translates to:
-  /// **'网络'**
+  /// **'远程'**
   String get msgf13fc21c;
 
   /// ui\widgets\zenfile_drawer.dart
@@ -4999,7 +5047,7 @@ abstract class L10n {
   /// No description provided for @cat_network.
   ///
   /// In zh, this message translates to:
-  /// **'网络'**
+  /// **'远程'**
   String get cat_network;
 
   /// No description provided for @cat_apps.
@@ -6205,7 +6253,7 @@ abstract class L10n {
   /// No description provided for @ui_network.
   ///
   /// In zh, this message translates to:
-  /// **'网络'**
+  /// **'远程'**
   String get ui_network;
 
   /// No description provided for @log_i18n_full.
@@ -14245,7 +14293,7 @@ abstract class L10n {
   /// No description provided for @ui_transfers.
   ///
   /// In zh, this message translates to:
-  /// **'传输'**
+  /// **'连接'**
   String get ui_transfers;
 
   /// No description provided for @ui_profile.
@@ -14337,6 +14385,42 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'经典图标'**
   String get app_icon_original;
+
+  /// ui\widgets\cut_destination_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'剪切到剪贴板'**
+  String get cut_to_clipboard;
+
+  /// ui\widgets\cut_destination_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'剪切到另一窗口'**
+  String get cut_to_other_window;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'新建文件夹自动打开'**
+  String get auto_open_created_folder;
+
+  /// ui\screens\more_settings_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'创建文件夹后自动进入该文件夹'**
+  String get auto_open_created_folder_desc;
+
+  /// ui\widgets\clipboard_menu_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'粘贴后保留剪贴板内容'**
+  String get paste_keep_clipboard;
+
+  /// ui\widgets\clipboard_menu_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'不勾选时粘贴完成后自动清空剪贴板'**
+  String get paste_keep_clipboard_desc;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

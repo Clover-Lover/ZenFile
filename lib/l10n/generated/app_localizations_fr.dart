@@ -224,6 +224,20 @@ class L10nFr extends L10n {
   String get update_retry => 'Réessayer';
 
   @override
+  String get update_dialog_ignore => 'Ignorer';
+
+  @override
+  String get update_dialog_update => 'Mettre à jour';
+
+  @override
+  String get update_changelog_empty =>
+      'Aucun journal des modifications pour cette version';
+
+  @override
+  String get update_ignored_hint =>
+      'L\'alerte au démarrage pour cette version est ignorée';
+
+  @override
   String get update_download_install => 'Télécharger et installer';
 
   @override
@@ -1620,6 +1634,18 @@ class L10nFr extends L10n {
   String get app_icon_blue_gold => 'Bleu profond doré';
 
   @override
+  String get app_icon_blue_folder_white => 'Dossier bleu et blanc';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Dossier bleu dégradé';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Dossier bleu profond et or';
+
+  @override
+  String get app_icon_sunset_zf => 'Violet crépusculaire';
+
+  @override
   String title(Object title) {
     return 'Icône de l\'application changée en $title';
   }
@@ -2647,7 +2673,7 @@ class L10nFr extends L10n {
   String get msg6cbbf7d9 => 'Entrez le chemin absolu...';
 
   @override
-  String get msgf13fc21c => 'Réseau';
+  String get msgf13fc21c => 'Distant';
 
   @override
   String get msg41e625d1 => 'Ajouter une connexion distante';
@@ -2770,7 +2796,7 @@ class L10nFr extends L10n {
   String get cat_recent => 'Récent';
 
   @override
-  String get cat_network => 'Réseau';
+  String get cat_network => 'Distant';
 
   @override
   String get cat_apps => 'Applications';
@@ -3440,7 +3466,7 @@ class L10nFr extends L10n {
   String get ui_web_share => 'Partage Web';
 
   @override
-  String get ui_network => 'Réseau';
+  String get ui_network => 'Distant';
 
   @override
   String get log_i18n_full =>
@@ -8143,7 +8169,7 @@ class L10nFr extends L10n {
       'Les applications d’effets audio (RootlessJamesDSP, etc.) ne peuvent s’attacher qu’aux modes AudioTrack ; OpenSL ES utilise une session attribuée par le système, à laquelle elles ne peuvent pas s’attacher. Le changement est immédiat.';
 
   @override
-  String get ui_transfers => 'Transferts';
+  String get ui_transfers => 'Connexions';
 
   @override
   String get ui_profile => 'Profil';
@@ -8193,4 +8219,26 @@ class L10nFr extends L10n {
 
   @override
   String get app_icon_original => 'Icône classique';
+
+  @override
+  String get cut_to_clipboard => 'Couper vers le presse-papiers';
+
+  @override
+  String get cut_to_other_window => 'Couper vers l\'autre fenêtre';
+
+  @override
+  String get auto_open_created_folder =>
+      'Ouvrir automatiquement les dossiers créés';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Entrer automatiquement dans le dossier après sa création';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Conserver le presse-papiers après le collage';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Le presse-papiers est vidé après le collage si non coché';
 }

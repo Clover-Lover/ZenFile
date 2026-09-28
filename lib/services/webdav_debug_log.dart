@@ -39,14 +39,38 @@ class WebdavDebugLog {
   /// 判断崩溃前**最后执行到哪一步**。⚠️ **发版前必须改回 false**。
   /// 2026-09-28 v3.2.0 发版：已改回 false。
   /// 🔴 **血的教训（务必看完再动这个开关）**：本开关不只是「要不要往 SD 卡写日志」，
-  /// 它还决定了 `MpvAudioOutputService` 的 **AO 延迟回读诊断**是否运行 —— 该诊断走
+  /// 它**曾**同时决定 `MpvAudioOutputService` 的 AO 延迟回读诊断是否运行
+  /// （2026-09-28 已解耦到 [aoDiagnostics]）；该诊断走
   /// **裸原生 `getProperty`**，且有「8s 兜底 + 内层 3s」的最长 **11 秒窗口**；player
   /// 一旦在此期间被销毁就是 use-after-free（`CRASH_NATIVE` 且无栈，`try/catch` 抓不住）。
-  /// ⇒ **开着它发布出去的每一个包，都自带「播放中偶发闪退」的悬垂窗口**，
+  /// ⇒ **（解耦前）开着它发布出去的每个包，都自带「播放中偶发闪退」的悬垂窗口**，
   /// 而它的存在感又极低（只在本文件的 webdav_debug.log 里留痕）。
   /// ⇒ 任何情况下：**发版前必须回到 false，且要 grep 复核，
   ///   不要相信 WORKLOG / memory 里「应该已经关了」的文字描述。**
+  /// ⚠️⚠️ **2026-09-28 起临时置 true**：视频后台播放「反复进出播放页崩溃」的
+  /// 取证构建。取完日志（`/storage/emulated/0/ZenFile/webdav_debug.log` 与
+  /// `.prev` **一起**取）**必须改回 false 再发版**，并 grep 复核 ——
+  /// 不要相信 WORKLOG / memory 里「应该已经关了」的文字描述。
+  /// 2026-09-28 晚：真机复测 `7204ac6`（接管退役）后**用户确认不再崩溃** ⇒
+  /// 取证结束，**已改回 false**。
+  ///
+  /// 与 AO 诊断**已解耦**（见 [aoDiagnostics]）：打开本开关不再顺手装上那条
+  /// 11 秒的裸原生悬垂窗口，所以取证包不会再自带崩因、不会把取证引向错误结论。
   static bool enabled = false;
+
+  /// AO（音频输出）延迟回读诊断的**独立开关**，默认关闭。
+  ///
+  /// ## 为什么必须与 [enabled] 拆开（2026-09-28 血的教训）
+  ///
+  /// `MpvAudioOutputService.schedulePlaybackDiagnostics` 会挂
+  /// 「8s 兜底 + 内层 3s」最长 **11 秒**的延迟回读窗口，且走**裸原生 `getProperty`**；
+  /// player 一旦在此期间被销毁就是 use-after-free（`CRASH_NATIVE`、系统不给 trace、
+  /// `try/catch` 抓不住 native 段错误）。
+  /// 原先两者**共用 `enabled` 一个开关** ⇒ 为了抓崩溃而打开文件日志，会顺手把这条
+  /// 悬垂窗口也装上 ⇒ 诊断包自带「播放中偶发闪退」的崩因，取证时极易得出
+  /// 「上一轮修复无效」的错误结论。
+  /// ⇒ 抓崩溃只开 [enabled]；查 AO 才额外把本开关置 true（两者都开才真正订阅）。
+  static bool aoDiagnostics = false;
 
   /// 写入一行日志（同步落盘，保证崩溃前也已写入）。
   static void log(String msg) {

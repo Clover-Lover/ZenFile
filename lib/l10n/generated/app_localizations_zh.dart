@@ -217,6 +217,18 @@ class L10nZh extends L10n {
   String get update_retry => '重试';
 
   @override
+  String get update_dialog_ignore => '忽略';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_changelog_empty => '该版本未提供更新日志';
+
+  @override
+  String get update_ignored_hint => '已忽略该版本的启动提示';
+
+  @override
   String get update_download_install => '下载安装';
 
   @override
@@ -1515,6 +1527,18 @@ class L10nZh extends L10n {
   String get app_icon_blue_gold => '深蓝鎏金';
 
   @override
+  String get app_icon_blue_folder_white => '蓝白文件夹';
+
+  @override
+  String get app_icon_blue_folder_gradient => '渐变蓝文件夹';
+
+  @override
+  String get app_icon_deep_blue_gold => '深蓝鎏金文件夹';
+
+  @override
+  String get app_icon_sunset_zf => '暮色红紫';
+
+  @override
   String title(Object title) {
     return '应用图标已切换为 $title';
   }
@@ -2506,7 +2530,7 @@ class L10nZh extends L10n {
   String get msg6cbbf7d9 => '输入绝对路径...';
 
   @override
-  String get msgf13fc21c => '网络';
+  String get msgf13fc21c => '远程';
 
   @override
   String get msg41e625d1 => '添加远程连接';
@@ -2619,7 +2643,7 @@ class L10nZh extends L10n {
   String get cat_recent => '最近';
 
   @override
-  String get cat_network => '网络';
+  String get cat_network => '远程';
 
   @override
   String get cat_apps => '应用';
@@ -3259,7 +3283,7 @@ class L10nZh extends L10n {
   String get ui_web_share => '网页共享';
 
   @override
-  String get ui_network => '网络';
+  String get ui_network => '远程';
 
   @override
   String get log_i18n_full => '全面国际化中英文界面';
@@ -7603,7 +7627,7 @@ class L10nZh extends L10n {
       '音效类应用（如 RootlessJamesDSP）只能接管 AudioTrack 档位；OpenSL ES 的会话号由系统分配，音效软件无法接管。切换立即生效。';
 
   @override
-  String get ui_transfers => '传输';
+  String get ui_transfers => '连接';
 
   @override
   String get ui_profile => '我的';
@@ -7651,6 +7675,24 @@ class L10nZh extends L10n {
 
   @override
   String get app_icon_original => '经典图标';
+
+  @override
+  String get cut_to_clipboard => '剪切到剪贴板';
+
+  @override
+  String get cut_to_other_window => '剪切到另一窗口';
+
+  @override
+  String get auto_open_created_folder => '新建文件夹自动打开';
+
+  @override
+  String get auto_open_created_folder_desc => '创建文件夹后自动进入该文件夹';
+
+  @override
+  String get paste_keep_clipboard => '粘贴后保留剪贴板内容';
+
+  @override
+  String get paste_keep_clipboard_desc => '不勾选时粘贴完成后自动清空剪贴板';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -7864,6 +7906,18 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get update_retry => '重試';
+
+  @override
+  String get update_dialog_ignore => '忽略';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_changelog_empty => '該版本未提供更新日誌';
+
+  @override
+  String get update_ignored_hint => '已忽略該版本的啟動提示';
 
   @override
   String get update_download_install => '下載安裝';
@@ -9164,6 +9218,18 @@ class L10nZhTw extends L10nZh {
   String get app_icon_blue_gold => '深藍鎏金';
 
   @override
+  String get app_icon_blue_folder_white => '藍白資料夾';
+
+  @override
+  String get app_icon_blue_folder_gradient => '漸變藍資料夾';
+
+  @override
+  String get app_icon_deep_blue_gold => '深藍鎏金資料夾';
+
+  @override
+  String get app_icon_sunset_zf => '暮色紅紫';
+
+  @override
   String title(Object title) {
     return '應用圖示已切換為 $title';
   }
@@ -10146,7 +10212,7 @@ class L10nZhTw extends L10nZh {
   String get msg6cbbf7d9 => '輸入絕對路徑...';
 
   @override
-  String get msgf13fc21c => '網路';
+  String get msgf13fc21c => '遠端';
 
   @override
   String get msg41e625d1 => '新增遠端連線';
@@ -10259,7 +10325,7 @@ class L10nZhTw extends L10nZh {
   String get cat_recent => '最近';
 
   @override
-  String get cat_network => '網路';
+  String get cat_network => '遠端';
 
   @override
   String get cat_apps => '應用';
@@ -10899,7 +10965,7 @@ class L10nZhTw extends L10nZh {
   String get ui_web_share => '網頁共享';
 
   @override
-  String get ui_network => '網路';
+  String get ui_network => '遠端';
 
   @override
   String get log_i18n_full => '全面國際化中英文介面';
@@ -15222,7 +15288,7 @@ class L10nZhTw extends L10nZh {
       '音效類應用程式（如 RootlessJamesDSP）只能接管 AudioTrack 檔位；OpenSL ES 的工作階段 ID 由系統分配，音效軟體無法接管。切換立即生效。';
 
   @override
-  String get ui_transfers => '傳輸';
+  String get ui_transfers => '連線';
 
   @override
   String get ui_profile => '我的';
@@ -15270,4 +15336,22 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get app_icon_original => '經典圖示';
+
+  @override
+  String get cut_to_clipboard => '剪下到剪貼簿';
+
+  @override
+  String get cut_to_other_window => '剪下到另一視窗';
+
+  @override
+  String get auto_open_created_folder => '新建資料夾自動開啟';
+
+  @override
+  String get auto_open_created_folder_desc => '建立資料夾後自動進入該資料夾';
+
+  @override
+  String get paste_keep_clipboard => '貼上後保留剪貼簿內容';
+
+  @override
+  String get paste_keep_clipboard_desc => '未勾選時貼上完成後自動清空剪貼簿';
 }

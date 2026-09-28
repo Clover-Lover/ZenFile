@@ -213,6 +213,10 @@
   "update_new_version": "새 버전이 있습니다: {version}",
   "update_check_failed": "업데이트 확인에 실패했습니다. 네트워크를 확인하고 다시 시도하세요",
   "update_retry": "다시 시도",
+  "update_dialog_ignore": "무시",
+  "update_dialog_update": "업데이트",
+  "update_changelog_empty": "이 버전의 변경 내역이 없습니다",
+  "update_ignored_hint": "이 버전의 시작 알림을 무시했습니다",
   "update_download_install": "다운로드 및 설치",
   "update_downloading": "업데이트 다운로드 중…",
   "update_download_failed": "다운로드 실패. 다시 시도하세요",
@@ -1882,6 +1886,22 @@
   "app_icon_blue_gold": "딥 블루 골드",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "블루 화이트 폴더",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "그라데이션 블루 폴더",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "딥 블루 골드 폴더",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "선셋 퍼플",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },
@@ -3085,7 +3105,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "네트워크",
+  "msgf13fc21c": "원격",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3134,7 +3154,7 @@
   "cat_downloads": "다운로드",
   "cat_screenshots": "스크린샷",
   "cat_recent": "최근",
-  "cat_network": "네트워크",
+  "cat_network": "원격",
   "cat_apps": "앱",
   "cat_settings": "설정",
   "cat_storage": "공간",
@@ -3635,7 +3655,7 @@
   "ui_back": "뒤로",
   "ui_connect": "연결",
   "ui_web_share": "웹 공유",
-  "ui_network": "네트워크",
+  "ui_network": "원격",
   "log_i18n_full": "중국어/영어 UI 완전 국제화",
   "log_fix_selection_count": "파일 선택 수 표시 안 되는 문제 수정",
   "log_fix_remote_title": "원격 연결 페이지 제목 표시 문제 수정",
@@ -8045,7 +8065,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "전송",
+  "ui_transfers": "연결",
   "ui_profile": "프로필",
   "msg_coming_soon": "곧 제공 예정",
   "toolbox_text_editor": "텍스트 편집기",
@@ -8090,5 +8110,32 @@
   "app_icon_original": "클래식 아이콘",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "클립보드로 잘라내기",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "다른 창으로 잘라내기",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "생성한 폴더 자동 열기",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "폴더 생성 후 해당 폴더로 자동 이동",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
+,
+  "paste_keep_clipboard": "붙여넣기 후 클립보드 유지",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "체크하지 않으면 붙여넣기 후 클립보드 자동 삭제",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
+
 }

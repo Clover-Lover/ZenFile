@@ -224,6 +224,20 @@ class L10nRu extends L10n {
   String get update_retry => 'Повторить';
 
   @override
+  String get update_dialog_ignore => 'Игнорировать';
+
+  @override
+  String get update_dialog_update => 'Обновить';
+
+  @override
+  String get update_changelog_empty =>
+      'Для этой версии список изменений не предоставлен';
+
+  @override
+  String get update_ignored_hint =>
+      'Уведомление при запуске для этой версии отключено';
+
+  @override
   String get update_download_install => 'Скачать и установить';
 
   @override
@@ -1617,6 +1631,18 @@ class L10nRu extends L10n {
   String get app_icon_blue_gold => 'Тёмно-синий с золотом';
 
   @override
+  String get app_icon_blue_folder_white => 'Сине-белая папка';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Градиентная синяя папка';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Темно-синяя папка с золотом';
+
+  @override
+  String get app_icon_sunset_zf => 'Закатно-пурпурный';
+
+  @override
   String title(Object title) {
     return 'Значок приложения изменён на $title';
   }
@@ -2639,7 +2665,7 @@ class L10nRu extends L10n {
   String get msg6cbbf7d9 => 'Введите абсолютный путь...';
 
   @override
-  String get msgf13fc21c => 'Сеть';
+  String get msgf13fc21c => 'Удалённое';
 
   @override
   String get msg41e625d1 => 'Добавить Удалённое Подключение';
@@ -2760,7 +2786,7 @@ class L10nRu extends L10n {
   String get cat_recent => 'Недавние';
 
   @override
-  String get cat_network => 'Сеть';
+  String get cat_network => 'Удалённое';
 
   @override
   String get cat_apps => 'Приложения';
@@ -3424,7 +3450,7 @@ class L10nRu extends L10n {
   String get ui_web_share => 'Веб Доступ';
 
   @override
-  String get ui_network => 'Сеть';
+  String get ui_network => 'Удалённое';
 
   @override
   String get log_i18n_full =>
@@ -8097,7 +8123,7 @@ class L10nRu extends L10n {
       'Приложения звуковых эффектов (например, RootlessJamesDSP) могут подключаться только к режимам AudioTrack; в OpenSL ES идентификатор сеанса назначает система, поэтому подключиться к нему нельзя. Переключение применяется сразу.';
 
   @override
-  String get ui_transfers => 'Передачи';
+  String get ui_transfers => 'Подключения';
 
   @override
   String get ui_profile => 'Профиль';
@@ -8146,4 +8172,25 @@ class L10nRu extends L10n {
 
   @override
   String get app_icon_original => 'Классическая иконка';
+
+  @override
+  String get cut_to_clipboard => 'Вырезать в буфер обмена';
+
+  @override
+  String get cut_to_other_window => 'Вырезать в другое окно';
+
+  @override
+  String get auto_open_created_folder =>
+      'Автоматически открывать созданные папки';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Автоматически входить в папку после её создания';
+
+  @override
+  String get paste_keep_clipboard => 'Сохранять буфер обмена после вставки';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Без отметки буфер обмена очищается после вставки';
 }

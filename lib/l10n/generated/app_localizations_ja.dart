@@ -218,6 +218,18 @@ class L10nJa extends L10n {
   String get update_retry => '再試行';
 
   @override
+  String get update_dialog_ignore => '無視';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_changelog_empty => 'このバージョンの更新履歴はありません';
+
+  @override
+  String get update_ignored_hint => 'このバージョンの起動時通知は無視されています';
+
+  @override
   String get update_download_install => 'ダウンロードしてインストール';
 
   @override
@@ -1518,6 +1530,18 @@ class L10nJa extends L10n {
   String get app_icon_blue_gold => 'ダークブルーゴールド';
 
   @override
+  String get app_icon_blue_folder_white => 'ブルーホワイトフォルダ';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'グラデーションブルーフォルダ';
+
+  @override
+  String get app_icon_deep_blue_gold => 'ディープブルーゴールドフォルダ';
+
+  @override
+  String get app_icon_sunset_zf => 'サンセットパープル';
+
+  @override
   String title(Object title) {
     return 'アプリアイコンを$titleに切り替えました';
   }
@@ -2515,7 +2539,7 @@ class L10nJa extends L10n {
   String get msg6cbbf7d9 => '絶対パスを入力...';
 
   @override
-  String get msgf13fc21c => 'ネットワーク';
+  String get msgf13fc21c => 'リモート';
 
   @override
   String get msg41e625d1 => 'リモート接続を追加';
@@ -2628,7 +2652,7 @@ class L10nJa extends L10n {
   String get cat_recent => '最近';
 
   @override
-  String get cat_network => 'ネットワーク';
+  String get cat_network => 'リモート';
 
   @override
   String get cat_apps => 'アプリ';
@@ -3271,7 +3295,7 @@ class L10nJa extends L10n {
   String get ui_web_share => 'Web共有';
 
   @override
-  String get ui_network => 'ネットワーク';
+  String get ui_network => 'リモート';
 
   @override
   String get log_i18n_full => '中国語/英語UIの完全な国際化';
@@ -7773,7 +7797,7 @@ class L10nJa extends L10n {
       '音響エフェクトアプリ（RootlessJamesDSP など）に対応するのは AudioTrack のみです。OpenSL ES はセッションIDをシステムが割り当てるため対応できません。切り替えは即時反映されます。';
 
   @override
-  String get ui_transfers => '転送';
+  String get ui_transfers => '接続';
 
   @override
   String get ui_profile => 'プロフィール';
@@ -7821,4 +7845,22 @@ class L10nJa extends L10n {
 
   @override
   String get app_icon_original => 'クラシックアイコン';
+
+  @override
+  String get cut_to_clipboard => 'クリップボードへ切り取り';
+
+  @override
+  String get cut_to_other_window => '別のウィンドウへ切り取り';
+
+  @override
+  String get auto_open_created_folder => '作成したフォルダーを自動で開く';
+
+  @override
+  String get auto_open_created_folder_desc => 'フォルダー作成後に自動的にそのフォルダーへ移動';
+
+  @override
+  String get paste_keep_clipboard => '貼り付け後にクリップボードを保持';
+
+  @override
+  String get paste_keep_clipboard_desc => 'チェックなしの場合、貼り付け後にクリップボードを自動クリア';
 }

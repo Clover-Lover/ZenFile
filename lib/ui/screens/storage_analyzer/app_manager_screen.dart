@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../../../core/icon_fonts/broken_icons.dart';
 import '../../../models/app_info_model.dart';
 import '../../../services/app_manager_service.dart';
+import '../../../services/preferences_service.dart';
 import 'widgets/app_list_tab.dart';
 import 'widgets/backup_list_tab.dart';
 import 'widgets/app_options_sheet.dart';
@@ -46,7 +48,21 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
         });
       }
     });
-    _loadApplications();
+
+    // 先用上次的列表秒开（进程重启后立刻有内容，不必等逐包统计），
+    // 再在后台静默刷新。
+    final cached = PreferencesService.getInstalledAppsCache();
+    if (cached.isNotEmpty) {
+      final apps = cached.map((m) => AppInfoModel.fromMap(m)).toList();
+      _userApps = apps.where((a) => !a.isSystem).toList();
+      _systemApps = apps.where((a) => a.isSystem).toList();
+      _isLoading = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadApplications(silent: true);
+      });
+    } else {
+      _loadApplications();
+    }
   }
 
   @override
@@ -55,28 +71,43 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
     super.dispose();
   }
 
-  Future<void> _loadApplications() async {
-    setState(() {
-      _isLoading = true;
-    });
+  /// [silent] 为 true 时不显示整页 loading（页面上已有缓存列表）。
+  Future<void> _loadApplications({bool silent = false}) async {
+    if (!silent) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
     try {
       final hasPermission = await AppManagerService.checkUsageStatsPermission();
-      final user = await AppManagerService.getInstalledApps(includeSystem: false);
+      // 原生 getInstalledApps 逐包做 queryStatsForPackage / loadLabel /
+      // getPackageInfo（每包数次 IPC），一次调用已是秒级；此前这里还要跑两遍
+      // （false + true）⇒ 白跑一轮全部包。改用一次 includeSystem:true 后
+      // 在 Dart 侧分组。
       final all = await AppManagerService.getInstalledApps(includeSystem: true);
-      
+      final user = all.where((app) => !app.isSystem).toList();
       final sys = all.where((app) => app.isSystem).toList();
 
+      if (!mounted) return;
       setState(() {
         _hasUsageStatsPermission = hasPermission;
         _userApps = user;
         _systemApps = sys;
         _isLoading = false;
       });
+
+      unawaited(
+        PreferencesService.saveInstalledAppsCache(
+          all.map((app) => app.toMap()).toList(),
+        ),
+      );
     } catch (_) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

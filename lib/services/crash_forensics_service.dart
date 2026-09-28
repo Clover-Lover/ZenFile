@@ -117,20 +117,84 @@ class CrashForensicsService {
   static String _clip(String s, int max) =>
       s.length <= max ? s : s.substring(0, max);
 
-  /// 启动时调用：让原生补一次取证，并把私有存档导出到公共目录。
+  /// 启动时调用：让原生补一次取证，并把私有存档镜像到公共目录。
+  ///
+  /// [suppress] = **不要补回**的报告名（调用方用 [selectSuppressed] 从「已交付台账」
+  /// 与「公共目录现状」算出来）—— 那些是用户主动删掉的旧报告。传空集 = 旧的全量补拷
+  /// 行为（首次运行、台账不可用时的安全退化）。
   ///
   /// ⚠️ **必须在 `runApp()` 之后**调用 —— 内部会 `await` 一次原生通道，而
   /// `runApp()` 之前任何等待都可能拖慢/拖挂启动（2026-09-23 的教训）。取证是为
   /// **下一次**崩溃服务的，本次启动快慢与它无关。
   ///
   /// 返回 `null` 表示拿不到结果（原生通道不可用等），调用方应静默跳过。
-  static Future<CrashForensicsResult?> checkPreviousExit() async {
+  static Future<CrashForensicsResult?> checkPreviousExit({
+    Iterable<String> suppress = const <String>[],
+  }) async {
     try {
-      final raw = await _channel.invokeMethod<String>('exportToPublicDir');
+      final raw = await _channel.invokeMethod<String>(
+        'exportToPublicDir',
+        suppress.isEmpty ? null : suppress.toList(),
+      );
       return CrashForensicsResult.parse(raw);
     } catch (_) {
       return null;
     }
+  }
+
+  // ────────────────────────────────────────────────────────────────────
+  //  「用户删掉的报告不要再补回来」—— 交付台账
+  // ────────────────────────────────────────────────────────────────────
+
+  /// 列出公共归档目录里**全部** `.txt` 报告名（升序）。
+  ///
+  /// 与 [listExitReports] 的分工：那个服务于「要不要提示用户」，只看
+  /// `exit_*` / `java_crash_*`；本方法服务于「交付台账」，必须覆盖原生镜像会拷的
+  /// **所有**文件（含 `dart_error_*` 与 `unsupported_sdk*.txt`），否则台账会漏记、
+  /// 漏记的那类被删掉后仍会被补回来。失败返回空列表。
+  static List<String> listAllReports() {
+    try {
+      final dir = Directory(_dir);
+      if (!dir.existsSync()) return const <String>[];
+      return dir
+          .listSync()
+          .whereType<File>()
+          .map((f) => p.basename(f.path))
+          .where((n) => n.toLowerCase().endsWith('.txt'))
+          .toList()
+        ..sort();
+    } catch (_) {
+      return const <String>[];
+    }
+  }
+
+  /// 算出「不要补回」的报告名：**曾交付过、但现在不在公共目录里**的那些。
+  ///
+  /// 语义就是「用户主动删的」：原生每次启动都会把私有存档里缺的补到公共目录，
+  /// 于是用户手删过后旧报告会原样复活、看起来像「又崩了一堆」
+  /// （2026-09-28 用户实测）。纯函数，便于单测；返回值已排序，通道参数才稳定。
+  static List<String> selectSuppressed(
+    Iterable<String> delivered,
+    Set<String> present,
+  ) {
+    return delivered.where((n) => !present.contains(n)).toList()..sort();
+  }
+
+  /// 合并交付台账：**旧台账 ∪ 公共目录现状**，只保留最近 [maxLedger] 条。
+  ///
+  /// 设上限是必要的：私有存档封顶 40 份，但台账会跨版本、跨重装累积，不设上限就是
+  /// 一条只会变长的字符串列表。裁剪按**文件名里的时间戳**丢最旧的；即便某个名字被
+  /// 裁掉，后果也仅仅是「那份旧报告若被删可能再补回来一次」，不影响新报告。
+  static List<String> mergeLedger(
+    Iterable<String> delivered,
+    Iterable<String> present, {
+    int maxLedger = 200,
+  }) {
+    final set = <String>{...delivered, ...present};
+    if (set.length <= maxLedger) return set.toList()..sort();
+    final byStamp = set.toList()
+      ..sort((a, b) => _stampOfName(a).compareTo(_stampOfName(b)));
+    return byStamp.sublist(byStamp.length - maxLedger)..sort();
   }
 
   /// 归档目录概况（供诊断日志使用）。失败返回 `null`。
@@ -305,6 +369,7 @@ class CrashForensicsResult {
   const CrashForensicsResult({
     required this.newReports,
     required this.skipped,
+    this.suppressed = 0,
     this.dir,
     this.raw,
     this.error,
@@ -312,12 +377,20 @@ class CrashForensicsResult {
 
   /// 本次**真正新增**到公共目录的报告份数（目标已存在的不计入）。
   ///
-  /// 这是「要不要提示用户」的唯一判据：靠「文件已存在就跳过」实现天然幂等，
-  /// 因此不需要额外持久化「上次提示过什么」。
+  /// ⚠️ 它**不是**「要不要提示用户」的判据（那个由 [CrashForensicsService.listExitReports]
+  /// 与持久化的「已提示」集合决定，见 `main.dart::_maybeNotifyCrashReports`）——
+  /// 报告一旦被删，同一个崩溃会被重新补拷、这里就又「新增」一次。
+  /// 本字段只用于启动诊断日志。
   final int newReports;
 
   /// 公共目录里已存在、本次跳过的份数。
   final int skipped;
+
+  /// 因在「不要补回」名单里而**刻意没拷**的份数（用户已删过的旧报告）。
+  ///
+  /// 它不是异常信号，而是「用户删过的没被复活」的正面证据；出问题时这句话能直接
+  /// 解释「为什么我的旧报告没回来」。
+  final int suppressed;
 
   /// 公共归档目录（成功时非空）。
   final String? dir;
@@ -334,7 +407,7 @@ class CrashForensicsResult {
   /// 解析原生的返回值。**任何无法识别的输入都退化成「无报告」而不是抛异常。**
   ///
   /// 原生可能返回：
-  /// * `ok:<新增>:<跳过>:<目录>`
+  /// * `ok:<新增>:<跳过>:<抑制>:<目录>`
   /// * `no-reports`（私有目录还没有任何报告，最常见 —— 没崩过）
   /// * `mkdir-failed:<目录>`（公共目录建不出来，通常是存储权限未授予）
   /// * `error:<异常名>:<消息>`
@@ -348,15 +421,17 @@ class CrashForensicsResult {
     }
     if (raw.startsWith('ok:')) {
       final parts = raw.split(':');
-      // ok:<新增>:<跳过>:<目录>；目录本身可能含 ':'（Windows 风格路径），
-      // 故只按前 3 个分隔符切分，其余原样拼回目录。
-      if (parts.length >= 4) {
+      // ok:<新增>:<跳过>:<抑制>:<目录>；目录本身可能含 ':'（Windows 风格路径），
+      // 故只按前 4 个分隔符切分，其余原样拼回目录。
+      if (parts.length >= 5) {
         final added = int.tryParse(parts[1]) ?? 0;
         final skipped = int.tryParse(parts[2]) ?? 0;
-        final dir = parts.sublist(3).join(':');
+        final suppressed = int.tryParse(parts[3]) ?? 0;
+        final dir = parts.sublist(4).join(':');
         return CrashForensicsResult(
           newReports: added,
           skipped: skipped,
+          suppressed: suppressed,
           dir: dir.isEmpty ? null : dir,
           raw: raw,
         );
@@ -463,11 +538,8 @@ class CrashErrorThrottle {
   /// 从文件名里取毫秒时间戳（`dart_error_<ms>.txt`）；取不到时退化成 mtime。
   @visibleForTesting
   static int stampOf(String path) {
-    final name = p.basename(path);
-    final digits =
-        RegExp(r'\d+').allMatches(name).map((m) => m.group(0)!).join();
-    final parsed = int.tryParse(digits);
-    if (parsed != null) return parsed;
+    final byName = _stampOfName(path);
+    if (byName != 0) return byName;
     try {
       return File(path).lastModifiedSync().millisecondsSinceEpoch;
     } catch (_) {
@@ -491,4 +563,16 @@ class _SignatureState {
 
   /// 本窗口内被抑制掉的次数。
   int suppressed = 0;
+}
+
+/// 从报告文件名里取毫秒时间戳，取不到返回 0（**不**回退 mtime —— 调用方各自决定）。
+///
+/// 报告名形如 `exit_<毫秒>_<reason>.txt` / `java_crash_<毫秒>.txt` /
+/// `dart_error_<毫秒>.txt`。**只取第一段数字**：若把后面的 reason 码也拼进来，
+/// `exit_<13位>_10` 就成了 15 位数，会排在 `exit_<13位>_5` 这类 14 位数之后 ——
+/// 于是「更旧的报告」反而被判成「更新的」，排序又错回去（2026-09-28 修）。
+int _stampOfName(String path) {
+  final m = RegExp(r'\d+').firstMatch(p.basename(path));
+  if (m == null) return 0;
+  return int.tryParse(m.group(0)!) ?? 0;
 }

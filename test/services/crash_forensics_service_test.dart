@@ -29,9 +29,9 @@ void main() {
     CrashForensicsService.resetThrottle();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (call) async {
-      nativeCalls.add(call);
-      return 'ok:1:0:/fake';
-    });
+          nativeCalls.add(call);
+          return 'ok:1:0:0:/fake';
+        });
   });
 
   tearDown(() {
@@ -58,25 +58,43 @@ void main() {
       expect(r.error, isNull, reason: '「没崩过」不是错误，不该被当成失败');
     });
 
-    test('ok:<新增>:<跳过>:<目录> → 逐项解析', () {
-      final r = CrashForensicsResult.parse('ok:3:5:/storage/emulated/0/ZenFile/crash');
+    test('ok:<新增>:<跳过>:<抑制>:<目录> → 逐项解析', () {
+      final r = CrashForensicsResult.parse(
+        'ok:3:5:2:/storage/emulated/0/ZenFile/crash',
+      );
       expect(r.newReports, 3);
       expect(r.skipped, 5);
+      expect(r.suppressed, 2);
       expect(r.dir, '/storage/emulated/0/ZenFile/crash');
       expect(r.hasNewReport, isTrue);
       expect(r.error, isNull);
     });
 
     test('新增为 0 → 不提示用户（幂等的关键）', () {
-      final r = CrashForensicsResult.parse('ok:0:7:/storage/emulated/0/ZenFile/crash');
+      final r = CrashForensicsResult.parse(
+        'ok:0:7:0:/storage/emulated/0/ZenFile/crash',
+      );
       expect(r.newReports, 0);
       expect(r.hasNewReport, isFalse,
           reason: '报告已存在时若还判成「有新报告」，用户每次启动都会被提示一次');
       expect(r.skipped, 7);
     });
 
-    test('目录里含冒号也不能被切断（按前 3 个分隔符切分）', () {
-      final r = CrashForensicsResult.parse('ok:1:0:C:/Users/x/ZenFile/crash');
+    test('全部被抑制（用户已删过）→ 无新增、但 suppressed 如实计数', () {
+      final r = CrashForensicsResult.parse(
+        'ok:0:0:15:/storage/emulated/0/ZenFile/crash',
+      );
+      expect(r.newReports, 0);
+      expect(r.suppressed, 15);
+      expect(
+        r.dir,
+        '/storage/emulated/0/ZenFile/crash',
+        reason: '「用户删过的没被复活」是正常结果，目录信息不该丢',
+      );
+    });
+
+    test('目录里含冒号也不能被切断（按前 4 个分隔符切分）', () {
+      final r = CrashForensicsResult.parse('ok:1:0:0:C:/Users/x/ZenFile/crash');
       expect(r.newReports, 1);
       expect(r.dir, 'C:/Users/x/ZenFile/crash');
     });
@@ -348,6 +366,18 @@ void main() {
       final r = await CrashForensicsService.checkPreviousExit();
       expect(r, isNull);
     });
+
+    test('suppress 名单会随通道参数传给原生（否则「删了不补回」是空话）', () async {
+      await CrashForensicsService.checkPreviousExit(
+        suppress: const ['exit_1_4.txt', 'exit_2_4.txt'],
+      );
+      expect(nativeCalls.single.arguments, ['exit_1_4.txt', 'exit_2_4.txt']);
+    });
+
+    test('suppress 为空时不传参数（维持旧行为，少一次序列化）', () async {
+      await CrashForensicsService.checkPreviousExit();
+      expect(nativeCalls.single.arguments, isNull);
+    });
   });
 
   /// 「要不要提示用户」的判据。
@@ -414,6 +444,133 @@ void main() {
       CrashForensicsService.publicDirOverride = blocker.path; // 指向文件而非目录
       expect(() => CrashForensicsService.listExitReports(), returnsNormally);
       expect(CrashForensicsService.listExitReports(), isEmpty);
+    });
+  });
+
+  /// 交付台账 —— 「用户删掉的报告不要再补回来」。
+  ///
+  /// 背景（2026-09-28 用户实测）：私有存档是权威、公共目录只是**镜像**，于是用户把
+  /// `ZenFile/crash/` 清空后，下次启动旧报告被原样补回，看起来像「又崩了一堆」。
+  /// 判据 = 台账（曾交付过的名字）− 公共目录现状 = 用户删过的 ⇒ 告诉原生别再补回。
+  group('交付台账：用户删掉的不要再补回来', () {
+    test('selectSuppressed：交过、现在不在 ⇒ 判定为用户删的', () {
+      const delivered = ['exit_1_4.txt', 'exit_2_4.txt', 'java_crash_3.txt'];
+      expect(
+        CrashForensicsService.selectSuppressed(delivered, {
+          'exit_1_4.txt',
+          'java_crash_3.txt',
+        }),
+        ['exit_2_4.txt'],
+      );
+      expect(
+        CrashForensicsService.selectSuppressed(delivered, delivered.toSet()),
+        isEmpty,
+        reason: '一个都没删 ⇒ 不抑制（正常补拷路径不受影响）',
+      );
+      expect(
+        CrashForensicsService.selectSuppressed(const [], const {}),
+        isEmpty,
+        reason: '首次运行台账为空 ⇒ 不能抑制任何东西，否则新装用户永远拿不到报告',
+      );
+      expect(
+        CrashForensicsService.selectSuppressed(delivered, const {}),
+        delivered,
+        reason: '公共目录被整个清空 ⇒ 视为用户全删，不再补回',
+      );
+    });
+
+    test('selectSuppressed：返回值已排序（通道参数才稳定）', () {
+      expect(
+        CrashForensicsService.selectSuppressed([
+          'b_2.txt',
+          'a_1.txt',
+          'c_3.txt',
+        ], const {}),
+        ['a_1.txt', 'b_2.txt', 'c_3.txt'],
+      );
+    });
+
+    test('mergeLedger：并集去重 + 升序', () {
+      expect(
+        CrashForensicsService.mergeLedger(
+          ['exit_2_4.txt', 'exit_1_4.txt'],
+          ['exit_2_4.txt', 'dart_error_3.txt'],
+        ),
+        ['dart_error_3.txt', 'exit_1_4.txt', 'exit_2_4.txt'],
+      );
+    });
+
+    test('mergeLedger：超上限按文件名时间戳丢最旧的（台账不能无限变长）', () {
+      final delivered = [for (var i = 1; i <= 5; i++) 'exit_${1000 + i}_4.txt'];
+      expect(
+        CrashForensicsService.mergeLedger(delivered, const [], maxLedger: 3),
+        ['exit_1003_4.txt', 'exit_1004_4.txt', 'exit_1005_4.txt'],
+        reason: '只保留最近 3 条，丢的是最旧的两个',
+      );
+    });
+
+    test('mergeLedger：未超上限时一个都不丢（含刚交付的新报告）', () {
+      expect(
+        CrashForensicsService.mergeLedger(
+          const ['exit_1_4.txt'],
+          const ['exit_1_4.txt', 'exit_2_4.txt'],
+        ),
+        ['exit_1_4.txt', 'exit_2_4.txt'],
+      );
+    });
+
+    test('时间戳取文件名里第一段数字（不能把 reason 码拼进来）', () {
+      // 若把 reason 码也拼进来，`_10` 会变成 15 位数、反排在 14 位数之后，
+      // 于是「更旧的报告」被判成「更新的」—— 排序又错回去。
+      expect(
+        CrashForensicsService.mergeLedger(
+          const ['exit_1700000000000_10.txt', 'exit_1799999999999_5.txt'],
+          const [],
+          maxLedger: 1,
+        ),
+        ['exit_1799999999999_5.txt'],
+        reason: '该丢 1700000000000 那条（更旧），而不是误丢 1799999999999',
+      );
+    });
+
+    test('listAllReports：列出全部 .txt（含 dart_error_*），升序', () {
+      final tmp = Directory.systemTemp.createTempSync('zf_crash_all_');
+      CrashForensicsService.publicDirOverride = tmp.path;
+      try {
+        for (final name in [
+          'exit_20_4.txt',
+          'dart_error_99.txt',
+          'java_crash_30.txt',
+          'unsupported_sdk29.txt',
+          'not-a-report.log', // 原生镜像也不会拷它，不该进台账
+        ]) {
+          File(p.join(tmp.path, name)).writeAsStringSync('x');
+        }
+        expect(CrashForensicsService.listAllReports(), [
+          'dart_error_99.txt',
+          'exit_20_4.txt',
+          'java_crash_30.txt',
+          'unsupported_sdk29.txt',
+        ], reason: '台账必须覆盖镜像会拷的全部文件，漏一类就会漏抑制');
+      } finally {
+        CrashForensicsService.publicDirOverride = null;
+        tmp.deleteSync(recursive: true);
+      }
+    });
+
+    test('listAllReports：目录不存在或路径非法时返回空而不抛', () {
+      CrashForensicsService.publicDirOverride = p.join(
+        Directory.systemTemp.createTempSync('zf_crash_all2_').path,
+        'not-exists',
+      );
+      expect(CrashForensicsService.listAllReports(), isEmpty);
+
+      final blocker = File(
+        p.join(Directory.systemTemp.createTempSync('zf_crash_all3_').path, 'f'),
+      )..writeAsStringSync('x');
+      CrashForensicsService.publicDirOverride = blocker.path; // 指向文件而非目录
+      expect(() => CrashForensicsService.listAllReports(), returnsNormally);
+      expect(CrashForensicsService.listAllReports(), isEmpty);
     });
   });
 

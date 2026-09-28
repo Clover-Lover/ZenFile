@@ -213,6 +213,10 @@
   "update_new_version": "Neue Version verfügbar: {version}",
   "update_check_failed": "Update-Prüfung fehlgeschlagen. Netzwerk prüfen und erneut versuchen.",
   "update_retry": "Wiederholen",
+  "update_dialog_ignore": "Ignorieren",
+  "update_dialog_update": "Aktualisieren",
+  "update_changelog_empty": "Für diese Version ist kein Änderungsprotokoll verfügbar",
+  "update_ignored_hint": "Start-Hinweis für diese Version ist ignoriert",
   "update_download_install": "Herunterladen & installieren",
   "update_downloading": "Update wird heruntergeladen…",
   "update_download_failed": "Download fehlgeschlagen. Bitte erneut versuchen.",
@@ -1879,6 +1883,22 @@
   "app_icon_blue_gold": "Tiefblau Gold",
   "@app_icon_blue_gold": {
     "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_white": "Blau-Weißer Ordner",
+  "@app_icon_blue_folder_white": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_blue_folder_gradient": "Verlauf-blauer Ordner",
+  "@app_icon_blue_folder_gradient": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_deep_blue_gold": "Tiefblau-Gold-Ordner",
+  "@app_icon_deep_blue_gold": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "app_icon_sunset_zf": "Abendrot-Lila",
+  "@app_icon_sunset_zf": {
+    "description": "ui\\screens\\more_settings_screen.dart"
   },  "@title": {
     "type": "text"
   },
@@ -3082,7 +3102,7 @@
   "@msgf13fc21c": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
-  "msgf13fc21c": "Netzwerk",
+  "msgf13fc21c": "Remote",
   "@msg41e625d1": {
     "description": "ui\\widgets\\zenfile_drawer.dart"
   },
@@ -3131,7 +3151,7 @@
   "cat_downloads": "Downloads",
   "cat_screenshots": "Bildschirmfotos",
   "cat_recent": "Aktuell",
-  "cat_network": "Netzwerk",
+  "cat_network": "Remote",
   "cat_apps": "Anwendungen",
   "cat_settings": "Einstellungen",
   "cat_storage": "Speicherplatz",
@@ -3632,7 +3652,7 @@
   "ui_back": "Zurück",
   "ui_connect": "Verbinden",
   "ui_web_share": "Web-Freigabe",
-  "ui_network": "Netzwerk",
+  "ui_network": "Remote",
   "log_i18n_full": "Vollständige Internationalisierung für Chinesisch/Englisch-Benutzeroberfläche",
   "log_fix_selection_count": "Behoben: Datei-Auswahlanzahl wird nicht angezeigt",
   "log_fix_remote_title": "Behoben: Anzeigeproblem des Remote-Verbindungsseitentitels",
@@ -8042,7 +8062,7 @@
   "@audio_opensles_desc": {
     "description": "audio_player_screen.dart OpenSL ES output switch subtitle"
   },
-  "ui_transfers": "Übertragungen",
+  "ui_transfers": "Verbindungen",
   "ui_profile": "Profil",
   "msg_coming_soon": "Bald verfügbar",
   "toolbox_text_editor": "Texteditor",
@@ -8087,5 +8107,32 @@
   "app_icon_original": "Klassisches Symbol",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "In die Zwischenablage ausschneiden",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "In das andere Fenster ausschneiden",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+,
+  "auto_open_created_folder": "Erstellte Ordner automatisch öffnen",
+  "@auto_open_created_folder": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  },
+  "auto_open_created_folder_desc": "Nach der Erstellung automatisch in den Ordner wechseln",
+  "@auto_open_created_folder_desc": {
+    "description": "ui\\screens\\more_settings_screen.dart"
+  }
+,
+  "paste_keep_clipboard": "Zwischenablage nach dem Einfügen behalten",
+  "@paste_keep_clipboard": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  },
+  "paste_keep_clipboard_desc": "Ohne Häkchen wird die Zwischenablage nach dem Einfügen geleert",
+  "@paste_keep_clipboard_desc": {
+    "description": "ui\\widgets\\clipboard_menu_sheet.dart"
+  }
+
 }

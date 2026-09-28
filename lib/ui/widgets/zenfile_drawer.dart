@@ -157,7 +157,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                     _buildExpandableSection(
                       context,
                       sectionKey: 'network',
-                      icon: Broken.wifi_square,
+                      icon: Broken.cloud_connection,
                       title: L10n.of(context).msgf13fc21c,
                       children: [
                         _buildDrawerTile(
@@ -261,7 +261,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                         ),
                         _buildDrawerTile(
                           context,
-                          icon: Broken.send_2,
+                          icon: Broken.link,
                           title: PreferencesService.getTransfersEntryLabel() ??
                               L10n.of(context).ui_transfers,
                           onTap: () {
@@ -404,7 +404,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
-                'ZenFile v3.2.0',
+                'ZenFile v3.3.0',
                 style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.4), fontWeight: FontWeight.w600),
               ),
             ),

@@ -4,9 +4,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -311,6 +313,65 @@ public class AudioService extends MediaBrowserServiceCompat {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private VolumeProviderCompat volumeProvider;
 
+    /**
+     * 耳机 / 蓝牙断开（{@link AudioManager#ACTION_AUDIO_BECOMING_NOISY}）时自动暂停。
+     *
+     * 为什么必须自己注册：本应用的播放链路（media_kit → mpv）不感知系统音频路由变化，
+     * 而 audio_service 0.18.x 的原生侧也没有内置 becoming-noisy 接收器 —— 用户拔掉耳机 /
+     * 关掉 TWS 后声音会从手机外放继续播（用户反馈，issue #35）。
+     *
+     * 触发后走标准的 MediaSession 暂停回调，最终由 Dart 侧
+     * {@code ZenFileAudioHandler.pause()} 暂停播放器，通知栏状态同步更新。
+     */
+    private final BroadcastReceiver becomingNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null
+                    || !AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                return;
+            }
+            System.out.println("[ZenFileAudio] becoming noisy → pause");
+            if (mediaSessionCallback != null) {
+                mediaSessionCallback.onPause();
+            }
+        }
+    };
+
+    /** 防止重复注册 / 重复注销（onCreate 与 onDestroy 未必成对）。 */
+    private boolean becomingNoisyRegistered = false;
+
+    /**
+     * 注册「音频输出设备断开」广播接收器。
+     * 在 {@code onCreate()} 注册：Service 的生命周期与播放会话一致，比挂在 Activity 上可靠
+     * （Activity 可被回收而音乐仍在播）。
+     */
+    private void registerBecomingNoisyReceiver() {
+        if (becomingNoisyRegistered) return;
+        try {
+            IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // Android 13+ 动态注册必须显式声明导出标志。这里是系统广播，
+                // 用 NOT_EXPORTED 即可正常收到，同时不暴露给第三方应用。
+                registerReceiver(becomingNoisyReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(becomingNoisyReceiver, filter);
+            }
+            becomingNoisyRegistered = true;
+        } catch (Exception e) {
+            System.out.println("[ZenFileAudio] register becoming-noisy failed: " + e);
+        }
+    }
+
+    private void unregisterBecomingNoisyReceiver() {
+        if (!becomingNoisyRegistered) return;
+        try {
+            unregisterReceiver(becomingNoisyReceiver);
+        } catch (Exception e) {
+            System.out.println("[ZenFileAudio] unregister becoming-noisy failed: " + e);
+        }
+        becomingNoisyRegistered = false;
+    }
+
     public AudioProcessingState getProcessingState() {
         return processingState;
     }
@@ -384,6 +445,9 @@ public class AudioService extends MediaBrowserServiceCompat {
         System.out.println("[ZenFileAudio] onCreate SDK=" + Build.VERSION.SDK_INT
                 + " channelId=" + notificationChannelId
                 + " active=" + mediaSession.isActive());
+
+        // 耳机 / 蓝牙断开即暂停（issue #35）；生命周期与 Service 一致
+        registerBecomingNoisyReceiver();
     }
 
     @Override
@@ -416,6 +480,7 @@ public class AudioService extends MediaBrowserServiceCompat {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterBecomingNoisyReceiver();
         if (listener != null) {
             listener.onDestroy();
             listener = null;
@@ -488,10 +553,53 @@ public class AudioService extends MediaBrowserServiceCompat {
     }
 
     int getResourceId(String resource) {
+        // ⚠️ 这里必须防御：`resource` 来自 Dart 侧配置 / MediaControl 定义，
+        // 拼错（没有 "/"）或传 null 时原来会抛 ArrayIndexOutOfBounds / NPE，
+        // 把「图标名写错」升级成「服务直接崩」。
+        if (resource == null) return 0;
         String[] parts = resource.split("/");
-        String resourceType = parts[0];
-        String resourceName = parts[1];
-        return getResources().getIdentifier(resourceName, resourceType, getApplicationContext().getPackageName());
+        if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) return 0;
+        try {
+            return getResources().getIdentifier(parts[1], parts[0],
+                    getApplicationContext().getPackageName());
+        } catch (Throwable t) {
+            return 0;
+        }
+    }
+
+    /**
+     * 解析**通知小图标**，保证**永不返回 0**。
+     *
+     * 🔴 为什么不能把 {@link #getResourceId} 的结果直接交给 setSmallIcon（2026-09-28
+     * v3.2.0 线上事故）：`app/build.gradle.kts` 开了 `isShrinkResources = true`，而
+     * AGP 的资源裁剪**看不见写在 Dart 字符串里的资源名**。v3.2.0 把清单里的应用图标
+     * 从 `@mipmap/ic_launcher` 换成 `@drawable/ic_launcher_*` 之后，`mipmap/` 目录
+     * 失去全部静态引用 ⇒ 被整体裁掉 ⇒ getIdentifier 返回 0 ⇒ `setSmallIcon(0)` ⇒
+     * Android 11+ 在 `NotificationManager.fixNotification()` 抛
+     * `IllegalArgumentException: Invalid notification (no valid small icon)` ⇒
+     * 主线程未捕获 ⇒ 进程被杀（用户反馈：「播放结束跳到下一首就闪退」）。
+     *
+     * 兜底链（逐级降级，任一级命中即返回）：
+     *   1. Dart 配置里指定的资源名；
+     *   2. `mipmap/ic_launcher`（3.2.0 之前的配置名，兼容旧版 Dart 配置）；
+     *   3. 应用当前图标 `ApplicationInfo.icon`（随 activity-alias 换图标同步）；
+     *   4. 系统内置播放图标（一定存在）。
+     * ⇒ 即使将来又有人改图标 / 忘了登记 keep.xml，也只会「图标不好看」，**不会崩**。
+     */
+    int resolveSmallIcon(String resource) {
+        int id = getResourceId(resource);
+        if (id != 0) return id;
+        id = getResourceId("mipmap/ic_launcher");
+        if (id != 0) return id;
+        try {
+            android.content.pm.ApplicationInfo ai = getApplicationInfo();
+            if (ai != null && ai.icon != 0) return ai.icon;
+        } catch (Throwable ignored) {
+            // 拿不到就用系统图标兜底
+        }
+        System.out.println("[ZenFileAudio] resolveSmallIcon: 全部兜底失败，改用系统图标 resource="
+                + resource);
+        return android.R.drawable.ic_media_play;
     }
 
     NotificationCompat.Action createAction(String resource, String label, long actionCode) {
@@ -784,7 +892,9 @@ public class AudioService extends MediaBrowserServiceCompat {
                     .setDeleteIntent(buildDeletePendingIntent())
             ;
         }
-        int iconId = getResourceId(config.androidNotificationIcon);
+        // ⚠️ 必须走 resolveSmallIcon（三级兜底、永不返回 0）：
+        // setSmallIcon(0) 会让 Android 11+ 抛 IllegalArgumentException 直接杀掉进程。
+        int iconId = resolveSmallIcon(config.androidNotificationIcon);
         notificationBuilder.setSmallIcon(iconId);
         return notificationBuilder;
     }
@@ -867,7 +977,7 @@ public class AudioService extends MediaBrowserServiceCompat {
             e.printStackTrace();
             // 即使通知构建失败，也要调用 startForeground 避免系统因 5 秒规则杀服务。
             notification = new NotificationCompat.Builder(this, notificationChannelId)
-                    .setSmallIcon(getResourceId(config.androidNotificationIcon))
+                    .setSmallIcon(resolveSmallIcon(config.androidNotificationIcon))
                     .setContentTitle("ZenFile")
                     .setContentText("Media playback")
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

@@ -15,6 +15,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 // 映射角色与 dynamic_color 1.x 的 CorePalette→ColorScheme 官方转换逐项一致，视觉效果不变。
 import 'package:material_ui/material_ui.dart' as mui;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:audio_service/audio_service.dart';
 
 import 'core/theme.dart';
@@ -36,6 +37,9 @@ import 'ui/screens/home_screen.dart';
 import 'ui/screens/audio_player/audio_player_screen.dart';
 import 'ui/screens/remote_guard_screen.dart';
 import 'services/remote_guard_service.dart';
+import 'services/net_proxy_service.dart';
+import 'services/update_check_service.dart';
+import 'ui/screens/update_screen.dart';
 
 final GlobalKey<_ZenFileAppState> appStateKey = GlobalKey<_ZenFileAppState>();
 
@@ -176,7 +180,13 @@ void main() {
         config: const AudioServiceConfig(
           androidNotificationChannelId: 'com.sequl.zenfile.audio.v2',
           androidNotificationChannelName: 'ZenFile Audio Player',
-          androidNotificationIcon: 'mipmap/ic_launcher',
+          // ⚠️ 必须指向「确定打进 APK」的资源：本项目的 AndroidManifest 已把应用图标
+          // 换成 @drawable/ic_launcher_*（多图标切换），而 build.gradle.kts 里
+          // isShrinkResources = true ⇒ 只被 Dart 字符串引用的资源（AGP 看不见）会被裁掉，
+          // 用 'mipmap/ic_launcher' 会解析成 0 ⇒ setSmallIcon(0) ⇒ Android 11+ 抛
+          // 「Invalid notification (no valid small icon)」⇒ 播放/切歌时进程被杀。
+          // ic_stat_zenfile 已在 res/raw/keep.xml 登记，保证不被裁。
+          androidNotificationIcon: 'drawable/ic_stat_zenfile',
           androidShowNotificationBadge: true,
           androidStopForegroundOnPause: false,
           // 允许点击通知空白区域启动 MainActivity，从而跳转到音频播放页。
@@ -314,23 +324,46 @@ Future<void> _primeCrashEnvironment() async {
   }
 }
 
-/// 启动期崩溃取证：把「上次异常退出」的证据导出到用户随手可取的目录。
+/// 启动期崩溃取证：把「上次异常退出」的证据镜像到用户随手可取的目录。
 ///
 /// 没有 adb 的环境里（如云电脑），这是唯一能拿到崩溃现场的手段：原生侧用
 /// `ApplicationExitInfo` 在 `MainActivity.onCreate` 最早期就把系统记录的原因与
-/// trace 落盘（见 `CrashForensics.kt`），这里负责把它导出到
+/// trace 落盘（见 `CrashForensics.kt`），这里负责把它镜像到
 /// `/storage/emulated/0/ZenFile/crash/`，让用户能用任意文件管理器取出。
 ///
 /// ⚠️ 与 [_logBootFingerprint] 同样**只能在 `runApp()` 之后调用**：内部要 await
 /// 一次原生通道。它服务的是**下一次**崩溃，本次启动快慢与它无关；但它同样
 /// 不该有拖挂启动的能力，故整个函数包在 try/catch 里。
+///
+/// ## 为什么要维护「已交付台账」
+/// 私有存档才是权威、公共目录只是**镜像** ⇒ 公共目录缺什么就补什么。副作用是
+/// **用户手删后会原样复活**（2026-09-28 用户实测：「我清空了，什么都没操作，
+/// 关掉应用再打开又出现一堆日志，但没发现崩溃」）。所以：
+///   台账（曾经交付过的名字）− 公共目录现状 = **用户删过的** ⇒ 告诉原生别再补回。
 Future<void> _checkCrashForensics() async {
   try {
-    final result = await CrashForensicsService.checkPreviousExit();
+    // ① 导出**前**的公共目录现状（必须在调原生之前取，否则分不清「原本就在」与「刚补的」）
+    final before = CrashForensicsService.listAllReports().toSet();
+    // ② 已交付台账（持久化）：曾经出现在公共目录里的报告名，含后来被删掉的
+    final delivered = PreferencesService.getDeliveredCrashReports();
+    // ③ 交过、现在不在了 ⇒ 用户主动删的 ⇒ 本次不补回
+    final suppress = CrashForensicsService.selectSuppressed(delivered, before);
+    // ④ 让原生补拷（会跳过 suppress 名单）
+    final result = await CrashForensicsService.checkPreviousExit(
+      suppress: suppress,
+    );
+    // ⑤ 台账 = 旧台账 ∪ 导出后真的存在的；顺序**不能**与 ④ 颠倒
+    await PreferencesService.saveDeliveredCrashReports(
+      CrashForensicsService.mergeLedger(
+        delivered,
+        CrashForensicsService.listAllReports(),
+      ),
+    );
     if (result == null) return;
     WebdavDebugLog.log(
       '[crash] forensics new=${result.newReports} skipped=${result.skipped} '
-      'dir=${result.dir ?? "-"} error=${result.error ?? "-"}',
+      'suppressed=${result.suppressed} dir=${result.dir ?? "-"} '
+      'error=${result.error ?? "-"}',
     );
     _maybeNotifyCrashReports();
   } catch (e) {
@@ -421,6 +454,12 @@ Future<void> _updateSystemGestureExclusion(bool disableLeftBack, double width, d
   }
 }
 
+/// 启动「发现新版本」弹窗的返回值。
+///
+/// `null`（返回键 / 点外部关闭）刻意**不映射**到任何分支 ⇒ 不持久化忽略标记，
+/// 下次启动仍会提示。
+enum _UpdatePromptAction { ignore, update }
+
 class ZenFileApp extends StatefulWidget {
   const ZenFileApp({super.key});
 
@@ -460,6 +499,9 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   String? _lastOverlayKey;
   // 缓存上次手势排他区域参数，避免每帧调用平台通道（setSystemGestureExclusionRects）。
   String? _lastGestureKey;
+  // 启动版本检测：本进程是否已跑过（权限从设置页回来时不会重复弹）+ 弹窗是否正在显示。
+  bool _updatePromptChecked = false;
+  bool _updatePromptShowing = false;
 
   @override
   void initState() {
@@ -935,6 +977,183 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
       if (mounted) {
         setState(() => _hasPermission = true);
       }
+    }
+
+    // 权限就绪 ⇒ 触发一次启动版本检测（幂等，见 [_checkUpdateOnStartup]）。
+    // 刻意挂在权限判定**之后**：否则弹窗会盖在权限引导页 / 启动保护闸门上，
+    // 而「忽略 / 更新」在那种场景下点了也没意义。
+    if (_hasPermission == true) unawaited(_checkUpdateOnStartup());
+  }
+
+  /// 启动时静默检测新版本；发现更高版本且未被忽略时弹窗询问「忽略 / 更新」。
+  ///
+  /// 设计要点：
+  /// * **不阻塞启动**：调用方 `unawaited`，且 [UpdateCheckService.check] 契约上
+  ///   不抛异常、有总超时上限 ⇒ 最坏只是静默失败，绝不影响界面；
+  /// * **一个进程只跑一次**：`_updatePromptChecked` 置位在最前（含异常路径），
+  ///   所以「从设置页授权回来」触发的第二次权限检查不会再弹一遍；
+  /// * **纯静默成功不打扰**：只有 `hasUpdate` 才弹；「已是最新」什么都不做
+  ///   （想看结果的人自己去「版本更新」页，那里信息更全）；
+  /// * **「忽略」是持久化的**：记住被忽略的 tag，同版本 / 更低版本以后都不再弹
+  ///   （判据与「版本更新」页共用 [UpdateCheckService.isVersionIgnored]，
+  ///   保证「页面上说已忽略」与「启动不弹」永远一致）。
+  Future<void> _checkUpdateOnStartup() async {
+    if (_updatePromptChecked) return;
+    _updatePromptChecked = true;
+
+    try {
+      final info = await PackageInfo.fromPlatform();
+      final result = await UpdateCheckService(
+        apiUrlOverride: PreferencesService.getUpdateApiUrl(),
+        httpProxyProvider: NetProxyService.getHttpProxy,
+        logger: WebdavDebugLog.log,
+      ).check(info.version);
+
+      if (!result.ok || !result.hasUpdate) return;
+      if (UpdateCheckService.isVersionIgnored(
+        result.remoteVersion,
+        PreferencesService.getIgnoredUpdateVersion(),
+      )) {
+        return;
+      }
+      if (!mounted) return;
+      // 启动保护闸门还锁着 / 权限未确认 / 正在处理外部打开请求时不要插入弹窗：
+      // 会盖在闸门或引导页上，且此时点「更新」也去不了该去的地方。
+      if (_hasPermission != true || _isResolvingIntent) return;
+      if (_appLockEnabled && !_appUnlocked) return;
+
+      // 让首页先渲染完再弹，避免冷启动时与首帧争抢。
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (!mounted) return;
+      await _showUpdateDialog(result);
+    } catch (e) {
+      // 启动路径上的任何异常都不许外溢（service 已承诺不抛，这里是最后一道保险）
+      debugPrint('[ZenFile] startup update check failed: $e');
+    }
+  }
+
+  /// 启动「发现新版本」弹窗。返回后：
+  /// * 选了「忽略」 ⇒ 持久化该版本，之后同版本不再提示；
+  /// * 选了「更新」 ⇒ 跳到「版本更新」页（下载 / ABI 匹配 / 安装器链路都在那里）；
+  /// * 直接返回（返回键 / 点外部）⇒ 不持久化，下次启动仍会提示。
+  Future<void> _showUpdateDialog(UpdateCheckResult result) async {
+    if (_updatePromptShowing) return;
+    _updatePromptShowing = true;
+    try {
+      // 冷启动时 navigator 可能还没挂好：重试一次再放弃。
+      var context = navigatorKey.currentContext;
+      if (context == null || !context.mounted) {
+        await Future.delayed(const Duration(milliseconds: 400));
+        context = navigatorKey.currentContext;
+      }
+      if (context == null || !context.mounted) return;
+
+      final l10n = L10n.of(context);
+      // GitHub 的 body 是 CRLF 原文，统一成 LF（Text 对 \r\n 会多渲染一个空行）。
+      final notes = result.releaseNotes.replaceAll('\r\n', '\n');
+
+      final action = await showDialog<_UpdatePromptAction>(
+        context: context,
+        builder: (ctx) {
+          final theme = Theme.of(ctx);
+          return AlertDialog(
+            icon: Icon(
+              Icons.new_releases_rounded,
+              size: 30,
+              color: theme.colorScheme.primary,
+            ),
+            title: Text(l10n.update_new_version(result.remoteVersion)),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (notes.isNotEmpty) ...[
+                    Text(
+                      l10n.msg305734ce, // 「更新日志」
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: double.infinity,
+                      // ⚠️ 高度必须有界，否则弹窗内容会溢出屏幕（用户看不到按钮）。
+                      constraints: const BoxConstraints(maxHeight: 200),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest
+                            .withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: SelectableText(
+                            notes,
+                            style: TextStyle(
+                              fontSize: 12,
+                              height: 1.5,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.8,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ] else
+                    Text(
+                      l10n.update_changelog_empty,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.5,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, _UpdatePromptAction.ignore),
+                child: Text(l10n.update_dialog_ignore),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, _UpdatePromptAction.update),
+                child: Text(l10n.update_dialog_update),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (action == _UpdatePromptAction.ignore) {
+        await PreferencesService.saveIgnoredUpdateVersion(result.remoteVersion);
+        WebdavDebugLog.log(
+          '[update] startup prompt ignored for '
+          '${result.remoteVersion}',
+        );
+        return;
+      }
+      if (action == _UpdatePromptAction.update) {
+        // 走「版本更新」页而不是就地下载：那里有完整的 ABI 匹配、下载进度、
+        // 失败分类提示与安装器链路，也能看全更新日志。
+        navigatorKey.currentState?.push(
+          MaterialPageRoute(builder: (_) => const UpdateScreen()),
+        );
+      }
+    } finally {
+      _updatePromptShowing = false;
     }
   }
 

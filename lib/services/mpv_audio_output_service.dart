@@ -59,7 +59,7 @@ typedef MpvPropertyGetter = Future<String> Function(String key);
 /// ## 设计约束
 ///
 /// * 所有原生调用失败一律吞掉并只记日志 —— **绝不能因为诊断让音频播不出来**；
-/// * 诊断只在 [WebdavDebugLog.enabled] 打开时才产生（订阅都省掉，零运行时开销）；
+/// * 诊断只在 [WebdavDebugLog.aoDiagnostics] 打开时才产生（订阅都省掉，零运行时开销）；
 /// * [configureBeforeOpen] **必须**在 `player.open()` 之前调用：mpv 只在初始化
 ///   AO 时读这些选项，播放开始后再设已经晚了一个 AudioTrack。
 enum MpvAoMode {
@@ -232,11 +232,37 @@ class MpvAudioOutputService {
   /// （不持有强引用，player 被 GC 后自动消失，不会泄漏）。
   static final Expando<bool> _abandoned = Expando<bool>('zenfile.aoAbandoned');
 
+  /// 存活 player 的**近似**计数：每次 `Player()` 构造后调 [notePlayerCreated]，
+  /// 每个销毁点（都会先调 [abandon]）自动减一。
+  ///
+  /// ## 为什么需要（2026-09-28 真机崩溃现场）
+  ///
+  /// 「反复进出视频播放页就崩」这类问题必须回答一个数字：**同时有几个 mpv 实例活着**。
+  /// 日志里的 `[ledger] live=N` 是唯一直接证据 —— 后台会话被霸占 + media_kit 的
+  /// `dispose()` 要延迟 5s 才 `mpv_terminate_destroy`，N 会随进出次数单调上升，
+  /// 崩溃点就落在 N≥3 的时候。
+  static int _livePlayers = 0;
+
+  /// 记录一次 `Player()` 构造（**新增创建点时必须一并接入**，否则计数偏小）。
+  static void notePlayerCreated(Player player, String where) {
+    _livePlayers++;
+    WebdavDebugLog.log(
+      '[ledger] create($where, #${identityHashCode(player)}) → live=$_livePlayers',
+    );
+  }
+
   /// 声明 [player] 已作废（**必须在 `player.dispose()` 之前调用**）。
   ///
   /// 全库 `Player.dispose()` 只有 5 处，均已接入；新增销毁点时**必须一并接入**，
   /// 否则该路径上的延迟诊断又会变成悬垂原生调用。
   static void abandon(Player player) {
+    // 台账减一（幂等：同一 player 重复 abandon 不重复计数）。
+    if (_abandoned[player] != true) {
+      _livePlayers--;
+      WebdavDebugLog.log(
+        '[ledger] abandon(#${identityHashCode(player)}) → live=$_livePlayers',
+      );
+    }
     _abandoned[player] = true;
   }
 
@@ -434,7 +460,8 @@ class MpvAudioOutputService {
     }
   }
 
-  /// 起播后采集一次音频输出诊断（仅在 [WebdavDebugLog.enabled] 打开时工作）。
+  /// 起播后采集一次音频输出诊断（仅在 [WebdavDebugLog.aoDiagnostics] 打开时工作；
+  /// 取证用的 [WebdavDebugLog.enabled] **不再**连带开启本诊断）。
   ///
   /// 采集三样东西，缺一不可：
   /// 1. `current-ao` —— mpv **运行时实际解析出的驱动**（`ao` 只是候选列表的
@@ -444,7 +471,9 @@ class MpvAudioOutputService {
   /// 3. **原生复刻自检**：用同一个会话号去挂 `DynamicsProcessing`（RJ 的判定
   ///    动作），直接给出「RJ 会不会判我们不兼容」的预测。
   static void schedulePlaybackDiagnostics(Player player, String tag) {
-    if (!WebdavDebugLog.enabled) return; // 未开日志则完全不订阅
+    // 🔴 两个开关都开才订阅：只开 enabled（抓崩溃）不再顺手装上那条 11 秒的
+    // 裸原生悬垂窗口；只开 aoDiagnostics 则诊断无日志可查、纯白挂窗口。
+    if (!WebdavDebugLog.enabled || !WebdavDebugLog.aoDiagnostics) return;
     _attachMpvLog(player, tag);
 
     // ⚠️ 无条件哨兵：证明这段代码**确实被执行到了**。

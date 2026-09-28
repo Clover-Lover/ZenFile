@@ -576,6 +576,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
   /// 导航栏」会把底栏的工具按钮行藏掉、4-tab 反而留在顶部。
   Widget _buildNavTopBar(bool bottomTabs) {
     if (bottomTabs) return _buildTopBarRow();
+    // 多选操作栏覆盖 4-tab：选择模式（长按多选）时隐藏顶栏 4-tab，
+    // 与底栏行为保持一致。
+    if (context.select<FileManagerProvider, bool>((p) => p.isSelectionMode)) {
+      return SizedBox(height: MediaQuery.of(context).padding.top);
+    }
     // 4-tab 在顶栏：关闭时整条收起，只留状态栏高度的空白，
     // 免得下面的内容被状态栏压住。
     if (!context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled)) {
@@ -597,6 +602,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
   Widget _buildNavBottomBar(bool bottomTabs) {
     final navEnabled =
         context.select<FileManagerProvider, bool>((p) => p.bottomNavBarEnabled);
+    // 多选操作栏覆盖 4-tab：任一页面进入选择模式（长按多选）时隐藏整条底栏
+    // （4-tab 或工具按钮行），让页面自身 bottomNavigationBar 的多选操作栏落到
+    // 屏幕最底部，而不是悬在导航栏上方。
+    final selecting =
+        context.select<FileManagerProvider, bool>((p) => p.isSelectionMode);
+    if (selecting) {
+      return SizedBox(height: MediaQuery.of(context).padding.bottom);
+    }
     // 位置=顶部：4-tab 在顶栏，底栏固定是工具按钮行。它不受总开关影响，
     // 否则「关掉导航栏」会把工具按钮行一起藏掉（它没有第二入口）。
     if (!bottomTabs) {
@@ -838,7 +851,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
         case 'tab_settings':
           return [Broken.setting_2, L10n.of(context).cat_settings, _settingsTabIndex, false, slot];
         default:
-          return [Broken.send_2, L10n.of(context).ui_transfers, 2, false, slot];
+          return [Broken.link, L10n.of(context).ui_transfers, 2, false, slot];
       }
     }
     // custom_entry：打开自定义快捷方式弹窗（isCustomEntry=true → 点击走 _openBottomTabEntry）

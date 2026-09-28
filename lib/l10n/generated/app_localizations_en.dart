@@ -221,6 +221,19 @@ class L10nEn extends L10n {
   String get update_retry => 'Retry';
 
   @override
+  String get update_dialog_ignore => 'Ignore';
+
+  @override
+  String get update_dialog_update => 'Update';
+
+  @override
+  String get update_changelog_empty => 'No changelog provided for this version';
+
+  @override
+  String get update_ignored_hint =>
+      'Startup prompt for this version is ignored';
+
+  @override
   String get update_download_install => 'Download & Install';
 
   @override
@@ -1587,6 +1600,18 @@ class L10nEn extends L10n {
   String get app_icon_blue_gold => 'Deep Blue Gold';
 
   @override
+  String get app_icon_blue_folder_white => 'Blue & White Folder';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Gradient Blue Folder';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Deep Blue & Gold Folder';
+
+  @override
+  String get app_icon_sunset_zf => 'Sunset Purple';
+
+  @override
   String title(Object title) {
     return 'App icon switched to $title';
   }
@@ -2596,7 +2621,7 @@ class L10nEn extends L10n {
   String get msg6cbbf7d9 => 'Enter absolute path...';
 
   @override
-  String get msgf13fc21c => 'Network';
+  String get msgf13fc21c => 'Remote';
 
   @override
   String get msg41e625d1 => 'Add Remote Connection';
@@ -2714,7 +2739,7 @@ class L10nEn extends L10n {
   String get cat_recent => 'Recent';
 
   @override
-  String get cat_network => 'Network';
+  String get cat_network => 'Remote';
 
   @override
   String get cat_apps => 'Apps';
@@ -3372,7 +3397,7 @@ class L10nEn extends L10n {
   String get ui_web_share => 'Web Share';
 
   @override
-  String get ui_network => 'Network';
+  String get ui_network => 'Remote';
 
   @override
   String get log_i18n_full =>
@@ -8019,7 +8044,7 @@ class L10nEn extends L10n {
       'Audio effect apps (e.g. RootlessJamesDSP) can only attach to AudioTrack modes; OpenSL ES uses a system-assigned session that they cannot attach to. Switching takes effect immediately.';
 
   @override
-  String get ui_transfers => 'Transfers';
+  String get ui_transfers => 'Connections';
 
   @override
   String get ui_profile => 'Profile';
@@ -8068,4 +8093,24 @@ class L10nEn extends L10n {
 
   @override
   String get app_icon_original => 'Classic Icon';
+
+  @override
+  String get cut_to_clipboard => 'Cut to clipboard';
+
+  @override
+  String get cut_to_other_window => 'Cut to other window';
+
+  @override
+  String get auto_open_created_folder => 'Auto-open created folders';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Automatically enter the folder after creating it';
+
+  @override
+  String get paste_keep_clipboard => 'Keep clipboard after paste';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Clipboard is cleared after paste when unchecked';
 }

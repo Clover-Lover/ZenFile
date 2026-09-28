@@ -84,6 +84,12 @@ class UpdateCheckResult {
   /// 可下载资产（只有 [UpdateChannel.githubApi] 拿得到）。
   final List<UpdateAsset> assets;
 
+  /// 该 Release 的更新日志正文（GitHub API 的 `body`，Markdown 原文）。
+  ///
+  /// 只有 [UpdateChannel.githubApi] / [UpdateChannel.custom] 拿得到 ——
+  /// 网页降级通道只读 302 的 `Location`，**没有正文**，故为空串。
+  final String releaseNotes;
+
   final UpdateCheckError? error;
 
   /// 失败时的 HTTP 状态码（网络层失败时为 null）。
@@ -106,6 +112,7 @@ class UpdateCheckResult {
     this.remoteVersion = '',
     this.pageUrl = '',
     this.assets = const <UpdateAsset>[],
+    this.releaseNotes = '',
     this.error,
     this.httpStatus,
     this.channel = UpdateChannel.githubApi,
@@ -209,6 +216,21 @@ class UpdateCheckService {
   /// 把 `{repo}` 占位展开。
   static String expandUrl(String template) =>
       template.replaceAll('{repo}', repoSlug);
+
+  /// 远端版本是否已被用户「忽略」（不再弹启动提示）。
+  ///
+  /// **启动弹窗与「版本更新」页必须共用这一个判据**，否则会出现
+  /// 「页面上说已忽略、启动却还弹」的自相矛盾。
+  ///
+  /// 用「不高于已忽略版本」而不是相等判断，有两个理由：
+  /// * 用户忽略 v2.1.7 之后，出现 v2.2.0 时**仍应提示一次**（否则等于永久静默）；
+  /// * 避免「已忽略的 tag 比当前还旧」这类脏数据把后续提示全部堵死。
+  static bool isVersionIgnored(String remoteVersion, String ignoredVersion) {
+    final r = remoteVersion.trim();
+    final i = ignoredVersion.trim();
+    if (r.isEmpty || i.isEmpty) return false;
+    return compareVersions(r, i) <= 0;
+  }
 
   /// 用户手填的地址是否可用（用于设置项校验）。
   static bool isValidCustomUrl(String raw) {
@@ -396,15 +418,21 @@ class UpdateCheckService {
           ),
     ];
     final page = (json['html_url'] as String? ?? '').trim();
+    // 更新日志正文：GitHub Release 的 `body`（Markdown）。自定义源（镜像 / 自建接口）
+    // 只要返回同构 JSON 也会带上；缺失时为空串，由 UI 显示占位文案。
+    final notes = (json['body'] as String? ?? '').trim();
     return _ok(
       tag: tag,
       pageUrl: page.isNotEmpty ? page : _fallbackPageUrl,
       assets: assets,
+      releaseNotes: notes,
       channel: a.channel,
       cur: cur,
       sw: sw,
       usedFallback: usedFallback,
-      detail: 'api ok, ${assets.length} asset(s)',
+      detail:
+          'api ok, ${assets.length} asset(s), '
+          'notes=${notes.length}ch',
     );
   }
 
@@ -438,6 +466,8 @@ class UpdateCheckService {
       tag: tag,
       pageUrl: location.startsWith('http') ? location : _webUrlOrPage,
       assets: const <UpdateAsset>[],
+      // 网页通道只拿到 tag，**没有更新日志正文**
+      releaseNotes: '',
       channel: a.channel,
       cur: cur,
       sw: sw,
@@ -457,6 +487,7 @@ class UpdateCheckService {
     required String tag,
     required String pageUrl,
     required List<UpdateAsset> assets,
+    required String releaseNotes,
     required UpdateChannel channel,
     required String cur,
     required Stopwatch sw,
@@ -472,6 +503,7 @@ class UpdateCheckService {
       remoteVersion: tag,
       pageUrl: pageUrl,
       assets: assets,
+      releaseNotes: releaseNotes,
       channel: channel,
       usedFallback: usedFallback,
       elapsed: sw.elapsed,

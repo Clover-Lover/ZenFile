@@ -11,6 +11,8 @@ class PreferencesService {
   static const String _keyThemeMode = 'theme_mode';
   static const String _keyAppLocale = 'app_locale';
   static const String _keyShowHiddenFiles = 'show_hidden_files';
+  static const String _keyAutoOpenCreatedFolder = 'auto_open_created_folder';
+  static const String _keyKeepClipboardAfterPaste = 'keep_clipboard_after_paste';
   static const String _keyShowFloatingAddButton = 'show_floating_add_button';
   static const String _keyShowRemoteCloudBadge = 'show_remote_cloud_badge';
   static const String _keyCategoryFilter = 'category_filter';
@@ -107,6 +109,23 @@ class PreferencesService {
 
   static Future<void> saveShowHiddenFiles(bool val) async {
     await _prefs?.setBool(_keyShowHiddenFiles, val);
+  }
+
+  static bool getAutoOpenCreatedFolder() {
+    return _prefs?.getBool(_keyAutoOpenCreatedFolder) ?? true;
+  }
+
+  static Future<void> saveAutoOpenCreatedFolder(bool val) async {
+    await _prefs?.setBool(_keyAutoOpenCreatedFolder, val);
+  }
+
+  /// 剪贴板「粘贴后保留剪贴板内容」勾选状态（持久化记住，默认不勾选=粘贴后清空）。
+  static bool getKeepClipboardAfterPaste() {
+    return _prefs?.getBool(_keyKeepClipboardAfterPaste) ?? false;
+  }
+
+  static Future<void> saveKeepClipboardAfterPaste(bool val) async {
+    await _prefs?.setBool(_keyKeepClipboardAfterPaste, val);
   }
 
   static bool getShowFloatingAddButton() {
@@ -910,6 +929,56 @@ class PreferencesService {
     await _prefs?.setInt(_keyCachedUsedStorage, val);
   }
 
+  // --- 存储分析（space）扫描结果缓存 ---
+  //
+  // 目录递归统计一次要遍历整个内部存储，冷启动后必然会重跑一遍 ⇒ 用户感知
+  // 「关掉应用就重新算」。这里持久化上次的分类体积，进页面先秒开渲染缓存，
+  // 后台再静默重扫并覆盖。`updatedAt` 用于判定缓存是否足够新。
+  static const String _keySpaceScanCache = 'space_scan_cache_v1';
+
+  /// 读缓存。返回 null 表示没有可用缓存（首次安装 / 已损坏）。
+  static Map<String, dynamic>? getSpaceScanCache() {
+    final str = _prefs?.getString(_keySpaceScanCache);
+    if (str == null || str.isEmpty) return null;
+    try {
+      final decoded = jsonDecode(str);
+      if (decoded is Map) return Map<String, dynamic>.from(decoded);
+    } catch (_) {}
+    return null;
+  }
+
+  static Future<void> saveSpaceScanCache(Map<String, dynamic> data) async {
+    try {
+      await _prefs?.setString(_keySpaceScanCache, jsonEncode(data));
+    } catch (_) {}
+  }
+
+  // --- 已装应用列表缓存 ---
+  //
+  // 原生 getInstalledApps 会对每个包做 queryStatsForPackage / getPackageInfo
+  // （逐包 IPC + 磁盘 io），几百个包时是秒级开销。缓存列表后进页面先秒开，
+  // 后台再刷新。图标不入缓存（体积大且随主题变化），由内存 `_iconCache` 负责。
+  static const String _keyInstalledAppsCache = 'installed_apps_cache_v1';
+
+  static List<Map<String, dynamic>> getInstalledAppsCache() {
+    final str = _prefs?.getString(_keyInstalledAppsCache);
+    if (str == null || str.isEmpty) return [];
+    try {
+      final decoded = jsonDecode(str) as List<dynamic>;
+      return decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static Future<void> saveInstalledAppsCache(
+    List<Map<String, dynamic>> list,
+  ) async {
+    try {
+      await _prefs?.setString(_keyInstalledAppsCache, jsonEncode(list));
+    } catch (_) {}
+  }
+
   static const String _keyAdaptiveMultiLineNames = 'adaptive_multiline_names';
 
   static bool getAdaptiveMultiLineNames() {
@@ -1037,6 +1106,13 @@ class PreferencesService {
   /// 崩溃取证：已经提示过用户的报告文件名（避免同一份报告反复提示）。
   static const String _keyNotifiedCrashReports = 'crash_notified_reports';
 
+  /// 崩溃取证：**曾经交付到公共归档目录**的报告文件名（「已交付台账」）。
+  ///
+  /// 与 `_keyNotifiedCrashReports` 是两件事，别合并：提示集合只在真正弹出提示后
+  /// 才写、且只含 `exit_*` / `java_crash_*`；台账覆盖原生镜像会拷的**全部**文件，
+  /// 用来判断「公共目录里少掉的那份是不是用户删的」—— 是的话就不再补回来。
+  static const String _keyDeliveredCrashReports = 'crash_delivered_reports';
+
   /// 自定义更新源（镜像 / 自建接口）地址。空 = 使用 GitHub 官方 API。
   static const String _keyUpdateApiUrl = 'update_api_url';
 
@@ -1050,6 +1126,27 @@ class PreferencesService {
       await _prefs?.remove(_keyUpdateApiUrl);
     } else {
       await _prefs?.setString(_keyUpdateApiUrl, v);
+    }
+  }
+
+  /// 启动时「发现新版本」弹窗被用户点「忽略」的那一版（存远端 tag，如 `v2.1.7`）。
+  ///
+  /// 语义：**只要远端 tag 不高于这个值就不再弹窗**。用比较而非相等，
+  /// 是为了让用户忽略 2.1.7 之后，出现 2.2.0 时仍能被提示一次；
+  /// 也顺带避免「忽略某个比当前还旧的 tag」这种脏数据把后续提示全堵死。
+  static const String _keyIgnoredUpdateVersion = 'update_ignored_version';
+
+  /// 读取已忽略的版本号；空串 = 没有忽略任何版本。
+  static String getIgnoredUpdateVersion() =>
+      _prefs?.getString(_keyIgnoredUpdateVersion) ?? '';
+
+  /// 记住「已忽略该版本的启动提示」；传空串 = 清除（恢复提示）。
+  static Future<void> saveIgnoredUpdateVersion(String tag) async {
+    final v = tag.trim();
+    if (v.isEmpty) {
+      await _prefs?.remove(_keyIgnoredUpdateVersion);
+    } else {
+      await _prefs?.setString(_keyIgnoredUpdateVersion, v);
     }
   }
 
@@ -1104,6 +1201,19 @@ class PreferencesService {
 
   static Future<void> saveNotifiedCrashReports(List<String> names) async {
     await _prefs?.setStringList(_keyNotifiedCrashReports, names);
+  }
+
+  /// 崩溃取证的「已交付台账」：曾经出现在公共归档目录里的报告名。
+  ///
+  /// 用途只有一个：**用户删掉的报告不要再补回来**。原生每次启动都会把私有存档里
+  /// 公共目录缺的补过去（互为兜底），于是用户手删后旧报告会原样复活、看起来像
+  /// 「又崩了一堆」（2026-09-28 用户实测）。台账减去公共目录现状 = 用户删过的那些。
+  static List<String> getDeliveredCrashReports() {
+    return _prefs?.getStringList(_keyDeliveredCrashReports) ?? const <String>[];
+  }
+
+  static Future<void> saveDeliveredCrashReports(List<String> names) async {
+    await _prefs?.setStringList(_keyDeliveredCrashReports, names);
   }
 
   /// 获取远程媒体文件缩略图预览开关

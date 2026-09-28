@@ -57,12 +57,13 @@ Future<void> _json(
 Map<String, Object> _release(
   String tag, {
   List<Map<String, String>> assets = const [],
-}) =>
-    {
-      'tag_name': tag,
-      'html_url': 'https://github.com/l930203811/ZenFile/releases/tag/$tag',
-      'assets': assets,
-    };
+  String? notes,
+}) => {
+  'tag_name': tag,
+  'html_url': 'https://github.com/l930203811/ZenFile/releases/tag/$tag',
+  'assets': assets,
+  'body': ?notes,
+};
 
 String _apiUrl(HttpServer s) => 'http://127.0.0.1:${s.port}/releases/latest';
 
@@ -111,6 +112,37 @@ void main() {
       expect(UpdateCheckService.compareVersions('2.1.7', '2.1.7'), 0);
       expect(UpdateCheckService.compareVersions('2.0.10', '2.0.9') > 0, isTrue);
       expect(UpdateCheckService.compareVersions('1.9.9', '2.0.0') < 0, isTrue);
+    });
+
+    test('更新日志正文（release body）随结果带回，供「查看 / 复制」使用', () async {
+      final srv = await _serve(
+        (req) async =>
+            _json(req, body: _release('v9.9.9', notes: '## 新功能\n- 目录加解密提速')),
+      );
+      addTearDown(() => srv.close(force: true));
+
+      final r = await UpdateCheckService(
+        apiUrl: _apiUrl(srv),
+        webUrl: null,
+      ).check('2.1.7');
+
+      expect(r.ok, isTrue, reason: r.detail);
+      expect(r.releaseNotes, contains('目录加解密提速'));
+    });
+
+    test('响应里没有 body → releaseNotes 为空串（UI 显示占位，不崩）', () async {
+      final srv = await _serve(
+        (req) async => _json(req, body: _release('v9.9.9')),
+      );
+      addTearDown(() => srv.close(force: true));
+
+      final r = await UpdateCheckService(
+        apiUrl: _apiUrl(srv),
+        webUrl: null,
+      ).check('2.1.7');
+
+      expect(r.ok, isTrue, reason: r.detail);
+      expect(r.releaseNotes, isEmpty);
     });
   });
 
@@ -366,6 +398,20 @@ void main() {
       );
       expect(UpdateCheckService.tagFromLocation('https://github.com/o/r'), isEmpty);
       expect(UpdateCheckService.tagFromLocation(''), isEmpty);
+    });
+
+    test('「已忽略版本」判据：同版 / 更低版都静默，更高版仍要提示', () {
+      // 忽略 v2.1.7 之后：
+      expect(UpdateCheckService.isVersionIgnored('v2.1.7', 'v2.1.7'), isTrue);
+      expect(UpdateCheckService.isVersionIgnored('2.1.7', 'v2.1.7'), isTrue);
+      expect(UpdateCheckService.isVersionIgnored('v2.1.6', 'v2.1.7'), isTrue);
+      // 出现更高的版本必须重新提示，否则等于永久静默
+      expect(UpdateCheckService.isVersionIgnored('v2.2.0', 'v2.1.7'), isFalse);
+      expect(UpdateCheckService.isVersionIgnored('v3.0.0', 'v2.1.7'), isFalse);
+      // 没忽略过任何版本 / 版本号缺失 → 一律不静默
+      expect(UpdateCheckService.isVersionIgnored('v2.1.7', ''), isFalse);
+      expect(UpdateCheckService.isVersionIgnored('v2.1.7', '   '), isFalse);
+      expect(UpdateCheckService.isVersionIgnored('', 'v2.1.7'), isFalse);
     });
   });
 }

@@ -225,6 +225,20 @@ class L10nEs extends L10n {
   String get update_retry => 'Reintentar';
 
   @override
+  String get update_dialog_ignore => 'Ignorar';
+
+  @override
+  String get update_dialog_update => 'Actualizar';
+
+  @override
+  String get update_changelog_empty =>
+      'No hay registro de cambios para esta versión';
+
+  @override
+  String get update_ignored_hint =>
+      'El aviso de inicio para esta versión está ignorado';
+
+  @override
   String get update_download_install => 'Descargar e instalar';
 
   @override
@@ -1623,6 +1637,18 @@ class L10nEs extends L10n {
   String get app_icon_blue_gold => 'Azul profundo dorado';
 
   @override
+  String get app_icon_blue_folder_white => 'Carpeta azul y blanca';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Carpeta azul degradada';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Carpeta azul profundo y dorado';
+
+  @override
+  String get app_icon_sunset_zf => 'Púrpura atardecer';
+
+  @override
   String title(Object title) {
     return 'Icono de la app cambiado a $title';
   }
@@ -2648,7 +2674,7 @@ class L10nEs extends L10n {
   String get msg6cbbf7d9 => 'Ingrese la ruta absoluta...';
 
   @override
-  String get msgf13fc21c => 'Red';
+  String get msgf13fc21c => 'Remoto';
 
   @override
   String get msg41e625d1 => 'Añadir Conexión Remota';
@@ -2771,7 +2797,7 @@ class L10nEs extends L10n {
   String get cat_recent => 'Recientes';
 
   @override
-  String get cat_network => 'Red';
+  String get cat_network => 'Remoto';
 
   @override
   String get cat_apps => 'Aplicaciones';
@@ -3440,7 +3466,7 @@ class L10nEs extends L10n {
   String get ui_web_share => 'Compartir Web';
 
   @override
-  String get ui_network => 'Red';
+  String get ui_network => 'Remoto';
 
   @override
   String get log_i18n_full =>
@@ -8124,7 +8150,7 @@ class L10nEs extends L10n {
       'Las apps de efectos de audio (p. ej. RootlessJamesDSP) solo pueden engancharse a los modos AudioTrack; OpenSL ES usa una sesión asignada por el sistema, a la que no pueden engancharse. El cambio es inmediato.';
 
   @override
-  String get ui_transfers => 'Transferencias';
+  String get ui_transfers => 'Conexiones';
 
   @override
   String get ui_profile => 'Perfil';
@@ -8174,4 +8200,26 @@ class L10nEs extends L10n {
 
   @override
   String get app_icon_original => 'Icono clásico';
+
+  @override
+  String get cut_to_clipboard => 'Cortar al portapapeles';
+
+  @override
+  String get cut_to_other_window => 'Cortar a la otra ventana';
+
+  @override
+  String get auto_open_created_folder =>
+      'Abrir automáticamente las carpetas creadas';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Entrar automáticamente en la carpeta después de crearla';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Conservar el portapapeles después de pegar';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'El portapapeles se limpia después de pegar si no está marcado';
 }

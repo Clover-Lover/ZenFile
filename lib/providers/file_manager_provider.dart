@@ -180,6 +180,7 @@ class FileManagerProvider extends ChangeNotifier {
     _iconScale = PreferencesService.getIconScale();
     _itemPaddingMultiplier = PreferencesService.getItemPaddingMultiplier();
     _showHiddenFiles = PreferencesService.getShowHiddenFiles();
+    _autoOpenCreatedFolder = PreferencesService.getAutoOpenCreatedFolder();
     _showFloatingAddButton = PreferencesService.getShowFloatingAddButton();
     _showRemoteCloudBadge = PreferencesService.getShowRemoteCloudBadge();
     _rememberCategoryFilter = PreferencesService.getRememberCategoryFilter();
@@ -830,6 +831,15 @@ class FileManagerProvider extends ChangeNotifier {
 
   bool _showHiddenFiles = false;
   bool get showHiddenFiles => _showHiddenFiles;
+
+  bool _autoOpenCreatedFolder = true;
+  bool get autoOpenCreatedFolder => _autoOpenCreatedFolder;
+
+  void toggleAutoOpenCreatedFolder() {
+    _autoOpenCreatedFolder = !_autoOpenCreatedFolder;
+    PreferencesService.saveAutoOpenCreatedFolder(_autoOpenCreatedFolder);
+    notifyListeners();
+  }
 
   void toggleHiddenFiles() {
     _showHiddenFiles = !_showHiddenFiles;
@@ -1499,6 +1509,18 @@ class FileManagerProvider extends ChangeNotifier {
       return _activeTabIndex.clamp(0, _tabs.length - 1);
     }
     return raw;
+  }
+
+  /// 双窗口：返回「源路径所在 pane」的另一 pane 的目标 tab 索引。
+  /// 单窗口、双窗口未开、或源路径无法归属任一 pane 时返回 -1。
+  int otherPaneTabIndexForPath(String sourcePath) {
+    if (!_enableSplitScreen || _tabs.length < 2) return -1;
+    final p0 = _tabs[paneTabIndex(0)].currentPath;
+    final p1 = _tabs[paneTabIndex(1)].currentPath;
+    final parent = p.posix.dirname(sourcePath);
+    if (parent == p0) return paneTabIndex(1);
+    if (parent == p1) return paneTabIndex(0);
+    return paneTabIndex(1);
   }
 
   /// 让 [paneIndex] 对应的 pane 获得焦点。
@@ -9978,6 +10000,17 @@ class FileManagerProvider extends ChangeNotifier {
       _lastCreateError = e.toString();
       return null;
     }
+  }
+
+  /// 新建文件夹成功后自动打开该文件夹（本地 / 远程一致；远程加密目录由
+  /// createFolder 内部刷新原目录，密文路径构造复杂暂不自动进入）。
+  Future<void> openCreatedFolder(String createdName) async {
+    if (!_autoOpenCreatedFolder || activeTab.isCryptRemote) return;
+    final parent = activeTab.currentPath;
+    final newPath = currIsRemote
+        ? _buildRemotePath(parent, createdName)
+        : p.join(parent, createdName);
+    await loadDirectory(newPath);
   }
 
   Future<String?> createFile(String name) async {

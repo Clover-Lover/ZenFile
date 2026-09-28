@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  媒体通知栏（audio_service）专用的「状态栏小图标」。
+
+  ⚠️ 为什么不能直接用应用图标（`mipmap/ic_launcher` / `drawable/ic_launcher_*`）：
+  1. 通知小图标必须是**纯 alpha 单色图**，否则 Android 5.0+ 会把整个不透明
+     区域渲染成一坨白色实心块；
+  2. 应用图标资源会被 `activity-alias` 图标切换功能重新指向，且
+     `isShrinkResources = true` 下「只被 Dart 字符串引用」的图标会被裁掉
+     ⇒ `setSmallIcon(0)` ⇒ 抛 `Invalid notification (no valid small icon)`。
+
+  本文件是**独立自有资源**，不参与图标切换，并在 `res/raw/keep.xml` 中登记，
+  保证一定打进 APK。图形 = 文件夹 + 播放三角（与应用图标同源语义）。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:pathData="M26,30h20l6,6h30c3.3,0 6,2.7 6,6v36c0,3.3 -2.7,6 -6,6h-56c-3.3,0 -6,-2.7 -6,-6v-42c0,-3.3 2.7,-6 6,-6z M48,46l18,10l-18,10z" />
+</vector>

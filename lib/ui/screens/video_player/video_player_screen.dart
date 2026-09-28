@@ -173,6 +173,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   StreamSubscription<Tracks>? _tracksSub;
   StreamSubscription<Track>? _trackSub;
 
+  /// 播放器事件订阅（error / playing / position / duration / buffering / completed）。
+  ///
+  /// ⚠️ 必须保存、在 `dispose()` 时取消，并让 `_initListeners()` 幂等：
+  /// `_switchHwdec()`（用户手动切硬解、或黑屏自动软解回退）会**重建 player 并再次
+  /// 调用 `_initListeners()`**；不摘掉旧订阅，旧 player 上的回调会在重建窗口内继续
+  /// 驱动本页 UI（两个 player 的事件同时打到同一个 State），而旧 player 退役后这些
+  /// 订阅再也没有机会被取消。后台播放模式下本页销毁也不销毁 player，同理。
+  final List<StreamSubscription<dynamic>> _playerSubs =
+      <StreamSubscription<dynamic>>[];
+
   // 解码方式：true=硬解(auto-safe), false=软解(no)，持久化保存
   bool _useHardwareDecode = true;
 
@@ -230,12 +240,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // 每次打开视频都会弹一次系统通知权限框（打断刚开播的画面，并让 Activity 反复
       // 切前后台）。权限提示只在用户**主动**点「后台播放」时给
       // （`_toggleBackgroundMode` → `_startBackgroundMode`）。
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
-        final path = _currentStreamUrl ?? widget.videoPath;
-        if (path.isEmpty || getAudioHandler().isPlayingPath(path)) return;
+        final handler = getAudioHandler();
+        final source = widget.videoPath;
+        if (source.isEmpty) return;
+        // ① 幂等：**本页这个 player 已经在通知栏上**（`diagnose.onReattach`、
+        //    `_switchHwdec` 重建后的内部重挂都会再走到这里）⇒ 直接返回。
+        //    判据用**本页 player 的身份**，不用「源路径是否在播」那种猜法：后者在
+        //    流地址解析前/后结果不同（远程/加密视频会变成带随机端口的代理 URL）。
+        if (identical(handler.currentPlayer, player) && handler.videoSession)
+          return;
+        // ② 后台旧会话的**接管退役**已在启动流程最开始完成（见 initState 里
+        //    「接管后台视频会话」那段注释），这里只剩「把本页 player 挂上去」。
+        //    ⚠️ 绝不能改成上一版那样「发现后台已有会话就静默跳过 attach」：那会让
+        //    第一个实例被永久霸占，每进出一次多一个存活 mpv 实例，第 3-4 次即
+        //    `CRASH_NATIVE`（2026-09-28 真机日志，硬解/软解均复现）。
         WebdavDebugLog.log('[vp] postFrame 自动 attach 后台播放（偏好粘性）');
-        unawaited(_attachToBackgroundHandler());
+        // ⚠️ 必须 `silent: true`：这是「偏好粘性」的自动挂载，**不是**用户主动开启
+        // 后台播放，弹「已进入后台播放」会变成「每次重进播放页都弹一次」
+        // （用户反馈 2026-09-28）。与 `_switchHwdec` 重建后的内部重挂保持一致。
+        await _attachToBackgroundHandler(silent: true);
       });
     }
 
@@ -265,6 +290,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         bufferSize: bufferSize,
       ),
     );
+    MpvAudioOutputService.notePlayerCreated(player, 'video-init');
     controller = VideoController(
       player,
       configuration: VideoControllerConfiguration(
@@ -280,15 +306,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // 排查远程（WebDAV/OpenList 302、本地代理）播放失败：记录 libmpv 的错误事件。
     // 与 webdav_debug.log 同源，release 包同样可查；排查完毕后随 WebdavDebugLog
     // 总开关一起关闭。
-    player.stream.error.listen((err) {
-      WebdavDebugLog.log('【播放器错误】$err');
-      _maybeAutoFallbackOnError(err.toString());
-    });
-    player.stream.playing.listen((playing) {
-      if (playing) {
-        WebdavDebugLog.log('播放器开始播放 path=${WebdavDebugLog.mask(widget.videoPath)}');
-      }
-    });
+    // ⚠️ error / playing 两个监听已移入 `_initListeners()` 统一管理（见下方调用）：
+    // 它们同属「player 事件订阅」，必须与 position/duration 等一样可被取消，否则
+    // 每次 `_switchHwdec()` 重建 player 都会留下一份永不取消的旧订阅。顺带修掉一个
+    // 既有缺口 —— 原先 error 只在首次 `initState` 挂，软解重建后新 player 的错误
+    // 不再被记录，`_maybeAutoFallbackOnError` 也永远不会再触发。
 
     // 覆盖 media_kit 硬编码的 network-timeout=5s。
     // SMB/FTP/SFTP 建立连接+认证可能需要 5-10s，5s 超时会导致 libmpv
@@ -297,6 +319,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _initListeners();
     _initTrackListeners();
     () async {
+      // 接管后台视频会话：后台还挂着**别的** player 时，先把它退役再配置/起播本页
+      // 播放器 —— 保证本页 `open()` 时进程里只有一个 mpv 实例。
+      // ⚠️ 时序很重要：放到这里（`configureBeforeOpen` 之前）而不是 postFrame，
+      // 是因为真机崩溃就发生在 `open()` 里/后不久（2026-09-28 日志：`open()` 之后
+      // 0.25s 崩、无任何日志）。旧实现让后台会话**永久霸占**第一个实例（既不退役
+      // 也没人引用），每进出一次多一个存活实例，第 3-4 次即 `CRASH_NATIVE`。
+      if (_isBackgroundMode) {
+        final h = getAudioHandler();
+        if (h.videoSession && !identical(h.currentPlayer, player)) {
+          WebdavDebugLog.log(
+            '[vp] 进场接管后台视频会话（同一部=${h.isPlayingSource(widget.videoPath)}）',
+          );
+          await h.takeOverBackgroundSession(reason: 'video-takeover');
+        }
+      }
       try {
         final platform = player.platform;
       if (platform is NativePlayer) {
@@ -471,6 +508,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         '硬解=$_useHardwareDecode voCompat=$_voCompatMode');
     _startBlackScreenCheck();
     player.open(Media(widget.videoPath), play: false);
+    // 崩溃定位哨兵：`open()` 之后紧邻的一段没有任何日志，若进程崩在这里，上面那行
+    // 「打开视频」就是日志最后一行 —— 用它把「崩在 open 里」和「崩在之后」分开。
+    WebdavDebugLog.log('[vp] open() 已发出 player=#${identityHashCode(player)}');
     _autoMatchSubtitle();
   }
 
@@ -1339,41 +1379,85 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _initListeners() {
-    player.stream.playing.listen((v) {
-      if (!mounted) return;
-      setState(() => _isPlaying = v);
-    });
+    // 幂等：`_switchHwdec()` 重建 player 后会再次调用本方法，必须先摘掉旧订阅。
+    _cancelPlayerSubs();
 
-    player.stream.position.listen((p) {
-      if (!mounted || _isSeeking) return;
-      setState(() {
-        _position = p;
-        _sliderValue = p.inMilliseconds.toDouble();
-      });
-    });
+    // 排查远程（WebDAV/OpenList 302、本地代理）播放失败：记录 libmpv 的错误事件。
+    // 与 webdav_debug.log 同源，release 包同样可查；排查完毕后随 WebdavDebugLog
+    // 总开关一起关闭。
+    _playerSubs.add(
+      player.stream.error.listen((err) {
+        WebdavDebugLog.log('【播放器错误】$err');
+        _maybeAutoFallbackOnError(err.toString());
+      }),
+    );
 
-    player.stream.duration.listen((d) {
-      if (!mounted) return;
-      setState(() => _duration = d);
-      if (!_hasRestoredPosition && d > Duration.zero) {
-        _restorePlaybackPosition();
-      }
-    });
+    _playerSubs.add(
+      player.stream.playing.listen((v) {
+        if (v) {
+          WebdavDebugLog.log(
+            '播放器开始播放 path=${WebdavDebugLog.mask(widget.videoPath)}',
+          );
+        }
+        if (!mounted) return;
+        setState(() => _isPlaying = v);
+      }),
+    );
 
-    player.stream.buffering.listen((v) {
-      if (!mounted) return;
-      setState(() => _isBuffering = v);
-    });
+    _playerSubs.add(
+      player.stream.position.listen((p) {
+        if (!mounted || _isSeeking) return;
+        setState(() {
+          _position = p;
+          _sliderValue = p.inMilliseconds.toDouble();
+        });
+      }),
+    );
 
-    player.stream.completed.listen((v) {
-      if (!v || !mounted) return;
-      _clearPlaybackPosition();
-      _handlePlaybackCompleted();
-    });
+    _playerSubs.add(
+      player.stream.duration.listen((d) {
+        if (!mounted) return;
+        setState(() => _duration = d);
+        if (!_hasRestoredPosition && d > Duration.zero) {
+          _restorePlaybackPosition();
+        }
+      }),
+    );
+
+    _playerSubs.add(
+      player.stream.buffering.listen((v) {
+        if (!mounted) return;
+        setState(() => _isBuffering = v);
+      }),
+    );
+
+    _playerSubs.add(
+      player.stream.completed.listen((v) {
+        if (!v || !mounted) return;
+        _clearPlaybackPosition();
+        _handlePlaybackCompleted();
+      }),
+    );
+  }
+
+  /// 取消全部播放器事件订阅（`dispose()` 与重复 `_initListeners()` 共用）。
+  ///
+  /// 对 media_kit 的 broadcast stream 而言 `cancel()` 是**同步摘除订阅者**，无需
+  /// await；这里保持同步以贴合 `dispose()` 的 void 约束。
+  void _cancelPlayerSubs() {
+    if (_playerSubs.isEmpty) return;
+    for (final sub in _playerSubs) {
+      sub.cancel();
+    }
+    _playerSubs.clear();
   }
 
   /// 监听可用音轨/字幕轨变化与当前选中轨道，用于音轨/字幕轨选择 UI。
   void _initTrackListeners() {
+    // 幂等：`_switchHwdec()` 重建 player 后会再次调用本方法。直接覆盖字段会让
+    // **旧订阅彻底失去引用**（再也 cancel 不掉）⇒ 必须先显式取消。
+    _tracksSub?.cancel();
+    _trackSub?.cancel();
     _tracksSub = player.stream.tracks.listen((tracks) {
       if (!mounted) return;
       setState(() {
@@ -1681,6 +1765,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         bufferSize: 64 * 1024 * 1024,
       ),
     );
+    MpvAudioOutputService.notePlayerCreated(player, 'video-switch');
     controller = VideoController(
       player,
       configuration: VideoControllerConfiguration(
@@ -2631,6 +2716,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _positionSub?.cancel();
     _tracksSub?.cancel();
     _trackSub?.cancel();
+    // ⚠️ 摘掉挂在 player 上的事件订阅：后台播放模式下 player 会被保留（继续播），
+    // `_switchHwdec()` 还会重建 player ⇒ 不摘掉就是永久泄漏（见 _playerSubs）。
+    _cancelPlayerSubs();
     _seekIndicatorTimer?.cancel();
     _previewDebounceTimer?.cancel();
     _sliderTimer?.cancel();
@@ -2640,6 +2728,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _progressSaveTimer?.cancel();
     _sleepTimer?.cancel();
     _stopBlackScreenCheck();
+    // ⚠️ 丢帧监测的 Timer.periodic 也必须停（此前只在 `_switchHwdec()` 里停，
+    // 漏了本方法）：它每个窗口都会醒一次，虽然 `_onFrameDropWindow()` 首行
+    // `if (!mounted) return` 挡住了原生调用，但**每次进出播放页都留下一个永不
+    // 取消的周期定时器**，反复进出即持续累积（软解路径才启动它）。
+    _stopFrameDropWatch();
     _saveCurrentPlaybackPosition();
     _controlsAnimController.dispose();
     // 本页即将销毁、不再持有 player ⇒ 撤销登记，之后通知栏的「关闭」/换绑可以安全
@@ -2975,7 +3068,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         // 显式闭包（不直接传方法引用）：`_attachToBackgroundHandler` 现在带可选命名
         // 参数 `silent`，用闭包让类型匹配一目了然，不必依赖「带可选参数的函数可赋给
         // 参数更少的函数类型」这条子类型规则。
-        onReattach: () => _attachToBackgroundHandler(),
+        // silent：用户上一步刚在 `_startBackgroundMode` 里拿到过「已进入后台播放」
+        // 提示，这里只是媒体通知链路重初始化后的**补挂**，再弹一次就是重复提示。
+        onReattach: () => _attachToBackgroundHandler(silent: true),
       ),
     );
   }
@@ -3009,6 +3104,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       // 标记本次会话属于视频：音频类别页顶部卡片据此忽略 mediaItem、退回
       // lastPlayedAudio，否则会显示视频播放记录（用户反馈 2026-09-27）。
       videoSession: true,
+      // 视频会话身份 = **源路径**（不是解析后的代理流 URL）：供
+      // `isPlayingSource` 判断「重复打开同一部视频」时是否已在后台播放，
+      // 避免每次重进都重复 attach（见 `ZenFileAudioHandler.videoSourcePath`）。
+      videoSourcePath: widget.videoPath,
     );
     // ⚠️ 必须声明「本页仍持有这个 player」：页面不再自动退出后，通知栏的
     // 「关闭」（ZenFileAudioHandler.stop）或**换绑其它播放器**（attach 回收 oldPlayer，
@@ -3076,10 +3175,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // 这个 player，它们发的是**裸原生调用**，销毁后调用即 use-after-free
     // ⇒ CRASH_NATIVE（Dart 侧拿不到栈）。abandon 是它们唯一的拦阻点。
     MpvAudioOutputService.abandon(target);
+    WebdavDebugLog.log(
+      '[vp] disposePlayer(#${identityHashCode(target)}): abandon 完成',
+    );
     unawaited(
       _eqService.detach().whenComplete(() {
+        WebdavDebugLog.log(
+          '[vp] disposePlayer(#${identityHashCode(target)}): eq 已解绑 → 调 dispose()',
+        );
         try {
           target.dispose();
+          WebdavDebugLog.log(
+            '[vp] disposePlayer(#${identityHashCode(target)}): dispose() 已调用',
+          );
         } catch (_) {}
       }),
     );

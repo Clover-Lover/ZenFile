@@ -14,6 +14,7 @@ import '../../models/file_filter_type.dart';
 import '../../models/network_connection_model.dart';
 import '../../core/icon_fonts/broken_icons.dart';
 import 'drag_drop_action_dialog.dart';
+import 'cut_destination_sheet.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../../services/app_manager_service.dart';
 import '../../core/utils.dart';
@@ -281,7 +282,12 @@ class _PaneBrowserState extends State<PaneBrowser> {
         provider.copyFile(path);
         break;
       case 'cut':
-        provider.cutFile(path);
+        await handleCutWithDestination(
+          context,
+          provider,
+          paths: [path],
+          defaultCut: () async => provider.cutFile(path),
+        );
         break;
       case 'rename':
         final isMulti =
