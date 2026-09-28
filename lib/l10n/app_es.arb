@@ -8090,5 +8090,14 @@
   "app_icon_original": "Icono clásico",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "Cortar al portapapeles",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "Cortar a la otra ventana",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+
 }

@@ -8068,4 +8068,10 @@ class L10nEn extends L10n {
 
   @override
   String get app_icon_original => 'Classic Icon';
+
+  @override
+  String get cut_to_clipboard => 'Cut to clipboard';
+
+  @override
+  String get cut_to_other_window => 'Cut to other window';
 }

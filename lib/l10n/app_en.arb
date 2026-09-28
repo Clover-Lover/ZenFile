@@ -8156,5 +8156,14 @@
   "app_icon_original": "Classic Icon",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "Cut to clipboard",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "Cut to other window",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+
 }

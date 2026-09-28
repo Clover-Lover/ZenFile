@@ -7651,6 +7651,12 @@ class L10nZh extends L10n {
 
   @override
   String get app_icon_original => '经典图标';
+
+  @override
+  String get cut_to_clipboard => '剪切到剪贴板';
+
+  @override
+  String get cut_to_other_window => '剪切到另一窗口';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -15270,4 +15276,10 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get app_icon_original => '經典圖示';
+
+  @override
+  String get cut_to_clipboard => '剪下到剪貼簿';
+
+  @override
+  String get cut_to_other_window => '剪下到另一視窗';
 }

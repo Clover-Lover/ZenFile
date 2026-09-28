@@ -8090,5 +8090,14 @@
   "app_icon_original": "أيقونة كلاسيكية",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "قص إلى الحافظة",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "قص إلى النافذة الأخرى",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+
 }

@@ -7827,4 +7827,10 @@ class L10nKo extends L10n {
 
   @override
   String get app_icon_original => '클래식 아이콘';
+
+  @override
+  String get cut_to_clipboard => '클립보드로 잘라내기';
+
+  @override
+  String get cut_to_other_window => '다른 창으로 잘라내기';
 }

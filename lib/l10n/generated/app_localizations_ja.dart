@@ -7821,4 +7821,10 @@ class L10nJa extends L10n {
 
   @override
   String get app_icon_original => 'クラシックアイコン';
+
+  @override
+  String get cut_to_clipboard => 'クリップボードへ切り取り';
+
+  @override
+  String get cut_to_other_window => '別のウィンドウへ切り取り';
 }

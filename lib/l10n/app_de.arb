@@ -8087,5 +8087,14 @@
   "app_icon_original": "Klassisches Symbol",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "In die Zwischenablage ausschneiden",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "In das andere Fenster ausschneiden",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+
 }

@@ -8146,4 +8146,10 @@ class L10nRu extends L10n {
 
   @override
   String get app_icon_original => 'Классическая иконка';
+
+  @override
+  String get cut_to_clipboard => 'Вырезать в буфер обмена';
+
+  @override
+  String get cut_to_other_window => 'Вырезать в другое окно';
 }

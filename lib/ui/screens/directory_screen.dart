@@ -34,6 +34,7 @@ import '../../core/theme.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import '../widgets/crypt_progress_dialog.dart';
 import '../widgets/clipboard_menu_sheet.dart';
+import '../widgets/cut_destination_sheet.dart';
 import '../widgets/favorites_sheet.dart';
 
 
@@ -673,7 +674,12 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).msg4fb42e6e)));
         break;
       case 'cut':
-        provider.cutFile(path);
+        await handleCutWithDestination(
+          context,
+          provider,
+          paths: [path],
+          defaultCut: () async => provider.cutFile(path),
+        );
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).msge5212c58)));
         break;
       case 'rename':

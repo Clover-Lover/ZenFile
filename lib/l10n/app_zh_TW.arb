@@ -8238,5 +8238,14 @@
   "app_icon_original": "經典圖示",
   "@app_icon_original": {
     "description": "Classic app icon"
+  },
+  "cut_to_clipboard": "剪下到剪貼簿",
+  "@cut_to_clipboard": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
+  },
+  "cut_to_other_window": "剪下到另一視窗",
+  "@cut_to_other_window": {
+    "description": "ui\\widgets\\cut_destination_sheet.dart"
   }
+
 }

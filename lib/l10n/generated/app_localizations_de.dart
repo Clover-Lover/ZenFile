@@ -8158,4 +8158,10 @@ class L10nDe extends L10n {
 
   @override
   String get app_icon_original => 'Klassisches Symbol';
+
+  @override
+  String get cut_to_clipboard => 'In die Zwischenablage ausschneiden';
+
+  @override
+  String get cut_to_other_window => 'In das andere Fenster ausschneiden';
 }

@@ -8174,4 +8174,10 @@ class L10nEs extends L10n {
 
   @override
   String get app_icon_original => 'Icono clásico';
+
+  @override
+  String get cut_to_clipboard => 'Cortar al portapapeles';
+
+  @override
+  String get cut_to_other_window => 'Cortar a la otra ventana';
 }

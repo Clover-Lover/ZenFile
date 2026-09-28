@@ -8039,4 +8039,10 @@ class L10nAr extends L10n {
 
   @override
   String get app_icon_original => 'أيقونة كلاسيكية';
+
+  @override
+  String get cut_to_clipboard => 'قص إلى الحافظة';
+
+  @override
+  String get cut_to_other_window => 'قص إلى النافذة الأخرى';
 }

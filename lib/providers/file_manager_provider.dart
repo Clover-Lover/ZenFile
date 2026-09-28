@@ -1501,6 +1501,18 @@ class FileManagerProvider extends ChangeNotifier {
     return raw;
   }
 
+  /// 双窗口：返回「源路径所在 pane」的另一 pane 的目标 tab 索引。
+  /// 单窗口、双窗口未开、或源路径无法归属任一 pane 时返回 -1。
+  int otherPaneTabIndexForPath(String sourcePath) {
+    if (!_enableSplitScreen || _tabs.length < 2) return -1;
+    final p0 = _tabs[paneTabIndex(0)].currentPath;
+    final p1 = _tabs[paneTabIndex(1)].currentPath;
+    final parent = p.posix.dirname(sourcePath);
+    if (parent == p0) return paneTabIndex(1);
+    if (parent == p1) return paneTabIndex(0);
+    return paneTabIndex(1);
+  }
+
   /// 让 [paneIndex] 对应的 pane 获得焦点。
   void setActivePane(int paneIndex) {
     if (paneIndex < 0 || paneIndex > 1) return;

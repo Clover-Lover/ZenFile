@@ -14337,6 +14337,18 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'经典图标'**
   String get app_icon_original;
+
+  /// ui\widgets\cut_destination_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'剪切到剪贴板'**
+  String get cut_to_clipboard;
+
+  /// ui\widgets\cut_destination_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'剪切到另一窗口'**
+  String get cut_to_other_window;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

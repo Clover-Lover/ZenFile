@@ -8193,4 +8193,10 @@ class L10nFr extends L10n {
 
   @override
   String get app_icon_original => 'Icône classique';
+
+  @override
+  String get cut_to_clipboard => 'Couper vers le presse-papiers';
+
+  @override
+  String get cut_to_other_window => 'Couper vers l\'autre fenêtre';
 }
