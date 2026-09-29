@@ -37,7 +37,6 @@ Future<void> showClipboardMenuSheet(
   // 每任务独立的「粘贴后保留」状态（内存态，默认不勾选 → 粘贴后自动清除）。
   final keepByTask = <ClipboardTask, bool>{};
   const maxPanelHeight = 340.0;
-  const maxTaskItemsHeight = 110.0;
 
   return showDialog<void>(
     context: context,
@@ -45,14 +44,6 @@ Future<void> showClipboardMenuSheet(
     builder: (_) => StatefulBuilder(
       builder: (sheetContext, setSheetState) {
         final tasks = provider.clipboardTasks;
-        final totalItems = tasks.fold<int>(
-          0,
-          (s, t) =>
-              s +
-              (t.isRemote
-                  ? (t.remoteItems?.length ?? 0)
-                  : t.paths.length),
-        );
         return Stack(
           children: [
             GestureDetector(
@@ -79,39 +70,6 @@ Future<void> showClipboardMenuSheet(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 标题：剪贴板 + 总项数
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Broken.clipboard,
-                            size: 16,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              l10n.ui_clipboard,
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.primary,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Text(
-                            '$totalItems',
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.5,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     // 任务列表（多任务：任务间分割线 + 每任务独立粘贴/勾选/清除）
                     Flexible(
                       child: ConstrainedBox(
@@ -170,12 +128,14 @@ Future<void> showClipboardMenuSheet(
                       ),
                     ),
                     const SizedBox(height: 4),
-                    // 底部操作：清除全部
+                    // 底部操作：清除全部（窄）+ 粘贴全部（右侧，按每任务勾选状态操作）
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12, 6, 12, 10),
                       child: Row(
                         children: [
+                          // 清除全部（窄）
                           Expanded(
+                            flex: 1,
                             child: OutlinedButton(
                               onPressed: () {
                                 Navigator.pop(sheetContext);
@@ -199,6 +159,47 @@ Future<void> showClipboardMenuSheet(
                               child: _ButtonLabel(
                                 text: l10n.ui_clear,
                                 fontSize: 13,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          // 粘贴全部：依次粘贴所有任务；每个任务按自己的勾选状态
+                          // （勾选=粘贴后保留，不勾选=粘贴后清除；剪切任务始终清除）
+                          Expanded(
+                            flex: 3,
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                Navigator.pop(sheetContext);
+                                // 从后往前粘贴：任务被移除时索引保持有效
+                                for (int i = tasks.length - 1; i >= 0; i--) {
+                                  final task = tasks[i];
+                                  await onPaste(
+                                    i,
+                                    clearAfterPaste: task.isCut
+                                        ? true
+                                        : !(keepByTask[task] ?? false),
+                                  );
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.content_paste,
+                                size: 16,
+                              ),
+                              label: _ButtonLabel(
+                                text: l10n.ui_paste,
+                                fontSize: 14,
+                                bold: true,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 4,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
                           ),
