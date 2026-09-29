@@ -7,20 +7,21 @@ import '../../core/icon_fonts/broken_icons.dart';
 import '../../core/utils.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../providers/file_manager_provider.dart';
-import '../../services/preferences_service.dart';
 
 /// 剪贴板面板（**全项目唯一实现**，单窗口 + 双窗口共用）。
 ///
 /// ## 多任务剪贴板（issue #36）
 /// 每次复制/剪切 = 一个任务（[ClipboardTask]），累计存放（上限 20，超出自动
-/// 移除最旧）。面板按任务分组展示，任务之间用**分割线**区分；每个任务有独立的
-/// 「粘贴」按钮 —— 只粘贴该任务；任务可单独删除；底部「清除」清空全部任务。
+/// 移除最旧）。面板按任务分组展示，任务之间用**分割线**区分。
 ///
-/// ## 粘贴语义
-/// - **复制任务**：粘贴后默认保留（可多次粘贴到不同位置）；勾选「粘贴后保留
-///   剪贴板内容」时保留，不勾选则粘贴过的复制任务被清除。
-/// - **剪切任务**：粘贴后**始终自动移除**（源文件已被移走，留着是死路径）。
-/// - 全局「保留剪贴板」勾选状态持久化（PreferencesService）。
+/// ## 每任务独立操作（不共用一套）
+/// - 每个任务有自己的**清除**按钮（区块头部 ✕）与自己的**勾选框**
+///   （「粘贴后保留」），互不影响。
+/// - **复制任务**：勾选框默认不勾选 ⇒ 粘贴后**自动清除**该任务；
+///   勾选后粘贴则保留（可多次粘贴到不同位置）。
+/// - **剪切任务**：粘贴后**始终自动清除**（源文件已被移走，留着是死路径），
+///   区块内显示提示文案，无勾选框。
+/// - 底部「清除」按钮清空全部任务。
 ///
 /// ## 显示内容
 /// 每个任务的列表项按**真实文件类型**给图标与配色（复用
@@ -33,12 +34,8 @@ Future<void> showClipboardMenuSheet(
 }) {
   final l10n = L10n.of(context);
   final theme = Theme.of(context);
-  // 勾选「粘贴后保留剪贴板内容」后，复制任务粘贴成功不清除；默认不勾选
-  // （粘贴后自动清除）。勾选状态持久化（PreferencesService）。
-  var keepClipboard = PreferencesService.getKeepClipboardAfterPaste();
-  // 是否存在复制任务（存在则勾选框可操作；全是剪切任务时禁用置灰）
-  bool hasCopyTask(FileManagerProvider pr) =>
-      pr.clipboardTasks.any((t) => !t.isCut);
+  // 每任务独立的「粘贴后保留」状态（内存态，默认不勾选 → 粘贴后自动清除）。
+  final keepByTask = <ClipboardTask, bool>{};
   const maxPanelHeight = 340.0;
   const maxTaskItemsHeight = 110.0;
 
@@ -56,7 +53,6 @@ Future<void> showClipboardMenuSheet(
                   ? (t.remoteItems?.length ?? 0)
                   : t.paths.length),
         );
-        final copyExists = hasCopyTask(provider);
         return Stack(
           children: [
             GestureDetector(
@@ -83,7 +79,7 @@ Future<void> showClipboardMenuSheet(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 标题：剪贴板 + 任务数/总项数
+                    // 标题：剪贴板 + 总项数
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                       child: Row(
@@ -116,7 +112,7 @@ Future<void> showClipboardMenuSheet(
                         ],
                       ),
                     ),
-                    // 任务列表（多任务：任务间分割线 + 每任务独立粘贴/删除）
+                    // 任务列表（多任务：任务间分割线 + 每任务独立粘贴/勾选/清除）
                     Flexible(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(
@@ -138,13 +134,20 @@ Future<void> showClipboardMenuSheet(
                                   task: task,
                                   folderIconOption:
                                       provider.folderIconOption,
+                                  keepClipboard:
+                                      keepByTask[task] ?? false,
+                                  onToggleKeep: (v) {
+                                    setSheetState(
+                                      () => keepByTask[task] = v,
+                                    );
+                                  },
                                   onPasteTask: () async {
                                     Navigator.pop(sheetContext);
                                     await onPaste(
                                       i,
                                       clearAfterPaste: task.isCut
                                           ? true
-                                          : !keepClipboard,
+                                          : !(keepByTask[task] ?? false),
                                     );
                                   },
                                   onRemoveTask: () {
@@ -169,7 +172,7 @@ Future<void> showClipboardMenuSheet(
                     const SizedBox(height: 4),
                     // 底部操作：清除全部
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                      padding: const EdgeInsets.fromLTRB(12, 6, 12, 10),
                       child: Row(
                         children: [
                           Expanded(
@@ -200,69 +203,6 @@ Future<void> showClipboardMenuSheet(
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                    // 勾选保留剪贴板（存在复制任务时可勾选；全是剪切任务禁用置灰）
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
-                      child: InkWell(
-                        onTap: copyExists
-                            ? () {
-                                setSheetState(
-                                  () =>
-                                      keepClipboard = !keepClipboard,
-                                );
-                                PreferencesService
-                                    .saveKeepClipboardAfterPaste(
-                                      keepClipboard,
-                                    );
-                              }
-                            : null,
-                        borderRadius: BorderRadius.circular(8),
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: keepClipboard,
-                              onChanged: copyExists
-                                  ? (v) {
-                                      setSheetState(
-                                        () => keepClipboard = v ?? false,
-                                      );
-                                      PreferencesService
-                                          .saveKeepClipboardAfterPaste(
-                                            keepClipboard,
-                                          );
-                                    }
-                                  : null,
-                              visualDensity: VisualDensity.compact,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    l10n.paste_keep_clipboard,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.8),
-                                    ),
-                                  ),
-                                  Text(
-                                    l10n.paste_keep_clipboard_desc,
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.5),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ],
@@ -308,17 +248,21 @@ List<_ClipboardEntry> _collectTaskItems(ClipboardTask task) {
   }).toList();
 }
 
-/// 剪贴板里的一个任务区块：头部（图标 + 剪切/复制 N 项 + 时间 + 删除）、
-/// 文件列表、该任务的独立「粘贴」按钮。
+/// 剪贴板里的一个任务区块：头部（图标 + 剪切/复制 N 项 + 时间 + 清除）、
+/// 文件列表、底部操作行（该任务的勾选框 + 独立「粘贴」按钮）。
 class _ClipboardTaskBlock extends StatelessWidget {
   final ClipboardTask task;
   final String folderIconOption;
+  final bool keepClipboard;
+  final ValueChanged<bool> onToggleKeep;
   final VoidCallback onPasteTask;
   final VoidCallback onRemoveTask;
 
   const _ClipboardTaskBlock({
     required this.task,
     required this.folderIconOption,
+    required this.keepClipboard,
+    required this.onToggleKeep,
     required this.onPasteTask,
     required this.onRemoveTask,
   });
@@ -337,7 +281,7 @@ class _ClipboardTaskBlock extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 头部：图标 + 剪切/复制 N 项 + 时间 + 删除
+        // 头部：图标 + 剪切/复制 N 项 + 时间 + 清除（该任务）
         Row(
           children: [
             Icon(
@@ -392,31 +336,78 @@ class _ClipboardTaskBlock extends StatelessWidget {
             ),
           ),
         ),
-        // 该任务的独立粘贴按钮
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: ElevatedButton.icon(
-              onPressed: onPasteTask,
-              icon: const Icon(Icons.content_paste, size: 14),
-              label: _ButtonLabel(
-                text: l10n.ui_paste,
-                fontSize: 13,
-                bold: true,
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.colorScheme.primary,
-                foregroundColor: theme.colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 6,
-                  horizontal: 10,
+        // 底部操作行：该任务的勾选框（复制）或提示（剪切）+ 独立粘贴按钮
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Row(
+            children: [
+              if (task.isCut)
+                Expanded(
+                  child: Text(
+                    l10n.ui_cut_paste_hint,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              else
+                Expanded(
+                  child: InkWell(
+                    onTap: () => onToggleKeep(!keepClipboard),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                          value: keepClipboard,
+                          onChanged: (v) =>
+                              onToggleKeep(v ?? false),
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        const SizedBox(width: 2),
+                        Flexible(
+                          child: Text(
+                            l10n.paste_keep_clipboard,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurface.withOpacity(
+                                0.8,
+                              ),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              const SizedBox(width: 8),
+              // 该任务的独立粘贴按钮
+              ElevatedButton.icon(
+                onPressed: onPasteTask,
+                icon: const Icon(Icons.content_paste, size: 14),
+                label: _ButtonLabel(
+                  text: l10n.ui_paste,
+                  fontSize: 13,
+                  bold: true,
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 10,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ],
