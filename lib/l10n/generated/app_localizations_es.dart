@@ -1072,6 +1072,9 @@ class L10nEs extends L10n {
   String get msg1303e638 => 'Fecha de Modificación';
 
   @override
+  String get prop_created => 'Fecha de Creación';
+
+  @override
   String get msg5bab3781 => 'Información Multimedia';
 
   @override

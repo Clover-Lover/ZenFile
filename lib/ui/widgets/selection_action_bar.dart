@@ -15,6 +15,7 @@ import 'batch_rename_dialog.dart';
 import '../../services/folder_share_service.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import 'bulk_crypt_actions.dart';
+import 'action_bar_button.dart';
 
 class SelectionActionBar extends StatelessWidget {
   final FileManagerProvider provider;
@@ -69,7 +70,7 @@ class SelectionActionBar extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: _ActionButton(
+                  child: ActionBarButton(
                     icon: Broken.document_copy,
                     label: L10n.of(context).ui_copy,
                     hideLabel: provider.hideActionText,
@@ -82,7 +83,7 @@ class SelectionActionBar extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: _ActionButton(
+                  child: ActionBarButton(
                     icon: Broken.scissor,
                     label: L10n.of(context).ui_cut,
                     hideLabel: provider.hideActionText,
@@ -100,7 +101,7 @@ class SelectionActionBar extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: _ActionButton(
+                  child: ActionBarButton(
                     icon: Broken.edit,
                     label: L10n.of(context).msgc8ce4b36,
                     hideLabel: provider.hideActionText,
@@ -127,7 +128,7 @@ class SelectionActionBar extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: _ActionButton(
+                  child: ActionBarButton(
                     icon: Broken.tick_square,
                     label: L10n.of(context).ui_select_all,
                     hideLabel: provider.hideActionText,
@@ -137,19 +138,20 @@ class SelectionActionBar extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: _ActionButton(
+                  child: ActionBarButton(
                     icon: Broken.trash,
                     label: L10n.of(context).ui_delete,
                     color: Colors.redAccent,
                     hideLabel: provider.hideActionText,
                     onTap: () async {
-                      final confirm = await FileActionDialogs.showDeleteConfirmDialog(
-                        context,
-                        title: L10n.of(context).msgcd0b9aca,
-                        content: L10n.of(
-                          context,
-                        ).selectedcount2(provider.selectedPaths.length),
-                      );
+                      final confirm =
+                          await FileActionDialogs.showDeleteConfirmDialog(
+                            context,
+                            title: L10n.of(context).msgcd0b9aca,
+                            content: L10n.of(
+                              context,
+                            ).selectedcount2(provider.selectedPaths.length),
+                          );
                       if (confirm) {
                         try {
                           await provider.deleteSelected();
@@ -174,7 +176,11 @@ class SelectionActionBar extends StatelessWidget {
                     icon: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Broken.more, size: 24, color: theme.colorScheme.primary),
+                        Icon(
+                          Broken.more,
+                          size: 24,
+                          color: theme.colorScheme.primary,
+                        ),
                         if (!provider.hideActionText) ...[
                           const SizedBox(height: 4),
                           AutoSizeText(
@@ -200,7 +206,10 @@ class SelectionActionBar extends StatelessWidget {
                       if (action == 'encrypt') {
                         if (provider.activeTab.isCryptRemote) {
                           // 远程加密目录：加密＝选择本地文件加密后上传
-                          await BulkCryptActions.encryptUploadRemoteCrypt(context, provider);
+                          await BulkCryptActions.encryptUploadRemoteCrypt(
+                            context,
+                            provider,
+                          );
                         } else if (provider.activeTab.isRemote) {
                           // 普通远程目录：加密＝原地加密（下载→加密→回写→删原明文）
                           await BulkCryptActions.encryptRemoteInPlace(
@@ -209,12 +218,19 @@ class SelectionActionBar extends StatelessWidget {
                             provider.selectedPaths.toList(),
                           );
                         } else {
-                          await BulkCryptActions.encryptSelected(context, provider);
+                          await BulkCryptActions.encryptSelected(
+                            context,
+                            provider,
+                          );
                         }
                       } else if (action == 'encrypt_upload') {
-                        await BulkCryptActions.encryptUploadRemoteCrypt(context, provider);
+                        await BulkCryptActions.encryptUploadRemoteCrypt(
+                          context,
+                          provider,
+                        );
                       } else if (action == 'decrypt') {
-                        if (provider.activeTab.isCryptRemote || provider.activeTab.isRemote) {
+                        if (provider.activeTab.isCryptRemote ||
+                            provider.activeTab.isRemote) {
                           // 远程：解密＝解密到本地 + 明文回写替换远程原密文
                           await BulkCryptActions.decryptRemoteInPlace(
                             context,
@@ -223,7 +239,10 @@ class SelectionActionBar extends StatelessWidget {
                           );
                           provider.clearSelection();
                         } else {
-                          await BulkCryptActions.decryptSelected(context, provider);
+                          await BulkCryptActions.decryptSelected(
+                            context,
+                            provider,
+                          );
                         }
                       } else if (action == 'extract') {
                         final selectedPaths = provider.selectedPaths.toList();
@@ -390,8 +409,12 @@ class SelectionActionBar extends StatelessWidget {
                       final selectedModels = provider.currentFiles
                           .where((f) => selected.contains(f.path))
                           .toList();
-                      final anyEncrypted = selectedModels.any((m) => m.isEncrypted);
-                      final anyPlain = selectedModels.any((m) => !m.isEncrypted);
+                      final anyEncrypted = selectedModels.any(
+                        (m) => m.isEncrypted,
+                      );
+                      final anyPlain = selectedModels.any(
+                        (m) => !m.isEncrypted,
+                      );
                       final hasSingleDirectory =
                           selected.length == 1 &&
                           selectedModels.isNotEmpty &&
@@ -426,10 +449,7 @@ class SelectionActionBar extends StatelessWidget {
                             value: 'encrypt',
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.lock,
-                                  size: 20,
-                                ),
+                                const Icon(Icons.lock, size: 20),
                                 const SizedBox(width: 12),
                                 Text(
                                   L10n.of(context).vault_action_encrypt,
@@ -445,10 +465,7 @@ class SelectionActionBar extends StatelessWidget {
                             value: 'decrypt',
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.lock_open,
-                                  size: 20,
-                                ),
+                                const Icon(Icons.lock_open, size: 20),
                                 const SizedBox(width: 12),
                                 Text(
                                   // 远程「解密」＝解密到本地 + 回写替换远程原密文
@@ -656,6 +673,7 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
   int _folderCount = 0;
   int _fileCount = 0;
   DateTime? _lastModified;
+  DateTime? _creationTime;
   String _permissions = '';
   String _mimeType = '';
 
@@ -763,6 +781,15 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
         }
       }
 
+      // 创建时间：仅在本地文件 / 文件夹（已成功 stat 出 _lastModified）时向原生索取；
+      // 不支持 / 通道未注册（旧包）/ 出错则保持 null，UI 不显示该行。
+      if (widget.selectedPaths.length == 1 && _lastModified != null) {
+        _creationTime = await _fetchCreationTime(
+          widget.selectedPaths.first,
+          _lastModified!.millisecondsSinceEpoch,
+        );
+      }
+
       if (widget.selectedPaths.length == 1) {
         final pStr = widget.selectedPaths.first;
         final ext = pStr.contains('.')
@@ -789,6 +816,27 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
         });
       }
     }
+  }
+
+  /// 向原生索取文件创建时间（birth time）。原生在文件系统不支持时返回 0，
+  /// 通道未注册（旧包）/ 异常时抛错 —— 这些情况一律返回 null，UI 不显示「创建时间」行。
+  Future<DateTime?> _fetchCreationTime(String path, int modifiedMillis) async {
+    try {
+      const channel = MethodChannel('com.sequl.zenfile/root_shizuku');
+      final raw = await channel.invokeMethod<dynamic>(
+        'getFileCreationTime',
+        {'path': path},
+      );
+      final millis = raw is int ? raw : 0;
+      // 仅当文件系统确实提供了创建时间（>0 且不应晚于修改时间）才展示，
+      // 避免把 ctime 回退值 / 纪元值误当成「创建时间」显示给用户。
+      if (millis > 0 && millis <= modifiedMillis + 1000) {
+        return DateTime.fromMillisecondsSinceEpoch(millis);
+      }
+    } catch (_) {
+      // 不支持 / 通道未注册（旧包）/ 任何异常 ⇒ 隐藏该行
+    }
+    return null;
   }
 
   @override
@@ -860,6 +908,11 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
                       _CopyablePropertyRow(
                         label: l10n.msg1303e638,
                         value: FileUtils.formatDate(_lastModified!),
+                      ),
+                    if (_creationTime != null)
+                      _CopyablePropertyRow(
+                        label: l10n.prop_created,
+                        value: FileUtils.formatDate(_creationTime!),
                       ),
                     if (_mimeType.isNotEmpty)
                       _CopyablePropertyRow(
@@ -941,56 +994,6 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
           child: Text(L10n.of(context).ui_done),
         ),
       ],
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final Color? color;
-  final bool hideLabel;
-
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.color,
-    this.hideLabel = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final displayColor = color ?? theme.colorScheme.primary;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: displayColor, size: 24),
-            if (!hideLabel) ...[
-              const SizedBox(height: 4),
-              AutoSizeText(
-                label,
-                minFontSize: 8,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  color: displayColor,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
     );
   }
 }

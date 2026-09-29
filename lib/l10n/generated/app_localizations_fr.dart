@@ -1070,6 +1070,9 @@ class L10nFr extends L10n {
   String get msg1303e638 => 'Date de modification';
 
   @override
+  String get prop_created => 'Date de création';
+
+  @override
   String get msg5bab3781 => 'Informations sur le média';
 
   @override

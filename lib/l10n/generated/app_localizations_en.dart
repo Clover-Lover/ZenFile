@@ -1054,6 +1054,9 @@ class L10nEn extends L10n {
   String get msg1303e638 => 'Modified Time';
 
   @override
+  String get prop_created => 'Creation Time';
+
+  @override
   String get msg5bab3781 => 'Media Info';
 
   @override

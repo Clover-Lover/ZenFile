@@ -1996,6 +1996,12 @@ abstract class L10n {
   /// **'修改时间'**
   String get msg1303e638;
 
+  /// Creation time of the file or folder
+  ///
+  /// In zh, this message translates to:
+  /// **'创建时间'**
+  String get prop_created;
+
   /// ui\screens\media_category_screen.dart
   ///
   /// In zh, this message translates to:

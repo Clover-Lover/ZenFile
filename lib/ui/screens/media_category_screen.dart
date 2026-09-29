@@ -26,6 +26,7 @@ import 'image_viewer_screen.dart';
 import 'video_player/video_player_screen.dart';
 import 'audio_player/audio_player_screen.dart';
 import '../../core/icon_fonts/broken_icons.dart';
+import '../widgets/action_bar_button.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/file_action_dialogs.dart';
@@ -45,7 +46,6 @@ import '../widgets/bulk_crypt_actions.dart';
 import '../screens/vault_session_unlock_dialog.dart';
 import '../screens/crypt_mount_edit_screen.dart';
 import '../widgets/crypt_progress_dialog.dart';
-
 
 /// 媒体分类页右上角「查看与排序」菜单动作
 enum _ViewMenuAction {
@@ -515,14 +515,17 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     }
     final statusNotifier = ValueNotifier<String>(L10n.of(context).ui_syncing);
     // 双层圆环进度：外圈=整体（已处理文件数/总文件数），内圈=当前文件上传进度。
-    final progressNotifier = ValueNotifier<({double overall, double? inner})>(
-      (overall: 0, inner: null),
-    );
+    final progressNotifier = ValueNotifier<({double overall, double? inner})>((
+      overall: 0,
+      inner: null,
+    ));
     var wentBackground = false;
     var processed = 0;
     var currentName = '';
-    final totalFiles =
-        pairs.fold<int>(0, (sum, p) => sum + p.localFiles.length);
+    final totalFiles = pairs.fold<int>(
+      0,
+      (sum, p) => sum + p.localFiles.length,
+    );
     void updateProgress(String name, double prog) {
       if (name != currentName) {
         currentName = name;
@@ -536,6 +539,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         inner: prog.clamp(0.0, 1.0),
       );
     }
+
     // 点击「后台」后的最小化逻辑：关闭弹窗并注册重新打开回调，
     // 由分类页工具栏浮窗按钮（排序按钮左侧）调用 fm.resumeProgress() 重新打开。
     void onBg() {
@@ -902,7 +906,8 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     // 按月分组激活时，「全选」只选中当前已选条目所属月份的文件；
     // 当前未选中、跨月选中或日期未知时保持全选。
     final sortOrder = provider.getSortOrderForCategory(_categoryLabel);
-    final isGroupedSort = sortOrder == MediaSortOrder.newestGrouped ||
+    final isGroupedSort =
+        sortOrder == MediaSortOrder.newestGrouped ||
         sortOrder == MediaSortOrder.oldestGrouped;
     if (isGroupedSort && _selectedFilePaths.isNotEmpty) {
       String? targetMonth;
@@ -924,9 +929,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       if (singleMonth && targetMonth != null) {
         final m = targetMonth;
         filePaths.removeWhere(
-          (p) =>
-              pathDates[p] == null ||
-              _monthKeyOf(pathDates[p]!) != m,
+          (p) => pathDates[p] == null || _monthKeyOf(pathDates[p]!) != m,
         );
       }
     }
@@ -1404,12 +1407,16 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             if (count == 1) {
               if (match.type == AssetType.image) {
                 dimensionsOrDuration = '${match.width} x ${match.height}';
-                mimeType = match.mimeType ?? 'image/${FileUtils.effectiveExtension(f.path)}';
+                mimeType =
+                    match.mimeType ??
+                    'image/${FileUtils.effectiveExtension(f.path)}';
               } else if (match.type == AssetType.video) {
                 final d = Duration(seconds: match.duration);
                 dimensionsOrDuration =
                     '${match.width} x ${match.height} • ${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, "0")}';
-                mimeType = match.mimeType ?? 'video/${FileUtils.effectiveExtension(f.path)}';
+                mimeType =
+                    match.mimeType ??
+                    'video/${FileUtils.effectiveExtension(f.path)}';
               }
             }
           }
@@ -1545,9 +1552,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             icon: Broken.archive,
             label: L10n.of(context).ui_extract,
             onTap: () {
-              context
-                  .read<FileManagerProvider>()
-                  .extractArchiveDirectly(context, filePath);
+              context.read<FileManagerProvider>().extractArchiveDirectly(
+                context,
+                filePath,
+              );
             },
           ),
         ActionItem(
@@ -1555,9 +1563,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           label: L10n.of(context).ui_copy,
           onTap: () async {
             if (filePath != null && filePath.startsWith('remote://')) {
-              context
-                  .read<FileManagerProvider>()
-                  .copyRemotePathToClipboard(filePath, isCut: false);
+              context.read<FileManagerProvider>().copyRemotePathToClipboard(
+                filePath,
+                isCut: false,
+              );
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Copied $name to clipboard')),
@@ -1573,17 +1582,16 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 ...provider.videos,
                 ...provider.screenshots,
               ];
-              final match =
-                  allAssets.where((a) => a.id == assetId).firstOrNull;
+              final match = allAssets.where((a) => a.id == assetId).firstOrNull;
               if (match != null) {
                 final f = await match.file;
                 target = f?.path;
               }
             }
             if (target != null && mounted) {
-              context
-                  .read<FileManagerProvider>()
-                  .setClipboard([target], isCut: false);
+              context.read<FileManagerProvider>().setClipboard([
+                target,
+              ], isCut: false);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Copied $name to clipboard')),
               );
@@ -1595,9 +1603,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           label: L10n.of(context).ui_cut,
           onTap: () async {
             if (filePath != null && filePath.startsWith('remote://')) {
-              context
-                  .read<FileManagerProvider>()
-                  .copyRemotePathToClipboard(filePath, isCut: true);
+              context.read<FileManagerProvider>().copyRemotePathToClipboard(
+                filePath,
+                isCut: true,
+              );
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Cut $name to clipboard')),
@@ -1613,20 +1622,19 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 ...provider.videos,
                 ...provider.screenshots,
               ];
-              final match =
-                  allAssets.where((a) => a.id == assetId).firstOrNull;
+              final match = allAssets.where((a) => a.id == assetId).firstOrNull;
               if (match != null) {
                 final f = await match.file;
                 target = f?.path;
               }
             }
             if (target != null && mounted) {
-              context
-                  .read<FileManagerProvider>()
-                  .setClipboard([target], isCut: true);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Cut $name to clipboard')),
-              );
+              context.read<FileManagerProvider>().setClipboard([
+                target,
+              ], isCut: true);
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Cut $name to clipboard')));
             }
           },
         ),
@@ -1638,16 +1646,16 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             if (filePath != null && filePath.startsWith('remote://')) {
               final ok = await FileManagerProvider.deleteRemotePath(filePath);
               if (ok && mounted) {
-                await context
-                    .read<MediaProvider>()
-                    .loadMedia(forceRefresh: true);
+                await context.read<MediaProvider>().loadMedia(
+                  forceRefresh: true,
+                );
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(L10n.of(context).name(name))),
                 );
               } else if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('删除失败')),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('删除失败')));
               }
               return;
             }
@@ -1666,8 +1674,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   ...mediaProvider.videos,
                   ...mediaProvider.screenshots,
                 ];
-                final match =
-                    allAssets.where((a) => a.id == assetId).firstOrNull;
+                final match = allAssets
+                    .where((a) => a.id == assetId)
+                    .firstOrNull;
                 if (match != null) {
                   final f = await match.file;
                   if (f != null) files.add(f.path);
@@ -1709,13 +1718,13 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     newName,
                   );
                   if (ok && mounted) {
-                    await context
-                        .read<MediaProvider>()
-                        .loadMedia(forceRefresh: true);
-                  } else if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('重命名失败')),
+                    await context.read<MediaProvider>().loadMedia(
+                      forceRefresh: true,
                     );
+                  } else if (mounted) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('重命名失败')));
                   }
                 }
                 return;
@@ -1730,14 +1739,15 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               );
               if (newName != null && newName.isNotEmpty && mounted) {
                 try {
-                  await context
-                      .read<FileManagerProvider>()
-                      .renameFile(filePath!, newName);
+                  await context.read<FileManagerProvider>().renameFile(
+                    filePath!,
+                    newName,
+                  );
                 } catch (e) {
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('重命名失败: $e')),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('重命名失败: $e')));
                   }
                   return;
                 }
@@ -1751,13 +1761,13 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             label: L10n.of(context).msgcd8264f1,
             onTap: () {
               if (filePath!.startsWith('remote://')) {
-                context
-                    .read<FileManagerProvider>()
-                    .showRemoteFileInLocation(filePath!);
+                context.read<FileManagerProvider>().showRemoteFileInLocation(
+                  filePath!,
+                );
               } else {
-                context
-                    .read<FileManagerProvider>()
-                    .showFileInLocation(filePath!);
+                context.read<FileManagerProvider>().showFileInLocation(
+                  filePath!,
+                );
               }
               Navigator.popUntil(context, (route) => route.isFirst);
               widget.onNavigateTab?.call(1);
@@ -1768,9 +1778,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             icon: Broken.eye,
             label: L10n.of(context).msg2a4cfb07,
             onTap: () {
-              context
-                  .read<FileManagerProvider>()
-                  .showOpenWithSheet(context, filePath!);
+              context.read<FileManagerProvider>().showOpenWithSheet(
+                context,
+                filePath!,
+              );
             },
           ),
         if (filePath != null)
@@ -1850,8 +1861,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 ...provider.videos,
                 ...provider.screenshots,
               ];
-              final match =
-                  allAssets.where((a) => a.id == assetId).firstOrNull;
+              final match = allAssets.where((a) => a.id == assetId).firstOrNull;
               if (match != null) {
                 final f = await match.file;
                 target = f?.path;
@@ -1879,7 +1889,6 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       ],
     );
   }
-
 
   Future<bool> _ensureMasterPassword(BuildContext context) async {
     if (await VaultCryptService.instance.hasMasterPassword()) return true;
@@ -1953,7 +1962,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       if (context.mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context).vault_encrypt_failed(e.toString()))),
+          SnackBar(
+            content: Text(L10n.of(context).vault_encrypt_failed(e.toString())),
+          ),
         );
       }
     } finally {
@@ -1994,7 +2005,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       if (context.mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(L10n.of(context).vault_decrypt_failed(e.toString()))),
+          SnackBar(
+            content: Text(L10n.of(context).vault_decrypt_failed(e.toString())),
+          ),
         );
       }
     } finally {
@@ -2032,7 +2045,6 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -2132,25 +2144,46 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     onSelected: (action) async {
                       switch (action) {
                         case _ViewMenuAction.sortNewest:
-                          provider.setSortOrder(MediaSortOrder.newest, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.newest,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.sortOldest:
-                          provider.setSortOrder(MediaSortOrder.oldest, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.oldest,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.sortDateWise:
-                          provider.setSortOrder(MediaSortOrder.dateWise, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.dateWise,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.sortNewestGrouped:
-                          provider.setSortOrder(MediaSortOrder.newestGrouped, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.newestGrouped,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.sortOldestGrouped:
-                          provider.setSortOrder(MediaSortOrder.oldestGrouped, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.oldestGrouped,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.sortSizeLargest:
-                          provider.setSortOrder(MediaSortOrder.sizeLargest, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.sizeLargest,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.sortSizeSmallest:
-                          provider.setSortOrder(MediaSortOrder.sizeSmallest, category: _categoryLabel);
+                          provider.setSortOrder(
+                            MediaSortOrder.sizeSmallest,
+                            category: _categoryLabel,
+                          );
                           break;
                         case _ViewMenuAction.viewList:
                           setState(() => _isGridView = false);
@@ -2198,41 +2231,51 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     itemBuilder: (context) => [
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortNewest,
-                        checked: provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.newest,
+                        checked:
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.newest,
                         child: Text(L10n.of(context).msg5093bc80),
                       ),
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortOldest,
-                        checked: provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.oldest,
+                        checked:
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.oldest,
                         child: Text(L10n.of(context).ui_oldest_first),
                       ),
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortDateWise,
-                        checked: provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.dateWise,
+                        checked:
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.dateWise,
                         child: Text(L10n.of(context).msgbc74b5a8),
                       ),
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortNewestGrouped,
                         checked:
-                            provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.newestGrouped,
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.newestGrouped,
                         child: Text(L10n.of(context).msgef7ae768),
                       ),
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortOldestGrouped,
                         checked:
-                            provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.oldestGrouped,
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.oldestGrouped,
                         child: Text(L10n.of(context).msgb8140039),
                       ),
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortSizeLargest,
                         checked:
-                            provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.sizeLargest,
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.sizeLargest,
                         child: Text(L10n.of(context).msg2e2a26bb),
                       ),
                       CheckedPopupMenuItem(
                         value: _ViewMenuAction.sortSizeSmallest,
                         checked:
-                            provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.sizeSmallest,
+                            provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.sizeSmallest,
                         child: Text(L10n.of(context).ui_size_small),
                       ),
                       const PopupMenuDivider(),
@@ -2478,22 +2521,31 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                       return _buildShimmerLoading();
                     }
                     final displayAssets = List<AssetEntity>.from(_albumAssets);
-                    if (provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.newest ||
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.newestGrouped ||
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.dateWise) {
+                    if (provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.newest ||
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.newestGrouped ||
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.dateWise) {
                       displayAssets.sort(
                         (a, b) => b.createDateTime.compareTo(a.createDateTime),
                       );
-                    } else if (provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.oldest ||
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.oldestGrouped) {
+                    } else if (provider.getSortOrderForCategory(
+                              _categoryLabel,
+                            ) ==
+                            MediaSortOrder.oldest ||
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.oldestGrouped) {
                       displayAssets.sort(
                         (a, b) => a.createDateTime.compareTo(b.createDateTime),
                       );
                     } else if (provider.sortOrder ==
                             MediaSortOrder.sizeLargest ||
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.sizeSmallest) {
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.sizeSmallest) {
                       final isSmallest =
-                          provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.sizeSmallest;
+                          provider.getSortOrderForCategory(_categoryLabel) ==
+                          MediaSortOrder.sizeSmallest;
                       displayAssets.sort((a, b) {
                         final aRes = a.width * a.height;
                         final bRes = b.width * b.height;
@@ -2504,11 +2556,15 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     }
 
                     final isDateWise =
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.dateWise;
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                        MediaSortOrder.dateWise;
                     final isGrouped =
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.newestGrouped ||
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.oldestGrouped ||
-                        provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.dateWise;
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.newestGrouped ||
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.oldestGrouped ||
+                        provider.getSortOrderForCategory(_categoryLabel) ==
+                            MediaSortOrder.dateWise;
 
                     if (widget.mediaType == MediaType.images) {
                       return _buildImageGrid(
@@ -2530,11 +2586,15 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   }
 
                   final isDateWise =
-                      provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.dateWise;
+                      provider.getSortOrderForCategory(_categoryLabel) ==
+                      MediaSortOrder.dateWise;
                   final isGrouped =
-                      provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.newestGrouped ||
-                      provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.oldestGrouped ||
-                      provider.getSortOrderForCategory(_categoryLabel) == MediaSortOrder.dateWise;
+                      provider.getSortOrderForCategory(_categoryLabel) ==
+                          MediaSortOrder.newestGrouped ||
+                      provider.getSortOrderForCategory(_categoryLabel) ==
+                          MediaSortOrder.oldestGrouped ||
+                      provider.getSortOrderForCategory(_categoryLabel) ==
+                          MediaSortOrder.dateWise;
 
                   // 优先显示已加载的数据（缓存或实时），只有数据为空且未完成加载时才显示 shimmer
                   Widget? content;
@@ -2783,11 +2843,13 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     );
   }
 
-  /// 多选底栏：结构与「最近」页共享的 SelectionActionBar 对齐
-  /// （复制/剪切/重命名/全选/删除 + 「更多」弹窗），但复用本页自身的
-  /// 选择状态（_selectedFilePaths / _selectedAssetIds）与各 handler。
+  /// 多选底栏：与「最近」页 / 浏览页共用同一个 [ActionBarButton] 按钮组件
+  /// （隐藏文字标签逻辑统一由 [FileManagerProvider.hideActionText] 驱动，
+  /// 切换设置时实时生效），仅操作集合（复制/剪切/重命名/全选/删除 + 更多）
+  /// 复用本页自身的选择状态（_selectedFilePaths / _selectedAssetIds）与各 handler。
   Widget _buildBottomActionBar(ThemeData theme) {
     final l10n = L10n.of(context);
+    final fm = context.watch<FileManagerProvider>();
     final selectedCount = _selectedFilePaths.length + _selectedAssetIds.length;
 
     return Container(
@@ -2832,43 +2894,43 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             Row(
               children: [
                 Expanded(
-                  child: _buildActionItem(
-                    theme,
+                  child: ActionBarButton(
                     icon: Broken.document_copy,
                     label: l10n.ui_copy,
+                    hideLabel: fm.hideActionText,
                     onTap: () => _handleCopyCut(false),
                   ),
                 ),
                 Expanded(
-                  child: _buildActionItem(
-                    theme,
+                  child: ActionBarButton(
                     icon: Broken.scissor,
                     label: l10n.ui_cut,
+                    hideLabel: fm.hideActionText,
                     onTap: () => _handleCopyCut(true),
                   ),
                 ),
                 Expanded(
-                  child: _buildActionItem(
-                    theme,
+                  child: ActionBarButton(
                     icon: Broken.edit,
                     label: l10n.msgc8ce4b36,
+                    hideLabel: fm.hideActionText,
                     onTap: _handleBatchRename,
                   ),
                 ),
                 Expanded(
-                  child: _buildActionItem(
-                    theme,
+                  child: ActionBarButton(
                     icon: Broken.tick_square,
                     label: l10n.ui_select_all,
+                    hideLabel: fm.hideActionText,
                     onTap: () => _selectAll(context.read<MediaProvider>()),
                   ),
                 ),
                 Expanded(
-                  child: _buildActionItem(
-                    theme,
+                  child: ActionBarButton(
                     icon: Broken.trash,
                     label: l10n.ui_delete,
                     color: Colors.redAccent,
+                    hideLabel: fm.hideActionText,
                     onTap: _handleDelete,
                   ),
                 ),
@@ -2877,19 +2939,25 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     icon: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Broken.more, size: 24, color: theme.colorScheme.primary),
-                        const SizedBox(height: 4),
-                        AutoSizeText(
-                          l10n.ui_more,
-                          minFontSize: 8,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: theme.colorScheme.primary,
-                          ),
+                        Icon(
+                          Broken.more,
+                          size: 24,
+                          color: theme.colorScheme.primary,
                         ),
+                        if (!fm.hideActionText) ...[
+                          const SizedBox(height: 4),
+                          AutoSizeText(
+                            l10n.ui_more,
+                            minFontSize: 8,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                     shape: RoundedRectangleBorder(
@@ -2937,8 +3005,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     final selected = <String>[..._selectedFilePaths];
     final hasArchive = selected.any((p) => FileUtils.isArchive(p));
     final allPinned =
-        selected.isNotEmpty &&
-        selected.every((p) => PinService.isPinned(p));
+        selected.isNotEmpty && selected.every((p) => PinService.isPinned(p));
     final hasClipboard = context.read<FileManagerProvider>().hasClipboard;
 
     return [
@@ -3070,8 +3137,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     } else if (action == 'archive') {
       final paths = await _resolveSelectedFilePaths();
       if (paths.isEmpty) return;
-      final initialName =
-          paths.length == 1 ? path_helper.basename(paths.first) : 'archive';
+      final initialName = paths.length == 1
+          ? path_helper.basename(paths.first)
+          : 'archive';
       final res = await CreateArchiveDialog.show(
         context,
         initialName: initialName,
@@ -3108,8 +3176,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       if (group == null) return;
       for (final p in paths) {
         final isRemote = p.startsWith('remote://');
-        final connId =
-            isRemote ? FileManagerProvider.connectionForRemotePath(p)?.id : null;
+        final connId = isRemote
+            ? FileManagerProvider.connectionForRemotePath(p)?.id
+            : null;
         final isDir = isRemote ? true : Directory(p).existsSync();
         fm.addFavorite(
           p,
@@ -3124,7 +3193,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.msg_favorited(path_helper.basename(paths.first))),
+            content: Text(
+              l10n.msg_favorited(path_helper.basename(paths.first)),
+            ),
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 2),
           ),
@@ -3170,41 +3241,6 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     } else if (action == 'properties') {
       await _showPropertiesDialog();
     }
-  }
-
-  Widget _buildActionItem(
-    ThemeData theme, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-    Color? color,
-  }) {
-    final c = color ?? theme.colorScheme.primary;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: c, size: 24),
-            const SizedBox(height: 4),
-            AutoSizeText(
-              label,
-              minFontSize: 8,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: c,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   /// 加载占位（shimmer 骨架屏）。
@@ -3289,8 +3325,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     final groups = <String, List<T>>{};
     for (final item in items) {
       final date = getDate(item);
-      final monthKey =
-          L10n.of(context).ui_month_group_header(date.year, date.month);
+      final monthKey = L10n.of(
+        context,
+      ).ui_month_group_header(date.year, date.month);
       groups.putIfAbsent(monthKey, () => []).add(item);
     }
     return groups;
@@ -3374,7 +3411,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.outlineVariant.withOpacity(0.3),
+                        color: theme.colorScheme.outlineVariant.withOpacity(
+                          0.3,
+                        ),
                         thickness: 1,
                       ),
                     ),
@@ -3680,7 +3719,11 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   color: Colors.black.withOpacity(0.5),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.more_vert, color: Colors.white, size: 18),
+                child: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
             ),
           ),
@@ -4161,7 +4204,11 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   color: Colors.black.withOpacity(0.5),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.more_vert, color: Colors.white, size: 18),
+                child: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
             ),
           ),
@@ -4896,7 +4943,11 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     color: Colors.black.withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.more_vert, color: Colors.white, size: 18),
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),
@@ -5220,7 +5271,11 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     color: Colors.black.withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.more_vert, color: Colors.white, size: 18),
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),
@@ -5585,7 +5640,11 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     color: Colors.black.withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.more_vert, color: Colors.white, size: 18),
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),

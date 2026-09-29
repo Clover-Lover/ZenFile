@@ -54,6 +54,8 @@ import android.os.Process
 import android.media.MediaMetadataRetriever
 import androidx.core.content.FileProvider
 import java.util.zip.ZipFile
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributes
 import android.media.audiofx.Equalizer
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -539,6 +541,27 @@ class MainActivity : AudioServiceFragmentActivity() {
                         } catch (e: Exception) {
                             e.printStackTrace()
                             runOnUiThread { result.error("RAW_PATH_ERROR", e.message, null) }
+                        }
+                    }
+                }
+                "getFileCreationTime" -> {
+                    val pathArg = call.argument<String>("path") ?: ""
+                    executor.execute {
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                val file = File(pathArg)
+                                if (!file.exists()) {
+                                    runOnUiThread { result.success(0L) }
+                                    return@execute
+                                }
+                                val attrs = Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+                                runOnUiThread { result.success(attrs.creationTime().toMillis()) }
+                            } else {
+                                runOnUiThread { result.success(0L) }
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            runOnUiThread { result.success(0L) }
                         }
                     }
                 }

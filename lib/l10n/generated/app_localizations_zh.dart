@@ -1012,6 +1012,9 @@ class L10nZh extends L10n {
   String get msg1303e638 => '修改时间';
 
   @override
+  String get prop_created => '创建时间';
+
+  @override
   String get msg5bab3781 => '媒体信息';
 
   @override
@@ -8704,6 +8707,9 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get msg1303e638 => '修改時間';
+
+  @override
+  String get prop_created => '建立時間';
 
   @override
   String get msg5bab3781 => '媒體資訊';

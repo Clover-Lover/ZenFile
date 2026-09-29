@@ -1013,6 +1013,9 @@ class L10nKo extends L10n {
   String get msg1303e638 => '수정 시간';
 
   @override
+  String get prop_created => '생성 시간';
+
+  @override
   String get msg5bab3781 => '미디어 정보';
 
   @override

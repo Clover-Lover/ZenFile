@@ -872,12 +872,58 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.3.0';
+  static const String _latestChangelogVersion = 'v3.4.0';
 
   /// 全部版本的更新日志，**最新在最前**。
-  static const List<_Changelog> _changelogs = <_Changelog>[_v330, _v320];
+  static const List<_Changelog> _changelogs = <_Changelog>[_v340, _v330, _v320];
 
-  /// ── 当前版本：v3.3.0 ────────────────────────────────────────────────
+  /// ── 当前版本：v3.4.0 ────────────────────────────────────────────────
+  static const _Changelog _v340 = _Changelog(
+    version: 'v3.4.0',
+    date: '2026-09-29',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '文件 / 文件夹「属性」对话框新增「创建时间」一行（类似 MiXplorer），当文件系统支持时显示（Android 8.0+）',
+        '多任务剪贴板（issue #36）：复制 / 剪切现在累计为多个任务，面板用分割线区分，每个任务可单独粘贴 / 删除；远程（FTP / SMB / WebDAV）任务一并纳入，最多保留 20 个',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        '分类页（视频、音频、图片、文档、下载、截图、压缩包、安装包）的多选操作栏，与浏览页、「最近」页改用同一套按钮组件',
+        '开启「隐藏操作栏文字标签」后，上述所有分类页的多选操作栏现在都会同步隐藏文字、只显示图标，与浏览页 /「最近」页习惯一致',
+        '「更多」操作（分享、详情、收藏等）在隐藏文字标签时同样只显示图标，不再露出文字',
+        '剪贴板面板底部改为「清除（窄）+ 粘贴全部（右侧）」，粘贴全部按每任务勾选状态决定保留 / 清除；面板顶部标题已移除，更紧凑',
+      ]),
+      _ChangeSection('🛠️ 维护优化', [
+        '将操作栏按钮渲染逻辑抽离为共用的 ActionBarButton 组件，浏览页与分类页共享同一份隐藏文字 / 配色 / 尺寸规则，后续只改一处',
+        '剪贴板面板每个任务拥有独立的「清除」与「粘贴后保留」勾选，粘贴后默认自动清除该任务（复制不勾选则清除、剪切始终清除）',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复「隐藏操作栏文字标签」设置对分类页（除「最近」外）不生效的问题',
+        '修复新增的 4 个备用图标（蓝白 / 渐变蓝 / 深蓝鎏金 / 暮色）在设置中切换不生效的问题',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'The file / folder "Properties" dialog now shows a "Creation Time" row (like MiXplorer) when the filesystem supports it (Android 8.0+)',
+        'Multi-task clipboard (issue #36): copy / cut now accumulate into separate tasks, divided by dividers in the panel, each pannable and deletable on its own; remote (FTP / SMB / WebDAV) tasks are included too, up to 20 kept',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'The multi-select action bar of category pages (Video, Audio, Image, Document, Downloads, Screenshots, Archives, APK) now shares the same button widget as the Browse and Recent pages',
+        'With "Hide action bar text labels" on, those category pages now also hide the text and show icons only, matching the Browse and Recent pages',
+        'The "More" overflow (Share, Details, Favorite, etc.) also shows icon only when labels are hidden',
+        'Clipboard panel bottom is now "Clear (narrow) + Paste All (right)"; Paste All respects each task keep-after-paste choice; the top title was removed for a more compact panel',
+      ]),
+      _ChangeSection('🛠️ Maintenance', [
+        'Extracted the action bar button into a shared ActionBarButton widget so the Browse and Category pages use one source of truth for label-hiding, color and sizing',
+        'In the clipboard panel each task has its own "Clear" and "Keep after paste" toggle; after pasting a task is cleared by default (copy without the toggle is cleared, cut is always cleared)',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed "Hide action bar text labels" having no effect on category pages (except Recent)',
+        'Fixed the 4 newly added alternative icons (Blue-White / Gradient-Blue / Blue-Gold / Sunset) not taking effect when selected in Settings',
+      ]),
+    ],
+  );
+
+  /// ── 上一版：v3.3.0 ─────────────────────────────────────────────────
   static const _Changelog _v330 = _Changelog(
     version: 'v3.3.0',
     date: '2026-09-28',

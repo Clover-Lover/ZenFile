@@ -1049,6 +1049,9 @@ class L10nAr extends L10n {
   String get msg1303e638 => 'وقت التعديل';
 
   @override
+  String get prop_created => 'وقت الإنشاء';
+
+  @override
   String get msg5bab3781 => 'معلومات الوسائط';
 
   @override

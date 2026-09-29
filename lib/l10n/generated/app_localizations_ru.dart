@@ -1068,6 +1068,9 @@ class L10nRu extends L10n {
   String get msg1303e638 => 'Дата Изменения';
 
   @override
+  String get prop_created => 'Дата Создания';
+
+  @override
   String get msg5bab3781 => 'Информация о Медиа';
 
   @override

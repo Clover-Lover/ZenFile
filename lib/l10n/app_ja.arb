@@ -1210,6 +1210,10 @@
     "description": "ui\\screens\\media_category_screen.dart"
   },
   "msg1303e638": "更新日時",
+  "prop_created": "作成日時",
+  "@prop_created": {
+    "description": "Creation time of the file or folder"
+  },
   "@msg5bab3781": {
     "description": "ui\\screens\\media_category_screen.dart"
   },

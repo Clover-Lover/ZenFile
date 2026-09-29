@@ -1014,6 +1014,9 @@ class L10nJa extends L10n {
   String get msg1303e638 => '更新日時';
 
   @override
+  String get prop_created => '作成日時';
+
+  @override
   String get msg5bab3781 => 'メディア情報';
 
   @override

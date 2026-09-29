@@ -1069,6 +1069,9 @@ class L10nDe extends L10n {
   String get msg1303e638 => 'Änderungsdatum';
 
   @override
+  String get prop_created => 'Erstellungsdatum';
+
+  @override
   String get msg5bab3781 => 'Medieninformationen';
 
   @override
