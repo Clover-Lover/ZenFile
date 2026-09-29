@@ -883,7 +883,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
     date: '2026-09-29',
     zh: [
       _ChangeSection('✨ 新功能', [
-        '文件 / 文件夹「属性」对话框新增「创建时间」一行（类似 MiXplorer），当文件系统支持时显示（Android 8.0+）',
+        '文件 / 文件夹「属性」对话框新增「创建时间」一行（类似 MiXplorer）：取自 MediaStore 加入时间（DATE_ADDED），与「修改时间」来源不同、绝大多数文件天然不相等；分类页属性页也已补齐这一行',
         '多任务剪贴板（issue #36）：复制 / 剪切现在累计为多个任务，面板用分割线区分，每个任务可单独粘贴 / 删除；远程（FTP / SMB / WebDAV）任务一并纳入，最多保留 20 个',
       ]),
       _ChangeSection('🎨 界面与交互', [
@@ -903,7 +903,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
     ],
     en: [
       _ChangeSection('✨ New Features', [
-        'The file / folder "Properties" dialog now shows a "Creation Time" row (like MiXplorer) when the filesystem supports it (Android 8.0+)',
+        'The file / folder "Properties" dialog now shows a "Creation Time" row (like MiXplorer): sourced from MediaStore DATE_ADDED, a different clock from "Modified" so they differ for most files; the category-page properties dialog now shows this row too',
         'Multi-task clipboard (issue #36): copy / cut now accumulate into separate tasks, divided by dividers in the panel, each pannable and deletable on its own; remote (FTP / SMB / WebDAV) tasks are included too, up to 20 kept',
       ]),
       _ChangeSection('🎨 UI & Interaction', [

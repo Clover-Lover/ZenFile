@@ -54,8 +54,6 @@ import android.os.Process
 import android.media.MediaMetadataRetriever
 import androidx.core.content.FileProvider
 import java.util.zip.ZipFile
-import java.nio.file.Files
-import java.nio.file.attribute.BasicFileAttributes
 import android.media.audiofx.Equalizer
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -544,27 +542,36 @@ class MainActivity : AudioServiceFragmentActivity() {
                         }
                     }
                 }
-                "getFileCreationTime" -> {
+                                "getFileCreationTime" -> {
                     val pathArg = call.argument<String>("path") ?: ""
                     executor.execute {
                         try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                val file = File(pathArg)
-                                if (!file.exists()) {
-                                    runOnUiThread { result.success(0L) }
-                                    return@execute
-                                }
-                                val attrs = Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
-                                runOnUiThread { result.success(attrs.creationTime().toMillis()) }
-                            } else {
-                                runOnUiThread { result.success(0L) }
+                            var createdMillis = 0L
+                            if (pathArg.isNotEmpty()) {
+                                val uri = MediaStore.Files.getContentUri("external")
+                                val projection = arrayOf(MediaStore.MediaColumns.DATE_ADDED)
+                                val selection = "${MediaStore.MediaColumns.DATA} = ?"
+                                val selectionArgs = arrayOf(pathArg)
+                                applicationContext.contentResolver
+                                    .query(uri, projection, selection, selectionArgs, null)
+                                    ?.use { cursor ->
+                                        if (cursor.moveToFirst()) {
+                                            val idx = cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED)
+                                            if (idx >= 0) {
+                                                val secs = cursor.getLong(idx)
+                                                if (secs > 0L) createdMillis = secs * 1000L
+                                            }
+                                        }
+                                    }
                             }
+                            runOnUiThread { result.success(createdMillis) }
                         } catch (e: Exception) {
                             e.printStackTrace()
                             runOnUiThread { result.success(0L) }
                         }
                     }
                 }
+
                 "resolveContentUri" -> {
                     val uriString = call.argument<String>("uri") ?: ""
                     executor.execute {

@@ -828,9 +828,11 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
         {'path': path},
       );
       final millis = raw is int ? raw : 0;
-      // 仅当文件系统确实提供了创建时间（>0 且不应晚于修改时间）才展示，
-      // 避免把 ctime 回退值 / 纪元值误当成「创建时间」显示给用户。
-      if (millis > 0 && millis <= modifiedMillis + 1000) {
+      // 原生现在返回 MediaStore 的 DATE_ADDED（文件「加入 / 创建」时间，毫秒）。
+      // 它与修改时间来自不同来源，对绝大多数文件天然不相等；只对脏数据做基本
+      // 合理性校验：必须 > 0 且不超过「现在 + 1 天」，避免异常值被当成创建时间显示。
+      final upper = DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
+      if (millis > 0 && millis <= upper) {
         return DateTime.fromMillisecondsSinceEpoch(millis);
       }
     } catch (_) {

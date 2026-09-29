@@ -1379,6 +1379,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     String mimeType = '';
     String dimensionsOrDuration = '';
     String permissionsStr = '';
+    DateTime? creationTime;
 
     if (assetIds.isNotEmpty) {
       final provider = context.read<MediaProvider>();
@@ -1462,6 +1463,25 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       } catch (_) {}
     }
 
+    // 创建时间：原生返回 MediaStore 的 DATE_ADDED（文件「加入 / 创建」时间），
+    // 与修改时间不同源，对绝大多数文件天然不相等。取不到（文件夹 / 未扫描的
+    // SD 卡文件 / 通道未注册）时保持 null，下方不显示该行。
+    if (count == 1 && fullPath.isNotEmpty) {
+      try {
+        const channel = MethodChannel('com.sequl.zenfile/root_shizuku');
+        final raw = await channel.invokeMethod<dynamic>(
+          'getFileCreationTime',
+          {'path': fullPath},
+        );
+        final millis = raw is int ? raw : 0;
+        final upper =
+            DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
+        if (millis > 0 && millis <= upper) {
+          creationTime = DateTime.fromMillisecondsSinceEpoch(millis);
+        }
+      } catch (_) {}
+    }
+
     if (!mounted) return;
     final theme = Theme.of(context);
     showDialog(
@@ -1503,6 +1523,12 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   _buildCopyableRow(
                     L10n.of(context).msg5bab3781,
                     dimensionsOrDuration,
+                    ctx,
+                  ),
+                if (creationTime != null)
+                  _buildCopyableRow(
+                    L10n.of(context).prop_created,
+                    FileUtils.formatDate(creationTime!),
                     ctx,
                   ),
                 if (permissionsStr.isNotEmpty)
