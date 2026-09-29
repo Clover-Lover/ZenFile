@@ -3192,6 +3192,9 @@ class L10nDe extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'Zwischenablage';
+
+  @override
   String get ui_clear => 'Leeren';
 
   @override

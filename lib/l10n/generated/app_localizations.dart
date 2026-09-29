@@ -5788,6 +5788,12 @@ abstract class L10n {
   /// **'{prefix} · {count} 项'**
   String ui_cut_copy_items(String prefix, int count);
 
+  /// Clipboard panel title
+  ///
+  /// In zh, this message translates to:
+  /// **'剪贴板'**
+  String get ui_clipboard;
+
   /// directory_screen.dart
   ///
   /// In zh, this message translates to:

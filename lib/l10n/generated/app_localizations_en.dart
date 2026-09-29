@@ -3144,6 +3144,9 @@ class L10nEn extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'Clipboard';
+
+  @override
   String get ui_clear => 'Clear';
 
   @override

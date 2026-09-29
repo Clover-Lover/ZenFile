@@ -3367,6 +3367,10 @@
       }
     }
   },
+  "ui_clipboard": "Zwischenablage",
+  "@ui_clipboard": {
+    "description": "Clipboard panel title"
+  },
   "ui_clear": "Leeren",
   "@ui_clear": {
     "description": "directory_screen.dart"

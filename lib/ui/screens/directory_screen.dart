@@ -549,8 +549,12 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     showClipboardMenuSheet(
       context,
       provider: provider,
-      onPaste: ({required bool clearAfterPaste}) =>
-          provider.pasteFile(context, clearAfterPaste: clearAfterPaste),
+      onPaste: (taskIndex, {required bool clearAfterPaste}) =>
+          provider.pasteClipboardTask(
+            context,
+            taskIndex: taskIndex,
+            clearAfterPaste: clearAfterPaste,
+          ),
     );
   }
 

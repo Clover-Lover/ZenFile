@@ -3370,6 +3370,10 @@
       }
     }
   },
+  "ui_clipboard": "클립보드",
+  "@ui_clipboard": {
+    "description": "Clipboard panel title"
+  },
   "ui_clear": "지우기",
   "@ui_clear": {
     "description": "directory_screen.dart"

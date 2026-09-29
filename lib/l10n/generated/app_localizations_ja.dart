@@ -3046,6 +3046,9 @@ class L10nJa extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'クリップボード';
+
+  @override
   String get ui_clear => 'クリア';
 
   @override

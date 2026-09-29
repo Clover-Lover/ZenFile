@@ -3034,6 +3034,9 @@ class L10nZh extends L10n {
   }
 
   @override
+  String get ui_clipboard => '剪贴板';
+
+  @override
   String get ui_clear => '清除';
 
   @override
@@ -10714,6 +10717,9 @@ class L10nZhTw extends L10nZh {
   String ui_cut_copy_items(String prefix, int count) {
     return '$prefix · $count 項';
   }
+
+  @override
+  String get ui_clipboard => '剪貼簿';
 
   @override
   String get ui_clear => '清除';

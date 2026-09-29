@@ -3196,6 +3196,9 @@ class L10nRu extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'Буфер обмена';
+
+  @override
   String get ui_clear => 'Очистить';
 
   @override

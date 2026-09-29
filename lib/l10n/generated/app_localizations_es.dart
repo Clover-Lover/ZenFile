@@ -3211,6 +3211,9 @@ class L10nEs extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'Portapapeles';
+
+  @override
   String get ui_clear => 'Limpiar';
 
   @override

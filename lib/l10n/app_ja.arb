@@ -3374,6 +3374,10 @@
       }
     }
   },
+  "ui_clipboard": "クリップボード",
+  "@ui_clipboard": {
+    "description": "Clipboard panel title"
+  },
   "ui_clear": "クリア",
   "@ui_clear": {
     "description": "directory_screen.dart"

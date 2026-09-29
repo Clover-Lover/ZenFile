@@ -3045,6 +3045,9 @@ class L10nKo extends L10n {
   }
 
   @override
+  String get ui_clipboard => '클립보드';
+
+  @override
   String get ui_clear => '지우기';
 
   @override

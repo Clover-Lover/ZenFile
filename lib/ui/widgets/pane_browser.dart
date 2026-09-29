@@ -117,11 +117,13 @@ class _PaneBrowserState extends State<PaneBrowser> {
     showClipboardMenuSheet(
       context,
       provider: provider,
-      onPaste: ({required bool clearAfterPaste}) => provider.pasteFileToTab(
-        context,
-        widget.tabIndex,
-        clearAfterPaste: clearAfterPaste,
-      ),
+      onPaste: (taskIndex, {required bool clearAfterPaste}) =>
+          provider.pasteClipboardTask(
+            context,
+            taskIndex: taskIndex,
+            clearAfterPaste: clearAfterPaste,
+            targetTabIndex: widget.tabIndex,
+          ),
     );
   }
 

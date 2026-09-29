@@ -166,6 +166,29 @@ class RemoteSourceChanged {
   RemoteSourceChanged(this.connection, this.dir);
 }
 
+/// 剪贴板里的一个任务：一次复制/剪切操作产生的整批条目。
+/// 本地任务存 [paths]；远程任务存 [remoteItems] + [remoteConnection]。
+class ClipboardTask {
+  final List<String> paths;
+  final bool isCut;
+  final String? sourceArchive;
+  final List<String>? internalSourcePaths;
+  final bool isRemote;
+  final List<RemoteFileItem>? remoteItems;
+  final NetworkConnectionModel? remoteConnection;
+  final DateTime createdAt;
+
+  ClipboardTask({
+    required this.paths,
+    required this.isCut,
+    this.sourceArchive,
+    this.internalSourcePaths,
+    this.isRemote = false,
+    this.remoteItems,
+    this.remoteConnection,
+  }) : createdAt = DateTime.now();
+}
+
 class FileManagerProvider extends ChangeNotifier {
   // 远程源目录变化广播：剪切/移动远程文件后，通知全屏 RemoteExplorerScreen 刷新，
   // 避免“原文件残留 / 返回后页面丢失”。远程 tab 由 provider 直接刷新。
@@ -4698,49 +4721,55 @@ class FileManagerProvider extends ChangeNotifier {
   void setPathEditing(bool value) => _isPathEditing = value;
   void exitPathEditing() => _isPathEditing = false;
 
-  // --- Global Clipboard ---
+
+  // --- Global Clipboard (multi-task) ---
+  // 每次复制/剪切 = 一个任务（ClipboardTask），追加进 _clipboardTasks（上限 20，
+  // 超出自动移除最旧）。面板按任务分组展示、任务间用分割线区分；粘贴时可指定
+  // 某个任务单独粘贴（issue #36：多次复制/剪切累计存放，到目标处选择任务粘贴）。
+  //
+  // 粘贴链路（_pasteFileToTab 及其下游）仍读取「活动剪贴板」字段
+  // （_clipboardPaths/_isCut/_isRemoteClipboard/_remoteClipboardItems/...），
+  // 该字段始终等于最新任务；指定任务粘贴时先把目标任务载入活动字段再粘贴。
+  static const int _maxClipboardTasks = 20;
+  final List<ClipboardTask> _clipboardTasks = [];
+
   final List<String> _clipboardPaths = [];
   bool _isCut = false;
   String? _sourceArchiveForCut;
   List<String>? _internalSourcePathsForCut;
 
-  // Remote Clipboard support
+  // Remote Clipboard support（活动字段）
   bool _isRemoteClipboard = false;
   final List<RemoteFileItem> _remoteClipboardItems = [];
   NetworkConnectionModel? _remoteClipboardConnection;
 
-  bool get hasClipboard => _clipboardPaths.isNotEmpty || _isRemoteClipboard;
+  List<ClipboardTask> get clipboardTasks => List.unmodifiable(_clipboardTasks);
+  bool get hasClipboard => _clipboardTasks.isNotEmpty;
   List<String> get clipboardPaths => _clipboardPaths;
   bool get isCut => _isCut;
   bool get isRemoteClipboard => _isRemoteClipboard;
   List<RemoteFileItem> get remoteClipboardItems => _remoteClipboardItems;
   NetworkConnectionModel? get remoteClipboardConnection => _remoteClipboardConnection;
 
-  void setClipboard(List<String> paths, {required bool isCut, String? sourceArchive, List<String>? internalSourcePaths}) {
-    _clipboardPaths.clear();
-    _clipboardPaths.addAll(paths);
-    _isRemoteClipboard = false;
+  /// 把任务载入「活动剪贴板」字段（粘贴链路读取这些字段）。
+  void _loadTaskIntoActive(ClipboardTask task) {
+    _clipboardPaths
+      ..clear()
+      ..addAll(task.paths);
+    _isRemoteClipboard = task.isRemote;
     _remoteClipboardItems.clear();
-    _remoteClipboardConnection = null;
-    _isCut = isCut;
-    _sourceArchiveForCut = sourceArchive;
-    _internalSourcePathsForCut = internalSourcePaths;
-    notifyListeners();
+    if (task.isRemote) {
+      _remoteClipboardItems.addAll(task.remoteItems ?? const []);
+    }
+    _remoteClipboardConnection = task.remoteConnection;
+    _isCut = task.isCut;
+    _sourceArchiveForCut = task.sourceArchive;
+    _internalSourcePathsForCut = task.internalSourcePaths;
   }
 
-  void setRemoteClipboard(List<RemoteFileItem> items, {required bool isCut, required NetworkConnectionModel connection}) {
-    _clipboardPaths.clear();
-    _isRemoteClipboard = true;
-    _remoteClipboardItems.clear();
-    _remoteClipboardItems.addAll(items);
-    _remoteClipboardConnection = connection;
-    _isCut = isCut;
-    _sourceArchiveForCut = null;
-    _internalSourcePathsForCut = null;
-    notifyListeners();
-  }
-
-  void clearClipboard() {
+  /// 只清「活动剪贴板」字段，不动任务列表（粘贴链路内部清理用；
+  /// 任务移除由 pasteClipboardTask / pasteFile 包装层统一处理）。
+  void _clearActiveClipboard() {
     _clipboardPaths.clear();
     _isRemoteClipboard = false;
     _remoteClipboardItems.clear();
@@ -4748,6 +4777,52 @@ class FileManagerProvider extends ChangeNotifier {
     _isCut = false;
     _sourceArchiveForCut = null;
     _internalSourcePathsForCut = null;
+  }
+
+  void _appendTask(ClipboardTask task) {
+    _clipboardTasks.add(task);
+    if (_clipboardTasks.length > _maxClipboardTasks) {
+      _clipboardTasks.removeAt(0);
+    }
+    _loadTaskIntoActive(task);
+    notifyListeners();
+  }
+
+  void setClipboard(List<String> paths, {required bool isCut, String? sourceArchive, List<String>? internalSourcePaths}) {
+    _appendTask(ClipboardTask(
+      paths: List.of(paths),
+      isCut: isCut,
+      sourceArchive: sourceArchive,
+      internalSourcePaths: internalSourcePaths,
+      isRemote: false,
+    ));
+  }
+
+  void setRemoteClipboard(List<RemoteFileItem> items, {required bool isCut, required NetworkConnectionModel connection}) {
+    _appendTask(ClipboardTask(
+      paths: const [],
+      isCut: isCut,
+      isRemote: true,
+      remoteItems: List.of(items),
+      remoteConnection: connection,
+    ));
+  }
+
+  /// 移除指定任务；若移除的是活动任务，活动字段回退到最新任务。
+  void removeClipboardTask(int index) {
+    if (index < 0 || index >= _clipboardTasks.length) return;
+    _clipboardTasks.removeAt(index);
+    if (_clipboardTasks.isNotEmpty) {
+      _loadTaskIntoActive(_clipboardTasks.last);
+    } else {
+      _clearActiveClipboard();
+    }
+    notifyListeners();
+  }
+
+  void clearClipboard() {
+    _clipboardTasks.clear();
+    _clearActiveClipboard();
     notifyListeners();
   }
 
@@ -6840,12 +6915,67 @@ class FileManagerProvider extends ChangeNotifier {
     }
   }
 
+  /// 粘贴「活动剪贴板」（最新任务）。粘贴完成后按语义移除该任务：
+  /// 剪切任务始终移除；复制任务仅 clearAfterPaste=true 时移除。
   Future<void> pasteFile(BuildContext context, {bool clearAfterPaste = true}) async {
-    await _pasteFileToTab(context, _activeTabIndex, clearAfterPaste: clearAfterPaste);
+    await _runPasteWithTaskRemoval(
+      context,
+      _activeTabIndex,
+      clearAfterPaste: clearAfterPaste,
+    );
   }
 
   Future<void> pasteFileToTab(BuildContext context, int targetTabIndex, {bool clearAfterPaste = true}) async {
-    await _pasteFileToTab(context, targetTabIndex, clearAfterPaste: clearAfterPaste);
+    await _runPasteWithTaskRemoval(
+      context,
+      targetTabIndex,
+      clearAfterPaste: clearAfterPaste,
+    );
+  }
+
+  /// 粘贴指定任务（多任务剪贴板：面板中每个任务独立粘贴）。
+  /// [targetTabIndex] 缺省粘贴到当前活动 tab。
+  Future<void> pasteClipboardTask(
+    BuildContext context, {
+    required int taskIndex,
+    bool clearAfterPaste = true,
+    int? targetTabIndex,
+  }) async {
+    if (taskIndex < 0 || taskIndex >= _clipboardTasks.length) return;
+    final task = _clipboardTasks[taskIndex];
+    // 载入活动字段（粘贴链路读取活动字段）
+    _loadTaskIntoActive(task);
+    await _runPasteWithTaskRemoval(
+      context,
+      targetTabIndex ?? _activeTabIndex,
+      clearAfterPaste: task.isCut ? true : clearAfterPaste,
+      taskIndex: taskIndex,
+    );
+  }
+
+  /// 统一粘贴包装：调 _pasteFileToTab 粘贴活动剪贴板，随后按语义移除任务。
+  /// [taskIndex] 提供时移除该任务；否则移除最新任务（活动任务）。
+  Future<void> _runPasteWithTaskRemoval(
+    BuildContext context,
+    int targetTabIndex, {
+    bool clearAfterPaste = true,
+    int? taskIndex,
+  }) async {
+    final wasCut = _isCut;
+    final effectiveClear = wasCut ? true : clearAfterPaste;
+    await _pasteFileToTab(
+      context,
+      targetTabIndex,
+      clearAfterPaste: effectiveClear,
+    );
+    // 剪切任务始终移除；复制任务按 clearAfterPaste 移除。
+    if (wasCut || clearAfterPaste) {
+      if (taskIndex != null) {
+        removeClipboardTask(taskIndex);
+      } else if (_clipboardTasks.isNotEmpty) {
+        removeClipboardTask(_clipboardTasks.length - 1);
+      }
+    }
   }
 
   /// 显示文件传输进度对话框。设置一个初始 progress 值，避免对话框在首帧因
@@ -6895,7 +7025,7 @@ class FileManagerProvider extends ChangeNotifier {
           // 带上目录标记：源目录已不在目标页的 currentFiles 里
           sourceIsDir: _remoteClipboardItems.map((it) => it.isDirectory).toList(),
         );
-        if (clearAfterPaste) clearClipboard();
+        if (clearAfterPaste) _clearActiveClipboard();
         return;
       }
     }
@@ -7006,7 +7136,7 @@ class FileManagerProvider extends ChangeNotifier {
         _isPasting = false;
       }
       if (clearAfterPaste) {
-        clearClipboard();
+        _clearActiveClipboard();
       }
       activeTab.isLoading = false;
       await loadDirectory(currentPath, showLoading: false, clearCache: true);
@@ -7072,7 +7202,7 @@ class FileManagerProvider extends ChangeNotifier {
               content: 'Cannot cut and paste a file into the same folder.',
             );
           }
-          clearClipboard();
+          _clearActiveClipboard();
           activeTab.isLoading = false;
           notifyListeners();
           return;
@@ -7498,7 +7628,7 @@ class FileManagerProvider extends ChangeNotifier {
       }
 
       if (clearAfterPaste) {
-        clearClipboard();
+        _clearActiveClipboard();
       }
       
       _highlightedPaths.clear();
@@ -7713,7 +7843,7 @@ class FileManagerProvider extends ChangeNotifier {
       return;
     }
 
-    // clearClipboard() 会在 finally 中清空 _isCut/_remoteClipboardItems，故先缓存
+    // _clearActiveClipboard() 会在 finally 中清空 _isCut/_remoteClipboardItems，故先缓存
     // 剪切来源信息，供结束后刷新源目录使用。
     final bool remoteWasCut = _isCut;
     final NetworkConnectionModel? remoteSourceConn = _remoteClipboardConnection;
@@ -7974,11 +8104,11 @@ class FileManagerProvider extends ChangeNotifier {
       } catch (_) {}
       progressNotifier.value = null;
       if (clearAfterPaste) {
-        clearClipboard();
+        _clearActiveClipboard();
       }
       activeTab.isLoading = false;
       await loadDirectory(currentPath, showLoading: false, clearCache: true);
-      // 剪切操作：刷新远程源目录。clearClipboard() 已清空 _isCut/_remoteClipboardItems，
+      // 剪切操作：刷新远程源目录。_clearActiveClipboard() 已清空 _isCut/_remoteClipboardItems，
       // 故使用前面缓存的 remoteWasCut/remoteSourceConn/remoteSourceDir。
       if (remoteWasCut && remoteSourceConn != null) {
         for (int i = 0; i < _tabs.length; i++) {
@@ -8012,7 +8142,7 @@ class FileManagerProvider extends ChangeNotifier {
     // 切换到其它面板，故此处先捕获，供结束后精准刷新目标 tab（避免污染活跃面板）。
     final int targetTabIndex = activeTabIndex;
 
-    // clearClipboard() 会在 finally 中清空 _isCut/_clipboardPaths，故先缓存
+    // _clearActiveClipboard() 会在 finally 中清空 _isCut/_clipboardPaths，故先缓存
     // 剪切来源信息，供结束后刷新本地源目录使用。
     final bool localWasCut = _isCut;
     final List<String> localSourcePaths = List<String>.from(_clipboardPaths);
@@ -8256,13 +8386,13 @@ class FileManagerProvider extends ChangeNotifier {
     } finally {
       _activeTransferClient = null;
       progressNotifier.value = null;
-      if (clearAfterPaste) clearClipboard();
+      if (clearAfterPaste) _clearActiveClipboard();
       // 注意：**不再**在上传结束后立即刷新目标远程 tab（旧逻辑会立刻 LIST 可见
       // 目录，把 openlist 本机储存的 staging 中间态——临时文件 + 目标文件 0KB 增长——
       // 暴露给用户，见问题2/问题3）。最终化完成后的目录揭示统一交给
       // [scheduleRemoteRefreshAfterUpload]（轮询 finalizeUpload，仅最终化成功后
       // 一次性刷新可见目录），避免用户看到中间态，也消除 FTP 单连接高频 LIST 竞争。
-      // 剪切操作：刷新本地源目录。clearClipboard() 已清空 _isCut/_clipboardPaths，
+      // 剪切操作：刷新本地源目录。_clearActiveClipboard() 已清空 _isCut/_clipboardPaths，
       // 故使用前面缓存的 localWasCut/localSourcePaths。
       if (localWasCut && localSourcePaths.isNotEmpty) {
         await refreshLocalSourceAfterCut(localSourcePaths);
@@ -8510,7 +8640,7 @@ class FileManagerProvider extends ChangeNotifier {
       progressNotifier.value = null;
       _isPasting = false;
       _isOperationCancelled = false;
-      if (clearAfterPaste) clearClipboard();
+      if (clearAfterPaste) _clearActiveClipboard();
       if (localWasCut && sourcePaths.isNotEmpty) {
         await refreshLocalSourceAfterCut(sourcePaths);
       }
@@ -8537,7 +8667,7 @@ class FileManagerProvider extends ChangeNotifier {
     // 记录上传目标 tab 索引（上传目标是当前活跃远程 tab），供结束后精准刷新。
     final int targetTabIndex = activeTabIndex;
 
-    // clearClipboard() 会在 finally 中清空 _isCut/_remoteClipboardItems，故先缓存
+    // _clearActiveClipboard() 会在 finally 中清空 _isCut/_remoteClipboardItems，故先缓存
     // 剪切来源信息，供结束后刷新源目录使用。
     final bool r2rWasCut = _isCut;
     final NetworkConnectionModel? r2rConn = _remoteClipboardConnection;
@@ -8805,10 +8935,10 @@ class FileManagerProvider extends ChangeNotifier {
         if (tempDir.existsSync()) tempDir.deleteSync(recursive: true);
       } catch (_) {}
       progressNotifier.value = null;
-      if (clearAfterPaste) clearClipboard();
+      if (clearAfterPaste) _clearActiveClipboard();
       // 精准刷新目标远程 tab，避免污染全局活跃面板。
       await loadDirectoryForTab(targetTabIndex, currentPath, showLoading: false, clearCache: true);
-      // 剪切操作：刷新远程源目录。clearClipboard() 已清空 _isCut/_remoteClipboardItems，
+      // 剪切操作：刷新远程源目录。_clearActiveClipboard() 已清空 _isCut/_remoteClipboardItems，
       // 故使用前面缓存的 r2rWasCut/r2rConn/r2rSourceDir。
       if (r2rWasCut && r2rConn != null) {
         for (int i = 0; i < _tabs.length; i++) {
@@ -11679,7 +11809,7 @@ class FileManagerProvider extends ChangeNotifier {
       activeTab.isLoading = false;
       notifyListeners();
     }
-    if (clearAfterPaste) clearClipboard();
+    if (clearAfterPaste) _clearActiveClipboard();
     await loadDirectory(currentPath, showLoading: false, clearCache: true);
     notifyListeners();
   }

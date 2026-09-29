@@ -3377,6 +3377,10 @@
       }
     }
   },
+  "ui_clipboard": "Clipboard",
+  "@ui_clipboard": {
+    "description": "Clipboard panel title"
+  },
   "ui_clear": "Clear",
   "@ui_clear": {
     "description": "directory_screen.dart"

@@ -3138,6 +3138,9 @@ class L10nAr extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'الحافظة';
+
+  @override
   String get ui_clear => 'مسح';
 
   @override

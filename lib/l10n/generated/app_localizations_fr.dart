@@ -3212,6 +3212,9 @@ class L10nFr extends L10n {
   }
 
   @override
+  String get ui_clipboard => 'Presse-papiers';
+
+  @override
   String get ui_clear => 'Effacer';
 
   @override

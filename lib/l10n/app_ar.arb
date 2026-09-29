@@ -3370,6 +3370,10 @@
       }
     }
   },
+  "ui_clipboard": "الحافظة",
+  "@ui_clipboard": {
+    "description": "Clipboard panel title"
+  },
   "ui_clear": "مسح",
   "@ui_clear": {
     "description": "directory_screen.dart"

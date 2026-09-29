@@ -3469,6 +3469,10 @@
       }
     }
   },
+  "ui_clipboard": "剪贴板",
+  "@ui_clipboard": {
+    "description": "Clipboard panel title"
+  },
   "ui_clear": "清除",
   "@ui_clear": {
     "description": "directory_screen.dart"
