@@ -3349,6 +3349,46 @@
   "ui_action_menu_mode_all": "全部显示",
   "ui_action_menu_mode_single": "仅在单窗口模式显示",
   "ui_action_menu_mode_dual": "仅在双窗口模式显示",
+  "ui_time_date_format": "时间与日期格式",
+  "@ui_time_date_format": {
+    "description": "Settings: date & time format"
+  },
+  "ui_select_time_date_format": "选择日期与时间格式",
+  "@ui_select_time_date_format": {
+    "description": "Dialog title: select date & time format"
+  },
+  "ui_date_format": "日期格式",
+  "@ui_date_format": {
+    "description": "Picker section: date format"
+  },
+  "ui_time_format": "时间格式",
+  "@ui_time_format": {
+    "description": "Picker section: time format"
+  },
+  "ui_date_fmt_dmy": "日/月/年",
+  "@ui_date_fmt_dmy": {
+    "description": "Date format: day/month/year"
+  },
+  "ui_date_fmt_mdy": "月/日/年",
+  "@ui_date_fmt_mdy": {
+    "description": "Date format: month/day/year"
+  },
+  "ui_date_fmt_ymd": "年/月/日",
+  "@ui_date_fmt_ymd": {
+    "description": "Date format: year/month/day"
+  },
+  "ui_time_fmt_12h": "12小时制（上午/下午）",
+  "@ui_time_fmt_12h": {
+    "description": "Time format: 12-hour AM/PM"
+  },
+  "ui_time_fmt_24h": "24小时制",
+  "@ui_time_fmt_24h": {
+    "description": "Time format: 24-hour"
+  },
+  "ui_select_action_menu_mode": "选择显示模式",
+  "@ui_select_action_menu_mode": {
+    "description": "Dialog title: select three-dot button display mode"
+  },
   "ui_enable_drag_drop": "启用拖放",
   "ui_confirm_drag_drop": "确认拖放操作",
   "ui_enable_multi_tabs": "启用多标签页",

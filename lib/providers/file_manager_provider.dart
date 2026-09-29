@@ -244,6 +244,10 @@ class FileManagerProvider extends ChangeNotifier {
     _enableDragDrop = PreferencesService.getEnableDragDrop();
     _showDragDropDialog = PreferencesService.getShowDragDropDialog();
     _use24HourFormat = PreferencesService.getUse24HourFormat();
+    _dateFormat = PreferencesService.getDateFormat();
+    // 同步全局时间/日期格式偏好到 FileUtils，文件列表等格式化函数即时生效。
+    FileUtils.use24HourFormat = _use24HourFormat;
+    FileUtils.datePattern = _dateFormat;
     _hideTimeAndDate = PreferencesService.getHideTimeAndDate();
     _showFolderContentsCount = PreferencesService.getShowFolderContentsCount();
     _showFolderSizes = PreferencesService.getShowFolderSizes();
@@ -1067,12 +1071,29 @@ class FileManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _use24HourFormat = false;
+  bool _use24HourFormat = true;
   bool get use24HourFormat => _use24HourFormat;
 
   void toggleUse24HourFormat() {
-    _use24HourFormat = !_use24HourFormat;
-    PreferencesService.saveUse24HourFormat(_use24HourFormat);
+    setUse24HourFormat(!_use24HourFormat);
+  }
+
+  /// 直接设置 12/24 小时制（弹窗选择用），并同步全局格式偏好。
+  void setUse24HourFormat(bool val) {
+    _use24HourFormat = val;
+    FileUtils.use24HourFormat = val;
+    PreferencesService.saveUse24HourFormat(val);
+    notifyListeners();
+  }
+
+  String _dateFormat = 'yyyy-MM-dd';
+  String get dateFormat => _dateFormat;
+
+  /// 设置日期格式（dd/MM/yyyy、MM/dd/yyyy、yyyy-MM-dd 等），并同步全局格式偏好。
+  void setDateFormat(String fmt) {
+    _dateFormat = fmt;
+    FileUtils.datePattern = fmt;
+    PreferencesService.saveDateFormat(fmt);
     notifyListeners();
   }
 

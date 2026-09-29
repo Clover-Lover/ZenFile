@@ -3041,6 +3041,37 @@ class L10nFr extends L10n {
   String get ui_action_menu_mode_dual => 'Mode double fenêtre uniquement';
 
   @override
+  String get ui_time_date_format => 'Format date & heure';
+
+  @override
+  String get ui_select_time_date_format =>
+      'Choisir le format de date et d\'heure';
+
+  @override
+  String get ui_date_format => 'Format de date';
+
+  @override
+  String get ui_time_format => 'Format d\'heure';
+
+  @override
+  String get ui_date_fmt_dmy => 'Jour/Mois/Année';
+
+  @override
+  String get ui_date_fmt_mdy => 'Mois/Jour/Année';
+
+  @override
+  String get ui_date_fmt_ymd => 'Année/Mois/Jour';
+
+  @override
+  String get ui_time_fmt_12h => '12 heures (AM/PM)';
+
+  @override
+  String get ui_time_fmt_24h => '24 heures';
+
+  @override
+  String get ui_select_action_menu_mode => 'Sélectionner le mode d\'affichage';
+
+  @override
   String get ui_enable_drag_drop => 'Activer le glisser-déposer';
 
   @override

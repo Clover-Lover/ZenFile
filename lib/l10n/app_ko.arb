@@ -3250,6 +3250,46 @@
   "ui_action_menu_mode_all": "모두 표시",
   "ui_action_menu_mode_single": "단일 창 모드만",
   "ui_action_menu_mode_dual": "듀얼 창 모드만",
+  "ui_time_date_format": "날짜 및 시간 형식",
+  "@ui_time_date_format": {
+    "description": "Settings: date & time format"
+  },
+  "ui_select_time_date_format": "날짜 및 시간 형식 선택",
+  "@ui_select_time_date_format": {
+    "description": "Dialog title: select date & time format"
+  },
+  "ui_date_format": "날짜 형식",
+  "@ui_date_format": {
+    "description": "Picker section: date format"
+  },
+  "ui_time_format": "시간 형식",
+  "@ui_time_format": {
+    "description": "Picker section: time format"
+  },
+  "ui_date_fmt_dmy": "일/월/년",
+  "@ui_date_fmt_dmy": {
+    "description": "Date format: day/month/year"
+  },
+  "ui_date_fmt_mdy": "월/일/년",
+  "@ui_date_fmt_mdy": {
+    "description": "Date format: month/day/year"
+  },
+  "ui_date_fmt_ymd": "년/월/일",
+  "@ui_date_fmt_ymd": {
+    "description": "Date format: year/month/day"
+  },
+  "ui_time_fmt_12h": "12시간제(오전/오후)",
+  "@ui_time_fmt_12h": {
+    "description": "Time format: 12-hour AM/PM"
+  },
+  "ui_time_fmt_24h": "24시간제",
+  "@ui_time_fmt_24h": {
+    "description": "Time format: 24-hour"
+  },
+  "ui_select_action_menu_mode": "표시 모드 선택",
+  "@ui_select_action_menu_mode": {
+    "description": "Dialog title: select three-dot button display mode"
+  },
   "ui_enable_drag_drop": "드래그 앤 드롭 활성화",
   "ui_confirm_drag_drop": "드래그 앤 드롭 확인",
   "ui_enable_multi_tabs": "여러 탭 활성화",

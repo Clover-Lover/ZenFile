@@ -2883,6 +2883,36 @@ class L10nKo extends L10n {
   String get ui_action_menu_mode_dual => '듀얼 창 모드만';
 
   @override
+  String get ui_time_date_format => '날짜 및 시간 형식';
+
+  @override
+  String get ui_select_time_date_format => '날짜 및 시간 형식 선택';
+
+  @override
+  String get ui_date_format => '날짜 형식';
+
+  @override
+  String get ui_time_format => '시간 형식';
+
+  @override
+  String get ui_date_fmt_dmy => '일/월/년';
+
+  @override
+  String get ui_date_fmt_mdy => '월/일/년';
+
+  @override
+  String get ui_date_fmt_ymd => '년/월/일';
+
+  @override
+  String get ui_time_fmt_12h => '12시간제(오전/오후)';
+
+  @override
+  String get ui_time_fmt_24h => '24시간제';
+
+  @override
+  String get ui_select_action_menu_mode => '표시 모드 선택';
+
+  @override
   String get ui_enable_drag_drop => '드래그 앤 드롭 활성화';
 
   @override

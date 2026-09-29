@@ -3027,6 +3027,36 @@ class L10nRu extends L10n {
   String get ui_action_menu_mode_dual => 'Только в двухоконном режиме';
 
   @override
+  String get ui_time_date_format => 'Формат даты и времени';
+
+  @override
+  String get ui_select_time_date_format => 'Выбрать формат даты и времени';
+
+  @override
+  String get ui_date_format => 'Формат даты';
+
+  @override
+  String get ui_time_format => 'Формат времени';
+
+  @override
+  String get ui_date_fmt_dmy => 'День/Месяц/Год';
+
+  @override
+  String get ui_date_fmt_mdy => 'Месяц/День/Год';
+
+  @override
+  String get ui_date_fmt_ymd => 'Год/Месяц/День';
+
+  @override
+  String get ui_time_fmt_12h => '12 часов (AM/PM)';
+
+  @override
+  String get ui_time_fmt_24h => '24 часа';
+
+  @override
+  String get ui_select_action_menu_mode => 'Выбрать режим отображения';
+
+  @override
   String get ui_enable_drag_drop => 'Включить Перетаскивание';
 
   @override

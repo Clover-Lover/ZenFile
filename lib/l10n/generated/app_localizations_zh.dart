@@ -2872,6 +2872,36 @@ class L10nZh extends L10n {
   String get ui_action_menu_mode_dual => '仅在双窗口模式显示';
 
   @override
+  String get ui_time_date_format => '时间与日期格式';
+
+  @override
+  String get ui_select_time_date_format => '选择日期与时间格式';
+
+  @override
+  String get ui_date_format => '日期格式';
+
+  @override
+  String get ui_time_format => '时间格式';
+
+  @override
+  String get ui_date_fmt_dmy => '日/月/年';
+
+  @override
+  String get ui_date_fmt_mdy => '月/日/年';
+
+  @override
+  String get ui_date_fmt_ymd => '年/月/日';
+
+  @override
+  String get ui_time_fmt_12h => '12小时制（上午/下午）';
+
+  @override
+  String get ui_time_fmt_24h => '24小时制';
+
+  @override
+  String get ui_select_action_menu_mode => '选择显示模式';
+
+  @override
   String get ui_enable_drag_drop => '启用拖放';
 
   @override
@@ -10558,6 +10588,36 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_action_menu_mode_dual => '僅在雙視窗模式顯示';
+
+  @override
+  String get ui_time_date_format => '時間與日期格式';
+
+  @override
+  String get ui_select_time_date_format => '選擇日期與時間格式';
+
+  @override
+  String get ui_date_format => '日期格式';
+
+  @override
+  String get ui_time_format => '時間格式';
+
+  @override
+  String get ui_date_fmt_dmy => '日/月/年';
+
+  @override
+  String get ui_date_fmt_mdy => '月/日/年';
+
+  @override
+  String get ui_date_fmt_ymd => '年/月/日';
+
+  @override
+  String get ui_time_fmt_12h => '12小時制（上午/下午）';
+
+  @override
+  String get ui_time_fmt_24h => '24小時制';
+
+  @override
+  String get ui_select_action_menu_mode => '選擇顯示模式';
 
   @override
   String get ui_enable_drag_drop => '啟用拖放';

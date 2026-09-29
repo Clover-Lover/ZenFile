@@ -3247,6 +3247,46 @@
   "ui_action_menu_mode_all": "In allen Modi anzeigen",
   "ui_action_menu_mode_single": "Nur im Einzelfenstermodus",
   "ui_action_menu_mode_dual": "Nur im Doppel-Fenstermodus",
+  "ui_time_date_format": "Datums- und Zeitformat",
+  "@ui_time_date_format": {
+    "description": "Settings: date & time format"
+  },
+  "ui_select_time_date_format": "Datums- und Zeitformat auswählen",
+  "@ui_select_time_date_format": {
+    "description": "Dialog title: select date & time format"
+  },
+  "ui_date_format": "Datumsformat",
+  "@ui_date_format": {
+    "description": "Picker section: date format"
+  },
+  "ui_time_format": "Zeitformat",
+  "@ui_time_format": {
+    "description": "Picker section: time format"
+  },
+  "ui_date_fmt_dmy": "Tag/Monat/Jahr",
+  "@ui_date_fmt_dmy": {
+    "description": "Date format: day/month/year"
+  },
+  "ui_date_fmt_mdy": "Monat/Tag/Jahr",
+  "@ui_date_fmt_mdy": {
+    "description": "Date format: month/day/year"
+  },
+  "ui_date_fmt_ymd": "Jahr/Monat/Tag",
+  "@ui_date_fmt_ymd": {
+    "description": "Date format: year/month/day"
+  },
+  "ui_time_fmt_12h": "12 Stunden (AM/PM)",
+  "@ui_time_fmt_12h": {
+    "description": "Time format: 12-hour AM/PM"
+  },
+  "ui_time_fmt_24h": "24 Stunden",
+  "@ui_time_fmt_24h": {
+    "description": "Time format: 24-hour"
+  },
+  "ui_select_action_menu_mode": "Anzeigemodus auswählen",
+  "@ui_select_action_menu_mode": {
+    "description": "Dialog title: select three-dot button display mode"
+  },
   "ui_enable_drag_drop": "Drag & Drop aktivieren",
   "ui_confirm_drag_drop": "Drag & Drop bestätigen",
   "ui_enable_multi_tabs": "Mehrere Tabs aktivieren",

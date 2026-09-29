@@ -909,17 +909,22 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                     if (use24HourVis)
                       SettingsTile(
                         icon: Icons.access_time_rounded,
-                        title: L10n.of(context).ui_use_24h_format,
-                        subtitle: L10n.of(context).ampm24,
+                        title: L10n.of(context).ui_time_date_format,
+                        subtitle: _getTimeDateSubtitle(context, fileManager),
                         trailing: Transform.scale(
                           scale: 0.85,
                           child: Switch(
                             value: fileManager.use24HourFormat,
                             activeColor: theme.colorScheme.primary,
-                            onChanged: (_) => fileManager.toggleUse24HourFormat(),
+                            onChanged: (_) =>
+                                fileManager.toggleUse24HourFormat(),
                           ),
                         ),
-                        onTap: () => fileManager.toggleUse24HourFormat(),
+                        onTap: () => _showTimeDateFormatPicker(
+                          context,
+                          fileManager,
+                          theme,
+                        ),
                       ),
                     if (hideTimeDateVis)
                       SettingsTile(
@@ -955,38 +960,27 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                       SettingsTile(
                         icon: Icons.more_vert_rounded,
                         title: L10n.of(context).ui_show_action_menu_buttons,
-                        subtitle: L10n.of(context).ui_action_menu_subtitle,
+                        subtitle: fileManager.showActionMenuButtons
+                            ? _getActionMenuModeLabel(
+                                context,
+                                fileManager.actionMenuDisplayMode,
+                              )
+                            : L10n.of(context).ui_action_menu_subtitle,
                         trailing: Transform.scale(
                           scale: 0.85,
                           child: Switch(
                             value: fileManager.showActionMenuButtons,
                             activeColor: theme.colorScheme.primary,
-                            onChanged: (val) => fileManager.setShowActionMenuButtons(val),
+                            onChanged: (val) =>
+                                fileManager.setShowActionMenuButtons(val),
                           ),
                         ),
-                        onTap: () => fileManager.setShowActionMenuButtons(!fileManager.showActionMenuButtons),
+                        onTap: () => _showActionMenuModePicker(
+                          context,
+                          fileManager,
+                          theme,
+                        ),
                       ),
-                      // 当开关开启时显示三个模式选项
-                      if (fileManager.showActionMenuButtons) ...[
-                        _buildActionMenuModeTile(
-                          context, theme, fileManager,
-                          mode: 'all',
-                          title: L10n.of(context).ui_action_menu_mode_all,
-                          icon: Icons.visibility_rounded,
-                        ),
-                        _buildActionMenuModeTile(
-                          context, theme, fileManager,
-                          mode: 'single',
-                          title: L10n.of(context).ui_action_menu_mode_single,
-                          icon: Icons.looks_one_rounded,
-                        ),
-                        _buildActionMenuModeTile(
-                          context, theme, fileManager,
-                          mode: 'dual',
-                          title: L10n.of(context).ui_action_menu_mode_dual,
-                          icon: Icons.looks_two_rounded,
-                        ),
-                      ],
                     ],
                     SettingsTile(
                       icon: Icons.info_outline_rounded,
@@ -1075,52 +1069,333 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
 }
 
 // ----------------------------------------------------
-// 三点操作按钮显示模式选项 tile（顶层函数，供多个设置页面复用）
+// 三点操作按钮显示模式：弹窗单选（顶层函数，供多个设置页面复用）
 // ----------------------------------------------------
-Widget _buildActionMenuModeTile(
+
+/// 三点按钮显示模式的当前文案。
+String _getActionMenuModeLabel(BuildContext context, String mode) {
+  final l10n = L10n.of(context);
+  switch (mode) {
+    case 'single':
+      return l10n.ui_action_menu_mode_single;
+    case 'dual':
+      return l10n.ui_action_menu_mode_dual;
+    default:
+      return l10n.ui_action_menu_mode_all;
+  }
+}
+
+/// 时间与日期格式设置的副标题：当前日期格式 + 12/24 小时制。
+String _getTimeDateSubtitle(
   BuildContext context,
+  FileManagerProvider fileManager,
+) {
+  final l10n = L10n.of(context);
+  final time = fileManager.use24HourFormat
+      ? l10n.ui_time_fmt_24h
+      : l10n.ui_time_fmt_12h;
+  return '${fileManager.dateFormat} · $time';
+}
+
+/// 「显示三点操作按钮」模式选择弹窗：单选即生效并收起。
+Future<void> _showActionMenuModePicker(
+  BuildContext context,
+  FileManagerProvider fileManager,
   ThemeData theme,
-  FileManagerProvider fileManager, {
+) async {
+  final l10n = L10n.of(context);
+  final mode = await showModalBottomSheet<String>(
+    context: context,
+    showDragHandle: true,
+    builder: (sheetContext) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+            child: Text(
+              l10n.ui_select_action_menu_mode,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          _buildActionMenuModeOption(
+            sheetContext,
+            fileManager,
+            theme,
+            mode: 'all',
+            title: l10n.ui_action_menu_mode_all,
+            icon: Icons.visibility_rounded,
+          ),
+          _buildActionMenuModeOption(
+            sheetContext,
+            fileManager,
+            theme,
+            mode: 'single',
+            title: l10n.ui_action_menu_mode_single,
+            icon: Icons.looks_one_rounded,
+          ),
+          _buildActionMenuModeOption(
+            sheetContext,
+            fileManager,
+            theme,
+            mode: 'dual',
+            title: l10n.ui_action_menu_mode_dual,
+            icon: Icons.looks_two_rounded,
+          ),
+          const SizedBox(height: 12),
+        ],
+      ),
+    ),
+  );
+  if (mode != null) {
+    fileManager.setActionMenuDisplayMode(mode);
+  }
+}
+
+/// 弹窗内单个显示模式选项：点选即返回该模式并收起。
+Widget _buildActionMenuModeOption(
+  BuildContext sheetContext,
+  FileManagerProvider fileManager,
+  ThemeData theme, {
   required String mode,
   required String title,
   required IconData icon,
 }) {
   final isSelected = fileManager.actionMenuDisplayMode == mode;
-  return Card(
-    elevation: 0,
-    margin: const EdgeInsets.symmetric(vertical: 4),
-    color: isSelected
-        ? theme.colorScheme.primary.withOpacity(0.08)
-        : theme.colorScheme.surface.withOpacity(0.5),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
-      side: BorderSide(
-        color: isSelected
-            ? theme.colorScheme.primary.withOpacity(0.4)
-            : theme.colorScheme.outline.withOpacity(0.1),
-        width: isSelected ? 1.5 : 1.0,
-      ),
+  return ListTile(
+    leading: Icon(
+      icon,
+      color: isSelected
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurface.withOpacity(0.5),
     ),
-    child: ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: Icon(icon, size: 20,
-          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.5)),
-      ),
-      title: Text(title, style: TextStyle(
+    title: Text(
+      title,
+      style: TextStyle(
         fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-        fontSize: 15,
-        color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
-      )),
-      trailing: Icon(
-        isSelected ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded,
-        color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.3),
-        size: 22,
+        color: isSelected
+            ? theme.colorScheme.primary
+            : theme.colorScheme.onSurface,
       ),
-      onTap: () => fileManager.setActionMenuDisplayMode(mode),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
+    trailing: Icon(
+      isSelected
+          ? Icons.radio_button_checked_rounded
+          : Icons.radio_button_off_rounded,
+      color: isSelected
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurface.withOpacity(0.3),
+      size: 22,
+    ),
+    onTap: () => Navigator.pop(sheetContext, mode),
+  );
+}
+
+// ----------------------------------------------------
+// 时间与日期格式选择弹窗（顶层函数，供多个设置页面复用）
+// ----------------------------------------------------
+
+/// 「时间与日期格式」选择弹窗：日期格式 3 选 + 时间格式 2 选，
+/// 点「确定」应用并收起。
+Future<void> _showTimeDateFormatPicker(
+  BuildContext context,
+  FileManagerProvider fileManager,
+  ThemeData theme,
+) async {
+  final l10n = L10n.of(context);
+  final result = await showModalBottomSheet<(String, bool)>(
+    context: context,
+    showDragHandle: true,
+    builder: (sheetContext) => StatefulBuilder(
+      builder: (_, setSheetState) {
+        var dateFmt = fileManager.dateFormat;
+        var use24 = fileManager.use24HourFormat;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                child: Text(
+                  l10n.ui_select_time_date_format,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _buildPickerSectionLabel(theme, l10n.ui_date_format),
+              _buildDateFormatOption(
+                sheetContext,
+                setSheetState,
+                theme,
+                fmt: 'dd/MM/yyyy',
+                label: l10n.ui_date_fmt_dmy,
+                sample: '30/09/2026',
+                selected: dateFmt,
+                onSelect: (v) => setSheetState(() => dateFmt = v),
+              ),
+              _buildDateFormatOption(
+                sheetContext,
+                setSheetState,
+                theme,
+                fmt: 'MM/dd/yyyy',
+                label: l10n.ui_date_fmt_mdy,
+                sample: '09/30/2026',
+                selected: dateFmt,
+                onSelect: (v) => setSheetState(() => dateFmt = v),
+              ),
+              _buildDateFormatOption(
+                sheetContext,
+                setSheetState,
+                theme,
+                fmt: 'yyyy-MM-dd',
+                label: l10n.ui_date_fmt_ymd,
+                sample: '2026-09-30',
+                selected: dateFmt,
+                onSelect: (v) => setSheetState(() => dateFmt = v),
+              ),
+              _buildPickerSectionLabel(theme, l10n.ui_time_format),
+              _buildTimeFormatOption(
+                sheetContext,
+                setSheetState,
+                theme,
+                use24: true,
+                label: l10n.ui_time_fmt_24h,
+                sample: '21:30',
+                selectedUse24: use24,
+                onSelect: (v) => setSheetState(() => use24 = v),
+              ),
+              _buildTimeFormatOption(
+                sheetContext,
+                setSheetState,
+                theme,
+                use24: false,
+                label: l10n.ui_time_fmt_12h,
+                sample: '09:30 PM',
+                selectedUse24: use24,
+                onSelect: (v) => setSheetState(() => use24 = v),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () =>
+                        Navigator.pop(sheetContext, (dateFmt, use24)),
+                    child: Text(l10n.ui_confirm),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+  if (result != null) {
+    if (result.$1 != fileManager.dateFormat) {
+      fileManager.setDateFormat(result.$1);
+    }
+    if (result.$2 != fileManager.use24HourFormat) {
+      fileManager.setUse24HourFormat(result.$2);
+    }
+  }
+}
+
+/// 弹窗内分组标题（日期格式 / 时间格式）。
+Widget _buildPickerSectionLabel(ThemeData theme, String text) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        text,
+        style: theme.textTheme.labelMedium?.copyWith(
+          color: theme.colorScheme.primary,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
+}
+
+/// 日期格式单选选项（带样例预览）。
+Widget _buildDateFormatOption(
+  BuildContext sheetContext,
+  StateSetter setSheetState,
+  ThemeData theme, {
+  required String fmt,
+  required String label,
+  required String sample,
+  required String selected,
+  required ValueChanged<String> onSelect,
+}) {
+  final isSelected = selected == fmt;
+  return ListTile(
+    leading: Icon(
+      Icons.calendar_today_outlined,
+      color: isSelected
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurface.withOpacity(0.5),
+    ),
+    title: Text(label),
+    subtitle: Text(
+      sample,
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: theme.colorScheme.onSurface.withOpacity(0.6),
+      ),
+    ),
+    trailing: Icon(
+      isSelected
+          ? Icons.radio_button_checked_rounded
+          : Icons.radio_button_off_rounded,
+      color: isSelected
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurface.withOpacity(0.3),
+      size: 22,
+    ),
+    onTap: () => onSelect(fmt),
+  );
+}
+
+/// 时间格式单选选项（12 小时制 / 24 小时制，带样例预览）。
+Widget _buildTimeFormatOption(
+  BuildContext sheetContext,
+  StateSetter setSheetState,
+  ThemeData theme, {
+  required bool use24,
+  required String label,
+  required String sample,
+  required bool selectedUse24,
+  required ValueChanged<bool> onSelect,
+}) {
+  final isSelected = use24 == selectedUse24;
+  return ListTile(
+    leading: Icon(
+      Icons.schedule_rounded,
+      color: isSelected
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurface.withOpacity(0.5),
+    ),
+    title: Text(label),
+    subtitle: Text(
+      sample,
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: theme.colorScheme.onSurface.withOpacity(0.6),
+      ),
+    ),
+    trailing: Icon(
+      isSelected
+          ? Icons.radio_button_checked_rounded
+          : Icons.radio_button_off_rounded,
+      color: isSelected
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurface.withOpacity(0.3),
+      size: 22,
+    ),
+    onTap: () => onSelect(use24),
   );
 }
 
@@ -1596,8 +1871,8 @@ class LayoutSettingsScreen extends StatelessWidget {
             ),
             SettingsTile(
               icon: Icons.access_time_rounded,
-              title: L10n.of(context).ui_use_24h_format,
-              subtitle: L10n.of(context).ampm24,
+              title: L10n.of(context).ui_time_date_format,
+              subtitle: _getTimeDateSubtitle(context, fileManager),
               trailing: Transform.scale(
                 scale: 0.85,
                 child: Switch(
@@ -1606,7 +1881,11 @@ class LayoutSettingsScreen extends StatelessWidget {
                   onChanged: (_) => fileManager.toggleUse24HourFormat(),
                 ),
               ),
-              onTap: () => fileManager.toggleUse24HourFormat(),
+              onTap: () => _showTimeDateFormatPicker(
+                context,
+                fileManager,
+                theme,
+              ),
             ),
             SettingsTile(
               icon: Icons.visibility_off_rounded,
@@ -1639,37 +1918,27 @@ class LayoutSettingsScreen extends StatelessWidget {
             SettingsTile(
               icon: Icons.more_vert_rounded,
               title: L10n.of(context).ui_show_action_menu_buttons,
-              subtitle: L10n.of(context).ui_action_menu_subtitle,
+              subtitle: fileManager.showActionMenuButtons
+                  ? _getActionMenuModeLabel(
+                      context,
+                      fileManager.actionMenuDisplayMode,
+                    )
+                  : L10n.of(context).ui_action_menu_subtitle,
               trailing: Transform.scale(
                 scale: 0.85,
                 child: Switch(
                   value: fileManager.showActionMenuButtons,
                   activeColor: theme.colorScheme.primary,
-                  onChanged: (val) => fileManager.setShowActionMenuButtons(val),
+                  onChanged: (val) =>
+                      fileManager.setShowActionMenuButtons(val),
                 ),
               ),
-              onTap: () => fileManager.setShowActionMenuButtons(!fileManager.showActionMenuButtons),
+              onTap: () => _showActionMenuModePicker(
+                context,
+                fileManager,
+                theme,
+              ),
             ),
-            if (fileManager.showActionMenuButtons) ...[
-              _buildActionMenuModeTile(
-                context, theme, fileManager,
-                mode: 'all',
-                title: L10n.of(context).ui_action_menu_mode_all,
-                icon: Icons.visibility_rounded,
-              ),
-              _buildActionMenuModeTile(
-                context, theme, fileManager,
-                mode: 'single',
-                title: L10n.of(context).ui_action_menu_mode_single,
-                icon: Icons.looks_one_rounded,
-              ),
-              _buildActionMenuModeTile(
-                context, theme, fileManager,
-                mode: 'dual',
-                title: L10n.of(context).ui_action_menu_mode_dual,
-                icon: Icons.looks_two_rounded,
-              ),
-            ],
           ],
         ),
       ),

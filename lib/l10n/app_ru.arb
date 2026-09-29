@@ -3250,6 +3250,46 @@
   "ui_action_menu_mode_all": "Показывать во всех режимах",
   "ui_action_menu_mode_single": "Только в однооконном режиме",
   "ui_action_menu_mode_dual": "Только в двухоконном режиме",
+  "ui_time_date_format": "Формат даты и времени",
+  "@ui_time_date_format": {
+    "description": "Settings: date & time format"
+  },
+  "ui_select_time_date_format": "Выбрать формат даты и времени",
+  "@ui_select_time_date_format": {
+    "description": "Dialog title: select date & time format"
+  },
+  "ui_date_format": "Формат даты",
+  "@ui_date_format": {
+    "description": "Picker section: date format"
+  },
+  "ui_time_format": "Формат времени",
+  "@ui_time_format": {
+    "description": "Picker section: time format"
+  },
+  "ui_date_fmt_dmy": "День/Месяц/Год",
+  "@ui_date_fmt_dmy": {
+    "description": "Date format: day/month/year"
+  },
+  "ui_date_fmt_mdy": "Месяц/День/Год",
+  "@ui_date_fmt_mdy": {
+    "description": "Date format: month/day/year"
+  },
+  "ui_date_fmt_ymd": "Год/Месяц/День",
+  "@ui_date_fmt_ymd": {
+    "description": "Date format: year/month/day"
+  },
+  "ui_time_fmt_12h": "12 часов (AM/PM)",
+  "@ui_time_fmt_12h": {
+    "description": "Time format: 12-hour AM/PM"
+  },
+  "ui_time_fmt_24h": "24 часа",
+  "@ui_time_fmt_24h": {
+    "description": "Time format: 24-hour"
+  },
+  "ui_select_action_menu_mode": "Выбрать режим отображения",
+  "@ui_select_action_menu_mode": {
+    "description": "Dialog title: select three-dot button display mode"
+  },
   "ui_enable_drag_drop": "Включить Перетаскивание",
   "ui_confirm_drag_drop": "Подтверждать Перетаскивание",
   "ui_enable_multi_tabs": "Включить Несколько Вкладок",

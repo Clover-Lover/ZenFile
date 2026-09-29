@@ -2884,6 +2884,36 @@ class L10nJa extends L10n {
   String get ui_action_menu_mode_dual => 'デュアルウィンドウモードのみ';
 
   @override
+  String get ui_time_date_format => '日付と時刻の形式';
+
+  @override
+  String get ui_select_time_date_format => '日付と時刻の形式を選択';
+
+  @override
+  String get ui_date_format => '日付形式';
+
+  @override
+  String get ui_time_format => '時刻形式';
+
+  @override
+  String get ui_date_fmt_dmy => '日/月/年';
+
+  @override
+  String get ui_date_fmt_mdy => '月/日/年';
+
+  @override
+  String get ui_date_fmt_ymd => '年/月/日';
+
+  @override
+  String get ui_time_fmt_12h => '12時間制（午前/午後）';
+
+  @override
+  String get ui_time_fmt_24h => '24時間制';
+
+  @override
+  String get ui_select_action_menu_mode => '表示モードを選択';
+
+  @override
   String get ui_enable_drag_drop => 'ドラッグ＆ドロップを有効にする';
 
   @override

@@ -690,6 +690,7 @@ class PreferencesService {
   }
 
   static const String _keyUse24HourFormat = 'use_24_hour_format';
+  static const String _keyDateFormat = 'date_format';
   static const String _keyHideTimeAndDate = 'hide_time_and_date';
   static const String _keyShowFolderContentsCount = 'show_folder_contents_count';
 
@@ -699,6 +700,15 @@ class PreferencesService {
 
   static Future<void> saveUse24HourFormat(bool val) async {
     await _prefs?.setBool(_keyUse24HourFormat, val);
+  }
+
+  /// 用户选择的日期格式（intl DateFormat 模式，默认 yyyy-MM-dd）。
+  static String getDateFormat() {
+    return _prefs?.getString(_keyDateFormat) ?? 'yyyy-MM-dd';
+  }
+
+  static Future<void> saveDateFormat(String val) async {
+    await _prefs?.setString(_keyDateFormat, val);
   }
 
   static bool getHideTimeAndDate() {

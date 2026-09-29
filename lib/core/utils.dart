@@ -31,32 +31,55 @@ class FileUtils {
     return '${b.toStringAsFixed(decimals)}${suffixes[i]}';
   }
 
-  static String formatDate(DateTime date, {bool use24Hour = true}) {
-    final timePattern = use24Hour ? 'HH:mm' : 'hh:mm a';
-    return DateFormat('yyyy-MM-dd  $timePattern').format(date);
+  /// 全局时间/日期格式偏好（由设置页写入，文件列表等所有格式化函数读取）。
+  /// 默认 24 小时制 + yyyy-MM-dd，与历史行为一致。
+  static bool use24HourFormat = true;
+  static String datePattern = 'yyyy-MM-dd';
+
+  static String formatDate(DateTime date, {bool? use24Hour}) {
+    final use24 = use24Hour ?? FileUtils.use24HourFormat;
+    final timePattern = use24 ? 'HH:mm' : 'hh:mm a';
+    return DateFormat('${FileUtils.datePattern}  $timePattern').format(date);
   }
 
   /// 紧凑日期（对标 MT 管理器）：今年内「yy-MM-dd HH:mm」（两位年份），
   /// 跨年「yy-MM-dd」（省时间）。比 yyyy-MM-dd HH:mm 短 2~6 字符，
-  /// 让日期+时间+文件大小在同一行都能完整显示。
-  static String formatDateShort(DateTime date, {bool use24Hour = true}) {
+  /// 让日期+时间+文件大小在同一行都能完整显示。日期部分跟随用户
+  /// 设置的日期格式（yyyy→yy 缩短）。
+  static String formatDateShort(DateTime date, {bool? use24Hour}) {
+    final use24 = use24Hour ?? FileUtils.use24HourFormat;
+    final timePattern = use24 ? 'HH:mm' : 'hh:mm a';
     final now = DateTime.now();
-    final timePattern = use24Hour ? 'HH:mm' : 'hh:mm a';
+    final dp = FileUtils.datePattern.replaceAll('yyyy', 'yy');
     if (date.year == now.year) {
-      return DateFormat('yy-MM-dd $timePattern').format(date);
+      return DateFormat('$dp $timePattern').format(date);
     }
-    return DateFormat('yy-MM-dd').format(date);
+    return DateFormat(dp).format(date);
   }
 
   /// 超紧凑日期（双窗口分屏使用）：今年内省略年份只保留「MM-dd HH:mm」，
   /// 跨年仍显示「yy-MM-dd」。在窄 pane 下仍能保证日期+时间+大小完整显示。
-  static String formatDateCompact(DateTime date, {bool use24Hour = true}) {
+  /// 月日部分跟随用户设置的日期格式顺序。
+  static String formatDateCompact(DateTime date, {bool? use24Hour}) {
+    final use24 = use24Hour ?? FileUtils.use24HourFormat;
+    final timePattern = use24 ? 'HH:mm' : 'hh:mm a';
     final now = DateTime.now();
-    final timePattern = use24Hour ? 'HH:mm' : 'hh:mm a';
     if (date.year == now.year) {
-      return DateFormat('MM-dd $timePattern').format(date);
+      return DateFormat('${_compactMdPattern()} $timePattern').format(date);
     }
-    return DateFormat('yy-MM-dd').format(date);
+    return DateFormat(FileUtils.datePattern.replaceAll('yyyy', 'yy')).format(date);
+  }
+
+  /// 超紧凑日期今年部分的月日模式（按用户日期格式的月日顺序）。
+  static String _compactMdPattern() {
+    switch (FileUtils.datePattern) {
+      case 'dd/MM/yyyy':
+        return 'dd/MM';
+      case 'MM/dd/yyyy':
+        return 'MM/dd';
+      default:
+        return 'MM-dd';
+    }
   }
 
   /// 判断艺术家字符串是否为未知（null、空、或 "unknown"/"<unknown>" 等变体）。

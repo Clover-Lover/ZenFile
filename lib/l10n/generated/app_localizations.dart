@@ -5488,6 +5488,66 @@ abstract class L10n {
   /// **'仅在双窗口模式显示'**
   String get ui_action_menu_mode_dual;
 
+  /// Settings: date & time format
+  ///
+  /// In zh, this message translates to:
+  /// **'时间与日期格式'**
+  String get ui_time_date_format;
+
+  /// Dialog title: select date & time format
+  ///
+  /// In zh, this message translates to:
+  /// **'选择日期与时间格式'**
+  String get ui_select_time_date_format;
+
+  /// Picker section: date format
+  ///
+  /// In zh, this message translates to:
+  /// **'日期格式'**
+  String get ui_date_format;
+
+  /// Picker section: time format
+  ///
+  /// In zh, this message translates to:
+  /// **'时间格式'**
+  String get ui_time_format;
+
+  /// Date format: day/month/year
+  ///
+  /// In zh, this message translates to:
+  /// **'日/月/年'**
+  String get ui_date_fmt_dmy;
+
+  /// Date format: month/day/year
+  ///
+  /// In zh, this message translates to:
+  /// **'月/日/年'**
+  String get ui_date_fmt_mdy;
+
+  /// Date format: year/month/day
+  ///
+  /// In zh, this message translates to:
+  /// **'年/月/日'**
+  String get ui_date_fmt_ymd;
+
+  /// Time format: 12-hour AM/PM
+  ///
+  /// In zh, this message translates to:
+  /// **'12小时制（上午/下午）'**
+  String get ui_time_fmt_12h;
+
+  /// Time format: 24-hour
+  ///
+  /// In zh, this message translates to:
+  /// **'24小时制'**
+  String get ui_time_fmt_24h;
+
+  /// Dialog title: select three-dot button display mode
+  ///
+  /// In zh, this message translates to:
+  /// **'选择显示模式'**
+  String get ui_select_action_menu_mode;
+
   /// No description provided for @ui_enable_drag_drop.
   ///
   /// In zh, this message translates to:
