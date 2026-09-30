@@ -1,15 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cronet_http/cronet_http.dart';
+import 'package:http/http.dart' as http;
+
 import '../remote_client.dart';
 import '../../netdisk_auth_store.dart';
 import '../../../models/network_connection_model.dart';
 
 /// 阿里云盘远程客户端。
 ///
-/// 走阿里云盘网页版内部接口（api.aliyundrive.com）：
+/// 走阿里云盘网页版内部接口（openapi.alipan.com，PDS 体系）：
 /// 登录阶段在应用内网页完成（网页登录后取得的登录态经 [NetdiskAuthStore]
 /// 加密保存）；客户端携带 access_token 访问文件接口，失效时自动刷新。
+///
+/// 网络层说明：阿里对非浏览器 TLS 指纹的请求会挂起 / 拒绝，Android 上
+/// 改用 Cronet（Chrome 网络栈，指纹与真实浏览器一致）规避。
 ///
 /// 说明：
 /// - 网页登录获取的凭证仅适用于网页版内部接口，开放平台 OAuth 不识别；
@@ -33,7 +39,7 @@ class AlipanRemoteClient extends RemoteClient {
 
   static const String _userAgent =
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-      '(KHTML, like Gecko) Chrome/120.0 Safari/537.36';
+      '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36';
 
   String _accessToken = '';
   String _refreshToken = '';
@@ -83,28 +89,38 @@ class AlipanRemoteClient extends RemoteClient {
     }
   }
 
+  /// 创建 HTTP 客户端：Android 用 Cronet（真实浏览器网络栈，规避 TLS 指纹风控），
+  /// 其它平台回退到默认实现。
+  http.Client _newClient() {
+    if (Platform.isAndroid) return CronetClient.defaultCronetEngine();
+    return http.Client();
+  }
+
   /// 用 refresh_token 换取 access_token；返回的新 refresh_token 回写加密存储，
   /// 并顺带读取 default_drive_id（网页版刷新响应直接携带）。
   Future<void> _refreshAccessToken() async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+    final client = _newClient();
     try {
-      final req = await client.postUrl(
+      final req = http.Request('POST',
           Uri.parse('$_refreshBase/v2/account/token'));
-      req.headers.contentType = ContentType.json;
-      req.headers.set('User-Agent', _userAgent);
-      req.headers.set('Referer', 'https://www.aliyundrive.com/');
-      req.headers.set('Origin', 'https://www.aliyundrive.com');
-      req.add(utf8.encode(json.encode({
+      req.headers.addAll({
+        'User-Agent': _userAgent,
+        'Referer': 'https://www.aliyundrive.com/',
+        'Origin': 'https://www.aliyundrive.com',
+        'Content-Type': 'application/json',
+      });
+      req.body = json.encode({
         'grant_type': 'refresh_token',
         'refresh_token': _refreshToken,
         'app_id': _webAppId,
-      })));
-      final resp = await req.close();
-      final raw = await utf8.decoder.bind(resp).join();
+      });
+      final streamed =
+          await client.send(req).timeout(const Duration(seconds: 20));
+      final resp = await http.Response.fromStream(streamed);
       if (resp.statusCode != 200) {
         throw Exception('刷新登录态失败(${resp.statusCode})');
       }
-      final decoded = json.decode(raw);
+      final decoded = json.decode(resp.body);
       if (decoded is! Map<String, dynamic>) {
         throw Exception('刷新登录态失败');
       }
@@ -123,24 +139,27 @@ class AlipanRemoteClient extends RemoteClient {
         });
       }
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 
   Future<String> _getDriveId() async {
     if (_driveId.isNotEmpty) return _driveId;
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+    final client = _newClient();
     try {
-      final req = await client.postUrl(
+      final req = http.Request('POST',
           Uri.parse('$_apiBase/adrive/v1.0/user/getDriveInfo'));
-      req.headers.contentType = ContentType.json;
-      req.headers.set('Authorization', 'Bearer $_accessToken');
-      req.headers.set('User-Agent', _userAgent);
-      req.headers.set('Referer', 'https://www.aliyundrive.com/');
-      req.headers.set('Origin', 'https://www.aliyundrive.com');
-      req.add(utf8.encode('{}'));
-      final resp = await req.close();
-      final raw = await utf8.decoder.bind(resp).join();
+      req.headers.addAll({
+        'Authorization': 'Bearer $_accessToken',
+        'User-Agent': _userAgent,
+        'Referer': 'https://www.aliyundrive.com/',
+        'Origin': 'https://www.aliyundrive.com',
+        'Content-Type': 'application/json',
+      });
+      req.body = '{}';
+      final streamed =
+          await client.send(req).timeout(const Duration(seconds: 20));
+      final resp = await http.Response.fromStream(streamed);
       if (resp.statusCode == 401) {
         // access_token 失效：刷新一次后重试
         await _refreshAccessToken();
@@ -149,7 +168,7 @@ class AlipanRemoteClient extends RemoteClient {
       if (resp.statusCode != 200) {
         throw Exception('获取网盘信息失败(${resp.statusCode})');
       }
-      final decoded = json.decode(raw);
+      final decoded = json.decode(resp.body);
       if (decoded is! Map<String, dynamic>) {
         throw Exception('获取网盘信息失败');
       }
@@ -160,7 +179,7 @@ class AlipanRemoteClient extends RemoteClient {
       _driveId = driveId;
       return driveId;
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 
@@ -191,17 +210,20 @@ class AlipanRemoteClient extends RemoteClient {
 
   Future<Map<String, dynamic>> _apiPost(String path,
       Map<String, dynamic> body) async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+    final client = _newClient();
     try {
-      final req = await client.postUrl(Uri.parse('$_apiBase$path'));
-      req.headers.contentType = ContentType.json;
-      req.headers.set('Authorization', 'Bearer $_accessToken');
-      req.headers.set('User-Agent', _userAgent);
-      req.headers.set('Referer', 'https://www.aliyundrive.com/');
-      req.headers.set('Origin', 'https://www.aliyundrive.com');
-      req.add(utf8.encode(json.encode(body)));
-      final resp = await req.close();
-      final raw = await utf8.decoder.bind(resp).join();
+      final req = http.Request('POST', Uri.parse('$_apiBase$path'));
+      req.headers.addAll({
+        'Authorization': 'Bearer $_accessToken',
+        'User-Agent': _userAgent,
+        'Referer': 'https://www.aliyundrive.com/',
+        'Origin': 'https://www.aliyundrive.com',
+        'Content-Type': 'application/json',
+      });
+      req.body = json.encode(body);
+      final streamed =
+          await client.send(req).timeout(const Duration(seconds: 20));
+      final resp = await http.Response.fromStream(streamed);
       if (resp.statusCode == 401) {
         await _refreshAccessToken();
         return await _apiPost(path, body);
@@ -209,13 +231,13 @@ class AlipanRemoteClient extends RemoteClient {
       if (resp.statusCode != 200) {
         throw Exception('接口请求失败(${resp.statusCode})');
       }
-      final decoded = json.decode(raw);
+      final decoded = json.decode(resp.body);
       if (decoded is! Map<String, dynamic>) {
         throw Exception('接口返回异常');
       }
       return decoded;
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 
@@ -302,25 +324,28 @@ class AlipanRemoteClient extends RemoteClient {
 
   Future<void> _downloadFromUrl(String url, String localPath,
       String? rangeHeader, Function(double progress)? onProgress) async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+    final client = _newClient();
     try {
-      final req = await client.getUrl(Uri.parse(url));
-      req.headers.set('User-Agent', _userAgent);
-      req.headers.set('Referer', 'https://www.aliyundrive.com/');
+      final req = http.Request('GET', Uri.parse(url));
+      req.headers.addAll({
+        'User-Agent': _userAgent,
+        'Referer': 'https://www.aliyundrive.com/',
+      });
       if (rangeHeader != null) {
-        req.headers.set('Range', rangeHeader);
+        req.headers['Range'] = rangeHeader;
       }
-      final resp = await req.close();
-      if (resp.statusCode != HttpStatus.ok &&
-          resp.statusCode != HttpStatus.partialContent) {
-        throw Exception('下载失败(${resp.statusCode})');
+      final streamed =
+          await client.send(req).timeout(const Duration(seconds: 20));
+      if (streamed.statusCode != HttpStatus.ok &&
+          streamed.statusCode != HttpStatus.partialContent) {
+        throw Exception('下载失败(${streamed.statusCode})');
       }
       final file = File(localPath);
       if (file.existsSync()) file.deleteSync();
       final sink = file.openWrite();
-      final total = resp.contentLength;
+      final total = streamed.contentLength;
       var received = 0;
-      await for (final chunk in resp) {
+      await for (final chunk in streamed.stream) {
         if (isCancelled) {
           await sink.close();
           file.deleteSync();
@@ -328,13 +353,13 @@ class AlipanRemoteClient extends RemoteClient {
         }
         sink.add(chunk);
         received += chunk.length;
-        if (onProgress != null && total > 0) {
+        if (onProgress != null && total != null && total > 0) {
           onProgress(received / total);
         }
       }
       await sink.close();
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 

@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cronet_http/cronet_http.dart';
+import 'package:http/http.dart' as http;
+
 import '../remote_client.dart';
 import '../../netdisk_auth_store.dart';
 import '../../../models/network_connection_model.dart';
@@ -12,6 +15,10 @@ import '../../../models/network_connection_model.dart';
 /// 目录采用「友好路径 + 目录 id 缓存」两层表示：外部一律使用 `/a/b` 路径，
 /// 客户端在每次列目录时记录子目录 id，需要时按路径逐级解析出目录 id。
 ///
+/// 网络层说明：夸克风控会直接掐断 Dart 默认 TLS 指纹的连接（
+/// Connection closed while receiving data），Android 上改用 Cronet
+/// （Chrome 网络栈，指纹与真实浏览器一致）规避。
+///
 /// 说明：
 /// - 下载为网页版普通直链下载，不包含任何加速能力；
 /// - 流式播放走 Range 区间读取（每次取流前重新申请直链并携带 Cookie）。
@@ -22,6 +29,9 @@ class QuarkRemoteClient extends RemoteClient {
   static const String _rootFid = '0';
   static const String _apiBase = 'https://drive-pc.quark.cn';
   static const String _webOrigin = 'https://pan.quark.cn';
+  static const String _userAgent =
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36';
 
   String _cookie = '';
 
@@ -59,6 +69,13 @@ class QuarkRemoteClient extends RemoteClient {
     }
   }
 
+  /// 创建 HTTP 客户端：Android 用 Cronet（真实浏览器网络栈，规避 TLS 指纹风控），
+  /// 其它平台回退到默认实现。
+  http.Client _newClient() {
+    if (Platform.isAndroid) return CronetClient.defaultCronetEngine();
+    return http.Client();
+  }
+
   /// 按路径解析目录 id；缓存未命中时从根目录逐级查找。
   Future<String> _resolveFid(String path) {
     if (path == '/' || path.isEmpty) return Future.value(_rootFid);
@@ -88,10 +105,8 @@ class QuarkRemoteClient extends RemoteClient {
         'Cookie': _cookie,
         'Origin': _webOrigin,
         'Referer': '$_webOrigin/',
-        'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
-        // 浏览器指纹头：夸克风控要求完整的 Sec-CH-UA 系列，缺失会被断开连接
+        'User-Agent': _userAgent,
+        // 浏览器指纹头：夸克风控要求完整的 Sec-CH-UA 系列
         'Sec-Ch-Ua':
             '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
         'Sec-Ch-Ua-Mobile': '?0',
@@ -104,36 +119,39 @@ class QuarkRemoteClient extends RemoteClient {
         'Connection': 'keep-alive',
       };
 
-  Future<HttpClientResponse> _apiGet(String url) async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+  Future<http.Response> _apiGet(String url) async {
+    final client = _newClient();
     try {
-      final req = await client.getUrl(Uri.parse(url));
-      _defaultHeaders().forEach(req.headers.set);
-      return await req.close();
+      final req = http.Request('GET', Uri.parse(url));
+      req.headers.addAll(_defaultHeaders());
+      final streamed = await client.send(req)
+          .timeout(const Duration(seconds: 20));
+      return await http.Response.fromStream(streamed);
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 
-  Future<HttpClientResponse> _apiPost(String url, Map<String, dynamic> body) async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+  Future<http.Response> _apiPost(String url, Map<String, dynamic> body) async {
+    final client = _newClient();
     try {
-      final req = await client.postUrl(Uri.parse(url));
-      _defaultHeaders().forEach(req.headers.set);
-      req.headers.contentType = ContentType.json;
-      req.add(utf8.encode(json.encode(body)));
-      return await req.close();
+      final req = http.Request('POST', Uri.parse(url));
+      req.headers.addAll(_defaultHeaders());
+      req.headers['Content-Type'] = 'application/json';
+      req.body = json.encode(body);
+      final streamed = await client.send(req)
+          .timeout(const Duration(seconds: 20));
+      return await http.Response.fromStream(streamed);
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 
-  Future<Map<String, dynamic>> _decodeBody(HttpClientResponse resp) async {
-    final raw = await utf8.decoder.bind(resp).join();
+  Future<Map<String, dynamic>> _decodeBody(http.Response resp) async {
     if (resp.statusCode != 200) {
       throw Exception('接口请求失败(${resp.statusCode})');
     }
-    final decoded = json.decode(raw);
+    final decoded = json.decode(resp.body);
     if (decoded is! Map<String, dynamic>) {
       throw Exception('接口返回异常');
     }
@@ -229,28 +247,29 @@ class QuarkRemoteClient extends RemoteClient {
 
   Future<void> _downloadFromUrl(String url, String localPath,
       String? rangeHeader, Function(double progress)? onProgress) async {
-    final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+    final client = _newClient();
     try {
-      final req = await client.getUrl(Uri.parse(url));
-      req.headers.set('Cookie', _cookie);
-      req.headers.set('Referer', '$_webOrigin/');
-      req.headers.set('User-Agent',
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-              '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36');
+      final req = http.Request('GET', Uri.parse(url));
+      req.headers.addAll({
+        'Cookie': _cookie,
+        'Referer': '$_webOrigin/',
+        'User-Agent': _userAgent,
+      });
       if (rangeHeader != null) {
-        req.headers.set('Range', rangeHeader);
+        req.headers['Range'] = rangeHeader;
       }
-      final resp = await req.close();
-      if (resp.statusCode != HttpStatus.ok &&
-          resp.statusCode != HttpStatus.partialContent) {
-        throw Exception('下载失败(${resp.statusCode})');
+      final streamed = await client.send(req)
+          .timeout(const Duration(seconds: 20));
+      if (streamed.statusCode != HttpStatus.ok &&
+          streamed.statusCode != HttpStatus.partialContent) {
+        throw Exception('下载失败(${streamed.statusCode})');
       }
       final file = File(localPath);
       if (file.existsSync()) file.deleteSync();
       final sink = file.openWrite();
-      final total = resp.contentLength;
+      final total = streamed.contentLength;
       var received = 0;
-      await for (final chunk in resp) {
+      await for (final chunk in streamed.stream) {
         if (isCancelled) {
           await sink.close();
           file.deleteSync();
@@ -258,13 +277,13 @@ class QuarkRemoteClient extends RemoteClient {
         }
         sink.add(chunk);
         received += chunk.length;
-        if (onProgress != null && total > 0) {
+        if (onProgress != null && total != null && total > 0) {
           onProgress(received / total);
         }
       }
       await sink.close();
     } finally {
-      client.close(force: true);
+      client.close();
     }
   }
 
