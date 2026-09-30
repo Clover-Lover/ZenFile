@@ -26,11 +26,18 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
   Timer? _pollTimer;
   bool _done = false;
 
+  /// 桌面版 UA：夸克/阿里网页版会按 UA 区分展示「网页版登录界面」与
+  /// 「App 推广引导页」，移动端 UA 下会命中推广页（无法登录），因此统一模拟桌面浏览器。
+  static const _desktopUA =
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
   static const _pollScriptQuark = '''
 (function () {
   try {
     var c = document.cookie || '';
-    if (c.indexOf('__pus') >= 0 && c.length > 120) {
+    var m = c.match(/(?:^|;\\s*)__pus=([^;]+)/);
+    if (m && m[1] && m[1].length > 10 && m[1] !== 'undefined') {
       window.ZenFileBridge.postMessage('OK:' + c);
     }
   } catch (e) {}
@@ -40,7 +47,13 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
   static const _pollScriptAlipan = '''
 (function () {
   try {
-    var t = localStorage.getItem('refresh_token') || '';
+    var raw = localStorage.getItem('token') || localStorage.getItem('refresh_token') || '';
+    var t = '';
+    if (raw.indexOf('{') === 0) {
+      try { t = JSON.parse(raw).refresh_token || ''; } catch (e) { t = ''; }
+    } else {
+      t = raw;
+    }
     if (t && t.length > 10 && t.indexOf('null') !== 0) {
       window.ZenFileBridge.postMessage('OK:' + t);
     }
@@ -61,6 +74,7 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent(_desktopUA)
       ..setBackgroundColor(Colors.white)
       ..addJavaScriptChannel('ZenFileBridge',
           onMessageReceived: (message) {
