@@ -675,82 +675,23 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
             style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.6)),
           ),
           const SizedBox(height: 24),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: protocols.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 14,
-              crossAxisSpacing: 14,
-              childAspectRatio: 1.15,
-            ),
-            itemBuilder: (context, index) {
-              final protocol = protocols[index];
-              final name = protocol['name'] as String;
-              final desc = protocol['desc'] as String;
-              final color = protocol['color'] as Color;
-
-              return Card(
-                elevation: 2,
-                margin: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.08)),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () => _selectProtocol(name),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          color.withOpacity(0.06),
-                          color.withOpacity(0.01),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: color.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: _buildProtocolIcon(name, size: 22, customColor: color),
-                        ),
-                        const Spacer(),
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 14.5,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'LexendDeca',
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          desc,
-                          style: TextStyle(
-                            fontSize: 10.5,
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
-                            height: 1.2,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+          // 协议选择：与下方「添加网盘」入口同款单行卡片，保持样式统一
+          ...protocols.map((protocol) {
+            final name = protocol['name'] as String;
+            final desc = protocol['desc'] as String;
+            final color = protocol['color'] as Color;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _buildNetdiskEntry(
+                context,
+                icon: _buildProtocolIcon(name, size: 22, customColor: color),
+                title: name,
+                subtitle: desc,
+                color: color,
+                onTap: () => _selectProtocol(name),
+              ),
+            );
+          }),
 
           // 分割线：下方为聚合网盘添加区（夸克 / 阿里云盘）
           const SizedBox(height: 30),
@@ -805,11 +746,12 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
     );
   }
 
-  /// 添加网盘入口卡片（与协议卡片同风格的单行卡片）。
+  /// 添加网盘 / 协议入口卡片（单行：图标 + 标题[+描述] + 右箭头）。
   Widget _buildNetdiskEntry(
     BuildContext context, {
     required Widget icon,
     required String title,
+    String? subtitle,
     required Color color,
     required VoidCallback onTap,
   }) {
@@ -838,13 +780,31 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               ),
               const SizedBox(width: 14),
               Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'LexendDeca',
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'LexendDeca',
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          height: 1.2,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
                 ),
               ),
               Icon(
