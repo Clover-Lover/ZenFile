@@ -90,7 +90,18 @@ class QuarkRemoteClient extends RemoteClient {
         'Referer': '$_webOrigin/',
         'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                '(KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+                '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        // 浏览器指纹头：夸克风控要求完整的 Sec-CH-UA 系列，缺失会被断开连接
+        'Sec-Ch-Ua':
+            '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Sec-Fetch-Site': 'same-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Connection': 'keep-alive',
       };
 
   Future<HttpClientResponse> _apiGet(String url) async {
@@ -225,7 +236,7 @@ class QuarkRemoteClient extends RemoteClient {
       req.headers.set('Referer', '$_webOrigin/');
       req.headers.set('User-Agent',
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-              '(KHTML, like Gecko) Chrome/120.0 Safari/537.36');
+              '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36');
       if (rangeHeader != null) {
         req.headers.set('Range', rangeHeader);
       }

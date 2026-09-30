@@ -21,9 +21,12 @@ class AlipanRemoteClient extends RemoteClient {
 
   static const String _rootFid = 'root';
 
-  /// 网页版文件接口（与开放平台 openapi.alipan.com 的接口路径一致，
-  /// 但登录态体系不同，需使用网页版域名）。
-  static const String _apiBase = 'https://api.aliyundrive.com';
+  /// 网页版刷新端点（阿里云盘网页版登录态刷新，返回含 default_drive_id）。
+  static const String _refreshBase = 'https://auth.aliyundrive.com';
+
+  /// 网页版文件接口（网页版已并入 PDS 体系，走 openapi.alipan.com，
+  /// 接口路径与开放平台一致；本机网络可能不通，以真机为准）。
+  static const String _apiBase = 'https://openapi.alipan.com';
 
   /// 网页版公共 app_id（阿里云盘网页端固定客户端标识，配置后可更换）。
   static const String _webAppId = 'pJZInNHN2dZWk8qg';
@@ -80,12 +83,13 @@ class AlipanRemoteClient extends RemoteClient {
     }
   }
 
-  /// 用 refresh_token 换取 access_token；返回的新 refresh_token 回写加密存储。
+  /// 用 refresh_token 换取 access_token；返回的新 refresh_token 回写加密存储，
+  /// 并顺带读取 default_drive_id（网页版刷新响应直接携带）。
   Future<void> _refreshAccessToken() async {
     final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
     try {
       final req = await client.postUrl(
-          Uri.parse('$_apiBase/v2/account/token'));
+          Uri.parse('$_refreshBase/v2/account/token'));
       req.headers.contentType = ContentType.json;
       req.headers.set('User-Agent', _userAgent);
       req.headers.set('Referer', 'https://www.aliyundrive.com/');
@@ -109,6 +113,9 @@ class AlipanRemoteClient extends RemoteClient {
       if (_accessToken.isEmpty) {
         throw Exception('刷新登录态失败');
       }
+      // 刷新响应直接携带 default_drive_id，可避免单独调用取盘接口
+      final driveId = (decoded['default_drive_id'] as String?) ?? '';
+      if (driveId.isNotEmpty) _driveId = driveId;
       if (newRefresh.isNotEmpty && newRefresh != _refreshToken) {
         _refreshToken = newRefresh;
         await NetdiskAuthStore.saveAuth(connection.id, {
@@ -121,10 +128,11 @@ class AlipanRemoteClient extends RemoteClient {
   }
 
   Future<String> _getDriveId() async {
+    if (_driveId.isNotEmpty) return _driveId;
     final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
     try {
-      final req =
-          await client.postUrl(Uri.parse('$_apiBase/v1/user/get_drive_info'));
+      final req = await client.postUrl(
+          Uri.parse('$_apiBase/adrive/v1.0/user/getDriveInfo'));
       req.headers.contentType = ContentType.json;
       req.headers.set('Authorization', 'Bearer $_accessToken');
       req.headers.set('User-Agent', _userAgent);
@@ -149,6 +157,7 @@ class AlipanRemoteClient extends RemoteClient {
       if (driveId.isEmpty) {
         throw Exception('获取网盘信息失败');
       }
+      _driveId = driveId;
       return driveId;
     } finally {
       client.close(force: true);
