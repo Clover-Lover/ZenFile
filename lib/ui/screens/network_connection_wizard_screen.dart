@@ -8,12 +8,14 @@ import '../../core/icon_fonts/broken_icons.dart';
 import '../../models/network_connection_model.dart';
 import '../../providers/file_manager_provider.dart';
 import '../../services/network_connections_service.dart';
+import '../../services/netdisk_auth_store.dart';
 import '../../services/remote/remote_client.dart';
 import '../../services/remote/ftp_client.dart';
 import '../../services/remote/sftp_client.dart';
 import '../../services/remote/webdav_client.dart';
 import '../../services/remote/lan_client.dart';
 import '../../services/remote/remote_error_localizer.dart';
+import 'netdisk_login_screen.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 
 class NetworkConnectionWizardScreen extends StatefulWidget {
@@ -170,6 +172,50 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
       }
     });
     _nextStep();
+  }
+
+  /// 添加聚合网盘（夸克 / 阿里云盘）：网页登录 → 保存连接与登录态 →
+  /// 关闭向导返回远程列表（列表自动刷新显示新网盘）。
+  Future<void> _addNetdisk(String provider) async {
+    final l10n = L10n.of(context);
+    final isQuark = provider == 'quark';
+    final name = isQuark ? l10n.netdisk_quark : l10n.netdisk_alipan;
+    final id =
+        'nd_${isQuark ? 'quark' : 'alipan'}_${DateTime.now().millisecondsSinceEpoch}';
+
+    final auth = await Navigator.push<Map<String, dynamic>>(
+      context,
+      MaterialPageRoute(builder: (_) => NetdiskLoginScreen(provider: provider)),
+    );
+    if (auth == null || !mounted) return; // 用户取消登录，留在向导
+
+    await NetdiskAuthStore.saveAuth(id, auth);
+    await NetworkConnectionsService.saveConnection(NetworkConnectionModel(
+      id: id,
+      name: name,
+      type: isQuark ? 'NETDISK_QUARK' : 'NETDISK_ALIPAN',
+      host: provider,
+      port: 0,
+      username: '',
+      password: '',
+      rootPath: '/',
+    ));
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Broken.tick_circle, color: Colors.white),
+            const SizedBox(width: 8),
+            Expanded(child: Text(l10n.name1(name), overflow: TextOverflow.ellipsis)),
+          ],
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+    );
+    // 关闭向导返回远程列表，列表页 onReturn 时刷新
+    Navigator.pop(context, true);
   }
 
   Future<void> _requestSafAndSave() async {
@@ -705,7 +751,109 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               );
             },
           ),
+
+          // 分割线：下方为聚合网盘添加区（夸克 / 阿里云盘）
+          const SizedBox(height: 30),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: theme.colorScheme.onSurface.withOpacity(0.12),
+          ),
+          const SizedBox(height: 20),
+
+          Row(
+            children: [
+              Icon(Icons.cloud_outlined,
+                  size: 20, color: theme.colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(
+                L10n.of(context).netdisk_add,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'LexendDeca',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            L10n.of(context).netdisk_empty_hint,
+            style: TextStyle(
+              fontSize: 12.5,
+              color: theme.colorScheme.onSurface.withOpacity(0.5),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _buildNetdiskEntry(
+            context,
+            icon: const Icon(Broken.cloud, color: Color(0xFF2B6CB0), size: 22),
+            title: L10n.of(context).netdisk_quark,
+            color: const Color(0xFF2B6CB0),
+            onTap: () => _addNetdisk('quark'),
+          ),
+          const SizedBox(height: 10),
+          _buildNetdiskEntry(
+            context,
+            icon: const Icon(Icons.cloud_rounded, color: Color(0xFFFF6A00), size: 22),
+            title: L10n.of(context).netdisk_alipan,
+            color: const Color(0xFFFF6A00),
+            onTap: () => _addNetdisk('alipan'),
+          ),
         ],
+      ),
+    );
+  }
+
+  /// 添加网盘入口卡片（与协议卡片同风格的单行卡片）。
+  Widget _buildNetdiskEntry(
+    BuildContext context, {
+    required Widget icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.08)),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: icon,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'LexendDeca',
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.onSurface.withOpacity(0.4),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

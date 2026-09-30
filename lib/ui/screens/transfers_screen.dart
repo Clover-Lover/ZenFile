@@ -5,9 +5,8 @@ import 'network_category_screen.dart';
 import 'ftp_server_screen.dart';
 import 'web_sharing_screen.dart';
 import 'quick_transfer_screen.dart';
-import 'netdisk_home_screen.dart';
 
-/// 传输页：以列表形式聚合「远程 / 网盘 / FTP共享 / Web共享 / 快传」入口，
+/// 传输页：以列表形式聚合「远程 / FTP共享 / Web共享 / 快传」入口，
 /// UI 风格与工具箱（ToolboxScreen）一致。进入/退出动画由调用方统一控制。
 class TransfersScreen extends StatelessWidget {
   /// 子页面（如网络）连接成功后通知首页切换底部 tab 的回调。
@@ -26,14 +25,6 @@ class TransfersScreen extends StatelessWidget {
         title: l10n.cat_network,
         color: Colors.cyan.shade600,
         buildPage: () => NetworkCategoryScreen(
-          onNavigateTab: onNavigateTab,
-        ),
-      ),
-      _TransferItem(
-        icon: Broken.cloud,
-        title: l10n.netdisk,
-        color: Colors.blue.shade600,
-        buildPage: () => NetdiskHomeScreen(
           onNavigateTab: onNavigateTab,
         ),
       ),
