@@ -8274,4 +8274,40 @@ class L10nEs extends L10n {
   @override
   String get paste_keep_clipboard_desc =>
       'El portapapeles se limpia después de pegar si no está marcado';
+
+  @override
+  String get netdisk => 'Disco en la nube';
+
+  @override
+  String get netdisk_add => 'Añadir disco';
+
+  @override
+  String get netdisk_quark => 'Quark';
+
+  @override
+  String get netdisk_alipan => 'Aliyun Drive';
+
+  @override
+  String get netdisk_logged_in => 'Conectado';
+
+  @override
+  String get netdisk_empty => 'Ningún disco añadido';
+
+  @override
+  String get netdisk_empty_hint =>
+      'Añade un disco para explorar, descargar y reproducir archivos';
+
+  @override
+  String get netdisk_login_hint =>
+      'Inicia sesión en la página oficial; volverás automáticamente';
+
+  @override
+  String get netdisk_login_loading => 'Cargando página de inicio de sesión…';
+
+  @override
+  String get netdisk_auth_expired =>
+      'La sesión ha expirado. Vuelve a iniciar sesión';
+
+  @override
+  String get netdisk_unsupported => 'Operación no compatible con este disco';
 }

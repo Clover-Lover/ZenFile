@@ -122,6 +122,8 @@ dependencies:
   flutter_secure_storage: ^10.3.1
   qr_flutter: ^4.1.0
   mobile_scanner: ^7.4.1
+  # 聚合网盘登录：内嵌 WebView 打开官方登录页，注入 JS 抓取登录态（cookie / refresh_token）。
+  webview_flutter: ^4.10.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

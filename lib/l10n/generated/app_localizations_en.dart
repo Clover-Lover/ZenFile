@@ -8164,4 +8164,40 @@ class L10nEn extends L10n {
   @override
   String get paste_keep_clipboard_desc =>
       'Clipboard is cleared after paste when unchecked';
+
+  @override
+  String get netdisk => 'Netdisk';
+
+  @override
+  String get netdisk_add => 'Add Netdisk';
+
+  @override
+  String get netdisk_quark => 'Quark Netdisk';
+
+  @override
+  String get netdisk_alipan => 'Aliyun Drive';
+
+  @override
+  String get netdisk_logged_in => 'Logged in';
+
+  @override
+  String get netdisk_empty => 'No netdisk added';
+
+  @override
+  String get netdisk_empty_hint =>
+      'Add a netdisk to browse, download and play cloud files';
+
+  @override
+  String get netdisk_login_hint =>
+      'Sign in on the opened official page; you will return automatically after signing in';
+
+  @override
+  String get netdisk_login_loading => 'Loading sign-in page…';
+
+  @override
+  String get netdisk_auth_expired => 'Sign-in expired. Please sign in again';
+
+  @override
+  String get netdisk_unsupported =>
+      'This operation is not supported for this netdisk';
 }

@@ -8293,4 +8293,41 @@ class L10nFr extends L10n {
   @override
   String get paste_keep_clipboard_desc =>
       'Le presse-papiers est vidé après le collage si non coché';
+
+  @override
+  String get netdisk => 'Disque réseau';
+
+  @override
+  String get netdisk_add => 'Ajouter un disque réseau';
+
+  @override
+  String get netdisk_quark => 'Quark';
+
+  @override
+  String get netdisk_alipan => 'Aliyun Drive';
+
+  @override
+  String get netdisk_logged_in => 'Connecté';
+
+  @override
+  String get netdisk_empty => 'Aucun disque réseau';
+
+  @override
+  String get netdisk_empty_hint =>
+      'Ajoutez un disque réseau pour parcourir, télécharger et lire les fichiers cloud';
+
+  @override
+  String get netdisk_login_hint =>
+      'Connectez-vous sur la page officielle ouverte ; retour automatique après connexion';
+
+  @override
+  String get netdisk_login_loading => 'Chargement de la page de connexion…';
+
+  @override
+  String get netdisk_auth_expired =>
+      'Connexion expirée. Veuillez vous reconnecter';
+
+  @override
+  String get netdisk_unsupported =>
+      'Opération non prise en charge pour ce disque réseau';
 }

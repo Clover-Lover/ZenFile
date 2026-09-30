@@ -7744,6 +7744,39 @@ class L10nZh extends L10n {
 
   @override
   String get paste_keep_clipboard_desc => '不勾选时粘贴完成后自动清空剪贴板';
+
+  @override
+  String get netdisk => '网盘';
+
+  @override
+  String get netdisk_add => '添加网盘';
+
+  @override
+  String get netdisk_quark => '夸克网盘';
+
+  @override
+  String get netdisk_alipan => '阿里云盘';
+
+  @override
+  String get netdisk_logged_in => '已登录';
+
+  @override
+  String get netdisk_empty => '尚未添加网盘';
+
+  @override
+  String get netdisk_empty_hint => '添加网盘后可浏览、下载和播放网盘文件';
+
+  @override
+  String get netdisk_login_hint => '请在打开的官方页面中完成登录，登录成功后自动返回';
+
+  @override
+  String get netdisk_login_loading => '正在加载登录页面…';
+
+  @override
+  String get netdisk_auth_expired => '登录已过期，请重新登录';
+
+  @override
+  String get netdisk_unsupported => '该网盘暂不支持此操作';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -15456,4 +15489,37 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get paste_keep_clipboard_desc => '未勾選時貼上完成後自動清空剪貼簿';
+
+  @override
+  String get netdisk => '網盤';
+
+  @override
+  String get netdisk_add => '新增網盤';
+
+  @override
+  String get netdisk_quark => '夸克網盤';
+
+  @override
+  String get netdisk_alipan => '阿里雲盤';
+
+  @override
+  String get netdisk_logged_in => '已登入';
+
+  @override
+  String get netdisk_empty => '尚未新增網盤';
+
+  @override
+  String get netdisk_empty_hint => '新增網盤後可瀏覽、下載及播放雲端檔案';
+
+  @override
+  String get netdisk_login_hint => '請於開啟的官方頁面完成登入，登入成功後自動返回';
+
+  @override
+  String get netdisk_login_loading => '正在載入登入頁面…';
+
+  @override
+  String get netdisk_auth_expired => '登入已過期，請重新登入';
+
+  @override
+  String get netdisk_unsupported => '此網盤暫不支援此操作';
 }

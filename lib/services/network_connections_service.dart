@@ -7,9 +7,11 @@ import 'remote/sftp_client.dart';
 import 'remote/webdav_client.dart';
 import 'remote/lan_client.dart';
 import 'remote/saf_client.dart';
+import 'remote/netdisk/quark_client.dart';
+import 'remote/netdisk/alipan_client.dart';
 
 /// 远程连接协议类型（由 `NetworkConnectionModel.type` 解析而来）。
-enum RemoteProtocolKind { sftp, ftp, webdav, smb, saf }
+enum RemoteProtocolKind { sftp, ftp, webdav, smb, saf, netdisk }
 
 /// 从 `NetworkConnectionModel.type` 解析协议类型。
 ///
@@ -24,6 +26,8 @@ enum RemoteProtocolKind { sftp, ftp, webdav, smb, saf }
 RemoteProtocolKind? detectRemoteProtocolKind(String? type) {
   if (type == null) return null;
   final t = type.toLowerCase();
+  // 网盘聚合连接：type 以 NETDISK_ 开头（NETDISK_QUARK / NETDISK_ALIPAN）。
+  if (t.contains('netdisk')) return RemoteProtocolKind.netdisk;
   if (t.contains('sftp')) return RemoteProtocolKind.sftp;
   if (t.contains('saf')) return RemoteProtocolKind.saf;
   if (t.contains('smb') || t.contains('samba') || t.contains('cifs')) {
@@ -143,6 +147,12 @@ class NetworkConnectionsService {
     }
     if (kind == RemoteProtocolKind.saf) {
       return SafRemoteClient(rootUri: conn.rootPath);
+    }
+    if (kind == RemoteProtocolKind.netdisk) {
+      if (conn.type.toLowerCase().contains('quark')) {
+        return QuarkRemoteClient(connection: conn);
+      }
+      return AlipanRemoteClient(connection: conn);
     }
     throw ArgumentError('Unsupported connection type: ${conn.type}');
   }

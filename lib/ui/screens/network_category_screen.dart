@@ -30,7 +30,10 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
 
   void _loadConnections() {
     setState(() {
-      _connections = NetworkConnectionsService.getConnections();
+      // 聚合网盘连接（NETDISK_*）由网盘主页管理，不在远程连接列表展示
+      _connections = NetworkConnectionsService.getConnections()
+          .where((c) => !c.type.toLowerCase().contains('netdisk'))
+          .toList();
       _isLoading = false;
     });
   }

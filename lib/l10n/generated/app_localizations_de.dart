@@ -8256,4 +8256,41 @@ class L10nDe extends L10n {
   @override
   String get paste_keep_clipboard_desc =>
       'Ohne Häkchen wird die Zwischenablage nach dem Einfügen geleert';
+
+  @override
+  String get netdisk => 'Netzlaufwerk';
+
+  @override
+  String get netdisk_add => 'Netzlaufwerk hinzufügen';
+
+  @override
+  String get netdisk_quark => 'Quark';
+
+  @override
+  String get netdisk_alipan => 'Aliyun Drive';
+
+  @override
+  String get netdisk_logged_in => 'Angemeldet';
+
+  @override
+  String get netdisk_empty => 'Kein Netzlaufwerk';
+
+  @override
+  String get netdisk_empty_hint =>
+      'Fügen Sie ein Netzlaufwerk hinzu, um Cloud-Dateien zu durchsuchen, herunterzuladen und abzuspielen';
+
+  @override
+  String get netdisk_login_hint =>
+      'Melden Sie sich auf der geöffneten offiziellen Seite an; nach der Anmeldung kehren Sie automatisch zurück';
+
+  @override
+  String get netdisk_login_loading => 'Anmeldeseite wird geladen…';
+
+  @override
+  String get netdisk_auth_expired =>
+      'Anmeldung abgelaufen. Bitte erneut anmelden';
+
+  @override
+  String get netdisk_unsupported =>
+      'Dieser Vorgang wird für dieses Netzlaufwerk nicht unterstützt';
 }

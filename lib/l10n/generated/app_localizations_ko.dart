@@ -7920,4 +7920,37 @@ class L10nKo extends L10n {
 
   @override
   String get paste_keep_clipboard_desc => '체크하지 않으면 붙여넣기 후 클립보드 자동 삭제';
+
+  @override
+  String get netdisk => '클라우드 드라이브';
+
+  @override
+  String get netdisk_add => '클라우드 드라이브 추가';
+
+  @override
+  String get netdisk_quark => 'Quark 클라우드';
+
+  @override
+  String get netdisk_alipan => 'Aliyun 드라이브';
+
+  @override
+  String get netdisk_logged_in => '로그인됨';
+
+  @override
+  String get netdisk_empty => '추가된 클라우드 드라이브 없음';
+
+  @override
+  String get netdisk_empty_hint => '클라우드 드라이브를 추가하면 파일을 탐색·다운로드·재생할 수 있습니다';
+
+  @override
+  String get netdisk_login_hint => '열린 공식 페이지에서 로그인하세요. 로그인 후 자동으로 돌아갑니다';
+
+  @override
+  String get netdisk_login_loading => '로그인 페이지 불러오는 중…';
+
+  @override
+  String get netdisk_auth_expired => '로그인이 만료되었습니다. 다시 로그인하세요';
+
+  @override
+  String get netdisk_unsupported => '이 클라우드 드라이브에서는 이 작업을 지원하지 않습니다';
 }

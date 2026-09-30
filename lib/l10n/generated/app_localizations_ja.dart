@@ -7914,4 +7914,37 @@ class L10nJa extends L10n {
 
   @override
   String get paste_keep_clipboard_desc => 'チェックなしの場合、貼り付け後にクリップボードを自動クリア';
+
+  @override
+  String get netdisk => 'ネットドライブ';
+
+  @override
+  String get netdisk_add => 'ネットドライブを追加';
+
+  @override
+  String get netdisk_quark => '夸克ネットドライブ';
+
+  @override
+  String get netdisk_alipan => '阿里云ドライブ';
+
+  @override
+  String get netdisk_logged_in => 'ログイン済み';
+
+  @override
+  String get netdisk_empty => 'ネットドライブがありません';
+
+  @override
+  String get netdisk_empty_hint => 'ネットドライブを追加すると、クラウドのファイルを閲覧・ダウンロード・再生できます';
+
+  @override
+  String get netdisk_login_hint => '開いた公式ページでログインしてください。ログイン後は自動的に戻ります';
+
+  @override
+  String get netdisk_login_loading => 'ログインページを読み込んでいます…';
+
+  @override
+  String get netdisk_auth_expired => 'ログインの有効期限が切れました。再ログインしてください';
+
+  @override
+  String get netdisk_unsupported => 'この操作はこのネットドライブではサポートされていません';
 }

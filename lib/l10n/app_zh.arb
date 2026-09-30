@@ -4748,6 +4748,15 @@
       "count": {
         "type": "int"
       },
+
+      "folderCount": {
+        "type": "int"
+      },
+      "fileCount": {
+        "type": "int"
+      }
+    }
+  },
   "prop_calc_hash": "计算哈希值",
   "@prop_calc_hash": {
     "description": "Button to compute file MD5/SHA-256 on demand"
@@ -4767,15 +4776,8 @@
   "prop_hash_failed": "哈希计算失败",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  },
-      "folderCount": {
-        "type": "int"
-      },
-      "fileCount": {
-        "type": "int"
-      }
-    }
-  },
+  }
+,
   "msg_add_subtitle": "添加字幕",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8503,4 +8505,49 @@
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
   }
 
+,
+  "netdisk": "网盘",
+  "@netdisk": {
+    "description": "ui\\screens\\transfers_screen.dart"
+  },
+  "netdisk_add": "添加网盘",
+  "@netdisk_add": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_quark": "夸克网盘",
+  "@netdisk_quark": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_alipan": "阿里云盘",
+  "@netdisk_alipan": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_logged_in": "已登录",
+  "@netdisk_logged_in": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_empty": "尚未添加网盘",
+  "@netdisk_empty": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_empty_hint": "添加网盘后可浏览、下载和播放网盘文件",
+  "@netdisk_empty_hint": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_login_hint": "请在打开的官方页面中完成登录，登录成功后自动返回",
+  "@netdisk_login_hint": {
+    "description": "ui\\screens\\netdisk_login_screen.dart"
+  },
+  "netdisk_login_loading": "正在加载登录页面…",
+  "@netdisk_login_loading": {
+    "description": "ui\\screens\\netdisk_login_screen.dart"
+  },
+  "netdisk_auth_expired": "登录已过期，请重新登录",
+  "@netdisk_auth_expired": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_unsupported": "该网盘暂不支持此操作",
+  "@netdisk_unsupported": {
+    "description": "services\\remote\\netdisk"
+  }
 }

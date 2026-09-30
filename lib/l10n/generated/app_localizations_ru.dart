@@ -8244,4 +8244,40 @@ class L10nRu extends L10n {
   @override
   String get paste_keep_clipboard_desc =>
       'Без отметки буфер обмена очищается после вставки';
+
+  @override
+  String get netdisk => 'Облачный диск';
+
+  @override
+  String get netdisk_add => 'Добавить облачный диск';
+
+  @override
+  String get netdisk_quark => 'Quark';
+
+  @override
+  String get netdisk_alipan => 'Aliyun Drive';
+
+  @override
+  String get netdisk_logged_in => 'Выполнен вход';
+
+  @override
+  String get netdisk_empty => 'Нет облачных дисков';
+
+  @override
+  String get netdisk_empty_hint =>
+      'Добавьте облачный диск, чтобы просматривать, скачивать и воспроизводить файлы';
+
+  @override
+  String get netdisk_login_hint =>
+      'Войдите на открывшейся официальной странице; после входа вы вернетесь автоматически';
+
+  @override
+  String get netdisk_login_loading => 'Загрузка страницы входа…';
+
+  @override
+  String get netdisk_auth_expired => 'Срок входа истёк. Войдите снова';
+
+  @override
+  String get netdisk_unsupported =>
+      'Данная операция не поддерживается для этого облачного диска';
 }

@@ -4514,6 +4514,15 @@
       "count": {
         "type": "int"
       },
+
+      "folderCount": {
+        "type": "int"
+      },
+      "fileCount": {
+        "type": "int"
+      }
+    }
+  },
   "prop_calc_hash": "Hash berechnen",
   "@prop_calc_hash": {
     "description": "Button to compute file MD5/SHA-256 on demand"
@@ -4533,15 +4542,8 @@
   "prop_hash_failed": "Hash-Berechnung fehlgeschlagen",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  },
-      "folderCount": {
-        "type": "int"
-      },
-      "fileCount": {
-        "type": "int"
-      }
-    }
-  },
+  }
+,
   "msg_add_subtitle": "Untertitel hinzufügen",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8203,4 +8205,49 @@
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
   }
 
+,
+  "netdisk": "Netzlaufwerk",
+  "@netdisk": {
+    "description": "ui\\screens\\transfers_screen.dart"
+  },
+  "netdisk_add": "Netzlaufwerk hinzufügen",
+  "@netdisk_add": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_quark": "Quark",
+  "@netdisk_quark": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_alipan": "Aliyun Drive",
+  "@netdisk_alipan": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_logged_in": "Angemeldet",
+  "@netdisk_logged_in": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_empty": "Kein Netzlaufwerk",
+  "@netdisk_empty": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_empty_hint": "Fügen Sie ein Netzlaufwerk hinzu, um Cloud-Dateien zu durchsuchen, herunterzuladen und abzuspielen",
+  "@netdisk_empty_hint": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_login_hint": "Melden Sie sich auf der geöffneten offiziellen Seite an; nach der Anmeldung kehren Sie automatisch zurück",
+  "@netdisk_login_hint": {
+    "description": "ui\\screens\\netdisk_login_screen.dart"
+  },
+  "netdisk_login_loading": "Anmeldeseite wird geladen…",
+  "@netdisk_login_loading": {
+    "description": "ui\\screens\\netdisk_login_screen.dart"
+  },
+  "netdisk_auth_expired": "Anmeldung abgelaufen. Bitte erneut anmelden",
+  "@netdisk_auth_expired": {
+    "description": "ui\\screens\\netdisk_home_screen.dart"
+  },
+  "netdisk_unsupported": "Dieser Vorgang wird für dieses Netzlaufwerk nicht unterstützt",
+  "@netdisk_unsupported": {
+    "description": "services\\remote\\netdisk"
+  }
 }

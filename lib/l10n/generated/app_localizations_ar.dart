@@ -8135,4 +8135,40 @@ class L10nAr extends L10n {
   @override
   String get paste_keep_clipboard_desc =>
       'يتم مسح الحافظة بعد اللصق إذا لم يتم التحديد';
+
+  @override
+  String get netdisk => 'قرص السحابة';
+
+  @override
+  String get netdisk_add => 'إضافة قرص سحابي';
+
+  @override
+  String get netdisk_quark => 'كوارك';
+
+  @override
+  String get netdisk_alipan => 'أليون درايف';
+
+  @override
+  String get netdisk_logged_in => 'تم تسجيل الدخول';
+
+  @override
+  String get netdisk_empty => 'لا توجد أقراص سحابية';
+
+  @override
+  String get netdisk_empty_hint =>
+      'أضف قرصًا سحابيًا لتصفح وتنزيل وتشغيل الملفات';
+
+  @override
+  String get netdisk_login_hint =>
+      'سجّل الدخول في الصفحة الرسمية المفتوحة، وستعود تلقائيًا بعد تسجيل الدخول';
+
+  @override
+  String get netdisk_login_loading => 'جارٍ تحميل صفحة تسجيل الدخول…';
+
+  @override
+  String get netdisk_auth_expired =>
+      'انتهت صلاحية تسجيل الدخول، يرجى تسجيل الدخول مجددًا';
+
+  @override
+  String get netdisk_unsupported => 'هذه العملية غير مدعومة لهذا القرص';
 }

@@ -8469,36 +8469,36 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'{count} 项（{folderCount} 个文件夹, {fileCount} 个文件）'**
   String prop_items_summary(int count, int folderCount, int fileCount);
-  /// No description provided for @prop_calc_hash.
+
+  /// Button to compute file MD5/SHA-256 on demand
   ///
   /// In zh, this message translates to:
   /// **'计算哈希值'**
   String get prop_calc_hash;
 
-  /// No description provided for @prop_md5.
+  /// MD5 hash label
   ///
   /// In zh, this message translates to:
   /// **'MD5'**
   String get prop_md5;
 
-  /// No description provided for @prop_sha256.
+  /// SHA-256 hash label
   ///
   /// In zh, this message translates to:
   /// **'SHA-256'**
   String get prop_sha256;
 
-  /// No description provided for @prop_hashing.
+  /// Hash computation in progress
   ///
   /// In zh, this message translates to:
   /// **'哈希计算中…'**
   String get prop_hashing;
 
-  /// No description provided for @prop_hash_failed.
+  /// Hash computation failed
   ///
   /// In zh, this message translates to:
   /// **'哈希计算失败'**
   String get prop_hash_failed;
-
 
   /// Add subtitle option in video player more menu
   ///
@@ -14523,6 +14523,72 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'不勾选时粘贴完成后自动清空剪贴板'**
   String get paste_keep_clipboard_desc;
+
+  /// ui\screens\transfers_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'网盘'**
+  String get netdisk;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'添加网盘'**
+  String get netdisk_add;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'夸克网盘'**
+  String get netdisk_quark;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'阿里云盘'**
+  String get netdisk_alipan;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'已登录'**
+  String get netdisk_logged_in;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'尚未添加网盘'**
+  String get netdisk_empty;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'添加网盘后可浏览、下载和播放网盘文件'**
+  String get netdisk_empty_hint;
+
+  /// ui\screens\netdisk_login_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'请在打开的官方页面中完成登录，登录成功后自动返回'**
+  String get netdisk_login_hint;
+
+  /// ui\screens\netdisk_login_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'正在加载登录页面…'**
+  String get netdisk_login_loading;
+
+  /// ui\screens\netdisk_home_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'登录已过期，请重新登录'**
+  String get netdisk_auth_expired;
+
+  /// services\remote\netdisk
+  ///
+  /// In zh, this message translates to:
+  /// **'该网盘暂不支持此操作'**
+  String get netdisk_unsupported;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
