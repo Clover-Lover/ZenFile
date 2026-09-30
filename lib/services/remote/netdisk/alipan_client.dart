@@ -7,12 +7,12 @@ import '../../../models/network_connection_model.dart';
 
 /// 阿里云盘远程客户端。
 ///
-/// 走网盘开放平台官方接口（openapi.alipan.com）：
-/// 登录阶段在应用内网页完成（网页登录后取得 refresh_token，经
-/// [NetdiskAuthStore] 加密保存）；客户端用 refresh_token 换取短期
-/// access_token 访问文件接口。access_token 失效时自动用 refresh_token 刷新。
+/// 走阿里云盘网页版内部接口（api.aliyundrive.com）：
+/// 登录阶段在应用内网页完成（网页登录后取得的登录态经 [NetdiskAuthStore]
+/// 加密保存）；客户端携带 access_token 访问文件接口，失效时自动刷新。
 ///
 /// 说明：
+/// - 网页登录获取的凭证仅适用于网页版内部接口，开放平台 OAuth 不识别；
 /// - 下载 / 播放使用官方直链，不包含任何加速能力；
 /// - 直链自带签名与时效，每次下载 / 取流前重新申请。
 class AlipanRemoteClient extends RemoteClient {
@@ -20,10 +20,17 @@ class AlipanRemoteClient extends RemoteClient {
   AlipanRemoteClient({required this.connection});
 
   static const String _rootFid = 'root';
-  static const String _apiBase = 'https://openapi.alipan.com';
 
-  /// 开放平台公共 OAuth 客户端标识（公开应用标识，配置后可更换）。
-  static const String clientId = '25dzX3vbYqktVxXy';
+  /// 网页版文件接口（与开放平台 openapi.alipan.com 的接口路径一致，
+  /// 但登录态体系不同，需使用网页版域名）。
+  static const String _apiBase = 'https://api.aliyundrive.com';
+
+  /// 网页版公共 app_id（阿里云盘网页端固定客户端标识，配置后可更换）。
+  static const String _webAppId = 'pJZInNHN2dZWk8qg';
+
+  static const String _userAgent =
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/120.0 Safari/537.36';
 
   String _accessToken = '';
   String _refreshToken = '';
@@ -37,12 +44,22 @@ class AlipanRemoteClient extends RemoteClient {
   @override
   Future<void> connect() async {
     final auth = await NetdiskAuthStore.readAuth(connection.id);
-    final refresh = auth?['refresh_token'] as String?;
-    if (refresh == null || refresh.isEmpty) {
+    // 新格式：登录页回传完整 token JSON（含 access_token 与 refresh_token）
+    final tokenJson = auth?['token_json'] as String?;
+    if (tokenJson != null && tokenJson.isNotEmpty) {
+      final decoded = json.decode(tokenJson);
+      if (decoded is Map<String, dynamic>) {
+        _accessToken = (decoded['access_token'] as String?) ?? '';
+        _refreshToken = (decoded['refresh_token'] as String?) ?? '';
+      }
+    }
+    // 兼容旧格式：仅保存了 refresh_token
+    if (_refreshToken.isEmpty) {
+      _refreshToken = (auth?['refresh_token'] as String?) ?? '';
+    }
+    if (_accessToken.isEmpty && _refreshToken.isEmpty) {
       throw Exception('netdisk_auth_expired');
     }
-    _refreshToken = refresh;
-    await _refreshAccessToken();
     _driveId = await _getDriveId();
     _connected = true;
   }
@@ -67,15 +84,16 @@ class AlipanRemoteClient extends RemoteClient {
   Future<void> _refreshAccessToken() async {
     final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
     try {
-      final req = await client.postUrl(Uri.parse('$_apiBase/oauth/access_token'));
+      final req = await client.postUrl(
+          Uri.parse('$_apiBase/v2/account/token'));
       req.headers.contentType = ContentType.json;
-      req.headers.set('User-Agent',
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-              '(KHTML, like Gecko) Chrome/120.0 Safari/537.36');
+      req.headers.set('User-Agent', _userAgent);
+      req.headers.set('Referer', 'https://www.aliyundrive.com/');
+      req.headers.set('Origin', 'https://www.aliyundrive.com');
       req.add(utf8.encode(json.encode({
         'grant_type': 'refresh_token',
         'refresh_token': _refreshToken,
-        'client_id': clientId,
+        'app_id': _webAppId,
       })));
       final resp = await req.close();
       final raw = await utf8.decoder.bind(resp).join();
@@ -105,9 +123,14 @@ class AlipanRemoteClient extends RemoteClient {
   Future<String> _getDriveId() async {
     final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
     try {
-      final req = await client.getUrl(
-          Uri.parse('$_apiBase/adrive/v1.0/user/getDriveInfo'));
+      final req =
+          await client.postUrl(Uri.parse('$_apiBase/v1/user/get_drive_info'));
+      req.headers.contentType = ContentType.json;
       req.headers.set('Authorization', 'Bearer $_accessToken');
+      req.headers.set('User-Agent', _userAgent);
+      req.headers.set('Referer', 'https://www.aliyundrive.com/');
+      req.headers.set('Origin', 'https://www.aliyundrive.com');
+      req.add(utf8.encode('{}'));
       final resp = await req.close();
       final raw = await utf8.decoder.bind(resp).join();
       if (resp.statusCode == 401) {
@@ -164,9 +187,9 @@ class AlipanRemoteClient extends RemoteClient {
       final req = await client.postUrl(Uri.parse('$_apiBase$path'));
       req.headers.contentType = ContentType.json;
       req.headers.set('Authorization', 'Bearer $_accessToken');
-      req.headers.set('User-Agent',
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-              '(KHTML, like Gecko) Chrome/120.0 Safari/537.36');
+      req.headers.set('User-Agent', _userAgent);
+      req.headers.set('Referer', 'https://www.aliyundrive.com/');
+      req.headers.set('Origin', 'https://www.aliyundrive.com');
       req.add(utf8.encode(json.encode(body)));
       final resp = await req.close();
       final raw = await utf8.decoder.bind(resp).join();
@@ -273,9 +296,8 @@ class AlipanRemoteClient extends RemoteClient {
     final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
     try {
       final req = await client.getUrl(Uri.parse(url));
-      req.headers.set('User-Agent',
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-              '(KHTML, like Gecko) Chrome/120.0 Safari/537.36');
+      req.headers.set('User-Agent', _userAgent);
+      req.headers.set('Referer', 'https://www.aliyundrive.com/');
       if (rangeHeader != null) {
         req.headers.set('Range', rangeHeader);
       }

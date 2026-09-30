@@ -37,7 +37,9 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
   try {
     var c = document.cookie || '';
     var m = c.match(/(?:^|;\\s*)__pus=([^;]+)/);
-    if (m && m[1] && m[1].length > 10 && m[1] !== 'undefined') {
+    var m2 = c.match(/(?:^|;\\s*)__puus=([^;]+)/);
+    if ((m && m[1] && m[1].length > 10 && m[1] !== 'undefined') ||
+        (m2 && m2[1] && m2[1].length > 10 && m2[1] !== 'undefined')) {
       window.ZenFileBridge.postMessage('OK:' + c);
     }
   } catch (e) {}
@@ -47,15 +49,13 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
   static const _pollScriptAlipan = '''
 (function () {
   try {
-    var raw = localStorage.getItem('token') || localStorage.getItem('refresh_token') || '';
+    var raw = localStorage.getItem('token') || '';
     var t = '';
     if (raw.indexOf('{') === 0) {
       try { t = JSON.parse(raw).refresh_token || ''; } catch (e) { t = ''; }
-    } else {
-      t = raw;
     }
     if (t && t.length > 10 && t.indexOf('null') !== 0) {
-      window.ZenFileBridge.postMessage('OK:' + t);
+      window.ZenFileBridge.postMessage('OK:' + raw);
     }
   } catch (e) {}
 })();
@@ -86,7 +86,7 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
         if (widget.provider == 'quark') {
           Navigator.pop(context, {'cookie': payload});
         } else {
-          Navigator.pop(context, {'refresh_token': payload});
+          Navigator.pop(context, {'token_json': payload});
         }
       })
       ..setNavigationDelegate(NavigationDelegate(
