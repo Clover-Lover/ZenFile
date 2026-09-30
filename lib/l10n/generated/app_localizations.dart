@@ -8469,6 +8469,36 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'{count} 项（{folderCount} 个文件夹, {fileCount} 个文件）'**
   String prop_items_summary(int count, int folderCount, int fileCount);
+  /// No description provided for @prop_calc_hash.
+  ///
+  /// In zh, this message translates to:
+  /// **'计算哈希值'**
+  String get prop_calc_hash;
+
+  /// No description provided for @prop_md5.
+  ///
+  /// In zh, this message translates to:
+  /// **'MD5'**
+  String get prop_md5;
+
+  /// No description provided for @prop_sha256.
+  ///
+  /// In zh, this message translates to:
+  /// **'SHA-256'**
+  String get prop_sha256;
+
+  /// No description provided for @prop_hashing.
+  ///
+  /// In zh, this message translates to:
+  /// **'哈希计算中…'**
+  String get prop_hashing;
+
+  /// No description provided for @prop_hash_failed.
+  ///
+  /// In zh, this message translates to:
+  /// **'哈希计算失败'**
+  String get prop_hash_failed;
+
 
   /// Add subtitle option in video player more menu
   ///

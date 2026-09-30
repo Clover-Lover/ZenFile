@@ -4722,6 +4722,21 @@ class L10nDe extends L10n {
   }
 
   @override
+  String get prop_calc_hash => 'Hash berechnen';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'Hash wird berechnet…';
+
+  @override
+  String get prop_hash_failed => 'Hash-Berechnung fehlgeschlagen';
+
+  @override
   String get msg_add_subtitle => 'Untertitel hinzufügen';
 
   @override

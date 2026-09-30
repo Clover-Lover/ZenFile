@@ -4729,6 +4729,21 @@ class L10nRu extends L10n {
   }
 
   @override
+  String get prop_calc_hash => 'Вычислить хэш';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'Вычисление хэша…';
+
+  @override
+  String get prop_hash_failed => 'Ошибка вычисления хэша';
+
+  @override
   String get msg_add_subtitle => 'Добавить субтитры';
 
   @override

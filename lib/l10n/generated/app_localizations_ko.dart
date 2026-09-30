@@ -4535,6 +4535,21 @@ class L10nKo extends L10n {
   }
 
   @override
+  String get prop_calc_hash => '해시 계산';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => '해시 계산 중…';
+
+  @override
+  String get prop_hash_failed => '해시 계산 실패';
+
+  @override
   String get msg_add_subtitle => '자막 추가';
 
   @override

@@ -4514,6 +4514,26 @@
       "count": {
         "type": "int"
       },
+  "prop_calc_hash": "Hash berechnen",
+  "@prop_calc_hash": {
+    "description": "Button to compute file MD5/SHA-256 on demand"
+  },
+  "prop_md5": "MD5",
+  "@prop_md5": {
+    "description": "MD5 hash label"
+  },
+  "prop_sha256": "SHA-256",
+  "@prop_sha256": {
+    "description": "SHA-256 hash label"
+  },
+  "prop_hashing": "Hash wird berechnet…",
+  "@prop_hashing": {
+    "description": "Hash computation in progress"
+  },
+  "prop_hash_failed": "Hash-Berechnung fehlgeschlagen",
+  "@prop_hash_failed": {
+    "description": "Hash computation failed"
+  },
       "folderCount": {
         "type": "int"
       },

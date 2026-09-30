@@ -16,6 +16,7 @@ import '../../services/folder_share_service.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import 'bulk_crypt_actions.dart';
 import 'action_bar_button.dart';
+import '../../services/file_hash_service.dart';
 
 class SelectionActionBar extends StatelessWidget {
   final FileManagerProvider provider;
@@ -676,6 +677,10 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
   DateTime? _creationTime;
   String _permissions = '';
   String _mimeType = '';
+  bool _isHashing = false;
+  String? _hashMd5;
+  String? _hashSha256;
+  String? _hashError;
 
   @override
   void initState() {
@@ -841,6 +846,30 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
     return null;
   }
 
+  /// 用户主动点击「计算哈希」后调用：流式计算本地文件的 MD5 与 SHA-256。
+  /// 文件夹 / 远程路径不会显示该按钮，故此处无需额外判路径类型。
+  Future<void> _computeHash() async {
+    final path = widget.selectedPaths.first;
+    if (mounted) setState(() => _isHashing = true);
+    try {
+      final res = await FileHashService.compute(path);
+      if (mounted) {
+        setState(() {
+          _hashMd5 = res.md5;
+          _hashSha256 = res.sha256;
+          _isHashing = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _hashError = e.toString();
+          _isHashing = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -921,12 +950,57 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
                         label: l10n.ui_type,
                         value: _mimeType,
                       ),
-                    if (_permissions.isNotEmpty)
-                      _CopyablePropertyRow(
-                        label: l10n.ui_permissions,
-                        value: _permissions,
+                if (_permissions.isNotEmpty)
+                  _CopyablePropertyRow(
+                    label: l10n.ui_permissions,
+                    value: _permissions,
+                  ),
+                if (isSingle &&
+                    !isFolderType &&
+                    !widget.selectedPaths.first.startsWith('remote://')) ...[
+                  if (_isHashing)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          SizedBox(width: 12),
+                          Text(l10n.prop_hashing),
+                        ],
                       ),
-                  ] else ...[
+                    )
+                  else if (_hashError != null)
+                    _CopyablePropertyRow(
+                      label: l10n.prop_sha256,
+                      value: '${l10n.prop_hash_failed}: $_hashError',
+                    )
+                  else if (_hashMd5 != null && _hashSha256 != null) ...[
+                    _CopyablePropertyRow(
+                      label: l10n.prop_md5,
+                      value: _hashMd5!,
+                    ),
+                    _CopyablePropertyRow(
+                      label: l10n.prop_sha256,
+                      value: _hashSha256!,
+                    ),
+                  ] else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          onPressed: _computeHash,
+                          icon: const Icon(Broken.hashtag, size: 18),
+                          label: Text(l10n.prop_calc_hash),
+                        ),
+                      ),
+                    ),
+                ],
+              ] else ...[
                     _CopyablePropertyRow(
                       label: l10n.msg880a18f3,
                       value: l10n.prop_items_summary(

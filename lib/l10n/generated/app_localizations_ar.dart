@@ -4660,6 +4660,21 @@ class L10nAr extends L10n {
   }
 
   @override
+  String get prop_calc_hash => 'حساب التجزئة';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'جارٍ حساب التجزئة…';
+
+  @override
+  String get prop_hash_failed => 'فشل حساب التجزئة';
+
+  @override
   String get msg_add_subtitle => 'إضافة ترجمة';
 
   @override

@@ -885,6 +885,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
       _ChangeSection('✨ 新功能', [
         '文件 / 文件夹「属性」对话框新增「创建时间」一行（类似 MiXplorer）：取自 MediaStore 加入时间（DATE_ADDED），与「修改时间」来源不同、绝大多数文件天然不相等；分类页属性页也已补齐这一行',
         '多任务剪贴板（issue #36）：复制 / 剪切现在累计为多个任务，面板用分割线区分，每个任务可单独粘贴 / 删除；远程（FTP / SMB / WebDAV）任务一并纳入，最多保留 20 个',
+        '文件属性新增「计算哈希值」按钮：点击后才流式计算 MD5 / SHA-256（非打开属性即算），本地文件可用，大文件也只占少量内存',
+        '分类页属性对话框对文件夹显示「包含 N 子文件夹 / M 文件」（与浏览页一致），并统计其总大小',
       ]),
       _ChangeSection('🎨 界面与交互', [
         '分类页（视频、音频、图片、文档、下载、截图、压缩包、安装包）的多选操作栏，与浏览页、「最近」页改用同一套按钮组件',
@@ -905,6 +907,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
       _ChangeSection('✨ New Features', [
         'The file / folder "Properties" dialog now shows a "Creation Time" row (like MiXplorer): sourced from MediaStore DATE_ADDED, a different clock from "Modified" so they differ for most files; the category-page properties dialog now shows this row too',
         'Multi-task clipboard (issue #36): copy / cut now accumulate into separate tasks, divided by dividers in the panel, each pannable and deletable on its own; remote (FTP / SMB / WebDAV) tasks are included too, up to 20 kept',
+        'The file "Properties" dialog now has a "Calculate Hash" button: MD5 / SHA-256 are computed on demand (streaming, not at open) for local files, using little memory even for large files',
+        'The category-page properties dialog now shows "N subfolder(s) / M file(s)" for folders (matching the Browse page) and their total size',
       ]),
       _ChangeSection('🎨 UI & Interaction', [
         'The multi-select action bar of category pages (Video, Audio, Image, Document, Downloads, Screenshots, Archives, APK) now shares the same button widget as the Browse and Recent pages',

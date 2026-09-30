@@ -43,6 +43,7 @@ import '../widgets/progress_overlay.dart';
 import '../../services/crypt/crypt_operations.dart';
 import '../../services/crypt/vault_crypt_service.dart';
 import '../widgets/bulk_crypt_actions.dart';
+import '../../services/file_hash_service.dart';
 import '../screens/vault_session_unlock_dialog.dart';
 import '../screens/crypt_mount_edit_screen.dart';
 import '../widgets/crypt_progress_dialog.dart';
@@ -1380,6 +1381,13 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     String dimensionsOrDuration = '';
     String permissionsStr = '';
     DateTime? creationTime;
+    int catFolderDirs = 0;
+    int catFolderFiles = 0;
+    int catFolderBytes = 0;
+    bool singleIsLocalDir = false;
+    bool singleIsLocalFile = false;
+    String? _hashMd5, _hashSha256, _hashErr;
+    bool _hashing = false;
 
     if (assetIds.isNotEmpty) {
       final provider = context.read<MediaProvider>();
@@ -1463,6 +1471,32 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       } catch (_) {}
     }
 
+    // 对单个本地项判定类型：文件夹则递归统计「包含 N 子文件夹 / M 文件」，
+    // 文件则标记可计算哈希；远程路径跳过（无法本地 stat）。
+    if (count == 1 &&
+        fullPath.isNotEmpty &&
+        !fullPath.startsWith('remote://')) {
+      try {
+        final type = FileSystemEntity.typeSync(fullPath);
+        singleIsLocalDir = type == FileSystemEntityType.directory;
+        singleIsLocalFile = type == FileSystemEntityType.file;
+        if (singleIsLocalDir) {
+          await for (final e in Directory(fullPath).list(
+            recursive: true,
+            followLinks: false,
+          )) {
+            if (e is Directory) {
+              catFolderDirs++;
+            } else if (e is File) {
+              catFolderFiles++;
+              catFolderBytes += await e.length();
+            }
+          }
+          totalBytes = catFolderBytes;
+        }
+      } catch (_) {}
+    }
+
     // 创建时间：原生返回 MediaStore 的 DATE_ADDED（文件「加入 / 创建」时间），
     // 与修改时间不同源，对绝大多数文件天然不相等。取不到（文件夹 / 未扫描的
     // SD 卡文件 / 通道未注册）时保持 null，下方不显示该行。
@@ -1511,6 +1545,15 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   '${FileUtils.formatBytes(totalBytes, 2)} ($totalBytes bytes)',
                   ctx,
                 ),
+                if (singleIsLocalDir)
+                  _buildCopyableRow(
+                    L10n.of(context).ui_contains,
+                    L10n.of(context).prop_contains_format(
+                      catFolderDirs,
+                      catFolderFiles,
+                    ),
+                    ctx,
+                  ),
                 if (lastMod != null)
                   _buildCopyableRow(
                     L10n.of(context).msg1303e638,
@@ -1536,6 +1579,76 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     L10n.of(context).ui_permissions,
                     permissionsStr,
                     ctx,
+                  ),
+                if (singleIsLocalFile)
+                  StatefulBuilder(
+                    builder: (ctx2, setSt) {
+                      if (_hashing) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(L10n.of(context).prop_hashing),
+                            ],
+                          ),
+                        );
+                      }
+                      if (_hashErr != null) {
+                        return _buildCopyableRow(
+                          L10n.of(context).prop_sha256,
+                          '${L10n.of(context).prop_hash_failed}: $_hashErr',
+                          ctx,
+                        );
+                      }
+                      if (_hashMd5 != null && _hashSha256 != null) {
+                        return Column(
+                          children: [
+                            _buildCopyableRow(
+                              L10n.of(context).prop_md5,
+                              _hashMd5!,
+                              ctx,
+                            ),
+                            _buildCopyableRow(
+                              L10n.of(context).prop_sha256,
+                              _hashSha256!,
+                              ctx,
+                            ),
+                          ],
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            onPressed: () async {
+                              setSt(() => _hashing = true);
+                              try {
+                                final res = await FileHashService.compute(fullPath);
+                                setSt(() {
+                                  _hashMd5 = res.md5;
+                                  _hashSha256 = res.sha256;
+                                  _hashing = false;
+                                });
+                              } catch (e) {
+                                setSt(() {
+                                  _hashErr = e.toString();
+                                  _hashing = false;
+                                });
+                              }
+                            },
+                            icon: const Icon(Broken.hashtag, size: 18),
+                            label: Text(L10n.of(context).prop_calc_hash),
+                          ),
+                        ),
+                      );
+                    },
                   ),
               ] else ...[
                 _buildCopyableRow(

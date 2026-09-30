@@ -4680,6 +4680,21 @@ class L10nEn extends L10n {
   }
 
   @override
+  String get prop_calc_hash => 'Calculate Hash';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'Computing hash…';
+
+  @override
+  String get prop_hash_failed => 'Hash calculation failed';
+
+  @override
   String get msg_add_subtitle => 'Add Subtitle';
 
   @override

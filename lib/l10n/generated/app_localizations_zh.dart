@@ -4498,6 +4498,21 @@ class L10nZh extends L10n {
   }
 
   @override
+  String get prop_calc_hash => '计算哈希值';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => '哈希计算中…';
+
+  @override
+  String get prop_hash_failed => '哈希计算失败';
+
+  @override
   String get msg_add_subtitle => '添加字幕';
 
   @override
@@ -12175,6 +12190,21 @@ class L10nZhTw extends L10nZh {
   String prop_items_summary(int count, int folderCount, int fileCount) {
     return '$count items ($folderCount folder(s), $fileCount file(s))';
   }
+
+  @override
+  String get prop_calc_hash => '計算雜湊值';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => '雜湊計算中…';
+
+  @override
+  String get prop_hash_failed => '雜湊計算失敗';
 
   @override
   String get msg_add_subtitle => '新增字幕';

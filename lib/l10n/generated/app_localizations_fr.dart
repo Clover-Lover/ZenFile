@@ -4750,6 +4750,21 @@ class L10nFr extends L10n {
   }
 
   @override
+  String get prop_calc_hash => 'Calculer le hachage';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'Calcul du hachage…';
+
+  @override
+  String get prop_hash_failed => 'Échec du calcul du hachage';
+
+  @override
   String get msg_add_subtitle => 'Ajouter des sous-titres';
 
   @override

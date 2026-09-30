@@ -4535,6 +4535,21 @@ class L10nJa extends L10n {
   }
 
   @override
+  String get prop_calc_hash => 'ハッシュを計算';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'ハッシュ計算中…';
+
+  @override
+  String get prop_hash_failed => 'ハッシュ計算に失敗';
+
+  @override
   String get msg_add_subtitle => '字幕を追加';
 
   @override
