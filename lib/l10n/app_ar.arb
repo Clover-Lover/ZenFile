@@ -3250,7 +3250,7 @@
   "ui_action_menu_mode_all": "إظهار في كل الأوضاع",
   "ui_action_menu_mode_single": "وضع النافذة المنفردة فقط",
   "ui_action_menu_mode_dual": "وضع النافذة المزدوجة فقط",
-  "ui_time_date_format": "تنسيق التاريخ والوقت",
+  "ui_time_date_format": "عرض التاريخ والوقت",
   "@ui_time_date_format": {
     "description": "Settings: date & time format"
   },

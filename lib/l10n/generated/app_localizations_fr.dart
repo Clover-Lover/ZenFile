@@ -3041,7 +3041,7 @@ class L10nFr extends L10n {
   String get ui_action_menu_mode_dual => 'Mode double fenêtre uniquement';
 
   @override
-  String get ui_time_date_format => 'Format date & heure';
+  String get ui_time_date_format => 'Affichage date & heure';
 
   @override
   String get ui_select_time_date_format =>

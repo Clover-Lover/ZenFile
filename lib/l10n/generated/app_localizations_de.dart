@@ -3021,7 +3021,7 @@ class L10nDe extends L10n {
   String get ui_action_menu_mode_dual => 'Nur im Doppel-Fenstermodus';
 
   @override
-  String get ui_time_date_format => 'Datums- und Zeitformat';
+  String get ui_time_date_format => 'Datums- und Zeitanzeige';
 
   @override
   String get ui_select_time_date_format => 'Datums- und Zeitformat auswählen';

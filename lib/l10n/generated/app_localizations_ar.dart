@@ -2971,7 +2971,7 @@ class L10nAr extends L10n {
   String get ui_action_menu_mode_dual => 'وضع النافذة المزدوجة فقط';
 
   @override
-  String get ui_time_date_format => 'تنسيق التاريخ والوقت';
+  String get ui_time_date_format => 'عرض التاريخ والوقت';
 
   @override
   String get ui_select_time_date_format => 'اختيار تنسيق التاريخ والوقت';

@@ -3027,7 +3027,7 @@ class L10nRu extends L10n {
   String get ui_action_menu_mode_dual => 'Только в двухоконном режиме';
 
   @override
-  String get ui_time_date_format => 'Формат даты и времени';
+  String get ui_time_date_format => 'Отображение даты и времени';
 
   @override
   String get ui_select_time_date_format => 'Выбрать формат даты и времени';

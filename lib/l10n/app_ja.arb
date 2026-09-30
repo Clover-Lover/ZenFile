@@ -3254,7 +3254,7 @@
   "ui_action_menu_mode_all": "すべて表示",
   "ui_action_menu_mode_single": "シングルウィンドウモードのみ",
   "ui_action_menu_mode_dual": "デュアルウィンドウモードのみ",
-  "ui_time_date_format": "日付と時刻の形式",
+  "ui_time_date_format": "日付と時刻の表示",
   "@ui_time_date_format": {
     "description": "Settings: date & time format"
   },

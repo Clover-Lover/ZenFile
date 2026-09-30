@@ -3321,7 +3321,7 @@
   "ui_action_menu_mode_all": "全部顯示",
   "ui_action_menu_mode_single": "僅在單視窗模式顯示",
   "ui_action_menu_mode_dual": "僅在雙視窗模式顯示",
-  "ui_time_date_format": "時間與日期格式",
+  "ui_time_date_format": "時間與日期顯示",
   "@ui_time_date_format": {
     "description": "Settings: date & time format"
   },

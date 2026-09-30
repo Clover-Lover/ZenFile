@@ -5491,7 +5491,7 @@ abstract class L10n {
   /// Settings: date & time format
   ///
   /// In zh, this message translates to:
-  /// **'时间与日期格式'**
+  /// **'时间与日期显示'**
   String get ui_time_date_format;
 
   /// Dialog title: select date & time format

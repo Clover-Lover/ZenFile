@@ -893,6 +893,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
         '开启「隐藏操作栏文字标签」后，上述所有分类页的多选操作栏现在都会同步隐藏文字、只显示图标，与浏览页 /「最近」页习惯一致',
         '「更多」操作（分享、详情、收藏等）在隐藏文字标签时同样只显示图标，不再露出文字',
         '剪贴板面板底部改为「清除（窄）+ 粘贴全部（右侧）」，粘贴全部按每任务勾选状态决定保留 / 清除；面板顶部标题已移除，更紧凑',
+        '设置页「时间与日期格式」与「在列表中隐藏时间和日期」合并为「时间与日期显示」单一条目，点开弹出合并面板（日期 / 时间格式选择 + 隐藏开关）',
       ]),
       _ChangeSection('🛠️ 维护优化', [
         '将操作栏按钮渲染逻辑抽离为共用的 ActionBarButton 组件，浏览页与分类页共享同一份隐藏文字 / 配色 / 尺寸规则，后续只改一处',
@@ -915,6 +916,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
         'With "Hide action bar text labels" on, those category pages now also hide the text and show icons only, matching the Browse and Recent pages',
         'The "More" overflow (Share, Details, Favorite, etc.) also shows icon only when labels are hidden',
         'Clipboard panel bottom is now "Clear (narrow) + Paste All (right)"; Paste All respects each task keep-after-paste choice; the top title was removed for a more compact panel',
+        'In Settings, "Date & Time Format" and "Hide time and date in list" are merged into a single "Date & Time Display" item that opens a combined sheet (date / time format pickers + hide toggle)',
       ]),
       _ChangeSection('🛠️ Maintenance', [
         'Extracted the action bar button into a shared ActionBarButton widget so the Browse and Category pages use one source of truth for label-hiding, color and sizing',

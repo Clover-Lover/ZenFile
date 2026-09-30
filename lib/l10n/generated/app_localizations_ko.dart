@@ -2883,7 +2883,7 @@ class L10nKo extends L10n {
   String get ui_action_menu_mode_dual => '듀얼 창 모드만';
 
   @override
-  String get ui_time_date_format => '날짜 및 시간 형식';
+  String get ui_time_date_format => '날짜 및 시간 표시';
 
   @override
   String get ui_select_time_date_format => '날짜 및 시간 형식 선택';

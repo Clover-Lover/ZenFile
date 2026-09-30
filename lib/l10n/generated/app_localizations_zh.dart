@@ -2872,7 +2872,7 @@ class L10nZh extends L10n {
   String get ui_action_menu_mode_dual => '仅在双窗口模式显示';
 
   @override
-  String get ui_time_date_format => '时间与日期格式';
+  String get ui_time_date_format => '时间与日期显示';
 
   @override
   String get ui_select_time_date_format => '选择日期与时间格式';
@@ -10605,7 +10605,7 @@ class L10nZhTw extends L10nZh {
   String get ui_action_menu_mode_dual => '僅在雙視窗模式顯示';
 
   @override
-  String get ui_time_date_format => '時間與日期格式';
+  String get ui_time_date_format => '時間與日期顯示';
 
   @override
   String get ui_select_time_date_format => '選擇日期與時間格式';

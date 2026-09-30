@@ -906,41 +906,11 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         ),
                         onTap: () => fileManager.toggleShowFolderSizes(),
                       ),
-                    if (use24HourVis)
+                    if (use24HourVis || hideTimeDateVis)
                       SettingsTile(
                         icon: Icons.access_time_rounded,
                         title: L10n.of(context).ui_time_date_format,
                         subtitle: _getTimeDateSubtitle(context, fileManager),
-                        trailing: Transform.scale(
-                          scale: 0.85,
-                          child: Switch(
-                            value: fileManager.use24HourFormat,
-                            activeColor: theme.colorScheme.primary,
-                            onChanged: (val) {
-                              fileManager.setUse24HourFormat(val);
-                              // 开启 24 小时制时弹出格式选择；关闭时不弹
-                              if (val) {
-                                _showTimeDateFormatPicker(
-                                  context,
-                                  fileManager,
-                                  theme,
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        trailingInteractive: true,
-                        onTap: () => _showTimeDateFormatPicker(
-                          context,
-                          fileManager,
-                          theme,
-                        ),
-                      ),
-                    if (hideTimeDateVis)
-                      SettingsTile(
-                        icon: Icons.visibility_off_rounded,
-                        title: L10n.of(context).msg25ee6612,
-                        subtitle: L10n.of(context).msg337359a6,
                         trailing: Transform.scale(
                           scale: 0.85,
                           child: Switch(
@@ -949,7 +919,12 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                             onChanged: (_) => fileManager.toggleHideTimeAndDate(),
                           ),
                         ),
-                        onTap: () => fileManager.toggleHideTimeAndDate(),
+                        trailingInteractive: true,
+                        onTap: () => _showTimeDateFormatPicker(
+                          context,
+                          fileManager,
+                          theme,
+                        ),
                       ),
                     if (adaptiveNamesVis)
                       SettingsTile(
@@ -1301,6 +1276,18 @@ Future<void> _showTimeDateFormatPicker(
                 sample: '09:30 PM',
                 selectedUse24: use24,
                 onSelect: (v) => setSheetState(() => use24 = v),
+              ),
+              const Divider(height: 1, indent: 16, endIndent: 16),
+              SwitchListTile(
+                title: Text(l10n.msg25ee6612),
+                subtitle: Text(l10n.msg337359a6),
+                value: fileManager.hideTimeAndDate,
+                activeColor: theme.colorScheme.primary,
+                onChanged: (_) {
+                  fileManager.toggleHideTimeAndDate();
+                  setSheetState(() {});
+                },
+                contentPadding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
@@ -1911,19 +1898,9 @@ class LayoutSettingsScreen extends StatelessWidget {
               trailing: Transform.scale(
                 scale: 0.85,
                 child: Switch(
-                  value: fileManager.use24HourFormat,
+                  value: fileManager.hideTimeAndDate,
                   activeColor: theme.colorScheme.primary,
-                  onChanged: (val) {
-                    fileManager.setUse24HourFormat(val);
-                    // 开启 24 小时制时弹出格式选择；关闭时不弹
-                    if (val) {
-                      _showTimeDateFormatPicker(
-                        context,
-                        fileManager,
-                        theme,
-                      );
-                    }
-                  },
+                  onChanged: (_) => fileManager.toggleHideTimeAndDate(),
                 ),
               ),
               trailingInteractive: true,
@@ -1932,20 +1909,6 @@ class LayoutSettingsScreen extends StatelessWidget {
                 fileManager,
                 theme,
               ),
-            ),
-            SettingsTile(
-              icon: Icons.visibility_off_rounded,
-              title: L10n.of(context).msg25ee6612,
-              subtitle: L10n.of(context).msg337359a6,
-              trailing: Transform.scale(
-                scale: 0.85,
-                child: Switch(
-                  value: fileManager.hideTimeAndDate,
-                  activeColor: theme.colorScheme.primary,
-                  onChanged: (_) => fileManager.toggleHideTimeAndDate(),
-                ),
-              ),
-              onTap: () => fileManager.toggleHideTimeAndDate(),
             ),
             SettingsTile(
               icon: Broken.text,

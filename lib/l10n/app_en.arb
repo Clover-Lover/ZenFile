@@ -3257,7 +3257,7 @@
   "ui_action_menu_mode_all": "Show in All Modes",
   "ui_action_menu_mode_single": "Single Window Mode Only",
   "ui_action_menu_mode_dual": "Dual Window Mode Only",
-  "ui_time_date_format": "Date & Time Format",
+  "ui_time_date_format": "Date & Time Display",
   "@ui_time_date_format": {
     "description": "Settings: date & time format"
   },

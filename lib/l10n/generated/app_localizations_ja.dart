@@ -2884,7 +2884,7 @@ class L10nJa extends L10n {
   String get ui_action_menu_mode_dual => 'デュアルウィンドウモードのみ';
 
   @override
-  String get ui_time_date_format => '日付と時刻の形式';
+  String get ui_time_date_format => '日付と時刻の表示';
 
   @override
   String get ui_select_time_date_format => '日付と時刻の形式を選択';

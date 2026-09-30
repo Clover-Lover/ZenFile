@@ -3250,7 +3250,7 @@
   "ui_action_menu_mode_all": "모두 표시",
   "ui_action_menu_mode_single": "단일 창 모드만",
   "ui_action_menu_mode_dual": "듀얼 창 모드만",
-  "ui_time_date_format": "날짜 및 시간 형식",
+  "ui_time_date_format": "날짜 및 시간 표시",
   "@ui_time_date_format": {
     "description": "Settings: date & time format"
   },
