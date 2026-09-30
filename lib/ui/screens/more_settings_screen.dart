@@ -916,10 +916,20 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                           child: Switch(
                             value: fileManager.use24HourFormat,
                             activeColor: theme.colorScheme.primary,
-                            onChanged: (_) =>
-                                fileManager.toggleUse24HourFormat(),
+                            onChanged: (val) {
+                              fileManager.setUse24HourFormat(val);
+                              // 开启 24 小时制时弹出格式选择；关闭时不弹
+                              if (val) {
+                                _showTimeDateFormatPicker(
+                                  context,
+                                  fileManager,
+                                  theme,
+                                );
+                              }
+                            },
                           ),
                         ),
+                        trailingInteractive: true,
                         onTap: () => _showTimeDateFormatPicker(
                           context,
                           fileManager,
@@ -971,15 +981,28 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                           child: Switch(
                             value: fileManager.showActionMenuButtons,
                             activeColor: theme.colorScheme.primary,
-                            onChanged: (val) =>
-                                fileManager.setShowActionMenuButtons(val),
+                            onChanged: (val) {
+                              fileManager.setShowActionMenuButtons(val);
+                              // 开启时弹出显示模式选择；关闭时不弹
+                              if (val) {
+                                _showActionMenuModePicker(
+                                  context,
+                                  fileManager,
+                                  theme,
+                                );
+                              }
+                            },
                           ),
                         ),
-                        onTap: () => _showActionMenuModePicker(
-                          context,
-                          fileManager,
-                          theme,
-                        ),
+                        trailingInteractive: true,
+                        onTap: () {
+                          fileManager.setShowActionMenuButtons(true);
+                          _showActionMenuModePicker(
+                            context,
+                            fileManager,
+                            theme,
+                          );
+                        },
                       ),
                     ],
                     SettingsTile(
@@ -1205,13 +1228,15 @@ Future<void> _showTimeDateFormatPicker(
   ThemeData theme,
 ) async {
   final l10n = L10n.of(context);
+  // 选择状态在弹窗外初始化一次：StatefulBuilder 每次重建都会重新执行 builder，
+  // 若在此处读取偏好，点选后重建会被重置回旧值，导致无法选中。
+  var dateFmt = fileManager.dateFormat;
+  var use24 = fileManager.use24HourFormat;
   final result = await showModalBottomSheet<(String, bool)>(
     context: context,
     showDragHandle: true,
     builder: (sheetContext) => StatefulBuilder(
       builder: (_, setSheetState) {
-        var dateFmt = fileManager.dateFormat;
-        var use24 = fileManager.use24HourFormat;
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1409,6 +1434,11 @@ class SettingsTile extends StatelessWidget {
   final VoidCallback? onTap;
   final Widget? trailing;
 
+  /// 是否允许 trailing（如 Switch）自身接收点击。默认 false 时 trailing 被
+  /// IgnorePointer 包裹，整行点击只触发 [onTap]；设为 true 后开关可单独点按，
+  /// 用于「点击开关即切换并弹窗」的设置项。
+  final bool trailingInteractive;
+
   const SettingsTile({
     super.key,
     required this.icon,
@@ -1416,6 +1446,7 @@ class SettingsTile extends StatelessWidget {
     required this.subtitle,
     this.onTap,
     this.trailing,
+    this.trailingInteractive = false,
   });
 
   @override
@@ -1441,7 +1472,11 @@ class SettingsTile extends StatelessWidget {
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
         subtitle: Text(subtitle, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.6))),
-        trailing: trailing != null ? IgnorePointer(child: trailing) : null,
+        trailing: trailing != null
+            ? (trailingInteractive
+                ? trailing
+                : IgnorePointer(child: trailing))
+            : null,
         onTap: onTap,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
@@ -1878,9 +1913,20 @@ class LayoutSettingsScreen extends StatelessWidget {
                 child: Switch(
                   value: fileManager.use24HourFormat,
                   activeColor: theme.colorScheme.primary,
-                  onChanged: (_) => fileManager.toggleUse24HourFormat(),
+                  onChanged: (val) {
+                    fileManager.setUse24HourFormat(val);
+                    // 开启 24 小时制时弹出格式选择；关闭时不弹
+                    if (val) {
+                      _showTimeDateFormatPicker(
+                        context,
+                        fileManager,
+                        theme,
+                      );
+                    }
+                  },
                 ),
               ),
+              trailingInteractive: true,
               onTap: () => _showTimeDateFormatPicker(
                 context,
                 fileManager,
@@ -1929,15 +1975,28 @@ class LayoutSettingsScreen extends StatelessWidget {
                 child: Switch(
                   value: fileManager.showActionMenuButtons,
                   activeColor: theme.colorScheme.primary,
-                  onChanged: (val) =>
-                      fileManager.setShowActionMenuButtons(val),
+                  onChanged: (val) {
+                    fileManager.setShowActionMenuButtons(val);
+                    // 开启时弹出显示模式选择；关闭时不弹
+                    if (val) {
+                      _showActionMenuModePicker(
+                        context,
+                        fileManager,
+                        theme,
+                      );
+                    }
+                  },
                 ),
               ),
-              onTap: () => _showActionMenuModePicker(
-                context,
-                fileManager,
-                theme,
-              ),
+              trailingInteractive: true,
+              onTap: () {
+                fileManager.setShowActionMenuButtons(true);
+                _showActionMenuModePicker(
+                  context,
+                  fileManager,
+                  theme,
+                );
+              },
             ),
           ],
         ),
