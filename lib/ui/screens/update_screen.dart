@@ -880,13 +880,16 @@ class _UpdateScreenState extends State<UpdateScreen> {
   /// ── 当前版本：v3.4.0 ────────────────────────────────────────────────
   static const _Changelog _v340 = _Changelog(
     version: 'v3.4.0',
-    date: '2026-09-29',
+    date: '2026-09-30',
     zh: [
       _ChangeSection('✨ 新功能', [
         '文件 / 文件夹「属性」对话框新增「创建时间」一行（类似 MiXplorer）：取自 MediaStore 加入时间（DATE_ADDED），与「修改时间」来源不同、绝大多数文件天然不相等；分类页属性页也已补齐这一行',
         '多任务剪贴板（issue #36）：复制 / 剪切现在累计为多个任务，面板用分割线区分，每个任务可单独粘贴 / 删除；远程（FTP / SMB / WebDAV）任务一并纳入，最多保留 20 个',
         '文件属性新增「计算哈希值」按钮：点击后才流式计算 MD5 / SHA-256（非打开属性即算），本地文件可用，大文件也只占少量内存',
         '分类页属性对话框对文件夹显示「包含 N 子文件夹 / M 文件」（与浏览页一致），并统计其总大小',
+        '底部 4-tab 可常驻其他页面（默认开启）：从抽屉、分类、「最近」等入口进入的页面同样保留底部导航栏，随时切换标签；进入视频播放 / 图片查看的沉浸态时自动收起，唤出控制条或操作按钮时恢复（设置 → 常规与行为 → 导航栏中可关闭）',
+        '时间与日期格式可自定义（issue #38）：日期支持 DD/MM/YYYY、MM/DD/YYYY、YYYY-MM-DD 三种格式，时间支持 12 / 24 小时制，选择后整个应用统一生效',
+        '「显示三点操作按钮」设置方式优化：打开开关即弹出模式选择（全部显示 / 仅单窗口 / 仅双窗口），选完自动收起，不再内联展开占位',
       ]),
       _ChangeSection('🎨 界面与交互', [
         '分类页（视频、音频、图片、文档、下载、截图、压缩包、安装包）的多选操作栏，与浏览页、「最近」页改用同一套按钮组件',
@@ -894,14 +897,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
         '「更多」操作（分享、详情、收藏等）在隐藏文字标签时同样只显示图标，不再露出文字',
         '剪贴板面板底部改为「清除（窄）+ 粘贴全部（右侧）」，粘贴全部按每任务勾选状态决定保留 / 清除；面板顶部标题已移除，更紧凑',
         '设置页「时间与日期格式」与「在列表中隐藏时间和日期」合并为「时间与日期显示」单一条目，点开弹出合并面板（日期 / 时间格式选择 + 隐藏开关）',
+        '远程添加向导的协议卡片改为单行卡片（图标 + 标题 + 描述 + 右箭头），纵向排列、点选区域更大，整体风格统一',
+        '分类页多选时，操作栏改为覆盖并收起底部导航栏，不再叠在它上方',
       ]),
       _ChangeSection('🛠️ 维护优化', [
         '将操作栏按钮渲染逻辑抽离为共用的 ActionBarButton 组件，浏览页与分类页共享同一份隐藏文字 / 配色 / 尺寸规则，后续只改一处',
         '剪贴板面板每个任务拥有独立的「清除」与「粘贴后保留」勾选，粘贴后默认自动清除该任务（复制不勾选则清除、剪切始终清除）',
+        '远程添加向导的协议选项改为复用同一套卡片组件，后续调整只需改一处',
       ]),
       _ChangeSection('🐛 问题修复', [
         '修复「隐藏操作栏文字标签」设置对分类页（除「最近」外）不生效的问题',
         '修复新增的 4 个备用图标（蓝白 / 渐变蓝 / 深蓝鎏金 / 暮色）在设置中切换不生效的问题',
+        '修复时间 / 日期格式选择弹窗点不中：选中状态被反复重置，选项永远停在默认值',
+        '修复「时间与日期格式」「显示三点操作按钮」的开关点不动，只能整行点击弹窗',
+        '修复远程连接（SMB 等）切到别的页面再回来就连不上、必须重启应用：重连判定补齐 socket 超时类错误，返回目录时自动重建连接',
+        '修复远程文件列表的日期不跟随「时间与日期格式」设置',
       ]),
     ],
     en: [
@@ -910,6 +920,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
         'Multi-task clipboard (issue #36): copy / cut now accumulate into separate tasks, divided by dividers in the panel, each pannable and deletable on its own; remote (FTP / SMB / WebDAV) tasks are included too, up to 20 kept',
         'The file "Properties" dialog now has a "Calculate Hash" button: MD5 / SHA-256 are computed on demand (streaming, not at open) for local files, using little memory even for large files',
         'The category-page properties dialog now shows "N subfolder(s) / M file(s)" for folders (matching the Browse page) and their total size',
+        'The bottom 4-tab bar can now stay visible on other pages (on by default): pages opened from the drawer, categories or Recent keep the bottom navigation so tabs are always reachable; it slides away when you enter immersive video playback or image viewing, and returns when the controls are shown (can be turned off in Settings -> General & Behavior -> Navigation bar)',
+        'Customizable date & time format (issue #38): pick DD/MM/YYYY, MM/DD/YYYY or YYYY-MM-DD, and 12- or 24-hour time; the choice applies across the whole app',
+        '"Show the three-dot action button" is easier to set up now: turning the switch on pops up the mode picker (Always / Single pane only / Dual pane only) and closes itself once chosen',
       ]),
       _ChangeSection('🎨 UI & Interaction', [
         'The multi-select action bar of category pages (Video, Audio, Image, Document, Downloads, Screenshots, Archives, APK) now shares the same button widget as the Browse and Recent pages',
@@ -917,14 +930,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
         'The "More" overflow (Share, Details, Favorite, etc.) also shows icon only when labels are hidden',
         'Clipboard panel bottom is now "Clear (narrow) + Paste All (right)"; Paste All respects each task keep-after-paste choice; the top title was removed for a more compact panel',
         'In Settings, "Date & Time Format" and "Hide time and date in list" are merged into a single "Date & Time Display" item that opens a combined sheet (date / time format pickers + hide toggle)',
+        'Protocol cards in the Add Remote wizard are now single-row cards (icon + title + description + arrow), stacked vertically with a bigger tap area and a consistent look',
+        'In category pages, the multi-select action bar now covers and hides the bottom navigation bar instead of stacking above it',
       ]),
       _ChangeSection('🛠️ Maintenance', [
         'Extracted the action bar button into a shared ActionBarButton widget so the Browse and Category pages use one source of truth for label-hiding, color and sizing',
         'In the clipboard panel each task has its own "Clear" and "Keep after paste" toggle; after pasting a task is cleared by default (copy without the toggle is cleared, cut is always cleared)',
+        'Protocol options in the Add Remote wizard now reuse one shared card widget, so future changes are made in a single place',
       ]),
       _ChangeSection('🐛 Bug Fixes', [
         'Fixed "Hide action bar text labels" having no effect on category pages (except Recent)',
         'Fixed the 4 newly added alternative icons (Blue-White / Gradient-Blue / Blue-Gold / Sunset) not taking effect when selected in Settings',
+        'Fixed the date / time format picker not being selectable: the selection was reset on every rebuild and always fell back to the default',
+        'Fixed the "Date & Time Format" and "Show three-dot action button" switches not being tappable - only tapping the whole row worked',
+        'Fixed remote connections (SMB etc.) becoming unreachable after switching pages until the app was restarted: the reconnect check now recognizes socket-timeout errors and rebuilds the connection automatically',
+        'Fixed remote file lists not following the "Date & Time Format" setting',
       ]),
     ],
   );

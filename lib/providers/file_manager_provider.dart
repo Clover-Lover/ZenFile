@@ -217,6 +217,7 @@ class FileManagerProvider extends ChangeNotifier {
     _showFolderFileCount = PreferencesService.getShowFolderFileCount();
     _showBottomActionBar = PreferencesService.getShowBottomActionBar();
     _bottomNavBarEnabled = PreferencesService.getBottomNavBarEnabled();
+    _persistentTabBar = PreferencesService.getPersistentTabBar();
     _showHomeBrowseNav = PreferencesService.getShowHomeBrowseNav();
     _showMediaPreviews = PreferencesService.getShowMediaPreviews();
     // 进度通知器在进度置空时清除最小化状态（字段初始化器无法访问实例方法，故在此赋值）。
@@ -1106,6 +1107,14 @@ class FileManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 按值设置（供「时间与日期显示」开关使用：开启=显示 ⇔ hideTimeAndDate=false）。
+  void setHideTimeAndDate(bool value) {
+    if (_hideTimeAndDate == value) return;
+    _hideTimeAndDate = value;
+    PreferencesService.saveHideTimeAndDate(_hideTimeAndDate);
+    notifyListeners();
+  }
+
   bool _showFolderContentsCount = false;
   bool get showFolderContentsCount => _showFolderContentsCount;
 
@@ -1265,6 +1274,18 @@ class FileManagerProvider extends ChangeNotifier {
     if (_bottomNavBarEnabled == value) return;
     _bottomNavBarEnabled = value;
     PreferencesService.saveBottomNavBarEnabled(_bottomNavBarEnabled);
+    notifyListeners();
+  }
+
+  // 「导航栏常驻」总开关：开启时底部 4-tab 在其他（壳内）页面也保持显示
+  // （分类页 / 抽屉等进入的页面只占 body 区域，底栏不动）；关闭时恢复整页全屏。
+  bool _persistentTabBar = true;
+  bool get persistentTabBar => _persistentTabBar;
+
+  void setPersistentTabBar(bool value) {
+    if (_persistentTabBar == value) return;
+    _persistentTabBar = value;
+    PreferencesService.savePersistentTabBar(_persistentTabBar);
     notifyListeners();
   }
 

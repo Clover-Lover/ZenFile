@@ -8172,6 +8172,7 @@
   },
   "ui_bottom_tab_bar": "ナビゲーションバー",
   "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "ui_persistent_tab_bar": "他のページでもナビゲーションバーを表示",
   "ui_pick_bottom_tab": "下部エントリを選択",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "長押しで変更できます",

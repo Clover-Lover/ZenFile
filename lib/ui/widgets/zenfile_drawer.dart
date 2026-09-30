@@ -25,6 +25,7 @@ import '../screens/qr_scanner_screen.dart';
 import '../screens/decibel_meter_screen.dart';
 import '../screens/text_editor_screen.dart';
 import '../../services/preferences_service.dart';
+import '../navigation/shell_navigator.dart';
 
 class ZenFileDrawer extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -147,7 +148,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                           title: L10n.of(context).ui_recycle_bin,
                           onTap: () {
                             Navigator.pop(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const RecycleBinScreen()));
+                            ShellNavigator.push(context, MaterialPageRoute(builder: (_) => const RecycleBinScreen()));
                           },
                         ),
                       ],
@@ -166,7 +167,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                           title: L10n.of(context).ftp2,
                           onTap: () {
                             Navigator.pop(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const FtpServerScreen()));
+                            ShellNavigator.push(context, MaterialPageRoute(builder: (_) => const FtpServerScreen()));
                           },
                         ),
                         _buildDrawerTile(
@@ -175,7 +176,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                           title: L10n.of(context).ui_web_share,
                           onTap: () {
                             Navigator.pop(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const WebSharingScreen()));
+                            ShellNavigator.push(context, MaterialPageRoute(builder: (_) => const WebSharingScreen()));
                           },
                         ),
                         ...connections.map((conn) {
@@ -212,7 +213,8 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                             );
                             // 添加成功后跳到已保存连接列表页，与分类页—网络行为一致
                             if (added == true && navigator.mounted) {
-                              await navigator.push(
+                              await ShellNavigator.push(
+                                context,
                                 MaterialPageRoute(
                                   builder: (_) => NetworkCategoryScreen(onNavigateTab: widget.onNavigateTab),
                                 ),
@@ -304,7 +306,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                           title: L10n.of(context).wol_title,
                           onTap: () {
                             Navigator.pop(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const WakeOnLanScreen()));
+                            ShellNavigator.push(context, MaterialPageRoute(builder: (_) => const WakeOnLanScreen()));
                           },
                         ),
                         _buildDrawerTile(
@@ -331,7 +333,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                           title: L10n.of(context).decibel_meter_title,
                           onTap: () {
                             Navigator.pop(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const DecibelMeterScreen()));
+                            ShellNavigator.push(context, MaterialPageRoute(builder: (_) => const DecibelMeterScreen()));
                           },
                         ),
                         _buildDrawerTile(
@@ -387,7 +389,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                       isPrimary: true,
                       onTap: () {
                         Navigator.pop(context);
-                        Navigator.push(
+                        ShellNavigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const AboutZenFileScreen()),
                         );

@@ -8128,6 +8128,9 @@ class L10nEn extends L10n {
   String get ui_bottom_tab_bar => 'Navigation Bar';
 
   @override
+  String get ui_persistent_tab_bar => 'Keep Nav Bar on Other Pages';
+
+  @override
   String get ui_pick_bottom_tab => 'Choose bottom entry';
 
   @override

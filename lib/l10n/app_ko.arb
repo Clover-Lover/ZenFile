@@ -8168,6 +8168,7 @@
   },
   "ui_bottom_tab_bar": "탐색 모음",
   "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "ui_persistent_tab_bar": "다른 페이지에서도 내비게이션 바 유지",
   "ui_pick_bottom_tab": "하단 항목 선택",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "길게 누르면 변경할 수 있습니다",

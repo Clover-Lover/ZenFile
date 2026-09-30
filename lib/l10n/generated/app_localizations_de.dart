@@ -8219,6 +8219,10 @@ class L10nDe extends L10n {
   String get ui_bottom_tab_bar => 'Navigationsleiste';
 
   @override
+  String get ui_persistent_tab_bar =>
+      'Navigationsleiste auf anderen Seiten beibehalten';
+
+  @override
   String get ui_pick_bottom_tab => 'Untereintrag wählen';
 
   @override

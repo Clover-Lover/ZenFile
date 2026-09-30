@@ -8098,6 +8098,9 @@ class L10nAr extends L10n {
   String get ui_bottom_tab_bar => 'شريط التنقل';
 
   @override
+  String get ui_persistent_tab_bar => 'إبقاء شريط التنقل على الصفحات الأخرى';
+
+  @override
   String get ui_pick_bottom_tab => 'اختيار عنصر سفلي';
 
   @override

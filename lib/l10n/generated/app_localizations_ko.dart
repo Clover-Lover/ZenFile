@@ -7887,6 +7887,9 @@ class L10nKo extends L10n {
   String get ui_bottom_tab_bar => '탐색 모음';
 
   @override
+  String get ui_persistent_tab_bar => '다른 페이지에서도 내비게이션 바 유지';
+
+  @override
   String get ui_pick_bottom_tab => '하단 항목 선택';
 
   @override

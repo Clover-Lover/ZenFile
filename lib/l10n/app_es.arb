@@ -8168,6 +8168,7 @@
   },
   "ui_bottom_tab_bar": "Barra de navegación",
   "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "ui_persistent_tab_bar": "Mantener la barra de navegación en otras páginas",
   "ui_pick_bottom_tab": "Elegir entrada inferior",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Mantén pulsado para cambiar",

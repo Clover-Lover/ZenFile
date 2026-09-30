@@ -11,6 +11,7 @@ import '../screens/storage_analyzer/app_manager_screen.dart';
 import '../../models/media_type.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import 'nav_bar_settings_sheet.dart';
+import '../navigation/shell_navigator.dart';
 import '../../core/utils.dart';
 
 import '../screens/all_recent_files_screen.dart';
@@ -313,7 +314,7 @@ class QuickCategoriesGrid extends StatefulWidget {
       final cat = entry.value;
       if (cat['action'] == null && cat['pageBuilder'] != null) {
         final pageBuilder = cat['pageBuilder'] as Widget Function();
-        cat['action'] = () => Navigator.push(
+        cat['action'] = () => ShellNavigator.push(
           context,
           MaterialPageRoute(builder: (_) => pageBuilder()),
         );
@@ -539,7 +540,8 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
   }) {
     final renderBox = iconKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => targetPage));
+      // 无图标位置可扩散时直接推入（仍走壳内导航，保留底栏）。
+      ShellNavigator.push(context, MaterialPageRoute(builder: (_) => targetPage));
       return;
     }
 
@@ -555,7 +557,9 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
     final dy = max(center.dy, screenSize.height - center.dy);
     final radius = sqrt(dx * dx + dy * dy);
 
-    Navigator.push(
+    // 走壳内导航：分类页（图片/视频/音频/文档/下载/截图/压缩包/安装包/最近…）
+    // 进入后底部 4-tab 保持可见；扩散动画在内容区内播放。
+    ShellNavigator.push(
       context,
       _RadialExpandRoute(
         center: center,
@@ -2378,6 +2382,39 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                                   context
                                       .read<FileManagerProvider>()
                                       .setBottomNavBarEnabled(v);
+                                  setModalState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        // ===== 导航栏常驻（其他页面也显示 4-tab）=====
+                        // 与「设置 → 常规与行为 → 导航栏」面板里的同名开关
+                        // 共用同一份 provider 状态，两处双向同步。
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 4.0,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  L10n.of(context).ui_persistent_tab_bar,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Switch(
+                                value: context
+                                    .watch<FileManagerProvider>()
+                                    .persistentTabBar,
+                                onChanged: (v) {
+                                  context
+                                      .read<FileManagerProvider>()
+                                      .setPersistentTabBar(v);
                                   setModalState(() {});
                                 },
                               ),

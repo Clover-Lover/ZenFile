@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import '../../core/icon_fonts/broken_icons.dart';
 import '../../models/network_connection_model.dart';
 import '../../services/network_connections_service.dart';
-import '../../services/netdisk_auth_store.dart';
+// ⛔ 聚合网盘暂时下线：登录态存储 import 已注释。
+// import '../../services/netdisk_auth_store.dart';
 import '../../providers/file_manager_provider.dart';
 import '../../services/remote_guard_service.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
@@ -31,9 +32,11 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
 
   void _loadConnections() {
     setState(() {
-      // 聚合网盘连接（NETDISK_*）与远程协议连接统一在此展示，
-      // 添加网盘入口位于添加向导（NetworkConnectionWizardScreen）分割线下方
-      _connections = NetworkConnectionsService.getConnections().toList();
+      // ⛔ 聚合网盘（夸克 / 阿里云盘）暂时下线：过滤掉 NETDISK_* 连接，避免残留的
+      // 网盘连接出现在列表里、点开报错。恢复时去掉 .where 一行即可。
+      _connections = NetworkConnectionsService.getConnections()
+          .where((c) => !_isNetdisk(c))
+          .toList();
       _isLoading = false;
     });
   }
@@ -43,8 +46,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
 
   IconData _getIconForType(String type) {
     if (FileManagerProvider.isSmbType(type)) return Icons.dns_rounded;
-    if (type.toLowerCase().contains('quark')) return Broken.cloud;
-    if (type.toLowerCase().contains('netdisk')) return Icons.cloud_rounded;
+    // ⛔ 聚合网盘暂时下线：原先 quark / netdisk 的图标映射已移除。
     switch (type) {
       case 'FTP':
         return Icons.swap_horizontal_circle_rounded;
@@ -59,8 +61,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
 
   Color _getColorForType(String type) {
     if (FileManagerProvider.isSmbType(type)) return const Color(0xFF5B21B6);
-    if (type.toLowerCase().contains('quark')) return const Color(0xFF2B6CB0);
-    if (type.toLowerCase().contains('netdisk')) return const Color(0xFFFF6A00);
+    // ⛔ 聚合网盘暂时下线：原先 quark / netdisk 的配色映射已移除。
     switch (type) {
       case 'FTP':
         return const Color(0xFFF97316);
@@ -95,10 +96,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
     );
     if (confirmed == true) {
       await NetworkConnectionsService.deleteConnection(conn.id);
-      // 网盘连接删除即退出登录：同步清除加密存储的登录态
-      if (conn.type.toLowerCase().contains('netdisk')) {
-        await NetdiskAuthStore.clearAuth(conn.id);
-      }
+      // ⛔ 聚合网盘暂时下线：删除网盘连接时同步清理登录态的逻辑已移除。
       _loadConnections();
     }
   }
@@ -207,45 +205,38 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                         ),
                         subtitle: Padding(
                           padding: const EdgeInsets.only(top: 4),
-                          // 网盘连接无 host/port，副标题显示登录状态；
                           // 协议连接显示类型与 host:port 两行（垂直方向有空间，两行都能完整展示）
-                          child: _isNetdisk(conn)
-                              ? Text(
-                                  L10n.of(context).netdisk_logged_in,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: theme.colorScheme.onSurface.withOpacity(0.5),
-                                  ),
-                                )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      conn.type,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: theme.colorScheme.onSurface.withOpacity(0.5),
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      '${conn.host}:${conn.port}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: theme.colorScheme.onSurface.withOpacity(0.5),
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                          // ⛔ 聚合网盘暂时下线：网盘「已登录」副标题分支已移除。
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                conn.type,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '${conn.host}:${conn.port}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // 网盘连接无协议参数可编辑，仅保留删除（退出登录）
+                            // ⛔ 聚合网盘暂时下线后列表里不会再有网盘连接，此处恒为 true，
+                            // 保留判断以防旧设备上残留 NETDISK_* 记录。
                             if (!_isNetdisk(conn))
                               IconButton(
                                 icon: Icon(Broken.edit, size: 18, color: theme.colorScheme.primary),
@@ -283,21 +274,14 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                           } catch (e) {
                             if (context.mounted) {
                               final l10n = L10n.of(context);
-                              // 网盘登录态过期：显示本地化提示并清理该连接
-                              final expired = e.toString() == 'netdisk_auth_expired';
+                              // ⛔ 聚合网盘暂时下线：netdisk_auth_expired 专用提示与
+                              // 「登录态过期即删除该连接」的处理一并移除。
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(expired
-                                      ? l10n.netdisk_auth_expired
-                                      : l10n.e13(e.toString())),
+                                  content: Text(l10n.e13(e.toString())),
                                   backgroundColor: Colors.redAccent,
                                 ),
                               );
-                              if (expired) {
-                                await NetworkConnectionsService.deleteConnection(conn.id);
-                                await NetdiskAuthStore.clearAuth(conn.id);
-                                _loadConnections();
-                              }
                             }
                           }
                         },

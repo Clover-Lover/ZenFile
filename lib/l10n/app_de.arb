@@ -8165,6 +8165,7 @@
   },
   "ui_bottom_tab_bar": "Navigationsleiste",
   "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "ui_persistent_tab_bar": "Navigationsleiste auf anderen Seiten beibehalten",
   "ui_pick_bottom_tab": "Untereintrag wählen",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Lange drücken zum Ändern",

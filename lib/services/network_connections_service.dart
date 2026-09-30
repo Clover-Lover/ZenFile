@@ -7,10 +7,16 @@ import 'remote/sftp_client.dart';
 import 'remote/webdav_client.dart';
 import 'remote/lan_client.dart';
 import 'remote/saf_client.dart';
-import 'remote/netdisk/quark_client.dart';
-import 'remote/netdisk/alipan_client.dart';
+// ⛔ 聚合网盘（夸克 / 阿里云盘）功能暂时下线（2026-09-30）：连接仍有问题，留待重做。
+// 恢复步骤：① 取消下面两行 import 的注释；② 恢复 detectRemoteProtocolKind 里的
+// netdisk 分支；③ 恢复 buildRemoteClient 里的 netdisk 分支；④ 恢复各 UI 入口
+// （network_connection_wizard_screen 的添加区、network_category_screen 的连接过滤）。
+// import 'remote/netdisk/quark_client.dart';
+// import 'remote/netdisk/alipan_client.dart';
 
 /// 远程连接协议类型（由 `NetworkConnectionModel.type` 解析而来）。
+///
+/// ⚠️ `netdisk` 目前**不参与解析**（聚合网盘暂时下线），保留枚举值便于恢复。
 enum RemoteProtocolKind { sftp, ftp, webdav, smb, saf, netdisk }
 
 /// 从 `NetworkConnectionModel.type` 解析协议类型。
@@ -26,8 +32,9 @@ enum RemoteProtocolKind { sftp, ftp, webdav, smb, saf, netdisk }
 RemoteProtocolKind? detectRemoteProtocolKind(String? type) {
   if (type == null) return null;
   final t = type.toLowerCase();
-  // 网盘聚合连接：type 以 NETDISK_ 开头（NETDISK_QUARK / NETDISK_ALIPAN）。
-  if (t.contains('netdisk')) return RemoteProtocolKind.netdisk;
+  // ⛔ 聚合网盘暂时下线：不再把 NETDISK_* 识别为网盘协议，残留连接会走
+  // 「不支持的类型」分支，而不是停在半可用状态。
+  // if (t.contains('netdisk')) return RemoteProtocolKind.netdisk;
   if (t.contains('sftp')) return RemoteProtocolKind.sftp;
   if (t.contains('saf')) return RemoteProtocolKind.saf;
   if (t.contains('smb') || t.contains('samba') || t.contains('cifs')) {
@@ -148,12 +155,13 @@ class NetworkConnectionsService {
     if (kind == RemoteProtocolKind.saf) {
       return SafRemoteClient(rootUri: conn.rootPath);
     }
-    if (kind == RemoteProtocolKind.netdisk) {
-      if (conn.type.toLowerCase().contains('quark')) {
-        return QuarkRemoteClient(connection: conn);
-      }
-      return AlipanRemoteClient(connection: conn);
-    }
+    // ⛔ 聚合网盘暂时下线（见文件头说明）：不再构造网盘客户端。
+    // if (kind == RemoteProtocolKind.netdisk) {
+    //   if (conn.type.toLowerCase().contains('quark')) {
+    //     return QuarkRemoteClient(connection: conn);
+    //   }
+    //   return AlipanRemoteClient(connection: conn);
+    // }
     throw ArgumentError('Unsupported connection type: ${conn.type}');
   }
 }

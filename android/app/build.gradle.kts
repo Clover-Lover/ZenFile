@@ -123,4 +123,35 @@ dependencies {
     // OpenSSH-v1 私钥）。注意该分支默认禁用 ssh-rsa，故 SshSftpService.connect
     // 里显式把新旧算法一并列入，以兼容老服务器（见 SshSftpService 注释）。
     implementation("com.github.mwiede:jsch:2.28.7")
+    // 聚合网盘（夸克 / 阿里）的兜底网络栈 Cronet：本轮**故意不引入**，只留说明。
+    // 兜底逻辑本身仍在（lib/services/remote/netdisk/netdisk_http.dart），会自行
+    // 探测失败并永久停在 dart:io，属于安全的空转。
+    //
+    // ⚠️ 为什么不引：2026-09-30 实测在 **AGP 9.1.1** 下引入必构建失败
+    //
+    //   > Task :app:processReleaseMainManifest FAILED
+    //   Namespace 'org.chromium.net' is used in multiple modules and/or libraries:
+    //   org.chromium.net:cronet-embedded:113.5672.61,
+    //   org.chromium.net:cronet-common:113.5672.61,
+    //   org.chromium.net:cronet-api:113.5672.61
+    //
+    // 根因：这三个 AAR 的 AndroidManifest 都写着 package="org.chromium.net"；
+    // AGP 8+ 由该属性推导 library 的 namespace，三者撞名 ⇒ 清单合并的
+    // namespace 唯一性校验直接判失败。而且三者**缺一不可**（已实测类集合互补：
+    //  - cronet-api      49 个顶层类：CronetEngine / CronetEngine.Builder /
+    //                    UrlRequest / CronetProvider（纯 API，无实现）
+    //  - cronet-common   3 个顶层类：CronetEngineBase / CronetEngineBuilderImpl
+    //  - cronet-embedded 88 个顶层类：NativeCronetProvider 等 + 4 个 ABI 的
+    //                    libcronet.113.0.5672.61.so
+    // 且 cronet-embedded 的 POM 又传递依赖 cronet-common）⇒ 不存在「只留一个」的绕法。
+    // 上游在 **143.7445.0** 才给这批 AAR 分配互不相同的 namespace（该版本在
+    // Google Maven 上已核实可用）。
+    //
+    // 另外 cronet_http 插件（钉 1.3.0）自带的开关
+    //   --dart-define=cronetHttpNoPlay=true   （见插件 android/build.gradle:79）
+    // 只是把依赖换成 cronet-embedded:113.5672.61 —— 同一版本、同样撞名，
+    // 在 AGP 9 上一样构建失败，故该开关在本项目同样不可用。
+    //
+    // 结论：先让真机验证 dart:io 是否能直连夸克/阿里（对照实现「文析助手」在同机型上
+    // 就是纯 dart:io 且工作正常）。若确被掐断，再把 cronet-* 抬到 143.7445.0 重评。
 }

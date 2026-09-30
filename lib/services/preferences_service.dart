@@ -1962,6 +1962,18 @@ class PreferencesService {
     await _prefs?.setBool(_keyBottomNavBarEnabled, enabled);
   }
 
+  /// 「导航栏常驻」：是否让底部 4-tab 在其他（壳内）页面也保持显示，默认开启。
+  /// 关闭后，从分类页 / 抽屉等进入的页面恢复为整页全屏（旧行为）。
+  static const String _keyPersistentTabBar = 'persistent_tab_bar';
+
+  static bool getPersistentTabBar({bool defaultValue = true}) {
+    return _prefs?.getBool(_keyPersistentTabBar) ?? defaultValue;
+  }
+
+  static Future<void> savePersistentTabBar(bool enabled) async {
+    await _prefs?.setBool(_keyPersistentTabBar, enabled);
+  }
+
   /// 自定义入口（「自定义」开关）在分类列表中的插入位置（0..分类数，等于分类数=末尾）。
   /// 默认 -1 = 未设置（使用处按分类数末尾处理），避免新装用户自定义卡片跑到最前。
   static const String _keyCustomEntryPosition = 'custom_entry_position';

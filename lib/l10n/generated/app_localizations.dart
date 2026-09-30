@@ -14458,6 +14458,12 @@ abstract class L10n {
   /// **'导航栏'**
   String get ui_bottom_tab_bar;
 
+  /// No description provided for @ui_persistent_tab_bar.
+  ///
+  /// In zh, this message translates to:
+  /// **'导航栏常驻其他页面'**
+  String get ui_persistent_tab_bar;
+
   /// Choose bottom entry
   ///
   /// In zh, this message translates to:

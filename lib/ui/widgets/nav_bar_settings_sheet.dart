@@ -91,6 +91,30 @@ class _NavBarSettingsSheetBody extends StatelessWidget {
                       color: theme.colorScheme.onSurface.withOpacity(0.5),
                     ),
                   ),
+                  const SizedBox(height: 12),
+                  // 「导航栏常驻」：开启时从分类页 / 抽屉进入的页面也保留底部
+                  // 4-tab（只占 body 区域）；关闭则恢复整页全屏。
+                  // 与「自定义快捷方式」页里的同名开关共用同一份 provider 状态。
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.ui_persistent_tab_bar,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color:
+                                theme.colorScheme.onSurface.withOpacity(0.75),
+                          ),
+                        ),
+                      ),
+                      Switch(
+                        value: fileManager.persistentTabBar,
+                        activeColor: theme.colorScheme.primary,
+                        onChanged: (v) => fileManager.setPersistentTabBar(v),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 20),
                   Text(
                     l10n.ui_show_bottom_action_bar,

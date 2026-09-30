@@ -1203,7 +1203,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                                 subtitle: Text(
                                   item.isDirectory
                                       ? L10n.of(context).msg1f4c1042
-                                      : '${item.formattedSize} • ${item.modified.toLocal().toString().substring(0, 10)}',
+                                      : '${item.formattedSize} • ${FileUtils.formatDateOnly(item.modified)}',
                                   style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.4)),
                                 ),
                                 trailing: _isSelectionMode

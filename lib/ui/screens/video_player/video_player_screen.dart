@@ -21,6 +21,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:zenfile/providers/file_manager_provider.dart';
 import 'package:provider/provider.dart';
 import '../internal_file_picker_screen.dart';
+import '../../navigation/shell_navigator.dart';
 import 'video_loading_indicator.dart';
 import 'video_seek_indicator.dart';
 import 'video_controls_overlay.dart';
@@ -2057,6 +2058,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     if (!mounted) return;
     _controlsAnimController.reverse();
     setState(() => _controlsVisible = false);
+    _syncShellImmersive();
   }
 
   void _showControls() {
@@ -2064,6 +2066,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _controlsAnimController.forward();
     setState(() => _controlsVisible = true);
     _startHideTimer();
+    _syncShellImmersive();
+  }
+
+  /// 把「本页是否沉浸」上报给壳层：沉浸时整条导航栏一并收起（视频真正铺满屏幕），
+  /// 控制条被唤出后重新显示。
+  ///
+  /// 锁定（`_isLocked`）不需要单独上报 —— 两个锁定入口都是「先改 `_isLocked`
+  /// 再调 `_hideControls()`/`_showControls()`」，这里能直接读到新值。
+  void _syncShellImmersive() {
+    ShellNavigator.setChildImmersive(!_controlsVisible || _isLocked);
   }
 
   void _toggleControls() {
@@ -2708,6 +2720,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
 
   @override
   void dispose() {
+    // 离开播放页务必复位壳层沉浸态，否则回到首页后底栏会一直藏着。
+    ShellNavigator.setChildImmersive(false);
     // 崩溃定位哨兵：`dispose` 是本页释放 player 前的最后一段 Dart 代码，
     // 若日志停在这一行之后没有更多内容，则崩溃发生在释放链里（见
     // `_disposePlayerAfterEqDetach` 与 `MpvAudioOutputService.abandon`）。

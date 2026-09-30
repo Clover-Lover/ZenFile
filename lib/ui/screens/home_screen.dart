@@ -16,6 +16,7 @@ import 'directory_screen.dart';
 import 'transfers_screen.dart';
 import 'more_settings_screen.dart';
 import 'global_search_screen.dart';
+import '../navigation/shell_navigator.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -136,6 +137,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
   }
 
   void _switchTab(int index) {
+    // 壳内有页面（媒体分类页 / 最近页等）时，先收起它们再切页，
+    // 避免「底栏已切 tab、内容区还停在壳内页面」的错位。
+    if (ShellNavigator.hasPages) ShellNavigator.popAll();
     // 边界保护：IndexedStack 共 4 页（分类/文件/传输/设置），越界 index 直接忽略，
     // 避免 IndexedStack index 越界崩溃。
     if (index < 0 || index > _settingsTabIndex) return;
@@ -278,6 +282,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
       canPop: false,
       onPopInvoked: (didPop) {
         if (didPop) return;
+        // 壳内页面（媒体分类页 / 最近页等）优先：返回键先收起一层壳内页面，
+        // 而不是直接切标签页或退出应用。
+        if (ShellNavigator.hasPages) {
+          ShellNavigator.popOne();
+          return;
+        }
         // 抽屉打开时优先关闭抽屉
         if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
           _scaffoldKey.currentState?.closeDrawer();
@@ -327,8 +337,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
         // 右侧抽屉（endDrawer）已下线：收藏夹改为底部半屏面板。入口为
         // 左抽屉「收藏夹」一项 / 底部导航栏上滑（导航栏开启时）/
         // 浏览页底部操作栏上滑，统一走 FavoritesSheet.show。
-        bottomNavigationBar: _buildNavBottomBar(provider.showBottomActionBar),
-        body: Consumer<FileManagerProvider>(
+        // 订阅「导航栏该不该藏」的两个来源：
+        //  1) childSelectionMode —— 媒体分类页等进入多选，让页面自身操作栏贴底
+        //     （而不是叠在 4-tab 上方）；
+        //  2) childImmersive     —— 视频控制条 / 图片操作按钮被隐藏的沉浸态，
+        //     整条收起把屏幕让给内容，控制条唤出时再显示。
+        bottomNavigationBar: ListenableBuilder(
+          listenable: ShellNavigator.navBarHidden,
+          builder: (_, __) =>
+              _buildNavBottomBar(provider.showBottomActionBar),
+        ),
+        body: ShellBody(
+          child: Consumer<FileManagerProvider>(
           builder: (context, provider, _) {
             return Listener(
               onPointerDown: (event) {
@@ -502,7 +522,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
               },
           child: Column(
             children: [
-              _buildNavTopBar(provider.showBottomActionBar),
+              ListenableBuilder(
+                listenable: ShellNavigator.navBarHidden,
+                builder: (_, __) =>
+                    _buildNavTopBar(provider.showBottomActionBar),
+              ),
               Expanded(
                 child: Consumer<FileManagerProvider>(
             builder: (context, provider, _) {
@@ -564,6 +588,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
         );
       },
     ),
+      ),
   ),
     );
   }
@@ -577,8 +602,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
   Widget _buildNavTopBar(bool bottomTabs) {
     if (bottomTabs) return _buildTopBarRow();
     // 多选操作栏覆盖 4-tab：选择模式（长按多选）时隐藏顶栏 4-tab，
-    // 与底栏行为保持一致。
-    if (context.select<FileManagerProvider, bool>((p) => p.isSelectionMode)) {
+    // 与底栏行为保持一致；壳内页面（媒体分类页等）的局部多选态同理。
+    if (ShellNavigator.childSelectionMode.value ||
+        ShellNavigator.childImmersive.value ||
+        context.select<FileManagerProvider, bool>((p) => p.isSelectionMode)) {
       return SizedBox(height: MediaQuery.of(context).padding.top);
     }
     // 4-tab 在顶栏：关闭时整条收起，只留状态栏高度的空白，
@@ -607,7 +634,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     // 屏幕最底部，而不是悬在导航栏上方。
     final selecting =
         context.select<FileManagerProvider, bool>((p) => p.isSelectionMode);
-    if (selecting) {
+    if (selecting ||
+        ShellNavigator.childSelectionMode.value ||
+        ShellNavigator.childImmersive.value) {
       return SizedBox(height: MediaQuery.of(context).padding.bottom);
     }
     // 位置=顶部：4-tab 在顶栏，底栏固定是工具按钮行。它不受总开关影响，
@@ -936,7 +965,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
       // 默认槽位：第 4 槽默认「最近」（v3.4b2 起替换设置）
       if (slot == 3) {
         setState(() => _activeBottomSlot = slot);
-        Navigator.push(
+        // 「最近」页走壳内导航：保留底部 4-tab（与分类页入口一致）。
+        ShellNavigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => AllRecentFilesScreen(

@@ -22,6 +22,7 @@ import '../../services/image_edit_service.dart';
 import '../../services/preferences_service.dart';
 import '../../services/image_metadata_service.dart';
 import 'image_editor_screen.dart';
+import '../navigation/shell_navigator.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -350,8 +351,19 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     }
   }
 
+  /// 切换沉浸式查看：显隐顶部元信息条 / 底部操作按钮，并把「是否显示导航栏」
+  /// 上报给壳层 —— 沉浸查看时底部 4-tab 一并收起，唤出操作按钮时再显示。
+  void _toggleShellUI() {
+    setState(() {
+      _showUI = !_showUI;
+    });
+    ShellNavigator.setChildImmersive(!_showUI);
+  }
+
   @override
   void dispose() {
+    // 离开查看器务必复位壳层沉浸态，否则回到首页后底栏会一直藏着。
+    ShellNavigator.setChildImmersive(false);
     _pageController.dispose();
     super.dispose();
   }
@@ -1089,9 +1101,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
               },
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _showUI = !_showUI;
-                  });
+                  _toggleShellUI();
                 },
                 child: PhotoViewGallery.builder(
                   scrollPhysics: _isZoomed
@@ -1142,9 +1152,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
                         maxScale: PhotoViewComputedScale.covered * 4,
                         heroAttributes: const PhotoViewHeroAttributes(tag: 'crypt_stream'),
                         onTapUp: (context, details, controllerValue) {
-                          setState(() {
-                            _showUI = !_showUI;
-                          });
+                          _toggleShellUI();
                         },
                       );
                     }
@@ -1239,9 +1247,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
                       maxScale: PhotoViewComputedScale.covered * 4,
                       heroAttributes: PhotoViewHeroAttributes(tag: tagKey),
                       onTapUp: (context, details, controllerValue) {
-                        setState(() {
-                          _showUI = !_showUI;
-                        });
+                        _toggleShellUI();
                       },
                     );
                   },

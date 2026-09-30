@@ -1,3 +1,7 @@
+// ⛔ 聚合网盘（夸克 / 阿里云盘）功能暂时下线 —— 2026-09-30。
+// 原因：登录后进入目录仍有问题，暂不随正式版发布，代码原样保留待下次完善。
+// 本文件目前已无生效引用（不参与构建）；恢复步骤见
+// lib/services/network_connections_service.dart 文件头的说明。
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/icon_fonts/broken_icons.dart';

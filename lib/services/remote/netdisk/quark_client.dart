@@ -1,9 +1,15 @@
+// ⛔ 聚合网盘（夸克 / 阿里云盘）功能暂时下线 —— 2026-09-30。
+// 原因：登录后进入目录仍有问题，暂不随正式版发布，代码原样保留待下次完善。
+// 本文件目前已无生效引用（不参与构建）；恢复步骤见
+// lib/services/network_connections_service.dart 文件头的说明。
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cronet_http/cronet_http.dart';
 import 'package:http/http.dart' as http;
 
+import 'netdisk_http.dart';
+import 'netdisk_log.dart';
+import 'netdisk_ua.dart';
 import '../remote_client.dart';
 import '../../netdisk_auth_store.dart';
 import '../../../models/network_connection_model.dart';
@@ -15,9 +21,8 @@ import '../../../models/network_connection_model.dart';
 /// 目录采用「友好路径 + 目录 id 缓存」两层表示：外部一律使用 `/a/b` 路径，
 /// 客户端在每次列目录时记录子目录 id，需要时按路径逐级解析出目录 id。
 ///
-/// 网络层说明：夸克风控会直接掐断 Dart 默认 TLS 指纹的连接（
-/// Connection closed while receiving data），Android 上改用 Cronet
-/// （Chrome 网络栈，指纹与真实浏览器一致）规避。
+/// 网络层说明：默认走 dart:io；若连接被掐断（Connection closed / 重置 / 超时），
+/// 自动切到 Cronet（Chrome 网络栈）并重试一次，详见 [NetdiskHttp]。
 ///
 /// 说明：
 /// - 下载为网页版普通直链下载，不包含任何加速能力；
@@ -26,12 +31,15 @@ class QuarkRemoteClient extends RemoteClient {
   final NetworkConnectionModel connection;
   QuarkRemoteClient({required this.connection});
 
+  /// 诊断日志标签（日志里显示为 `[netdisk:quark]`）。
+  static const String _tag = 'quark';
+
   static const String _rootFid = '0';
   static const String _apiBase = 'https://drive-pc.quark.cn';
   static const String _webOrigin = 'https://pan.quark.cn';
-  static const String _userAgent =
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-      '(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36';
+  /// 接口请求 UA（客户端 UA，见 [NetdiskUserAgent.quarkClient]）。
+  /// ⚠️ 不要再写死字符串：登录与请求的 UA 分工见该文件说明。
+  static const String _userAgent = NetdiskUserAgent.quarkClient;
 
   String _cookie = '';
 
@@ -44,13 +52,21 @@ class QuarkRemoteClient extends RemoteClient {
   Future<void> connect() async {
     final auth = await NetdiskAuthStore.readAuth(connection.id);
     final cookie = auth?['cookie'] as String?;
+    NetdiskLog.event(
+        _tag,
+        'connect: auth={${auth == null ? 'null' : auth.keys.join(',')}} '
+            'cookie=${cookie == null ? 'null' : '${cookie.length}字'}');
     if (cookie == null || cookie.isEmpty) {
+      NetdiskLog.error(
+          _tag, 'connect', Exception('netdisk_auth_expired：本地无 cookie'));
       throw Exception('netdisk_auth_expired');
     }
     _cookie = cookie;
+    NetdiskLog.event(_tag, '请求 UA = $_userAgent');
     // 连接即验证：列根目录失败视为登录态失效
     await listDirectory('/');
     _connected = true;
+    NetdiskLog.event(_tag, 'connect 成功');
   }
 
   @override
@@ -67,13 +83,6 @@ class QuarkRemoteClient extends RemoteClient {
     } catch (_) {
       return false;
     }
-  }
-
-  /// 创建 HTTP 客户端：Android 用 Cronet（真实浏览器网络栈，规避 TLS 指纹风控），
-  /// 其它平台回退到默认实现。
-  http.Client _newClient() {
-    if (Platform.isAndroid) return CronetClient.defaultCronetEngine();
-    return http.Client();
   }
 
   /// 按路径解析目录 id；缓存未命中时从根目录逐级查找。
@@ -93,6 +102,8 @@ class QuarkRemoteClient extends RemoteClient {
       final match =
           items.where((i) => i.isDirectory && i.name == part).firstOrNull;
       if (match == null) {
+        NetdiskLog.error(_tag, '_resolveFidByWalking',
+            Exception('目录不存在: $part（当前 $currentPath）'));
         throw Exception('目录不存在: $part');
       }
       currentPath = currentPath == '/' ? '/$part' : '$currentPath/$part';
@@ -106,9 +117,10 @@ class QuarkRemoteClient extends RemoteClient {
         'Origin': _webOrigin,
         'Referer': '$_webOrigin/',
         'User-Agent': _userAgent,
-        // 浏览器指纹头：夸克风控要求完整的 Sec-CH-UA 系列
+        // Sec-CH-UA 系列必须与 UA 自称的 Chromium 版本一致，否则指纹自相矛盾
+        // （比不带这些头更容易被风控标记）。quarkClient UA 自称 Chromium/100。
         'Sec-Ch-Ua':
-            '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
+            '"Chromium";v="100", "Not:A-Brand";v="24", "Google Chrome";v="100"',
         'Sec-Ch-Ua-Mobile': '?0',
         'Sec-Ch-Ua-Platform': '"Windows"',
         'Accept': 'application/json, text/plain, */*',
@@ -116,32 +128,77 @@ class QuarkRemoteClient extends RemoteClient {
         'Sec-Fetch-Site': 'same-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Connection': 'keep-alive',
+        // 注意：**不设置** Connection —— dart:io 自行管理连接复用
+        // （HTTP/1.1 默认 keep-alive），手动再塞一个会和它内部逻辑打架。
       };
 
   Future<http.Response> _apiGet(String url) async {
-    final client = _newClient();
+    // 连接级失败自动换栈重试一次（详见 netdisk_http.dart）；业务错误不重试。
+    for (var attempt = 0;; attempt++) {
+      try {
+        return await _apiGetOnce(url);
+      } catch (e) {
+        if (attempt == 0 && NetdiskHttp.escalateIfStackFailure(_tag, e)) {
+          continue;
+        }
+        rethrow; // 详细日志已在 _apiGetOnce 里打过
+      }
+    }
+  }
+
+  Future<http.Response> _apiGetOnce(String url) async {
+    final client = NetdiskHttp.create(_tag);
+    final sw = Stopwatch()..start();
     try {
       final req = http.Request('GET', Uri.parse(url));
       req.headers.addAll(_defaultHeaders());
+      NetdiskLog.request(_tag, 'GET', req.url, headers: req.headers);
       final streamed = await client.send(req)
           .timeout(const Duration(seconds: 20));
-      return await http.Response.fromStream(streamed);
+      final resp = await http.Response.fromStream(streamed);
+      NetdiskLog.response(_tag, resp.statusCode, resp.body, elapsed: sw.elapsed);
+      return resp;
+    } catch (e) {
+      NetdiskLog.error(_tag, 'GET ${NetdiskLog.redactUrl(url)}', e);
+      rethrow;
     } finally {
       client.close();
     }
   }
 
   Future<http.Response> _apiPost(String url, Map<String, dynamic> body) async {
-    final client = _newClient();
+    // 连接级失败自动换栈重试一次（详见 netdisk_http.dart）；业务错误不重试。
+    for (var attempt = 0;; attempt++) {
+      try {
+        return await _apiPostOnce(url, body);
+      } catch (e) {
+        if (attempt == 0 && NetdiskHttp.escalateIfStackFailure(_tag, e)) {
+          continue;
+        }
+        rethrow; // 详细日志已在 _apiPostOnce 里打过
+      }
+    }
+  }
+
+  Future<http.Response> _apiPostOnce(
+      String url, Map<String, dynamic> body) async {
+    final client = NetdiskHttp.create(_tag);
+    final sw = Stopwatch()..start();
     try {
       final req = http.Request('POST', Uri.parse(url));
       req.headers.addAll(_defaultHeaders());
       req.headers['Content-Type'] = 'application/json';
       req.body = json.encode(body);
+      NetdiskLog.request(_tag, 'POST', req.url,
+          headers: req.headers, body: body);
       final streamed = await client.send(req)
           .timeout(const Duration(seconds: 20));
-      return await http.Response.fromStream(streamed);
+      final resp = await http.Response.fromStream(streamed);
+      NetdiskLog.response(_tag, resp.statusCode, resp.body, elapsed: sw.elapsed);
+      return resp;
+    } catch (e) {
+      NetdiskLog.error(_tag, 'POST ${NetdiskLog.redactUrl(url)}', e);
+      rethrow;
     } finally {
       client.close();
     }
@@ -149,14 +206,26 @@ class QuarkRemoteClient extends RemoteClient {
 
   Future<Map<String, dynamic>> _decodeBody(http.Response resp) async {
     if (resp.statusCode != 200) {
+      NetdiskLog.error(
+          _tag,
+          '_decodeBody',
+          Exception(
+              'HTTP ${resp.statusCode}: ${NetdiskLog.snippet(resp.body, 240)}'));
       throw Exception('接口请求失败(${resp.statusCode})');
     }
     final decoded = json.decode(resp.body);
     if (decoded is! Map<String, dynamic>) {
+      NetdiskLog.error(_tag, '_decodeBody',
+          Exception('非 JSON 对象: ${NetdiskLog.snippet(resp.body, 240)}'));
       throw Exception('接口返回异常');
     }
     final status = decoded['status'];
     if (status != 200) {
+      NetdiskLog.error(
+          _tag,
+          '_decodeBody',
+          Exception('业务 status=$status code=${decoded['code']} '
+              'message=${decoded['message']}'));
       throw Exception('接口返回异常(status: $status)');
     }
     return decoded;
@@ -166,6 +235,7 @@ class QuarkRemoteClient extends RemoteClient {
   Future<List<RemoteFileItem>> listDirectory(String path,
       {bool forceRefresh = false}) async {
     final fid = await _resolveFid(path);
+    NetdiskLog.event(_tag, 'listDirectory($path) pdir_fid=$fid');
     final url =
         '$_apiBase/1/clouddrive/file/sort?pr=ucpro&fr=pc&pdir_fid=$fid'
         '&_page=1&_size=200&_sort=file_type:asc,updated_at:desc';
@@ -193,6 +263,7 @@ class QuarkRemoteClient extends RemoteClient {
         modified: _parseTime(e['updated_at']),
       ));
     }
+    NetdiskLog.event(_tag, 'listDirectory($path) → ${items.length} 项');
     return items;
   }
 
@@ -211,6 +282,7 @@ class QuarkRemoteClient extends RemoteClient {
 
   /// 申请文件下载直链（每次申请新链接）。
   Future<String> _getDownloadUrl(String fid) async {
+    NetdiskLog.event(_tag, '_getDownloadUrl fid=$fid');
     final resp = await _apiPost(
       '$_apiBase/1/clouddrive/file/download?pr=ucpro&fr=pc',
       {'fids': [fid]},
@@ -218,13 +290,22 @@ class QuarkRemoteClient extends RemoteClient {
     final body = await _decodeBody(resp);
     final data = body['data'];
     if (data is! List || data.isEmpty) {
+      NetdiskLog.error(
+          _tag,
+          '_getDownloadUrl',
+          Exception('data 为空: ${NetdiskLog.snippet(resp.body, 240)}'));
       throw Exception('获取下载链接失败');
     }
     final first = data.first;
     final url = first is Map<String, dynamic> ? first['download_url'] as String? : null;
     if (url == null || url.isEmpty) {
+      NetdiskLog.error(
+          _tag,
+          '_getDownloadUrl',
+          Exception('download_url 缺失: ${NetdiskLog.snippet(resp.body, 240)}'));
       throw Exception('获取下载链接失败');
     }
+    NetdiskLog.event(_tag, '直链 ok: ${NetdiskLog.redactUrl(url)}');
     return url;
   }
 
@@ -247,7 +328,23 @@ class QuarkRemoteClient extends RemoteClient {
 
   Future<void> _downloadFromUrl(String url, String localPath,
       String? rangeHeader, Function(double progress)? onProgress) async {
-    final client = _newClient();
+    // 连接级失败自动换栈重试一次（详见 netdisk_http.dart）；业务错误不重试。
+    for (var attempt = 0;; attempt++) {
+      try {
+        return await _downloadFromUrlOnce(
+            url, localPath, rangeHeader, onProgress);
+      } catch (e) {
+        if (attempt == 0 && NetdiskHttp.escalateIfStackFailure(_tag, e)) {
+          continue;
+        }
+        rethrow; // 详细日志已在 _downloadFromUrlOnce 里打过
+      }
+    }
+  }
+
+  Future<void> _downloadFromUrlOnce(String url, String localPath,
+      String? rangeHeader, Function(double progress)? onProgress) async {
+    final client = NetdiskHttp.create(_tag);
     try {
       final req = http.Request('GET', Uri.parse(url));
       req.headers.addAll({
@@ -260,8 +357,17 @@ class QuarkRemoteClient extends RemoteClient {
       }
       final streamed = await client.send(req)
           .timeout(const Duration(seconds: 20));
+      NetdiskLog.event(
+          _tag,
+          '下载响应 ${streamed.statusCode} range=${rangeHeader ?? 'null'} '
+              'len=${streamed.contentLength}');
       if (streamed.statusCode != HttpStatus.ok &&
           streamed.statusCode != HttpStatus.partialContent) {
+        NetdiskLog.error(
+            _tag,
+            '下载直链',
+            Exception('HTTP ${streamed.statusCode} '
+                '${NetdiskLog.redactUrl(url)}'));
         throw Exception('下载失败(${streamed.statusCode})');
       }
       final file = File(localPath);
@@ -282,6 +388,7 @@ class QuarkRemoteClient extends RemoteClient {
         }
       }
       await sink.close();
+      NetdiskLog.event(_tag, '下载完成 $localPath ← $received 字节');
     } finally {
       client.close();
     }

@@ -6,6 +6,7 @@ import '../../providers/file_manager_provider.dart';
 import '../../providers/media_provider.dart';
 import '../../models/file_item_model.dart';
 import '../screens/all_recent_files_screen.dart';
+import '../navigation/shell_navigator.dart';
 import 'file_item.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 
@@ -58,7 +59,8 @@ class RecentFilesSection extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
+                    // 走壳内导航：进入「最近」页后底部 4-tab 保持可见。
+                    ShellNavigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => AllRecentFilesScreen(onNavigateTab: onNavigateTab)),
                     );

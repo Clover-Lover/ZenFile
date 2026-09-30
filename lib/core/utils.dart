@@ -42,6 +42,11 @@ class FileUtils {
     return DateFormat('${FileUtils.datePattern}  $timePattern').format(date);
   }
 
+  /// 仅日期（不含时间），跟随用户设置的日期格式。
+  static String formatDateOnly(DateTime date) {
+    return DateFormat(FileUtils.datePattern).format(date);
+  }
+
   /// 紧凑日期（对标 MT 管理器）：今年内「yy-MM-dd HH:mm」（两位年份），
   /// 跨年「yy-MM-dd」（省时间）。比 yyyy-MM-dd HH:mm 短 2~6 字符，
   /// 让日期+时间+文件大小在同一行都能完整显示。日期部分跟随用户

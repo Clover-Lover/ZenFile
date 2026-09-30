@@ -38,6 +38,7 @@ import '../widgets/remote_path_picker.dart';
 import '../widgets/circular_progress_dialog.dart';
 import 'internal_file_picker_screen.dart';
 import 'media_category_settings_screen.dart';
+import '../navigation/shell_navigator.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import '../widgets/progress_overlay.dart';
 import '../../services/crypt/crypt_operations.dart';
@@ -795,6 +796,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         }
       }
     });
+    // 本页多选态是页面局部状态（不进 activeTab.selectedPaths），单独上报给壳层，
+    // 让外层 4-tab 收起、本页操作栏贴底。
+    ShellNavigator.setChildSelectionMode(_isSelectionMode);
   }
 
   void _selectAll(MediaProvider provider) {
@@ -939,6 +943,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       _selectedFilePaths = filePaths;
       _selectedAssetIds = assetIds;
     });
+    ShellNavigator.setChildSelectionMode(_isSelectionMode);
   }
 
   /// 月份归组键（按月分组的「全选只选当前月份」用）
@@ -950,6 +955,14 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       _selectedFilePaths.clear();
       _selectedAssetIds.clear();
     });
+    ShellNavigator.setChildSelectionMode(_isSelectionMode);
+  }
+
+  @override
+  void dispose() {
+    // 离开本页时复位壳层选择态，避免返回首页后 4-tab 被一直隐藏。
+    ShellNavigator.setChildSelectionMode(false);
+    super.dispose();
   }
 
   Future<void> _handleCopyCut(bool isCut) async {

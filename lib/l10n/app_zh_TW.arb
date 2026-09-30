@@ -8316,6 +8316,7 @@
   },
   "ui_bottom_tab_bar": "導覽列",
   "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "ui_persistent_tab_bar": "導覽列常駐其他頁面",
   "ui_pick_bottom_tab": "選擇底部入口",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "長按可替換",

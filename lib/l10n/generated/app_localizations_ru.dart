@@ -8207,6 +8207,10 @@ class L10nRu extends L10n {
   String get ui_bottom_tab_bar => 'Панель навигации';
 
   @override
+  String get ui_persistent_tab_bar =>
+      'Сохранять панель навигации на других страницах';
+
+  @override
   String get ui_pick_bottom_tab => 'Выберите элемент внизу';
 
   @override

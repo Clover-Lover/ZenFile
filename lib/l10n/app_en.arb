@@ -8234,6 +8234,7 @@
   },
   "ui_bottom_tab_bar": "Navigation Bar",
   "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "ui_persistent_tab_bar": "Keep Nav Bar on Other Pages",
   "ui_pick_bottom_tab": "Choose bottom entry",
   "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
   "ui_long_press_switch": "Long press to change",

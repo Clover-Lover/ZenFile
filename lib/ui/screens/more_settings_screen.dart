@@ -914,9 +914,20 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         trailing: Transform.scale(
                           scale: 0.85,
                           child: Switch(
-                            value: fileManager.hideTimeAndDate,
+                            // 开启=显示时间/日期（即 !hideTimeAndDate），关闭=隐藏
+                            value: !fileManager.hideTimeAndDate,
                             activeColor: theme.colorScheme.primary,
-                            onChanged: (_) => fileManager.toggleHideTimeAndDate(),
+                            // 仅在「开启（显示）」时弹出设置面板；关闭不弹。
+                            onChanged: (val) {
+                              fileManager.setHideTimeAndDate(!val);
+                              if (val) {
+                                _showTimeDateFormatPicker(
+                                  context,
+                                  fileManager,
+                                  theme,
+                                );
+                              }
+                            },
                           ),
                         ),
                         trailingInteractive: true,
@@ -1195,125 +1206,124 @@ Widget _buildActionMenuModeOption(
 // 时间与日期格式选择弹窗（顶层函数，供多个设置页面复用）
 // ----------------------------------------------------
 
-/// 「时间与日期格式」选择弹窗：日期格式 3 选 + 时间格式 2 选，
-/// 点「确定」应用并收起。
+/// 「时间与日期格式」选择弹窗：日期格式 3 选 + 时间格式 2 选，点选即时生效。
 Future<void> _showTimeDateFormatPicker(
   BuildContext context,
   FileManagerProvider fileManager,
   ThemeData theme,
 ) async {
   final l10n = L10n.of(context);
-  // 选择状态在弹窗外初始化一次：StatefulBuilder 每次重建都会重新执行 builder，
-  // 若在此处读取偏好，点选后重建会被重置回旧值，导致无法选中。
-  var dateFmt = fileManager.dateFormat;
-  var use24 = fileManager.use24HourFormat;
-  final result = await showModalBottomSheet<(String, bool)>(
+  await showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
+    // 面板内容较高（日期 3 选 + 时间 2 选 + 隐藏开关）：默认底部弹窗被限制在
+    // 9/16 屏高，底部的「确定」会被裁掉、点不到 ⇒ 选择无法应用。这里放开高度
+    // 上限并允许内部滚动；同时把「点选即时生效」作为兜底。
+    isScrollControlled: true,
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.of(context).size.height * 0.85,
+    ),
     builder: (sheetContext) => StatefulBuilder(
       builder: (_, setSheetState) {
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
-                child: Text(
-                  l10n.ui_select_time_date_format,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                  child: Text(
+                    l10n.ui_select_time_date_format,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              _buildPickerSectionLabel(theme, l10n.ui_date_format),
-              _buildDateFormatOption(
-                sheetContext,
-                setSheetState,
-                theme,
-                fmt: 'dd/MM/yyyy',
-                label: l10n.ui_date_fmt_dmy,
-                sample: '30/09/2026',
-                selected: dateFmt,
-                onSelect: (v) => setSheetState(() => dateFmt = v),
-              ),
-              _buildDateFormatOption(
-                sheetContext,
-                setSheetState,
-                theme,
-                fmt: 'MM/dd/yyyy',
-                label: l10n.ui_date_fmt_mdy,
-                sample: '09/30/2026',
-                selected: dateFmt,
-                onSelect: (v) => setSheetState(() => dateFmt = v),
-              ),
-              _buildDateFormatOption(
-                sheetContext,
-                setSheetState,
-                theme,
-                fmt: 'yyyy-MM-dd',
-                label: l10n.ui_date_fmt_ymd,
-                sample: '2026-09-30',
-                selected: dateFmt,
-                onSelect: (v) => setSheetState(() => dateFmt = v),
-              ),
-              _buildPickerSectionLabel(theme, l10n.ui_time_format),
-              _buildTimeFormatOption(
-                sheetContext,
-                setSheetState,
-                theme,
-                use24: true,
-                label: l10n.ui_time_fmt_24h,
-                sample: '21:30',
-                selectedUse24: use24,
-                onSelect: (v) => setSheetState(() => use24 = v),
-              ),
-              _buildTimeFormatOption(
-                sheetContext,
-                setSheetState,
-                theme,
-                use24: false,
-                label: l10n.ui_time_fmt_12h,
-                sample: '09:30 PM',
-                selectedUse24: use24,
-                onSelect: (v) => setSheetState(() => use24 = v),
-              ),
-              const Divider(height: 1, indent: 16, endIndent: 16),
-              SwitchListTile(
-                title: Text(l10n.msg25ee6612),
-                subtitle: Text(l10n.msg337359a6),
-                value: fileManager.hideTimeAndDate,
-                activeColor: theme.colorScheme.primary,
-                onChanged: (_) {
-                  fileManager.toggleHideTimeAndDate();
-                  setSheetState(() {});
-                },
-                contentPadding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: () =>
-                        Navigator.pop(sheetContext, (dateFmt, use24)),
-                    child: Text(l10n.ui_confirm),
+                _buildPickerSectionLabel(theme, l10n.ui_date_format),
+                _buildDateFormatOption(
+                  sheetContext,
+                  setSheetState,
+                  theme,
+                  fmt: 'dd/MM/yyyy',
+                  label: l10n.ui_date_fmt_dmy,
+                  sample: '30/09/2026',
+                  selected: fileManager.dateFormat,
+                  onSelect: (v) {
+                    fileManager.setDateFormat(v);
+                    setSheetState(() {});
+                  },
+                ),
+                _buildDateFormatOption(
+                  sheetContext,
+                  setSheetState,
+                  theme,
+                  fmt: 'MM/dd/yyyy',
+                  label: l10n.ui_date_fmt_mdy,
+                  sample: '09/30/2026',
+                  selected: fileManager.dateFormat,
+                  onSelect: (v) {
+                    fileManager.setDateFormat(v);
+                    setSheetState(() {});
+                  },
+                ),
+                _buildDateFormatOption(
+                  sheetContext,
+                  setSheetState,
+                  theme,
+                  fmt: 'yyyy-MM-dd',
+                  label: l10n.ui_date_fmt_ymd,
+                  sample: '2026-09-30',
+                  selected: fileManager.dateFormat,
+                  onSelect: (v) {
+                    fileManager.setDateFormat(v);
+                    setSheetState(() {});
+                  },
+                ),
+                _buildPickerSectionLabel(theme, l10n.ui_time_format),
+                _buildTimeFormatOption(
+                  sheetContext,
+                  setSheetState,
+                  theme,
+                  use24: true,
+                  label: l10n.ui_time_fmt_24h,
+                  sample: '21:30',
+                  selectedUse24: fileManager.use24HourFormat,
+                  onSelect: (v) {
+                    fileManager.setUse24HourFormat(v);
+                    setSheetState(() {});
+                  },
+                ),
+                _buildTimeFormatOption(
+                  sheetContext,
+                  setSheetState,
+                  theme,
+                  use24: false,
+                  label: l10n.ui_time_fmt_12h,
+                  sample: '09:30 PM',
+                  selectedUse24: fileManager.use24HourFormat,
+                  onSelect: (v) {
+                    fileManager.setUse24HourFormat(v);
+                    setSheetState(() {});
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      // 选择已即时生效，此处只需关闭面板。
+                      onPressed: () => Navigator.pop(sheetContext),
+                      child: Text(l10n.ui_confirm),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
     ),
   );
-  if (result != null) {
-    if (result.$1 != fileManager.dateFormat) {
-      fileManager.setDateFormat(result.$1);
-    }
-    if (result.$2 != fileManager.use24HourFormat) {
-      fileManager.setUse24HourFormat(result.$2);
-    }
-  }
 }
 
 /// 弹窗内分组标题（日期格式 / 时间格式）。
@@ -1898,9 +1908,20 @@ class LayoutSettingsScreen extends StatelessWidget {
               trailing: Transform.scale(
                 scale: 0.85,
                 child: Switch(
-                  value: fileManager.hideTimeAndDate,
+                  // 开启=显示时间/日期，关闭=隐藏
+                  value: !fileManager.hideTimeAndDate,
                   activeColor: theme.colorScheme.primary,
-                  onChanged: (_) => fileManager.toggleHideTimeAndDate(),
+                  // 仅在「开启（显示）」时弹出设置面板；关闭不弹。
+                  onChanged: (val) {
+                    fileManager.setHideTimeAndDate(!val);
+                    if (val) {
+                      _showTimeDateFormatPicker(
+                        context,
+                        fileManager,
+                        theme,
+                      );
+                    }
+                  },
                 ),
               ),
               trailingInteractive: true,
