@@ -40,6 +40,14 @@ const List<String> kRemoteConnectionLostMarkers = <String>[
   'pipe closed',
   'transport closed',
   'client is closed',
+  // socket 层超时 = 底层连接已死（smbj `withSoTimeout` 空闲超时、网络中断等），
+  // 重建连接即可恢复。必须单独列出：Java 的 SocketTimeoutException toString 是
+  // "java.net.SocketTimeoutException: Read timed out"（lowercase 含 read timed
+  // out 但不含 socketexception），不补上会导致会话假死后「无法访问且只能重启
+  // 客户端」（2026-09-30 排查结论：服务端无空闲超时，问题在客户端判定）。
+  'read timed out',
+  'socket timed out',
+  'socket timeout',
 ];
 
 /// 该错误是否属于「连接/会话已失效」类（重连可能救回来）。
