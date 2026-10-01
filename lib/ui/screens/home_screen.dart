@@ -812,7 +812,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     );
     final slot2 = _resolveTabSlot(
       2,
-      defaultIcon: Broken.send_2,
+      defaultIcon: Broken.link,
       defaultLabel: l10n.ui_transfers,
       defaultIndex: 2,
     );
