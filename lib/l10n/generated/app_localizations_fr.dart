@@ -230,6 +230,16 @@ class L10nFr extends L10n {
   String get update_dialog_update => 'Mettre à jour';
 
   @override
+  String get update_startup_prompt => 'Notifier au démarrage';
+
+  @override
+  String get update_dialog_no_remind => 'Ne plus me rappeler';
+
+  @override
+  String get update_prompt_off_hint =>
+      'Notifications de démarrage désactivées. Réactivables sur la page Mise à jour.';
+
+  @override
   String get update_changelog_empty =>
       'Aucun journal des modifications pour cette version';
 

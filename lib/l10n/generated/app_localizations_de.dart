@@ -231,6 +231,16 @@ class L10nDe extends L10n {
   String get update_dialog_update => 'Aktualisieren';
 
   @override
+  String get update_startup_prompt => 'Beim Start benachrichtigen';
+
+  @override
+  String get update_dialog_no_remind => 'Nicht mehr erinnern';
+
+  @override
+  String get update_prompt_off_hint =>
+      'Startbenachrichtigung deaktiviert. Auf der Seite Versionsupdate wieder aktivierbar.';
+
+  @override
   String get update_changelog_empty =>
       'Für diese Version ist kein Änderungsprotokoll verfügbar';
 

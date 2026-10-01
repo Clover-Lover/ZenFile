@@ -230,6 +230,16 @@ class L10nRu extends L10n {
   String get update_dialog_update => 'Обновить';
 
   @override
+  String get update_startup_prompt => 'Уведомлять при запуске';
+
+  @override
+  String get update_dialog_no_remind => 'Больше не напоминать';
+
+  @override
+  String get update_prompt_off_hint =>
+      'Уведомления при запуске отключены. Снова включить можно на странице Обновление.';
+
+  @override
   String get update_changelog_empty =>
       'Для этой версии список изменений не предоставлен';
 

@@ -38,6 +38,7 @@ import 'ui/screens/audio_player/audio_player_screen.dart';
 import 'ui/screens/remote_guard_screen.dart';
 import 'services/remote_guard_service.dart';
 import 'services/net_proxy_service.dart';
+import 'services/update_apk_cache.dart';
 import 'services/update_check_service.dart';
 import 'ui/screens/update_screen.dart';
 
@@ -456,9 +457,14 @@ Future<void> _updateSystemGestureExclusion(bool disableLeftBack, double width, d
 
 /// 启动「发现新版本」弹窗的返回值。
 ///
-/// `null`（返回键 / 点外部关闭）刻意**不映射**到任何分支 ⇒ 不持久化忽略标记，
+/// `null`（返回键 / 点外部关闭）刻意**不映射**到任何分支 ⇒ 不持久化任何标记，
 /// 下次启动仍会提示。
-enum _UpdatePromptAction { ignore, update }
+///
+/// * [ignore] —— **只忽略本次**：什么都不写，下次启动遇到同一版本照样提示；
+/// * [noRemind] —— **不再提醒**：关掉总开关（`update_prompt_enabled`），
+///   与「版本更新」页卡片里的同名开关是同一个键 ⇒ 两边永远一致；
+/// * [update] —— 跳到「版本更新」页。
+enum _UpdatePromptAction { ignore, noRemind, update }
 
 class ZenFileApp extends StatefulWidget {
   const ZenFileApp({super.key});
@@ -994,12 +1000,25 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   ///   所以「从设置页授权回来」触发的第二次权限检查不会再弹一遍；
   /// * **纯静默成功不打扰**：只有 `hasUpdate` 才弹；「已是最新」什么都不做
   ///   （想看结果的人自己去「版本更新」页，那里信息更全）；
-  /// * **「忽略」是持久化的**：记住被忽略的 tag，同版本 / 更低版本以后都不再弹
-  ///   （判据与「版本更新」页共用 [UpdateCheckService.isVersionIgnored]，
-  ///   保证「页面上说已忽略」与「启动不弹」永远一致）。
+  /// * **总开关优先**：用户在「版本更新」页关掉「启动时弹窗提醒」（或点过弹窗里的
+  ///   「不再提醒」）后，这里**一次网络都不发**直接返回 —— 开关是关掉整个功能，
+  ///   不只是关掉那一次弹窗；
+  /// * **「忽略」只忽略本次**：不写任何持久化标记，下次启动该版本仍会提示；
+  ///   想彻底安静只能关总开关（或在旧版曾点过忽略时，用「版本更新」页的
+  ///   「恢复默认」清掉遗留的 [PreferencesService.saveIgnoredUpdateVersion] 标记，
+  ///   判据与「版本更新」页共用 [UpdateCheckService.isVersionIgnored]）；
+  /// * **顺带清缓存**：顺手清一次自动下载留下的历史安装包
+  ///   （[UpdateApkCache]，数量恒定、失败静默），**与弹不弹窗无关**。
   Future<void> _checkUpdateOnStartup() async {
     if (_updatePromptChecked) return;
     _updatePromptChecked = true;
+
+    // 刻意放在总开关判断**之前**：关掉「启动时弹窗提醒」只是关掉提醒，
+    // 不该连带让缓存清理也不再发生。不 await：清理不该拖慢启动。
+    unawaited(UpdateApkCache.sweep());
+
+    // 总开关关掉 ⇒ 连检测请求都不发（既省流量，也避免用户看到「明明关了还联网」）。
+    if (!PreferencesService.getUpdatePromptEnabled()) return;
 
     try {
       final info = await PackageInfo.fromPlatform();
@@ -1033,9 +1052,11 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   }
 
   /// 启动「发现新版本」弹窗。返回后：
-  /// * 选了「忽略」 ⇒ 持久化该版本，之后同版本不再提示；
+  /// * 选了「忽略」 ⇒ **只忽略本次**（不持久化），下次启动仍会提示；
+  /// * 选了「不再提醒」 ⇒ 关掉总开关 [PreferencesService.saveUpdatePromptEnabled]，
+  ///   与「版本更新」页卡片里的开关同步，以后启动都不再弹；
   /// * 选了「更新」 ⇒ 跳到「版本更新」页（下载 / ABI 匹配 / 安装器链路都在那里）；
-  /// * 直接返回（返回键 / 点外部）⇒ 不持久化，下次启动仍会提示。
+  /// * 直接返回（返回键 / 点外部）⇒ 同样什么都不写，下次启动仍会提示。
   Future<void> _showUpdateDialog(UpdateCheckResult result) async {
     if (_updatePromptShowing) return;
     _updatePromptShowing = true;
@@ -1128,6 +1149,11 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
                 onPressed: () => Navigator.pop(ctx, _UpdatePromptAction.ignore),
                 child: Text(l10n.update_dialog_ignore),
               ),
+              TextButton(
+                onPressed: () =>
+                    Navigator.pop(ctx, _UpdatePromptAction.noRemind),
+                child: Text(l10n.update_dialog_no_remind),
+              ),
               FilledButton(
                 onPressed: () => Navigator.pop(ctx, _UpdatePromptAction.update),
                 child: Text(l10n.update_dialog_update),
@@ -1138,11 +1164,35 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
       );
 
       if (action == _UpdatePromptAction.ignore) {
-        await PreferencesService.saveIgnoredUpdateVersion(result.remoteVersion);
+        // 「忽略」= 只忽略**本次**：刻意不写任何持久化标记（既不写总开关，
+        // 也不写 `update_ignored_version`），下次启动遇到同一版本还会提示。
+        // 想彻底安静请点「不再提醒」（关总开关）或在「版本更新」页关开关。
         WebdavDebugLog.log(
-          '[update] startup prompt ignored for '
+          '[update] startup prompt dismissed (this time only) for '
           '${result.remoteVersion}',
         );
+        return;
+      }
+      if (action == _UpdatePromptAction.noRemind) {
+        // 与「版本更新」页卡片里的开关共用同一个键 ⇒ 回那边看开关就是关的。
+        await PreferencesService.saveUpdatePromptEnabled(false);
+        WebdavDebugLog.log('[update] startup prompt disabled by user');
+        // 关掉的是**永久**开关 ⇒ 点错了必须有路回来，所以用 SnackBar 指路
+        // （与「版本更新」页的「已忽略该版本 + 恢复默认」同一个设计原则）。
+        // 拿不到 messenger 就静默跳过：弹提示失败绝不能变成又一次崩溃，
+        // 与 [_notifyCrashReportSaved] 是同一套保守写法。
+        try {
+          final ctx = navigatorKey.currentContext;
+          final messenger = ctx == null ? null : ScaffoldMessenger.maybeOf(ctx);
+          messenger?.showSnackBar(
+            SnackBar(
+              content: Text(l10n.update_prompt_off_hint),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } catch (_) {
+          // 静默：提示失败不影响任何功能
+        }
         return;
       }
       if (action == _UpdatePromptAction.update) {

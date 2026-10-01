@@ -224,6 +224,15 @@ class L10nJa extends L10n {
   String get update_dialog_update => '更新';
 
   @override
+  String get update_startup_prompt => '起動時に通知';
+
+  @override
+  String get update_dialog_no_remind => '今後表示しない';
+
+  @override
+  String get update_prompt_off_hint => '起動時の更新通知をオフにしました。バージョン更新ページで再度オンにできます。';
+
+  @override
   String get update_changelog_empty => 'このバージョンの更新履歴はありません';
 
   @override

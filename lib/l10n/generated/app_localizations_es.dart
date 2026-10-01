@@ -231,6 +231,16 @@ class L10nEs extends L10n {
   String get update_dialog_update => 'Actualizar';
 
   @override
+  String get update_startup_prompt => 'Avisar al iniciar';
+
+  @override
+  String get update_dialog_no_remind => 'No volver a recordar';
+
+  @override
+  String get update_prompt_off_hint =>
+      'Avisos de inicio desactivados. Puedes reactivarlos en la página Actualización.';
+
+  @override
   String get update_changelog_empty =>
       'No hay registro de cambios para esta versión';
 

@@ -1160,6 +1160,25 @@ class PreferencesService {
     }
   }
 
+  /// 「启动时发现新版本弹窗提醒」总开关（默认开）。
+  ///
+  /// 三处共用**同一个键**，不存在第二套状态：「版本更新」页卡片里的开关、
+  /// 启动弹窗的「不再提醒」按钮、[ZenFileApp] 启动检测的早退判据。
+  static const String _keyUpdatePromptEnabled = 'update_prompt_enabled';
+
+  /// 是否在启动时弹窗提示新版本。默认 `true`（老用户行为不变）。
+  static bool getUpdatePromptEnabled() =>
+      _prefs?.getBool(_keyUpdatePromptEnabled) ?? true;
+
+  /// 保存「启动弹窗提醒」开关；回到默认（开）时**移除键**，避免留下与默认同值的脏数据。
+  static Future<void> saveUpdatePromptEnabled(bool enabled) async {
+    if (enabled) {
+      await _prefs?.remove(_keyUpdatePromptEnabled);
+    } else {
+      await _prefs?.setBool(_keyUpdatePromptEnabled, false);
+    }
+  }
+
   /// 获取自动清理天数，0表示不自动清理
   /// @deprecated 保留兼容旧版本，新代码使用 getRemoteCacheAutoCleanMinutes
   static int getRemoteCacheAutoCleanDays() {

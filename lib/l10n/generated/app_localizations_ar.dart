@@ -226,6 +226,16 @@ class L10nAr extends L10n {
   String get update_dialog_update => 'تحديث';
 
   @override
+  String get update_startup_prompt => 'التنبيه عند بدء التشغيل';
+
+  @override
+  String get update_dialog_no_remind => 'عدم التذكير مرة أخرى';
+
+  @override
+  String get update_prompt_off_hint =>
+      'تم إيقاف التنبيه عند بدء التشغيل. يمكنك إعادة تفعيله من صفحة تحديث الإصدار.';
+
+  @override
   String get update_changelog_empty => 'لا يوجد سجل تغييرات لهذا الإصدار';
 
   @override

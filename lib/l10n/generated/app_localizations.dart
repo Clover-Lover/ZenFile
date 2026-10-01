@@ -490,6 +490,24 @@ abstract class L10n {
   /// **'更新'**
   String get update_dialog_update;
 
+  /// No description provided for @update_startup_prompt.
+  ///
+  /// In zh, this message translates to:
+  /// **'启动时弹窗提醒'**
+  String get update_startup_prompt;
+
+  /// No description provided for @update_dialog_no_remind.
+  ///
+  /// In zh, this message translates to:
+  /// **'不再提醒'**
+  String get update_dialog_no_remind;
+
+  /// No description provided for @update_prompt_off_hint.
+  ///
+  /// In zh, this message translates to:
+  /// **'已关闭启动弹窗提醒，可在「版本更新」页重新开启'**
+  String get update_prompt_off_hint;
+
   /// No description provided for @update_changelog_empty.
   ///
   /// In zh, this message translates to:

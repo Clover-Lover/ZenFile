@@ -222,6 +222,16 @@ class L10nKo extends L10n {
   String get update_dialog_update => '업데이트';
 
   @override
+  String get update_startup_prompt => '시작 시 알림';
+
+  @override
+  String get update_dialog_no_remind => '다시 알리지 않음';
+
+  @override
+  String get update_prompt_off_hint =>
+      '시작 시 업데이트 알림을 껐습니다. 버전 업데이트 페이지에서 다시 켤 수 있습니다.';
+
+  @override
   String get update_changelog_empty => '이 버전의 변경 내역이 없습니다';
 
   @override

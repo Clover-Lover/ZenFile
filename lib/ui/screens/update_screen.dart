@@ -5,7 +5,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 
@@ -13,6 +12,7 @@ import '../../core/icon_fonts/broken_icons.dart';
 import '../../services/apk_installer_service.dart';
 import '../../services/net_proxy_service.dart';
 import '../../services/preferences_service.dart';
+import '../../services/update_apk_cache.dart';
 import '../../services/update_check_service.dart';
 import '../../services/webdav_debug_log.dart';
 
@@ -64,6 +64,10 @@ class _UpdateScreenState extends State<UpdateScreen> {
   /// 自定义更新源（镜像 / 自建接口）地址；空 = GitHub 官方源。
   String _apiUrlOverride = '';
 
+  /// 「启动时弹窗提醒」总开关。与启动弹窗的「不再提醒」按钮共用同一个存储键
+  /// （`update_prompt_enabled`）⇒ 用户在任何一处改，另一处立刻反映同样的值。
+  bool _updatePromptEnabled = true;
+
   bool _downloading = false;
   double? _downloadProgress; // null = 服务器未给 contentLength，用不确定进度条
 
@@ -75,6 +79,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
   Future<void> _init() async {
     _apiUrlOverride = PreferencesService.getUpdateApiUrl();
+    _updatePromptEnabled = PreferencesService.getUpdatePromptEnabled();
     try {
       final info = await PackageInfo.fromPlatform();
       _currentVersion = info.version;
@@ -154,7 +159,17 @@ class _UpdateScreenState extends State<UpdateScreen> {
       _downloadProgress = 0;
     });
     final client = HttpClient()..connectionTimeout = const Duration(seconds: 15);
+    // catch 里要删掉半成品，故路径在 try 外声明；解析本身留在 try 内
+    // （解析若抛错也必须落到统一的失败分支，不能让按钮永远停在「下载中」）。
+    String? filePath;
     try {
+      // 目标路径 + 清理都交给 [UpdateApkCache]（安装包缓存的唯一管理者）：
+      // 下载前先清掉历史更新包 —— 用户点「下载安装」就说明上一轮已经结束，
+      // 而自动下载走系统安装器时应用拿不到「装完了没」的回报，只能挑这种
+      // 「上一轮必然已结束」的时机做清理。
+      final file = await UpdateApkCache.targetFile(_remoteVersion);
+      filePath = file.path;
+      await UpdateApkCache.sweep(keepPath: file.path);
       final req = await client
           .getUrl(Uri.parse(url))
           .timeout(const Duration(seconds: 15));
@@ -163,8 +178,6 @@ class _UpdateScreenState extends State<UpdateScreen> {
       if (resp.statusCode != 200) {
         throw HttpException('HTTP ${resp.statusCode}');
       }
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/ZenFile_update_$_remoteVersion.apk');
       final sink = file.openWrite();
       final total = resp.contentLength; // -1 表示未知
       var received = 0;
@@ -188,8 +201,13 @@ class _UpdateScreenState extends State<UpdateScreen> {
         _downloadProgress = null;
       });
       // 走统一安装链路（VirusTotal 扫描开关、系统安装器等逻辑与文件管理器一致）
+      // 装完之后不在这里删：走系统安装器时无法得知用户何时确认，
+      // 立刻删会让安装器读不到文件（详见 [UpdateApkCache] 的说明）。
       await ApkInstallerService.installApk(context, file.path);
     } catch (_) {
+      // 下载失败/被取消留下的半成品必须立刻删掉：它不会被复用（重下会覆盖），
+      // 留着只会一个版本一个文件地堆在私有缓存里。
+      if (filePath != null) await UpdateApkCache.discard(filePath);
       if (!mounted) return;
       setState(() {
         _downloading = false;
@@ -235,6 +253,15 @@ class _UpdateScreenState extends State<UpdateScreen> {
     await PreferencesService.saveIgnoredUpdateVersion('');
     if (!mounted) return;
     setState(() {});
+  }
+
+  /// 开关「启动时弹窗提醒」。
+  ///
+  /// 只写一个键（`update_prompt_enabled`），启动弹窗的「不再提醒」按钮写的是**同一个键**
+  /// ⇒ 两处天然同步，不存在「页面上开着、启动却不弹」这种自相矛盾。
+  Future<void> _setUpdatePromptEnabled(bool value) async {
+    setState(() => _updatePromptEnabled = value);
+    await PreferencesService.saveUpdatePromptEnabled(value);
   }
 
   /// 当前显示的远端版本是否已被用户「忽略」（即启动弹窗不会再提示它）。
@@ -415,7 +442,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
         children: [
           Row(
             children: [
-              Icon(Broken.refresh,
+              // 标题图标 = 「系统更新」箭头（原来用 Broken.refresh，和右侧「重试」
+              // 按钮的 refresh_2 撞脸，看不出这是「版本检测」而不是「刷新」）。
+              Icon(Icons.system_update_alt_rounded,
                   size: 18, color: theme.colorScheme.primary),
               const SizedBox(width: 8),
               Expanded(
@@ -471,6 +500,32 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 ),
               ],
             ),
+          ),
+          // 启动时「发现新版本」弹窗的总开关（与弹窗里的「不再提醒」同一个键）。
+          // 关掉后启动检测连网络都不发（见 main.dart 的 _checkUpdateOnStartup）。
+          Row(
+            children: [
+              Icon(
+                Icons.notifications_active_outlined,
+                size: 13,
+                color: theme.colorScheme.onSurface.withOpacity(0.45),
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  l10n.update_startup_prompt,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                ),
+              ),
+              Switch(
+                value: _updatePromptEnabled,
+                activeColor: theme.colorScheme.primary,
+                onChanged: _setUpdatePromptEnabled,
+              ),
+            ],
           ),
           const SizedBox(height: 12),
           _buildCheckStatus(theme, l10n),
@@ -872,12 +927,55 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.4.0';
+  static const String _latestChangelogVersion = 'v3.4.1';
 
   /// 全部版本的更新日志，**最新在最前**。
-  static const List<_Changelog> _changelogs = <_Changelog>[_v340, _v330, _v320];
+  static const List<_Changelog> _changelogs = <_Changelog>[
+    _v341,
+    _v340,
+    _v330,
+    _v320,
+  ];
 
-  /// ── 当前版本：v3.4.0 ────────────────────────────────────────────────
+  /// ── 当前版本：v3.4.1 ────────────────────────────────────────────────
+  static const _Changelog _v341 = _Changelog(
+    version: 'v3.4.1',
+    date: '2026-10-01',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '分享图片时可以选择「安全分享」：先去掉 EXIF 等元数据，再分享一份临时副本，原图完全不受影响',
+        '「版本更新」页新增「启动时弹窗提醒」开关：关掉后启动时不再检测更新（连网络请求都不会发），随时能在同一张卡片里开回来',
+        '启动时的「发现新版本」弹窗新增「不再提醒」按钮：点一下等同于关掉上面那个开关，两处状态永远同步',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        '「版本更新」页 GitHub 检测卡片的标题图标换成更贴切的「系统更新」图标（旧图标与右侧「重试」的刷新图标撞脸，容易被误认成刷新按钮）',
+        '启动弹窗的「忽略」改为**只忽略本次**：下次启动遇到同一个版本仍会提醒，不再被一次性永久静音；想彻底安静请点「不再提醒」',
+        '底部 4-tab 的「连接」槽位默认图标由「快传」改为「连接」，与分类页的连接入口保持一致',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复文件夹「属性」里的「创建时间」整行消失（issue #39 回归）：改为读取文件系统真实的创建时间，取不到时继续隐藏该行，不再拿「修改时间」冒充',
+        '修复自动下载的更新安装包在应用私有缓存里无限堆积：改为统一管理，每次启动清理超过 24 小时的旧包，下载失败或被取消留下的半成品立刻删除（正在安装的那个不动，否则安装器会读不到文件）',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'Images can now be shared with "Secure share": a temporary copy with EXIF metadata stripped out is shared, leaving the original file untouched',
+        'The Update page has a new "Prompt on startup" switch: turn it off and the app no longer checks for updates on launch (it does not even make a network request); flip it back on any time from the same card',
+        'The startup "New version available" dialog has a new "Do not remind again" button: tapping it is the same as turning that switch off, so the two always stay in sync',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'The title icon of the GitHub check card on the Update page is now a proper system-update icon (the old one clashed with the "Retry" refresh icon next to it and read as a refresh button)',
+        '"Ignore" in the startup dialog now ignores that one prompt only: the next launch shows it again for the same version instead of silencing it forever; use "Do not remind again" to go fully quiet',
+        'The default icon of the "Connection" slot in the 4-tab bar changed from "Quick transfer" to "Connection", matching the Connection entry on the Categories page',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed the folder "Creation Time" row disappearing entirely in Properties (issue #39 regression): the real filesystem creation time is now read, and the row stays hidden when it is unavailable instead of falling back to "Modified"',
+        'Fixed downloaded update packages piling up forever in the app private cache: they are managed centrally now - packages older than 24 hours are cleaned on every launch, and half-written files from failed or cancelled downloads are deleted immediately (the package being installed is left alone, otherwise the installer cannot read it)',
+      ]),
+    ],
+  );
+
+  /// ── 上一版：v3.4.0 ─────────────────────────────────────────────────
   static const _Changelog _v340 = _Changelog(
     version: 'v3.4.0',
     date: '2026-09-30',

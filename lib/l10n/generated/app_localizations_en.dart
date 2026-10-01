@@ -227,6 +227,16 @@ class L10nEn extends L10n {
   String get update_dialog_update => 'Update';
 
   @override
+  String get update_startup_prompt => 'Prompt on startup';
+
+  @override
+  String get update_dialog_no_remind => 'Don\'t remind again';
+
+  @override
+  String get update_prompt_off_hint =>
+      'Startup update prompts turned off. Re-enable it on the Version Update page.';
+
+  @override
   String get update_changelog_empty => 'No changelog provided for this version';
 
   @override

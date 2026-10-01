@@ -223,6 +223,15 @@ class L10nZh extends L10n {
   String get update_dialog_update => '更新';
 
   @override
+  String get update_startup_prompt => '启动时弹窗提醒';
+
+  @override
+  String get update_dialog_no_remind => '不再提醒';
+
+  @override
+  String get update_prompt_off_hint => '已关闭启动弹窗提醒，可在「版本更新」页重新开启';
+
+  @override
   String get update_changelog_empty => '该版本未提供更新日志';
 
   @override
@@ -8019,6 +8028,15 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get update_dialog_update => '更新';
+
+  @override
+  String get update_startup_prompt => '啟動時彈窗提醒';
+
+  @override
+  String get update_dialog_no_remind => '不再提醒';
+
+  @override
+  String get update_prompt_off_hint => '已關閉啟動彈窗提醒，可在「版本更新」頁重新開啟';
 
   @override
   String get update_changelog_empty => '該版本未提供更新日誌';

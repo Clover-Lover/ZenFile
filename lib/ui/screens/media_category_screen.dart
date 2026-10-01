@@ -21,6 +21,7 @@ import '../../core/utils.dart';
 import '../../core/navigator_key.dart';
 import '../../services/app_manager_service.dart';
 import '../../services/media_thumbnail_service.dart';
+import '../../services/file_birth_time_service.dart';
 import '../../models/media_type.dart';
 import 'image_viewer_screen.dart';
 import 'video_player/video_player_screen.dart';
@@ -1510,23 +1511,14 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       } catch (_) {}
     }
 
-    // 创建时间：原生返回 MediaStore 的 DATE_ADDED（文件「加入 / 创建」时间），
-    // 与修改时间不同源，对绝大多数文件天然不相等。取不到（文件夹 / 未扫描的
-    // SD 卡文件 / 通道未注册）时保持 null，下方不显示该行。
+    // 创建时间：优先文件系统真实 birth time（libc statx，**文件夹同样可取得**），
+    // 取不到再回退原生 MediaStore DATE_ADDED（只索引文件，文件夹必然取不到）。
+    // 两路都拿不到时保持 null，下方不显示该行（详见 FileBirthTimeService）。
     if (count == 1 && fullPath.isNotEmpty) {
-      try {
-        const channel = MethodChannel('com.sequl.zenfile/root_shizuku');
-        final raw = await channel.invokeMethod<dynamic>(
-          'getFileCreationTime',
-          {'path': fullPath},
-        );
-        final millis = raw is int ? raw : 0;
-        final upper =
-            DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
-        if (millis > 0 && millis <= upper) {
-          creationTime = DateTime.fromMillisecondsSinceEpoch(millis);
-        }
-      } catch (_) {}
+      creationTime = await FileBirthTimeService.resolve(
+        fullPath,
+        knownModified: lastMod,
+      );
     }
 
     if (!mounted) return;

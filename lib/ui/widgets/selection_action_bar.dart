@@ -17,6 +17,7 @@ import 'package:zenfile/l10n/generated/app_localizations.dart';
 import 'bulk_crypt_actions.dart';
 import 'action_bar_button.dart';
 import '../../services/file_hash_service.dart';
+import '../../services/file_birth_time_service.dart';
 
 class SelectionActionBar extends StatelessWidget {
   final FileManagerProvider provider;
@@ -786,8 +787,9 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
         }
       }
 
-      // 创建时间：仅在本地文件 / 文件夹（已成功 stat 出 _lastModified）时向原生索取；
-      // 不支持 / 通道未注册（旧包）/ 出错则保持 null，UI 不显示该行。
+      // 创建时间：仅在本地文件 / 文件夹（已成功 stat 出 _lastModified）时解析。
+      // 文件系统 birth time（statx）→ MediaStore DATE_ADDED 逐级回退；
+      // 都取不到则保持 null、不显示该行（详见 FileBirthTimeService）。
       if (widget.selectedPaths.length == 1 && _lastModified != null) {
         _creationTime = await _fetchCreationTime(
           widget.selectedPaths.first,
@@ -823,27 +825,16 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
     }
   }
 
-  /// 向原生索取文件创建时间（birth time）。原生在文件系统不支持时返回 0，
-  /// 通道未注册（旧包）/ 异常时抛错 —— 这些情况一律返回 null，UI 不显示「创建时间」行。
+  /// 创建时间：优先文件系统真实 birth time（libc statx，**文件夹同样可取得**），
+  /// 取不到再回退原生 MediaStore DATE_ADDED（只索引文件，文件夹必然取不到）。
+  /// 两路都拿不到时返回 null，UI 隐藏该行 —— 宁可没有，也不拿修改时间冒充（issue #39）。
   Future<DateTime?> _fetchCreationTime(String path, int modifiedMillis) async {
-    try {
-      const channel = MethodChannel('com.sequl.zenfile/root_shizuku');
-      final raw = await channel.invokeMethod<dynamic>(
-        'getFileCreationTime',
-        {'path': path},
-      );
-      final millis = raw is int ? raw : 0;
-      // 原生现在返回 MediaStore 的 DATE_ADDED（文件「加入 / 创建」时间，毫秒）。
-      // 它与修改时间来自不同来源，对绝大多数文件天然不相等；只对脏数据做基本
-      // 合理性校验：必须 > 0 且不超过「现在 + 1 天」，避免异常值被当成创建时间显示。
-      final upper = DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
-      if (millis > 0 && millis <= upper) {
-        return DateTime.fromMillisecondsSinceEpoch(millis);
-      }
-    } catch (_) {
-      // 不支持 / 通道未注册（旧包）/ 任何异常 ⇒ 隐藏该行
-    }
-    return null;
+    return FileBirthTimeService.resolve(
+      path,
+      knownModified: modifiedMillis > 0
+          ? DateTime.fromMillisecondsSinceEpoch(modifiedMillis)
+          : null,
+    );
   }
 
   /// 用户主动点击「计算哈希」后调用：流式计算本地文件的 MD5 与 SHA-256。
