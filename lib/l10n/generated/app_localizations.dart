@@ -14440,6 +14440,12 @@ abstract class L10n {
   /// **'进度条常驻'**
   String get ui_video_progress_always_show;
 
+  /// video player: menu item showing measurable playback diagnostics
+  ///
+  /// In zh, this message translates to:
+  /// **'播放信息'**
+  String get video_playback_info;
+
   /// media settings: ui_image_fit_width
   ///
   /// In zh, this message translates to:
@@ -14623,7 +14629,7 @@ abstract class L10n {
   /// Share mode hint: original file is not modified
   ///
   /// In zh, this message translates to:
-  /// **'分享原始图片，不修改文件'**
+  /// **'分享原始文件，不做任何修改'**
   String get share_normal_share_hint;
 
   /// Share mode: strip metadata (EXIF/GPS) before sharing
@@ -14635,7 +14641,7 @@ abstract class L10n {
   /// Safe share hint: strips location/camera privacy data, original unchanged
   ///
   /// In zh, this message translates to:
-  /// **'去除拍摄地点、相机信息等隐私数据，不修改原图'**
+  /// **'去除拍摄地点、相机信息、文档作者等隐私数据，不改动原文件'**
   String get share_safe_share_hint;
 
   /// Share: no shareable items found
@@ -14649,6 +14655,24 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'准备分享文件时出错：{error}'**
   String share_prepare_error(Object error);
+
+  /// Share: loading dialog title while preparing files
+  ///
+  /// In zh, this message translates to:
+  /// **'正在准备分享…'**
+  String get share_preparing_title;
+
+  /// Share: loading dialog body while preparing files
+  ///
+  /// In zh, this message translates to:
+  /// **'正在处理文件，请稍候'**
+  String get share_preparing_body;
+
+  /// Safe share: files that could not be stripped were shared as-is
+  ///
+  /// In zh, this message translates to:
+  /// **'有 {count} 个文件无法去除元数据（可能已加密），已按普通分享发送'**
+  String share_safe_unsupported(Object count);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

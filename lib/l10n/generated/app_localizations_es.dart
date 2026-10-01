@@ -8228,6 +8228,9 @@ class L10nEs extends L10n {
       'Mostrar siempre la barra de progreso';
 
   @override
+  String get video_playback_info => 'Información de reproducción';
+
+  @override
   String get ui_image_fit_width => 'Ajustar al ancho';
 
   @override
@@ -8330,14 +8333,14 @@ class L10nEs extends L10n {
 
   @override
   String get share_normal_share_hint =>
-      'Compartir la imagen original sin modificarla';
+      'Compartir el archivo original sin modificarlo';
 
   @override
   String get share_safe_share => 'Compartir seguro';
 
   @override
   String get share_safe_share_hint =>
-      'Elimina ubicación, cámara y otros datos privados; la imagen original no cambia';
+      'Elimina ubicación, cámara y datos del documento; el archivo original no cambia';
 
   @override
   String get share_nothing_found =>
@@ -8346,5 +8349,16 @@ class L10nEs extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'Error al preparar los archivos: $error';
+  }
+
+  @override
+  String get share_preparing_title => 'Preparando para compartir…';
+
+  @override
+  String get share_preparing_body => 'Procesando archivos, espera un momento';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return 'No se pudieron eliminar los metadatos de $count archivo(s) (posiblemente cifrados); se compartieron tal cual';
   }
 }

@@ -8446,6 +8446,10 @@
   "@ui_video_progress_always_show": {
     "description": "media settings: ui_video_progress_always_show"
   },
+  "video_playback_info": "播放信息",
+  "@video_playback_info": {
+    "description": "video player: menu item showing measurable playback diagnostics"
+  },
   "ui_image_fit_width": "适应宽度",
   "@ui_image_fit_width": {
     "description": "media settings: ui_image_fit_width"
@@ -8556,14 +8560,20 @@
   },
   "share_normal_share": "普通分享",
   "@share_normal_share": { "description": "Share mode: share original files as-is" },
-  "share_normal_share_hint": "分享原始图片，不修改文件",
+  "share_normal_share_hint": "分享原始文件，不做任何修改",
   "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
   "share_safe_share": "安全分享",
   "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
-  "share_safe_share_hint": "去除拍摄地点、相机信息等隐私数据，不修改原图",
+  "share_safe_share_hint": "去除拍摄地点、相机信息、文档作者等隐私数据，不改动原文件",
   "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
   "share_nothing_found": "未找到可分享的项目。",
   "@share_nothing_found": { "description": "Share: no shareable items found" },
   "share_prepare_error": "准备分享文件时出错：{error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "share_preparing_title": "正在准备分享…",
+  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "share_preparing_body": "正在处理文件，请稍候",
+  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "share_safe_unsupported": "有 {count} 个文件无法去除元数据（可能已加密），已按普通分享发送",
+  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
 }

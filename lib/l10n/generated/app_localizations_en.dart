@@ -8120,6 +8120,9 @@ class L10nEn extends L10n {
   String get ui_video_progress_always_show => 'Always show progress bar';
 
   @override
+  String get video_playback_info => 'Playback info';
+
+  @override
   String get ui_image_fit_width => 'Fit width';
 
   @override
@@ -8219,14 +8222,14 @@ class L10nEn extends L10n {
 
   @override
   String get share_normal_share_hint =>
-      'Share the original image without modifying it';
+      'Share the original file without any modification';
 
   @override
   String get share_safe_share => 'Safe share';
 
   @override
   String get share_safe_share_hint =>
-      'Removes location, camera and other privacy info; original image is unchanged';
+      'Removes location, camera and document metadata; the original file stays untouched';
 
   @override
   String get share_nothing_found => 'No shareable items found.';
@@ -8234,5 +8237,16 @@ class L10nEn extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'Error preparing files for sharing: $error';
+  }
+
+  @override
+  String get share_preparing_title => 'Preparing to share…';
+
+  @override
+  String get share_preparing_body => 'Processing files, please wait';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '$count file(s) could not be stripped of metadata (possibly encrypted) and were shared as-is';
   }
 }

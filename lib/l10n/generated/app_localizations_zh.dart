@@ -7702,6 +7702,9 @@ class L10nZh extends L10n {
   String get ui_video_progress_always_show => '进度条常驻';
 
   @override
+  String get video_playback_info => '播放信息';
+
+  @override
   String get ui_image_fit_width => '适应宽度';
 
   @override
@@ -7794,13 +7797,13 @@ class L10nZh extends L10n {
   String get share_normal_share => '普通分享';
 
   @override
-  String get share_normal_share_hint => '分享原始图片，不修改文件';
+  String get share_normal_share_hint => '分享原始文件，不做任何修改';
 
   @override
   String get share_safe_share => '安全分享';
 
   @override
-  String get share_safe_share_hint => '去除拍摄地点、相机信息等隐私数据，不修改原图';
+  String get share_safe_share_hint => '去除拍摄地点、相机信息、文档作者等隐私数据，不改动原文件';
 
   @override
   String get share_nothing_found => '未找到可分享的项目。';
@@ -7808,6 +7811,17 @@ class L10nZh extends L10n {
   @override
   String share_prepare_error(Object error) {
     return '准备分享文件时出错：$error';
+  }
+
+  @override
+  String get share_preparing_title => '正在准备分享…';
+
+  @override
+  String get share_preparing_body => '正在处理文件，请稍候';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '有 $count 个文件无法去除元数据（可能已加密），已按普通分享发送';
   }
 }
 
@@ -15479,6 +15493,9 @@ class L10nZhTw extends L10nZh {
   String get ui_video_progress_always_show => '進度條常駐';
 
   @override
+  String get video_playback_info => '播放資訊';
+
+  @override
   String get ui_image_fit_width => '適應寬度';
 
   @override
@@ -15571,13 +15588,13 @@ class L10nZhTw extends L10nZh {
   String get share_normal_share => '一般分享';
 
   @override
-  String get share_normal_share_hint => '分享原始圖片，不修改檔案';
+  String get share_normal_share_hint => '分享原始檔案，不做任何修改';
 
   @override
   String get share_safe_share => '安全分享';
 
   @override
-  String get share_safe_share_hint => '移除拍攝地點、相機資訊等隱私資料，不修改原圖';
+  String get share_safe_share_hint => '移除拍攝地點、相機資訊、文件作者等隱私資料，不改動原檔案';
 
   @override
   String get share_nothing_found => '未找到可分享的項目。';
@@ -15585,5 +15602,16 @@ class L10nZhTw extends L10nZh {
   @override
   String share_prepare_error(Object error) {
     return '準備分享檔案時出錯：$error';
+  }
+
+  @override
+  String get share_preparing_title => '正在準備分享…';
+
+  @override
+  String get share_preparing_body => '正在處理檔案，請稍候';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '有 $count 個檔案無法移除中繼資料（可能已加密），已改用一般分享送出';
   }
 }

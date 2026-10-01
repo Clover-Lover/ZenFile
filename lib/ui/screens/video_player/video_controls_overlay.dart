@@ -50,6 +50,7 @@ class VideoControlsOverlay extends StatelessWidget {
   final bool progressAlwaysShow; // 进度条常驻开关状态
   final VoidCallback? onToggleProgressAlwaysShow;
   final bool isBackgroundActive; // 后台播放是否已激活（菜单项高亮）
+  final VoidCallback? onPlaybackInfo; // 「播放信息」（可量化诊断，只读）
 
   const VideoControlsOverlay({
     super.key,
@@ -100,6 +101,7 @@ class VideoControlsOverlay extends StatelessWidget {
     this.progressAlwaysShow = false,
     this.onToggleProgressAlwaysShow,
     this.isBackgroundActive = false,
+    this.onPlaybackInfo,
   });
 
   String _formatDuration(Duration d) {
@@ -266,6 +268,8 @@ class VideoControlsOverlay extends StatelessWidget {
                         onSleepTimer();
                       } else if (value == 'progress_always') {
                         onToggleProgressAlwaysShow?.call();
+                      } else if (value == 'playback_info') {
+                        onPlaybackInfo?.call();
                       }
                     },
                     itemBuilder: (_) => [
@@ -367,6 +371,26 @@ class VideoControlsOverlay extends StatelessWidget {
                               L10n.of(context).ui_video_progress_always_show,
                               style: TextStyle(
                                 color: progressAlwaysShow ? accentColor : Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'playback_info',
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.info_outline_rounded,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              L10n.of(context).video_playback_info,
+                              style: const TextStyle(
+                                color: Colors.white,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

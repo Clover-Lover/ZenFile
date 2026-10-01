@@ -197,6 +197,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   Timer? _frameDropWatchTimer;
   int _frameDropCount = 0; // observeProperty 上报的最新解码器丢帧总数
   int _frameDropBaseline = 0; // 上一个监测窗口结束时的计数值
+  // 下面两个只用于「播放信息」诊断，**不参与降质决策**：
+  // 「解码一帧不丢却明显顿挫」和「解码跟不上」是两种完全不同的卡顿，
+  // 只看解码器丢帧数会把前者判成「很流畅」。两个计数分开给，才能一眼分辨。
+  int _renderDropCount = 0; // frame-drop-count：来不及显示的帧数
+  int _delayedFrameCount = 0; // vo-delayed-frame-count：被延后显示的帧数
   int _cleanWindowsInARow = 0;
   static const Duration _frameDropWindow = Duration(seconds: 2);
   // 一个窗口（2s）内解码器丢帧达到该值即判定「跟不上」，降一级
@@ -350,9 +355,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         // 脉冲式抖动，使 SFTP/FTP/SMB 与 WebDAV 直连一样流畅。此前这些仅在软解模式
         // 才设置，硬解（默认）下 demuxer 缓冲极小，代理轻微抖动即导致 libmpv 缓冲
         // 耗尽而周期性卡顿。WebDAV 直连不经过 Dart 代理故不受影响。
-        await platform.setProperty('cache-secs', '60');
-        await platform.setProperty('demuxer-max-bytes', '300M');
-        await platform.setProperty('demuxer-readahead-secs', '60');
+        //
+        // ⚠️ 只对远程/代理源生效。`demuxer-max-bytes` 不是「预留」而是 mpv **真的
+        // 会吃满**的内存上限：本地文件根本用不上 60s 预读，无条件抬到 300M 只会把
+        // native 侧 RSS 顶高几百 MB，小内存机型被系统拖慢反而更卡。本地这里显式写成
+        // 与 media_kit 的 bufferSize 同值（64M）——这样无论它和 media_kit 自身那份
+        // 默认属性的写入顺序谁先谁后，本地都稳定落在 64M，不出现「谁后写谁生效」。
+        if (_isRemoteSource) {
+          await platform.setProperty('cache-secs', '60');
+          await platform.setProperty('demuxer-max-bytes', '300M');
+          await platform.setProperty('demuxer-readahead-secs', '60');
+        } else {
+          await platform.setProperty('demuxer-max-bytes', '64M');
+          await platform.setProperty('demuxer-readahead-secs', '20');
+        }
         // 注意：不在初始化时设置 sub-ass-override，否则会破坏 VOBSub 位图字幕渲染
         // sub-ass-override 仅在加载 ASS/SSA 字幕时应用（见 _applySubtitle）
         await platform.setProperty('sub-font-size', _subtitleFontSize.round().toString());
@@ -363,6 +379,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           await _applySoftwareDecodeOptimizations(platform);
         } else {
           await _applyVideoOutputQuality(platform, highQuality: true);
+          // 硬解也挂上丢帧观测（不参与降质，见 _onFrameDropWindow）：
+          // 「卡顿」这类反馈没有量化数字根本排不动，这一项是唯一的证据来源。
+          await _startFrameDropWatch(platform);
         }
         // 音频均衡器：绑定到当前 mpv 原生播放器，恢复上次使用的预设
         try {
@@ -430,6 +449,32 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       }
     }
     if (mounted) setState(() {});
+  }
+
+  /// 当前片源是不是「远程 / 本地流式代理」。
+  ///
+  /// 这个判据只用于**性能取舍**（要不要开大缓冲、播放信息里显示哪种源），
+  /// 不参与任何功能分支，所以按路径前缀判断即可。
+  bool get _isRemoteSource {
+    final path = widget.videoPath;
+    return widget.isRemote ||
+        path.startsWith('http://') ||
+        path.startsWith('https://') ||
+        path.startsWith('remote://');
+  }
+
+  /// 「播放信息」里的源类型：用户反馈卡顿时，这一行决定排查方向。
+  String get _sourceKind {
+    final path = widget.videoPath;
+    if (path.startsWith('http://127.0.0.1') ||
+        path.startsWith('http://localhost')) {
+      return 'stream-proxy(127.0.0.1)';
+    }
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return 'http';
+    }
+    if (path.startsWith('remote://')) return 'remote';
+    return 'local';
   }
 
   void _startPlayback() async {
@@ -827,18 +872,48 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _updateActiveCue(Duration pos) {
-    if (_externalCues.isEmpty) {
+    final total = _externalCues.length;
+    if (total == 0) {
       if (_activeCueIndex != -1) {
         _activeCueIndex = -1;
         if (mounted) setState(() {});
       }
       return;
     }
+    // ⚠️ 本方法挂在 position 流上（每秒若干次），此前每 tick 都全量线性扫描
+    // `_externalCues`：一部电影上千条 cue，等于每个进度回调都跑一遍 O(n)。
+    // 播放时绝大多数 tick 只有三种情况，都能 O(1) 判掉：
+    //   ① 仍停在上一条 cue 上；② 刚进入下一条；③ 落在两条之间的间隙里。
+    // 只有跳转（seek）或字幕文件本身乱序时才回退到全量扫描。
+    final current = _activeCueIndex;
     var idx = -1;
-    for (var i = 0; i < _externalCues.length; i++) {
-      if (pos >= _externalCues[i].start && pos <= _externalCues[i].end) {
-        idx = i;
-        break;
+    if (current >= 0 &&
+        current < total &&
+        pos >= _externalCues[current].start &&
+        pos <= _externalCues[current].end) {
+      idx = current;
+    } else {
+      final next = current + 1;
+      if (next < total &&
+          pos >= _externalCues[next].start &&
+          pos <= _externalCues[next].end) {
+        idx = next;
+      } else if (current >= 0 &&
+          current < total &&
+          pos > _externalCues[current].end &&
+          (next >= total || pos < _externalCues[next].start)) {
+        // 间隙：明确没有字幕，不必扫
+        idx = -1;
+      } else if (current < 0 && pos < _externalCues[0].start) {
+        // 片头还没到第一条
+        idx = -1;
+      } else {
+        for (var i = 0; i < total; i++) {
+          if (pos >= _externalCues[i].start && pos <= _externalCues[i].end) {
+            idx = i;
+            break;
+          }
+        }
       }
     }
     if (idx != _activeCueIndex) {
@@ -1408,6 +1483,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _playerSubs.add(
       player.stream.position.listen((p) {
         if (!mounted || _isSeeking) return;
+        // ⚠️ media_kit 对 `time-pos` **不做节流**（mpv 每次属性变化都推一次），
+        // 直接 setState 等于每帧重建整页（控制层 + 播放列表 + 字幕层全在树上）。
+        // 进度条与时间文本都只精确到秒 ⇒ 只在「显示的秒」变了才重建，
+        // 重建频率从每秒几十次压到 1 次。拖动进度条时 `_isSeeking` 为真，
+        // 本分支直接跳过，不会跟手指打架。
+        if (p.inSeconds == _position.inSeconds) return;
         setState(() {
           _position = p;
           _sliderValue = p.inMilliseconds.toDouble();
@@ -1819,11 +1900,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           tag: 'video-switch',
         );
         await platform.setProperty('network-timeout', '60');
-        // 与初始播放一致：所有解码模式都放大缓存/解复用缓冲，掩盖代理喂流抖动
-        // （硬解默认路径此前只有 cache-secs=10，demuxer 缓冲极小 → 远程视频卡顿）。
-        await platform.setProperty('cache-secs', '60');
-        await platform.setProperty('demuxer-max-bytes', '300M');
-        await platform.setProperty('demuxer-readahead-secs', '60');
+        // 与初始播放**同一口径**：只有远程/代理源才放大缓存与解复用缓冲
+        // （硬解默认路径此前只有 cache-secs=10，demuxer 缓冲极小 → 远程视频卡顿）；
+        // 本地文件不需要大预读，`demuxer-max-bytes` 是 mpv 真的会吃满的内存上限，
+        // 无条件抬到 300M 只会顶高 native RSS。本地显式写 64M —— 与 media_kit
+        // 自身那份默认属性同值，避免「谁后写谁生效」的不确定性。
+        if (_isRemoteSource) {
+          await platform.setProperty('cache-secs', '60');
+          await platform.setProperty('demuxer-max-bytes', '300M');
+          await platform.setProperty('demuxer-readahead-secs', '60');
+        } else {
+          await platform.setProperty('demuxer-max-bytes', '64M');
+          await platform.setProperty('demuxer-readahead-secs', '20');
+        }
         await platform.setProperty('sub-font-size', _subtitleFontSize.round().toString());
         await platform.setProperty('sub-pos', _subtitlePosition.round().toString());
         await _applySubtitleBackgroundProps(platform);
@@ -1836,6 +1925,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           await _applySoftwareDecodeOptimizations(platform);
         } else {
           await _applyVideoOutputQuality(platform, highQuality: true);
+          // 硬解同样挂丢帧观测（只采集、不降质），与初始化段落保持一致：
+          // 否则「切一次解码方式」后播放信息里的 frame drops 就断了。
+          await _startFrameDropWatch(platform);
         }
       }
     } catch (e) {
@@ -1943,11 +2035,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       //    异常被 try/catch 吞掉，这条「保流畅」的设置从未真正生效；而为了流畅
       //    又无条件跳滤波牺牲画质，结果「糊」和「不流畅」两头都占。
       await platform.setProperty('framedrop', 'decoder');
-      // 增大解复用缓冲区，减少高码率视频卡顿
-      await platform.setProperty('demuxer-max-bytes', '300M');
-      await platform.setProperty('demuxer-readahead-secs', '60');
-      // 增大播放缓存时长，减少网络视频卡顿
-      await platform.setProperty('cache-secs', '60');
+      // 解复用缓冲 / 缓存：与初始化段落**同一口径** —— 只有远程/代理源才放大。
+      // ⚠️ 这里曾经无条件写 300M/60s，而它被初始化的软解分支直接调用 ⇒ 本地软解
+      // 播放照样会把 native RSS 顶高几百 MB（本地磁盘预读 20s 早已足够）。
+      if (_isRemoteSource) {
+        await platform.setProperty('demuxer-max-bytes', '300M');
+        await platform.setProperty('demuxer-readahead-secs', '60');
+        await platform.setProperty('cache-secs', '60');
+      }
       // 画质优先档位起步（不跳滤波 + spline36）
       _swQualityTier = 0;
       _cleanWindowsInARow = 0;
@@ -1980,6 +2075,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     try {
       _frameDropCount = 0;
       _frameDropBaseline = 0;
+      _renderDropCount = 0;
+      _delayedFrameCount = 0;
       await platform.observeProperty('decoder-frame-drop-count', (value) async {
         final n = int.tryParse(value.trim()) ?? 0;
         // 打开新片源时计数会归零，此时重置基线并回到画质优先，不误判为「流畅」
@@ -1990,6 +2087,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         }
         _frameDropCount = n;
       });
+      // 诊断专用（见字段注释）。两个属性只要有一个在某个 mpv 版本/渲染后端上不存在，
+      // 就会抛异常把后面的注册一起带走，所以各自独立 try，互不牵连。
+      await _observeDiagnosticCounter(
+        platform,
+        'frame-drop-count',
+        (v) => _renderDropCount = v,
+      );
+      await _observeDiagnosticCounter(
+        platform,
+        'vo-delayed-frame-count',
+        (v) => _delayedFrameCount = v,
+      );
       _frameDropWatchTimer = Timer.periodic(
         _frameDropWindow,
         (_) => unawaited(_onFrameDropWindow()),
@@ -1999,18 +2108,41 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     }
   }
 
+  /// 注册一个「只读诊断计数」观察属性，失败只写调试日志、不向上抛。
+  ///
+  /// 这些属性名是 mpv 版本/渲染后端相关的（有的只在特定 vo 下存在），注册失败
+  /// 不应该影响播放，更不应该连带影响其它观察属性的注册。
+  Future<void> _observeDiagnosticCounter(
+    NativePlayer platform,
+    String property,
+    void Function(int) assign,
+  ) async {
+    try {
+      await platform.observeProperty(property, (value) async {
+        final n = int.tryParse(value.trim());
+        if (n != null) assign(n);
+      });
+    } catch (e) {
+      debugPrint('诊断计数 $property 注册失败（不影响播放）: $e');
+    }
+  }
+
   void _stopFrameDropWatch() {
     _frameDropWatchTimer?.cancel();
     _frameDropWatchTimer = null;
   }
 
   /// 一个监测窗口结束：根据丢帧增量决定升档/降档。
+  ///
+  /// 硬解模式下本方法只更新基线（帧数在「播放信息」里给用户看），不做任何降质：
+  /// 画质档位调的是 `vd-lavc-*` 这一组属性，硬解路径不走 libavcodec，改了也没用。
   Future<void> _onFrameDropWindow() async {
     if (!mounted) return;
     final platform = player.platform;
     if (platform is! NativePlayer) return;
     final delta = _frameDropCount - _frameDropBaseline;
     _frameDropBaseline = _frameDropCount;
+    if (_useHardwareDecode) return;
     if (delta >= _frameDropDowngradeThreshold) {
       // 解码持续跟不上：降一级画质换流畅
       _cleanWindowsInARow = 0;
@@ -2043,6 +2175,74 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     if (_currentFilePath != null) {
       PreferencesService.clearVideoPlaybackPosition(_currentFilePath!);
     }
+  }
+
+  /// 「播放信息」：把「卡顿」这类没法复现的反馈，换成一串能抄下来发给开发者的数字。
+  ///
+  /// 全部是只读状态（**刻意不读裸原生属性** —— 用户手动触发时 player 可能正在退役，
+  /// 裸 `getProperty` 撞上 use-after-free 是抓不住的崩溃），因此看多少次都不会改变
+  /// 播放行为。字段名沿用 mpv 的术语，方便对照官方文档。
+  Future<void> _showPlaybackInfo() async {
+    final vp = player.state.videoParams;
+    final ap = player.state.audioParams;
+    final hasVideo = vp.w != null || vp.pixelformat != null;
+    final video = hasVideo
+        ? '${vp.w}x${vp.h} ${vp.pixelformat ?? '?'}'
+            '${vp.hwPixelformat != null ? ' hw=${vp.hwPixelformat}' : ''}'
+        : 'n/a';
+    final hasAudio = ap.sampleRate != null || ap.format != null;
+    final audio = hasAudio
+        ? '${ap.sampleRate ?? '?'}Hz ${ap.channelCount ?? '?'}ch '
+            '${ap.format ?? '?'}'
+        : 'n/a';
+    final decode = _useHardwareDecode
+        ? 'hardware (hwdec=auto-safe)'
+        : 'software (hwdec=no)';
+    final text = <String>[
+      'source      : $_sourceKind',
+      'decode      : $decode',
+      'video       : $video',
+      'audio       : $audio',
+      'color       : ${vp.primaries ?? '?'} / ${vp.colormatrix ?? '?'}',
+      // 三个计数分开列：dec=解码跟不上、render=来不及显示、delayed=被延后显示。
+      // 「卡顿」到底是哪一类，看这三行就能定，不用再猜。
+      'dec drops   : $_frameDropCount',
+      'render drops: $_renderDropCount',
+      'delayed frm : $_delayedFrameCount',
+      'buffer      : ${player.state.buffer.inMilliseconds} ms',
+      'buffering   : ${player.state.buffering}',
+      'playing     : ${player.state.playing}',
+      'quality tier: $_swQualityTier (voCompat=$_voCompatMode)',
+      'position    : ${_position.inSeconds}s / ${_duration.inSeconds}s',
+    ].join('\n');
+
+    if (!mounted) return;
+    final l10n = L10n.of(context);
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.video_playback_info),
+        content: SingleChildScrollView(
+          child: SelectableText(
+            text,
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: text));
+              Navigator.pop(ctx);
+            },
+            child: Text(l10n.ui_copy),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.ui_close),
+          ),
+        ],
+      ),
+    );
   }
 
   void _startHideTimer() {
@@ -3799,6 +3999,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                       PreferencesService.saveVideoProgressAlwaysShow(_alwaysShowProgress);
                     },
                     isBackgroundActive: _isBackgroundMode,
+                    onPlaybackInfo: _showPlaybackInfo,
                   ),
                 ],
               ),

@@ -8247,6 +8247,9 @@ class L10nFr extends L10n {
       'Toujours afficher la barre de progression';
 
   @override
+  String get video_playback_info => 'Infos de lecture';
+
+  @override
   String get ui_image_fit_width => 'Ajuster à la largeur';
 
   @override
@@ -8350,14 +8353,14 @@ class L10nFr extends L10n {
 
   @override
   String get share_normal_share_hint =>
-      'Partager l\'image originale sans la modifier';
+      'Partager le fichier original sans le modifier';
 
   @override
   String get share_safe_share => 'Partage sécurisé';
 
   @override
   String get share_safe_share_hint =>
-      'Supprime la localisation, l\'appareil et autres données privées ; l\'image originale est inchangée';
+      'Supprime la localisation, l\'appareil et les métadonnées du document ; le fichier original reste intact';
 
   @override
   String get share_nothing_found => 'Aucun élément à partager.';
@@ -8365,5 +8368,17 @@ class L10nFr extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'Erreur lors de la préparation des fichiers : $error';
+  }
+
+  @override
+  String get share_preparing_title => 'Préparation du partage…';
+
+  @override
+  String get share_preparing_body =>
+      'Traitement des fichiers, veuillez patienter';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return 'Impossible de supprimer les métadonnées de $count fichier(s) (peut-être chiffrés) ; ils ont été partagés tels quels';
   }
 }

@@ -7872,6 +7872,9 @@ class L10nJa extends L10n {
   String get ui_video_progress_always_show => 'プログレスバー常時表示';
 
   @override
+  String get video_playback_info => '再生情報';
+
+  @override
   String get ui_image_fit_width => '幅に合わせる';
 
   @override
@@ -7964,13 +7967,14 @@ class L10nJa extends L10n {
   String get share_normal_share => '通常共有';
 
   @override
-  String get share_normal_share_hint => '元の画像を変更せずに共有します';
+  String get share_normal_share_hint => '元のファイルを変更せずに共有します';
 
   @override
   String get share_safe_share => '安全に共有';
 
   @override
-  String get share_safe_share_hint => '位置情報やカメラ情報などのプライバシーデータを削除。元画像は変更されません';
+  String get share_safe_share_hint =>
+      '位置情報・カメラ情報・文書の作成者などのプライバシーデータを削除。元のファイルは変更されません';
 
   @override
   String get share_nothing_found => '共有できる項目が見つかりません。';
@@ -7978,5 +7982,16 @@ class L10nJa extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'ファイルの準備中にエラーが発生しました：$error';
+  }
+
+  @override
+  String get share_preparing_title => '共有の準備中…';
+
+  @override
+  String get share_preparing_body => 'ファイルを処理しています。しばらくお待ちください';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '$count 件のファイルはメタデータを削除できず（暗号化の可能性）、そのまま共有しました';
   }
 }

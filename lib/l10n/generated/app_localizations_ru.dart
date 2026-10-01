@@ -8199,6 +8199,9 @@ class L10nRu extends L10n {
   String get ui_video_progress_always_show => 'Всегда показывать прогресс';
 
   @override
+  String get video_playback_info => 'Сведения о воспроизведении';
+
+  @override
   String get ui_image_fit_width => 'По ширине';
 
   @override
@@ -8306,7 +8309,7 @@ class L10nRu extends L10n {
 
   @override
   String get share_safe_share_hint =>
-      'Удаляет местоположение, данные камеры и другую личную информацию; оригинал не изменяется';
+      'Удаляет местоположение, данные камеры и метаданные документа; оригинал не изменяется';
 
   @override
   String get share_nothing_found => 'Не найдено элементов для отправки.';
@@ -8314,5 +8317,16 @@ class L10nRu extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'Ошибка при подготовке файлов: $error';
+  }
+
+  @override
+  String get share_preparing_title => 'Подготовка к отправке…';
+
+  @override
+  String get share_preparing_body => 'Обработка файлов, подождите';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return 'Не удалось удалить метаданные у $count файл(ов) (возможно, они зашифрованы) — отправлены как есть';
   }
 }

@@ -8146,6 +8146,10 @@
   "@ui_video_progress_always_show": {
     "description": "media settings: ui_video_progress_always_show"
   },
+  "video_playback_info": "Wiedergabe-Info",
+  "@video_playback_info": {
+    "description": "video player: menu item showing measurable playback diagnostics"
+  },
   "ui_image_fit_width": "An Breite anpassen",
   "@ui_image_fit_width": {
     "description": "media settings: ui_image_fit_width"
@@ -8256,14 +8260,20 @@
   },
   "share_normal_share": "Normale Freigabe",
   "@share_normal_share": { "description": "Share mode: share original files as-is" },
-  "share_normal_share_hint": "Originalbild ohne Änderungen teilen",
+  "share_normal_share_hint": "Originaldatei ohne Änderungen teilen",
   "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
   "share_safe_share": "Sichere Freigabe",
   "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
-  "share_safe_share_hint": "Entfernt Standort-, Kamera- und andere private Daten; Originalbild bleibt unverändert",
+  "share_safe_share_hint": "Entfernt Standort-, Kamera- und Dokumentdaten; die Originaldatei bleibt unverändert",
   "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
   "share_nothing_found": "Keine teilbaren Elemente gefunden.",
   "@share_nothing_found": { "description": "Share: no shareable items found" },
   "share_prepare_error": "Fehler beim Vorbereiten der Dateien: {error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "share_preparing_title": "Teilen wird vorbereitet…",
+  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "share_preparing_body": "Dateien werden verarbeitet, bitte warten",
+  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "share_safe_unsupported": "Bei {count} Datei(en) konnten die Metadaten nicht entfernt werden (möglicherweise verschlüsselt); sie wurden unverändert geteilt",
+  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
 }

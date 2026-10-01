@@ -8211,6 +8211,9 @@ class L10nDe extends L10n {
       'Fortschrittsbalken immer anzeigen';
 
   @override
+  String get video_playback_info => 'Wiedergabe-Info';
+
+  @override
   String get ui_image_fit_width => 'An Breite anpassen';
 
   @override
@@ -8312,14 +8315,14 @@ class L10nDe extends L10n {
   String get share_normal_share => 'Normale Freigabe';
 
   @override
-  String get share_normal_share_hint => 'Originalbild ohne Änderungen teilen';
+  String get share_normal_share_hint => 'Originaldatei ohne Änderungen teilen';
 
   @override
   String get share_safe_share => 'Sichere Freigabe';
 
   @override
   String get share_safe_share_hint =>
-      'Entfernt Standort-, Kamera- und andere private Daten; Originalbild bleibt unverändert';
+      'Entfernt Standort-, Kamera- und Dokumentdaten; die Originaldatei bleibt unverändert';
 
   @override
   String get share_nothing_found => 'Keine teilbaren Elemente gefunden.';
@@ -8327,5 +8330,16 @@ class L10nDe extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'Fehler beim Vorbereiten der Dateien: $error';
+  }
+
+  @override
+  String get share_preparing_title => 'Teilen wird vorbereitet…';
+
+  @override
+  String get share_preparing_body => 'Dateien werden verarbeitet, bitte warten';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return 'Bei $count Datei(en) konnten die Metadaten nicht entfernt werden (möglicherweise verschlüsselt); sie wurden unverändert geteilt';
   }
 }

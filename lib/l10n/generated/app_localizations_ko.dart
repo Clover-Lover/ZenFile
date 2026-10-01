@@ -7879,6 +7879,9 @@ class L10nKo extends L10n {
   String get ui_video_progress_always_show => '진행 바 항상 표시';
 
   @override
+  String get video_playback_info => '재생 정보';
+
+  @override
   String get ui_image_fit_width => '너비에 맞추기';
 
   @override
@@ -7971,13 +7974,14 @@ class L10nKo extends L10n {
   String get share_normal_share => '일반 공유';
 
   @override
-  String get share_normal_share_hint => '원본 이미지를 수정하지 않고 공유합니다';
+  String get share_normal_share_hint => '원본 파일을 수정하지 않고 공유합니다';
 
   @override
   String get share_safe_share => '안전 공유';
 
   @override
-  String get share_safe_share_hint => '위치, 카메라 등 개인 정보를 제거하며 원본 이미지는 변경되지 않습니다';
+  String get share_safe_share_hint =>
+      '위치, 카메라, 문서 작성자 등 개인 정보를 제거하며 원본 파일은 변경되지 않습니다';
 
   @override
   String get share_nothing_found => '공유할 항목을 찾을 수 없습니다.';
@@ -7985,5 +7989,16 @@ class L10nKo extends L10n {
   @override
   String share_prepare_error(Object error) {
     return '파일 준비 중 오류가 발생했습니다: $error';
+  }
+
+  @override
+  String get share_preparing_title => '공유 준비 중…';
+
+  @override
+  String get share_preparing_body => '파일을 처리하는 중입니다. 잠시만 기다려 주세요';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '$count개 파일은 메타데이터를 제거할 수 없어(암호화 가능성) 그대로 공유했습니다';
   }
 }

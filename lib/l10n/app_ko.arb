@@ -8149,6 +8149,10 @@
   "@ui_video_progress_always_show": {
     "description": "media settings: ui_video_progress_always_show"
   },
+  "video_playback_info": "재생 정보",
+  "@video_playback_info": {
+    "description": "video player: menu item showing measurable playback diagnostics"
+  },
   "ui_image_fit_width": "너비에 맞추기",
   "@ui_image_fit_width": {
     "description": "media settings: ui_image_fit_width"
@@ -8259,14 +8263,20 @@
   },
   "share_normal_share": "일반 공유",
   "@share_normal_share": { "description": "Share mode: share original files as-is" },
-  "share_normal_share_hint": "원본 이미지를 수정하지 않고 공유합니다",
+  "share_normal_share_hint": "원본 파일을 수정하지 않고 공유합니다",
   "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
   "share_safe_share": "안전 공유",
   "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
-  "share_safe_share_hint": "위치, 카메라 등 개인 정보를 제거하며 원본 이미지는 변경되지 않습니다",
+  "share_safe_share_hint": "위치, 카메라, 문서 작성자 등 개인 정보를 제거하며 원본 파일은 변경되지 않습니다",
   "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
   "share_nothing_found": "공유할 항목을 찾을 수 없습니다.",
   "@share_nothing_found": { "description": "Share: no shareable items found" },
   "share_prepare_error": "파일 준비 중 오류가 발생했습니다: {error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "share_preparing_title": "공유 준비 중…",
+  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "share_preparing_body": "파일을 처리하는 중입니다. 잠시만 기다려 주세요",
+  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "share_safe_unsupported": "{count}개 파일은 메타데이터를 제거할 수 없어(암호화 가능성) 그대로 공유했습니다",
+  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
 }

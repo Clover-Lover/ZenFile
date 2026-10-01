@@ -8090,6 +8090,9 @@ class L10nAr extends L10n {
   String get ui_video_progress_always_show => 'إظهار شريط التقدم دائمًا';
 
   @override
+  String get video_playback_info => 'معلومات التشغيل';
+
+  @override
   String get ui_image_fit_width => 'ملاءمة العرض';
 
   @override
@@ -8189,14 +8192,14 @@ class L10nAr extends L10n {
   String get share_normal_share => 'مشاركة عادية';
 
   @override
-  String get share_normal_share_hint => 'مشاركة الصورة الأصلية دون تعديلها';
+  String get share_normal_share_hint => 'مشاركة الملف الأصلي دون أي تعديل';
 
   @override
   String get share_safe_share => 'مشاركة آمنة';
 
   @override
   String get share_safe_share_hint =>
-      'يزيل الموقع وبيانات الكاميرا وغيرها من المعلومات الخاصة؛ الصورة الأصلية لا تتغير';
+      'يزيل الموقع وبيانات الكاميرا وبيانات المستند؛ الملف الأصلي لا يتغير';
 
   @override
   String get share_nothing_found => 'لم يتم العثور على عناصر للمشاركة.';
@@ -8204,5 +8207,16 @@ class L10nAr extends L10n {
   @override
   String share_prepare_error(Object error) {
     return 'خطأ أثناء تجهيز الملفات: $error';
+  }
+
+  @override
+  String get share_preparing_title => 'جارٍ التحضير للمشاركة…';
+
+  @override
+  String get share_preparing_body => 'جارٍ معالجة الملفات، يُرجى الانتظار';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return 'تعذّرت إزالة البيانات الوصفية من $count ملف/ملفات (قد تكون مشفّرة)، وتمت مشاركتها كما هي';
   }
 }
