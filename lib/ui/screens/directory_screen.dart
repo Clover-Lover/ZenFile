@@ -770,6 +770,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
         provider.showOpenWithSheet(context, path);
         break;
       case 'pin':
+      case 'pin_to_top':
+      case 'unpin':
         await provider.togglePinPath(path);
         break;
       case 'set_as_home':

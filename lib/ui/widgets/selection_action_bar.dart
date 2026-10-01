@@ -451,7 +451,7 @@ class SelectionActionBar extends StatelessWidget {
                             value: 'encrypt',
                             child: Row(
                               children: [
-                                const Icon(Icons.lock, size: 20),
+                                const Icon(Broken.lock, size: 20),
                                 const SizedBox(width: 12),
                                 Text(
                                   L10n.of(context).vault_action_encrypt,
@@ -467,7 +467,7 @@ class SelectionActionBar extends StatelessWidget {
                             value: 'decrypt',
                             child: Row(
                               children: [
-                                const Icon(Icons.lock_open, size: 20),
+                                const Icon(Broken.unlock, size: 20),
                                 const SizedBox(width: 12),
                                 Text(
                                   // 远程「解密」＝解密到本地 + 回写替换远程原密文

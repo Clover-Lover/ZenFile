@@ -17,6 +17,7 @@ import 'drag_drop_action_dialog.dart';
 import 'cut_destination_sheet.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../../services/app_manager_service.dart';
+import '../../services/pin_service.dart';
 import '../../core/utils.dart';
 import '../../services/remote/remote_error_localizer.dart';
 import 'file_grid_item.dart';
@@ -389,6 +390,10 @@ class _PaneBrowserState extends State<PaneBrowser> {
         break;
       case 'share':
         await FolderShareService.sharePaths(context, [path]);
+        break;
+      case 'pin_to_top':
+      case 'unpin':
+        await provider.togglePinPath(path);
         break;
       case 'favorite':
         final name = p.posix.basename(path);
@@ -1492,6 +1497,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                       // 需传 filePath 才会显示加/解密项；远程加密目录据此显示「解密下载」
                       filePath: folder.path,
                       isEncrypted: folder.isEncrypted,
+                      isPinned: PinService.isPinned(folder.path),
                     );
                   },
                 ),
@@ -1668,6 +1674,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                       // 需传 filePath 才会显示加/解密项；远程加密文件据此显示「解密下载」
                       filePath: file.path,
                       isEncrypted: file.isEncrypted,
+                      isPinned: PinService.isPinned(file.path),
                     );
                   },
                 ),

@@ -22,13 +22,13 @@ import '../../core/navigator_key.dart';
 import '../../services/app_manager_service.dart';
 import '../../services/media_thumbnail_service.dart';
 import '../../services/file_birth_time_service.dart';
+import '../../services/folder_share_service.dart';
 import '../../models/media_type.dart';
 import 'image_viewer_screen.dart';
 import 'video_player/video_player_screen.dart';
 import 'audio_player/audio_player_screen.dart';
 import '../../core/icon_fonts/broken_icons.dart';
 import '../widgets/action_bar_button.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/file_action_dialogs.dart';
 import '../widgets/batch_rename_dialog.dart';
@@ -1163,30 +1163,22 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       }
     }
 
-    final filesToShare = <XFile>[];
-    for (final path in filePaths) {
-      if (FileSystemEntity.isFileSync(path)) {
-        filesToShare.add(XFile(path));
-      }
-    }
-
-    if (filesToShare.isNotEmpty) {
-      try {
-        await Share.shareXFiles(filesToShare);
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(L10n.of(context).e10(e))));
-        }
-      }
-    } else {
+    final exist = filePaths.where(FileSystemEntity.isFileSync).toList();
+    if (exist.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(L10n.of(context).msgfadbb0bc)));
       }
+      return;
     }
+
+    // ⚠️ 必须走 [FolderShareService] 而不是直连 `Share.shareXFiles`：
+    // 全库分享只有一个入口，JPEG/PNG 才会弹出「普通分享 / 安全分享」选择。
+    // 此前分类页两处（本方法与 _showSingleItemOptions 的「分享」项）各自直连
+    // `Share.shareXFiles`，导致「安全分享」只在图片查看器/文件管理器里出现，
+    // 分类页三点菜单里没有（多入口不一致）。
+    await FolderShareService.sharePaths(context, exist);
   }
 
   Future<void> _handleBatchRename() async {
@@ -1958,7 +1950,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           ),
         if (filePath != null)
           ActionItem(
-            icon: isEncrypted ? Icons.lock_open : Icons.lock,
+            icon: isEncrypted ? Broken.unlock : Broken.lock,
             label: isEncrypted
                 ? L10n.of(context).crypt_action_decrypt
                 : L10n.of(context).vault_action_encrypt,
@@ -1968,6 +1960,16 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               } else {
                 _handleEncrypt(context, filePath!);
               }
+            },
+          ),
+        if (filePath != null)
+          ActionItem(
+            icon: Icons.push_pin,
+            label: PinService.isPinned(filePath)
+                ? L10n.of(context).ui_unpin
+                : L10n.of(context).ui_pin_to_top,
+            onTap: () {
+              context.read<FileManagerProvider>().togglePinPath(filePath!);
             },
           ),
         if (filePath != null)
@@ -2012,15 +2014,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               }
             }
             if (target != null && FileSystemEntity.isFileSync(target)) {
-              try {
-                await Share.shareXFiles([XFile(target)]);
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(L10n.of(context).e10(e))),
-                  );
-                }
-              }
+              // 与多选分享（_handleShare）共用同一入口：JPEG/PNG 会先问
+              // 「普通分享 / 安全分享」，其余格式直接普通分享。
+              await FolderShareService.sharePaths(context, [target]);
             } else {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(

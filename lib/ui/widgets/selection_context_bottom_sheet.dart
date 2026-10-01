@@ -424,7 +424,7 @@ class SelectionContextBottomSheet extends StatelessWidget {
             PopupMenuItem(
               value: 'encrypt',
               child: Row(children: [
-                Icon(Icons.lock, size: 20, color: Theme.of(context).colorScheme.primary),
+                Icon(Broken.lock, size: 20, color: Theme.of(context).colorScheme.primary),
                 SizedBox(width: 12),
                 Text(L10n.of(context).vault_action_encrypt),
               ]),
@@ -433,7 +433,7 @@ class SelectionContextBottomSheet extends StatelessWidget {
             PopupMenuItem(
               value: 'decrypt',
               child: Row(children: [
-                Icon(Icons.lock_open, size: 20, color: Theme.of(context).colorScheme.primary),
+                Icon(Broken.unlock, size: 20, color: Theme.of(context).colorScheme.primary),
                 SizedBox(width: 12),
                 // 远程「解密」＝解密到本地 + 回写替换远程原密文（真·原地解密），
                 // 不再是「只下载到本地」，文案统一成「解密」。

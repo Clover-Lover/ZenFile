@@ -652,6 +652,7 @@ class FileActionSheet {
     bool isCurrentHome = false,
     String? filePath,
     bool isEncrypted = false,
+    bool isPinned = false,
   }) {
     final items = <ActionItem>[
       if (isArchive)
@@ -709,12 +710,19 @@ class FileActionSheet {
       ),
       if (filePath != null)
         ActionItem(
-          icon: isEncrypted ? Icons.lock_open : Icons.lock,
+          icon: isEncrypted ? Broken.unlock : Broken.lock,
           label: isEncrypted
               ? L10n.of(context).crypt_action_decrypt
               : L10n.of(context).vault_action_encrypt,
           onTap: () => onAction(isEncrypted ? 'decrypt' : 'encrypt'),
         ),
+      ActionItem(
+        icon: Icons.push_pin,
+        label: isPinned
+            ? L10n.of(context).ui_unpin
+            : L10n.of(context).ui_pin_to_top,
+        onTap: () => onAction(isPinned ? 'unpin' : 'pin_to_top'),
+      ),
       ActionItem(
         icon: Broken.folder_favorite,
         label: L10n.of(context).ui_favorite,

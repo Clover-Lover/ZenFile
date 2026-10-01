@@ -261,6 +261,7 @@ class FileItem extends StatelessWidget {
                       showShare: !file.isRemote,
                       filePath: file.path,
                       isEncrypted: file.isEncrypted,
+                      isPinned: PinService.isPinned(file.path),
                     );
                   },
                 ),

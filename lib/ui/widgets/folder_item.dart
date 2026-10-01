@@ -354,6 +354,7 @@ class FolderItem extends StatelessWidget {
                       showShare: !folder.isRemote,
                       filePath: folder.path,
                       isEncrypted: folder.isEncrypted,
+                      isPinned: PinService.isPinned(folder.path),
                     );
                   },
                 ),

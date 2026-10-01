@@ -251,6 +251,7 @@ class FileGridItem extends StatelessWidget {
                       // 需传 filePath 才会显示加/解密项；远程加密文件据此显示「解密下载」
                       filePath: file.path,
                       isEncrypted: file.isEncrypted,
+                      isPinned: PinService.isPinned(file.path),
                     );
                   },
                 ),
