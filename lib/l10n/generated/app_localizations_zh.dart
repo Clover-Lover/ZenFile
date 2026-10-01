@@ -7780,6 +7780,26 @@ class L10nZh extends L10n {
 
   @override
   String get netdisk_unsupported => '该网盘暂不支持此操作';
+
+  @override
+  String get share_normal_share => '普通分享';
+
+  @override
+  String get share_normal_share_hint => '分享原始图片，不修改文件';
+
+  @override
+  String get share_safe_share => '安全分享';
+
+  @override
+  String get share_safe_share_hint => '去除拍摄地点、相机信息等隐私数据，不修改原图';
+
+  @override
+  String get share_nothing_found => '未找到可分享的项目。';
+
+  @override
+  String share_prepare_error(Object error) {
+    return '准备分享文件时出错：$error';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -15528,4 +15548,24 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get netdisk_unsupported => '此網盤暫不支援此操作';
+
+  @override
+  String get share_normal_share => '一般分享';
+
+  @override
+  String get share_normal_share_hint => '分享原始圖片，不修改檔案';
+
+  @override
+  String get share_safe_share => '安全分享';
+
+  @override
+  String get share_safe_share_hint => '移除拍攝地點、相機資訊等隱私資料，不修改原圖';
+
+  @override
+  String get share_nothing_found => '未找到可分享的項目。';
+
+  @override
+  String share_prepare_error(Object error) {
+    return '準備分享檔案時出錯：$error';
+  }
 }

@@ -14595,6 +14595,42 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'该网盘暂不支持此操作'**
   String get netdisk_unsupported;
+
+  /// Share mode: share original files as-is
+  ///
+  /// In zh, this message translates to:
+  /// **'普通分享'**
+  String get share_normal_share;
+
+  /// Share mode hint: original file is not modified
+  ///
+  /// In zh, this message translates to:
+  /// **'分享原始图片，不修改文件'**
+  String get share_normal_share_hint;
+
+  /// Share mode: strip metadata (EXIF/GPS) before sharing
+  ///
+  /// In zh, this message translates to:
+  /// **'安全分享'**
+  String get share_safe_share;
+
+  /// Safe share hint: strips location/camera privacy data, original unchanged
+  ///
+  /// In zh, this message translates to:
+  /// **'去除拍摄地点、相机信息等隐私数据，不修改原图'**
+  String get share_safe_share_hint;
+
+  /// Share: no shareable items found
+  ///
+  /// In zh, this message translates to:
+  /// **'未找到可分享的项目。'**
+  String get share_nothing_found;
+
+  /// Share: error while preparing files (with error text)
+  ///
+  /// In zh, this message translates to:
+  /// **'准备分享文件时出错：{error}'**
+  String share_prepare_error(Object error);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

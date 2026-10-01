@@ -8174,4 +8174,25 @@ class L10nAr extends L10n {
 
   @override
   String get netdisk_unsupported => 'هذه العملية غير مدعومة لهذا القرص';
+
+  @override
+  String get share_normal_share => 'مشاركة عادية';
+
+  @override
+  String get share_normal_share_hint => 'مشاركة الصورة الأصلية دون تعديلها';
+
+  @override
+  String get share_safe_share => 'مشاركة آمنة';
+
+  @override
+  String get share_safe_share_hint =>
+      'يزيل الموقع وبيانات الكاميرا وغيرها من المعلومات الخاصة؛ الصورة الأصلية لا تتغير';
+
+  @override
+  String get share_nothing_found => 'لم يتم العثور على عناصر للمشاركة.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'خطأ أثناء تجهيز الملفات: $error';
+  }
 }

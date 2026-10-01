@@ -8253,5 +8253,17 @@
   "netdisk_unsupported": "هذه العملية غير مدعومة لهذا القرص",
   "@netdisk_unsupported": {
     "description": "services\\remote\\netdisk"
-  }
+  },
+  "share_normal_share": "مشاركة عادية",
+  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "share_normal_share_hint": "مشاركة الصورة الأصلية دون تعديلها",
+  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "share_safe_share": "مشاركة آمنة",
+  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "share_safe_share_hint": "يزيل الموقع وبيانات الكاميرا وغيرها من المعلومات الخاصة؛ الصورة الأصلية لا تتغير",
+  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "share_nothing_found": "لم يتم العثور على عناصر للمشاركة.",
+  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "share_prepare_error": "خطأ أثناء تجهيز الملفات: {error}",
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
 }

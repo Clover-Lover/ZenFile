@@ -8253,5 +8253,17 @@
   "netdisk_unsupported": "이 클라우드 드라이브에서는 이 작업을 지원하지 않습니다",
   "@netdisk_unsupported": {
     "description": "services\\remote\\netdisk"
-  }
+  },
+  "share_normal_share": "일반 공유",
+  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "share_normal_share_hint": "원본 이미지를 수정하지 않고 공유합니다",
+  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "share_safe_share": "안전 공유",
+  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "share_safe_share_hint": "위치, 카메라 등 개인 정보를 제거하며 원본 이미지는 변경되지 않습니다",
+  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "share_nothing_found": "공유할 항목을 찾을 수 없습니다.",
+  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "share_prepare_error": "파일 준비 중 오류가 발생했습니다: {error}",
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
 }

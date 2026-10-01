@@ -7950,4 +7950,24 @@ class L10nJa extends L10n {
 
   @override
   String get netdisk_unsupported => 'この操作はこのネットドライブではサポートされていません';
+
+  @override
+  String get share_normal_share => '通常共有';
+
+  @override
+  String get share_normal_share_hint => '元の画像を変更せずに共有します';
+
+  @override
+  String get share_safe_share => '安全に共有';
+
+  @override
+  String get share_safe_share_hint => '位置情報やカメラ情報などのプライバシーデータを削除。元画像は変更されません';
+
+  @override
+  String get share_nothing_found => '共有できる項目が見つかりません。';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'ファイルの準備中にエラーが発生しました：$error';
+  }
 }

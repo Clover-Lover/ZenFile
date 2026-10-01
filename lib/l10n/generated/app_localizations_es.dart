@@ -8314,4 +8314,27 @@ class L10nEs extends L10n {
 
   @override
   String get netdisk_unsupported => 'Operación no compatible con este disco';
+
+  @override
+  String get share_normal_share => 'Compartir normal';
+
+  @override
+  String get share_normal_share_hint =>
+      'Compartir la imagen original sin modificarla';
+
+  @override
+  String get share_safe_share => 'Compartir seguro';
+
+  @override
+  String get share_safe_share_hint =>
+      'Elimina ubicación, cámara y otros datos privados; la imagen original no cambia';
+
+  @override
+  String get share_nothing_found =>
+      'No se encontraron elementos para compartir.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'Error al preparar los archivos: $error';
+  }
 }

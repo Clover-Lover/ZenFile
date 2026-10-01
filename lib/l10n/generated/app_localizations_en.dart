@@ -8203,4 +8203,26 @@ class L10nEn extends L10n {
   @override
   String get netdisk_unsupported =>
       'This operation is not supported for this netdisk';
+
+  @override
+  String get share_normal_share => 'Normal share';
+
+  @override
+  String get share_normal_share_hint =>
+      'Share the original image without modifying it';
+
+  @override
+  String get share_safe_share => 'Safe share';
+
+  @override
+  String get share_safe_share_hint =>
+      'Removes location, camera and other privacy info; original image is unchanged';
+
+  @override
+  String get share_nothing_found => 'No shareable items found.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'Error preparing files for sharing: $error';
+  }
 }

@@ -8250,5 +8250,17 @@
   "netdisk_unsupported": "Dieser Vorgang wird für dieses Netzlaufwerk nicht unterstützt",
   "@netdisk_unsupported": {
     "description": "services\\remote\\netdisk"
-  }
+  },
+  "share_normal_share": "Normale Freigabe",
+  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "share_normal_share_hint": "Originalbild ohne Änderungen teilen",
+  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "share_safe_share": "Sichere Freigabe",
+  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "share_safe_share_hint": "Entfernt Standort-, Kamera- und andere private Daten; Originalbild bleibt unverändert",
+  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "share_nothing_found": "Keine teilbaren Elemente gefunden.",
+  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "share_prepare_error": "Fehler beim Vorbereiten der Dateien: {error}",
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
 }

@@ -8257,5 +8257,17 @@
   "netdisk_unsupported": "この操作はこのネットドライブではサポートされていません",
   "@netdisk_unsupported": {
     "description": "services\\remote\\netdisk"
-  }
+  },
+  "share_normal_share": "通常共有",
+  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "share_normal_share_hint": "元の画像を変更せずに共有します",
+  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "share_safe_share": "安全に共有",
+  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "share_safe_share_hint": "位置情報やカメラ情報などのプライバシーデータを削除。元画像は変更されません",
+  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "share_nothing_found": "共有できる項目が見つかりません。",
+  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "share_prepare_error": "ファイルの準備中にエラーが発生しました：{error}",
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
 }

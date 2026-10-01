@@ -8401,5 +8401,17 @@
   "netdisk_unsupported": "此網盤暫不支援此操作",
   "@netdisk_unsupported": {
     "description": "services\\remote\\netdisk"
-  }
+  },
+  "share_normal_share": "一般分享",
+  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "share_normal_share_hint": "分享原始圖片，不修改檔案",
+  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "share_safe_share": "安全分享",
+  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "share_safe_share_hint": "移除拍攝地點、相機資訊等隱私資料，不修改原圖",
+  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "share_nothing_found": "未找到可分享的項目。",
+  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "share_prepare_error": "準備分享檔案時出錯：{error}",
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
 }

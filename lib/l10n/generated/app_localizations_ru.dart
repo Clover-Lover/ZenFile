@@ -8284,4 +8284,25 @@ class L10nRu extends L10n {
   @override
   String get netdisk_unsupported =>
       'Данная операция не поддерживается для этого облачного диска';
+
+  @override
+  String get share_normal_share => 'Обычная отправка';
+
+  @override
+  String get share_normal_share_hint => 'Поделиться оригиналом без изменений';
+
+  @override
+  String get share_safe_share => 'Безопасная отправка';
+
+  @override
+  String get share_safe_share_hint =>
+      'Удаляет местоположение, данные камеры и другую личную информацию; оригинал не изменяется';
+
+  @override
+  String get share_nothing_found => 'Не найдено элементов для отправки.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'Ошибка при подготовке файлов: $error';
+  }
 }

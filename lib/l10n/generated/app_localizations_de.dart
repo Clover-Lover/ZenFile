@@ -8297,4 +8297,25 @@ class L10nDe extends L10n {
   @override
   String get netdisk_unsupported =>
       'Dieser Vorgang wird für dieses Netzlaufwerk nicht unterstützt';
+
+  @override
+  String get share_normal_share => 'Normale Freigabe';
+
+  @override
+  String get share_normal_share_hint => 'Originalbild ohne Änderungen teilen';
+
+  @override
+  String get share_safe_share => 'Sichere Freigabe';
+
+  @override
+  String get share_safe_share_hint =>
+      'Entfernt Standort-, Kamera- und andere private Daten; Originalbild bleibt unverändert';
+
+  @override
+  String get share_nothing_found => 'Keine teilbaren Elemente gefunden.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'Fehler beim Vorbereiten der Dateien: $error';
+  }
 }

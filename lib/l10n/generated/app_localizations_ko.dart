@@ -7956,4 +7956,24 @@ class L10nKo extends L10n {
 
   @override
   String get netdisk_unsupported => '이 클라우드 드라이브에서는 이 작업을 지원하지 않습니다';
+
+  @override
+  String get share_normal_share => '일반 공유';
+
+  @override
+  String get share_normal_share_hint => '원본 이미지를 수정하지 않고 공유합니다';
+
+  @override
+  String get share_safe_share => '안전 공유';
+
+  @override
+  String get share_safe_share_hint => '위치, 카메라 등 개인 정보를 제거하며 원본 이미지는 변경되지 않습니다';
+
+  @override
+  String get share_nothing_found => '공유할 항목을 찾을 수 없습니다.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return '파일 준비 중 오류가 발생했습니다: $error';
+  }
 }

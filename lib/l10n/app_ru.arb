@@ -8253,5 +8253,17 @@
   "netdisk_unsupported": "Данная операция не поддерживается для этого облачного диска",
   "@netdisk_unsupported": {
     "description": "services\\remote\\netdisk"
-  }
+  },
+  "share_normal_share": "Обычная отправка",
+  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "share_normal_share_hint": "Поделиться оригиналом без изменений",
+  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "share_safe_share": "Безопасная отправка",
+  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "share_safe_share_hint": "Удаляет местоположение, данные камеры и другую личную информацию; оригинал не изменяется",
+  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "share_nothing_found": "Не найдено элементов для отправки.",
+  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "share_prepare_error": "Ошибка при подготовке файлов: {error}",
+  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} }
 }

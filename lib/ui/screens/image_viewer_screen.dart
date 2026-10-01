@@ -10,7 +10,6 @@ import 'package:mime/mime.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_avif/flutter_avif.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import '../../providers/media_provider.dart';
@@ -21,6 +20,7 @@ import '../../ui/widgets/file_action_dialogs.dart';
 import '../../services/image_edit_service.dart';
 import '../../services/preferences_service.dart';
 import '../../services/image_metadata_service.dart';
+import '../../services/folder_share_service.dart';
 import 'image_editor_screen.dart';
 import '../navigation/shell_navigator.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
@@ -782,7 +782,8 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
   Future<void> _shareCurrentImage() async {
     final file = _getCurrentFile();
     if (file != null && file.existsSync()) {
-      await Share.shareXFiles([XFile(file.path)]);
+      // 统一走 FolderShareService：JPEG/PNG 图片会弹出「普通分享 / 安全分享」选择
+      await FolderShareService.sharePaths(context, [file.path]);
     }
   }
 
