@@ -202,6 +202,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   // 只看解码器丢帧数会把前者判成「很流畅」。两个计数分开给，才能一眼分辨。
   int _renderDropCount = 0; // frame-drop-count：来不及显示的帧数
   int _delayedFrameCount = 0; // vo-delayed-frame-count：被延后显示的帧数
+  // 这三个属性名是 mpv 版本/渲染后端相关的，注册失败时计数会**一直保持 0**。
+  // 若不区分「真的是 0」和「根本没采集到」，「播放信息」会把采集失败报成
+  // 「全程无丢帧」—— 假绿比不报更糟（用户回报 clean，我们却拿着没数据的结论）。
+  bool _decDropWatchOk = false;
+  bool _renderDropWatchOk = false;
+  bool _delayedDropWatchOk = false;
   int _cleanWindowsInARow = 0;
   static const Duration _frameDropWindow = Duration(seconds: 2);
   // 一个窗口（2s）内解码器丢帧达到该值即判定「跟不上」，降一级
@@ -2077,6 +2083,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       _frameDropBaseline = 0;
       _renderDropCount = 0;
       _delayedFrameCount = 0;
+      _decDropWatchOk = false;
+      _renderDropWatchOk = false;
+      _delayedDropWatchOk = false;
       await platform.observeProperty('decoder-frame-drop-count', (value) async {
         final n = int.tryParse(value.trim()) ?? 0;
         // 打开新片源时计数会归零，此时重置基线并回到画质优先，不误判为「流畅」
@@ -2087,17 +2096,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         }
         _frameDropCount = n;
       });
+      _decDropWatchOk = true;
       // 诊断专用（见字段注释）。两个属性只要有一个在某个 mpv 版本/渲染后端上不存在，
       // 就会抛异常把后面的注册一起带走，所以各自独立 try，互不牵连。
       await _observeDiagnosticCounter(
         platform,
         'frame-drop-count',
         (v) => _renderDropCount = v,
+        onRegister: (ok) => _renderDropWatchOk = ok,
       );
       await _observeDiagnosticCounter(
         platform,
         'vo-delayed-frame-count',
         (v) => _delayedFrameCount = v,
+        onRegister: (ok) => _delayedDropWatchOk = ok,
       );
       _frameDropWatchTimer = Timer.periodic(
         _frameDropWindow,
@@ -2112,17 +2124,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   ///
   /// 这些属性名是 mpv 版本/渲染后端相关的（有的只在特定 vo 下存在），注册失败
   /// 不应该影响播放，更不应该连带影响其它观察属性的注册。
+  ///
+  /// [onRegister] 上报注册结果：注册失败时计数会一直停在 0，若不告诉调用方，
+  /// 「播放信息」会把「采集不到」显示成「零丢帧」（假绿）。
   Future<void> _observeDiagnosticCounter(
     NativePlayer platform,
     String property,
-    void Function(int) assign,
-  ) async {
+    void Function(int) assign, {
+    void Function(bool ok)? onRegister,
+  }) async {
     try {
       await platform.observeProperty(property, (value) async {
         final n = int.tryParse(value.trim());
         if (n != null) assign(n);
       });
+      onRegister?.call(true);
     } catch (e) {
+      onRegister?.call(false);
       debugPrint('诊断计数 $property 注册失败（不影响播放）: $e');
     }
   }
@@ -2177,6 +2195,60 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     }
   }
 
+  /// 计数行格式化：未采集到该属性时显示 n/a，**不显示 0**。
+  ///
+  /// 计数属性注册失败时会一直停在 0，直接显示会和「真的零丢帧」混淆 ——
+  /// 用户回报「clean」，我们手里却是一个根本没采到数的结论。
+  static String _fmtDrop(int value, bool tracked) =>
+      tracked ? '$value' : 'n/a (not tracked)';
+
+  /// 「播放信息」里的 `size` 行：文件大小 + 平均码率。
+  ///
+  /// 码率是卡顿的第一嫌疑 —— 同为 720p，1.5 Mbps 与 20 Mbps 对解码器与总线的
+  /// 压力差一个量级，而它只能从「文件大小 ÷ 时长」估算。远程源在播放页拿不到
+  /// 可靠大小（`_currentFilePath` 为空），直说 n/a，不猜。
+  Future<String> _describeMediaSize() async {
+    final path = _currentFilePath;
+    if (path == null || _isRemoteSource) return 'n/a (remote)';
+    try {
+      final bytes = await File(path).length();
+      if (bytes <= 0) return 'n/a';
+      final mb = bytes / (1024 * 1024);
+      final secs = _duration.inSeconds;
+      if (secs <= 0) return '${mb.toStringAsFixed(1)} MB';
+      final mbps = (bytes * 8 / secs) / 1000000;
+      return '${mb.toStringAsFixed(1)} MB (~${mbps.toStringAsFixed(1)} Mbps)';
+    } catch (_) {
+      return 'n/a';
+    }
+  }
+
+  /// `verdict` 行：把丢帧计数收敛成一句可执行的结论。
+  ///
+  /// 用户只会说「卡」，不会说「哪一类卡」。解码丢帧 = 解码器/CPU/GPU 跟不上，
+  /// 渲染丢帧 = vo/合成器来不及（两条链路的修复方向完全不同）。mpv 这三个计数
+  /// 是**累计值**，所以「卡过」会一直留痕，不必掐着卡的那一刻来截图。
+  String _diagnosePlayback() {
+    final dec = _frameDropCount;
+    final renderSide = _renderDropCount + _delayedFrameCount;
+    if (player.state.buffering) {
+      return _isRemoteSource
+          ? 'starved: network (buffering)'
+          : 'starved: storage (buffering)';
+    }
+    if (!_decDropWatchOk) return 'drop counters unavailable';
+    if (dec == 0 && renderSide == 0) {
+      final renderTracked = _renderDropWatchOk || _delayedDropWatchOk;
+      return renderTracked
+          ? 'clean (no drops in ${_position.inSeconds}s)'
+          : 'no decode drops in ${_position.inSeconds}s';
+    }
+    if (renderSide > dec) {
+      return 'render-side drops > decode drops (vo/compositor)';
+    }
+    return 'decode drops >= render drops (decoder bound)';
+  }
+
   /// 「播放信息」：把「卡顿」这类没法复现的反馈，换成一串能抄下来发给开发者的数字。
   ///
   /// 全部是只读状态（**刻意不读裸原生属性** —— 用户手动触发时 player 可能正在退役，
@@ -2198,22 +2270,35 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     final decode = _useHardwareDecode
         ? 'hardware (hwdec=auto-safe)'
         : 'software (hwdec=no)';
+    // 本地文件的 `buffer` 是**伪指标**：mpv 读本地盘比播放快得多，demuxer 会一路把
+    // 整个文件读进来，这个数字随之涨到接近片长（实测 720p/650s 显示 389760 ms）。
+    // 它不代表「缓冲很充足」，只有远程/代理源才是真信号。
+    final buffer = _isRemoteSource
+        ? '${player.state.buffer.inMilliseconds} ms'
+        : 'n/a (local file)';
+    // 本页写死的缓冲参数：回报时不用再追问「装的是哪一版」。
+    final buffers = _isRemoteSource
+        ? 'cache=60s demuxer=300M readahead=60s'
+        : 'demuxer=64M readahead=20s';
     final text = <String>[
       'source      : $_sourceKind',
       'decode      : $decode',
       'video       : $video',
       'audio       : $audio',
       'color       : ${vp.primaries ?? '?'} / ${vp.colormatrix ?? '?'}',
+      'size        : ${await _describeMediaSize()}',
       // 三个计数分开列：dec=解码跟不上、render=来不及显示、delayed=被延后显示。
       // 「卡顿」到底是哪一类，看这三行就能定，不用再猜。
-      'dec drops   : $_frameDropCount',
-      'render drops: $_renderDropCount',
-      'delayed frm : $_delayedFrameCount',
-      'buffer      : ${player.state.buffer.inMilliseconds} ms',
+      'dec drops   : ${_fmtDrop(_frameDropCount, _decDropWatchOk)}',
+      'render drops: ${_fmtDrop(_renderDropCount, _renderDropWatchOk)}',
+      'delayed frm : ${_fmtDrop(_delayedFrameCount, _delayedDropWatchOk)}',
+      'buffer      : $buffer',
       'buffering   : ${player.state.buffering}',
       'playing     : ${player.state.playing}',
       'quality tier: $_swQualityTier (voCompat=$_voCompatMode)',
       'position    : ${_position.inSeconds}s / ${_duration.inSeconds}s',
+      'buffers cfg : $buffers',
+      'verdict     : ${_diagnosePlayback()}',
     ].join('\n');
 
     if (!mounted) return;
