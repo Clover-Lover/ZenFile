@@ -3169,6 +3169,63 @@
   "cat_manage": "Gestionar",
   "cat_config": "Configuración",
   "cat_analyze": "Analizar",
+  "cat_clean": "Limpiar",
+  "@cat_clean": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_title": "Limpieza",
+  "@junk_clean_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scanning": "Buscando archivos basura…",
+  "@junk_clean_scanning": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scannable": "Se pueden liberar {size}",
+  "@junk_clean_scannable": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_button": "Limpiar",
+  "@junk_clean_button": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_title": "Limpiar archivos basura",
+  "@junk_clean_confirm_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_body": "Se limpiarán la caché y los archivos temporales, liberando unos {size}. Las copias de seguridad, los informes de fallos y los archivos recibidos no se eliminan.",
+  "@junk_clean_confirm_body": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_cache_item": "Caché de la app (miniaturas, caché remota)",
+  "@junk_clean_cache_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_temp_item": "Archivos temporales (restos de descargas)",
+  "@junk_clean_temp_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_done": "{size} liberados",
+  "@junk_clean_done": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_none": "No hay archivos basura que limpiar",
+  "@junk_clean_none": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_failed": "Error al limpiar, inténtalo de nuevo más tarde",
+  "@junk_clean_failed": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
   "cat_vault": "Caja fuerte",
   "cat_vault_desc": "Almacenamiento seguro",
   "cat_quick_categories": "Categorías",

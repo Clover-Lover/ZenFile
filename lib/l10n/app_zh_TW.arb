@@ -3240,6 +3240,63 @@
   "cat_manage": "管理",
   "cat_config": "配置",
   "cat_analyze": "分析",
+  "cat_clean": "清理",
+  "@cat_clean": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_title": "垃圾清理",
+  "@junk_clean_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scanning": "正在掃描垃圾檔案…",
+  "@junk_clean_scanning": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scannable": "可清理 {size}",
+  "@junk_clean_scannable": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_button": "立即清理",
+  "@junk_clean_button": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_title": "清理垃圾檔案",
+  "@junk_clean_confirm_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_body": "將清理應用快取與暫存檔案，預計釋放 {size}。備份、當機報告和快傳接收的檔案不會被刪除。",
+  "@junk_clean_confirm_body": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_cache_item": "應用快取（縮圖、遠端快取）",
+  "@junk_clean_cache_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_temp_item": "暫存檔案（下載殘留等）",
+  "@junk_clean_temp_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_done": "已釋放 {size}",
+  "@junk_clean_done": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_none": "沒有可清理的垃圾檔案",
+  "@junk_clean_none": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_failed": "清理失敗，請稍後重試",
+  "@junk_clean_failed": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
   "cat_vault": "保險箱",
   "cat_vault_desc": "安全儲存",
   "cat_quick_categories": "分類",

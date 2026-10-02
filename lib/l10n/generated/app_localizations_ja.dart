@@ -2688,6 +2688,48 @@ class L10nJa extends L10n {
   String get cat_analyze => '分析';
 
   @override
+  String get cat_clean => 'クリーニング';
+
+  @override
+  String get junk_clean_title => '不要ファイルのクリーニング';
+
+  @override
+  String get junk_clean_scanning => '不要ファイルをスキャン中…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '$size 削除可能';
+  }
+
+  @override
+  String get junk_clean_button => 'クリーニング';
+
+  @override
+  String get junk_clean_confirm_title => '不要ファイルをクリーニング';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'アプリのキャッシュと一時ファイルをクリーニングし、約 $size を解放します。バックアップ・クラッシュレポート・受信ファイルは削除されません。';
+  }
+
+  @override
+  String get junk_clean_cache_item => 'アプリキャッシュ（サムネイル・リモートキャッシュ）';
+
+  @override
+  String get junk_clean_temp_item => '一時ファイル（ダウンロード残りなど）';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '$size を解放しました';
+  }
+
+  @override
+  String get junk_clean_none => 'クリーニングする不要ファイルはありません';
+
+  @override
+  String get junk_clean_failed => 'クリーニングに失敗しました。後でもう一度お試しください';
+
+  @override
   String get cat_vault => '金庫';
 
   @override

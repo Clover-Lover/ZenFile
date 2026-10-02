@@ -2823,6 +2823,51 @@ class L10nRu extends L10n {
   String get cat_analyze => 'Анализ';
 
   @override
+  String get cat_clean => 'Очистить';
+
+  @override
+  String get junk_clean_title => 'Очистка мусора';
+
+  @override
+  String get junk_clean_scanning => 'Поиск мусорных файлов…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return 'Можно освободить $size';
+  }
+
+  @override
+  String get junk_clean_button => 'Очистить';
+
+  @override
+  String get junk_clean_confirm_title => 'Очистить мусорные файлы';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'Будут очищены кэш приложения и временные файлы, что освободит около $size. Резервные копии, отчёты о сбоях и полученные файлы не удаляются.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'Кэш приложения (миниатюры, кэш удалённых файлов)';
+
+  @override
+  String get junk_clean_temp_item =>
+      'Временные файлы (остатки загрузок)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return 'Освобождено $size';
+  }
+
+  @override
+  String get junk_clean_none => 'Нет мусорных файлов для очистки';
+
+  @override
+  String get junk_clean_failed =>
+      'Не удалось очистить, попробуйте позже';
+
+  @override
   String get cat_vault => 'Сейф';
 
   @override

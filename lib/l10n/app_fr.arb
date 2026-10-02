@@ -3169,6 +3169,63 @@
   "cat_manage": "Gérer",
   "cat_config": "Configuration",
   "cat_analyze": "Analyser",
+  "cat_clean": "Nettoyer",
+  "@cat_clean": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_title": "Nettoyage",
+  "@junk_clean_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scanning": "Analyse des fichiers inutiles…",
+  "@junk_clean_scanning": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scannable": "{size} récupérables",
+  "@junk_clean_scannable": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_button": "Nettoyer",
+  "@junk_clean_button": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_title": "Nettoyer les fichiers inutiles",
+  "@junk_clean_confirm_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_body": "Le cache de l'application et les fichiers temporaires seront nettoyés, libérant environ {size}. Les sauvegardes, rapports de plantage et fichiers reçus sont conservés.",
+  "@junk_clean_confirm_body": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_cache_item": "Cache de l'app (miniatures, cache distant)",
+  "@junk_clean_cache_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_temp_item": "Fichiers temporaires (restes de téléchargements)",
+  "@junk_clean_temp_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_done": "{size} libérés",
+  "@junk_clean_done": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_none": "Aucun fichier inutile à nettoyer",
+  "@junk_clean_none": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_failed": "Échec du nettoyage, réessayez plus tard",
+  "@junk_clean_failed": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
   "cat_vault": "Coffre-fort",
   "cat_vault_desc": "Stockage sécurisé",
   "cat_quick_categories": "Catégories",

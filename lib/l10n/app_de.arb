@@ -3166,6 +3166,63 @@
   "cat_manage": "Verwalten",
   "cat_config": "Konfiguration",
   "cat_analyze": "Analysieren",
+  "cat_clean": "Aufräumen",
+  "@cat_clean": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_title": "Aufräumen",
+  "@junk_clean_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scanning": "Junk-Dateien werden gescannt…",
+  "@junk_clean_scanning": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scannable": "{size} freigebbar",
+  "@junk_clean_scannable": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_button": "Jetzt aufräumen",
+  "@junk_clean_button": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_title": "Junk-Dateien bereinigen",
+  "@junk_clean_confirm_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_body": "App-Cache und temporäre Dateien werden bereinigt und etwa {size} freigegeben. Backups, Absturzberichte und empfangene Dateien bleiben erhalten.",
+  "@junk_clean_confirm_body": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_cache_item": "App-Cache (Miniaturansichten, Remote-Cache)",
+  "@junk_clean_cache_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_temp_item": "Temporäre Dateien (Download-Reste)",
+  "@junk_clean_temp_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_done": "{size} freigegeben",
+  "@junk_clean_done": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_none": "Keine Junk-Dateien zu bereinigen",
+  "@junk_clean_none": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_failed": "Bereinigung fehlgeschlagen, bitte später erneut versuchen",
+  "@junk_clean_failed": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
   "cat_vault": "Tresor",
   "cat_vault_desc": "Sicherer Speicher",
   "cat_quick_categories": "Kategorien",

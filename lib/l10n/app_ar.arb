@@ -3169,6 +3169,63 @@
   "cat_manage": "الإدارة",
   "cat_config": "التكوين",
   "cat_analyze": "التحليل",
+  "cat_clean": "تنظيف",
+  "@cat_clean": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_title": "تنظيف",
+  "@junk_clean_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scanning": "جارٍ فحص الملفات غير المرغوبة…",
+  "@junk_clean_scanning": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_scannable": "يمكن تحرير {size}",
+  "@junk_clean_scannable": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_button": "تنظيف",
+  "@junk_clean_button": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_title": "تنظيف الملفات غير المرغوبة",
+  "@junk_clean_confirm_title": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_confirm_body": "سيتم تنظيف ذاكرة التخزين المؤقت والملفات المؤقتة، مما يحرر حوالي {size}. لن تُحذف النسخ الاحتياطية وتقارير الأعطال والملفات المستلمة.",
+  "@junk_clean_confirm_body": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_cache_item": "ذاكرة التطبيق المؤقتة (صور مصغرة، ذاكرة عن بُعد)",
+  "@junk_clean_cache_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_temp_item": "ملفات مؤقتة (بقايا التنزيلات)",
+  "@junk_clean_temp_item": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_done": "تم تحرير {size}",
+  "@junk_clean_done": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart",
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "junk_clean_none": "لا توجد ملفات غير مرغوبة للتنظيف",
+  "@junk_clean_none": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
+  "junk_clean_failed": "فشل التنظيف، حاول مرة أخرى لاحقًا",
+  "@junk_clean_failed": {
+    "description": "ui/screens/storage_analyzer/storage_analyzer_screen.dart"
+  },
   "cat_vault": "خزنة",
   "cat_vault_desc": "تخزين آمن",
   "cat_quick_categories": "الفئات",

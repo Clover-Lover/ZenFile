@@ -2679,6 +2679,48 @@ class L10nZh extends L10n {
   String get cat_analyze => '分析';
 
   @override
+  String get cat_clean => '清理';
+
+  @override
+  String get junk_clean_title => '垃圾清理';
+
+  @override
+  String get junk_clean_scanning => '正在扫描垃圾文件…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '可清理 $size';
+  }
+
+  @override
+  String get junk_clean_button => '立即清理';
+
+  @override
+  String get junk_clean_confirm_title => '清理垃圾文件';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return '将清理应用缓存与临时文件，预计释放 $size。备份、崩溃报告和快传接收的文件不会被删除。';
+  }
+
+  @override
+  String get junk_clean_cache_item => '应用缓存（缩略图、远程缓存）';
+
+  @override
+  String get junk_clean_temp_item => '临时文件（下载残留等）';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '已释放 $size';
+  }
+
+  @override
+  String get junk_clean_none => '没有可清理的垃圾文件';
+
+  @override
+  String get junk_clean_failed => '清理失败，请稍后重试';
+
+  @override
   String get cat_vault => '保险箱';
 
   @override
@@ -10502,6 +10544,48 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get cat_analyze => '分析';
+
+  @override
+  String get cat_clean => '清理';
+
+  @override
+  String get junk_clean_title => '垃圾清理';
+
+  @override
+  String get junk_clean_scanning => '正在扫描垃圾文件…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '可清理 $size';
+  }
+
+  @override
+  String get junk_clean_button => '立即清理';
+
+  @override
+  String get junk_clean_confirm_title => '清理垃圾文件';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return '将清理应用缓存与临时文件，预计释放 $size。备份、崩溃报告和快传接收的文件不会被删除。';
+  }
+
+  @override
+  String get junk_clean_cache_item => '应用缓存（缩略图、远程缓存）';
+
+  @override
+  String get junk_clean_temp_item => '临时文件（下载残留等）';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '已释放 $size';
+  }
+
+  @override
+  String get junk_clean_none => '没有可清理的垃圾文件';
+
+  @override
+  String get junk_clean_failed => '清理失败，请稍后重试';
 
   @override
   String get cat_vault => '保險箱';

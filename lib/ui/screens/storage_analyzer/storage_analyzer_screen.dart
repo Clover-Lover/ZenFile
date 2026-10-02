@@ -7,6 +7,7 @@ import '../../../core/icon_fonts/broken_icons.dart';
 import '../../../providers/file_manager_provider.dart';
 import '../../../core/utils.dart';
 import '../../../services/app_manager_service.dart';
+import '../../../services/junk_clean_service.dart';
 import '../../../services/preferences_service.dart';
 import '../media_category_screen.dart';
 import '../../../models/media_type.dart';
@@ -42,6 +43,11 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
   int _totalUsedSize = 0;
   int _totalStorageSize = 0;
 
+  /// 垃圾清理：三个来源的可清理体积（下标见 `JunkCleanService.idxXxx`）。
+  List<int> _junkBytes = const [0, 0, 0];
+  bool _junkScanning = false;
+  bool _junkCleaning = false;
+
   late AnimationController _radialController;
 
   @override
@@ -65,6 +71,9 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
     } else {
       _startStorageScan();
     }
+
+    // 垃圾体积扫描与主扫描并行：不阻塞页面首帧。
+    unawaited(_scanJunk());
   }
 
   /// 缓存是否可用：路径一致 + 未超过 24 小时。（超时后仍会后台重扫覆盖。）
@@ -234,6 +243,127 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
     }
   }
 
+  int get _junkTotalBytes =>
+      _junkBytes[JunkCleanService.idxZenfileCache] +
+      _junkBytes[JunkCleanService.idxLegacyCache] +
+      _junkBytes[JunkCleanService.idxAppTemp];
+
+  /// 后台扫描垃圾体积（统计在独立 isolate 中执行，不阻塞 UI）。
+  Future<void> _scanJunk() async {
+    if (_junkScanning) return;
+    _junkScanning = true;
+    try {
+      final r = await JunkCleanService.scan();
+      if (mounted) {
+        setState(() => _junkBytes = r);
+      }
+    } catch (_) {
+      // 扫描失败按「没有垃圾」处理，不打扰用户
+    } finally {
+      _junkScanning = false;
+    }
+  }
+
+  Future<void> _onTapJunkClean() async {
+    if (_junkCleaning || _junkScanning || !mounted) return;
+    final l10n = L10n.of(context);
+    final total = _junkTotalBytes;
+    if (total <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.junk_clean_none)),
+      );
+      return;
+    }
+    final confirmed = await _confirmJunkClean(l10n, total);
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _junkCleaning = true);
+    try {
+      final freed = await JunkCleanService.clean();
+      if (!mounted) return;
+      // 清理后：刷新垃圾体积 + 静默重扫存储（已用容量变了）。
+      await _scanJunk();
+      if (mounted) {
+        unawaited(_startStorageScan(silent: true));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              l10n.junk_clean_done(FileUtils.formatBytes(freed, 1)),
+            ),
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.junk_clean_failed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _junkCleaning = false);
+    }
+  }
+
+  Future<bool?> _confirmJunkClean(L10n l10n, int totalBytes) {
+    final cacheBytes = _junkBytes[JunkCleanService.idxZenfileCache] +
+        _junkBytes[JunkCleanService.idxLegacyCache];
+    final tempBytes = _junkBytes[JunkCleanService.idxAppTemp];
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.junk_clean_confirm_title),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.junk_clean_confirm_body(
+                FileUtils.formatBytes(totalBytes, 1),
+              ),
+            ),
+            if (cacheBytes > 0) ...[
+              const SizedBox(height: 12),
+              _buildJunkRow(ctx, l10n.junk_clean_cache_item,
+                  FileUtils.formatBytes(cacheBytes, 1)),
+            ],
+            if (tempBytes > 0) ...[
+              _buildJunkRow(ctx, l10n.junk_clean_temp_item,
+                  FileUtils.formatBytes(tempBytes, 1)),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l10n.ui_cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(l10n.ui_confirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildJunkRow(BuildContext ctx, String label, String size) {
+    final theme = Theme.of(ctx);
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(label, style: theme.textTheme.bodySmall),
+          ),
+          Text(
+            size,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -472,6 +602,9 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
             ),
           ),
 
+          // 垃圾清理：应用缓存 + 临时文件（详见 JunkCleanService）
+          _buildJunkCleanCard(theme, isDark, l10n),
+
           // Categories Breakdown Title
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
@@ -580,6 +713,78 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
     );
   }
 
+  /// 垃圾清理卡片：可清理体积 +「立即清理」。放在存储总览卡片下方。
+  Widget _buildJunkCleanCard(ThemeData theme, bool isDark, L10n l10n) {
+    final total = _junkTotalBytes;
+    const color = Color(0xFF14B8A6); // teal
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.06)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Broken.broom, color: color, size: 22),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.junk_clean_title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.5,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  _junkScanning
+                      ? l10n.junk_clean_scanning
+                      : total > 0
+                          ? l10n.junk_clean_scannable(
+                              FileUtils.formatBytes(total, 1),
+                            )
+                          : l10n.junk_clean_none,
+                  style: TextStyle(
+                    color: theme.textTheme.bodySmall
+                        ?.color?.withValues(alpha: 0.55),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          if (_junkCleaning)
+            const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2.4),
+            )
+          else
+            FilledButton.tonal(
+              onPressed: _onTapJunkClean,
+              style: FilledButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+              ),
+              child: Text(l10n.junk_clean_button),
+            ),
+        ],
+      ),
+    );
+  }
   Widget _buildCategoryCard({
     required BuildContext context,
     required String title,

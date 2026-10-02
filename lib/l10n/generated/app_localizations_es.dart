@@ -2834,6 +2834,52 @@ class L10nEs extends L10n {
   String get cat_analyze => 'Analizar';
 
   @override
+  String get cat_clean => 'Limpiar';
+
+  @override
+  String get junk_clean_title => 'Limpieza';
+
+  @override
+  String get junk_clean_scanning => 'Buscando archivos basura…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return 'Se pueden liberar $size';
+  }
+
+  @override
+  String get junk_clean_button => 'Limpiar';
+
+  @override
+  String get junk_clean_confirm_title => 'Limpiar archivos basura';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'Se limpiarán la caché y los archivos temporales, liberando unos $size. Las copias de seguridad, los informes de fallos y los archivos recibidos no se eliminan.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'Caché de la app (miniaturas, caché remota)';
+
+  @override
+  String get junk_clean_temp_item =>
+      'Archivos temporales (restos de descargas)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '$size liberados';
+  }
+
+  @override
+  String get junk_clean_none =>
+      'No hay archivos basura que limpiar';
+
+  @override
+  String get junk_clean_failed =>
+      'Error al limpiar, inténtalo de nuevo más tarde';
+
+  @override
   String get cat_vault => 'Caja fuerte';
 
   @override

@@ -268,7 +268,7 @@ class QuickCategoriesGrid extends StatefulWidget {
         'icon': Broken.chart_square,
         'color': categoryColor,
         'iconColor': iconColor(220), // 天蓝
-        'count': l10n.cat_analyze,
+        'count': l10n.cat_clean,
         'isCustom': false,
         'pageBuilder': () => const StorageAnalyzerScreen(),
       },

@@ -2776,6 +2776,51 @@ class L10nEn extends L10n {
   String get cat_analyze => 'Analyze';
 
   @override
+  String get cat_clean => 'Clean';
+
+  @override
+  String get junk_clean_title => 'Junk Cleaner';
+
+  @override
+  String get junk_clean_scanning => 'Scanning junk files…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '$size can be freed';
+  }
+
+  @override
+  String get junk_clean_button => 'Clean';
+
+  @override
+  String get junk_clean_confirm_title => 'Clean junk files';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'App cache and temporary files will be cleaned, freeing about $size. Backups, crash reports and received files are kept.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'App cache (thumbnails, remote cache)';
+
+  @override
+  String get junk_clean_temp_item =>
+      'Temporary files (download leftovers)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return 'Freed $size';
+  }
+
+  @override
+  String get junk_clean_none => 'No junk files to clean';
+
+  @override
+  String get junk_clean_failed =>
+      'Clean failed, please try again later';
+
+  @override
   String get cat_vault => 'Vault';
 
   @override

@@ -2815,6 +2815,51 @@ class L10nDe extends L10n {
   String get cat_analyze => 'Analysieren';
 
   @override
+  String get cat_clean => 'Aufräumen';
+
+  @override
+  String get junk_clean_title => 'Aufräumen';
+
+  @override
+  String get junk_clean_scanning => 'Junk-Dateien werden gescannt…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '$size freigebbar';
+  }
+
+  @override
+  String get junk_clean_button => 'Jetzt aufräumen';
+
+  @override
+  String get junk_clean_confirm_title => 'Junk-Dateien bereinigen';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'App-Cache und temporäre Dateien werden bereinigt und etwa $size freigegeben. Backups, Absturzberichte und empfangene Dateien bleiben erhalten.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'App-Cache (Miniaturansichten, Remote-Cache)';
+
+  @override
+  String get junk_clean_temp_item =>
+      'Temporäre Dateien (Download-Reste)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '$size freigegeben';
+  }
+
+  @override
+  String get junk_clean_none => 'Keine Junk-Dateien zu bereinigen';
+
+  @override
+  String get junk_clean_failed =>
+      'Bereinigung fehlgeschlagen, bitte später erneut versuchen';
+
+  @override
   String get cat_vault => 'Tresor';
 
   @override

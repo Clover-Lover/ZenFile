@@ -5116,6 +5116,66 @@ abstract class L10n {
   /// **'分析'**
   String get cat_analyze;
 
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'清理'**
+  String get cat_clean;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'垃圾清理'**
+  String get junk_clean_title;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'正在扫描垃圾文件…'**
+  String get junk_clean_scanning;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'可清理 {size}'**
+  String junk_clean_scannable(Object size);
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'立即清理'**
+  String get junk_clean_button;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'清理垃圾文件'**
+  String get junk_clean_confirm_title;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'将清理应用缓存与临时文件，预计释放 {size}。备份、崩溃报告和快传接收的文件不会被删除。'**
+  String junk_clean_confirm_body(Object size);
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'应用缓存（缩略图、远程缓存）'**
+  String get junk_clean_cache_item;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'临时文件（下载残留等）'**
+  String get junk_clean_temp_item;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'已释放 {size}'**
+  String junk_clean_done(Object size);
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'没有可清理的垃圾文件'**
+  String get junk_clean_none;
+  /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'清理失败，请稍后重试'**
+  String get junk_clean_failed;
   /// Vault shortcut category label
   ///
   /// In zh, this message translates to:

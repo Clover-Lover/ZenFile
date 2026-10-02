@@ -2769,6 +2769,53 @@ class L10nAr extends L10n {
   String get cat_analyze => 'التحليل';
 
   @override
+  String get cat_clean => 'تنظيف';
+
+  @override
+  String get junk_clean_title => 'تنظيف';
+
+  @override
+  String get junk_clean_scanning =>
+      'جارٍ فحص الملفات غير المرغوبة…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return 'يمكن تحرير $size';
+  }
+
+  @override
+  String get junk_clean_button => 'تنظيف';
+
+  @override
+  String get junk_clean_confirm_title =>
+      'تنظيف الملفات غير المرغوبة';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'سيتم تنظيف ذاكرة التخزين المؤقت والملفات المؤقتة، مما يحرر حوالي $size. لن تُحذف النسخ الاحتياطية وتقارير الأعطال والملفات المستلمة.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'ذاكرة التطبيق المؤقتة (صور مصغرة، ذاكرة عن بُعد)';
+
+  @override
+  String get junk_clean_temp_item =>
+      'ملفات مؤقتة (بقايا التنزيلات)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return 'تم تحرير $size';
+  }
+
+  @override
+  String get junk_clean_none => 'لا توجد ملفات غير مرغوبة للتنظيف';
+
+  @override
+  String get junk_clean_failed =>
+      'فشل التنظيف، حاول مرة أخرى لاحقًا';
+
+  @override
   String get cat_vault => 'خزنة';
 
   @override

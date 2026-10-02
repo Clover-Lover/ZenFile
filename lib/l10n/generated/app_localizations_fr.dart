@@ -2833,6 +2833,53 @@ class L10nFr extends L10n {
   String get cat_analyze => 'Analyser';
 
   @override
+  String get cat_clean => 'Nettoyer';
+
+  @override
+  String get junk_clean_title => 'Nettoyage';
+
+  @override
+  String get junk_clean_scanning =>
+      'Analyse des fichiers inutiles…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '$size récupérables';
+  }
+
+  @override
+  String get junk_clean_button => 'Nettoyer';
+
+  @override
+  String get junk_clean_confirm_title =>
+      'Nettoyer les fichiers inutiles';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'Le cache de l\'application et les fichiers temporaires seront nettoyés, libérant environ $size. Les sauvegardes, rapports de plantage et fichiers reçus sont conservés.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'Cache de l\'app (miniatures, cache distant)';
+
+  @override
+  String get junk_clean_temp_item =>
+      'Fichiers temporaires (restes de téléchargements)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '$size libérés';
+  }
+
+  @override
+  String get junk_clean_none => 'Aucun fichier inutile à nettoyer';
+
+  @override
+  String get junk_clean_failed =>
+      'Échec du nettoyage, réessayez plus tard';
+
+  @override
   String get cat_vault => 'Coffre-fort';
 
   @override

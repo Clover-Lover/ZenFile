@@ -2686,6 +2686,48 @@ class L10nKo extends L10n {
   String get cat_analyze => '분석';
 
   @override
+  String get cat_clean => '정리';
+
+  @override
+  String get junk_clean_title => '정크 파일 정리';
+
+  @override
+  String get junk_clean_scanning => '정크 파일 스캔 중…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '$size 정리 가능';
+  }
+
+  @override
+  String get junk_clean_button => '정리';
+
+  @override
+  String get junk_clean_confirm_title => '정크 파일 정리';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return '앱 캐시와 임시 파일을 정리하여 약 $size를 확보합니다. 백업, 크래시 리포트, 전송받은 파일은 삭제되지 않습니다.';
+  }
+
+  @override
+  String get junk_clean_cache_item => '앱 캐시(섬네일, 원격 캐시)';
+
+  @override
+  String get junk_clean_temp_item => '임시 파일(다운로드 잔여물 등)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '$size 확보됨';
+  }
+
+  @override
+  String get junk_clean_none => '정리할 정크 파일이 없습니다';
+
+  @override
+  String get junk_clean_failed => '정리에 실패했습니다. 나중에 다시 시도해 주세요';
+
+  @override
   String get cat_vault => '금고';
 
   @override
