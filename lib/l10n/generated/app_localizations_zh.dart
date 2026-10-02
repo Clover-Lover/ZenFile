@@ -7393,6 +7393,15 @@ class L10nZh extends L10n {
       '加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。';
 
   @override
+  String get vault_encrypt_new_files => '加密新增文件';
+
+  @override
+  String get vault_encrypt_new_files_none => '没有发现需要加密的新文件';
+
+  @override
+  String get vault_encrypt_new_files_done => '新增文件已加密并合并进本目录';
+
+  @override
   String get vault_encrypt_files => '+ 加密文件';
 
   @override
@@ -15186,6 +15195,15 @@ class L10nZhTw extends L10nZh {
   @override
   String get crypt_params_locked_hint =>
       '加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。';
+
+  @override
+  String get vault_encrypt_new_files => '加密新增文件';
+
+  @override
+  String get vault_encrypt_new_files_none => '没有发现需要加密的新文件';
+
+  @override
+  String get vault_encrypt_new_files_done => '新增文件已加密并合并进本目录';
 
   @override
   String get vault_encrypt_files => '+ 加密檔案';

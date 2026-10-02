@@ -7871,6 +7871,18 @@
   "@crypt_params_locked_hint": {
     "description": "vault/crypt: crypt_params_locked_hint"
   },
+  "vault_encrypt_new_files": "Neue Dateien verschlüsseln",
+  "@vault_encrypt_new_files": {
+    "description": "vault/crypt: vault_encrypt_new_files"
+  },
+  "vault_encrypt_new_files_none": "Keine neuen Dateien zu verschlüsseln",
+  "@vault_encrypt_new_files_none": {
+    "description": "vault/crypt: vault_encrypt_new_files_none"
+  },
+  "vault_encrypt_new_files_done": "Neue Dateien verschlüsselt und in diesen Ordner übernommen",
+  "@vault_encrypt_new_files_done": {
+    "description": "vault/crypt: vault_encrypt_new_files_done"
+  },
   "vault_encrypt_files": "+ Dateien verschlüsseln",
   "@vault_encrypt_files": {
     "description": "vault/crypt: vault_encrypt_files"

@@ -2391,6 +2391,8 @@ class _VaultExplorerScreenState extends State<VaultExplorerScreen> {
                   _removeFromInPlaceList(item.path);
                 } else if (value == 'unlink') {
                   _unlinkRemoteCrypt(item.path);
+                } else if (value == 'encryptNew') {
+                  _encryptNewFilesInPlace(item);
                 }
               },
               itemBuilder: (context) {
@@ -2441,6 +2443,19 @@ class _VaultExplorerScreenState extends State<VaultExplorerScreen> {
                       ],
                     ),
                   ),
+                  // 「加密新增文件」只对目录有意义：原地加密改名后，相机/其它
+                  // 应用会新建同名明文目录继续写，新条目需要并入这个密文目录。
+                  if (item.isDirectory)
+                    PopupMenuItem(
+                      value: 'encryptNew',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.note_add_outlined, size: 18),
+                          const SizedBox(width: 10),
+                          Text(l10n.vault_encrypt_new_files, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                    ),
                   PopupMenuItem(
                     value: 'config',
                     child: Row(
@@ -2722,6 +2737,99 @@ class _VaultExplorerScreenState extends State<VaultExplorerScreen> {
     }
   }
 
+  /// 「加密新增文件」：把**同名明文目录**里新增的条目合并进这个密文目录。
+  ///
+  /// 场景见 `CryptOperations.mergeNewFilesIntoEncryptedDir` 的方法文档：原地加密会
+  /// 把目录名换成密文名 ⇒ 相机/其它应用找不到原路径、**新建同名明文目录**继续写 ⇒
+  /// 新文件永远是明文；而「再执行一次原地加密」会因为 rename 的目标（那个已存在的
+  /// 密文目录）没有同名检查而直接抛异常。这里只做「并入」，一步都不改目录名。
+  Future<void> _encryptNewFilesInPlace(_InPlaceItem item) async {
+    if (!await requireVaultSessionUnlock(context)) return;
+    final l10n = L10n.of(context);
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    final ctl = CryptProgressController();
+    var loadingShown = false;
+    void showLoading() {
+      if (loadingShown) return;
+      loadingShown = true;
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      navigator.push(
+        PageRouteBuilder(
+          opaque: false,
+          barrierDismissible: false,
+          pageBuilder: (_, _, _) => ValueListenableBuilder<CryptProgressData?>(
+            valueListenable: ctl.notifier,
+            builder: (_, v, _) => ColoredBox(
+              color: isDark ? Colors.black54 : Colors.black26,
+              child: Center(
+                child: CryptProgressDialog(
+                  message: l10n.vault_encrypting,
+                  progress: v,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    void hideLoading() {
+      if (!loadingShown) return;
+      loadingShown = false;
+      navigator.pop();
+    }
+
+    Object? firstError;
+    try {
+      showLoading();
+      final mount = await _resolveCryptMountForPath(item.path);
+      if (mount == null) {
+        // 尚未在加密设置中配置主密码 → 引导去设置页
+        hideLoading();
+        _showNeedPasswordDialog(l10n);
+        return;
+      }
+
+      try {
+        final merged = await CryptOperations(mount).mergeNewFilesIntoEncryptedDir(
+          item.path,
+          onProgress: ctl.onOverall,
+          onFileProgress: ctl.onFile,
+        );
+        await _loadInPlaceEncryptedFiles();
+        if (mounted) {
+          hideLoading();
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text(merged > 0
+                  ? l10n.vault_encrypt_new_files_done
+                  : l10n.vault_encrypt_new_files_none),
+            ),
+          );
+        }
+        return;
+      } catch (e) {
+        firstError = e;
+      }
+
+      // 挂载点解析成功但仍失败 → 多半是密码/盐对不上，引导去加密设置
+      hideLoading();
+      _showWrongPasswordDialog(l10n);
+    } catch (e) {
+      if (mounted) {
+        hideLoading();
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(l10n.crypt_encrypt_failed('${firstError ?? e}')),
+          ),
+        );
+      }
+    } finally {
+      ctl.dispose();
+    }
+  }
   /// 解密成功后：从导入清单移除并刷新各区域
   Future<void> _afterDecrypt(String path) async {
     await VaultImportStore.remove(path);

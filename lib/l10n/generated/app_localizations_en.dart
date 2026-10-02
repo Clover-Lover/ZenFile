@@ -7787,6 +7787,17 @@ class L10nEn extends L10n {
       'Encryption parameters are locked after creation. Changing them makes existing encrypted files unreadable, because the on-disk encrypted names were generated with these settings. Create a new profile if you need different parameters.';
 
   @override
+  String get vault_encrypt_new_files => 'Encrypt New Files';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'No new files to encrypt';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'New files encrypted and merged into this folder';
+
+  @override
   String get vault_encrypt_files => '+ Encrypt Files';
 
   @override

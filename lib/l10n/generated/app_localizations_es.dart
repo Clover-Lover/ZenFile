@@ -7887,6 +7887,17 @@ class L10nEs extends L10n {
       'Los parámetros de cifrado se bloquean tras la creación. Cambiarlos hace ilegibles los archivos cifrados existentes, porque los nombres en disco se generaron con esta configuración. Crea un perfil nuevo si necesitas otros parámetros.';
 
   @override
+  String get vault_encrypt_new_files => 'Cifrar archivos nuevos';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'No hay archivos nuevos que cifrar';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'Archivos nuevos cifrados y combinados en esta carpeta';
+
+  @override
   String get vault_encrypt_files => '+ Cifrar archivos';
 
   @override

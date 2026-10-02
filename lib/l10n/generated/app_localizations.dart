@@ -13858,6 +13858,24 @@ abstract class L10n {
   /// **'加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。'**
   String get crypt_params_locked_hint;
 
+  /// vault/crypt: vault_encrypt_new_files
+  ///
+  /// In zh, this message translates to:
+  /// **'加密新增文件'**
+  String get vault_encrypt_new_files;
+
+  /// vault/crypt: vault_encrypt_new_files_none
+  ///
+  /// In zh, this message translates to:
+  /// **'没有发现需要加密的新文件'**
+  String get vault_encrypt_new_files_none;
+
+  /// vault/crypt: vault_encrypt_new_files_done
+  ///
+  /// In zh, this message translates to:
+  /// **'新增文件已加密并合并进本目录'**
+  String get vault_encrypt_new_files_done;
+
   /// vault/crypt: vault_encrypt_files
   ///
   /// In zh, this message translates to:

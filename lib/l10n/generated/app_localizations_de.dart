@@ -7874,6 +7874,18 @@ class L10nDe extends L10n {
       'Verschlüsselungsparameter sind nach dem Erstellen gesperrt. Änderungen machen vorhandene verschlüsselte Dateien unlesbar, da die Namen auf dem Datenträger mit diesen Einstellungen erzeugt wurden. Erstellen Sie ein neues Profil, wenn Sie andere Parameter benötigen.';
 
   @override
+  String get vault_encrypt_new_files =>
+      'Neue Dateien verschlüsseln';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'Keine neuen Dateien zu verschlüsseln';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'Neue Dateien verschlüsselt und in diesen Ordner übernommen';
+
+  @override
   String get vault_encrypt_files => '+ Dateien verschlüsseln';
 
   @override

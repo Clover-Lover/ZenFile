@@ -7864,6 +7864,17 @@ class L10nRu extends L10n {
       'Параметры шифрования блокируются после создания. Их изменение делает существующие зашифрованные файлы нечитаемыми: имена на диске были созданы с этими настройками. Создайте новый профиль, если нужны другие параметры.';
 
   @override
+  String get vault_encrypt_new_files => 'Шифровать новые файлы';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'Нет новых файлов для шифрования';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'Новые файлы зашифрованы и объединены с этой папкой';
+
+  @override
   String get vault_encrypt_files => '+ Зашифровать файлы';
 
   @override

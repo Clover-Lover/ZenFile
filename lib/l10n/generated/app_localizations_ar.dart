@@ -7759,6 +7759,17 @@ class L10nAr extends L10n {
       'تُقفل معلمات التشفير بعد الإنشاء. تغييرها يجعل الملفات المشفّرة الحالية غير قابلة للقراءة، لأن الأسماء على القرص أُنشئت بهذه الإعدادات. أنشئ ملفًا شخصيًا جديدًا إذا احتجت معلمات مختلفة.';
 
   @override
+  String get vault_encrypt_new_files => 'تشفير الملفات الجديدة';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'لا توجد ملفات جديدة للتشفير';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'تم تشفير الملفات الجديدة ودمجها في هذا المجلد';
+
+  @override
   String get vault_encrypt_files => '+ تشفير الملفات';
 
   @override

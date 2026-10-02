@@ -7555,6 +7555,16 @@ class L10nJa extends L10n {
       '暗号化パラメータは作成後に変更できません。変更すると既存の暗号化ファイルを元の名前で認識できなくなります（ディスク上の暗号名は作成時の設定で生成されています）。別の設定が必要な場合は、新しいプロファイルを作成してください。';
 
   @override
+  String get vault_encrypt_new_files => '新しいファイルを暗号化';
+
+  @override
+  String get vault_encrypt_new_files_none => '暗号化が必要な新しいファイルはありません';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      '新しいファイルを暗号化してこのフォルダーに統合しました';
+
+  @override
   String get vault_encrypt_files => '+ ファイルを暗号化';
 
   @override

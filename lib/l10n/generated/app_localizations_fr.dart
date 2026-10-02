@@ -7906,6 +7906,18 @@ class L10nFr extends L10n {
       'Les paramètres de chiffrement sont verrouillés après la création. Les modifier rend les fichiers chiffrés existants illisibles, car les noms sur le disque ont été générés avec ces réglages. Créez un nouveau profil si vous avez besoin d\'autres paramètres.';
 
   @override
+  String get vault_encrypt_new_files =>
+      'Chiffrer les nouveaux fichiers';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'Aucun nouveau fichier à chiffrer';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'Nouveaux fichiers chiffrés et fusionnés dans ce dossier';
+
+  @override
   String get vault_encrypt_files => '+ Chiffrer des fichiers';
 
   @override

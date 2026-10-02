@@ -769,6 +769,7 @@ class CryptOperations {
     void Function(int processed, int total)? onProgress,
     void Function(int bytes, int total)? onFileProgress,
     bool skipEncrypted = false,
+    bool renameTopDir = true,
   }) async {
     // 先统计文件总数
     final allFiles = await _listAllFiles(sourceDirPath);
@@ -840,6 +841,12 @@ class CryptOperations {
       await dir.rename(encryptedDirPath);
     }
 
+    // [renameTopDir] == false：调用方只借本方法做「文件/子目录就地加密」，
+    // 顶层目录名必须原样保留 —— 密文目录改名会与已有密文目录撞名、让挂载点
+    // `containsPath` 失配；明文目录改名则会让随后的搬运失去源路径。
+    // 见 [mergeNewFilesIntoEncryptedDir]。
+    if (!renameTopDir) return;
+
     // 最后加密文件夹名称本身（如果不是挂载点根目录）
     if (!p.equals(sourceDirPath, _mount.physicalPath)) {
       final dir = p.dirname(sourceDirPath);
@@ -869,6 +876,144 @@ class CryptOperations {
     }
   }
 
+  /// 增量加密：把「同名明文目录」里的新增条目**合并进已有密文目录**（不改目录名）。
+  ///
+  /// 场景（用户报障）：原地加密 `/DCIM/Camera` 会把目录名换成密文名 ⇒ 相机下次
+  /// 拍照时 `/DCIM/Camera` 已不存在 ⇒ 系统**新建同名明文目录**继续写 ⇒ 新照片
+  /// 永远是明文。而「再执行一次原地加密」修不好：EME 是确定性加密 ⇒
+  /// `encryptDirName('Camera')` 恒定 ⇒ rename 的目标就是那个已存在的密文目录，
+  /// 而 [encryptDirectory] 阶段④**没有同名检查** ⇒ 直接抛异常。
+  ///
+  /// 所以这里只做「并入」，一步都不改目录名：
+  /// ① 密文目录**内部**混进的明文文件（复制/工具写入绕过了自动加密）→ 就地加密；
+  /// ② 父目录下的**同名明文目录**（名字 = `decryptDirName(密文目录名)`）→ 整棵树
+  ///    就地加密（[encryptDirectory] 传 `renameTopDir: false`）→ 顶层子项逐个搬进
+  ///    密文目录（同一文件系统内 rename，几乎零成本）；
+  /// ③ 只有明文目录确实空了才删除它（非空 = 有失败或被占用，保留现场排查）。
+  ///
+  /// 同名冲突按**明文名**加 `_1/_2…` 后缀后重新加密（见 [_uniqueCipherNameFor]）——
+  /// 直接给密文名加后缀会让解密层认不出这个条目。
+  ///
+  /// 返回搬进来的顶层条目数（0 = 没有新增内容）。
+  /// 调用方负责用正确密钥解析出挂载点（见 `vault_explorer_screen._resolveCryptMountForPath`）。
+  Future<int> mergeNewFilesIntoEncryptedDir(
+    String cipherDirPath, {
+    void Function(int processed, int total)? onProgress,
+    void Function(int bytes, int total)? onFileProgress,
+  }) async {
+    final cipherDir = Directory(cipherDirPath);
+    if (!await cipherDir.exists()) {
+      throw FileSystemException('Directory not found', cipherDirPath);
+    }
+
+    // ① 密文目录内部：把漏掉的明文文件就地加密（已加密的由 skipEncrypted 跳过）
+    await encryptDirectory(
+      cipherDirPath,
+      skipEncrypted: true,
+      renameTopDir: false, // 密文目录名绝不能动
+      onProgress: onProgress,
+      onFileProgress: onFileProgress,
+    );
+
+    // ② 同名明文目录。先用「往返校验」确认这个目录名确实是密文名——
+    // `decryptDirName` 对随手起的明文名也可能解码出垃圾，不能只看它抛不抛。
+    final cipherName = p.basename(cipherDirPath);
+    if (!isCipherDirName(cipherName, _mount)) return 0;
+    final String plainName;
+    try {
+      plainName = _mount.crypt.decryptDirName(cipherName);
+    } catch (_) {
+      return 0;
+    }
+    if (plainName.isEmpty || plainName == cipherName) return 0;
+    final plainDirPath = p.join(p.dirname(cipherDirPath), plainName);
+    if (p.equals(plainDirPath, cipherDirPath)) return 0;
+    final plainDir = Directory(plainDirPath);
+    if (!await plainDir.exists()) return 0;
+
+    // ②a 明文目录整棵树就地加密，但顶层目录名不动
+    await encryptDirectory(
+      plainDirPath,
+      skipEncrypted: true,
+      renameTopDir: false,
+      onProgress: onProgress,
+      onFileProgress: onFileProgress,
+    );
+
+    // ②b 顶层子项逐个搬进密文目录
+    var merged = 0;
+    final children = <String>[];
+    await for (final entity in plainDir.list()) {
+      children.add(p.basename(entity.path));
+    }
+    for (final childName in children) {
+      final srcPath = p.join(plainDirPath, childName);
+      final isDir =
+          FileSystemEntity.typeSync(srcPath) == FileSystemEntityType.directory;
+      final destName = await _uniqueCipherNameFor(
+        targetDir: cipherDirPath,
+        cipherChildName: childName,
+        isDirectory: isDir,
+      );
+      final destPath = p.join(cipherDirPath, destName);
+      if (isDir) {
+        await Directory(srcPath).rename(destPath);
+      } else {
+        await File(srcPath).rename(destPath);
+      }
+      merged++;
+    }
+
+    // ③ 只在确实空了时删除：非空说明有失败或被占用，保留现场供排查
+    try {
+      if (await plainDir.list().isEmpty) {
+        await plainDir.delete();
+      }
+    } catch (_) {
+      // 删不掉不算失败：残留的空目录不是密文条目，解密层不会把它列出来
+    }
+    return merged;
+  }
+
+  /// 给要搬进 [targetDir] 的密文子项求一个不冲突的名字。
+  ///
+  /// ⚠️ 冲突时必须回到**明文名**上加后缀再重新加密：磁盘上存的是密文名，直接给
+  /// 密文名加 `_1` 会让 `decryptFileName` 认不出这个条目 —— 密文名必须满足
+  /// `encrypt(decrypt(name)) == name`。扩展名保留在末尾
+  ///（`IMG_0001.jpg` → `IMG_0001_1.jpg`）。
+  Future<String> _uniqueCipherNameFor({
+    required String targetDir,
+    required String cipherChildName,
+    required bool isDirectory,
+  }) async {
+    if (FileSystemEntity.typeSync(p.join(targetDir, cipherChildName)) ==
+        FileSystemEntityType.notFound) {
+      return cipherChildName;
+    }
+    final crypt = _mount.crypt;
+    String plain;
+    try {
+      plain = isDirectory
+          ? crypt.decryptDirName(cipherChildName)
+          : crypt.decryptFileName(cipherChildName);
+    } catch (_) {
+      plain = cipherChildName; // 名字不可解（配置不加密名字）→ 用原名加后缀
+    }
+    final ext = p.extension(plain);
+    final stem =
+        ext.isEmpty ? plain : plain.substring(0, plain.length - ext.length);
+    for (var i = 1; i < 1000; i++) {
+      final candidate = '${stem}_$i$ext';
+      final cipherCandidate = isDirectory
+          ? crypt.encryptDirName(candidate)
+          : crypt.encryptFileName(candidate);
+      if (FileSystemEntity.typeSync(p.join(targetDir, cipherCandidate)) ==
+          FileSystemEntityType.notFound) {
+        return cipherCandidate;
+      }
+    }
+    throw FileSystemException('无法为新条目找到可用名字', cipherChildName);
+  }
   /// 收集 [dir] 下的**全部子目录**，按「后序」排列 = 最深的最先。
   ///
   /// 加/解密都必须**先改深层目录名、再改浅层**：改名一个子目录不会影响它
