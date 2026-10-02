@@ -106,8 +106,11 @@ class FolderShareService {
 
     final filesToShare = <XFile>[];
     final tempZipFiles = <File>[];
-    final tempCleanFiles = <File>[];
-    final cleanNames = <String>{};
+    // 安全分享的清理副本：每个文件独占一个子目录（见 _writeCleanCopy）。
+    // 这里只记「根目录」以便一次删干净，**不给文件名加后缀去重** —— 磁盘文件名
+    // 就是接收方看到的名字。
+    Directory? cleanRoot;
+    var cleanSeq = 0;
     final failedToStrip = <String>[];
 
     try {
@@ -120,9 +123,12 @@ class FolderShareService {
             // 安全分享：把「去元数据副本」写到临时文件，绝不改动原文件。
             // 剥不掉时（加密 PDF、Zip64 压缩包等）**退回原文件**并记名，
             // 事后明确告知 —— 静默当成「已清理」等于骗用户。
-            final cleanFile = await _writeCleanCopy(path, tempDir, cleanNames);
+            cleanRoot ??= await Directory(
+              p.join(tempDir.path, 'zenfile_safe_share'),
+            ).create(recursive: true);
+            final cleanFile = await _writeCleanCopy(path, cleanRoot, cleanSeq);
             if (cleanFile != null) {
-              tempCleanFiles.add(cleanFile);
+              cleanSeq++;
               filesToShare.add(XFile(cleanFile.path));
               continue;
             }
@@ -188,50 +194,56 @@ class FolderShareService {
       // 2 分钟而不是 15 秒：接收集（IM/网盘）拿到的是 content URI，大压缩包可能
       // 要读好一会儿，删早了对方就拿到半截文件。
       Future.delayed(const Duration(minutes: 2), () {
-        for (final file in [...tempZipFiles, ...tempCleanFiles]) {
+        for (final file in tempZipFiles) {
           try {
             if (file.existsSync()) {
               file.deleteSync();
             }
           } catch (_) {}
         }
+        // 清理副本都躺在 zenfile_safe_share/<seq>/ 下，整根递归删掉最干净
+        // （逐文件删会留下一堆空目录）。
+        try {
+          final root = cleanRoot;
+          if (root != null && root.existsSync()) {
+            root.deleteSync(recursive: true);
+          }
+        } catch (_) {}
       });
     }
   }
 
   /// 生成「去元数据副本」写入临时文件（无损、不修改原文件）。
-  /// 临时文件名：`原文件名_clean.扩展名`；无法安全剥离时返回 null。
+  ///
+  /// 🔴 文件名**必须保持原名**：Android 端 share_plus 只会把文件复制成
+  /// `cacheDir/share_plus/<磁盘文件名>` 再分享 —— 它的 `Share.kt` **完全不读**
+  /// Dart 侧传来的 `fileNameOverrides`（12.0.2 实测：Dart 侧塞进 method channel，
+  /// Kotlin 侧根本没有这个字段）⇒ **接收方看到的名字就是磁盘文件名**。
+  /// 所以给副本加 `_clean` 后缀等于替用户把文件改了名，对方会以为
+  /// 「这文件被改过 / 画质被压过」—— 而安全分享的语义是「内容完全等价，只少了元数据」。
+  ///
+  /// 防撞车改用**子目录**（`<root>/<seq>/原名`）而不是改文件名：同一批里多个同名
+  /// 文件各自独占一个序号目录，磁盘名得以保持原名（这与普通分享的行为一致：
+  /// 普通分享遇到两个同名文件同样是两个 `photo.jpg`）。
+  ///
+  /// 无法安全剥离时返回 null（调用方退回原文件并告知用户）。
   static Future<File?> _writeCleanCopy(
     String path,
-    Directory tempDir,
-    Set<String> usedNames,
+    Directory root,
+    int seq,
   ) async {
     try {
       final bytes = await File(path).readAsBytes();
       final cleaned = ShareMetadataStripper.strip(bytes, path);
       if (cleaned == null) return null;
-      final base = p.basenameWithoutExtension(path);
-      final ext = p.extension(path).toLowerCase();
-      var name = '${base}_clean$ext';
-      // 不同目录下的同名文件会撞同一个临时路径，撞上时补一串稳定短标签
-      if (usedNames.contains(name)) {
-        name = '${base}_clean_${_stableTag(path)}$ext';
-      }
-      usedNames.add(name);
-      final cleanFile = File(p.join(tempDir.path, name));
+      final dir = await Directory(
+        p.join(root.path, '$seq'),
+      ).create(recursive: true);
+      final cleanFile = File(p.join(dir.path, p.basename(path)));
       await cleanFile.writeAsBytes(cleaned, flush: true);
       return cleanFile;
     } catch (_) {
       return null;
     }
-  }
-
-  /// 由完整路径算出的稳定短标签（同名文件去重用）。
-  static String _stableTag(String path) {
-    var hash = 0;
-    for (final unit in path.codeUnits) {
-      hash = (hash * 31 + unit) & 0x7FFFFFFF;
-    }
-    return hash.toRadixString(16).padLeft(8, '0').substring(0, 6);
   }
 }

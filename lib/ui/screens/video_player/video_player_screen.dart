@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -208,6 +209,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   bool _decDropWatchOk = false;
   bool _renderDropWatchOk = false;
   bool _delayedDropWatchOk = false;
+  // 「播放信息」用的 Flutter UI 帧统计。
+  // 视频画面走 Texture（原生直接渲染），其更新**不产生 Flutter frame** ⇒ 播放中
+  // 若 frames 几乎不涨，说明 Flutter 侧根本没在渲染，卡顿必在视频管线；反之
+  // janky 多就说明卡在 Flutter 这一层（控制栏动画 / 字幕 overlay / setState 重建）。
+  // 这是目前唯一能把「视频管线卡」与「UI 层卡」分开的探针。
+  int _uiFrameCount = 0;
+  int _uiJankyFrames = 0;
+  int _uiWorstFrameMs = 0;
   int _cleanWindowsInARow = 0;
   static const Duration _frameDropWindow = Duration(seconds: 2);
   // 一个窗口（2s）内解码器丢帧达到该值即判定「跟不上」，降一级
@@ -229,6 +238,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   @override
   void initState() {
     super.initState();
+    // 「播放信息」的 Flutter UI 帧统计（见 _onFrameTimings）；dispose 里成对摘除。
+    SchedulerBinding.instance.addTimingsCallback(_onFrameTimings);
     _currentIndex = widget.initialIndex ?? 0;
     _customAspectRatio = PreferencesService.getVideoCustomAspectRatio();
     _subtitleFontSize = PreferencesService.getSubtitleFontSize();
@@ -2195,6 +2206,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     }
   }
 
+  /// 累计 Flutter UI 帧耗时（「播放信息」诊断用，只读时机统计、零副作用）。
+  ///
+  /// 阈值 33ms ≈ 两帧（60fps 下一帧 16.7ms）：超过即这一帧明显迟到，用户能感知为
+  /// 顿挫。⚠️ 视频画面本身走 Texture，不产生 Flutter frame ⇒ `frames` 几乎不涨时
+  /// **不要把「没统计」误读成「很流畅」**（那恰恰说明卡顿不在 UI 层）。
+  void _onFrameTimings(List<FrameTiming> timings) {
+    for (final t in timings) {
+      _uiFrameCount++;
+      final ms = t.totalSpan.inMilliseconds;
+      if (ms > _uiWorstFrameMs) _uiWorstFrameMs = ms;
+      if (ms > 33) _uiJankyFrames++;
+    }
+  }
+
   /// 计数行格式化：未采集到该属性时显示 n/a，**不显示 0**。
   ///
   /// 计数属性注册失败时会一直停在 0，直接显示会和「真的零丢帧」混淆 ——
@@ -2238,6 +2263,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     }
     if (!_decDropWatchOk) return 'drop counters unavailable';
     if (dec == 0 && renderSide == 0) {
+      // 视频管线全绿、Flutter 侧却明显卡：别报 clean，直接把方向指过去
+      if (_uiJankyFrames >= 5) {
+        return 'pipeline clean but Flutter UI janky '
+            '($_uiJankyFrames frames)';
+      }
       final renderTracked = _renderDropWatchOk || _delayedDropWatchOk;
       return renderTracked
           ? 'clean (no drops in ${_position.inSeconds}s)'
@@ -2296,6 +2326,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       'buffering   : ${player.state.buffering}',
       'playing     : ${player.state.playing}',
       'quality tier: $_swQualityTier (voCompat=$_voCompatMode)',
+      'ui frames   : $_uiFrameCount '
+          '(janky $_uiJankyFrames, worst ${_uiWorstFrameMs}ms)',
       'position    : ${_position.inSeconds}s / ${_duration.inSeconds}s',
       'buffers cfg : $buffers',
       'verdict     : ${_diagnosePlayback()}',
@@ -3032,6 +3064,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // `if (!mounted) return` 挡住了原生调用，但**每次进出播放页都留下一个永不
     // 取消的周期定时器**，反复进出即持续累积（软解路径才启动它）。
     _stopFrameDropWatch();
+    // UI 帧统计回调也要成对摘除 —— 与上面同一个因：留在 SchedulerBinding 上
+    // 就是每次进出播放页累积一个永不释放的闭包（而且它持有已卸载的 State）。
+    SchedulerBinding.instance.removeTimingsCallback(_onFrameTimings);
     _saveCurrentPlaybackPosition();
     _controlsAnimController.dispose();
     // 本页即将销毁、不再持有 player ⇒ 撤销登记，之后通知栏的「关闭」/换绑可以安全
