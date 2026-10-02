@@ -7874,6 +7874,10 @@
   "@crypt_dirname_enc_no": {
     "description": "crypt: crypt_dirname_enc_no"
   },
+  "crypt_params_locked_hint": "暗号化パラメータは作成後に変更できません。変更すると既存の暗号化ファイルを元の名前で認識できなくなります（ディスク上の暗号名は作成時の設定で生成されています）。別の設定が必要な場合は、新しいプロファイルを作成してください。",
+  "@crypt_params_locked_hint": {
+    "description": "vault/crypt: crypt_params_locked_hint"
+  },
   "vault_encrypt_files": "+ ファイルを暗号化",
   "@vault_encrypt_files": {
     "description": "vault/crypt: vault_encrypt_files"

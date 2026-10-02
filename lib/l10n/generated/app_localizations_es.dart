@@ -7883,6 +7883,10 @@ class L10nEs extends L10n {
   String get crypt_dirname_enc_no => 'No';
 
   @override
+  String get crypt_params_locked_hint =>
+      'Los parámetros de cifrado se bloquean tras la creación. Cambiarlos hace ilegibles los archivos cifrados existentes, porque los nombres en disco se generaron con esta configuración. Crea un perfil nuevo si necesitas otros parámetros.';
+
+  @override
   String get vault_encrypt_files => '+ Cifrar archivos';
 
   @override

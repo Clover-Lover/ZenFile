@@ -7551,6 +7551,10 @@ class L10nJa extends L10n {
   String get crypt_dirname_enc_no => 'いいえ';
 
   @override
+  String get crypt_params_locked_hint =>
+      '暗号化パラメータは作成後に変更できません。変更すると既存の暗号化ファイルを元の名前で認識できなくなります（ディスク上の暗号名は作成時の設定で生成されています）。別の設定が必要な場合は、新しいプロファイルを作成してください。';
+
+  @override
   String get vault_encrypt_files => '+ ファイルを暗号化';
 
   @override

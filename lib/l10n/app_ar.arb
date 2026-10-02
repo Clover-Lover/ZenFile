@@ -7870,6 +7870,10 @@
   "@crypt_dirname_enc_no": {
     "description": "crypt: crypt_dirname_enc_no"
   },
+  "crypt_params_locked_hint": "تُقفل معلمات التشفير بعد الإنشاء. تغييرها يجعل الملفات المشفّرة الحالية غير قابلة للقراءة، لأن الأسماء على القرص أُنشئت بهذه الإعدادات. أنشئ ملفًا شخصيًا جديدًا إذا احتجت معلمات مختلفة.",
+  "@crypt_params_locked_hint": {
+    "description": "vault/crypt: crypt_params_locked_hint"
+  },
   "vault_encrypt_files": "+ تشفير الملفات",
   "@vault_encrypt_files": {
     "description": "vault/crypt: vault_encrypt_files"

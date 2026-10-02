@@ -13,8 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 这份凭据是 crypt 加解密的**唯一**密钥来源，与保险箱解锁密码完全独立。
 ///
 /// 两种模式：
-/// - [existingProfile] != null → **编辑配置档案**（密码/加盐只读，只能改名与编码参数）；
-/// - 否则 → **新建配置档案**（顶部填写唯一的「加密名称」）。
+/// - [existingProfile] != null → **编辑配置档案**：密码/加盐 + 全部「密钥空间参数」
+///   （文件名加密 / 目录名加密 / 文件名编码 / 加密后缀）**一律只读**，只能改名与
+///   改「设为默认」。这些参数决定磁盘上的密文名，改动会让**已有密文按名字定位失效**
+///   （与改密码同级），因此创建后即锁定；
+/// - 否则 → **新建配置档案**（顶部填写唯一的「加密名称」，参数可自由设置）。
 class CryptMountEditScreen extends StatefulWidget {
   final CryptProfile? existingProfile;
 
@@ -40,7 +43,13 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
   /// 已存在的档案（用于名称查重时排除自身）
   List<CryptProfile> _profiles = [];
 
-  /// 编辑档案模式：密码与加盐锁定不可改（改了等于换密钥，旧密文永久解不开）
+  /// 编辑档案模式：密码/加盐与**密钥空间参数**一律锁定不可改。
+  ///
+  /// - 改密码/盐 = 换密钥 ⇒ 旧密文永久解不开；
+  /// - 改文件名加密 / 目录名加密 / 文件名编码 / 加密后缀 = 换「名字空间」
+  ///   ⇒ 磁盘上既有的密文名再也解不回明文名（目录显示乱码名、解密层找不到条目，
+  ///   用户的 `/DCIM/Camera` 就是这么变成「只剩一串乱码目录」的）。
+  /// 两者破坏性同级，故一并锁定；需要不同参数请**新建一份配置**。
   bool get _isProfileEdit => widget.existingProfile != null;
 
   /// 新建档案模式（不是编辑挂载点）
@@ -485,6 +494,9 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
               _buildLabel(l10n.crypt_field_suffix, theme),
               TextField(
                 controller: _suffixController,
+                // 编辑档案时锁定（见 _isProfileEdit 注释）：后缀决定磁盘上密文名的
+                // 尾部，改动会让既有密文再也对不上。
+                enabled: !_isProfileEdit,
                 decoration: _fieldDecoration(
                   theme: theme,
                   isDark: isDark,
@@ -509,11 +521,13 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                     child: Text(_getFilenameEncryptionLabel(mode)),
                   );
                 }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => _filenameEncryption = value);
-                  }
-                },
+                onChanged: _isProfileEdit
+                    ? null
+                    : (value) {
+                        if (value != null) {
+                          setState(() => _filenameEncryption = value);
+                        }
+                      },
               ),
               const SizedBox(height: 16),
 
@@ -537,11 +551,15 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                     child: Text(l10n.crypt_dirname_enc_no),
                   ),
                 ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => _directoryNameEncryption = value);
-                  }
-                },
+                // ⚠️ 这个开关尤其不能改：关掉后 decryptDirName 退化成恒等函数，
+                // 已加密的目录名再也解不回明文（还会让「是否已加密」的判定整体失真）。
+                onChanged: _isProfileEdit
+                    ? null
+                    : (value) {
+                        if (value != null) {
+                          setState(() => _directoryNameEncryption = value);
+                        }
+                      },
               ),
               const SizedBox(height: 16),
 
@@ -561,12 +579,20 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                     child: Text(_getFilenameEncodingLabel(enc)),
                   );
                 }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => _filenameEncoding = value);
-                  }
-                },
+                onChanged: _isProfileEdit
+                    ? null
+                    : (value) {
+                        if (value != null) {
+                          setState(() => _filenameEncoding = value);
+                        }
+                      },
               ),
+
+              // 编辑模式：说明这几个参数为何锁定（详见 _isProfileEdit 的注释）
+              if (_isProfileEdit) ...[
+                const SizedBox(height: 12),
+                _buildLockedParamsHint(theme),
+              ],
               // 设为默认档案
               ...[
                 const SizedBox(height: 4),
@@ -622,6 +648,45 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// 编辑模式下「密钥空间参数」锁定的说明条。
+  ///
+  /// 为什么不做成「可改 + 二次确认」：这几个参数与密码同级 —— 改动不会报错，
+  /// 只会让**已有密文静默变成读不出的乱码名**（用户遇到的正是这个：把「加密目录名」
+  /// 改成「不加密目录名」后，`/DCIM/Camera` 就再也解不回明文名了）。
+  /// 给一个「确定要改吗」的弹窗，多数人还是会点确定；锁死 + 明确告知
+  /// 「需要不同参数就新建一份配置」才是真正安全的做法。
+  Widget _buildLockedParamsHint(ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: Colors.amber.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.amber.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.lock_outline_rounded,
+            size: 16,
+            color: Colors.amber.shade800,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              L10n.of(context).crypt_params_locked_hint,
+              style: TextStyle(
+                fontSize: 11.5,
+                height: 1.45,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

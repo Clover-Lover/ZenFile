@@ -7783,6 +7783,10 @@ class L10nEn extends L10n {
   String get crypt_dirname_enc_no => 'No';
 
   @override
+  String get crypt_params_locked_hint =>
+      'Encryption parameters are locked after creation. Changing them makes existing encrypted files unreadable, because the on-disk encrypted names were generated with these settings. Create a new profile if you need different parameters.';
+
+  @override
   String get vault_encrypt_files => '+ Encrypt Files';
 
   @override

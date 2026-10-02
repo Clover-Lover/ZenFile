@@ -7870,6 +7870,10 @@ class L10nDe extends L10n {
   String get crypt_dirname_enc_no => 'Nein';
 
   @override
+  String get crypt_params_locked_hint =>
+      'Verschlüsselungsparameter sind nach dem Erstellen gesperrt. Änderungen machen vorhandene verschlüsselte Dateien unlesbar, da die Namen auf dem Datenträger mit diesen Einstellungen erzeugt wurden. Erstellen Sie ein neues Profil, wenn Sie andere Parameter benötigen.';
+
+  @override
   String get vault_encrypt_files => '+ Dateien verschlüsseln';
 
   @override

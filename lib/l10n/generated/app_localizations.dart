@@ -13852,6 +13852,12 @@ abstract class L10n {
   /// **'否'**
   String get crypt_dirname_enc_no;
 
+  /// vault/crypt: crypt_params_locked_hint
+  ///
+  /// In zh, this message translates to:
+  /// **'加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。'**
+  String get crypt_params_locked_hint;
+
   /// vault/crypt: vault_encrypt_files
   ///
   /// In zh, this message translates to:

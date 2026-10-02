@@ -7389,6 +7389,10 @@ class L10nZh extends L10n {
   String get crypt_dirname_enc_no => '否';
 
   @override
+  String get crypt_params_locked_hint =>
+      '加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。';
+
+  @override
   String get vault_encrypt_files => '+ 加密文件';
 
   @override
@@ -15178,6 +15182,10 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get crypt_dirname_enc_no => '否';
+
+  @override
+  String get crypt_params_locked_hint =>
+      '加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。';
 
   @override
   String get vault_encrypt_files => '+ 加密檔案';

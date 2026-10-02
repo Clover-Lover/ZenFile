@@ -7554,6 +7554,10 @@ class L10nKo extends L10n {
   String get crypt_dirname_enc_no => '아니요';
 
   @override
+  String get crypt_params_locked_hint =>
+      '암호화 매개변수는 생성 후 변경할 수 없습니다. 변경하면 기존 암호문을 원래 이름으로 인식할 수 없게 됩니다(디스크의 암호문 이름은 생성 시 설정으로 만들어졌습니다). 다른 매개변수가 필요하면 새 프로필을 만드세요.';
+
+  @override
   String get vault_encrypt_files => '+ 파일 암호화';
 
   @override

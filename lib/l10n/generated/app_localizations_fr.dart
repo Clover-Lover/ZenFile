@@ -7902,6 +7902,10 @@ class L10nFr extends L10n {
   String get crypt_dirname_enc_no => 'Non';
 
   @override
+  String get crypt_params_locked_hint =>
+      'Les paramètres de chiffrement sont verrouillés après la création. Les modifier rend les fichiers chiffrés existants illisibles, car les noms sur le disque ont été générés avec ces réglages. Créez un nouveau profil si vous avez besoin d\'autres paramètres.';
+
+  @override
   String get vault_encrypt_files => '+ Chiffrer des fichiers';
 
   @override

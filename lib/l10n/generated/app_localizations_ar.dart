@@ -7755,6 +7755,10 @@ class L10nAr extends L10n {
   String get crypt_dirname_enc_no => 'لا';
 
   @override
+  String get crypt_params_locked_hint =>
+      'تُقفل معلمات التشفير بعد الإنشاء. تغييرها يجعل الملفات المشفّرة الحالية غير قابلة للقراءة، لأن الأسماء على القرص أُنشئت بهذه الإعدادات. أنشئ ملفًا شخصيًا جديدًا إذا احتجت معلمات مختلفة.';
+
+  @override
   String get vault_encrypt_files => '+ تشفير الملفات';
 
   @override

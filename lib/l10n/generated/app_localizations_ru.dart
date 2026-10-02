@@ -7860,6 +7860,10 @@ class L10nRu extends L10n {
   String get crypt_dirname_enc_no => 'Нет';
 
   @override
+  String get crypt_params_locked_hint =>
+      'Параметры шифрования блокируются после создания. Их изменение делает существующие зашифрованные файлы нечитаемыми: имена на диске были созданы с этими настройками. Создайте новый профиль, если нужны другие параметры.';
+
+  @override
   String get vault_encrypt_files => '+ Зашифровать файлы';
 
   @override
