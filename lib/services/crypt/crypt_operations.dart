@@ -124,9 +124,25 @@ class CryptDirectoryLister {
         virtualName = physicalName;
       }
 
-      // 保险箱「原地加密」列表只应显示真实已加密的文件/目录
-      if (onlyEncrypted && !decryptionSucceeded) {
-        continue;
+      // 保险箱「原地加密」列表只应显示真实已加密的文件/目录。
+      //
+      // ⚠️ 判据**不能**用「上面没抛异常」：`directoryNameEncryption=false` 时
+      // `decryptDirName` 退化成恒等函数（原样返回、永不抛），于是**任何**目录名
+      // 都算「解密成功」 ⇒ 保险箱列表把挂载点内所有普通文件夹都当成已加密条目
+      // 列出来（用户反馈：把配置改成「不加密目录名」后，列表冒出存储根下全部
+      // 文件夹；改回「加密目录名」又只剩真正的那一个 —— 因为前后只差这个判据）。
+      // 文件名侧同理（`filenameEncryption=off` 时名字不参与加密）。
+      // 这里改用 [CryptOperations.isCipherDirName] / [isCipherFileName] 的
+      // **往返校验**判据：名字映射一旦退化成恒等，它必然返回 false（即
+      // 「名字级信号失效 ⇒ 不认」），与浏览层的加密判定同源，避免「列表里有、
+      // 实际并未加密」。
+      if (onlyEncrypted) {
+        final reallyCipher = entity is Directory
+            ? CryptOperations.isCipherDirName(physicalName, _mount)
+            : CryptOperations.isCipherFileName(physicalName, _mount);
+        if (!reallyCipher) {
+          continue;
+        }
       }
 
       // 隐藏文件过滤
