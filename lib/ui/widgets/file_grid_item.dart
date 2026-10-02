@@ -62,7 +62,7 @@ class FileGridItem extends StatelessWidget {
 
     final child = Card(
       color: isSelected
-          ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+          ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
           : theme.colorScheme.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -70,7 +70,7 @@ class FileGridItem extends StatelessWidget {
         side: BorderSide(
           color: isSelected
               ? theme.colorScheme.primary
-              : theme.dividerColor.withOpacity(0.1),
+              : theme.dividerColor.withValues(alpha: 0.1),
           width: isSelected ? 1.5 : 1.0,
         ),
       ),
@@ -123,7 +123,7 @@ class FileGridItem extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? theme.colorScheme.primary
-                                    : iconColor.withOpacity(0.1),
+                                    : iconColor.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: ClipRRect(
@@ -183,7 +183,7 @@ class FileGridItem extends StatelessWidget {
                       Text(
                         FileUtils.formatBytes(file.size, 1),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.textTheme.bodySmall?.color?.withOpacity(
+                          color: theme.textTheme.bodySmall?.color?.withValues(alpha: 
                             0.6,
                           ),
                         ),
@@ -217,7 +217,7 @@ class FileGridItem extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.9),
+                    color: Colors.orange.withValues(alpha: 0.9),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -272,10 +272,10 @@ class FileGridItem extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.all(4.0),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.06),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.25),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.25),
                     width: 1.5,
                   ),
                 ),
@@ -309,6 +309,16 @@ class _MediaThumbnail extends StatefulWidget {
 
 class _MediaThumbnailState extends State<_MediaThumbnail> {
   static final Map<String, Uint8List?> _apkIconCache = {};
+
+  // 图标缓存上限：APK 图标每张几 KB~几十 KB，条目数封顶防止极端场景
+  // （几万个 APK 的目录）内存无限增长；超限时丢弃最早写入的条目。
+  static void _apkIconCachePut(String path, Uint8List? bytes) {
+    if (!_apkIconCache.containsKey(path) && _apkIconCache.length >= 500) {
+      _apkIconCache.remove(_apkIconCache.keys.first);
+    }
+    _apkIconCache[path] = bytes;
+  }
+
   Uint8List? _videoThumb;
   Uint8List? _audioThumb;
   Uint8List? _apkIcon;
@@ -387,7 +397,7 @@ class _MediaThumbnailState extends State<_MediaThumbnail> {
     }
     try {
       final iconBytes = await AppManagerService.getApkIcon(path);
-      _apkIconCache[path] = iconBytes;
+      _apkIconCachePut(path, iconBytes);
       if (mounted && iconBytes != null) {
         setState(() {
           _apkIcon = iconBytes;
@@ -854,7 +864,7 @@ class _MediaThumbnailState extends State<_MediaThumbnail> {
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 shape: BoxShape.circle,
               ),
               child: Icon(

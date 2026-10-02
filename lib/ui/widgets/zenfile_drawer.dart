@@ -366,7 +366,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
-                      child: Divider(color: theme.colorScheme.onSurface.withOpacity(0.08), height: 1),
+                      child: Divider(color: theme.colorScheme.onSurface.withValues(alpha: 0.08), height: 1),
                     ),
                     _buildDrawerTile(
                       context,
@@ -380,7 +380,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
-                      child: Divider(color: theme.colorScheme.onSurface.withOpacity(0.08), height: 1),
+                      child: Divider(color: theme.colorScheme.onSurface.withValues(alpha: 0.08), height: 1),
                     ),
                     _buildDrawerTile(
                       context,
@@ -406,8 +406,8 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
-                'ZenFile v3.4.1',
-                style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.4), fontWeight: FontWeight.w600),
+                'ZenFile v3.5.0',
+                style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -434,17 +434,17 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
           child: Theme(
             data: theme.copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
-              leading: Icon(icon, size: 24, color: theme.colorScheme.onSurface.withOpacity(0.8)),
+              leading: Icon(icon, size: 24, color: theme.colorScheme.onSurface.withValues(alpha: 0.8)),
               title: AutoSizeText(
                 title,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: theme.colorScheme.onSurface.withOpacity(0.95)),
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: theme.colorScheme.onSurface.withValues(alpha: 0.95)),
                 maxLines: 1,
                 minFontSize: 12,
                 overflow: TextOverflow.ellipsis,
               ),
               iconColor: theme.colorScheme.primary,
               textColor: theme.colorScheme.primary,
-              collapsedIconColor: theme.colorScheme.onSurface.withOpacity(0.8),
+              collapsedIconColor: theme.colorScheme.onSurface.withValues(alpha: 0.8),
               tilePadding: const EdgeInsets.symmetric(horizontal: 16.0),
               initiallyExpanded: expanded,
               onExpansionChanged: (val) => _toggleSection(sectionKey, val),
@@ -455,7 +455,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
         if (showDivider)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
-            child: Divider(color: theme.colorScheme.onSurface.withOpacity(0.08), height: 1),
+            child: Divider(color: theme.colorScheme.onSurface.withValues(alpha: 0.08), height: 1),
           ),
       ],
     );
@@ -477,14 +477,14 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
         gradient: LinearGradient(
           colors: isDark
               ? [const Color(0xFF0F172A), const Color(0xFF1E293B)]
-              : [theme.colorScheme.primary.withOpacity(0.85), theme.colorScheme.primary],
+              : [theme.colorScheme.primary.withValues(alpha: 0.85), theme.colorScheme.primary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.25),
+            color: theme.colorScheme.primary.withValues(alpha: 0.25),
             blurRadius: 12,
             offset: const Offset(0, 3),
           ),
@@ -496,7 +496,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: const Icon(Broken.folder, color: Colors.white, size: 20),
@@ -516,7 +516,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                   L10n.of(context).msgeef7e30c,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 11, fontWeight: FontWeight.w500),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 11, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -662,19 +662,19 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
           },
           onLongPress: showOptionsSheet,
           borderRadius: BorderRadius.circular(16),
-          splashColor: theme.colorScheme.primary.withOpacity(0.15),
-          highlightColor: theme.colorScheme.primary.withOpacity(0.08),
+          splashColor: theme.colorScheme.primary.withValues(alpha: 0.15),
+          highlightColor: theme.colorScheme.primary.withValues(alpha: 0.08),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 12.0, 0.0, 12.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(icon, size: 22, color: theme.colorScheme.onSurface.withOpacity(0.8)),
+                Icon(icon, size: 22, color: theme.colorScheme.onSurface.withValues(alpha: 0.8)),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     title,
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withOpacity(0.9)),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withValues(alpha: 0.9)),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -687,7 +687,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
                     height: 32,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: Icon(Icons.more_vert_rounded, size: 20, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                      child: Icon(Icons.more_vert_rounded, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                     ),
                   ),
                 ),
@@ -718,23 +718,23 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
         : (isSelected ? FontWeight.bold : FontWeight.w600);
     final color = isSelected
         ? theme.colorScheme.primary
-        : theme.colorScheme.onSurface.withOpacity(isPrimary ? 0.95 : 0.9);
+        : theme.colorScheme.onSurface.withValues(alpha: isPrimary ? 0.95 : 0.9);
     return Padding(
       key: key,
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
       child: Material(
-        color: isSelected ? theme.colorScheme.primary.withOpacity(0.15) : Colors.transparent,
+        color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          splashColor: theme.colorScheme.primary.withOpacity(0.15),
-          highlightColor: theme.colorScheme.primary.withOpacity(0.08),
+          splashColor: theme.colorScheme.primary.withValues(alpha: 0.15),
+          highlightColor: theme.colorScheme.primary.withValues(alpha: 0.08),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: trailing != null ? 4.0 : 12.0),
             child: Row(
               children: [
-                Icon(key: iconKey, icon, size: 22, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.8)),
+                Icon(key: iconKey, icon, size: 22, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.8)),
                 const SizedBox(width: 16),
                 Expanded(
                   child: AutoSizeText(

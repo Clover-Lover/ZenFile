@@ -156,7 +156,7 @@ class _ApkInstallSettingsScreenState extends State<ApkInstallSettingsScreen> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.08)),
+        border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.08)),
       ),
       child: Row(
         children: [
@@ -173,7 +173,7 @@ class _ApkInstallSettingsScreenState extends State<ApkInstallSettingsScreen> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.55)),
+                  style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
                 ),
               ],
             ),

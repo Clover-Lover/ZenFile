@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -636,8 +637,58 @@ Future<_FSScanResult> _scanMediaFileSystemIsolate(_FSScanParams params) async {
   );
 }
 
+/// 简单 LRU 缓存（LinkedHashMap 迭代序 = 插入序，命中即移到末尾）。
+///
+/// ThumbnailCache 原为只进不出的 static Map：几千个媒体 × 100~300KB 的
+/// 缩略图常驻可达数百 MB。现按「条目数 + 总字节」双上限淘汰最旧条目。
+class _LruBytesCache {
+  final int maxEntries;
+  final int maxBytes;
+
+  final LinkedHashMap<String, Uint8List?> _map = LinkedHashMap();
+  int _bytes = 0;
+
+  _LruBytesCache({this.maxEntries = 400, this.maxBytes = 64 * 1024 * 1024});
+
+  int get byteSize => _bytes;
+
+  Uint8List? operator [](String key) {
+    if (!_map.containsKey(key)) return null;
+    // 命中即移动到末尾（最近使用）
+    final value = _map.remove(key);
+    _map[key] = value;
+    return value;
+  }
+
+  bool containsKey(String key) => _map.containsKey(key);
+
+  void operator []=(String key, Uint8List? value) {
+    if (_map.containsKey(key)) {
+      final old = _map.remove(key);
+      _bytes -= old?.length ?? 0;
+    }
+    _map[key] = value;
+    _bytes += value?.length ?? 0;
+    _evict();
+  }
+
+  void clear() {
+    _map.clear();
+    _bytes = 0;
+  }
+
+  void _evict() {
+    while (_map.length > maxEntries || _bytes > maxBytes) {
+      if (_map.isEmpty) break;
+      final oldestKey = _map.keys.first;
+      final oldest = _map.remove(oldestKey);
+      _bytes -= oldest?.length ?? 0;
+    }
+  }
+}
+
 class ThumbnailCache {
-  static final Map<String, Uint8List?> _cache = {};
+  static final _LruBytesCache _cache = _LruBytesCache();
   static final Map<String, Future<Uint8List?>> _pending = {};
   static String? _cacheDir;
 
@@ -652,8 +703,10 @@ class ThumbnailCache {
       _cacheDir = folder.path;
       // 异步遍历缓存目录，避免 listSync/readAsBytesSync 阻塞主线程。
       // 缓存文件较多时（数百张缩略图），同步读取会明显卡顿。
+      // 有 LRU 上限：内存预算用尽即停止预载，其余条目按需从磁盘回读。
       try {
         await for (final f in folder.list()) {
+          if (_cache.byteSize >= _cache.maxBytes * 0.9) break;
           if (f is File && f.path.endsWith('.thumb')) {
             final key = f.path.split('/').last.split('\\').last.replaceAll('.thumb', '');
             if (!_cache.containsKey(key)) {
@@ -1417,6 +1470,22 @@ class MediaProvider extends ChangeNotifier {
       return true;
     }).toList();
     return list;
+  }
+
+  List<SongModel>? _audioIndexSource;
+  Map<String, SongModel>? _audioIndex;
+
+  /// O(1) 按路径查找音频条目（供缩略图 widget 逐项查询）。
+  ///
+  /// 此前 UI 里用 `audios.where((s) => s.data == path).firstOrNull`，
+  /// 每个音频 item 都全表扫描，列表页整体是 O(n²)；列表越大滚动越卡。
+  /// 索引按 [_audios] 列表引用惰性重建（列表总是整体替换，无原地修改）。
+  SongModel? audioByPath(String path) {
+    if (!identical(_audioIndexSource, _audios)) {
+      _audioIndex = {for (final s in _audios) s.data: s};
+      _audioIndexSource = _audios;
+    }
+    return _audioIndex![path];
   }
 
   List<FileSystemEntity> get documents {

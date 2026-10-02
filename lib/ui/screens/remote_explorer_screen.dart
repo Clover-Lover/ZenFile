@@ -607,10 +607,10 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
             style: const TextStyle(fontSize: 14),
             decoration: InputDecoration(
               hintText: L10n.of(context).msga98473f2,
-              hintStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.35)),
+              hintStyle: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.35)),
               prefixIcon: Icon(Broken.folder_open, size: 18, color: theme.colorScheme.primary),
               filled: true,
-              fillColor: theme.colorScheme.primary.withOpacity(0.04),
+              fillColor: theme.colorScheme.primary.withValues(alpha: 0.04),
               contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
             ),
@@ -675,7 +675,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                 child: Container(
                   width: 36, height: 4,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface.withOpacity(0.15),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -688,7 +688,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.1),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(
@@ -706,7 +706,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                           overflow: TextOverflow.ellipsis),
                         Text(
                           item.isDirectory ? L10n.of(context).msg5ca05a9b : item.formattedSize,
-                          style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                          style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                         ),
                       ],
                     ),
@@ -789,7 +789,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, size: 18, color: color),
@@ -801,7 +801,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                 children: [
                   Text(label, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
                   if (subtitle != null)
-                    Text(subtitle, style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.45))),
+                    Text(subtitle, style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.45))),
                 ],
               ),
             ),
@@ -1075,7 +1075,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                     Text(L10n.of(context).msg8439c155, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Text(_errorMsg, textAlign: TextAlign.center,
-                      style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.5))),
+                      style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
@@ -1105,7 +1105,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                 Container(
                   height: 44,
                   width: double.infinity,
-                  color: theme.colorScheme.onSurface.withOpacity(0.03),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.03),
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ScrollConfiguration(
                     behavior: const ScrollBehavior().copyWith(overscroll: false),
@@ -1135,13 +1135,13 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                                     fontSize: 12.5,
                                     fontWeight: isLast ? FontWeight.bold : FontWeight.w500,
                                     color: isLast
-                                        ? theme.colorScheme.onSurface.withOpacity(0.9)
+                                        ? theme.colorScheme.onSurface.withValues(alpha: 0.9)
                                         : theme.colorScheme.primary,
                                   )),
                               ),
                             ),
                             if (!isLast)
-                              Icon(Icons.chevron_right_rounded, size: 14, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                              Icon(Icons.chevron_right_rounded, size: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                           ],
                         );
                       },
@@ -1157,11 +1157,11 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Broken.folder_open, size: 56, color: theme.colorScheme.onSurface.withOpacity(0.2)),
+                              Icon(Broken.folder_open, size: 56, color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
                               const SizedBox(height: 14),
                               Text(L10n.of(context).msga21f6ab1,
                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.4))),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4))),
                               if (hasLocalClipboard) ...[
                                 const SizedBox(height: 12),
                                 ElevatedButton.icon(
@@ -1190,12 +1190,12 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
 
                               return ListTile(
                                 selected: _isSelectionMode && _selectedPaths.contains(item.path),
-                                selectedTileColor: theme.colorScheme.primary.withOpacity(0.08),
+                                selectedTileColor: theme.colorScheme.primary.withValues(alpha: 0.08),
                                 leading: _buildRemoteItemLeading(context, item, theme),
                                 title: Text(item.name,
                                   style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w600,
-                                    color: isInRemoteClip ? theme.colorScheme.primary.withOpacity(0.6) : null,
+                                    color: isInRemoteClip ? theme.colorScheme.primary.withValues(alpha: 0.6) : null,
                                     decoration: (isInRemoteClip && provider.isCut)
                                         ? TextDecoration.lineThrough : null,
                                   ),
@@ -1204,7 +1204,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                                   item.isDirectory
                                       ? L10n.of(context).msg1f4c1042
                                       : '${item.formattedSize} • ${FileUtils.formatDateOnly(item.modified)}',
-                                  style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                                  style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                                 ),
                                 trailing: _isSelectionMode
                                     ? Checkbox(
@@ -1221,7 +1221,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                                         activeColor: theme.colorScheme.primary,
                                       )
                                     : PopupMenuButton<String>(
-                                        icon: Icon(Icons.more_vert_rounded, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                                        icon: Icon(Icons.more_vert_rounded, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                         onSelected: (value) async {
                                           switch (value) {
@@ -1302,10 +1302,10 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
         height: 40,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.primary.withOpacity(0.1),
+          color: theme.colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(Broken.folder_open, size: 20, color: theme.colorScheme.primary.withOpacity(0.9)),
+        child: Icon(Broken.folder_open, size: 20, color: theme.colorScheme.primary.withValues(alpha: 0.9)),
       );
     }
 
@@ -1324,10 +1324,10 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
         height: 40,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.primary.withOpacity(0.04),
+          color: theme.colorScheme.primary.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(iconData, size: 20, color: theme.colorScheme.primary.withOpacity(0.6)),
+        child: Icon(iconData, size: 20, color: theme.colorScheme.primary.withValues(alpha: 0.6)),
       );
     }
 
@@ -1351,7 +1351,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.04),
+            color: theme.colorScheme.primary.withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Center(
@@ -1373,10 +1373,10 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
       height: 40,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.04),
+        color: theme.colorScheme.primary.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Icon(iconData, size: 20, color: theme.colorScheme.primary.withOpacity(0.6)),
+      child: Icon(iconData, size: 20, color: theme.colorScheme.primary.withValues(alpha: 0.6)),
     );
   }
 
@@ -1557,7 +1557,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
   Widget _buildClipboardBanner(ThemeData theme, bool hasLocal, bool hasRemote, FileManagerProvider provider) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: theme.colorScheme.primary.withOpacity(0.08),
+      color: theme.colorScheme.primary.withValues(alpha: 0.08),
       child: Row(
         children: [
           Icon(hasLocal ? Icons.upload_rounded : Icons.content_paste_rounded,
@@ -1600,7 +1600,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
             onTap: () {
               provider.clearClipboard();
             },
-            child: Icon(Icons.close_rounded, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+            child: Icon(Icons.close_rounded, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
           ),
         ],
       ),
@@ -1609,7 +1609,7 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
 
   Widget _buildTransferOverlay(ThemeData theme, bool isDark) {
     return Container(
-      color: Colors.black.withOpacity(0.45),
+      color: Colors.black.withValues(alpha: 0.45),
       width: double.infinity,
       height: double.infinity,
       child: Center(
@@ -1628,18 +1628,18 @@ class _RemoteExplorerScreenState extends State<RemoteExplorerScreen> {
                     strokeWidth: 5,
                     value: _transferProgress,
                     valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
-                    backgroundColor: theme.colorScheme.primary.withOpacity(0.15),
+                    backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.15),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(_transferLabel,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface.withOpacity(0.9), fontFamily: 'LexendDeca')),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.9), fontFamily: 'LexendDeca')),
                 const SizedBox(height: 4),
                 SizedBox(
                   width: 200,
                   child: Text(_transferFileName,
-                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                     textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
                 ),
                 const SizedBox(height: 10),

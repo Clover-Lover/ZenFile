@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import '../ssh_host_key_store.dart';
 import 'remote_client.dart';
 
 /// 原生 SSH/SFTP 通道：在 Android 上用 Java JSch 实现（加解密走系统硬件加速），
@@ -145,6 +147,14 @@ class SftpRemoteClient extends RemoteClient {
       username: username,
       identities: identities,
       onPasswordRequest: authMethod == 'key' ? null : () => password,
+      // TOFU 主机密钥校验：首次连接记录指纹并信任，之后不匹配即拒绝。
+      // 此前此处未设置回调 = 自动接受任意主机密钥（MITM 完全敞开）。
+      onVerifyHostKey: (keyType, fingerprintBytes) => SshHostKeyStore.verifyTofu(
+        host: host,
+        port: port,
+        keyType: keyType,
+        fingerprint: utf8.decode(fingerprintBytes, allowMalformed: true),
+      ),
     );
     _sftpClient = await _sshClient!.sftp();
   }

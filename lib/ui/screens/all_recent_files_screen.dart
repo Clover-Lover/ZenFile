@@ -430,7 +430,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
   }
 
   Future<void> _handleEncrypt(BuildContext context, String path) async {
-    if (!await requireVaultSessionUnlock(context)) return;
+    // 加密是「保护方向」操作，不过保险箱会话闸门（闸门只守明文出口）。
     if (!await _ensureMasterPassword(context)) return;
     final mode = await BulkCryptActions.promptEncryptionMode(context);
     if (mode == null) return;

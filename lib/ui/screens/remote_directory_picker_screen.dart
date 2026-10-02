@@ -198,7 +198,7 @@ class _RemoteDirectoryPickerScreenState extends State<RemoteDirectoryPickerScree
                   child: Text(
                     _currentPath,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -249,7 +249,7 @@ class _RemoteDirectoryPickerScreenState extends State<RemoteDirectoryPickerScree
       itemBuilder: (context, index) {
         if (parent != null && index == 0) {
           return ListTile(
-            leading: Icon(Icons.arrow_upward, color: theme.colorScheme.onSurface.withOpacity(0.6)),
+            leading: Icon(Icons.arrow_upward, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
             title: Text(
               L10n.of(context).ui_parent_directory,
               style: TextStyle(color: theme.colorScheme.onSurface),
@@ -264,7 +264,7 @@ class _RemoteDirectoryPickerScreenState extends State<RemoteDirectoryPickerScree
             item.name,
             style: TextStyle(color: theme.colorScheme.onSurface),
           ),
-          trailing: Icon(Icons.chevron_right, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+          trailing: Icon(Icons.chevron_right, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
           onTap: () => _loadDirectoryContents(item.path),
         );
       },

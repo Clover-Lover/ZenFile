@@ -277,17 +277,17 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
       prefixIcon: Icon(
         icon,
         size: 20,
-        color: theme.colorScheme.onSurface.withOpacity(0.55),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
       ),
       suffixIcon: suffix,
       filled: true,
       fillColor: isDark
-          ? Colors.white.withOpacity(0.03)
-          : Colors.black.withOpacity(0.02),
-      border: border(theme.colorScheme.outline.withOpacity(0.18), 1),
-      enabledBorder: border(theme.colorScheme.outline.withOpacity(0.18), 1),
+          ? Colors.white.withValues(alpha: 0.03)
+          : Colors.black.withValues(alpha: 0.02),
+      border: border(theme.colorScheme.outline.withValues(alpha: 0.18), 1),
+      enabledBorder: border(theme.colorScheme.outline.withValues(alpha: 0.18), 1),
       focusedBorder: border(theme.colorScheme.primary, 1.5),
-      errorBorder: border(theme.colorScheme.error.withOpacity(0.6), 1),
+      errorBorder: border(theme.colorScheme.error.withValues(alpha: 0.6), 1),
       focusedErrorBorder: border(theme.colorScheme.error, 1.5),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
     );
@@ -311,7 +311,7 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                   const Color(0xFF030712),
                 ]
               : [
-                  theme.colorScheme.primaryContainer.withOpacity(0.3),
+                  theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                   theme.colorScheme.surface,
                   theme.colorScheme.surface,
                 ],
@@ -344,7 +344,7 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(
+                  color: theme.colorScheme.primary.withValues(alpha: 
                     isDark ? 0.12 : 0.07,
                   ),
                   borderRadius: BorderRadius.circular(16),
@@ -364,7 +364,7 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                         style: TextStyle(
                           fontSize: 12.5,
                           height: 1.45,
-                          color: theme.colorScheme.onSurface.withOpacity(0.75),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                         ),
                       ),
                     ),
@@ -415,7 +415,7 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                       ? Icon(
                           Icons.lock_outline,
                           size: 18,
-                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                         )
                       : IconButton(
                           icon: Icon(
@@ -483,7 +483,7 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                     l10n.crypt_profile_credential_locked_desc,
                     style: TextStyle(
                       fontSize: 11.5,
-                      color: theme.colorScheme.onSurface.withOpacity(0.55),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                     ),
                   ),
                 ),
@@ -599,11 +599,11 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                 Container(
                   decoration: BoxDecoration(
                     color: isDark
-                        ? Colors.white.withOpacity(0.03)
-                        : Colors.black.withOpacity(0.02),
+                        ? Colors.white.withValues(alpha: 0.03)
+                        : Colors.black.withValues(alpha: 0.02),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: theme.colorScheme.outline.withOpacity(0.18),
+                      color: theme.colorScheme.outline.withValues(alpha: 0.18),
                     ),
                   ),
                   child: SwitchListTile(
@@ -617,7 +617,7 @@ class _CryptMountEditScreenState extends State<CryptMountEditScreen> {
                       l10n.crypt_profile_set_default_desc,
                       style: TextStyle(
                         fontSize: 11.5,
-                        color: theme.colorScheme.onSurface.withOpacity(0.55),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                       ),
                     ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 14),

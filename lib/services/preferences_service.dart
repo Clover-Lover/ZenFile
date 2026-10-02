@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/file_manager_provider.dart';
 import '../models/custom_shortcut_model.dart';
@@ -50,6 +51,8 @@ class PreferencesService {
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     await _applyUiNavBarMigration();
+    // 预载 Google Drive token（secure storage → 内存缓存），使同步 getter 可用
+    await _ensureGdriveTokensLoaded();
   }
 
   /// UI 导航栏版本迁移（v2.1.7）：旧版本导航栏位置默认在顶部（false），
@@ -893,20 +896,74 @@ class PreferencesService {
   static const String _keyGdriveAccessToken = 'gdrive_access_token';
   static const String _keyGdriveRefreshToken = 'gdrive_refresh_token';
 
+  static const FlutterSecureStorage _gdriveSecure = FlutterSecureStorage();
+  static String? _gdriveAccessTokenCache;
+  static String? _gdriveRefreshTokenCache;
+  static bool _gdriveSecureLoaded = false;
+
+  /// 首次使用前把 secure storage 中的 token 载入内存缓存，
+  /// 并将旧版明文 SharedPreferences 记录迁入 secure storage。
+  static Future<void> _ensureGdriveTokensLoaded() async {
+    if (_gdriveSecureLoaded) return;
+    _gdriveSecureLoaded = true;
+    try {
+      _gdriveAccessTokenCache = await _gdriveSecure.read(key: _keyGdriveAccessToken);
+      _gdriveRefreshTokenCache = await _gdriveSecure.read(key: _keyGdriveRefreshToken);
+    } catch (_) {
+      return; // secure storage 不可用时回退读明文旧值，保证功能可用
+    }
+    // 一次性迁移旧明文 token
+    final legacyAccess = _prefs?.getString(_keyGdriveAccessToken);
+    final legacyRefresh = _prefs?.getString(_keyGdriveRefreshToken);
+    if ((legacyAccess != null && legacyAccess.isNotEmpty) ||
+        (legacyRefresh != null && legacyRefresh.isNotEmpty)) {
+      try {
+        if (legacyAccess != null && legacyAccess.isNotEmpty) {
+          await _gdriveSecure.write(key: _keyGdriveAccessToken, value: legacyAccess);
+        }
+        if (legacyRefresh != null && legacyRefresh.isNotEmpty) {
+          await _gdriveSecure.write(key: _keyGdriveRefreshToken, value: legacyRefresh);
+        }
+        await _prefs?.remove(_keyGdriveAccessToken);
+        await _prefs?.remove(_keyGdriveRefreshToken);
+        _gdriveAccessTokenCache ??= legacyAccess;
+        _gdriveRefreshTokenCache ??= legacyRefresh;
+      } catch (_) {}
+    }
+  }
+
   static String? getGoogleDriveAccessToken() {
-    return _prefs?.getString(_keyGdriveAccessToken);
+    return _gdriveAccessTokenCache;
   }
 
   static Future<void> saveGoogleDriveAccessToken(String token) async {
-    await _prefs?.setString(_keyGdriveAccessToken, token);
+    await _ensureGdriveTokensLoaded();
+    _gdriveAccessTokenCache = token.isEmpty ? null : token;
+    try {
+      if (token.isEmpty) {
+        await _gdriveSecure.delete(key: _keyGdriveAccessToken);
+      } else {
+        await _gdriveSecure.write(key: _keyGdriveAccessToken, value: token);
+      }
+    } catch (_) {}
+    await _prefs?.remove(_keyGdriveAccessToken);
   }
 
   static String? getGoogleDriveRefreshToken() {
-    return _prefs?.getString(_keyGdriveRefreshToken);
+    return _gdriveRefreshTokenCache;
   }
 
   static Future<void> saveGoogleDriveRefreshToken(String token) async {
-    await _prefs?.setString(_keyGdriveRefreshToken, token);
+    await _ensureGdriveTokensLoaded();
+    _gdriveRefreshTokenCache = token.isEmpty ? null : token;
+    try {
+      if (token.isEmpty) {
+        await _gdriveSecure.delete(key: _keyGdriveRefreshToken);
+      } else {
+        await _gdriveSecure.write(key: _keyGdriveRefreshToken, value: token);
+      }
+    } catch (_) {}
+    await _prefs?.remove(_keyGdriveRefreshToken);
   }
 
   // --- 后台播放电池优化白名单提示 (#13) ---
@@ -1270,6 +1327,46 @@ class PreferencesService {
 
   static Future<void> saveFtpPort(int port) async {
     await _prefs?.setInt(_keyFtpPort, port);
+  }
+
+  static const String _keyFtpUsername = 'ftp_username';
+  static const String _keyFtpPassword = 'ftp_password';
+  static const String _keyFtpAnonymous = 'ftp_anonymous';
+
+  static String getFtpUsername() {
+    return _prefs?.getString(_keyFtpUsername) ?? 'Anonymous';
+  }
+
+  static Future<void> saveFtpUsername(String username) async {
+    await _prefs?.setString(_keyFtpUsername, username);
+  }
+
+  static String getFtpPassword() {
+    return _prefs?.getString(_keyFtpPassword) ?? '';
+  }
+
+  static Future<void> saveFtpPassword(String password) async {
+    await _prefs?.setString(_keyFtpPassword, password);
+  }
+
+  /// FTP 是否匿名模式，默认 true
+  static bool getFtpAnonymous() {
+    return _prefs?.getBool(_keyFtpAnonymous) ?? true;
+  }
+
+  static Future<void> saveFtpAnonymous(bool anonymous) async {
+    await _prefs?.setBool(_keyFtpAnonymous, anonymous);
+  }
+
+  static const String _keyWebSharePassword = 'web_share_password';
+
+  /// Web 分享访问口令；为空表示不启用鉴权（仅限本机网络信任场景）
+  static String getWebSharePassword() {
+    return _prefs?.getString(_keyWebSharePassword) ?? '';
+  }
+
+  static Future<void> saveWebSharePassword(String password) async {
+    await _prefs?.setString(_keyWebSharePassword, password);
   }
 
   static Map<String, List<String>> getCustomCategoryPaths() {

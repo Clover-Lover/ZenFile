@@ -56,11 +56,11 @@ class AboutZenFileScreen extends StatelessWidget {
     // AMOLED or normal backgrounds
     final scaffoldBg = theme.scaffoldBackgroundColor;
     final cardBg = isDark
-        ? Colors.white.withOpacity(0.04)
-        : Colors.black.withOpacity(0.03);
+        ? Colors.white.withValues(alpha: 0.04)
+        : Colors.black.withValues(alpha: 0.03);
     final borderCol = isDark
-        ? Colors.white.withOpacity(0.08)
-        : Colors.black.withOpacity(0.08);
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.black.withValues(alpha: 0.08);
 
     return Scaffold(
       backgroundColor: scaffoldBg,
@@ -73,7 +73,7 @@ class AboutZenFileScreen extends StatelessWidget {
             floating: false,
             pinned: true,
             elevation: 0,
-            backgroundColor: scaffoldBg.withOpacity(0.9),
+            backgroundColor: scaffoldBg.withValues(alpha: 0.9),
             iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
@@ -109,8 +109,8 @@ class AboutZenFileScreen extends StatelessWidget {
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: [
-                              theme.colorScheme.primary.withOpacity(0.2),
-                              theme.colorScheme.secondary.withOpacity(0.0),
+                              theme.colorScheme.primary.withValues(alpha: 0.2),
+                              theme.colorScheme.secondary.withValues(alpha: 0.0),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -125,8 +125,8 @@ class AboutZenFileScreen extends StatelessWidget {
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: [
-                              theme.colorScheme.primary.withOpacity(0.4),
-                              theme.colorScheme.secondary.withOpacity(0.1),
+                              theme.colorScheme.primary.withValues(alpha: 0.4),
+                              theme.colorScheme.secondary.withValues(alpha: 0.1),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -140,10 +140,10 @@ class AboutZenFileScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: isDark ? const Color(0xFF121212) : Colors.white,
-                          border: Border.all(color: theme.colorScheme.primary.withOpacity(0.4), width: 2),
+                          border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.4), width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: theme.colorScheme.primary.withOpacity(0.25),
+                              color: theme.colorScheme.primary.withValues(alpha: 0.25),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             )
@@ -184,9 +184,9 @@ class AboutZenFileScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   // 版本号文本（硬编码，无需 l10n；以后升级版本只改这里）
                   Text(
-                    'v3.4.1',
+                    'v3.5.0',
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'LexendDeca',
@@ -208,7 +208,7 @@ class AboutZenFileScreen extends StatelessWidget {
                       L10n.of(context).zenfileflutter,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: theme.colorScheme.onSurface.withOpacity(0.85),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
                         fontSize: 14.5,
                         height: 1.5,
                         fontWeight: FontWeight.w400,
@@ -359,7 +359,7 @@ class AboutZenFileScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       fontFamily: 'LexendDeca',
                     ),
                   ),
@@ -368,7 +368,7 @@ class AboutZenFileScreen extends StatelessWidget {
                     L10n.of(context).based_on_nfile,
                     style: TextStyle(
                       fontSize: 11,
-                      color: theme.colorScheme.onSurface.withOpacity(0.35),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -376,7 +376,7 @@ class AboutZenFileScreen extends StatelessWidget {
                     L10n.of(context).zenfile2,
                     style: TextStyle(
                       fontSize: 11,
-                      color: theme.colorScheme.onSurface.withOpacity(0.35),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -398,11 +398,11 @@ class AboutZenFileScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final cardBg = isDark
-        ? Colors.white.withOpacity(0.03)
-        : Colors.black.withOpacity(0.02);
+        ? Colors.white.withValues(alpha: 0.03)
+        : Colors.black.withValues(alpha: 0.02);
     final borderCol = isDark
-        ? Colors.white.withOpacity(0.06)
-        : Colors.black.withOpacity(0.06);
+        ? Colors.white.withValues(alpha: 0.06)
+        : Colors.black.withValues(alpha: 0.06);
 
     return Container(
       padding: const EdgeInsets.all(14),
@@ -431,7 +431,7 @@ class AboutZenFileScreen extends StatelessWidget {
             subtitle,
             style: TextStyle(
               fontSize: 10.5,
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -451,11 +451,11 @@ class AboutZenFileScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final cardBg = isDark
-        ? Colors.white.withOpacity(0.03)
-        : Colors.black.withOpacity(0.02);
+        ? Colors.white.withValues(alpha: 0.03)
+        : Colors.black.withValues(alpha: 0.02);
     final borderCol = isDark
-        ? Colors.white.withOpacity(0.06)
-        : Colors.black.withOpacity(0.06);
+        ? Colors.white.withValues(alpha: 0.06)
+        : Colors.black.withValues(alpha: 0.06);
 
     return Material(
       color: Colors.transparent,
@@ -486,7 +486,7 @@ class AboutZenFileScreen extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 14,
-                color: theme.colorScheme.onSurface.withOpacity(0.3),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
               ),
             ],
           ),
@@ -510,13 +510,13 @@ class AboutZenFileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Center(
-                  child: Container(width: 40, height: 4, margin: const EdgeInsets.only(bottom: 16), decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                  child: Container(width: 40, height: 4, margin: const EdgeInsets.only(bottom: 16), decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                 ),
                 Text(L10n.of(context).msg2eceaa85, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Text(
                   L10n.of(context).msg138d3725,
-                  style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                  style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -538,7 +538,7 @@ class AboutZenFileScreen extends StatelessWidget {
                                   return Container(
                                     height: 180,
                                     decoration: BoxDecoration(
-                                      color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                                      color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: const Center(child: Icon(Icons.qr_code, size: 48)),
@@ -553,7 +553,7 @@ class AboutZenFileScreen extends StatelessWidget {
                             children: [
                               Icon(Icons.payment, size: 16, color: theme.colorScheme.primary),
                               const SizedBox(width: 6),
-                              Text(L10n.of(context).msgccd097a7, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withOpacity(0.85))),
+                              Text(L10n.of(context).msgccd097a7, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withValues(alpha: 0.85))),
                             ],
                           ),
                         ],
@@ -577,7 +577,7 @@ class AboutZenFileScreen extends StatelessWidget {
                                   return Container(
                                     height: 180,
                                     decoration: BoxDecoration(
-                                      color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                                      color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: const Center(child: Icon(Icons.qr_code, size: 48)),
@@ -592,7 +592,7 @@ class AboutZenFileScreen extends StatelessWidget {
                             children: [
                               Icon(Icons.chat_bubble_outline, size: 16, color: theme.colorScheme.primary),
                               const SizedBox(width: 6),
-                              Text(L10n.of(context).msgbffe28c8, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withOpacity(0.85))),
+                              Text(L10n.of(context).msgbffe28c8, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withValues(alpha: 0.85))),
                             ],
                           ),
                         ],
@@ -604,18 +604,18 @@ class AboutZenFileScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.06),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: theme.colorScheme.primary.withOpacity(0.12)),
+                    border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.12)),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.favorite_rounded, size: 16, color: theme.colorScheme.primary.withOpacity(0.7)),
+                      Icon(Icons.favorite_rounded, size: 16, color: theme.colorScheme.primary.withValues(alpha: 0.7)),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           L10n.of(context).msg0537b04e,
-                          style: TextStyle(fontSize: 12.5, height: 1.4, color: theme.colorScheme.onSurface.withOpacity(0.65)),
+                          style: TextStyle(fontSize: 12.5, height: 1.4, color: theme.colorScheme.onSurface.withValues(alpha: 0.65)),
                         ),
                       ),
                     ],
@@ -636,7 +636,7 @@ class AboutZenFileScreen extends StatelessWidget {
         builder: (ctx) => Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
-            backgroundColor: Colors.black.withOpacity(0.5),
+            backgroundColor: Colors.black.withValues(alpha: 0.5),
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.close, color: Colors.white),

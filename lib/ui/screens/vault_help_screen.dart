@@ -28,7 +28,7 @@ class VaultHelpScreen extends StatelessWidget {
                     const Color(0xFF030712),
                   ]
                 : [
-                    theme.colorScheme.primaryContainer.withOpacity(0.25),
+                    theme.colorScheme.primaryContainer.withValues(alpha: 0.25),
                     theme.colorScheme.surface,
                     theme.colorScheme.surface,
                   ],
@@ -110,9 +110,9 @@ class VaultHelpScreen extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        color: theme.colorScheme.primary.withOpacity(0.08),
+        color: theme.colorScheme.primary.withValues(alpha: 0.08),
         border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.22),
+          color: theme.colorScheme.primary.withValues(alpha: 0.22),
           width: 1,
         ),
       ),
@@ -122,7 +122,7 @@ class VaultHelpScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.16),
+              color: theme.colorScheme.primary.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -137,7 +137,7 @@ class VaultHelpScreen extends StatelessWidget {
               l10n.vault_help_intro,
               style: theme.textTheme.bodyMedium?.copyWith(
                 height: 1.5,
-                color: theme.colorScheme.onSurface.withOpacity(0.85),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
               ),
             ),
           ),
@@ -181,12 +181,12 @@ class _Section extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.18),
+          color: theme.colorScheme.outline.withValues(alpha: 0.18),
           width: 1,
         ),
         color: isDark
-            ? Colors.white.withOpacity(0.03)
-            : Colors.black.withOpacity(0.015),
+            ? Colors.white.withValues(alpha: 0.03)
+            : Colors.black.withValues(alpha: 0.015),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
@@ -213,7 +213,7 @@ class _Section extends StatelessWidget {
                 intro!,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   height: 1.5,
-                  color: theme.colorScheme.onSurface.withOpacity(0.8),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
               ),
             ],
@@ -237,7 +237,7 @@ class _Section extends StatelessWidget {
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.45,
                         fontSize: 13.5,
-                        color: theme.colorScheme.onSurface.withOpacity(0.75),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                       ),
                     ),
                   ],
@@ -255,7 +255,7 @@ class _Section extends StatelessWidget {
                       child: Icon(
                         Icons.circle,
                         size: 6,
-                        color: accent.withOpacity(0.9),
+                        color: accent.withValues(alpha: 0.9),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -265,7 +265,7 @@ class _Section extends StatelessWidget {
                         style: theme.textTheme.bodyMedium?.copyWith(
                           height: 1.45,
                           fontSize: 13.5,
-                          color: theme.colorScheme.onSurface.withOpacity(0.78),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.78),
                         ),
                       ),
                     ),

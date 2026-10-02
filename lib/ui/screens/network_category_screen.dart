@@ -138,12 +138,12 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Broken.wifi, size: 64, color: theme.colorScheme.onSurface.withOpacity(0.15)),
+                      Icon(Broken.wifi, size: 64, color: theme.colorScheme.onSurface.withValues(alpha: 0.15)),
                       const SizedBox(height: 20),
                       Text(
                         L10n.of(context).msgc9c900d0,
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -151,7 +151,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                       Text(
                         L10n.of(context).ftpsftpwebdavsmb1,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                           fontSize: 14,
                         ),
                       ),
@@ -194,7 +194,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: color.withOpacity(0.1),
+                            color: color.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(iconData, color: color, size: 24),
@@ -214,7 +214,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                                 conn.type,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -224,7 +224,7 @@ class _NetworkCategoryScreenState extends State<NetworkCategoryScreen> {
                                 '${conn.host}:${conn.port}',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

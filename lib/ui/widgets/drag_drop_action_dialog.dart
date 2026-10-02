@@ -92,7 +92,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: _getFileIconColor(context).withOpacity(0.12),
+                        color: _getFileIconColor(context).withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Icon(
@@ -123,7 +123,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 11,
-                              color: theme.colorScheme.onSurface.withOpacity(0.5),
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                             ),
                           ),
                         ],
@@ -172,7 +172,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
                         L10n.of(context).ui_cancel,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface.withOpacity(0.55),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                         ),
                       ),
                     ),
@@ -182,7 +182,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: theme.colorScheme.primary.withOpacity(0.35),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.35),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           )
@@ -236,7 +236,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: color.withOpacity(0.04),
+                    color: color.withValues(alpha: 0.04),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   )
@@ -249,11 +249,11 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: isSelected ? color : theme.colorScheme.onSurface.withOpacity(0.08),
+              color: isSelected ? color : theme.colorScheme.onSurface.withValues(alpha: 0.08),
               width: isSelected ? 2.0 : 1.0,
             ),
           ),
-          color: isSelected ? color.withOpacity(0.06) : theme.colorScheme.surface,
+          color: isSelected ? color.withValues(alpha: 0.06) : theme.colorScheme.surface,
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: isDisabled
@@ -270,7 +270,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.12),
+                      color: color.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(icon, color: color, size: 22),
@@ -292,7 +292,7 @@ class _DragDropActionDialogState extends State<DragDropActionDialog> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isSelected ? color : theme.colorScheme.onSurface.withOpacity(0.25),
+                        color: isSelected ? color : theme.colorScheme.onSurface.withValues(alpha: 0.25),
                         width: 2.0,
                       ),
                       color: isSelected ? color : Colors.transparent,

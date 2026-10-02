@@ -15,7 +15,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       builder: (dialogContext) {
         service.setActiveDialogContext(dialogContext);
         service.dialogCloseCallback = () {
@@ -89,7 +89,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withValues(alpha: 0.4),
                     blurRadius: 30,
                     spreadRadius: 2,
                     offset: const Offset(0, 12),
@@ -110,7 +110,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                       strokeWidth: 8,
                       backgroundColor: Colors.transparent,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.primary.withOpacity(0.08),
+                        theme.colorScheme.primary.withValues(alpha: 0.08),
                       ),
                     ),
                   ),
@@ -145,7 +145,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         (isDark ? const Color(0xFF81C784) : const Color(0xFF43A047))
-                            .withOpacity(0.10),
+                            .withValues(alpha: 0.10),
                       ),
                     ),
                   ),
@@ -184,7 +184,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                             style: OutlinedButton.styleFrom(
                               foregroundColor: theme.colorScheme.primary,
                               side: BorderSide(
-                                color: theme.colorScheme.primary.withOpacity(0.3),
+                                color: theme.colorScheme.primary.withValues(alpha: 0.3),
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -216,7 +216,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -233,7 +233,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w500,
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -259,7 +259,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -270,7 +270,7 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                               ),
                             ),
                           ],
@@ -287,9 +287,9 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                               Navigator.of(context).pop();
                             },
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: theme.colorScheme.onSurface.withOpacity(0.6),
+                              foregroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                               side: BorderSide(
-                                color: theme.colorScheme.outline.withOpacity(0.2),
+                                color: theme.colorScheme.outline.withValues(alpha: 0.2),
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18),

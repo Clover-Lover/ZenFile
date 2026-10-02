@@ -97,9 +97,9 @@ class SortModal {
                         data: theme.copyWith(dividerColor: Colors.transparent),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                            color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: theme.dividerColor.withOpacity(0.1)),
+                            border: Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
                           ),
                           child: ExpansionTile(
                             initiallyExpanded: isAppearanceExpanded,
@@ -182,7 +182,7 @@ class SortModal {
                                 Text(
                                   L10n.of(context).msg_remember_filter_desc,
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.onSurface.withOpacity(0.55),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                                     fontSize: 11,
                                   ),
                                 ),
@@ -220,13 +220,13 @@ class SortModal {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: provider.isFolderOverrideEnabled(provider.currentPath)
-                              ? theme.colorScheme.primary.withOpacity(0.08)
-                              : theme.colorScheme.surfaceVariant.withOpacity(0.4),
+                              ? theme.colorScheme.primary.withValues(alpha: 0.08)
+                              : theme.colorScheme.surfaceVariant.withValues(alpha: 0.4),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: provider.isFolderOverrideEnabled(provider.currentPath)
-                                ? theme.colorScheme.primary.withOpacity(0.25)
-                                : theme.dividerColor.withOpacity(0.08),
+                                ? theme.colorScheme.primary.withValues(alpha: 0.25)
+                                : theme.dividerColor.withValues(alpha: 0.08),
                             width: 1.5,
                           ),
                         ),
@@ -236,7 +236,7 @@ class SortModal {
                               Broken.folder_favorite,
                               color: provider.isFolderOverrideEnabled(provider.currentPath)
                                   ? theme.colorScheme.primary
-                                  : theme.colorScheme.onSurface.withOpacity(0.65),
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.65),
                               size: 24,
                             ),
                             const SizedBox(width: 14),
@@ -255,7 +255,7 @@ class SortModal {
                                   Text(
                                     L10n.of(context).msg4dfc167a,
                                     style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurface.withOpacity(0.55),
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                                       fontSize: 11,
                                     ),
                                   ),
@@ -303,10 +303,10 @@ class SortModal {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant.withOpacity(0.5),
+          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? theme.colorScheme.primary.withOpacity(0.25) : theme.dividerColor.withOpacity(0.08),
+            color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.25) : theme.dividerColor.withValues(alpha: 0.08),
             width: 1.5,
           ),
         ),
@@ -314,7 +314,7 @@ class SortModal {
           label,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withOpacity(0.8),
+            color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withValues(alpha: 0.8),
             fontSize: 13,
           ),
         ),
@@ -341,10 +341,10 @@ class SortModal {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant.withOpacity(0.5),
+          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? theme.colorScheme.primary.withOpacity(0.25) : theme.dividerColor.withOpacity(0.08),
+            color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.25) : theme.dividerColor.withValues(alpha: 0.08),
             width: 1.5,
           ),
         ),
@@ -354,14 +354,14 @@ class SortModal {
             Icon(
               type.icon,
               size: 14,
-              color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withOpacity(0.7),
+              color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 6),
             Text(
               type.label(context),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withOpacity(0.8),
+                color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface.withValues(alpha: 0.8),
                 fontSize: 12,
               ),
             ),

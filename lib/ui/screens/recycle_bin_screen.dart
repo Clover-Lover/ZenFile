@@ -319,7 +319,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                                   return Card(
                                     margin: const EdgeInsets.symmetric(vertical: 6),
                                     color: isSelected
-                                        ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+                                        ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
                                         : theme.colorScheme.surface,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
@@ -327,7 +327,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                                       side: BorderSide(
                                         color: isSelected
                                             ? theme.colorScheme.primary
-                                            : theme.dividerColor.withOpacity(0.08),
+                                            : theme.dividerColor.withValues(alpha: 0.08),
                                         width: isSelected ? 1.5 : 1.0,
                                       ),
                                     ),
@@ -352,7 +352,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                                               decoration: BoxDecoration(
                                                 color: isSelected
                                                     ? theme.colorScheme.primary
-                                                    : theme.colorScheme.primary.withOpacity(0.08),
+                                                    : theme.colorScheme.primary.withValues(alpha: 0.08),
                                                 borderRadius: BorderRadius.circular(12),
                                               ),
                                               child: isSelected
@@ -381,7 +381,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                                                   Text(
                                                     '${L10n.of(context).msg4c478216}: ${item.originalPath}',
                                                     style: theme.textTheme.bodySmall?.copyWith(
-                                                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                                                       fontSize: 11,
                                                     ),
                                                     maxLines: 1,
@@ -394,7 +394,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                                                       FileUtils.formatBytes(item.size, 1),
                                                     ),
                                                     style: theme.textTheme.bodySmall?.copyWith(
-                                                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                                       fontSize: 11,
                                                     ),
                                                   ),
@@ -463,7 +463,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                                   color: theme.colorScheme.surface,
                                   border: Border(
                                     top: BorderSide(
-                                      color: theme.dividerColor.withOpacity(0.12),
+                                      color: theme.dividerColor.withValues(alpha: 0.12),
                                       width: 1,
                                     ),
                                   ),
@@ -517,7 +517,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.08)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.08)),
       ),
       child: Column(
         children: [
@@ -527,7 +527,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.08),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Broken.trash, color: theme.colorScheme.primary, size: 22),
@@ -542,7 +542,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                     const SizedBox(height: 2),
                     Text(L10n.of(context).msg25792550,
                         style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.5))),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
                   ],
                 ),
               ),
@@ -571,7 +571,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                 child: Row(
                   children: [
                     Icon(Icons.access_time_rounded,
-                        size: 20, color: theme.colorScheme.onSurface.withOpacity(0.7)),
+                        size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(L10n.of(context).msgf0ef894a,
@@ -579,10 +579,10 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                     ),
                     Text(_getAutoDeleteDaysLabel(RecycleBinService.getAutoDeleteDays()),
                         style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6))),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
                     const SizedBox(width: 4),
                     Icon(Icons.chevron_right_rounded,
-                        size: 18, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                        size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                   ],
                 ),
               ),
@@ -603,20 +603,20 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.08),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Broken.trash,
                 size: 72,
-                color: theme.colorScheme.primary.withOpacity(0.5),
+                color: theme.colorScheme.primary.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 20),
             Text(
               L10n.of(context).ui_recycle_disabled_hint,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
               textAlign: TextAlign.center,
             ),
@@ -636,13 +636,13 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.08),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Broken.trash,
                 size: 84,
-                color: theme.colorScheme.primary.withOpacity(0.7),
+                color: theme.colorScheme.primary.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 24),
@@ -657,7 +657,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
             Text(
               L10n.of(context).ui_recycle_empty_hint,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
               textAlign: TextAlign.center,
             ),
@@ -745,7 +745,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 2),
@@ -790,7 +790,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withOpacity(0.2),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -808,7 +808,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
                     L10n.of(context).msg1200d6b7,
-                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -818,10 +818,10 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                   final isSelected = current == days;
 
                   return Card(
-                    color: isSelected ? theme.colorScheme.primary.withOpacity(0.12) : theme.colorScheme.surface,
+                    color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.12) : theme.colorScheme.surface,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withOpacity(0.08)),
+                      side: BorderSide(color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.08)),
                     ),
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     child: InkWell(
@@ -835,7 +835,7 @@ class _RecycleBinScreenState extends State<RecycleBinScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         child: Row(
                           children: [
-                            Icon(Icons.access_time_rounded, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.6)),
+                            Icon(Icons.access_time_rounded, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                             const SizedBox(width: 16),
                             Expanded(
                               child: Text(

@@ -5121,61 +5121,73 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'清理'**
   String get cat_clean;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'垃圾清理'**
   String get junk_clean_title;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'正在扫描垃圾文件…'**
   String get junk_clean_scanning;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'可清理 {size}'**
   String junk_clean_scannable(Object size);
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'立即清理'**
   String get junk_clean_button;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'清理垃圾文件'**
   String get junk_clean_confirm_title;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'将清理应用缓存与临时文件，预计释放 {size}。备份、崩溃报告和快传接收的文件不会被删除。'**
   String junk_clean_confirm_body(Object size);
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'应用缓存（缩略图、远程缓存）'**
   String get junk_clean_cache_item;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'临时文件（下载残留等）'**
   String get junk_clean_temp_item;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'已释放 {size}'**
   String junk_clean_done(Object size);
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'没有可清理的垃圾文件'**
   String get junk_clean_none;
+
   /// ui/screens/storage_analyzer/storage_analyzer_screen.dart
   ///
   /// In zh, this message translates to:
   /// **'清理失败，请稍后重试'**
   String get junk_clean_failed;
+
   /// Vault shortcut category label
   ///
   /// In zh, this message translates to:
@@ -14757,6 +14769,66 @@ abstract class L10n {
   /// In zh, this message translates to:
   /// **'有 {count} 个文件无法去除元数据（可能已加密），已按普通分享发送'**
   String share_safe_unsupported(Object count);
+
+  /// Security setting: ui_ftp_password
+  ///
+  /// In zh, this message translates to:
+  /// **'FTP 密码'**
+  String get ui_ftp_password;
+
+  /// Security setting: ui_ftp_password_required
+  ///
+  /// In zh, this message translates to:
+  /// **'请设置密码，否则 FTP 服务器将拒绝所有客户端登录'**
+  String get ui_ftp_password_required;
+
+  /// Security setting: ui_web_share_password
+  ///
+  /// In zh, this message translates to:
+  /// **'访问口令'**
+  String get ui_web_share_password;
+
+  /// Security setting: ui_web_share_password_hint
+  ///
+  /// In zh, this message translates to:
+  /// **'留空则不启用鉴权（仅建议在可信局域网使用）'**
+  String get ui_web_share_password_hint;
+
+  /// Security setting: ui_web_share_password_generated
+  ///
+  /// In zh, this message translates to:
+  /// **'已为公网访问自动生成口令：{password}'**
+  String ui_web_share_password_generated(Object password);
+
+  /// Security setting: ui_web_share_password_required_for_tunnel
+  ///
+  /// In zh, this message translates to:
+  /// **'公网分享必须设置访问口令'**
+  String get ui_web_share_password_required_for_tunnel;
+
+  /// Auto-encrypt new files feature: crypt_auto_encrypt_section
+  ///
+  /// In zh, this message translates to:
+  /// **'自动加密'**
+  String get crypt_auto_encrypt_section;
+
+  /// Auto-encrypt new files feature: crypt_auto_encrypt_title
+  ///
+  /// In zh, this message translates to:
+  /// **'自动加密新增文件'**
+  String get crypt_auto_encrypt_title;
+
+  /// Auto-encrypt new files feature: crypt_auto_encrypt_desc
+  ///
+  /// In zh, this message translates to:
+  /// **'对已原地加密的目录开启实时监听，新文件写入完成后自动加密（需常驻通知）'**
+  String get crypt_auto_encrypt_desc;
+
+  /// Auto-encrypt new files feature: crypt_auto_encrypt_watching
+  ///
+  /// In zh, this message translates to:
+  /// **'正在保护 {count} 个目录，新文件将自动加密'**
+  String crypt_auto_encrypt_watching(Object count);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math' as math;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -157,14 +158,13 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     _findSiblings();
     _pageController = PageController(initialPage: _currentIndex);
     _preloadAdjacent(_currentIndex);
-    _refreshMeta();
-    _fitMode = PreferencesService.getImageFitMode();
+    _refreshMeta();    _fitMode = PreferencesService.getImageFitMode();
     if (_fitMode == 1) {
       _resolveCurrentImageSize();
     }
   }
 
-  void _findSiblings() {
+  Future<void> _findSiblings() async {
     // 流式解密 URL（加密文件）没有本地目录，直接作为单张图片展示
     if (widget.streamUrl != null) {
       _imageList = [widget.imagePath];
@@ -200,28 +200,25 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     try {
       final file = File(widget.imagePath);
       final parent = file.parent;
-      final files = parent.listSync();
-      final images = <String>{};
-      for (final f in files) {
-        if (f is File) {
-          final mime = lookupMimeType(f.path);
-          if ((mime != null && mime.startsWith('image/')) ||
-              f.path.toLowerCase().endsWith('.avif') ||
-              _isImageByHeader(f.path)) {
-            images.add(f.path);
-          }
-        }
-      }
-      // 确保当前图片一定在列表中（解密后的临时文件可能无扩展名）
-      if (File(widget.imagePath).existsSync()) {
-        images.add(widget.imagePath);
-      }
-      final sorted = images.toList()..sort((a, b) => a.compareTo(b));
+      // 列目录 + 逐文件读魔数放入 isolate：DCIM 这类几千文件的目录在主
+      // isolate 同步执行会形成 IO 风暴，打开图片时明显卡顿。
+      final sorted = await Isolate.run(() => _collectImageSiblings(parent.path, widget.imagePath));
+      if (!mounted) return;
       _imageList = sorted;
       _currentIndex = _imageList.indexOf(widget.imagePath);
       if (_currentIndex == -1) {
         _imageList.insert(0, widget.imagePath);
         _currentIndex = 0;
+      }
+      setState(() {});
+      // initState 里 PageController 以 initialPage:0 创建（扫描尚未完成），
+      // 现在补跳到当前图片所在页。
+      if (_pageController.hasClients) {
+        _pageController.jumpToPage(_currentIndex);
+      } else if (_currentIndex > 0) {
+        final old = _pageController;
+        _pageController = PageController(initialPage: _currentIndex);
+        old.dispose();
       }
     } catch (_) {
       _imageList = [widget.imagePath];
@@ -229,8 +226,34 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     }
   }
 
+  /// 纯函数（供 isolate 执行）：列出 [dirPath] 下的所有图片文件（按名排序），
+  /// 并确保 [currentPath] 在结果中。
+  static Future<List<String>> _collectImageSiblings(String dirPath, String currentPath) async {
+    final files = Directory(dirPath).listSync();
+    final images = <String>{};
+    for (final f in files) {
+      if (f is File) {
+        final mime = lookupMimeType(f.path);
+        if ((mime != null && mime.startsWith('image/')) ||
+            f.path.toLowerCase().endsWith('.avif') ||
+            _isImageByHeaderPath(f.path)) {
+          images.add(f.path);
+        }
+      }
+    }
+    if (File(currentPath).existsSync()) {
+      images.add(currentPath);
+    }
+    return images.toList()..sort((a, b) => a.compareTo(b));
+  }
+
+  /// 通过文件魔数判断是否为常见图片格式（纯函数版本，供 isolate 执行）。
+  static bool _isImageByHeaderPath(String path) {
+    return _isImageByHeaderSync(path);
+  }
+
   /// 通过文件魔数判断是否为常见图片格式，用于无扩展名或扩展名被加密的图片。
-  bool _isImageByHeader(String path) {
+  static bool _isImageByHeaderSync(String path) {
     RandomAccessFile? raf;
     try {
       final file = File(path);
@@ -431,6 +454,22 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     }
     if (f == null || !f.existsSync()) return;
     try {
+      // 优先用文件头解析尺寸（零解码开销，不重复解码正在显示的图）；
+      // AVIF 等 image 包不支持的格式回退到下方 provider 完整解码路径。
+      ImageEditInfo? info;
+      try {
+        final header = await _readHeaderBytes(f, 1024 * 1024);
+        info = await _editService.readInfo(header);
+      } catch (_) {
+        info = null;
+      }
+      final resolved = info;
+      if (resolved != null && mounted) {
+        setState(() {
+          _imageSize = Size(resolved.width.toDouble(), resolved.height.toDouble());
+        });
+        return;
+      }
       final provider = f.path.toLowerCase().endsWith('.avif')
           ? FileAvifImage(f) as ImageProvider
           : FileImage(f) as ImageProvider;
@@ -461,6 +500,18 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     } catch (_) {}
   }
 
+  /// 只读文件前 [length] 字节（不足则读全部），用于头部解析，避免整文件读入。
+  static Future<Uint8List> _readHeaderBytes(File file, int length) async {
+    final raf = await file.open(mode: FileMode.read);
+    try {
+      final size = await raf.length();
+      final n = size < length ? size : length;
+      return await raf.read(n);
+    } finally {
+      await raf.close();
+    }
+  }
+
   Future<void> _refreshMeta() async {
     final file = _getCurrentFile();
     if (file == null || !file.existsSync()) {
@@ -468,9 +519,22 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
       return;
     }
     try {
-      final bytes = await file.readAsBytes();
-      final info = await _editService.readInfo(bytes);
-      final size = file.lengthSync();
+      // 只读文件头部（1MB）给解码器取尺寸/格式：此前 readAsBytes() 会把
+      // 整张 30MB 原图读进内存，翻页时瞬时分配巨大。极少数把 SOF 写在
+      // 1MB 之后的畸形 JPEG 走完整读取回退。
+      Uint8List headerBytes;
+      try {
+        headerBytes = await _readHeaderBytes(file, 1024 * 1024);
+      } catch (_) {
+        headerBytes = await file.readAsBytes();
+      }
+      ImageEditInfo info;
+      try {
+        info = await _editService.readInfo(headerBytes);
+      } catch (_) {
+        info = await _editService.readInfo(await file.readAsBytes());
+      }
+      final size = await file.length();
       // 文件修改时间（顶部条显示）
       String? modified;
       try {
@@ -939,7 +1003,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
           '$label: ',
           style: TextStyle(
             fontSize: 13,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
         Expanded(child: Text(value, style: const TextStyle(fontSize: 13))),
@@ -1330,7 +1394,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+          colors: [Colors.black.withValues(alpha: 0.6), Colors.transparent],
         ),
       ),
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
@@ -1459,7 +1523,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
-          colors: [Colors.black.withOpacity(0.75), Colors.transparent],
+          colors: [Colors.black.withValues(alpha: 0.75), Colors.transparent],
         ),
       ),
       padding: const EdgeInsets.fromLTRB(12, 18, 12, 12),

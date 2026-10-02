@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
@@ -34,6 +35,11 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
 
   bool _isInternetActive = false;
   String _internetShareLink = '';
+
+  /// 最近一次为公网隧道自动生成的访问口令（供 UI 展示；null 表示本次会话未生成过）
+  String? _lastGeneratedPassword;
+
+  String? get generatedPassword => _lastGeneratedPassword;
 
   // Getters
   bool get isLocalActive => _isLocalActive;
@@ -193,6 +199,58 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
     notifyListeners();
   }
 
+  /// 校验请求头中的 Basic Auth 凭据（用户名任意，口令需匹配）。
+  /// 比较采用恒时逻辑，避免时序侧信道泄露口令长度/前缀。
+  bool _checkBasicAuth(HttpRequest request, String requiredPassword) {
+    final header = request.headers.value(HttpHeaders.authorizationHeader);
+    if (header == null || !header.startsWith('Basic ')) return false;
+    String decoded;
+    try {
+      decoded = utf8.decode(base64Decode(header.substring(6).trim()), allowMalformed: true);
+    } catch (_) {
+      return false;
+    }
+    final idx = decoded.indexOf(':');
+    final providedPassword = idx >= 0 ? decoded.substring(idx + 1) : '';
+    return _constantTimeEquals(providedPassword, requiredPassword);
+  }
+
+  static bool _constantTimeEquals(String a, String b) {
+    final aUnits = a.codeUnits;
+    final bUnits = b.codeUnits;
+    var diff = aUnits.length ^ bUnits.length;
+    final n = aUnits.length > bUnits.length ? aUnits.length : bUnits.length;
+    for (var i = 0; i < n; i++) {
+      diff |= (i < aUnits.length ? aUnits[i] : 0) ^ (i < bUnits.length ? bUnits[i] : 0);
+    }
+    return diff == 0;
+  }
+
+  /// 生成 8 位易读随机口令（去除易混淆字符 0/O/1/l/I）
+  static String _generateRandomPassword() {
+    const alphabet = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    final random = Random.secure();
+    final buffer = StringBuffer();
+    for (var i = 0; i < 8; i++) {
+      buffer.write(alphabet[random.nextInt(alphabet.length)]);
+    }
+    return buffer.toString();
+  }
+
+  /// 路径安全校验：目标路径归一化后必须仍在 rootDir 内（或恰为 rootDir）。
+  /// 不能用 `startsWith(normalize(root))` —— `/root/../rootEvil` 归一化后
+  /// 仍以前缀开头，会逃逸到同级目录；必须用 `isWithin`。
+  static bool _isWithinRoot(String targetPath, String rootDir) =>
+      isWithinRoot(targetPath, rootDir);
+
+  /// [_isWithinRoot] 的可测试版本。
+  @visibleForTesting
+  static bool isWithinRoot(String targetPath, String rootDir) {
+    final normalized = p.normalize(targetPath);
+    final normalizedRoot = p.normalize(rootDir);
+    return normalized == normalizedRoot || p.isWithin(normalizedRoot, normalized);
+  }
+
   // --- Real HTTP File System Router ---
   Future<void> _handleHttpRequest(HttpRequest request, String rootDir) async {
     final response = request.response;
@@ -202,6 +260,17 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
     if (uriPath.contains('..')) {
       response.statusCode = HttpStatus.forbidden;
       response.write('403 Forbidden: Directory traversal is prohibited.');
+      await response.close();
+      return;
+    }
+
+    // 访问口令鉴权：口令非空时，所有请求（页面/文件/API/上传）都要求
+    // Basic Auth；浏览器首次访问会弹出登录框，凭据会随会话自动携带。
+    final requiredPassword = PreferencesService.getWebSharePassword();
+    if (requiredPassword.isNotEmpty && !_checkBasicAuth(request, requiredPassword)) {
+      response.statusCode = HttpStatus.unauthorized;
+      response.headers.set(HttpHeaders.wwwAuthenticateHeader, 'Basic realm="ZenFile Web Share", charset="UTF-8"');
+      response.write('401 Unauthorized: password required.');
       await response.close();
       return;
     }
@@ -230,7 +299,7 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
               : p.join(p.dirname(targetPath), decodedFileName);
 
           // Verify destination path safety to prevent directory traversal
-          if (!p.normalize(uploadDestination).startsWith(p.normalize(rootDir))) {
+          if (!_isWithinRoot(uploadDestination, rootDir)) {
             response.statusCode = HttpStatus.forbidden;
             response.write('403 Forbidden: Invalid file upload destination.');
             await response.close();
@@ -2863,6 +2932,15 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
   Future<void> startInternetTunnel(String rootDir) async {
     if (_isInternetActive) return;
 
+    // 公网隧道暴露面远大于局域网，必须启用访问口令：
+    // 用户未设置时自动生成一个并持久化，UI 负责展示给用户。
+    if (PreferencesService.getWebSharePassword().isEmpty) {
+      final generated = _generateRandomPassword();
+      await PreferencesService.saveWebSharePassword(generated);
+      _lastGeneratedPassword = generated;
+      notifyListeners();
+    }
+
     try {
       // 1. Ensure local HTTP server is running
       if (!_isLocalActive) {
@@ -3161,13 +3239,13 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
           : null;
       final newName = data['newName'] as String?;
 
-      if (srcPath != null && !p.normalize(srcPath).startsWith(p.normalize(rootDir))) {
+      if (srcPath != null && !_isWithinRoot(srcPath, rootDir)) {
         response.statusCode = HttpStatus.forbidden;
         response.write(jsonEncode({'success': false, 'error': 'Invalid source path'}));
         await response.close();
         return;
       }
-      if (destPath != null && !p.normalize(destPath).startsWith(p.normalize(rootDir))) {
+      if (destPath != null && !_isWithinRoot(destPath, rootDir)) {
         response.statusCode = HttpStatus.forbidden;
         response.write(jsonEncode({'success': false, 'error': 'Invalid destination path'}));
         await response.close();
@@ -3204,7 +3282,7 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
             break;
           }
           final newPath = p.join(p.dirname(srcPath), newName);
-          if (!p.normalize(newPath).startsWith(p.normalize(rootDir))) {
+          if (!_isWithinRoot(newPath, rootDir)) {
             response.statusCode = HttpStatus.forbidden;
             response.write(jsonEncode({'success': false, 'error': 'Invalid new name'}));
             break;
@@ -3238,7 +3316,7 @@ AAAEBbg6hQHydFb0ZGHuYq+gCui5fFtXW1X2e3Ok3UKTfXMhY3eZl04qtec/5UVUNLrK49
             break;
           }
           final newFolderPath = p.join(destPath, newName);
-          if (!p.normalize(newFolderPath).startsWith(p.normalize(rootDir))) {
+          if (!_isWithinRoot(newFolderPath, rootDir)) {
             response.statusCode = HttpStatus.forbidden;
             response.write(jsonEncode({'success': false, 'error': 'Invalid path'}));
             break;

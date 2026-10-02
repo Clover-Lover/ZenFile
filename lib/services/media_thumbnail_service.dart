@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -189,10 +190,10 @@ class MediaThumbnailService {
         await srcFile.copy(thumbPath);
         return srcBytes;
       }
-      final decoded = img.decodeImage(srcBytes);
-      if (decoded != null) {
-        final resized = img.copyResize(decoded, width: maxDim);
-        final outBytes = Uint8List.fromList(img.encodeJpg(resized, quality: 85));
+      // 解码/缩放/编码放入独立 isolate：`image` 包是纯 Dart 实现，一张
+      // 10~30MB 的 JPEG 在主 isolate 解码会卡 UI 数秒甚至 ANR。
+      final outBytes = await Isolate.run(() => _encodeThumbnail(srcBytes, maxDim));
+      if (outBytes != null) {
         await File(thumbPath).writeAsBytes(outBytes, flush: true);
         return outBytes;
       }
@@ -202,6 +203,15 @@ class MediaThumbnailService {
     // 回退：原图直接作为缩略图缓存
     await srcFile.copy(thumbPath);
     return await srcFile.readAsBytes();
+  }
+
+  /// 纯函数：解码并缩放图片（供 isolate 执行）。解码失败返回 null，
+  /// 由调用方回退原图直存。
+  static Uint8List? _encodeThumbnail(Uint8List srcBytes, int maxDim) {
+    final decoded = img.decodeImage(srcBytes);
+    if (decoded == null) return null;
+    final resized = img.copyResize(decoded, width: maxDim);
+    return Uint8List.fromList(img.encodeJpg(resized, quality: 85));
   }
 
   /// 远程缩略图缓存基目录。

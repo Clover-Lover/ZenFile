@@ -31,6 +31,7 @@ class FTPConnect {
     SecurityType securityType = SecurityType.ftp,
     Logger? logger,
     int timeout = 30,
+    bool insecureSkipVerify = false,
   })  : _user = user,
         _pass = pass {
     port ??= securityType == SecurityType.ftps ? 990 : 21;
@@ -40,6 +41,7 @@ class FTPConnect {
       securityType,
       logger ?? Logger(isEnabled: showLog),
       timeout,
+      insecureSkipVerify: insecureSkipVerify,
     );
   }
 

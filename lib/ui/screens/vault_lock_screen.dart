@@ -255,7 +255,7 @@ class _VaultLockScreenState extends State<VaultLockScreen> {
           gradient: LinearGradient(
             colors: isDark
                 ? [const Color(0xFF0F172A), const Color(0xFF1E293B), const Color(0xFF020617)]
-                : [theme.colorScheme.primaryContainer.withOpacity(0.4), theme.colorScheme.surface, theme.colorScheme.surface],
+                : [theme.colorScheme.primaryContainer.withValues(alpha: 0.4), theme.colorScheme.surface, theme.colorScheme.surface],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -281,11 +281,11 @@ class _VaultLockScreenState extends State<VaultLockScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.12),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withOpacity(0.08),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.08),
                           blurRadius: 24,
                           spreadRadius: 2,
                         ),
@@ -313,7 +313,7 @@ class _VaultLockScreenState extends State<VaultLockScreen> {
                       fontWeight: FontWeight.w600,
                       color: _isError
                           ? theme.colorScheme.error
-                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -340,11 +340,11 @@ class _VaultLockScreenState extends State<VaultLockScreen> {
                         fontSize: 14,
                         letterSpacing: 0.3,
                         fontWeight: FontWeight.normal,
-                        color: theme.colorScheme.onSurface.withOpacity(0.4),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                       ),
                       hintMaxLines: 2,
                       filled: true,
-                      fillColor: isDark ? Colors.white.withOpacity(0.04) : Colors.black.withOpacity(0.02),
+                      fillColor: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.black.withValues(alpha: 0.02),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none,

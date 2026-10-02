@@ -819,7 +819,8 @@
   "ui_favorites_swipe_hint": "從螢幕底部上滑即可開啟收藏夾",
   "@ui_favorites_swipe_hint": {
     "description": "ui\\widgets\\favorites_sheet.dart"
-  },  "@ui_new_favorite": {
+  },
+  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "新增收藏",
@@ -1308,8 +1309,12 @@
   "@ui_month_group_header": {
     "description": "ui\\screens\\media_category_screen.dart",
     "placeholders": {
-      "year": {"type": "int"},
-      "month": {"type": "int"}
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
     }
   },
   "msg424a0110": "未知日期",
@@ -1871,7 +1876,6 @@
     "description": "ui\\screens\\more_settings_screen.dart"
   },
   "msg64a6476a": "預設標誌",
-
   "app_icon_classic2": "經典 2",
   "@app_icon_classic2": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -1943,7 +1947,8 @@
   "app_icon_sunset_zf": "暮色紅紫",
   "@app_icon_sunset_zf": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  },  "@msg64a6476a": {
+  },
+  "@msg64a6476a": {
     "description": "ui\\screens\\more_settings_screen.dart"
   },
   "title": "應用圖示已切換為 {title}",
@@ -3306,17 +3311,29 @@
   "update_err_rate_limit": "GitHub 要求過於頻繁，請稍後再試",
   "update_err_http": "伺服器回應異常（HTTP {code}）",
   "@update_err_http": {
-    "placeholders": { "code": { "type": "String" } }
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   },
   "update_err_malformed": "伺服器回傳資料異常，請稍後重試",
   "update_err_version_unknown": "無法取得目前版本號，請重新啟動應用程式後重試",
   "update_remote_version": "遠端最新：{version}",
   "@update_remote_version": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
   "update_checked_at": "檢查時間：{time}",
   "@update_checked_at": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "update_degraded_hint": "已降級為網頁檢測，無法於應用程式內下載",
   "update_source_label": "更新來源",
@@ -3326,7 +3343,6 @@
   "update_source_dialog_desc": "留空則使用 GitHub 官方介面。可填入鏡像或自建介面，需回傳與 GitHub 相同結構的 JSON；網址中的 REPO 代表倉庫路徑。",
   "update_source_hint": "https://example.com/…/releases/latest",
   "update_source_invalid": "網址無效，需以 http:// 或 https:// 開頭",
-
   "ui_paste_and_clear": "貼上並清除",
   "ui_cut_paste_hint": "剪下為移動，貼上後自動清空",
   "ui_search_in_settings": "在設定中搜尋",
@@ -4673,7 +4689,6 @@
       "count": {
         "type": "int"
       },
-
       "folderCount": {
         "type": "int"
       },
@@ -4701,8 +4716,7 @@
   "prop_hash_failed": "雜湊計算失敗",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  }
-,
+  },
   "msg_add_subtitle": "新增字幕",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8361,7 +8375,7 @@
   },
   "ui_transfers": "連線",
   "ui_profile": "我的",
-  "msg_coming_soon": "即將推出",
+  "msg_coming_soon": "即將推出",
   "toolbox_text_editor": "文字編輯器",
   "@toolbox_text_editor": {
     "description": "toolbox: text editor entry"
@@ -8395,17 +8409,31 @@
     "description": "text editor: import text file"
   },
   "ui_bottom_tab_bar": "導覽列",
-  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "@ui_bottom_tab_bar": {
+    "description": "Navigation bar (visibility + position)"
+  },
   "ui_persistent_tab_bar": "導覽列常駐其他頁面",
   "ui_pick_bottom_tab": "選擇底部入口",
-  "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
+  "@ui_pick_bottom_tab": {
+    "description": "Choose bottom entry"
+  },
   "ui_long_press_switch": "長按可替換",
-  "@ui_long_press_switch": {"description": "Long press to change"},
+  "@ui_long_press_switch": {
+    "description": "Long press to change"
+  },
   "ui_bottom_tab_slot": "位置 {index}",
-  "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
+  "@ui_bottom_tab_slot": {
+    "description": "Slot {index}",
+    "placeholders": {
+      "index": {
+        "type": "Object"
+      }
+    }
+  },
   "ui_bottom_tab_custom_hint": "底部入口可替換為任何快捷方式",
-  "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
-,
+  "@ui_bottom_tab_custom_hint": {
+    "description": "Bottom entries can be replaced with any shortcut"
+  },
   "app_icon_original": "經典圖示",
   "@app_icon_original": {
     "description": "Classic app icon"
@@ -8417,8 +8445,7 @@
   "cut_to_other_window": "剪下到另一視窗",
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
-  }
-,
+  },
   "auto_open_created_folder": "新建資料夾自動開啟",
   "@auto_open_created_folder": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -8426,8 +8453,7 @@
   "auto_open_created_folder_desc": "建立資料夾後自動進入該資料夾",
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  }
-,
+  },
   "paste_keep_clipboard": "貼上後保留剪貼簿內容",
   "@paste_keep_clipboard": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
@@ -8435,9 +8461,7 @@
   "paste_keep_clipboard_desc": "未勾選時貼上完成後自動清空剪貼簿",
   "@paste_keep_clipboard_desc": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
-  }
-
-,
+  },
   "netdisk": "網盤",
   "@netdisk": {
     "description": "ui\\screens\\transfers_screen.dart"
@@ -8483,21 +8507,85 @@
     "description": "services\\remote\\netdisk"
   },
   "share_normal_share": "一般分享",
-  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "@share_normal_share": {
+    "description": "Share mode: share original files as-is"
+  },
   "share_normal_share_hint": "分享原始檔案，不做任何修改",
-  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "@share_normal_share_hint": {
+    "description": "Share mode hint: original file is not modified"
+  },
   "share_safe_share": "安全分享",
-  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "@share_safe_share": {
+    "description": "Share mode: strip metadata (EXIF/GPS) before sharing"
+  },
   "share_safe_share_hint": "移除拍攝地點、相機資訊、文件作者等隱私資料，不改動原檔案",
-  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "@share_safe_share_hint": {
+    "description": "Safe share hint: strips location/camera privacy data, original unchanged"
+  },
   "share_nothing_found": "未找到可分享的項目。",
-  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "@share_nothing_found": {
+    "description": "Share: no shareable items found"
+  },
   "share_prepare_error": "準備分享檔案時出錯：{error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "@share_prepare_error": {
+    "description": "Share: error while preparing files (with error text)",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "share_preparing_title": "正在準備分享…",
-  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "@share_preparing_title": {
+    "description": "Share: loading dialog title while preparing files"
+  },
   "share_preparing_body": "正在處理檔案，請稍候",
-  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "@share_preparing_body": {
+    "description": "Share: loading dialog body while preparing files"
+  },
   "share_safe_unsupported": "有 {count} 個檔案無法移除中繼資料（可能已加密），已改用一般分享送出",
-  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
+  "@share_safe_unsupported": {
+    "description": "Safe share: files that could not be stripped were shared as-is",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "ui_ftp_password": "FTP 密碼",
+  "@ui_ftp_password": {
+    "description": "Security setting: ui_ftp_password"
+  },
+  "ui_ftp_password_required": "請設定密碼，否則 FTP 伺服器將拒絕所有用戶端登入",
+  "@ui_ftp_password_required": {
+    "description": "Security setting: ui_ftp_password_required"
+  },
+  "ui_web_share_password": "存取密碼",
+  "@ui_web_share_password": {
+    "description": "Security setting: ui_web_share_password"
+  },
+  "ui_web_share_password_hint": "留空則不啟用驗證（僅建議在可信區域網路使用）",
+  "@ui_web_share_password_hint": {
+    "description": "Security setting: ui_web_share_password_hint"
+  },
+  "ui_web_share_password_generated": "已為網際網路存取自動產生密碼：{password}",
+  "@ui_web_share_password_generated": {
+    "description": "Security setting: ui_web_share_password_generated"
+  },
+  "ui_web_share_password_required_for_tunnel": "網際網路分享必須設定存取密碼",
+  "@ui_web_share_password_required_for_tunnel": {
+    "description": "Security setting: ui_web_share_password_required_for_tunnel"
+  },
+  "crypt_auto_encrypt_section": "自動加密",
+  "@crypt_auto_encrypt_section": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_section"
+  },
+  "crypt_auto_encrypt_title": "自動加密新增檔案",
+  "@crypt_auto_encrypt_title": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_title"
+  },
+  "crypt_auto_encrypt_desc": "對已原地加密的目錄開啟即時監聽，新檔案寫入完成後自動加密（需常駐通知）",
+  "@crypt_auto_encrypt_desc": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_desc"
+  },
+  "crypt_auto_encrypt_watching": "正在保護 {count} 個目錄，新檔案將自動加密",
+  "@crypt_auto_encrypt_watching": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_watching"
+  }
 }

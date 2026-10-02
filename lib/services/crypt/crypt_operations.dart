@@ -39,6 +39,15 @@ class CryptFileEntry {
   /// 用于浏览页只给真实加密的条目显示🔐角标，其余正常显示。
   final bool isEncrypted;
 
+  /// 「明文同名冲突」：同一父目录下存在与本项目**解密名相同**的明文条目。
+  ///
+  /// 典型场景：相机检测不到密文目录（名字是密文），重建同名明文目录继续写
+  /// 新照片 → 浏览父目录时密文条目（显示解密名）与明文条目的虚拟路径完全
+  /// 重合，且 `resolvePhysicalPath` 的「明文已存在」短路会让两个条目都打开
+  /// 明文目录 → 用户看到「点哪个都是新文件、已加密内容消失」。
+  /// 浏览层应改用 [physicalPath] 作为该条目的跳转路径。
+  final bool plainNameClash;
+
   CryptFileEntry({
     required this.name,
     required this.virtualPath,
@@ -47,6 +56,7 @@ class CryptFileEntry {
     this.size = 0,
     required this.modified,
     this.isEncrypted = false,
+    this.plainNameClash = false,
   });
 
   /// 文件扩展名（解密后的）
@@ -172,6 +182,32 @@ class CryptDirectoryLister {
         modified: stat.modified,
         isEncrypted: decryptionSucceeded,
       ));
+    }
+
+    // 明文同名冲突标记：解密名与同目录下某个**明文条目**的磁盘名相同时，
+    // 该密文条目的虚拟路径会与明文条目的真实路径重合（浏览层两个条目指向
+    // 同一路径，且 resolvePhysicalPath 的「明文已存在」短路会让它们全部
+    // 落到明文目录上）。打上标记后，浏览层用 physicalPath 直达密文条目。
+    final plainNames = entries
+        .where((e) => !e.isEncrypted)
+        .map((e) => e.name)
+        .toSet();
+    if (plainNames.isNotEmpty) {
+      for (var i = 0; i < entries.length; i++) {
+        final e = entries[i];
+        if (e.isEncrypted && plainNames.contains(e.name)) {
+          entries[i] = CryptFileEntry(
+            name: e.name,
+            virtualPath: e.virtualPath,
+            physicalPath: e.physicalPath,
+            isDirectory: e.isDirectory,
+            size: e.size,
+            modified: e.modified,
+            isEncrypted: e.isEncrypted,
+            plainNameClash: true,
+          );
+        }
+      }
     }
 
     // 按名称排序

@@ -151,4 +151,70 @@ void main() {
       );
     });
   });
+
+  /// 明文同名冲突（2026-10-02 用户报障）：
+  ///
+  /// 相机检测不到密文目录（磁盘名是密文），会**重建同名明文目录**继续写新
+  /// 照片。浏览父目录时，密文条目显示解密名 `Camera`、明文条目也叫 `Camera`，
+  /// 两者的浏览路径完全重合；且 `resolvePhysicalPath` 的「明文已存在」短路
+  /// 让任何点击都落到明文目录 → 用户看到「点哪个都是新照片、已加密内容消失」。
+  ///
+  /// 修复：枚举层给「解密名与同目录明文条目重名」的密文条目打 `plainNameClash`
+  /// 标记，浏览层改用 physicalPath 直达密文条目。
+  group('明文同名冲突标记（plainNameClash）', () {
+    test('密文目录与同名明文目录并存时，密文条目被标记', () async {
+      final mount = buildMount();
+      Directory(p.join(mountRoot.path, mount.crypt.encryptDirName('Camera')))
+          .createSync();
+      // 相机重建的同名明文目录
+      Directory(p.join(mountRoot.path, 'Camera')).createSync();
+
+      // 真实报障场景是父目录浏览（不带 onlyEncrypted）：
+      // 明文条目必须在列表里参与冲突检测
+      final entries =
+          await CryptDirectoryLister(mount).listDirectory(mountRoot.path);
+
+      final camera =
+          entries.singleWhere((e) => e.isEncrypted && e.name == 'Camera');
+      expect(camera.plainNameClash, isTrue,
+          reason: '解密名与明文条目重名 ⇒ 必须标记，浏览层才能直达物理路径');
+      expect(camera.physicalPath,
+          p.join(mountRoot.path, mount.crypt.encryptDirName('Camera')));
+      // 明文 Camera 条目本身不被标记
+      final plain =
+          entries.singleWhere((e) => !e.isEncrypted && e.name == 'Camera');
+      expect(plain.plainNameClash, isFalse);
+    });
+
+    test('密文文件与同名明文文件并存时，同样被标记', () async {
+      final mount = buildMount();
+      File(p.join(mountRoot.path, mount.crypt.encryptFileName('IMG_1.jpg')))
+          .writeAsStringSync('cipher');
+      File(p.join(mountRoot.path, 'IMG_1.jpg')).writeAsStringSync('plain');
+
+      final entries =
+          await CryptDirectoryLister(mount).listDirectory(mountRoot.path);
+
+      final cipher = entries.firstWhere((e) => e.isEncrypted);
+      expect(cipher.name, 'IMG_1.jpg');
+      expect(cipher.plainNameClash, isTrue);
+      // 明文条目不受影响
+      final plain = entries.firstWhere((e) => !e.isEncrypted);
+      expect(plain.plainNameClash, isFalse);
+    });
+
+    test('无同名冲突时密文条目不标记（正常场景不受影响）', () async {
+      final mount = buildMount();
+      Directory(p.join(mountRoot.path, mount.crypt.encryptDirName('Camera')))
+          .createSync();
+      Directory(p.join(mountRoot.path, 'Download')).createSync();
+
+      final entries =
+          await CryptDirectoryLister(mount).listDirectory(mountRoot.path);
+
+      final camera = entries.firstWhere((e) => e.isEncrypted);
+      expect(camera.name, 'Camera');
+      expect(camera.plainNameClash, isFalse);
+    });
+  });
 }

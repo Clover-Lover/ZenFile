@@ -2775,8 +2775,7 @@ class L10nAr extends L10n {
   String get junk_clean_title => 'تنظيف';
 
   @override
-  String get junk_clean_scanning =>
-      'جارٍ فحص الملفات غير المرغوبة…';
+  String get junk_clean_scanning => 'جارٍ فحص الملفات غير المرغوبة…';
 
   @override
   String junk_clean_scannable(Object size) {
@@ -2787,8 +2786,7 @@ class L10nAr extends L10n {
   String get junk_clean_button => 'تنظيف';
 
   @override
-  String get junk_clean_confirm_title =>
-      'تنظيف الملفات غير المرغوبة';
+  String get junk_clean_confirm_title => 'تنظيف الملفات غير المرغوبة';
 
   @override
   String junk_clean_confirm_body(Object size) {
@@ -2800,8 +2798,7 @@ class L10nAr extends L10n {
       'ذاكرة التطبيق المؤقتة (صور مصغرة، ذاكرة عن بُعد)';
 
   @override
-  String get junk_clean_temp_item =>
-      'ملفات مؤقتة (بقايا التنزيلات)';
+  String get junk_clean_temp_item => 'ملفات مؤقتة (بقايا التنزيلات)';
 
   @override
   String junk_clean_done(Object size) {
@@ -2812,8 +2809,7 @@ class L10nAr extends L10n {
   String get junk_clean_none => 'لا توجد ملفات غير مرغوبة للتنظيف';
 
   @override
-  String get junk_clean_failed =>
-      'فشل التنظيف، حاول مرة أخرى لاحقًا';
+  String get junk_clean_failed => 'فشل التنظيف، حاول مرة أخرى لاحقًا';
 
   @override
   String get cat_vault => 'خزنة';
@@ -7809,8 +7805,7 @@ class L10nAr extends L10n {
   String get vault_encrypt_new_files => 'تشفير الملفات الجديدة';
 
   @override
-  String get vault_encrypt_new_files_none =>
-      'لا توجد ملفات جديدة للتشفير';
+  String get vault_encrypt_new_files_none => 'لا توجد ملفات جديدة للتشفير';
 
   @override
   String get vault_encrypt_new_files_done =>
@@ -8280,5 +8275,43 @@ class L10nAr extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return 'تعذّرت إزالة البيانات الوصفية من $count ملف/ملفات (قد تكون مشفّرة)، وتمت مشاركتها كما هي';
+  }
+
+  @override
+  String get ui_ftp_password => 'كلمة مرور FTP';
+
+  @override
+  String get ui_ftp_password_required =>
+      'يرجى تعيين كلمة مرور، وإلا سيرفض خادم FTP جميع العملاء';
+
+  @override
+  String get ui_web_share_password => 'كلمة مرور الوصول';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'اتركها فارغة لتعطيل المصادقة (لشبكة LAN الموثوقة فقط)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'تم إنشاء كلمة مرور تلقائيًا للوصول عبر الإنترنت: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'مطلوب كلمة مرور وصول للمشاركة عبر الإنترنت';
+
+  @override
+  String get crypt_auto_encrypt_section => 'التشفير التلقائي';
+
+  @override
+  String get crypt_auto_encrypt_title => 'تشفير الملفات الجديدة تلقائيًا';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'يراقب المجلدات المشفرة في مكانها ويشفّر الملفات الجديدة تلقائيًا بعد اكتمال كتابتها (يتطلب إشعارًا دائمًا)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return 'حماية $count مجلد(ات)؛ سيتم تشفير الملفات الجديدة تلقائيًا';
   }
 }

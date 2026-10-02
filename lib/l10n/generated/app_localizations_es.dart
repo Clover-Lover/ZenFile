@@ -2872,8 +2872,7 @@ class L10nEs extends L10n {
   }
 
   @override
-  String get junk_clean_none =>
-      'No hay archivos basura que limpiar';
+  String get junk_clean_none => 'No hay archivos basura que limpiar';
 
   @override
   String get junk_clean_failed =>
@@ -8421,5 +8420,44 @@ class L10nEs extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return 'No se pudieron eliminar los metadatos de $count archivo(s) (posiblemente cifrados); se compartieron tal cual';
+  }
+
+  @override
+  String get ui_ftp_password => 'Contraseña FTP';
+
+  @override
+  String get ui_ftp_password_required =>
+      'Establezca una contraseña; de lo contrario, el servidor FTP rechazará a todos los clientes';
+
+  @override
+  String get ui_web_share_password => 'Contraseña de acceso';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'Deje vacío para desactivar la autenticación (solo LAN de confianza)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'Contraseña generada automáticamente para acceso por Internet: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'Se requiere una contraseña de acceso para compartir por Internet';
+
+  @override
+  String get crypt_auto_encrypt_section => 'Cifrado automático';
+
+  @override
+  String get crypt_auto_encrypt_title =>
+      'Cifrar automáticamente los archivos nuevos';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'Vigila los directorios cifrados in situ y cifra automáticamente los archivos nuevos al terminar de escribirse (requiere notificación persistente)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return 'Protegiendo $count directorio(s); los archivos nuevos se cifrarán automáticamente';
   }
 }

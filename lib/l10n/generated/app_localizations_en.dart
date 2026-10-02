@@ -2801,12 +2801,10 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get junk_clean_cache_item =>
-      'App cache (thumbnails, remote cache)';
+  String get junk_clean_cache_item => 'App cache (thumbnails, remote cache)';
 
   @override
-  String get junk_clean_temp_item =>
-      'Temporary files (download leftovers)';
+  String get junk_clean_temp_item => 'Temporary files (download leftovers)';
 
   @override
   String junk_clean_done(Object size) {
@@ -2817,8 +2815,7 @@ class L10nEn extends L10n {
   String get junk_clean_none => 'No junk files to clean';
 
   @override
-  String get junk_clean_failed =>
-      'Clean failed, please try again later';
+  String get junk_clean_failed => 'Clean failed, please try again later';
 
   @override
   String get cat_vault => 'Vault';
@@ -7835,8 +7832,7 @@ class L10nEn extends L10n {
   String get vault_encrypt_new_files => 'Encrypt New Files';
 
   @override
-  String get vault_encrypt_new_files_none =>
-      'No new files to encrypt';
+  String get vault_encrypt_new_files_none => 'No new files to encrypt';
 
   @override
   String get vault_encrypt_new_files_done =>
@@ -8308,5 +8304,43 @@ class L10nEn extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return '$count file(s) could not be stripped of metadata (possibly encrypted) and were shared as-is';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP password';
+
+  @override
+  String get ui_ftp_password_required =>
+      'Please set a password, otherwise the FTP server will reject all clients';
+
+  @override
+  String get ui_web_share_password => 'Access password';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'Leave empty to disable authentication (trusted LAN only)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'Auto-generated password for internet access: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'An access password is required for internet sharing';
+
+  @override
+  String get crypt_auto_encrypt_section => 'Auto encryption';
+
+  @override
+  String get crypt_auto_encrypt_title => 'Auto-encrypt new files';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'Watch in-place encrypted directories and encrypt new files automatically after they are written (requires a persistent notification)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return 'Protecting $count directory(ies); new files will be encrypted automatically';
   }
 }

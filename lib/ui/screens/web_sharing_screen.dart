@@ -154,6 +154,77 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
     });
   }
 
+  /// 展示为公网隧道自动生成的访问口令（用户必须能看到才能在浏览器输入）
+  void _showGeneratedPasswordDialog(String password) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return AlertDialog(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(L10n.of(context).ui_web_share_password, style: const TextStyle(fontWeight: FontWeight.bold)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(L10n.of(context).ui_web_share_password_generated(password)),
+              const SizedBox(height: 12),
+              SelectableText(
+                password,
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 2),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(L10n.of(context).ui_confirm),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _editPassword() async {
+    final controller = TextEditingController(text: PreferencesService.getWebSharePassword());
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return AlertDialog(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(L10n.of(context).ui_web_share_password, style: const TextStyle(fontWeight: FontWeight.bold)),
+          content: TextField(
+            controller: controller,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: L10n.of(context).ui_web_share_password,
+              helperText: L10n.of(context).ui_web_share_password_hint,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(L10n.of(context).ui_cancel),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, controller.text.trim()),
+              child: Text(L10n.of(context).ui_confirm),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == null) return;
+    await PreferencesService.saveWebSharePassword(result);
+    if (!mounted) return;
+    setState(() {});
+  }
+
   void _toggleInternetTunnel(String shareDir) {
     if (_webService.isInternetActive) {
       _webService.stopInternetTunnel();
@@ -192,13 +263,20 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
         try {
           await Permission.notification.request();
           await _webService.startInternetTunnel(shareDir);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(L10n.of(context).msg2c146598),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-            ),
-          );
+          if (!mounted) return;
+          // 公网隧道启用强制口令：若口令是本次自动生成的，必须展示给用户
+          final generated = _webService.generatedPassword;
+          if (generated != null) {
+            _showGeneratedPasswordDialog(generated);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(L10n.of(context).msg2c146598),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          }
         } catch (e) {
           // 透传真实失败原因（含隧道节点名），不再用「无效的端口号」误导用户
           final errText = e.toString().replaceFirst('Exception: ', '');
@@ -228,7 +306,6 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
     final initialPath = _shareDir.isNotEmpty
         ? _shareDir
         : '/storage/emulated/0';
-
     final picked = await InternalFilePickerScreen.show(
       context,
       rootPath: initialPath,
@@ -282,7 +359,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   L10n.of(context).type(type),
                   style: TextStyle(
                     fontSize: 12,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -296,7 +373,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: theme.colorScheme.primary.withOpacity(0.08),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.08),
                         blurRadius: 20,
                         offset: const Offset(0, 4),
                       ),
@@ -312,7 +389,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface.withOpacity(0.04),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.04),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -385,7 +462,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
           Container(
             height: 180,
             width: double.infinity,
-            color: theme.colorScheme.onSurface.withOpacity(0.01),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.01),
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -408,12 +485,12 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   height: 68,
                   width: 68,
                   decoration: BoxDecoration(
-                    color: isActive ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.04),
+                    color: isActive ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.04),
                     shape: BoxShape.circle,
                     boxShadow: isActive
                         ? [
                             BoxShadow(
-                              color: theme.colorScheme.primary.withOpacity(0.35),
+                              color: theme.colorScheme.primary.withValues(alpha: 0.35),
                               blurRadius: 20,
                               offset: const Offset(0, 4),
                             ),
@@ -423,7 +500,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   child: Icon(
                     isActive ? Broken.export : Broken.export_1,
                     size: 28,
-                    color: isActive ? Colors.white : theme.colorScheme.onSurface.withOpacity(0.4),
+                    color: isActive ? Colors.white : theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   ),
                 ),
               ],
@@ -436,9 +513,9 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04),
+                color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.1)),
+                border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
@@ -459,7 +536,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                           style: TextStyle(
                             fontSize: 13.5,
                             fontWeight: FontWeight.bold,
-                            color: _activeTab == 0 ? Colors.white : theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: _activeTab == 0 ? Colors.white : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ),
@@ -482,7 +559,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                           style: TextStyle(
                             fontSize: 13.5,
                             fontWeight: FontWeight.bold,
-                            color: _activeTab == 1 ? Colors.white : theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: _activeTab == 1 ? Colors.white : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ),
@@ -521,7 +598,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
         const SizedBox(height: 4),
         Text(
           L10n.of(context).wifi,
-          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
         ),
         const SizedBox(height: 20),
 
@@ -530,10 +607,10 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
           Card(
             elevation: 2,
             margin: EdgeInsets.zero,
-            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04),
+            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
-              side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.12)),
+              side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.12)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -545,7 +622,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.12),
+                          color: Colors.green.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(Icons.circle, color: Colors.green, size: 10),
@@ -560,7 +637,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   const SizedBox(height: 16),
                   Text(
                     L10n.of(context).msg22b03c02,
-                    style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.4), fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -578,7 +655,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       Expanded(
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.25)),
+                            side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.25)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             padding: const EdgeInsets.symmetric(vertical: 10),
                           ),
@@ -591,7 +668,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       Expanded(
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.25)),
+                            side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.25)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             padding: const EdgeInsets.symmetric(vertical: 10),
                           ),
@@ -624,18 +701,18 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       children: [
                         Text(
                           L10n.of(context).msgfefea1b3,
-                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           _shareDir.isEmpty ? '/storage/emulated/0' : _shareDir,
-                          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.8), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.8), fontWeight: FontWeight.w600),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                 ],
               ),
             ),
@@ -645,7 +722,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
           Card(
             elevation: 0,
             margin: EdgeInsets.zero,
-            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.onSurface.withOpacity(0.02),
+            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.onSurface.withValues(alpha: 0.02),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
@@ -654,7 +731,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   Icon(
                     Broken.wifi_square,
                     size: 44,
-                    color: theme.colorScheme.onSurface.withOpacity(0.2),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -664,7 +741,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   const SizedBox(height: 4),
                   Text(
                     L10n.of(context).wifi1,
-                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5), height: 1.3),
+                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), height: 1.3),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -688,18 +765,18 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       children: [
                         Text(
                           L10n.of(context).msgfefea1b3,
-                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           _shareDir.isEmpty ? '/storage/emulated/0' : _shareDir,
-                          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.8), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.8), fontWeight: FontWeight.w600),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                 ],
               ),
             ),
@@ -721,7 +798,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       children: [
                         Text(
                           'Port',
-                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 2),
                         Text(
@@ -729,15 +806,53 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                           style: TextStyle(
                             fontSize: 13,
                             color: _webService.isLocalActive
-                                ? theme.colorScheme.onSurface.withOpacity(0.4)
-                                : theme.colorScheme.onSurface.withOpacity(0.8),
+                                ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
+                                : theme.colorScheme.onSurface.withValues(alpha: 0.8),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Access password (optional; required automatically for internet tunnel)
+          InkWell(
+            onTap: _editPassword,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              child: Row(
+                children: [
+                  Icon(Icons.lock_outline_rounded, size: 18, color: theme.colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          L10n.of(context).ui_web_share_password,
+                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          PreferencesService.getWebSharePassword().isEmpty
+                              ? L10n.of(context).ui_web_share_password_hint
+                              : '••••••••',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                 ],
               ),
             ),
@@ -779,7 +894,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
         const SizedBox(height: 4),
         Text(
           L10n.of(context).msg27d5bd3c,
-          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
         ),
         const SizedBox(height: 20),
 
@@ -788,10 +903,10 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
           Card(
             elevation: 2,
             margin: EdgeInsets.zero,
-            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04),
+            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
-              side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.12)),
+              side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.12)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -803,7 +918,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withOpacity(0.12),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(Icons.cloud_done, color: theme.colorScheme.primary, size: 16),
@@ -818,7 +933,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   const SizedBox(height: 16),
                   Text(
                     L10n.of(context).msg66a09a42,
-                    style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.4), fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -836,7 +951,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       Expanded(
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.25)),
+                            side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.25)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             padding: const EdgeInsets.symmetric(vertical: 10),
                           ),
@@ -849,7 +964,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       Expanded(
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.25)),
+                            side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.25)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             padding: const EdgeInsets.symmetric(vertical: 10),
                           ),
@@ -869,12 +984,12 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
           // Share path display
           Row(
             children: [
-              Icon(Broken.folder_open, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+              Icon(Broken.folder_open, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                     L10n.of(context).msgfefea1b3 + ': ' + (_shareDir.isEmpty ? '/storage/emulated/0' : _shareDir),
-                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.6), fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontWeight: FontWeight.w600),
                     overflow: TextOverflow.ellipsis,
                   ),
               ),
@@ -894,7 +1009,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
                 L10n.of(context).msgb77e4adf,
-              style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.4), fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontStyle: FontStyle.italic),
               textAlign: TextAlign.center,
             ),
             )
@@ -902,11 +1017,11 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
             ..._webService.activeClients.map((client) {
               return Card(
                 elevation: 0,
-                color: isDark ? const Color(0xFF1E293B).withOpacity(0.5) : theme.colorScheme.primary.withOpacity(0.02),
+                color: isDark ? const Color(0xFF1E293B).withValues(alpha: 0.5) : theme.colorScheme.primary.withValues(alpha: 0.02),
                 margin: const EdgeInsets.symmetric(vertical: 6.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.05)),
+                  side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(14.0),
@@ -914,7 +1029,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                     children: [
                       Row(
                         children: [
-                          Icon(Broken.monitor, size: 18, color: theme.colorScheme.primary.withOpacity(0.8)),
+                          Icon(Broken.monitor, size: 18, color: theme.colorScheme.primary.withValues(alpha: 0.8)),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
@@ -927,7 +1042,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.12),
+                              color: Colors.green.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -944,13 +1059,13 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                           Expanded(
                             child: Text(
                               L10n.of(context).ui_downloading_file(client['file'] as String),
-                              style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                              style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Text(
                             L10n.of(context).ui_sent(client['transferred'] as String),
-                            style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                            style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                           ),
                         ],
                       ),
@@ -961,7 +1076,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                         child: LinearProgressIndicator(
                           value: client['progress'] as double,
                           minHeight: 3.5,
-                          backgroundColor: theme.colorScheme.onSurface.withOpacity(0.05),
+                          backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
                           valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
                         ),
                       ),
@@ -975,7 +1090,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
           Card(
             elevation: 0,
             margin: EdgeInsets.zero,
-            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.onSurface.withOpacity(0.02),
+            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.onSurface.withValues(alpha: 0.02),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
@@ -984,7 +1099,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   Icon(
                     Broken.routing,
                     size: 44,
-                    color: theme.colorScheme.onSurface.withOpacity(0.2),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -994,7 +1109,7 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                   const SizedBox(height: 4),
                   Text(
                     L10n.of(context).msg27d5bd3c,
-                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5), height: 1.3),
+                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), height: 1.3),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -1018,18 +1133,18 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
                       children: [
                         Text(
                           L10n.of(context).msgfefea1b3,
-                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           _shareDir.isEmpty ? '/storage/emulated/0' : _shareDir,
-                          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.8), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.8), fontWeight: FontWeight.w600),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  Icon(Icons.chevron_right_rounded, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                 ],
               ),
             ),
@@ -1080,7 +1195,7 @@ class RadarPulsePainter extends CustomPainter {
 
     // Draw background concentric grid
     final bgPaint = Paint()
-      ..color = color.withOpacity(0.04)
+      ..color = color.withValues(alpha: 0.04)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
     canvas.drawCircle(center, 40, bgPaint);
@@ -1094,7 +1209,7 @@ class RadarPulsePainter extends CustomPainter {
         final radius = 34 + progress * 76;
         final opacity = (1.0 - progress) * 0.45;
 
-        paint.color = color.withOpacity(opacity);
+        paint.color = color.withValues(alpha: opacity);
         canvas.drawCircle(center, radius, paint);
       }
     }

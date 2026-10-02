@@ -2844,8 +2844,7 @@ class L10nDe extends L10n {
       'App-Cache (Miniaturansichten, Remote-Cache)';
 
   @override
-  String get junk_clean_temp_item =>
-      'Temporäre Dateien (Download-Reste)';
+  String get junk_clean_temp_item => 'Temporäre Dateien (Download-Reste)';
 
   @override
   String junk_clean_done(Object size) {
@@ -7919,8 +7918,7 @@ class L10nDe extends L10n {
       'Verschlüsselungsparameter sind nach dem Erstellen gesperrt. Änderungen machen vorhandene verschlüsselte Dateien unlesbar, da die Namen auf dem Datenträger mit diesen Einstellungen erzeugt wurden. Erstellen Sie ein neues Profil, wenn Sie andere Parameter benötigen.';
 
   @override
-  String get vault_encrypt_new_files =>
-      'Neue Dateien verschlüsseln';
+  String get vault_encrypt_new_files => 'Neue Dateien verschlüsseln';
 
   @override
   String get vault_encrypt_new_files_none =>
@@ -8402,5 +8400,44 @@ class L10nDe extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return 'Bei $count Datei(en) konnten die Metadaten nicht entfernt werden (möglicherweise verschlüsselt); sie wurden unverändert geteilt';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP-Passwort';
+
+  @override
+  String get ui_ftp_password_required =>
+      'Bitte ein Passwort festlegen, sonst weist der FTP-Server alle Clients ab';
+
+  @override
+  String get ui_web_share_password => 'Zugriffspasswort';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'Leer lassen, um die Authentifizierung zu deaktivieren (nur für vertrauenswürdige LANs empfohlen)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'Automatisch generiertes Passwort für den Internetzugriff: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'Für das Internet-Sharing ist ein Zugriffspasswort erforderlich';
+
+  @override
+  String get crypt_auto_encrypt_section => 'Auto-Verschlüsselung';
+
+  @override
+  String get crypt_auto_encrypt_title =>
+      'Neue Dateien automatisch verschlüsseln';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'Überwacht direk-verschlüsselte Verzeichnisse und verschlüsselt neue Dateien automatisch nach dem Schreiben (dauerhafte Benachrichtigung erforderlich)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '$count Verzeichnis(se) werden geschützt; neue Dateien werden automatisch verschlüsselt';
   }
 }

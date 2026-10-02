@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 3.4.1+83
+version: 3.5.0+84
 
 environment:
   sdk: ^3.11.5
@@ -84,9 +84,11 @@ dependencies:
   # 纯 Dart 图片处理库：编辑器/缩放/去 EXIF 全部走 dart:ui 之外的纯 Dart 实现，
   # 规避引入原生插件（如 image_editor/photofilters）带来的 KGP 构建风险。
   image: ^4.0.0
-  media_kit: any
-  media_kit_video: any
-  media_kit_libs_video: any
+  # media_kit 系列锚定到当前已解析版本（pub upgrade 曾因 any 拉入不兼容的
+  # 原生库组合）。升级时显式改这里并回归验证播放器。
+  media_kit: ^1.2.6
+  media_kit_video: ^2.0.1
+  media_kit_libs_video: ^1.0.7
   syncfusion_flutter_pdfviewer: ^33.2.6
   flutter_svg: ^2.0.0
   archive: ^3.6.1
@@ -103,7 +105,8 @@ dependencies:
   url_launcher: ^6.2.6
   sqflite: ^2.4.2+1
   share_plus: ^12.0.2
-  google_fonts: ^8.2.1
+  # google_fonts 已移除：Outfit / JetBrains Mono / Montserrat 改为本地打包
+  # （assets/fonts/google/），避免运行时联网下载字体。
   crypto: ^3.0.3
   ftpconnect: ^2.0.10
   dartssh2: ^3.3.1
@@ -175,6 +178,36 @@ flutter:
         - asset: assets/fonts/LexendDeca/LexendDeca-Regular.ttf
         - asset: assets/fonts/LexendDeca/LexendDeca-SemiBold.ttf
         - asset: assets/fonts/LexendDeca/LexendDeca-Thin.ttf
+    # 本地打包的 Google Fonts（Outfit / JetBrains Mono / Montserrat），
+    # 替代 google_fonts 运行时联网下载：弱网首帧不再闪烁/阻塞。
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/google/outfit-400.ttf
+          weight: 400
+        - asset: assets/fonts/google/outfit-500.ttf
+          weight: 500
+        - asset: assets/fonts/google/outfit-600.ttf
+          weight: 600
+        - asset: assets/fonts/google/outfit-700.ttf
+          weight: 700
+    - family: JetBrains Mono
+      fonts:
+        - asset: assets/fonts/google/jetbrainsmono-400.ttf
+          weight: 400
+        - asset: assets/fonts/google/jetbrainsmono-500.ttf
+          weight: 500
+        - asset: assets/fonts/google/jetbrainsmono-700.ttf
+          weight: 700
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/google/montserrat-400.ttf
+          weight: 400
+        - asset: assets/fonts/google/montserrat-500.ttf
+          weight: 500
+        - asset: assets/fonts/google/montserrat-600.ttf
+          weight: 600
+        - asset: assets/fonts/google/montserrat-700.ttf
+          weight: 700
 
   assets:
     - assets/ic_launcher.webp

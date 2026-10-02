@@ -477,7 +477,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
     final provider = context.read<FileManagerProvider>();
     await showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.55),
+      barrierColor: Colors.black.withValues(alpha: 0.55),
       builder: (context) => BatchRenameDialog(
         provider: provider,
         selectedPaths: _selectedPaths.toList(),
@@ -562,7 +562,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
         if (isMulti && _selectedPaths.length > 1) {
           await showDialog<void>(
             context: context,
-            barrierColor: Colors.black.withOpacity(0.55),
+            barrierColor: Colors.black.withValues(alpha: 0.55),
             builder: (context) => BatchRenameDialog(
               provider: provider,
               selectedPaths: _selectedPaths.toList(),

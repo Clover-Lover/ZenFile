@@ -150,7 +150,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2)))),
+                    Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2)))),
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -159,7 +159,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                     const SizedBox(height: 6),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(L10n.of(context).msgaa2a18a1, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontSize: 13)),
+                      child: Text(L10n.of(context).msgaa2a18a1, style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontSize: 13)),
                     ),
                     const SizedBox(height: 16),
                     ListView.builder(
@@ -178,7 +178,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                           leading: Container(
                             width: 36, height: 36,
                             decoration: BoxDecoration(
-                              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.1),
+                              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
@@ -188,8 +188,8 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                             ),
                           ),
                           title: Text(name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.w600)),
-                          subtitle: Text(desc, style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5))),
-                          trailing: isSelected ? Icon(Icons.radio_button_checked_rounded, color: theme.colorScheme.primary) : Icon(Icons.radio_button_off_rounded, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                          subtitle: Text(desc, style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
+                          trailing: isSelected ? Icon(Icons.radio_button_checked_rounded, color: theme.colorScheme.primary) : Icon(Icons.radio_button_off_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                           onTap: () {
                             fileManager.setTrailingInfoType(key);
                             Navigator.pop(ctx);
@@ -218,17 +218,17 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 6),
-      color: theme.colorScheme.surface.withOpacity(0.5),
+      color: theme.colorScheme.surface.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: theme.colorScheme.outline.withOpacity(0.1)),
+        side: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.1)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: theme.colorScheme.primary, size: 22),
@@ -241,10 +241,10 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(
             subtitle,
-            style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.6)),
+            style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
           ),
         ),
-        trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4), size: 22),
+        trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4), size: 22),
         onTap: () {
           Navigator.push(
             context,
@@ -381,7 +381,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                     hintText: L10n.of(context).msgead3e5c5,
                     border: InputBorder.none,
                     hintStyle: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                   ),
                   onChanged: (val) {
@@ -453,7 +453,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                   icon: Broken.language_circle,
                   title: L10n.of(context).ui_language,
                   subtitle: _getCurrentLocaleName(PreferencesService.getAppLocale()),
-                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                   onTap: () => _showLanguagePickerDialog(context),
                 ),
                 _buildCategoryCard(
@@ -508,21 +508,21 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                   icon: Icons.install_mobile_rounded,
                   title: L10n.of(context).vt_install_settings_title,
                   subtitle: L10n.of(context).vt_install_settings_subtitle,
-                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ApkInstallSettingsScreen())),
                 ),
                 SettingsTile(
                   icon: Broken.lock,
                   title: L10n.of(context).ui_security_settings,
                   subtitle: L10n.of(context).security_settings_subtitle,
-                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                   onTap: () => SecuritySettingsScreen.show(context),
                 ),
                 SettingsTile(
                   icon: Broken.refresh_circle,
                   title: L10n.of(context).msgb4fbc92c,
                   subtitle: L10n.of(context).msg9edfaff3,
-                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                  trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BackupSettingsScreen())),
                 ),
               ] else ...[
@@ -535,7 +535,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withOpacity(0.08),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.08),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -556,7 +556,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         Text(
                           L10n.of(context).msg99c9cc56,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.55),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                           ),
                         ),
                       ],
@@ -570,7 +570,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         icon: Broken.folder_favorite,
                         title: L10n.of(context).msga432d127,
                         subtitle: fileManager.defaultToBrowseScreen ? L10n.of(context).msg2c8a394a : L10n.of(context).msg226fc6ae,
-                        trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                        trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                         onTap: () => _showDefaultHomeDialog(context, fileManager),
                       ),
                     if (swipeModeVis)
@@ -578,7 +578,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                         icon: Broken.arrow_swap,
                         title: L10n.of(context).msgd48a082d,
                         subtitle: fileManager.swipeMode == 'single' ? L10n.of(context).msgaac01f32 : L10n.of(context).msgbc9bf336,
-                        trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                        trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                         onTap: () => _showSwipeModeDialog(context, fileManager),
                       ),
                     if (navBarVis)
@@ -592,7 +592,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
                             : (fileManager.showBottomActionBar
                                 ? L10n.of(context).msg8c414b06
                                 : L10n.of(context).msge34c23ff),
-                        trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                        trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                         onTap: () => _showNavBarDialog(context),
                       ),
                     if (rememberLastFolderVis)
@@ -1067,7 +1067,7 @@ class _MoreSettingsScreenState extends State<MoreSettingsScreen> {
       child: Text(
         title.toUpperCase(),
         style: TextStyle(
-          color: theme.colorScheme.primary.withOpacity(0.8),
+          color: theme.colorScheme.primary.withValues(alpha: 0.8),
           fontSize: 12,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.2,
@@ -1178,7 +1178,7 @@ Widget _buildActionMenuModeOption(
       icon,
       color: isSelected
           ? theme.colorScheme.primary
-          : theme.colorScheme.onSurface.withOpacity(0.5),
+          : theme.colorScheme.onSurface.withValues(alpha: 0.5),
     ),
     title: Text(
       title,
@@ -1195,7 +1195,7 @@ Widget _buildActionMenuModeOption(
           : Icons.radio_button_off_rounded,
       color: isSelected
           ? theme.colorScheme.primary
-          : theme.colorScheme.onSurface.withOpacity(0.3),
+          : theme.colorScheme.onSurface.withValues(alpha: 0.3),
       size: 22,
     ),
     onTap: () => Navigator.pop(sheetContext, mode),
@@ -1360,13 +1360,13 @@ Widget _buildDateFormatOption(
       Icons.calendar_today_outlined,
       color: isSelected
           ? theme.colorScheme.primary
-          : theme.colorScheme.onSurface.withOpacity(0.5),
+          : theme.colorScheme.onSurface.withValues(alpha: 0.5),
     ),
     title: Text(label),
     subtitle: Text(
       sample,
       style: theme.textTheme.bodySmall?.copyWith(
-        color: theme.colorScheme.onSurface.withOpacity(0.6),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
       ),
     ),
     trailing: Icon(
@@ -1375,7 +1375,7 @@ Widget _buildDateFormatOption(
           : Icons.radio_button_off_rounded,
       color: isSelected
           ? theme.colorScheme.primary
-          : theme.colorScheme.onSurface.withOpacity(0.3),
+          : theme.colorScheme.onSurface.withValues(alpha: 0.3),
       size: 22,
     ),
     onTap: () => onSelect(fmt),
@@ -1399,13 +1399,13 @@ Widget _buildTimeFormatOption(
       Icons.schedule_rounded,
       color: isSelected
           ? theme.colorScheme.primary
-          : theme.colorScheme.onSurface.withOpacity(0.5),
+          : theme.colorScheme.onSurface.withValues(alpha: 0.5),
     ),
     title: Text(label),
     subtitle: Text(
       sample,
       style: theme.textTheme.bodySmall?.copyWith(
-        color: theme.colorScheme.onSurface.withOpacity(0.6),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
       ),
     ),
     trailing: Icon(
@@ -1414,7 +1414,7 @@ Widget _buildTimeFormatOption(
           : Icons.radio_button_off_rounded,
       color: isSelected
           ? theme.colorScheme.primary
-          : theme.colorScheme.onSurface.withOpacity(0.3),
+          : theme.colorScheme.onSurface.withValues(alpha: 0.3),
       size: 22,
     ),
     onTap: () => onSelect(use24),
@@ -1452,23 +1452,23 @@ class SettingsTile extends StatelessWidget {
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 4),
-      color: theme.colorScheme.surface.withOpacity(0.5),
+      color: theme.colorScheme.surface.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: theme.colorScheme.outline.withOpacity(0.1)),
+        side: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.1)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: theme.colorScheme.primary, size: 22),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-        subtitle: Text(subtitle, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.6))),
+        subtitle: Text(subtitle, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
         trailing: trailing != null
             ? (trailingInteractive
                 ? trailing
@@ -1510,14 +1510,14 @@ class GeneralSettingsScreen extends StatelessWidget {
               icon: Broken.folder_favorite,
               title: L10n.of(context).msga432d127,
               subtitle: fileManager.defaultToBrowseScreen ? L10n.of(context).msg2c8a394a : L10n.of(context).msg226fc6ae,
-              trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+              trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
               onTap: () => _showDefaultHomeDialog(context, fileManager),
             ),
             SettingsTile(
               icon: Broken.arrow_swap,
               title: L10n.of(context).msgd48a082d,
               subtitle: fileManager.swipeMode == 'single' ? L10n.of(context).msgaac01f32 : L10n.of(context).msgbc9bf336,
-              trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+              trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
               onTap: () => _showSwipeModeDialog(context, fileManager),
             ),
             SettingsTile(
@@ -1530,7 +1530,7 @@ class GeneralSettingsScreen extends StatelessWidget {
                   : (fileManager.showBottomActionBar
                       ? L10n.of(context).msg8c414b06
                       : L10n.of(context).msge34c23ff),
-              trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+              trailing: Icon(Broken.arrow_right_3, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
               onTap: () => _showNavBarDialog(context),
             ),
             SettingsTile(
@@ -2091,7 +2091,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                 children: [
                   Container(
                     width: 40, height: 4,
-                    decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2)),
+                    decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2)),
                   ),
                   const SizedBox(height: 16),
                   Text(L10n.of(context).msgd9f142c4,
@@ -2171,7 +2171,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                     Container(
                       width: 40, height: 4,
                       decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.3),
+                          color: Colors.grey.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(2)),
                     ),
                     const SizedBox(height: 16),
@@ -2288,7 +2288,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                 height: 36,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primaryContainer.withOpacity(0.4),
+                  color: theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -2395,7 +2395,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               icon: Broken.folder_open,
               title: L10n.of(context).ui_view_cache_dir,
               subtitle: L10n.of(context).msgac7687d9,
-              trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+              trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
               onTap: () {
                 final provider = context.read<FileManagerProvider>();
                 // 设置待导航路径，让 HomeScreen 切页后加载目录
@@ -2409,7 +2409,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               icon: Broken.clock,
               title: L10n.of(context).msgd9f142c4,
               subtitle: _getAutoCleanLabel(_autoCleanMinutes),
-              trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+              trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
               onTap: _showAutoCleanPicker,
             ),
           ],
@@ -2582,13 +2582,13 @@ void _showDefaultHomeDialog(BuildContext context, FileManagerProvider fileManage
           children: [
             Center(
               child: Container(width: 36, height: 4,
-                decoration: BoxDecoration(color: theme.colorScheme.onSurface.withOpacity(0.15), borderRadius: BorderRadius.circular(2)),
+                decoration: BoxDecoration(color: theme.colorScheme.onSurface.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(2)),
               ),
             ),
             const SizedBox(height: 20),
             Text(L10n.of(context).msga432d127, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'LexendDeca')),
             const SizedBox(height: 6),
-            Text(L10n.of(context).msgfe76ae54, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.5))),
+            Text(L10n.of(context).msgfe76ae54, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
             const SizedBox(height: 20),
             _buildSelectionTile(
               ctx, theme, Broken.category, L10n.of(context).msg226fc6ae, L10n.of(context).msg8af2412a,
@@ -2644,7 +2644,7 @@ void _showLanguagePickerDialog(BuildContext context) {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface.withOpacity(0.2),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -2691,7 +2691,7 @@ Widget _buildLanguageOption(BuildContext context, ThemeData theme, String curren
   return Padding(
     padding: const EdgeInsets.only(bottom: 8),
     child: Material(
-      color: isSelected ? theme.colorScheme.primary.withOpacity(0.1) : theme.colorScheme.surface,
+      color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.surface,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -2706,7 +2706,7 @@ Widget _buildLanguageOption(BuildContext context, ThemeData theme, String curren
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected ? theme.colorScheme.primary.withOpacity(0.3) : theme.colorScheme.onSurface.withOpacity(0.08),
+              color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.3) : theme.colorScheme.onSurface.withValues(alpha: 0.08),
             ),
             borderRadius: BorderRadius.circular(12),
           ),
@@ -2729,7 +2729,7 @@ Widget _buildLanguageOption(BuildContext context, ThemeData theme, String curren
                       englishName,
                       style: TextStyle(
                         fontSize: 13,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -2790,7 +2790,7 @@ void _toggleMultiTabsWithScope(BuildContext context, FileManagerProvider fileMan
                 children: [
                   Center(
                     child: Container(width: 40, height: 4, decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withOpacity(0.15),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(2),
                     )),
                   ),
@@ -2802,7 +2802,7 @@ void _toggleMultiTabsWithScope(BuildContext context, FileManagerProvider fileMan
                   const SizedBox(height: 6),
                   Text(
                     L10n.of(context).ui_multi_tab_scope_subtitle,
-                    style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontSize: 13, fontFamily: 'LexendDeca'),
+                    style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontSize: 13, fontFamily: 'LexendDeca'),
                   ),
                   const SizedBox(height: 16),
                   ...options.map((opt) {
@@ -2814,7 +2814,7 @@ void _toggleMultiTabsWithScope(BuildContext context, FileManagerProvider fileMan
                     return ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      leading: Icon(icon, size: 24, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.6)),
+                      leading: Icon(icon, size: 24, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                       title: Text(
                         name,
                         style: TextStyle(
@@ -2825,7 +2825,7 @@ void _toggleMultiTabsWithScope(BuildContext context, FileManagerProvider fileMan
                       ),
                       subtitle: Text(
                         desc,
-                        style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5), fontFamily: 'LexendDeca'),
+                        style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5), fontFamily: 'LexendDeca'),
                       ),
                       trailing: isSelected
                           ? Icon(Icons.check_circle_rounded, color: theme.colorScheme.primary)
@@ -2863,13 +2863,13 @@ void _showSwipeModeDialog(BuildContext context, FileManagerProvider fileManager)
           children: [
             Center(
               child: Container(width: 36, height: 4,
-                decoration: BoxDecoration(color: theme.colorScheme.onSurface.withOpacity(0.15), borderRadius: BorderRadius.circular(2)),
+                decoration: BoxDecoration(color: theme.colorScheme.onSurface.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(2)),
               ),
             ),
             const SizedBox(height: 20),
             Text(L10n.of(context).msgd48a082d, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'LexendDeca')),
             const SizedBox(height: 6),
-            Text(L10n.of(context).msg4439669d, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.5))),
+            Text(L10n.of(context).msg4439669d, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
             const SizedBox(height: 20),
             _buildSelectionTile(
               ctx, theme, Broken.arrow_swap, L10n.of(context).msgaac01f32, L10n.of(context).msg46978666,
@@ -2910,10 +2910,10 @@ Widget _buildSelectionTile(
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: selected ? theme.colorScheme.primary.withOpacity(0.08) : theme.colorScheme.surface.withOpacity(0.5),
+        color: selected ? theme.colorScheme.primary.withValues(alpha: 0.08) : theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: selected ? theme.colorScheme.primary.withOpacity(0.4) : theme.colorScheme.outline.withOpacity(0.1),
+          color: selected ? theme.colorScheme.primary.withValues(alpha: 0.4) : theme.colorScheme.outline.withValues(alpha: 0.1),
           width: selected ? 1.5 : 1,
         ),
       ),
@@ -2922,10 +2922,10 @@ Widget _buildSelectionTile(
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: selected ? theme.colorScheme.primary.withOpacity(0.15) : theme.colorScheme.onSurface.withOpacity(0.05),
+              color: selected ? theme.colorScheme.primary.withValues(alpha: 0.15) : theme.colorScheme.onSurface.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, size: 20, color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.5)),
+            child: Icon(icon, size: 20, color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.5)),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -2934,7 +2934,7 @@ Widget _buildSelectionTile(
               children: [
                 Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface)),
                 const SizedBox(height: 2),
-                Text(subtitle, style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withOpacity(0.5))),
+                Text(subtitle, style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
               ],
             ),
           ),
@@ -2982,7 +2982,7 @@ void _showThemePickerDialog(BuildContext context, FileManagerProvider fileManage
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -3030,9 +3030,9 @@ void _showThemePickerDialog(BuildContext context, FileManagerProvider fileManage
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: current == 'custom' ? PreferencesService.getCustomAccentColor() : theme.colorScheme.primary.withOpacity(0.15),
+                        color: current == 'custom' ? PreferencesService.getCustomAccentColor() : theme.colorScheme.primary.withValues(alpha: 0.15),
                         shape: BoxShape.circle,
-                        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.3), width: 1.5),
+                        border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3), width: 1.5),
                       ),
                       child: Icon(
                         Icons.colorize,
@@ -3095,7 +3095,7 @@ void _showCustomColorPickerDialog(BuildContext context, FileManagerProvider file
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Text(L10n.of(context).ui_custom_theme, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
@@ -3108,8 +3108,8 @@ void _showCustomColorPickerDialog(BuildContext context, FileManagerProvider file
                       decoration: BoxDecoration(
                         color: currentColor,
                         shape: BoxShape.circle,
-                        border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.2), width: 2),
-                        boxShadow: [BoxShadow(color: currentColor.withOpacity(0.4), blurRadius: 12, spreadRadius: 2)],
+                        border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.2), width: 2),
+                        boxShadow: [BoxShadow(color: currentColor.withValues(alpha: 0.4), blurRadius: 12, spreadRadius: 2)],
                       ),
                     ),
                   ),
@@ -3119,7 +3119,7 @@ void _showCustomColorPickerDialog(BuildContext context, FileManagerProvider file
                   ),
                   const SizedBox(height: 20),
                   // 预设颜色
-                  Text(L10n.of(context).ui_preset_colors, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withOpacity(0.7))),
+                  Text(L10n.of(context).ui_preset_colors, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface.withValues(alpha: 0.7))),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 10,
@@ -3141,7 +3141,7 @@ void _showCustomColorPickerDialog(BuildContext context, FileManagerProvider file
                           decoration: BoxDecoration(
                             color: color,
                             shape: BoxShape.circle,
-                            border: isSelected ? Border.all(color: theme.colorScheme.primary, width: 3) : Border.all(color: theme.colorScheme.onSurface.withOpacity(0.15), width: 1),
+                            border: isSelected ? Border.all(color: theme.colorScheme.primary, width: 3) : Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.15), width: 1),
                           ),
                           child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 18) : null,
                         ),
@@ -3202,7 +3202,7 @@ Widget _buildColorSlider(String label, double value, Color color, ValueChanged<d
             max: 255,
             divisions: 255,
             activeColor: color,
-            inactiveColor: color.withOpacity(0.2),
+            inactiveColor: color.withValues(alpha: 0.2),
             onChanged: onChanged,
           ),
         ),
@@ -3246,7 +3246,7 @@ void _showFolderIconPickerDialog(BuildContext context, FileManagerProvider fileM
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -3270,7 +3270,7 @@ void _showFolderIconPickerDialog(BuildContext context, FileManagerProvider fileM
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.1),
+                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(icon, color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.primary, size: 20),
@@ -3321,7 +3321,7 @@ void _showMenuIconStylePickerDialog(BuildContext context, FileManagerProvider fi
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -3345,7 +3345,7 @@ void _showMenuIconStylePickerDialog(BuildContext context, FileManagerProvider fi
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.1),
+                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(icon, color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.primary, size: 20),
@@ -3396,7 +3396,7 @@ void _showCategoryIconShapePickerDialog(BuildContext context, FileManagerProvide
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -3420,7 +3420,7 @@ void _showCategoryIconShapePickerDialog(BuildContext context, FileManagerProvide
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.1),
+                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(icon, color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.primary, size: 20),
@@ -3450,7 +3450,7 @@ void _showAppIconPickerDialog(BuildContext context, FileManagerProvider fileMana
     context: context,
     barrierDismissible: true,
     barrierLabel: 'App Icon Picker',
-    barrierColor: Colors.black.withOpacity(0.55),
+    barrierColor: Colors.black.withValues(alpha: 0.55),
     transitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (dialogContext, anim1, anim2) => const SizedBox.shrink(),
     transitionBuilder: (dialogContext, anim1, anim2, child) {
@@ -3682,12 +3682,12 @@ Widget _buildIconOptionCard(
   final isSelected = fileManager.activeAppIcon == id;
 
   return Card(
-    color: isSelected ? theme.colorScheme.primaryContainer.withOpacity(0.4) : theme.colorScheme.surfaceVariant.withOpacity(0.15),
+    color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4) : theme.colorScheme.surfaceVariant.withValues(alpha: 0.15),
     elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
       side: BorderSide(
-        color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withOpacity(0.08),
+        color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.08),
         width: isSelected ? 2.0 : 1.0,
       ),
     ),
@@ -3722,7 +3722,7 @@ Widget _buildIconOptionCard(
                 errorBuilder: (_, __, ___) => Container(
                   width: 56,
                   height: 56,
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(alpha: 0.2),
                   child: const Icon(Icons.broken_image, size: 24),
                 ),
               ),
@@ -3757,12 +3757,12 @@ Widget _buildCustomIconOptionCard(
       final isSelected = fileManager.activeAppIcon == 'custom';
 
       return Card(
-        color: isSelected ? theme.colorScheme.primaryContainer.withOpacity(0.4) : theme.colorScheme.surfaceVariant.withOpacity(0.15),
+        color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4) : theme.colorScheme.surfaceVariant.withValues(alpha: 0.15),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withOpacity(0.08),
+            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.08),
             width: isSelected ? 2.0 : 1.0,
           ),
         ),
@@ -3830,10 +3830,10 @@ Widget _buildCustomIconPlaceholder(ThemeData theme) {
     width: 56,
     height: 56,
     decoration: BoxDecoration(
-      color: theme.colorScheme.primary.withOpacity(0.1),
+      color: theme.colorScheme.primary.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(12),
       border: Border.all(
-        color: theme.colorScheme.primary.withOpacity(0.3),
+        color: theme.colorScheme.primary.withValues(alpha: 0.3),
         width: 1.5,
         style: BorderStyle.solid,
       ),
@@ -3945,7 +3945,7 @@ Future<void> _showAddToHomeSheet({
       }) {
         return Card(
           elevation: 0,
-          color: theme.colorScheme.surfaceVariant.withOpacity(0.18),
+          color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.18),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: ListTile(
             onTap: onTap,
@@ -4099,7 +4099,7 @@ void _showFontFamilyPickerDialog(BuildContext context, FileManagerProvider fileM
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -4109,7 +4109,7 @@ void _showFontFamilyPickerDialog(BuildContext context, FileManagerProvider fileM
                   const SizedBox(height: 6),
                   Text(
                     L10n.of(context).zenfile5,
-                    style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontSize: 13, fontFamily: 'LexendDeca'),
+                    style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontSize: 13, fontFamily: 'LexendDeca'),
                   ),
                   const SizedBox(height: 16),
                   ...options.map((opt) {
@@ -4129,13 +4129,13 @@ void _showFontFamilyPickerDialog(BuildContext context, FileManagerProvider fileM
                         opt['desc']!,
                         style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           fontFamily: 'LexendDeca',
                         ),
                       ),
                       trailing: isSelected
                           ? Icon(Icons.radio_button_checked_rounded, color: theme.colorScheme.primary)
-                          : Icon(Icons.radio_button_off_rounded, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+                          : Icon(Icons.radio_button_off_rounded, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
                       onTap: () {
                         fileManager.setFontFamilyOption(opt['key']!);
                         Navigator.pop(ctx);
@@ -4154,7 +4154,7 @@ void _showFontFamilyPickerDialog(BuildContext context, FileManagerProvider fileM
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size.fromHeight(46),
                       foregroundColor: theme.colorScheme.primary,
-                      side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.5)),
+                      side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.5)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
                     onPressed: () async {

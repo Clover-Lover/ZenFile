@@ -427,15 +427,15 @@ class _UpdateScreenState extends State<UpdateScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            theme.colorScheme.primary.withOpacity(0.08),
-            theme.colorScheme.secondary.withOpacity(0.04),
+            theme.colorScheme.primary.withValues(alpha: 0.08),
+            theme.colorScheme.secondary.withValues(alpha: 0.04),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border:
-            Border.all(color: theme.colorScheme.primary.withOpacity(0.15)),
+            Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,7 +453,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface.withOpacity(0.9),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
                   ),
                 ),
               ),
@@ -473,7 +473,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 _currentVersion.isEmpty ? '—' : _currentVersion),
             style: TextStyle(
               fontSize: 13,
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               fontFamily: 'LexendDeca',
             ),
           ),
@@ -486,7 +486,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
             child: Row(
               children: [
                 Icon(Icons.cloud_outlined,
-                    size: 13, color: theme.colorScheme.onSurface.withOpacity(0.45)),
+                    size: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.45)),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -494,7 +494,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     '${_apiUrlOverride.isEmpty ? l10n.update_source_default : l10n.update_source_custom}',
                     style: TextStyle(
                       fontSize: 12,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ),
@@ -508,7 +508,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
               Icon(
                 Icons.notifications_active_outlined,
                 size: 13,
-                color: theme.colorScheme.onSurface.withOpacity(0.45),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
               ),
               const SizedBox(width: 6),
               Expanded(
@@ -516,7 +516,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   l10n.update_startup_prompt,
                   style: TextStyle(
                     fontSize: 12,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -551,7 +551,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
             Text(l10n.update_checking,
                 style: TextStyle(
                     fontSize: 13.5,
-                    color: theme.colorScheme.onSurface.withOpacity(0.75))),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.75))),
           ],
         );
       case _CheckState.latest:
@@ -568,7 +568,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       style: TextStyle(
                           fontSize: 13.5,
                           fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface.withOpacity(0.85))),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.85))),
                 ),
               ],
             ),
@@ -582,7 +582,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   _metaLine(l10n),
                   style: TextStyle(
                       fontSize: 11.5,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                 ),
               ),
             ],
@@ -601,7 +601,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   child: Text(_errorText(l10n),
                       style: TextStyle(
                           fontSize: 13.5,
-                          color: theme.colorScheme.onSurface.withOpacity(0.85))),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.85))),
                 ),
               ],
             ),
@@ -618,12 +618,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   onPressed: () => _openUrl(_releasePageUrl),
                   icon: Icon(Icons.open_in_new,
                       size: 14,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   label: Text(
                     l10n.update_view_github,
                     style: TextStyle(
                         fontSize: 12.5,
-                        color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                   ),
                 ),
               ],
@@ -658,14 +658,14 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 children: [
                   Icon(Icons.info_outline_rounded,
                       size: 14,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       l10n.update_degraded_hint,
                       style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                     ),
                   ),
                 ],
@@ -723,7 +723,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     : '${l10n.update_downloading} ${(_downloadProgress! * 100).toStringAsFixed(0)}%',
                 style: TextStyle(
                     fontSize: 12.5,
-                    color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
             ] else
               Row(
@@ -738,12 +738,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     onPressed: () => _openUrl(_pageUrl),
                     icon: Icon(Icons.open_in_new,
                         size: 14,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                     label: Text(
                       l10n.update_view_github,
                       style: TextStyle(
                           fontSize: 12.5,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                     ),
                   ),
                 ],
@@ -851,9 +851,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.2),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.06)),
+        border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.06)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -867,7 +867,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface.withOpacity(0.9))),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.9))),
             ],
           ),
           const SizedBox(height: 12),
@@ -892,21 +892,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceVariant.withOpacity(0.2),
+          color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.06)),
+          border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.06)),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 18, color: theme.colorScheme.primary.withOpacity(0.7)),
+            Icon(icon, size: 18, color: theme.colorScheme.primary.withValues(alpha: 0.7)),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 name,
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: theme.colorScheme.onSurface.withOpacity(0.85)),
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: theme.colorScheme.onSurface.withValues(alpha: 0.85)),
               ),
             ),
-            Icon(Icons.open_in_new, size: 14, color: theme.colorScheme.onSurface.withOpacity(0.35)),
+            Icon(Icons.open_in_new, size: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.35)),
           ],
         ),
       ),
@@ -927,15 +927,82 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.4.1';
+  static const String _latestChangelogVersion = 'v3.5.0';
 
   /// 全部版本的更新日志，**最新在最前**。
   static const List<_Changelog> _changelogs = <_Changelog>[
+    _v350,
     _v341,
     _v340,
     _v330,
     _v320,
   ];
+
+  /// ── 当前版本：v3.5.0 ────────────────────────────────────────────────
+  static const _Changelog _v350 = _Changelog(
+    version: 'v3.5.0',
+    date: '2026-10-03',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '保险箱新增「自动加密新增文件」：开启后，原地加密目录（如相机目录）里新出现的照片和视频会被自动加密，无需再手动点「加密新增文件」；即使相机重建了同名明文目录，也会自动并入已加密目录并实时刷新浏览页（论坛反馈）',
+        '空间分析页新增「垃圾清理」：一键统计并清理应用缓存、旧版缓存目录与临时文件（24 小时内的更新安装包会自动保留，避免安装器读不到）',
+        '文件与分类页的三点菜单新增「置顶 / 取消置顶」',
+        '安全分享扩展到 ZIP 压缩包与 PDF 文档：同样先剥离元数据再分享临时副本',
+        'Web 分享新增可选访问口令；启用公网隧道时强制鉴权，未设口令会自动生成 8 位口令并弹窗展示',
+        'FTP 服务器新增用户名/密码认证模式（也可切回匿名）；SFTP 首次连接记录服务器主机密钥指纹，之后指纹不匹配即拒绝连接，防止中间人攻击',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        '加密目录与重建的同名明文目录并存时，两个条目都能正确进入：点加密条目看到已加密内容，点明文条目看到新文件，不再互相遮住',
+        '加密冲突期间（同名目录并存时）浏览页面包屑改显解密后的明文名，点击仍导航到真实位置',
+        '保险箱配置页的四个密钥空间参数（目录名/文件名加密方式等）创建后锁定并显示提示条，防止误改导致已有密文无法解回',
+        '分类页「空间」卡片小字改为「清理」，与新增的垃圾清理功能呼应；加密/解密操作图标统一为 Broken 风格',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复 SMB 连接切后台或切页后回来「目录失效、必须关掉重进」：会话假死现在能被可靠识别，回前台或下次操作时自动重建连接，全程无感（论坛反馈）',
+        '修复保险箱「原地加密」列表把普通文件夹误显示为密文目录（某些配置下判据恒真所致）',
+        '修复「加密新增文件」合并完成后浏览页不自动刷新、需要手动下拉的问题',
+        '修复在 FTP 服务器设置里只改用户名不改密码可能把认证配置改坏的问题',
+      ]),
+      _ChangeSection('🛠️ 安全与维护', [
+        '远程连接密码、SSH 密钥口令、网盘令牌迁入系统安全存储：旧数据自动迁移，新写入不再含明文凭据',
+        '应用解锁 PIN 哈希从单轮 SHA-256 升级为 scrypt：存量记录首次验证通过时透明升级，无需重设',
+        '关闭 Android 云备份导出应用数据；设置备份文件不再包含 PIN 哈希、FTP 密码、分享口令、加密主密码等敏感项',
+        '封堵 Web 分享与 FTP 服务器的路径逃逸（../ 绕过）及 FTP 主动模式端口反弹；FTPS 证书默认严格校验',
+        '远程图片缩略图解码移入后台线程，10~30MB 大图不再卡住界面；缩略图缓存改为上限管理（400 条 / 64MB），不再无限增长',
+        '加密文件覆盖写入改为块级读-改-写，大文件局部改写明显提速；应用字体本地打包，首次启动不再联网拉取',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'The vault now offers "Auto-encrypt new files": once enabled, photos and videos appearing in an in-place encrypted directory (such as the camera folder) are encrypted automatically - no more tapping "Encrypt new files" by hand. Even if the camera recreates a plain-text folder with the same name, it is merged into the encrypted directory and the browser refreshes on its own (forum feedback)',
+        'Storage analysis gains "Junk cleanup": scan and clean app caches, legacy cache directories and temp files in one tap (update packages younger than 24 hours are kept so the installer can still read them)',
+        '"Pin / Unpin" added to the three-dot menus of file and category pages',
+        'Secure share now covers ZIP archives and PDF documents: metadata is stripped before a temporary copy is shared',
+        'Web sharing gains an optional access password; when a public tunnel is active, authentication is enforced and an 8-character password is generated automatically if none was set',
+        'The FTP server now supports username/password authentication (anonymous mode remains available); SFTP records the server host key fingerprint on first connection (TOFU) and rejects mismatches afterwards, preventing man-in-the-middle attacks',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'When an encrypted directory and a recreated plain-text directory with the same name coexist, both entries now work: the encrypted one shows encrypted content, the plain one shows new files - they no longer hide each other',
+        'While such a conflict exists, breadcrumbs in the local browser show the decrypted plain name while still navigating to the real location',
+        'The four key-space parameters of a vault profile (directory/file name encryption, etc.) are locked after creation with an amber notice, preventing accidental changes that would make existing ciphertext undecryptable',
+        'The "Storage" card caption on the Categories page now reads "Clean" to match the new junk cleanup; encrypt/decrypt icons unified to the Broken style',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed SMB sessions dying silently after switching away from the app ("directory no longer valid, must reopen"): the dead session is now detected reliably and rebuilt transparently when you return or on the next operation (forum feedback)',
+        'Fixed the vault in-place encryption list treating ordinary folders as encrypted directories under certain configurations',
+        'Fixed the browser not refreshing automatically after "Encrypt new files" finished merging a directory',
+        'Fixed the FTP server settings allowing the password to be wiped when only the username was changed',
+      ]),
+      _ChangeSection('🛠️ Security & Maintenance', [
+        'Remote connection passwords, SSH key passphrases and cloud-drive tokens moved into the system secure storage: legacy data migrates automatically and new writes never contain plain credentials',
+        'The unlock PIN hash was upgraded from single-round SHA-256 to scrypt: existing records upgrade transparently on the first successful verification, no re-setup needed',
+        'Android cloud backup of app data is now disabled; settings backup files no longer contain the PIN hash, FTP password, share password, vault master password or other sensitive items',
+        'Path traversal (../ escape) in Web sharing and the FTP server is blocked, as is FTP active-mode port bounce; FTPS certificate verification is strict by default',
+        'Remote image thumbnails are decoded on a background thread - 10~30 MB images no longer freeze the UI; the thumbnail cache is now LRU-capped (400 entries / 64 MB) instead of growing forever',
+        'Encrypted-file overwrite switched to block-level read-modify-write, visibly speeding up partial rewrites of large files; fonts are bundled locally so the first launch no longer fetches them online',
+      ]),
+    ],
+  );
 
   /// ── 当前版本：v3.4.1 ────────────────────────────────────────────────
   static const _Changelog _v341 = _Changelog(

@@ -144,7 +144,7 @@ Future<String?> showRemotePathPicker(BuildContext context) async {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 12),
-            Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+            Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -174,11 +174,11 @@ Future<String?> showRemotePathPicker(BuildContext context) async {
                 leading: Container(
                   width: 42,
                   height: 42,
-                  decoration: BoxDecoration(color: theme.colorScheme.primary.withOpacity(0.1), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
                   child: Icon(iconData, color: theme.colorScheme.primary, size: 20),
                 ),
                 title: Text(conn.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                subtitle: Text('${conn.type} · ${conn.host}', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5)), maxLines: 1, overflow: TextOverflow.ellipsis),
+                subtitle: Text('${conn.type} · ${conn.host}', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)), maxLines: 1, overflow: TextOverflow.ellipsis),
                 trailing: const Icon(Icons.chevron_right_rounded),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 onTap: () => Navigator.pop(ctx, conn),
@@ -330,7 +330,7 @@ class _RemoteDirectoryPickerPageState extends State<_RemoteDirectoryPickerPage> 
             const SizedBox(height: 2),
             Text(
               '${widget.connection.name} · $_currentPath',
-              style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+              style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -354,7 +354,7 @@ class _RemoteDirectoryPickerPageState extends State<_RemoteDirectoryPickerPage> 
                       const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: Text(_errorMsg, textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.6))),
+                        child: Text(_errorMsg, textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
                       ),
                       const SizedBox(height: 16),
                       FilledButton.icon(
@@ -370,7 +370,7 @@ class _RemoteDirectoryPickerPageState extends State<_RemoteDirectoryPickerPage> 
                     // 面包屑导航
                     if (_currentPath != '/' && _currentPath != widget.connection.rootPath)
                       Material(
-                        color: theme.colorScheme.primary.withOpacity(0.05),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.05),
                         child: InkWell(
                           onTap: _goUp,
                           child: Container(
@@ -392,14 +392,14 @@ class _RemoteDirectoryPickerPageState extends State<_RemoteDirectoryPickerPage> 
                       Expanded(
                         child: _items.isEmpty
                             ? Center(
-                                child: Text(l10n.ui_no_subfolders, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.4), fontSize: 14)),
+                                child: Text(l10n.ui_no_subfolders, style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontSize: 14)),
                               )
                             : ListView.builder(
                                 itemCount: _items.length,
                                 itemBuilder: (ctx, index) {
                                   final item = _items[index];
                                   return ListTile(
-                                    leading: Icon(Icons.folder, color: theme.colorScheme.primary.withOpacity(0.7), size: 26),
+                                    leading: Icon(Icons.folder, color: theme.colorScheme.primary.withValues(alpha: 0.7), size: 26),
                                     title: Text(item.name, style: const TextStyle(fontSize: 15), maxLines: 1, overflow: TextOverflow.ellipsis),
                                     trailing: const Icon(Icons.chevron_right, size: 22),
                                     onTap: () {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zenfile/services/remote/remote_session_recovery.dart';
 
@@ -45,6 +47,25 @@ void main() {
     test('FTP 控制连接被回收 → 命中', () {
       expect(
         isRemoteConnectionLostError(Exception('control connection closed')),
+        isTrue,
+      );
+    });
+
+    test('Dart 侧超时（会话假死的主表现）→ 命中', () {
+      // SMB 时序：原生 smbj withSoTimeout(60s) 还没炸、Dart 侧 30s 超时先炸，
+      // 到达判定层的就是这个 TimeoutException —— 不纳入的话重连分支永远
+      // 不触发（2026-10-02 排查：2f220a88 只补 Java 文案 marker 因此落空）。
+      expect(
+        isRemoteConnectionLostError(
+          TimeoutException('Future not completed', const Duration(seconds: 30)),
+        ),
+        isTrue,
+      );
+      // 上层把超时包成普通 Exception 再抛时，靠文案 marker 兜底。
+      expect(
+        isRemoteConnectionLostError(
+          Exception('TimeoutException after 0:00:30.000000: Future not completed'),
+        ),
         isTrue,
       );
     });

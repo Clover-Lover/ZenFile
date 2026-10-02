@@ -35,7 +35,7 @@ class SelectionActionBar extends StatelessWidget {
         color: theme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -50,10 +50,10 @@ class SelectionActionBar extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.06),
+                color: theme.colorScheme.primary.withValues(alpha: 0.06),
                 border: Border(
                   bottom: BorderSide(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -1020,7 +1020,7 @@ class PropertiesModalDialogState extends State<PropertiesModalDialog> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceVariant.withOpacity(
+                          color: theme.colorScheme.surfaceVariant.withValues(alpha: 
                             0.5,
                           ),
                           borderRadius: BorderRadius.circular(12),
@@ -1124,7 +1124,7 @@ class _CopyablePropertyRow extends StatelessWidget {
                     Icon(
                       Broken.document_copy,
                       size: 14,
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                   ],
                 ),

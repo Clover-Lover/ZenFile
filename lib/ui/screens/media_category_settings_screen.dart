@@ -166,7 +166,7 @@ class _MediaCategorySettingsScreenState
       color: theme.colorScheme.surface,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
-        color: theme.colorScheme.onSurface.withOpacity(0.08),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
       ),
     );
   }
@@ -240,7 +240,7 @@ class _MediaCategorySettingsScreenState
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.08),
+        color: theme.colorScheme.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -249,7 +249,7 @@ class _MediaCategorySettingsScreenState
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.12),
+              color: theme.colorScheme.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -273,7 +273,7 @@ class _MediaCategorySettingsScreenState
                 Text(
                   l10n.ui_category_settings_description,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -295,7 +295,7 @@ class _MediaCategorySettingsScreenState
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
@@ -312,7 +312,7 @@ class _MediaCategorySettingsScreenState
           l10n.ui_media_filter_master_hint,
           style: TextStyle(
             fontSize: 12,
-            color: theme.colorScheme.onSurface.withOpacity(0.55),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
           ),
         ),
         onChanged: _setEnabled,
@@ -404,13 +404,13 @@ class _MediaCategorySettingsScreenState
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isExcluded
-            ? theme.colorScheme.error.withOpacity(0.03)
-            : theme.colorScheme.primary.withOpacity(0.05),
+            ? theme.colorScheme.error.withValues(alpha: 0.03)
+            : theme.colorScheme.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: isExcluded
-              ? theme.colorScheme.error.withOpacity(0.1)
-              : theme.colorScheme.primary.withOpacity(0.1),
+              ? theme.colorScheme.error.withValues(alpha: 0.1)
+              : theme.colorScheme.primary.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -419,7 +419,7 @@ class _MediaCategorySettingsScreenState
             Icons.folder_shared_outlined,
             size: 16,
             color: isExcluded
-                ? theme.colorScheme.error.withOpacity(0.5)
+                ? theme.colorScheme.error.withValues(alpha: 0.5)
                 : theme.colorScheme.primary,
           ),
           const SizedBox(width: 8),
@@ -429,8 +429,8 @@ class _MediaCategorySettingsScreenState
               style: TextStyle(
                 fontSize: 12,
                 color: isExcluded
-                    ? theme.colorScheme.onSurface.withOpacity(0.4)
-                    : theme.colorScheme.onSurface.withOpacity(0.85),
+                    ? theme.colorScheme.onSurface.withValues(alpha: 0.4)
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.85),
                 decoration: isExcluded ? TextDecoration.lineThrough : null,
               ),
               maxLines: 1,
@@ -491,7 +491,7 @@ class _MediaCategorySettingsScreenState
                   child: Text(
                     L10n.of(context).msg4bb81f99,
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                       fontSize: 12,
                       fontStyle: FontStyle.italic,
                     ),
@@ -540,7 +540,7 @@ class _MediaCategorySettingsScreenState
                           borderRadius: BorderRadius.circular(8),
                         ),
                         backgroundColor:
-                            theme.colorScheme.primary.withOpacity(0.08),
+                            theme.colorScheme.primary.withValues(alpha: 0.08),
                       ),
                     ),
                     TextButton.icon(
@@ -571,7 +571,7 @@ class _MediaCategorySettingsScreenState
                           borderRadius: BorderRadius.circular(8),
                         ),
                         backgroundColor:
-                            theme.colorScheme.primary.withOpacity(0.08),
+                            theme.colorScheme.primary.withValues(alpha: 0.08),
                       ),
                     ),
                   ],
@@ -612,7 +612,7 @@ class _MediaCategorySettingsScreenState
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -669,7 +669,7 @@ class _MediaCategorySettingsScreenState
                   child: Text(
                     L10n.of(context).ui_excluded_folders_empty,
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                       fontSize: 12,
                       fontStyle: FontStyle.italic,
                     ),
@@ -713,7 +713,7 @@ class _MediaCategorySettingsScreenState
                       borderRadius: BorderRadius.circular(8),
                     ),
                     backgroundColor:
-                        theme.colorScheme.primary.withOpacity(0.08),
+                        theme.colorScheme.primary.withValues(alpha: 0.08),
                   ),
                 ),
               ),
@@ -734,10 +734,10 @@ class _MediaCategorySettingsScreenState
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: theme.colorScheme.error.withOpacity(0.03),
+        color: theme.colorScheme.error.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: theme.colorScheme.error.withOpacity(0.1),
+          color: theme.colorScheme.error.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -745,7 +745,7 @@ class _MediaCategorySettingsScreenState
           Icon(
             Icons.folder_off_outlined,
             size: 16,
-            color: theme.colorScheme.error.withOpacity(0.6),
+            color: theme.colorScheme.error.withValues(alpha: 0.6),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -753,7 +753,7 @@ class _MediaCategorySettingsScreenState
               path,
               style: TextStyle(
                 fontSize: 12,
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

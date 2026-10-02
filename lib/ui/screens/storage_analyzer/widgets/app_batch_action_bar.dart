@@ -133,7 +133,7 @@ class AppBatchActionBar extends StatelessWidget {
         color: theme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -158,7 +158,7 @@ class AppBatchActionBar extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange.withOpacity(0.15),
+                        backgroundColor: Colors.orange.withValues(alpha: 0.15),
                         foregroundColor: Colors.orange,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -173,7 +173,7 @@ class AppBatchActionBar extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal.withOpacity(0.15),
+                        backgroundColor: Colors.teal.withValues(alpha: 0.15),
                         foregroundColor: Colors.teal,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -189,7 +189,7 @@ class AppBatchActionBar extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.withOpacity(0.15),
+                          backgroundColor: Colors.red.withValues(alpha: 0.15),
                           foregroundColor: Colors.red,
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),

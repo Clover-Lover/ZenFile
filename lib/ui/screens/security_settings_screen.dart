@@ -212,21 +212,21 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.18),
+          color: theme.colorScheme.outline.withValues(alpha: 0.18),
           width: 1,
         ),
-        color: isDark ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.01),
+        color: isDark ? Colors.white.withValues(alpha: 0.02) : Colors.black.withValues(alpha: 0.01),
       ),
       child: ListTile(
         leading: Icon(icon, size: 24, color: theme.colorScheme.primary),
         title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
         subtitle: Text(
           subtitle,
-          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.55)),
+          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
         ),
         trailing: Icon(
           Icons.chevron_right_rounded,
-          color: theme.colorScheme.onSurface.withOpacity(0.4),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
         ),
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14),
@@ -248,17 +248,17 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.18),
+          color: theme.colorScheme.outline.withValues(alpha: 0.18),
           width: 1,
         ),
-        color: isDark ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.01),
+        color: isDark ? Colors.white.withValues(alpha: 0.02) : Colors.black.withValues(alpha: 0.01),
       ),
       child: ListTile(
         leading: Icon(icon, size: 24, color: theme.colorScheme.primary),
         title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
         subtitle: Text(
           subtitle,
-          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.55)),
+          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
         ),
         trailing: Switch(
           value: value,

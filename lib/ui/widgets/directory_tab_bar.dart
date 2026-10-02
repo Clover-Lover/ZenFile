@@ -69,8 +69,8 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
                   margin: const EdgeInsets.only(right: 4),
                   child: Material(
                     color: isActiveTab
-                        ? theme.colorScheme.primaryContainer.withOpacity(0.35)
-                        : theme.colorScheme.surfaceVariant.withOpacity(0.4),
+                        ? theme.colorScheme.primaryContainer.withValues(alpha: 0.35)
+                        : theme.colorScheme.surfaceVariant.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10),
                     child: InkWell(
                       onTap: () => provider.setActiveTab(index),
@@ -88,10 +88,10 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: isActiveTab
-                                ? theme.colorScheme.primary.withOpacity(0.4)
+                                ? theme.colorScheme.primary.withValues(alpha: 0.4)
                                 : (inOtherPane
-                                    ? theme.colorScheme.secondary.withOpacity(0.6)
-                                    : theme.dividerColor.withOpacity(0.05)),
+                                    ? theme.colorScheme.secondary.withValues(alpha: 0.6)
+                                    : theme.dividerColor.withValues(alpha: 0.05)),
                             width: inOtherPane ? 1.6 : 1.2,
                           ),
                         ),
@@ -115,7 +115,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
                                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                     color: isSelected
                                         ? theme.colorScheme.primary
-                                        : theme.colorScheme.onSurface.withOpacity(0.8)),
+                                        : theme.colorScheme.onSurface.withValues(alpha: 0.8)),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
@@ -168,7 +168,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
         ? Colors.orange
         : (isSelected
             ? theme.colorScheme.primary
-            : theme.colorScheme.onSurface.withOpacity(0.6));
+            : theme.colorScheme.onSurface.withValues(alpha: 0.6));
     if (isPinned) {
       return Icon(Icons.push_pin_rounded, size: size, color: baseColor);
     }
@@ -226,7 +226,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 20,
                 offset: const Offset(0, 4),
               ),
@@ -240,7 +240,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: theme.dividerColor.withOpacity(0.3),
+                  color: theme.dividerColor.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -286,7 +286,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
                       label: Text(L10n.of(context).ui_close_tab, style: TextStyle(fontWeight: FontWeight.bold)),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.redAccent,
-                        side: BorderSide(color: Colors.redAccent.withOpacity(0.3)),
+                        side: BorderSide(color: Colors.redAccent.withValues(alpha: 0.3)),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),

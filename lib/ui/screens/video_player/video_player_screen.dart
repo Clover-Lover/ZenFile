@@ -1007,7 +1007,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: theme.colorScheme.onSurface.withOpacity(0.2),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -1064,7 +1064,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                 return ListTile(
                   leading: Icon(
                     isCurrent ? Icons.play_circle_filled_rounded : Icons.movie_rounded,
-                    color: isCurrent ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: isCurrent ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   title: Text(
                     itemTitle,
@@ -3671,9 +3671,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: l10n.ui_enter_minutes,
-            hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+            hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white.withValues(alpha: 0.05),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide.none,
@@ -3763,7 +3763,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                         fontWeight: FontWeight.w500,
                         backgroundColor: _subtitleNoBackground
                             ? null
-                            : Colors.black.withOpacity(0.55),
+                            : Colors.black.withValues(alpha: 0.55),
                         shadows: const [
                           Shadow(
                             offset: Offset(1, 1),
@@ -3781,7 +3781,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           // Brightness Dimming Overlay
           IgnorePointer(
             child: Container(
-              color: Colors.black.withOpacity(1.0 - _brightness),
+              color: Colors.black.withValues(alpha: 1.0 - _brightness),
             ),
           ),
 
@@ -3848,7 +3848,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                     gradient: RadialGradient(
                       center: Alignment.centerRight,
                       radius: 1.0,
-                      colors: [Colors.white.withOpacity(0.2), Colors.transparent],
+                      colors: [Colors.white.withValues(alpha: 0.2), Colors.transparent],
                     ),
                   ),
                 ),
@@ -3866,7 +3866,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                     gradient: RadialGradient(
                       center: Alignment.centerLeft,
                       radius: 1.0,
-                      colors: [Colors.white.withOpacity(0.2), Colors.transparent],
+                      colors: [Colors.white.withValues(alpha: 0.2), Colors.transparent],
                     ),
                   ),
                 ),
@@ -3923,9 +3923,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.75),
+                        color: Colors.black.withValues(alpha: 0.75),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -3991,9 +3991,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.75),
+                          color: Colors.black.withValues(alpha: 0.75),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
                         ),
                         child: Text(
                           _aspectToast!,
@@ -4166,7 +4166,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                                 Text(
                                   _formatDuration(_position),
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -4174,7 +4174,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                                 Text(
                                   _formatDuration(_duration),
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -4188,9 +4188,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
                               overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
                               activeTrackColor: Theme.of(context).colorScheme.primary,
-                              inactiveTrackColor: Colors.white.withOpacity(0.25),
+                              inactiveTrackColor: Colors.white.withValues(alpha: 0.25),
                               thumbColor: Theme.of(context).colorScheme.primary,
-                              overlayColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                              overlayColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
                             ),
                             child: Slider(
                               value: _duration.inMilliseconds > 0
@@ -4248,12 +4248,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withValues(alpha: 0.5),
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: _isLocked
-                                ? Theme.of(context).colorScheme.primary.withOpacity(0.7)
-                                : Colors.white.withOpacity(0.25),
+                                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)
+                                : Colors.white.withValues(alpha: 0.25),
                             width: 1.2,
                           ),
                         ),

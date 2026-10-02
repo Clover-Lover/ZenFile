@@ -70,7 +70,7 @@ class AudioControlsWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
               // Main Control Buttons
@@ -83,7 +83,7 @@ class AudioControlsWidget extends StatelessWidget {
                     iconSize: 32,
                     color: onPrevious != null
                         ? theme.colorScheme.onSurface
-                        : theme.colorScheme.onSurface.withOpacity(0.25),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.25),
                     onPressed: onPrevious,
                   ),
                   const SizedBox(width: 16),
@@ -96,10 +96,10 @@ class AudioControlsWidget extends StatelessWidget {
                       height: 76,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color.alphaBlend(accentColor.withOpacity(0.75), theme.colorScheme.surface),
+                        color: Color.alphaBlend(accentColor.withValues(alpha: 0.75), theme.colorScheme.surface),
                         boxShadow: [
                           BoxShadow(
-                            color: accentColor.withOpacity(isPlaying ? 0.4 : 0.15),
+                            color: accentColor.withValues(alpha: isPlaying ? 0.4 : 0.15),
                             blurRadius: isPlaying ? 28 : 12,
                             spreadRadius: isPlaying ? 6 : 2,
                             offset: const Offset(0, 8),
@@ -130,7 +130,7 @@ class AudioControlsWidget extends StatelessWidget {
                     iconSize: 32,
                     color: onNext != null
                         ? theme.colorScheme.onSurface
-                        : theme.colorScheme.onSurface.withOpacity(0.25),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.25),
                     onPressed: onNext,
                   ),
                 ],
@@ -141,7 +141,7 @@ class AudioControlsWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -160,9 +160,9 @@ class AudioControlsWidget extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
-                    color: accentColor.withOpacity(0.12),
+                    color: accentColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: accentColor.withOpacity(0.3), width: 1),
+                    border: Border.all(color: accentColor.withValues(alpha: 0.3), width: 1),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -209,7 +209,7 @@ class AudioControlsWidget extends StatelessWidget {
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                       padding: EdgeInsets.zero,
                       tooltip: L10n.of(context).ui_sound_effects,
-                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                       onPressed: onShowEqualizer,
                     ),
                     // Lyrics display mode toggle
@@ -228,8 +228,8 @@ class AudioControlsWidget extends StatelessWidget {
                       color: lyricsDisplayMode != 0
                           ? accentColor
                           : hasLyrics
-                              ? accentColor.withOpacity(0.6)
-                              : theme.colorScheme.onSurface.withOpacity(0.8),
+                              ? accentColor.withValues(alpha: 0.6)
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.8),
                       onPressed: onShowLyrics,
                     ),
                     // Sleep Timer
@@ -239,7 +239,7 @@ class AudioControlsWidget extends StatelessWidget {
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                       padding: EdgeInsets.zero,
                       tooltip: L10n.of(context).msg47cab5ae,
-                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                       onPressed: onShowSleepTimer,
                     ),
                     // Queue
@@ -249,7 +249,7 @@ class AudioControlsWidget extends StatelessWidget {
                       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                       padding: EdgeInsets.zero,
                       tooltip: L10n.of(context).ui_playback_queue,
-                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                       onPressed: onShowQueue,
                     ),
                   ],

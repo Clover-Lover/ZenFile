@@ -15,6 +15,7 @@ class FtpServerService {
   int _port = 9999;
   String _homeDir = '/storage/emulated/0';
   String _username = 'Anonymous';
+  String _password = '';
   bool _anonymous = true;
   bool _showHidden = false;
   bool _isActive = false;
@@ -42,6 +43,7 @@ class FtpServerService {
   int get port => _port;
   String get homeDir => _homeDir;
   String get username => _username;
+  String get password => _password;
   bool get anonymous => _anonymous;
   bool get showHidden => _showHidden;
   String get ipAddress => _ipAddress;
@@ -50,15 +52,26 @@ class FtpServerService {
     int? port,
     String? homeDir,
     String? username,
+    String? password,
     bool? anonymous,
     bool? showHidden,
   }) {
     if (port != null) _port = port;
     if (homeDir != null) _homeDir = homeDir;
     if (username != null) _username = username;
+    if (password != null) _password = password;
     if (anonymous != null) _anonymous = anonymous;
     if (showHidden != null) _showHidden = showHidden;
+    _persistSettings();
     onStatusChanged?.call();
+  }
+
+  /// 持久化配置，应用重启后仍生效（密码随 SharedPreferences 存储，
+  /// 仅本机应用可读；配合 allowBackup=false 不随系统备份导出）。
+  void _persistSettings() {
+    PreferencesService.saveFtpUsername(_username);
+    PreferencesService.saveFtpPassword(_password);
+    PreferencesService.saveFtpAnonymous(_anonymous);
   }
 
   /// 设置并持久化 FTP 端口；若服务正在运行则自动重启以应用新端口
@@ -77,6 +90,9 @@ class FtpServerService {
     if (_isActive) return;
     try {
       _port = PreferencesService.getFtpPort();
+      _username = PreferencesService.getFtpUsername();
+      _password = PreferencesService.getFtpPassword();
+      _anonymous = PreferencesService.getFtpAnonymous();
       _ipAddress = await _getLocalIp();
       // Bind to the concrete LAN IP when possible so the control socket lives on
       // the same interface we advertise. This avoids situations where binding to
@@ -208,16 +224,31 @@ class FtpSession {
   final FtpServerService server;
   final Socket controlSocket;
   String currentDir = '/';
-  
+
+  /// 是否已通过 USER/PASS 认证（匿名模式下 USER 即视为已认证）
+  bool authenticated = false;
+
   ServerSocket? passiveServer;
   Socket? passiveDataSocket;
-  
+
   String? activeHost;
   int? activePort;
 
   String? renameFromPath;
 
   FtpSession(this.server, this.controlSocket);
+
+  /// 恒时字符串比较，避免密码校验引入时序侧信道
+  static bool _constantTimeEquals(String a, String b) {
+    final aUnits = a.codeUnits;
+    final bUnits = b.codeUnits;
+    var diff = aUnits.length ^ bUnits.length;
+    final n = aUnits.length > bUnits.length ? aUnits.length : bUnits.length;
+    for (var i = 0; i < n; i++) {
+      diff |= (i < aUnits.length ? aUnits[i] : 0) ^ (i < bUnits.length ? bUnits[i] : 0);
+    }
+    return diff == 0;
+  }
 
   void start() {
     sendResponse('220 ZenFile FTP Server ready.');
@@ -267,8 +298,14 @@ class FtpSession {
       path = p.join(currentDir, path);
     }
     path = p.normalize(path);
-    final fullPath = p.join(server.homeDir, path.startsWith('/') ? path.substring(1) : path);
-    return p.normalize(fullPath);
+    final fullPath = p.normalize(
+      p.join(server.homeDir, path.startsWith('/') ? path.substring(1) : path),
+    );
+    // 归一化后必须仍位于 homeDir 内，防止 CWD/RETR 等携带相对路径 .. 逃逸
+    if (fullPath != server.homeDir && !p.isWithin(server.homeDir, fullPath)) {
+      return server.homeDir;
+    }
+    return fullPath;
   }
 
   void _processCommand(String rawLine) async {
@@ -276,18 +313,38 @@ class FtpSession {
     final cmd = parts[0].toUpperCase();
     final arg = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
-    if (kDebugMode) print('FTP CMD: $cmd $arg');
+    if (kDebugMode) print('FTP CMD: $cmd');
+
+    // 未登录前只放行握手类命令，其余一律 530，防止匿名读写文件
+    const preAuthCommands = {'USER', 'PASS', 'QUIT', 'SYST', 'FEAT', 'OPTS', 'NOOP', 'HELP', 'AUTH'};
+    if (!authenticated && !preAuthCommands.contains(cmd)) {
+      sendResponse('530 Please login with USER and PASS.');
+      return;
+    }
 
     switch (cmd) {
       case 'USER':
         if (server.anonymous) {
+          authenticated = true;
           sendResponse('230 Anonymous user logged in.');
-        } else {
+        } else if (arg.trim() == server.username) {
           sendResponse('331 User name okay, need password.');
+        } else {
+          sendResponse('530 User name not allowed.');
         }
         break;
       case 'PASS':
-        sendResponse('230 User logged in, proceed.');
+        if (server.anonymous) {
+          sendResponse('230 Already logged in as anonymous.');
+        } else if (authenticated) {
+          sendResponse('230 Already logged in.');
+        } else if (_constantTimeEquals(arg.trim(), server.password) && server.password.isNotEmpty) {
+          authenticated = true;
+          sendResponse('230 User logged in, proceed.');
+        } else {
+          // 认证失败后强制重新走 USER 流程，防止跳过用户名校验
+          sendResponse('530 Login incorrect.');
+        }
         break;
       case 'SYST':
         sendResponse('215 UNIX Type: L8');
@@ -473,7 +530,19 @@ class FtpSession {
       sendResponse('501 Syntax error');
       return;
     }
-    activeHost = parts.sublist(0, 4).join('.');
+    final requestedHost = parts.sublist(0, 4).join('.');
+    // RFC 2577 防 FTP bounce/SSRF：主动模式只允许回连控制连接的对端地址
+    try {
+      final peer = controlSocket.remoteAddress.address;
+      if (requestedHost != peer) {
+        sendResponse('501 PORT host must match control connection peer.');
+        return;
+      }
+    } catch (_) {
+      sendResponse('501 Cannot verify PORT host.');
+      return;
+    }
+    activeHost = requestedHost;
     activePort = (int.parse(parts[4]) << 8) + int.parse(parts[5]);
     sendResponse('200 PORT command successful.');
   }
@@ -686,6 +755,15 @@ class FtpSession {
     
     if (!newDir.startsWith('/')) {
       newDir = '/$newDir';
+    }
+
+    // 归一化后若逃出 FTP 根目录（如 CWD /../.. 或 a/../../..），钳制回根目录
+    final normalizedDir = p.normalize(newDir);
+    final rel = normalizedDir.startsWith('/') ? normalizedDir.substring(1) : normalizedDir;
+    if (rel == '..' || rel.startsWith('../') || rel == '.' || rel.isEmpty) {
+      newDir = '/';
+    } else {
+      newDir = '/$rel';
     }
 
     final absPath = p.join(server.homeDir, newDir.startsWith('/') ? newDir.substring(1) : newDir);

@@ -7603,8 +7603,7 @@ class L10nJa extends L10n {
   String get vault_encrypt_new_files_none => '暗号化が必要な新しいファイルはありません';
 
   @override
-  String get vault_encrypt_new_files_done =>
-      '新しいファイルを暗号化してこのフォルダーに統合しました';
+  String get vault_encrypt_new_files_done => '新しいファイルを暗号化してこのフォルダーに統合しました';
 
   @override
   String get vault_encrypt_files => '+ ファイルを暗号化';
@@ -8049,5 +8048,42 @@ class L10nJa extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return '$count 件のファイルはメタデータを削除できず（暗号化の可能性）、そのまま共有しました';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP パスワード';
+
+  @override
+  String get ui_ftp_password_required =>
+      'パスワードを設定してください。設定しない場合、FTP サーバーはすべてのクライアントを拒否します';
+
+  @override
+  String get ui_web_share_password => 'アクセスパスワード';
+
+  @override
+  String get ui_web_share_password_hint => '空欄の場合は認証を無効化します（信頼できる LAN のみ推奨）';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'インターネットアクセス用パスワードを自動生成しました：$password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'インターネット共有にはアクセスパスワードが必要です';
+
+  @override
+  String get crypt_auto_encrypt_section => '自動暗号化';
+
+  @override
+  String get crypt_auto_encrypt_title => '新規ファイルを自動暗号化';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      '暗号化済みディレクトリを監視し、書き込み完了した新規ファイルを自動的に暗号化します（常駐通知が必要）';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '$count 個のディレクトリを保護中。新規ファイルは自動的に暗号化されます';
   }
 }

@@ -795,7 +795,8 @@
   "ui_favorites_swipe_hint": "화면 하단에서 위로 스와이프하여 즐겨찾기를 엽니다",
   "@ui_favorites_swipe_hint": {
     "description": "ui\\widgets\\favorites_sheet.dart"
-  },  "@ui_new_favorite": {
+  },
+  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "즐겨찾기에 추가",
@@ -1272,8 +1273,12 @@
   "@ui_month_group_header": {
     "description": "ui\\screens\\media_category_screen.dart",
     "placeholders": {
-      "year": {"type": "int"},
-      "month": {"type": "int"}
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
     }
   },
   "msgb8140039": "오래된 순 (월별 그룹화)",
@@ -1837,7 +1842,6 @@
     "description": "ui\\screens\\more_settings_screen.dart"
   },
   "msg64a6476a": "기본",
-
   "app_icon_classic2": "클래식 2",
   "@app_icon_classic2": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -1909,7 +1913,8 @@
   "app_icon_sunset_zf": "선셋 퍼플",
   "@app_icon_sunset_zf": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  },  "@title": {
+  },
+  "@title": {
     "type": "text"
   },
   "title": "앱 아이콘이 {title}(으)로 전환되었습니다",
@@ -3235,17 +3240,29 @@
   "update_err_rate_limit": "GitHub 요청 한도를 초과했습니다. 잠시 후 다시 시도하세요",
   "update_err_http": "서버가 오류를 반환했습니다 (HTTP {code})",
   "@update_err_http": {
-    "placeholders": { "code": { "type": "String" } }
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   },
   "update_err_malformed": "서버 응답 데이터가 비정상입니다. 잠시 후 다시 시도하세요",
   "update_err_version_unknown": "현재 버전 번호를 가져올 수 없습니다. 앱을 다시 시작한 후 시도하세요",
   "update_remote_version": "최신: {version}",
   "@update_remote_version": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
   "update_checked_at": "확인 시각: {time}",
   "@update_checked_at": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "update_degraded_hint": "웹 검사로 전환됨(앱 내 다운로드 불가)",
   "update_source_label": "업데이트 소스",
@@ -3255,7 +3272,6 @@
   "update_source_dialog_desc": "비워 두면 GitHub 공식 API를 사용합니다. 미러 또는 자체 엔드포인트(동일한 구조의 JSON 반환)를 입력할 수 있으며, 주소의 REPO는 저장소 경로를 의미합니다.",
   "update_source_hint": "https://example.com/…/releases/latest",
   "update_source_invalid": "주소가 올바르지 않습니다. http:// 또는 https://로 시작해야 합니다",
-
   "ui_paste_and_clear": "붙여넣기 후 비우기",
   "ui_cut_paste_hint": "잘라내기는 이동입니다. 붙여넣은 후 자동으로 비워집니다",
   "ui_search_in_settings": "설정에서 검색",
@@ -4577,7 +4593,6 @@
       "count": {
         "type": "int"
       },
-
       "folderCount": {
         "type": "int"
       },
@@ -4605,8 +4620,7 @@
   "prop_hash_failed": "해시 계산 실패",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  }
-,
+  },
   "msg_add_subtitle": "자막 추가",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8213,7 +8227,7 @@
   },
   "ui_transfers": "연결",
   "ui_profile": "프로필",
-  "msg_coming_soon": "곧 제공 예정",
+  "msg_coming_soon": "곧 제공 예정",
   "toolbox_text_editor": "텍스트 편집기",
   "@toolbox_text_editor": {
     "description": "toolbox: text editor entry"
@@ -8247,17 +8261,31 @@
     "description": "text editor: import text file"
   },
   "ui_bottom_tab_bar": "탐색 모음",
-  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "@ui_bottom_tab_bar": {
+    "description": "Navigation bar (visibility + position)"
+  },
   "ui_persistent_tab_bar": "다른 페이지에서도 내비게이션 바 유지",
   "ui_pick_bottom_tab": "하단 항목 선택",
-  "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
+  "@ui_pick_bottom_tab": {
+    "description": "Choose bottom entry"
+  },
   "ui_long_press_switch": "길게 누르면 변경할 수 있습니다",
-  "@ui_long_press_switch": {"description": "Long press to change"},
+  "@ui_long_press_switch": {
+    "description": "Long press to change"
+  },
   "ui_bottom_tab_slot": "슬롯 {index}",
-  "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
+  "@ui_bottom_tab_slot": {
+    "description": "Slot {index}",
+    "placeholders": {
+      "index": {
+        "type": "Object"
+      }
+    }
+  },
   "ui_bottom_tab_custom_hint": "하단 항목은 모든 바로가기로 바꿀 수 있습니다",
-  "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
-,
+  "@ui_bottom_tab_custom_hint": {
+    "description": "Bottom entries can be replaced with any shortcut"
+  },
   "app_icon_original": "클래식 아이콘",
   "@app_icon_original": {
     "description": "Classic app icon"
@@ -8269,8 +8297,7 @@
   "cut_to_other_window": "다른 창으로 잘라내기",
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
-  }
-,
+  },
   "auto_open_created_folder": "생성한 폴더 자동 열기",
   "@auto_open_created_folder": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -8278,8 +8305,7 @@
   "auto_open_created_folder_desc": "폴더 생성 후 해당 폴더로 자동 이동",
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  }
-,
+  },
   "paste_keep_clipboard": "붙여넣기 후 클립보드 유지",
   "@paste_keep_clipboard": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
@@ -8287,9 +8313,7 @@
   "paste_keep_clipboard_desc": "체크하지 않으면 붙여넣기 후 클립보드 자동 삭제",
   "@paste_keep_clipboard_desc": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
-  }
-
-,
+  },
   "netdisk": "클라우드 드라이브",
   "@netdisk": {
     "description": "ui\\screens\\transfers_screen.dart"
@@ -8335,21 +8359,85 @@
     "description": "services\\remote\\netdisk"
   },
   "share_normal_share": "일반 공유",
-  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "@share_normal_share": {
+    "description": "Share mode: share original files as-is"
+  },
   "share_normal_share_hint": "원본 파일을 수정하지 않고 공유합니다",
-  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "@share_normal_share_hint": {
+    "description": "Share mode hint: original file is not modified"
+  },
   "share_safe_share": "안전 공유",
-  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "@share_safe_share": {
+    "description": "Share mode: strip metadata (EXIF/GPS) before sharing"
+  },
   "share_safe_share_hint": "위치, 카메라, 문서 작성자 등 개인 정보를 제거하며 원본 파일은 변경되지 않습니다",
-  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "@share_safe_share_hint": {
+    "description": "Safe share hint: strips location/camera privacy data, original unchanged"
+  },
   "share_nothing_found": "공유할 항목을 찾을 수 없습니다.",
-  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "@share_nothing_found": {
+    "description": "Share: no shareable items found"
+  },
   "share_prepare_error": "파일 준비 중 오류가 발생했습니다: {error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "@share_prepare_error": {
+    "description": "Share: error while preparing files (with error text)",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "share_preparing_title": "공유 준비 중…",
-  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "@share_preparing_title": {
+    "description": "Share: loading dialog title while preparing files"
+  },
   "share_preparing_body": "파일을 처리하는 중입니다. 잠시만 기다려 주세요",
-  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "@share_preparing_body": {
+    "description": "Share: loading dialog body while preparing files"
+  },
   "share_safe_unsupported": "{count}개 파일은 메타데이터를 제거할 수 없어(암호화 가능성) 그대로 공유했습니다",
-  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
+  "@share_safe_unsupported": {
+    "description": "Safe share: files that could not be stripped were shared as-is",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "ui_ftp_password": "FTP 비밀번호",
+  "@ui_ftp_password": {
+    "description": "Security setting: ui_ftp_password"
+  },
+  "ui_ftp_password_required": "비밀번호를 설정하세요. 설정하지 않으면 FTP 서버가 모든 클라이언트의 로그인을 거부합니다",
+  "@ui_ftp_password_required": {
+    "description": "Security setting: ui_ftp_password_required"
+  },
+  "ui_web_share_password": "접근 비밀번호",
+  "@ui_web_share_password": {
+    "description": "Security setting: ui_web_share_password"
+  },
+  "ui_web_share_password_hint": "비워 두면 인증을 사용하지 않습니다(신뢰할 수 있는 LAN에서만 권장)",
+  "@ui_web_share_password_hint": {
+    "description": "Security setting: ui_web_share_password_hint"
+  },
+  "ui_web_share_password_generated": "인터넷 접근용 비밀번호가 자동 생성되었습니다: {password}",
+  "@ui_web_share_password_generated": {
+    "description": "Security setting: ui_web_share_password_generated"
+  },
+  "ui_web_share_password_required_for_tunnel": "인터넷 공유에는 접근 비밀번호가 필요합니다",
+  "@ui_web_share_password_required_for_tunnel": {
+    "description": "Security setting: ui_web_share_password_required_for_tunnel"
+  },
+  "crypt_auto_encrypt_section": "자동 암호화",
+  "@crypt_auto_encrypt_section": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_section"
+  },
+  "crypt_auto_encrypt_title": "새 파일 자동 암호화",
+  "@crypt_auto_encrypt_title": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_title"
+  },
+  "crypt_auto_encrypt_desc": "암호화된 디렉터리를 실시간 감시하여, 새 파일의 쓰기가 완료되면 자동으로 암호화합니다(상시 알림 필요)",
+  "@crypt_auto_encrypt_desc": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_desc"
+  },
+  "crypt_auto_encrypt_watching": "{count}개의 디렉터리를 보호 중입니다. 새 파일은 자동으로 암호화됩니다",
+  "@crypt_auto_encrypt_watching": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_watching"
+  }
 }

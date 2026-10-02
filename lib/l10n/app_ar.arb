@@ -795,7 +795,8 @@
   "ui_favorites_swipe_hint": "اسحب لأعلى من أسفل الشاشة لفتح المفضلة",
   "@ui_favorites_swipe_hint": {
     "description": "ui\\widgets\\favorites_sheet.dart"
-  },  "@ui_new_favorite": {
+  },
+  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "إضافة إلى المفضلات",
@@ -1272,8 +1273,12 @@
   "@ui_month_group_header": {
     "description": "ui\\screens\\media_category_screen.dart",
     "placeholders": {
-      "year": {"type": "int"},
-      "month": {"type": "int"}
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
     }
   },
   "msgb8140039": "الأقدم أولاً (مجمعة حسب الشهر)",
@@ -1837,7 +1842,6 @@
     "description": "ui\\screens\\more_settings_screen.dart"
   },
   "msg64a6476a": "الافتراضي",
-
   "app_icon_classic2": "كلاسيكي 2",
   "@app_icon_classic2": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -1909,7 +1913,8 @@
   "app_icon_sunset_zf": "بنفسجي الغروب",
   "@app_icon_sunset_zf": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  },  "@title": {
+  },
+  "@title": {
     "type": "text"
   },
   "title": "تم تغيير أيقونة التطبيق إلى {title}",
@@ -3235,17 +3240,29 @@
   "update_err_rate_limit": "تم بلوغ حد طلبات GitHub. أعد المحاولة لاحقًا",
   "update_err_http": "أعاد الخادم خطأ (HTTP {code})",
   "@update_err_http": {
-    "placeholders": { "code": { "type": "String" } }
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   },
   "update_err_malformed": "استجابة غير متوقعة من الخادم. أعد المحاولة لاحقًا",
   "update_err_version_unknown": "تعذّر قراءة الإصدار الحالي. أعد تشغيل التطبيق ثم حاول مجددًا",
   "update_remote_version": "الأحدث: {version}",
   "@update_remote_version": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
   "update_checked_at": "وقت الفحص: {time}",
   "@update_checked_at": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "update_degraded_hint": "تم التحويل إلى فحص الويب — التنزيل داخل التطبيق غير متاح",
   "update_source_label": "مصدر التحديث",
@@ -3255,7 +3272,6 @@
   "update_source_dialog_desc": "اتركه فارغًا لاستخدام واجهة GitHub الرسمية. يمكنك إدخال مرآة أو واجهة خاصة تُعيد JSON بالبنية نفسها؛ REPO في العنوان يعني مسار المستودع.",
   "update_source_hint": "https://example.com/…/releases/latest",
   "update_source_invalid": "عنوان غير صالح — يجب أن يبدأ بـ http:// أو https://",
-
   "ui_paste_and_clear": "لصق ومسح",
   "ui_cut_paste_hint": "القص = نقل؛ تُفرَّغ الحافظة بعد اللصق",
   "ui_search_in_settings": "البحث في الإعدادات",
@@ -4577,7 +4593,6 @@
       "count": {
         "type": "int"
       },
-
       "folderCount": {
         "type": "int"
       },
@@ -4605,8 +4620,7 @@
   "prop_hash_failed": "فشل حساب التجزئة",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  }
-,
+  },
   "msg_add_subtitle": "إضافة ترجمة",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8213,7 +8227,7 @@
   },
   "ui_transfers": "الاتصالات",
   "ui_profile": "الملف الشخصي",
-  "msg_coming_soon": "قريباً",
+  "msg_coming_soon": "قريباً",
   "toolbox_text_editor": "محرر النصوص",
   "@toolbox_text_editor": {
     "description": "toolbox: text editor entry"
@@ -8247,17 +8261,31 @@
     "description": "text editor: import text file"
   },
   "ui_bottom_tab_bar": "شريط التنقل",
-  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "@ui_bottom_tab_bar": {
+    "description": "Navigation bar (visibility + position)"
+  },
   "ui_persistent_tab_bar": "إبقاء شريط التنقل على الصفحات الأخرى",
   "ui_pick_bottom_tab": "اختيار عنصر سفلي",
-  "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
+  "@ui_pick_bottom_tab": {
+    "description": "Choose bottom entry"
+  },
   "ui_long_press_switch": "اضغط مطولاً للتغيير",
-  "@ui_long_press_switch": {"description": "Long press to change"},
+  "@ui_long_press_switch": {
+    "description": "Long press to change"
+  },
   "ui_bottom_tab_slot": "موضع {index}",
-  "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
+  "@ui_bottom_tab_slot": {
+    "description": "Slot {index}",
+    "placeholders": {
+      "index": {
+        "type": "Object"
+      }
+    }
+  },
   "ui_bottom_tab_custom_hint": "يمكن استبدال العناصر السفلية بأي اختصار",
-  "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
-,
+  "@ui_bottom_tab_custom_hint": {
+    "description": "Bottom entries can be replaced with any shortcut"
+  },
   "app_icon_original": "أيقونة كلاسيكية",
   "@app_icon_original": {
     "description": "Classic app icon"
@@ -8269,8 +8297,7 @@
   "cut_to_other_window": "قص إلى النافذة الأخرى",
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
-  }
-,
+  },
   "auto_open_created_folder": "فتح المجلدات التي تم إنشاؤها تلقائيًا",
   "@auto_open_created_folder": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -8278,8 +8305,7 @@
   "auto_open_created_folder_desc": "الدخول تلقائيًا إلى المجلد بعد إنشائه",
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  }
-,
+  },
   "paste_keep_clipboard": "الاحتفاظ بالحافظة بعد اللصق",
   "@paste_keep_clipboard": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
@@ -8287,9 +8313,7 @@
   "paste_keep_clipboard_desc": "يتم مسح الحافظة بعد اللصق إذا لم يتم التحديد",
   "@paste_keep_clipboard_desc": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
-  }
-
-,
+  },
   "netdisk": "قرص السحابة",
   "@netdisk": {
     "description": "ui\\screens\\transfers_screen.dart"
@@ -8335,21 +8359,85 @@
     "description": "services\\remote\\netdisk"
   },
   "share_normal_share": "مشاركة عادية",
-  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "@share_normal_share": {
+    "description": "Share mode: share original files as-is"
+  },
   "share_normal_share_hint": "مشاركة الملف الأصلي دون أي تعديل",
-  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "@share_normal_share_hint": {
+    "description": "Share mode hint: original file is not modified"
+  },
   "share_safe_share": "مشاركة آمنة",
-  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "@share_safe_share": {
+    "description": "Share mode: strip metadata (EXIF/GPS) before sharing"
+  },
   "share_safe_share_hint": "يزيل الموقع وبيانات الكاميرا وبيانات المستند؛ الملف الأصلي لا يتغير",
-  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "@share_safe_share_hint": {
+    "description": "Safe share hint: strips location/camera privacy data, original unchanged"
+  },
   "share_nothing_found": "لم يتم العثور على عناصر للمشاركة.",
-  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "@share_nothing_found": {
+    "description": "Share: no shareable items found"
+  },
   "share_prepare_error": "خطأ أثناء تجهيز الملفات: {error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "@share_prepare_error": {
+    "description": "Share: error while preparing files (with error text)",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "share_preparing_title": "جارٍ التحضير للمشاركة…",
-  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "@share_preparing_title": {
+    "description": "Share: loading dialog title while preparing files"
+  },
   "share_preparing_body": "جارٍ معالجة الملفات، يُرجى الانتظار",
-  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "@share_preparing_body": {
+    "description": "Share: loading dialog body while preparing files"
+  },
   "share_safe_unsupported": "تعذّرت إزالة البيانات الوصفية من {count} ملف/ملفات (قد تكون مشفّرة)، وتمت مشاركتها كما هي",
-  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
+  "@share_safe_unsupported": {
+    "description": "Safe share: files that could not be stripped were shared as-is",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "ui_ftp_password": "كلمة مرور FTP",
+  "@ui_ftp_password": {
+    "description": "Security setting: ui_ftp_password"
+  },
+  "ui_ftp_password_required": "يرجى تعيين كلمة مرور، وإلا سيرفض خادم FTP جميع العملاء",
+  "@ui_ftp_password_required": {
+    "description": "Security setting: ui_ftp_password_required"
+  },
+  "ui_web_share_password": "كلمة مرور الوصول",
+  "@ui_web_share_password": {
+    "description": "Security setting: ui_web_share_password"
+  },
+  "ui_web_share_password_hint": "اتركها فارغة لتعطيل المصادقة (لشبكة LAN الموثوقة فقط)",
+  "@ui_web_share_password_hint": {
+    "description": "Security setting: ui_web_share_password_hint"
+  },
+  "ui_web_share_password_generated": "تم إنشاء كلمة مرور تلقائيًا للوصول عبر الإنترنت: {password}",
+  "@ui_web_share_password_generated": {
+    "description": "Security setting: ui_web_share_password_generated"
+  },
+  "ui_web_share_password_required_for_tunnel": "مطلوب كلمة مرور وصول للمشاركة عبر الإنترنت",
+  "@ui_web_share_password_required_for_tunnel": {
+    "description": "Security setting: ui_web_share_password_required_for_tunnel"
+  },
+  "crypt_auto_encrypt_section": "التشفير التلقائي",
+  "@crypt_auto_encrypt_section": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_section"
+  },
+  "crypt_auto_encrypt_title": "تشفير الملفات الجديدة تلقائيًا",
+  "@crypt_auto_encrypt_title": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_title"
+  },
+  "crypt_auto_encrypt_desc": "يراقب المجلدات المشفرة في مكانها ويشفّر الملفات الجديدة تلقائيًا بعد اكتمال كتابتها (يتطلب إشعارًا دائمًا)",
+  "@crypt_auto_encrypt_desc": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_desc"
+  },
+  "crypt_auto_encrypt_watching": "حماية {count} مجلد(ات)؛ سيتم تشفير الملفات الجديدة تلقائيًا",
+  "@crypt_auto_encrypt_watching": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_watching"
+  }
 }

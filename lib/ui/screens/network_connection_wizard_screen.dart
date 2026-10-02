@@ -485,11 +485,11 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                   width: double.infinity,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.redAccent.withOpacity(0.08),
+                    color: Colors.redAccent.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(errReason!,
-                    style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.85),
+                    style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
                       fontFamily: 'monospace')),
                 ),
               ],
@@ -609,7 +609,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           Container(
             height: 4,
             width: double.infinity,
-            color: theme.colorScheme.onSurface.withOpacity(0.05),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
             child: Row(
               children: [
                 Expanded(
@@ -673,7 +673,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           const SizedBox(height: 6),
           Text(
             L10n.of(context).naszenfile,
-            style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.6)),
+            style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
           ),
           const SizedBox(height: 24),
           // 协议选择：单行卡片样式（图标 + 标题 + 描述 + 右箭头）
@@ -699,7 +699,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
 //           Divider(
 //             height: 1,
 //             thickness: 1,
-//             color: theme.colorScheme.onSurface.withOpacity(0.12),
+//             color: theme.colorScheme.onSurface.withValues(alpha: 0.12),
 //           ),
 //           const SizedBox(height: 20),
 
@@ -723,7 +723,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
 //             L10n.of(context).netdisk_empty_hint,
 //             style: TextStyle(
 //               fontSize: 12.5,
-//               color: theme.colorScheme.onSurface.withOpacity(0.5),
+//               color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
 //             ),
 //           ),
 //           const SizedBox(height: 14),
@@ -762,7 +762,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.08)),
+        side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.08)),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -774,7 +774,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.12),
+                  color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: icon,
@@ -798,7 +798,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                         subtitle,
                         style: TextStyle(
                           fontSize: 11.5,
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           height: 1.2,
                         ),
                         maxLines: 2,
@@ -810,7 +810,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               ),
               Icon(
                 Icons.chevron_right,
-                color: theme.colorScheme.onSurface.withOpacity(0.4),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
               ),
             ],
           ),
@@ -826,7 +826,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
       icon: Icon(
         _obscurePassword ? Broken.eye_slash : Broken.eye,
         size: 18,
-        color: theme.colorScheme.onSurface.withOpacity(0.5),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
       ),
       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
       splashRadius: 20,
@@ -859,7 +859,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                       l10n.msg5c808d9a,
                       style: TextStyle(
                         fontSize: 12.5,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -948,7 +948,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                             fontWeight: FontWeight.w600,
                             color: _anonymousLogin
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface.withOpacity(0.6),
+                                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ],
@@ -991,7 +991,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: theme.colorScheme.outline.withOpacity(0.35)),
+                    side: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.35)),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     foregroundColor: theme.colorScheme.onSurface,
@@ -1005,7 +1005,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               Expanded(
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.55)),
+                    side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.55)),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     foregroundColor: theme.colorScheme.primary,
@@ -1085,7 +1085,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           l10n.ui_lan_scan_hint,
           style: TextStyle(
             fontSize: 12,
-            color: theme.colorScheme.onSurface.withOpacity(0.55),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
           ),
         ),
         const SizedBox(height: 8),
@@ -1096,9 +1096,9 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
             margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withOpacity(0.35),
+              color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.35),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: theme.colorScheme.outline.withOpacity(0.15)),
+              border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.15)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1134,7 +1134,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                                   host,
                                   style: TextStyle(
                                     fontSize: 11.5,
-                                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                                   ),
                                 ),
                               ),
@@ -1142,7 +1142,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                         ),
                       ),
                       Icon(Icons.arrow_forward_ios_rounded,
-                          size: 14, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                          size: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
                     ],
                   ),
                 ),
@@ -1153,7 +1153,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                       l10n.ui_no_shares_found,
                       style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
                     ),
                   )
@@ -1170,7 +1170,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w600,
                           ),
-                          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
                           onPressed: () {
                             setState(() {
                               _hostController.text = host;
@@ -1237,7 +1237,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
         const SizedBox(height: 10),
         Text(
           l10n.ui_lan_scan_hint,
-          style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+          style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
         ),
       ],
     );
@@ -1258,9 +1258,9 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                 height: 130,
                 width: 130,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.04),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.04),
                   shape: BoxShape.circle,
-                  border: Border.all(color: theme.colorScheme.primary.withOpacity(0.1), width: 1.5),
+                  border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.1), width: 1.5),
                 ),
               ),
               SizedBox(
@@ -1269,7 +1269,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                 child: CircularProgressIndicator(
                   strokeWidth: 4,
                   valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
-                  backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                  backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
                 ),
               ),
               Icon(
@@ -1286,7 +1286,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface.withOpacity(0.9),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
               fontFamily: 'LexendDeca',
             ),
           ),
@@ -1295,7 +1295,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
             L10n.of(context).selectedtype1(_selectedType),
             style: TextStyle(
               fontSize: 12.5,
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
             textAlign: TextAlign.center,
           ),
@@ -1305,10 +1305,10 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           // Dynamic Diagnostic List
           Card(
             elevation: 0,
-            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.02),
+            color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.02),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              side: BorderSide(color: theme.colorScheme.primary.withOpacity(0.08)),
+              side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.08)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -1334,7 +1334,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                     itemColor = theme.colorScheme.primary;
                     icon = Icons.circle_outlined;
                   } else {
-                    itemColor = theme.colorScheme.onSurface.withOpacity(0.25);
+                    itemColor = theme.colorScheme.onSurface.withValues(alpha: 0.25);
                     icon = Icons.radio_button_off_outlined;
                   }
 
@@ -1351,8 +1351,8 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
                               fontSize: 13,
                               fontWeight: active ? FontWeight.bold : FontWeight.normal,
                               color: active
-                                  ? theme.colorScheme.onSurface.withOpacity(0.9)
-                                  : theme.colorScheme.onSurface.withOpacity(done ? 0.6 : 0.35),
+                                  ? theme.colorScheme.onSurface.withValues(alpha: 0.9)
+                                  : theme.colorScheme.onSurface.withValues(alpha: done ? 0.6 : 0.35),
                             ),
                           ),
                         ),
@@ -1420,9 +1420,9 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04),
+                color: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.colorScheme.primary.withOpacity(0.3)),
+                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -1460,7 +1460,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
               icon: Icon(
                 _obscureSshKeyPassword ? Broken.eye_slash : Broken.eye,
                 size: 18,
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
               onPressed: () => setState(() => _obscureSshKeyPassword = !_obscureSshKeyPassword),
               splashRadius: 20,
@@ -1469,7 +1469,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           const SizedBox(height: 8),
           Text(
             l10n.ui_ssh_key_password_hint,
-            style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+            style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
           ),
         ],
       ],
@@ -1491,11 +1491,11 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? theme.colorScheme.primary.withOpacity(0.12)
-              : (isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04)),
+              ? theme.colorScheme.primary.withValues(alpha: 0.12)
+              : (isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04)),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withOpacity(0.1),
+            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withValues(alpha: 0.1),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -1505,7 +1505,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.6),
+            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ),
@@ -1560,11 +1560,11 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
       style: const TextStyle(fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.35)),
-        prefixIcon: Icon(icon, size: 18, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+        hintStyle: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.35)),
+        prefixIcon: Icon(icon, size: 18, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
         suffixIcon: suffix,
         filled: true,
-        fillColor: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04),
+        fillColor: isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04),
         contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1572,11 +1572,11 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.1)),
+          borderSide: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.1)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: theme.colorScheme.primary.withOpacity(0.8), width: 1.5),
+          borderSide: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.8), width: 1.5),
         ),
       ),
     );
@@ -1672,11 +1672,11 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
           color: isSelected
-              ? activeColor.withOpacity(0.12)
-              : (isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withOpacity(0.04)),
+              ? activeColor.withValues(alpha: 0.12)
+              : (isDark ? const Color(0xFF1E293B) : theme.colorScheme.primary.withValues(alpha: 0.04)),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? activeColor : theme.colorScheme.outline.withOpacity(0.1),
+            color: isSelected ? activeColor : theme.colorScheme.outline.withValues(alpha: 0.1),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -1686,7 +1686,7 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: isSelected ? activeColor : theme.colorScheme.onSurface.withOpacity(0.6),
+            color: isSelected ? activeColor : theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ),

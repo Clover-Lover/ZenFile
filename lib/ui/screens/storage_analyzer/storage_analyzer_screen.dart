@@ -409,7 +409,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                   height: 130,
                   child: CircularProgressIndicator(
                     strokeWidth: 4,
-                    backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                    backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
                     valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
                   ),
                 ),
@@ -417,7 +417,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                   width: 90,
                   height: 90,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.08),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.08),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -438,7 +438,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
               L10n.of(context).msge4f5a6b7,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
                 fontSize: 14,
               ),
             ),
@@ -446,9 +446,9 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant.withOpacity(0.2),
+                color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: theme.dividerColor.withOpacity(0.05)),
+                border: Border.all(color: theme.dividerColor.withValues(alpha: 0.05)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -496,10 +496,10 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: theme.dividerColor.withOpacity(0.08)),
+              border: Border.all(color: theme.dividerColor.withValues(alpha: 0.08)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -538,7 +538,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                       Text(
                         L10n.of(context).msga5e5bf71,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
+                          color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -803,7 +803,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.06)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.06)),
       ),
       child: InkWell(
         onTap: onTap,
@@ -815,7 +815,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.12),
+                  color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 22),
@@ -843,7 +843,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
                         value: proportion,
-                        backgroundColor: color.withOpacity(0.1),
+                        backgroundColor: color.withValues(alpha: 0.1),
                         valueColor: AlwaysStoppedAnimation<Color>(color),
                         minHeight: 5,
                       ),
@@ -852,7 +852,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                     Text(
                       l10n.msgb7c8d9e0(percentStr),
                       style: TextStyle(
-                        color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+                        color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
                         fontSize: 11,
                       ),
                     ),
@@ -864,7 +864,7 @@ class _StorageAnalyzerScreenState extends State<StorageAnalyzerScreen> with Sing
                 Icon(
                   Broken.arrow_right_3,
                   size: 16,
-                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.4),
+                  color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.4),
                 ),
               ],
             ],
@@ -905,7 +905,7 @@ class StorageRadialPainter extends CustomPainter {
     final Rect rect = Rect.fromCircle(center: Offset(center, center), radius: radius);
 
     final Paint trackPaint = Paint()
-      ..color = isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.05)
+      ..color = isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14;
 

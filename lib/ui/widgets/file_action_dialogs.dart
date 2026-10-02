@@ -552,7 +552,7 @@ class ActionGridSheet {
                       height: 4,
                       margin: const EdgeInsets.only(top: 12, bottom: 8),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.onSurface.withOpacity(0.15),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -569,7 +569,7 @@ class ActionGridSheet {
                       ),
                     ),
                   if (title != null)
-                    Divider(height: 1, thickness: 1, color: theme.colorScheme.onSurface.withOpacity(0.1)),
+                    Divider(height: 1, thickness: 1, color: theme.colorScheme.onSurface.withValues(alpha: 0.1)),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
                     child: GridView.count(

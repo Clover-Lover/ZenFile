@@ -94,7 +94,7 @@ class CryptProgressDialog extends StatelessWidget {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withValues(alpha: 0.4),
               blurRadius: 30,
               spreadRadius: 2,
               offset: const Offset(0, 12),
@@ -113,7 +113,7 @@ class CryptProgressDialog extends StatelessWidget {
                 strokeWidth: 8,
                 backgroundColor: Colors.transparent,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  theme.colorScheme.primary.withOpacity(0.08),
+                  theme.colorScheme.primary.withValues(alpha: 0.08),
                 ),
               ),
             ),
@@ -139,7 +139,7 @@ class CryptProgressDialog extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   (isDark ? const Color(0xFF81C784) : const Color(0xFF43A047))
-                      .withOpacity(0.10),
+                      .withValues(alpha: 0.10),
                 ),
               ),
             ),

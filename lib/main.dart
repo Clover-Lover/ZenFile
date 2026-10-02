@@ -41,6 +41,7 @@ import 'services/net_proxy_service.dart';
 import 'services/update_apk_cache.dart';
 import 'services/update_check_service.dart';
 import 'ui/screens/update_screen.dart';
+import 'services/crypt_auto_encrypt_service.dart';
 
 final GlobalKey<_ZenFileAppState> appStateKey = GlobalKey<_ZenFileAppState>();
 
@@ -145,6 +146,14 @@ void main() {
       await NetworkConnectionsService.init();
     } catch (e) {
       debugPrint('[ZenFile] NetworkConnectionsService.init failed: $e');
+    }
+
+    // 原地加密目录「新文件自动加密」：读开关、注册事件通道，按登记表启动
+    // 前台监听服务并跑一次兜底补加密（用户在加密设置里开启后生效）。
+    try {
+      await CryptAutoEncryptService.instance.init();
+    } catch (e) {
+      debugPrint('[ZenFile] CryptAutoEncryptService.init failed: $e');
     }
 
     try {
@@ -715,7 +724,7 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
                   const SizedBox(height: 4),
                   Text(
                     'Select Language / 选择语言',
-                    style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                    style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -729,7 +738,7 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
                       Text(
                         L10n.of(ctx).ui_select_language_desc,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                        style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                       ),
                       const SizedBox(height: 20),
                       _buildLanguageOption(ctx, 'system', L10n.of(ctx).ui_follow_system, 'Auto / System', selectedLocale == 'system', (val) {
@@ -841,10 +850,10 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary.withOpacity(0.1) : theme.colorScheme.surface,
+          color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withOpacity(0.3),
+            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -852,7 +861,7 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
           children: [
             Icon(
               isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.4),
+              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -871,7 +880,7 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ],
@@ -1584,7 +1593,7 @@ class _IntentLoadingScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.08),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -1598,7 +1607,7 @@ class _IntentLoadingScreen extends StatelessWidget {
               width: 48,
               child: LinearProgressIndicator(
                 minHeight: 3,
-                backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
                 color: theme.colorScheme.primary,
                 borderRadius: const BorderRadius.all(Radius.circular(2)),
               ),
@@ -1608,14 +1617,14 @@ class _IntentLoadingScreen extends StatelessWidget {
               L10n.of(context).msg6f3e533a,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface.withOpacity(0.8),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
               ),
             ),
             const SizedBox(height: 6),
             Text(
               L10n.of(context).msgbca59325,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             ),
           ],
@@ -1653,8 +1662,8 @@ class _StoragePermissionShield extends StatelessWidget {
                     isMediaOnly ? Broken.document_sketch : Broken.folder_cross,
                     size: 72,
                     color: isMediaOnly
-                        ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
-                        : Theme.of(context).colorScheme.error.withOpacity(0.8),
+                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.8)
+                        : Theme.of(context).colorScheme.error.withValues(alpha: 0.8),
                   ),
                   const SizedBox(height: 24),
                   Text(

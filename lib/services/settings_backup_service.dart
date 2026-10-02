@@ -181,6 +181,28 @@ class SettingsBackupService {
     return '${_backupFileNamePrefix}_$ts.json';
   }
 
+  /// 敏感键黑名单：这些键包含凭据/口令/令牌，绝不写入明文备份文件
+  /// （备份 JSON 可能被上传到远程 FTP/SFTP，泄露面不可控）。
+  /// 恢复后需要用户重新输入对应凭据。
+  static const Set<String> _sensitivePrefKeys = {
+    // 保险箱 / 远程守卫门禁凭据
+    'vault_salt',
+    'vault_password_hash',
+    'vault_password_scheme',
+    'vault_v2_pwcheck',
+    'remote_guard_salt',
+    'remote_guard_hash',
+    // FTP 服务器口令
+    'ftp_password',
+    // Web 分享访问口令
+    'web_share_password',
+    // Google Drive OAuth 令牌
+    'gdrive_access_token',
+    'gdrive_refresh_token',
+    // VirusTotal API Key
+    'virustotal_api_key',
+  };
+
   /// 备份当前所有 SharedPreferences 设置到 JSON 文件
   static Future<bool> backupSettings(BuildContext context) async {
     try {
@@ -188,29 +210,20 @@ class SettingsBackupService {
       final allPrefs = prefs.getKeys();
       final Map<String, dynamic> backupData = {};
 
-      // 排除备份路径自身，避免恢复后把旧的备份目录路径也恢复回来
-      final keysToBackup = allPrefs.where((k) => k != _backupDirPrefKey).toList();
+      // 排除备份路径自身，避免恢复后把旧的备份目录路径也恢复回来；
+      // 再排除全部敏感键，防止口令/令牌随明文 JSON 外泄
+      final keysToBackup = allPrefs
+          .where((k) => k != _backupDirPrefKey && !_sensitivePrefKeys.contains(k))
+          .toList();
 
       for (final key in keysToBackup) {
         final value = prefs.get(key);
         backupData[key] = value;
       }
 
-      // 额外备份加密挂载点的密码（密码存在 FlutterSecureStorage 中，不在 SharedPreferences 里）
-      try {
-        final cryptMounts = await CryptMountService.loadMountPoints();
-        if (cryptMounts.isNotEmpty) {
-          final passwords = <String, String>{};
-          for (final m in cryptMounts) {
-            if (m.config.password.isNotEmpty) {
-              passwords[m.physicalPath] = m.config.password;
-            }
-          }
-          if (passwords.isNotEmpty) {
-            backupData['_crypt_mount_passwords'] = passwords;
-          }
-        }
-      } catch (_) {}
+      // ⚠️ 安全变更：不再把加密挂载点明文密码写入备份（旧版会写入
+      // `_crypt_mount_passwords`）。恢复侧保留对该键的兼容读取，
+      // 以支持旧版备份文件，但新备份一律不生成该键。
 
       final jsonString = const JsonEncoder.withIndent('  ').convert(backupData);
       final dirPath = await getBackupDirPath();

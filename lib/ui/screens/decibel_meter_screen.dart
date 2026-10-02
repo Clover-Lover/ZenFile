@@ -171,10 +171,10 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
                         vertical: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.error.withOpacity(0.1),
+                        color: theme.colorScheme.error.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: theme.colorScheme.error.withOpacity(0.3),
+                          color: theme.colorScheme.error.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Row(
@@ -287,7 +287,7 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
             greenColor: Colors.green.shade500,
             yellowColor: Colors.amber.shade600,
             redColor: Colors.red.shade500,
-            tickColor: theme.colorScheme.onSurface.withOpacity(0.4),
+            tickColor: theme.colorScheme.onSurface.withValues(alpha: 0.4),
             textColor: theme.colorScheme.onSurface,
             valueTextColor: theme.colorScheme.onSurface,
           ),
@@ -303,7 +303,7 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
           label,
           style: TextStyle(
             fontSize: 13,
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
         const SizedBox(height: 4),
@@ -334,10 +334,10 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: theme.colorScheme.onSurface.withOpacity(0.08),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
         ),
       ),
       child: Column(
@@ -359,8 +359,8 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
               painter: _NoiseChartPainter(
                 history: _history,
                 lineColor: theme.colorScheme.primary,
-                gridColor: theme.colorScheme.onSurface.withOpacity(0.1),
-                textColor: theme.colorScheme.onSurface.withOpacity(0.5),
+                gridColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                textColor: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             ),
           ),
@@ -376,10 +376,10 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: theme.colorScheme.onSurface.withOpacity(0.08),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
         ),
       ),
       child: Column(
@@ -401,7 +401,7 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
                   style: TextStyle(
                     fontSize: 13,
                     height: 1.4,
-                    color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                   ),
                 ),
               ),
@@ -424,7 +424,7 @@ class _DecibelMeterScreenState extends State<DecibelMeterScreen>
                   style: TextStyle(
                     fontSize: 13,
                     height: 1.4,
-                    color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                   ),
                 ),
               ),
@@ -483,7 +483,7 @@ class _GaugePainter extends CustomPainter {
     final bgPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14
-      ..color = Colors.grey.withOpacity(0.15);
+      ..color = Colors.grey.withValues(alpha: 0.15);
     canvas.drawArc(bgRect, startAngle, sweep, false, bgPaint);
 
     // 三色区域：绿 0-60、黄 60-90、红 90-120

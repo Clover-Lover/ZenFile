@@ -131,7 +131,7 @@ class _SandboxCryptBrowserScreenState extends State<SandboxCryptBrowserScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -145,7 +145,7 @@ class _SandboxCryptBrowserScreenState extends State<SandboxCryptBrowserScreen> {
                       child: Text(
                         l10n.vault_no_files,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                           fontSize: 13,
                         ),
                       ),
@@ -179,8 +179,8 @@ class _SandboxCryptBrowserScreenState extends State<SandboxCryptBrowserScreen> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: isDark
-            ? Colors.white.withOpacity(0.03)
-            : Colors.black.withOpacity(0.02),
+            ? Colors.white.withValues(alpha: 0.03)
+            : Colors.black.withValues(alpha: 0.02),
         borderRadius: BorderRadius.circular(14),
       ),
       child: ListTile(
@@ -189,7 +189,7 @@ class _SandboxCryptBrowserScreenState extends State<SandboxCryptBrowserScreen> {
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: color, size: 24),
@@ -217,7 +217,7 @@ class _SandboxCryptBrowserScreenState extends State<SandboxCryptBrowserScreen> {
           e.isDirectory ? l10n.vault_item_folder : _formatSize(e.size),
           style: TextStyle(
             fontSize: 11.5,
-            color: theme.colorScheme.onSurface.withOpacity(0.5),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
           ),
         ),
         trailing: e.isDirectory

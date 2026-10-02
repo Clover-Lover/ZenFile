@@ -61,7 +61,7 @@ Future<void> showClipboardMenuSheet(
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -119,7 +119,7 @@ Future<void> showClipboardMenuSheet(
                                     height: 12,
                                     thickness: 0.5,
                                     color: theme.colorScheme.outlineVariant
-                                        .withOpacity(0.5),
+                                        .withValues(alpha: 0.5),
                                   ),
                               ],
                             );
@@ -144,7 +144,7 @@ Future<void> showClipboardMenuSheet(
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: theme.colorScheme.error,
                                 side: BorderSide(
-                                  color: theme.colorScheme.error.withOpacity(
+                                  color: theme.colorScheme.error.withValues(alpha: 
                                     0.25,
                                   ),
                                 ),
@@ -309,7 +309,7 @@ class _ClipboardTaskBlock extends StatelessWidget {
             Text(
               time,
               style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.4),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
               ),
             ),
             const SizedBox(width: 2),
@@ -318,7 +318,7 @@ class _ClipboardTaskBlock extends StatelessWidget {
               icon: Icon(
                 Broken.close_circle,
                 size: 16,
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
               visualDensity: VisualDensity.compact,
               tooltip: l10n.ui_clear,
@@ -347,7 +347,7 @@ class _ClipboardTaskBlock extends StatelessWidget {
                   child: Text(
                     l10n.ui_cut_paste_hint,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -374,7 +374,7 @@ class _ClipboardTaskBlock extends StatelessWidget {
                           child: Text(
                             l10n.paste_keep_clipboard,
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(
+                              color: theme.colorScheme.onSurface.withValues(alpha: 
                                 0.8,
                               ),
                             ),
@@ -446,7 +446,7 @@ class _ClipboardItemRow extends StatelessWidget {
             child: Text(
               item.name,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

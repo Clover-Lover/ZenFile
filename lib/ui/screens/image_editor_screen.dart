@@ -2501,7 +2501,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
                     fillColor: _isPhysicalMode
                         ? Theme.of(
                             context,
-                          ).colorScheme.surfaceContainerHighest.withOpacity(0.3)
+                          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
                         : null,
                   ),
                   onChanged: _isPhysicalMode ? null : _onWidthChanged,
@@ -2531,7 +2531,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
                     fillColor: _isPhysicalMode
                         ? Theme.of(
                             context,
-                          ).colorScheme.surfaceContainerHighest.withOpacity(0.3)
+                          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
                         : null,
                   ),
                   onChanged: _isPhysicalMode ? null : _onHeightChanged,
@@ -2995,7 +2995,7 @@ class _CropPainter extends CustomPainter {
     // 在透明层上画外部暗化遮罩，再用 clear 在遮罩上挖出透明裁剪区
     final fullRect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.saveLayer(fullRect, Paint());
-    final paint = Paint()..color = Colors.black.withOpacity(0.55);
+    final paint = Paint()..color = Colors.black.withValues(alpha: 0.55);
     canvas.drawRect(fullRect, paint);
     final clear = Paint()..blendMode = BlendMode.clear;
     canvas.drawRect(rect, clear);
@@ -3010,7 +3010,7 @@ class _CropPainter extends CustomPainter {
 
     // 三分线
     final line = Paint()
-      ..color = Colors.white.withOpacity(0.4)
+      ..color = Colors.white.withValues(alpha: 0.4)
       ..strokeWidth = 1;
     for (var i = 1; i <= 2; i++) {
       final x1 = rect.left + rect.width * i / 3;

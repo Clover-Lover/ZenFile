@@ -430,7 +430,7 @@ class QuickCategoriesGrid extends StatefulWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: Colors.grey.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -450,7 +450,7 @@ class QuickCategoriesGrid extends StatefulWidget {
                   l10n.ui_bottom_tab_slot(slot + 1),
                   style: TextStyle(
                     fontSize: 12,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -492,12 +492,12 @@ class QuickCategoriesGrid extends StatefulWidget {
                         leading: Icon(
                           Broken.refresh,
                           size: 20,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
                         title: Text(
                           l10n.ui_restore_default,
                           style: TextStyle(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                         onTap: () => Navigator.pop(
@@ -589,7 +589,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
         child: Material(
           elevation: 6,
           borderRadius: BorderRadius.circular(8),
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           child: Container(
             width: 64,
             height: 64,
@@ -943,7 +943,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: theme.colorScheme.onSurface.withOpacity(0.1),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -1088,7 +1088,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: theme.colorScheme.onSurface.withOpacity(0.1),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -1202,7 +1202,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
                 child: Text(
                   L10n.of(context).msg490ac572,
                   style: TextStyle(
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -1336,15 +1336,15 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withOpacity(0.05),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.05),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: theme.colorScheme.primary.withOpacity(0.22),
+                              color: theme.colorScheme.primary.withValues(alpha: 0.22),
                               width: 1,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
+                                color: Colors.black.withValues(alpha: 0.06),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -1373,8 +1373,8 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                splashColor: color.withOpacity(0.25),
-                                highlightColor: color.withOpacity(0.15),
+                                splashColor: color.withValues(alpha: 0.25),
+                                highlightColor: color.withValues(alpha: 0.15),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -1406,7 +1406,7 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
                                             ?.copyWith(
                                           color: theme.textTheme.bodySmall
                                               ?.color
-                                              ?.withOpacity(0.7),
+                                              ?.withValues(alpha: 0.7),
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: -0.2,
@@ -1517,15 +1517,15 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.05),
+            color: theme.colorScheme.primary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: theme.colorScheme.primary.withOpacity(0.22),
+              color: theme.colorScheme.primary.withValues(alpha: 0.22),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -1536,8 +1536,8 @@ class _QuickCategoriesGridState extends State<QuickCategoriesGrid> {
             child: InkWell(
               borderRadius: BorderRadius.circular(8),
               onTap: onTap,
-              splashColor: theme.colorScheme.primary.withOpacity(0.25),
-              highlightColor: theme.colorScheme.primary.withOpacity(0.15),
+              splashColor: theme.colorScheme.primary.withValues(alpha: 0.25),
+              highlightColor: theme.colorScheme.primary.withValues(alpha: 0.15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -1669,7 +1669,7 @@ class _CategoryMenuOverlayWidgetState extends State<_CategoryMenuOverlayWidget> 
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -1774,7 +1774,7 @@ class _RadialTransition extends StatelessWidget {
             ClipPath(
               clipper: _CircleClipper(center: center, radius: radius),
               child: ColoredBox(
-                color: color.withOpacity(0.15 * animation.value),
+                color: color.withValues(alpha: 0.15 * animation.value),
                 child: child,
               ),
             ),
@@ -1910,7 +1910,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.15),
+                color: theme.colorScheme.primary.withValues(alpha: 0.15),
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -2003,7 +2003,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: theme.colorScheme.onSurface.withOpacity(0.1),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -2058,7 +2058,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
       child: Material(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -2108,7 +2108,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                 Icon(
                   Icons.chevron_right,
                   size: 18,
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                 ),
               ],
             ),
@@ -2209,7 +2209,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                           width: 40,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: Colors.grey.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -2314,10 +2314,10 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
-                                  color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                                  color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: theme.colorScheme.onSurface.withOpacity(0.1),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                                   ),
                                 ),
                                 child: DropdownButton<int>(
@@ -2329,7 +2329,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.onSurface.withOpacity(0.8),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                                   ),
                                   items: [
                                     DropdownMenuItem(
@@ -2454,7 +2454,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                             style: TextStyle(
                               fontSize: 13,
                               color: theme.colorScheme.onSurface
-                                  .withOpacity(0.6),
+                                  .withValues(alpha: 0.6),
                             ),
                           ),
                         ),
@@ -2470,7 +2470,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                               style: TextStyle(
                                 fontSize: 11,
                                 color: theme.colorScheme.onSurface
-                                    .withOpacity(0.5),
+                                    .withValues(alpha: 0.5),
                               ),
                             ),
                           ),
@@ -2490,7 +2490,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                             child: Text(
                               L10n.of(context).msg445a43cb,
                               style: TextStyle(
-                                color: theme.colorScheme.onSurface.withOpacity(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 
                                   0.6,
                                 ),
                                 fontSize: 13,
@@ -2511,7 +2511,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
                               minimumSize: const Size.fromHeight(46),
                               foregroundColor: theme.colorScheme.primary,
                               side: BorderSide(
-                                color: theme.colorScheme.primary.withOpacity(
+                                color: theme.colorScheme.primary.withValues(alpha: 
                                   0.5,
                                 ),
                               ),
@@ -2598,7 +2598,7 @@ class _CategoryItemWidgetState extends State<CategoryItemWidget> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: theme.colorScheme.onSurface.withOpacity(0.1),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -2664,7 +2664,7 @@ class _CategoryItemWidgetState extends State<CategoryItemWidget> {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(6),
             ),
@@ -2688,7 +2688,7 @@ class _CategoryItemWidgetState extends State<CategoryItemWidget> {
                   widget.cat['path'] as String,
                   style: TextStyle(
                     fontSize: 11,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

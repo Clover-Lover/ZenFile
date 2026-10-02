@@ -135,16 +135,11 @@ class RemoteCryptFile {
     if (encSize > fileHeaderSize && encEnd > encSize) encEnd = encSize;
     if (encEnd <= encStart) return Uint8List(0);
 
-    // 一次拉取覆盖所需所有块的密文区间（远少于「每块一次请求」）
-    final tmp = _tmpFilePath();
-    try {
-      await _client.downloadRange(_serverPath, tmp, encStart, encEnd - encStart);
-    } catch (e) {
-      await _safeDelete(tmp);
-      rethrow;
-    }
+    // 一次拉取覆盖所需所有块的密文区间（远少于「每块一次请求」）；
+    // 临时文件按实例复用（见 [_reusableTmpPath]），close 时统一删除。
+    final tmp = await _reusableTmpPath();
+    await _client.downloadRange(_serverPath, tmp, encStart, encEnd - encStart);
     final encBytes = await File(tmp).readAsBytes();
-    await _safeDelete(tmp);
 
     final result = BytesBuilder();
     const blockLen = cryptBlockSize + blockOverhead;
@@ -196,6 +191,9 @@ class RemoteCryptFile {
 
   Future<void> close() async {
     _isOpen = false;
+    final tmp = _openTmpPath;
+    _openTmpPath = null;
+    if (tmp != null) await _safeDelete(tmp);
   }
 
   void _ensureOpen() {
@@ -208,6 +206,18 @@ class RemoteCryptFile {
     final dir = Directory.systemTemp.path;
     return '$dir/zenfile_rc_${DateTime.now().microsecondsSinceEpoch}_'
         '${identityHashCode(this)}.bin';
+  }
+
+  /// 每实例复用的临时密文缓冲文件路径（懒创建，close 时删除）。
+  ///
+  /// 此前每次 read 都「创建临时文件 → 下载 → 读回 → 删除」，多了 4 次文件
+  /// 系统调用/读；流式播放起播路径上每次 range 请求都要走一遍。改为实例级
+  /// 复用同一个文件，仅保留一次磁盘往返（受 RemoteClient 接口限制，
+  /// in-memory range 下载需要改全部协议客户端，暂缓）。
+  String? _openTmpPath;
+
+  Future<String> _reusableTmpPath() async {
+    return _openTmpPath ??= _tmpFilePath();
   }
 
   Future<void> _safeDelete(String path) async {

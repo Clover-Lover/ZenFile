@@ -25,6 +25,7 @@ import '../ui/screens/archive_viewer_screen.dart';
 import '../ui/screens/database_reader_screen.dart';
 import '../services/archive_service.dart';
 import '../services/apk_installer_service.dart';
+import '../services/crypt_auto_encrypt_service.dart';
 import '../ui/widgets/extract_archive_dialog.dart';
 import '../core/utils.dart';
 import '../services/preferences_service.dart';
@@ -212,6 +213,7 @@ class FileManagerProvider extends ChangeNotifier {
     _categoryFilter = _rememberCategoryFilter
         ? PreferencesService.getCategoryFilters()
         : <CategoryFilterType>{};
+    _categoryFilterVersion++;
     _defaultToBrowseScreen = PreferencesService.getDefaultToBrowseScreen();
     _swipeMode = PreferencesService.getSwipeMode();
     _showFolderFileCount = PreferencesService.getShowFolderFileCount();
@@ -310,6 +312,15 @@ class FileManagerProvider extends ChangeNotifier {
         )
       ];
     }
+
+    // 自动加密服务把相机重建的同名明文目录并入密文容器后，刷新全部本地
+    // 标签页：「密文 + 同名明文」并存态自动收敛为一条，无需手动刷新
+    // （2026-10-02 用户报障：合并完成后浏览页仍显示旧的并存态）。
+    CryptAutoEncryptService.instance.onMergeCompleted = () async {
+      try {
+        await refreshAllBrowserTabs();
+      } catch (_) {}
+    };
   }
 
   /// 进度条点击「后台」后是否处于最小化状态。为 true 时，对应页面（浏览页双窗口
@@ -1631,6 +1642,9 @@ class FileManagerProvider extends ChangeNotifier {
   bool get isCategoryFilterActive => _categoryFilter.isNotEmpty;
   bool isCategoryFilterSelected(CategoryFilterType type) => _categoryFilter.contains(type);
 
+  /// 过滤条件版本号：集合被原地增删时递增，使 [currentFiles] 的过滤缓存失效。
+  int _categoryFilterVersion = 0;
+
   bool _rememberCategoryFilter = false;
   bool get rememberCategoryFilter => _rememberCategoryFilter;
 
@@ -1643,6 +1657,7 @@ class FileManagerProvider extends ChangeNotifier {
     } else {
       _categoryFilter.add(type);
     }
+    _categoryFilterVersion++;
     if (remember != null) {
       _rememberCategoryFilter = remember;
       PreferencesService.saveRememberCategoryFilter(remember);
@@ -2221,6 +2236,44 @@ class FileManagerProvider extends ChangeNotifier {
     }
   }
 
+  /// 「密文物理路径」→ 面包屑等 UI 的**显示**路径（逐段解密，失败段原样保留）。
+  ///
+  /// 冲突场景（密文目录与相机重建的同名明文目录并存）下，plainNameClash 条目
+  /// 直达物理路径（如 `/DCIM/jX0p4…`），面包屑若按原样分段会显示一串密文。
+  /// 这里按挂载点把挂载根之后的段逐段 `decryptDirName` 回明文名（能往返校验
+  /// 通过才解密，普通明文段原样保留），结构（段数）不变。
+  ///
+  /// ⚠️ **只用于显示**：导航/操作必须继续用物理路径 —— 虚拟路径会被
+  /// `resolvePhysicalPath` 的「明文已存在」短路解析到明文目录上。
+  String cryptDisplayPath(String path) {
+    if (path.isEmpty || !path.startsWith('/') || !_cryptMountsLoaded) {
+      return path;
+    }
+    for (final mount in _cryptMountPoints) {
+      if (mount.isSandboxMode || mount.isRemote) continue;
+      if (!mount.containsPath(path)) continue;
+      final base = p.normalize(mount.physicalPath);
+      final rel = p.normalize(path) == base
+          ? ''
+          : p.normalize(path).substring(base.length);
+      final segs = rel.split('/').where((s) => s.isNotEmpty).toList();
+      final displaySegs = <String>[];
+      for (final seg in segs) {
+        var name = seg;
+        try {
+          if (CryptOperations.isCipherDirName(seg, mount)) {
+            name = mount.crypt.decryptDirName(seg);
+          }
+        } catch (_) {}
+        displaySegs.add(name);
+      }
+      return base == '/'
+          ? '/${displaySegs.join('/')}'
+          : '$base/${displaySegs.join('/')}';
+    }
+    return path;
+  }
+
   /// 将 CryptFileEntry 转换为 FileItemModel
   FileItemModel _cryptEntryToFileItem(CryptFileEntry entry) {
     final entity = entry.isDirectory
@@ -2229,7 +2282,12 @@ class FileManagerProvider extends ChangeNotifier {
     return FileItemModel(
       entity: entity,
       name: entry.name,
-      path: entry.virtualPath,
+      // ⚠️ 明文同名冲突（如相机在密文目录旁重建同名明文目录）时，虚拟路径
+      // 与明文条目的真实路径重合，且 resolvePhysicalPath 的「明文已存在」
+      // 短路会让两个条目都打开明文目录（用户看到「点哪个都是新照片、已加密
+      // 内容消失」）。此时直达 physicalPath：物理路径必在挂载点内，浏览层
+      // 会按密文目录枚举，已加密内容不再被同名明文目录"遮住"。
+      path: entry.plainNameClash ? entry.physicalPath : entry.virtualPath,
       isDirectory: entry.isDirectory,
       size: entry.size,
       modified: entry.modified,
@@ -3020,7 +3078,6 @@ class FileManagerProvider extends ChangeNotifier {
     void Function(int bytes, int total)? onFileProgress,
   }) async {
     if (!activeTab.isCryptRemote || activeTab.remoteClient == null) return;
-    if (!await _ensureVaultSession(context)) return;
     final mount = await _activeCryptRemoteMount();
     if (mount == null) return;
     final client = activeTab.remoteClient!;
@@ -3059,7 +3116,6 @@ class FileManagerProvider extends ChangeNotifier {
     void Function(String name, double progress)? onProgress,
     void Function(int bytes, int total)? onFileProgress,
   }) async {
-    if (!await _ensureVaultSession(context)) return;
     RcloneCryptConfig? config = profileId != null
         ? (await CryptProfileService.instance.byId(profileId))?.toConfig()
         : null;
@@ -3460,7 +3516,6 @@ class FileManagerProvider extends ChangeNotifier {
     void Function(int bytes, int total)? onFileProgress,
   }) async {
     if (paths.isEmpty) return;
-    if (!await _ensureVaultSession(context)) return;
     final conn = activeTab.remoteConnection;
     final client = activeTab.remoteClient;
     if (conn == null || client == null) throw StateError('远程连接不可用');
@@ -3806,7 +3861,7 @@ class FileManagerProvider extends ChangeNotifier {
     void Function(String name, double progress)? onProgress,
   }) async {
     if (!activeTab.isCryptRemote || activeTab.remoteClient == null) return;
-    if (!await _ensureVaultSession(context)) return;
+    // 加密区内复制/移动是纯密文操作（内容不出现明文），不需会话闸门。
     final mount = CryptStreamServer.instance.findRemoteMount(destVirtualParent) ??
         await _buildRemoteMountForPath(destVirtualParent);
     if (mount == null) return;
@@ -4719,7 +4774,20 @@ class FileManagerProvider extends ChangeNotifier {
     _activeTabIndex = index;
   }
 
+  /// 标签页持久化防抖：快速连续导航（前进/后退/切目录）时每次导航都会触发
+  /// _persistTabs，jsonEncode + SharedPreferences 写盘成串冗余。这里合并
+  /// 500ms 内的连续调用为一次写入；应用被杀时的损失仅为最近 500ms 的
+  /// 导航位置，可接受。
+  Timer? _persistTabsDebounce;
+
   void _persistTabs() {
+    _persistTabsDebounce?.cancel();
+    _persistTabsDebounce = Timer(const Duration(milliseconds: 500), () {
+      _persistTabsNow();
+    });
+  }
+
+  void _persistTabsNow() {
     final list = _tabs.map((t) => {
       'id': t.id,
       'currentPath': t.currentPath,
@@ -4733,10 +4801,26 @@ class FileManagerProvider extends ChangeNotifier {
   }
 
   // --- Active Tab Delegations ---
+  // currentFiles 过滤结果缓存：一次 build 里 directory_screen 会调用该 getter
+  // 多次，过滤模式下每次全表 where().toList() 复制是 O(n)。以「源列表引用 +
+  // 过滤版本号」为失效条件（currentFiles 总是整体替换，无原地修改）。
+  List<FileItemModel>? _filteredFilesCacheSource;
+  int? _filteredFilesCacheVersion;
+  List<FileItemModel>? _filteredFilesCacheResult;
+
   List<FileItemModel> get currentFiles {
     final items = activeTab.currentFiles;
     if (_categoryFilter.isEmpty) return items;
-    return items.where((f) => matchesAnyCategory(_categoryFilter, f)).toList();
+    if (identical(_filteredFilesCacheSource, items) &&
+        _filteredFilesCacheVersion == _categoryFilterVersion &&
+        _filteredFilesCacheResult != null) {
+      return _filteredFilesCacheResult!;
+    }
+    final result = items.where((f) => matchesAnyCategory(_categoryFilter, f)).toList();
+    _filteredFilesCacheSource = items;
+    _filteredFilesCacheVersion = _categoryFilterVersion;
+    _filteredFilesCacheResult = result;
+    return result;
   }
 
   /// 返回某标签在界面上应展示的文件列表：在原始列表基础上套用「按类别过滤」。
@@ -5067,6 +5151,15 @@ class FileManagerProvider extends ChangeNotifier {
     required String remoteRoot,
     String connName = '',
     String rootLabel = 'Root',
+    /// 仅用于本地分支 **labels** 的显示路径。
+    ///
+    /// 冲突场景（密文目录与重建的同名明文目录并存）下 currentPath 会是
+    /// **密文物理路径**（如 `/DCIM/jX0p4…`，plainNameClash 条目直达），面包屑
+    /// 直接分段会显示一串密文。传入其解密后的虚拟路径（与 currentPath **段数
+    /// 一致**，只是逐段换名）即可让 labels 显示明文名。targets 始终由
+    /// [currentPath] 计算 —— 导航必须继续走物理路径：虚拟路径会被
+    /// `resolvePhysicalPath` 的「明文已存在」短路劫持到明文目录上。
+    String? displayPath,
   }) {
     final bool isRemotePath = currentPath.startsWith('remote://') ||
         currentPath.startsWith('cryptremote://');
@@ -5131,7 +5224,12 @@ class FileManagerProvider extends ChangeNotifier {
     // 标签），于是**每个标签都错位指向上一层**路径 —— 用户反馈的
     // 「打开 /storage/emulated/0 的子目录时，点面包屑 `0` 跳到 /storage/emulated」
     // 就是这么来的（`0` 取到了「/storage/emulated」那格目标）。
-    final segs = currentPath.split('/').where((n) => n.isNotEmpty).toList();
+    // displayPath 与 currentPath 段数一致（逐段解密不改结构），labels/targets
+    // 仍一一对应。
+    final segs = (displayPath ?? currentPath)
+        .split('/')
+        .where((n) => n.isNotEmpty)
+        .toList();
     return (
       labels: [rootLabel, ...segs],
       targets: [
@@ -6652,8 +6750,12 @@ class FileManagerProvider extends ChangeNotifier {
 
   Future<void> togglePinPath(String path) async {
     await PinService.togglePin(path);
-    final folders = currentFiles.where((e) => e.isDirectory).toList();
-    final files = currentFiles.where((e) => !e.isDirectory).toList();
+    // ⚠️ 必须用 activeTab.currentFiles（原始列表），不能用 currentFiles getter
+    // ——后者在分类过滤模式下返回过滤后的副本，排序写回会把被过滤掉的文件
+    // 从 tab 状态里永久丢掉（直到重新 loadDirectory）。
+    final raw = activeTab.currentFiles;
+    final folders = raw.where((e) => e.isDirectory).toList();
+    final files = raw.where((e) => !e.isDirectory).toList();
     _sortList(folders, currentPath);
     _sortList(files, currentPath);
     activeTab.currentFiles = [...folders, ...files];
@@ -6661,8 +6763,9 @@ class FileManagerProvider extends ChangeNotifier {
   }
 
   void refreshDirectoryView() {
-    final folders = currentFiles.where((e) => e.isDirectory).toList();
-    final files = currentFiles.where((e) => !e.isDirectory).toList();
+    final raw = activeTab.currentFiles;
+    final folders = raw.where((e) => e.isDirectory).toList();
+    final files = raw.where((e) => !e.isDirectory).toList();
     _sortList(folders, currentPath);
     _sortList(files, currentPath);
     activeTab.currentFiles = [...folders, ...files];
@@ -7189,11 +7292,11 @@ class FileManagerProvider extends ChangeNotifier {
     // 加密感知粘贴：源或目标任一处于加密目录时，逐条走 crypt 传输。
     // 注意方向语义：**只有「明文写入加密目录」会加密**；「加密文件写入普通目录」
     // 原样搬运密文、不自动解密（见 `_cryptAwareCopyOrMove` 的分支说明）。
-    // 前置会话解锁闸门。放在受限分支之后、主复制循环之前。
+    // 两个方向都不产生明文输出（跨配置重加密的临时明文纯内部瞬态、即用即删），
+    // 因此不设保险箱会话闸门（闸门只守明文出口）。
     if (!currIsRemote && !activeTab.isRemote && !targetIsRemote) {
       final involvesCrypt = await _pasteInvolvesCrypt();
       if (involvesCrypt) {
-        if (!await _ensureVaultSession(context)) return;
         await _pasteCryptAware(context, clearAfterPaste);
         return;
       }
@@ -8479,7 +8582,6 @@ class FileManagerProvider extends ChangeNotifier {
       progressNotifier.value = null;
       return;
     }
-    if (!await _ensureVaultSession(context)) return;
     final mount = await _activeCryptRemoteMount();
     if (mount == null) {
       if (context.mounted) {
@@ -9846,11 +9948,11 @@ class FileManagerProvider extends ChangeNotifier {
       return;
     }
 
-    // 加密文件删除：源为加密实体时走物理删除（绕过回收站），前置会话解锁闸门。
+    // 加密文件删除：源为加密实体时走物理删除（绕过回收站）。删除不泄露内容，
+    // 与普通文件删除一致不设保险箱会话闸门（「保护方向/无明文出口不验」）。
     if (!activeTab.isRemote) {
       final cryptSrc = await _analyzeCryptSource(path);
       if (cryptSrc.mount != null && cryptSrc.isEncrypted) {
-        if (!await _ensureVaultSession(null)) return;
         await _deletePhysical(cryptSrc.physical, isDir: cryptSrc.isDirectory);
         await refreshCryptMountPoints();
         await _refreshTabForPath(p.dirname(path));
@@ -9886,12 +9988,12 @@ class FileManagerProvider extends ChangeNotifier {
 
   Future<void> renameFile(String oldPath, String newName, [BuildContext? context]) async {
     try {
-      // 加密目录内重命名：物理名需按配置重加密，且需会话解锁闸门。
-      // 仅拦截「真实加密实体」；明文文件（即便位于加密挂载点内）走下方原生逻辑。
+      // 加密目录内重命名：物理名需按配置重加密。重命名不暴露内容（纯密文名
+      // 操作），不设保险箱会话闸门。仅拦截「真实加密实体」；
+      // 明文文件（即便位于加密挂载点内）走下方原生逻辑。
       if (!activeTab.isRemote && !isRestrictedPath(oldPath)) {
         final cryptSrc = await _analyzeCryptSource(oldPath);
         if (cryptSrc.mount != null && cryptSrc.isEncrypted) {
-          if (!await _ensureVaultSession(context)) return;
           final parentPhysical = p.dirname(cryptSrc.physical);
           final newPhysicalName = cryptSrc.isDirectory
               ? cryptSrc.mount!.crypt.encryptDirName(newName)
@@ -9908,9 +10010,9 @@ class FileManagerProvider extends ChangeNotifier {
           return;
         }
       }
-      // 远程加密重命名（cryptremote://）：密文名需用密码按「文件名/目录名」重加密
+      // 远程加密重命名（cryptremote://）：密文名需用密码按「文件名/目录名」重加密。
+      // 重命名不暴露内容（纯密文名操作），不设保险箱会话闸门。
       if (activeTab.isCryptRemote && activeTab.remoteClient != null) {
-        if (!await _ensureVaultSession(context)) return;
         final mount = CryptStreamServer.instance.findRemoteMount(oldPath) ??
             await _buildRemoteMountForPath(oldPath);
         if (mount == null) {
@@ -12410,7 +12512,11 @@ class FileManagerProvider extends ChangeNotifier {
       final cryptSrc = await _analyzeCryptSource(sourcePath);
       final cryptDst = await _analyzeCryptDestDir(destFolderPath);
       if ((cryptSrc.mount != null && cryptSrc.isEncrypted) || cryptDst.mount != null) {
-        if (!await _ensureVaultSession(context)) return;
+        // 只在「明文出口」（源是密文、要落到非加密区）设保险箱会话闸门；
+        // 搬入加密目录会触发自动加密，属「保护方向」，免验证（2026-10-02 拍板），
+        // 与各加密入口的口径一致。源、目标都在加密区内时保守起见仍验证。
+        final bool isPlainExit = cryptSrc.mount != null && cryptSrc.isEncrypted;
+        if (isPlainExit && !await _ensureVaultSession(context)) return;
         await _cryptAwareCopyOrMove(
           source: sourcePath,
           destFolder: destFolderPath,
@@ -12533,7 +12639,11 @@ class FileManagerProvider extends ChangeNotifier {
       final cryptSrc = await _analyzeCryptSource(sourcePath);
       final cryptDst = await _analyzeCryptDestDir(destFolderPath);
       if ((cryptSrc.mount != null && cryptSrc.isEncrypted) || cryptDst.mount != null) {
-        if (!await _ensureVaultSession(context)) return;
+        // 只在「明文出口」（源是密文、要落到非加密区）设保险箱会话闸门；
+        // 搬入加密目录会触发自动加密，属「保护方向」，免验证（2026-10-02 拍板），
+        // 与各加密入口的口径一致。源、目标都在加密区内时保守起见仍验证。
+        final bool isPlainExit = cryptSrc.mount != null && cryptSrc.isEncrypted;
+        if (isPlainExit && !await _ensureVaultSession(context)) return;
         await _cryptAwareCopyOrMove(
           source: sourcePath,
           destFolder: destFolderPath,
@@ -12607,6 +12717,7 @@ class FileManagerProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _persistTabsDebounce?.cancel();
     _remoteSourceChangedController.close();
     _navigateToBrowseTabNotifier.dispose();
     _settingsSearchRequestNotifier.dispose();

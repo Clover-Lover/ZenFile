@@ -1107,7 +1107,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                   Text(
                     l10n.ui_lyrics_not_found_online,
                     style: TextStyle(
-                      color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -1127,14 +1127,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                     style: TextStyle(color: isDark ? Colors.white : theme.colorScheme.onSurface),
                     decoration: InputDecoration(
                       labelText: l10n.ui_lyric_search_song_title,
-                      labelStyle: TextStyle(color: theme.colorScheme.primary.withOpacity(0.7)),
+                      labelStyle: TextStyle(color: theme.colorScheme.primary.withValues(alpha: 0.7)),
                       filled: true,
-                      fillColor: isDark ? Colors.white.withOpacity(0.05) : theme.colorScheme.onSurface.withOpacity(0.04),
+                      fillColor: isDark ? Colors.white.withValues(alpha: 0.05) : theme.colorScheme.onSurface.withValues(alpha: 0.04),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(Icons.music_note_rounded, color: theme.colorScheme.primary.withOpacity(0.6), size: 20),
+                      prefixIcon: Icon(Icons.music_note_rounded, color: theme.colorScheme.primary.withValues(alpha: 0.6), size: 20),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -1144,14 +1144,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                     style: TextStyle(color: isDark ? Colors.white : theme.colorScheme.onSurface),
                     decoration: InputDecoration(
                       labelText: l10n.ui_lyric_search_artist,
-                      labelStyle: TextStyle(color: theme.colorScheme.primary.withOpacity(0.7)),
+                      labelStyle: TextStyle(color: theme.colorScheme.primary.withValues(alpha: 0.7)),
                       filled: true,
-                      fillColor: isDark ? Colors.white.withOpacity(0.05) : theme.colorScheme.onSurface.withOpacity(0.04),
+                      fillColor: isDark ? Colors.white.withValues(alpha: 0.05) : theme.colorScheme.onSurface.withValues(alpha: 0.04),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(Icons.person_rounded, color: theme.colorScheme.primary.withOpacity(0.6), size: 20),
+                      prefixIcon: Icon(Icons.person_rounded, color: theme.colorScheme.primary.withValues(alpha: 0.6), size: 20),
                     ),
                   ),
                   if (isSearching) ...[
@@ -1162,7 +1162,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                       l10n.ui_lyrics_searching,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withValues(alpha: 0.5),
                         fontSize: 13,
                       ),
                     ),
@@ -1172,9 +1172,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
-                        color: Colors.orangeAccent.shade100.withOpacity(0.15),
+                        color: Colors.orangeAccent.shade100.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.orangeAccent.shade100.withOpacity(0.3)),
+                        border: Border.all(color: Colors.orangeAccent.shade100.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [
@@ -1210,14 +1210,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                           results = [];
                           errorMessage = null;
                         }),
-                child: Text(l10n.ui_back, style: TextStyle(color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withOpacity(0.6))),
+                child: Text(l10n.ui_back, style: TextStyle(color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withValues(alpha: 0.6))),
               ),
             ];
           } else {
             actions = [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: Text(l10n.ui_cancel, style: TextStyle(color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withOpacity(0.6))),
+                child: Text(l10n.ui_cancel, style: TextStyle(color: isDark ? Colors.white70 : theme.colorScheme.onSurface.withValues(alpha: 0.6))),
               ),
               TextButton(
                 onPressed: isSearching ? null : doSearch,
@@ -1281,7 +1281,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
     // 高亮色 = 主题主色（已唱部分）
     final highlightColor = accent.value;
     // 普通色 = 主题主色 35% 透明度（未唱部分）
-    final normalColor = accent.withOpacity(0.35).value;
+    final normalColor = accent.withValues(alpha: 0.35).value;
     return [highlightColor, normalColor];
   }
 
@@ -1473,7 +1473,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.35),
+                          color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.35),
                         ),
                       ),
                     ),
@@ -1497,7 +1497,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
       );
     }
 
-    final baseColor = (isDark ? Colors.white : Colors.black).withOpacity(0.5);
+    final baseColor = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5);
     final highlightColor = accent;
 
     // 检查是否有逐字时间戳
@@ -1641,7 +1641,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
           maxHeight: MediaQuery.of(context).size.height * 0.35,
         ),
         decoration: BoxDecoration(
-          color: (isDark ? Colors.white : Colors.black).withOpacity(0.03),
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(20),
         ),
         child: _isLoadingLyrics
@@ -1669,7 +1669,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
             Icon(
               Broken.document,
               size: 48,
-              color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.2),
+              color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.2),
             ),
             const SizedBox(height: 12),
             Text(
@@ -1679,7 +1679,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.5),
+                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 6),
@@ -1689,7 +1689,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
               style: TextStyle(
                 fontSize: 12,
                 height: 1.5,
-                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.35),
+                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.35),
               ),
             ),
             const SizedBox(height: 16),
@@ -1699,7 +1699,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
               label: Text(L10n.of(context).ui_select_lyrics_file, style: const TextStyle(fontWeight: FontWeight.w600)),
               style: TextButton.styleFrom(
                 foregroundColor: accent,
-                backgroundColor: accent.withOpacity(0.1),
+                backgroundColor: accent.withValues(alpha: 0.1),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
@@ -1805,9 +1805,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: L10n.of(context).ui_enter_minutes,
-            hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+            hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white.withValues(alpha: 0.05),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide.none,
@@ -2533,12 +2533,12 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                 end: Alignment.bottomCenter,
                 colors: isDark
                     ? [
-                        accent.withOpacity(0.2),
+                        accent.withValues(alpha: 0.2),
                         theme.scaffoldBackgroundColor,
                         theme.scaffoldBackgroundColor,
                       ]
                     : [
-                        accent.withOpacity(0.12),
+                        accent.withValues(alpha: 0.12),
                         theme.scaffoldBackgroundColor,
                         theme.scaffoldBackgroundColor,
                       ],
@@ -2604,7 +2604,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
-                        color: theme.colorScheme.onSurface.withOpacity(0.9),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -2613,7 +2613,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: theme.colorScheme.onSurface.withOpacity(0.08),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.more_horiz_rounded, size: 22),
@@ -2659,7 +2659,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -2669,7 +2669,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                         IconButton(
                           icon: Icon(
                             _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                            color: _isFavorite ? Colors.redAccent : theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: _isFavorite ? Colors.redAccent : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             size: 28,
                           ),
                           onPressed: () => setState(() => _isFavorite = !_isFavorite),
@@ -2738,7 +2738,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                     Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: theme.colorScheme.onSurface.withOpacity(0.08),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.more_horiz_rounded, size: 20),
@@ -2812,7 +2812,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -2823,7 +2823,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
                         IconButton(
                           icon: Icon(
                             _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                            color: _isFavorite ? Colors.redAccent : theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: _isFavorite ? Colors.redAccent : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             size: 32,
                           ),
                           onPressed: () => setState(() => _isFavorite = !_isFavorite),
@@ -2944,7 +2944,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: theme.colorScheme.onSurface.withOpacity(0.2),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -2973,7 +2973,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.5),
+                          color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.5),
                           fontSize: 13,
                         ),
                       ),
@@ -2992,7 +2992,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
               ],
             ),
           ),
-          Divider(color: theme.colorScheme.onSurface.withOpacity(0.08), height: 1),
+          Divider(color: theme.colorScheme.onSurface.withValues(alpha: 0.08), height: 1),
           // 歌词内容
           Expanded(
             child: widget.isLoading
@@ -3021,7 +3021,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
             Icon(
               Broken.document,
               size: 64,
-              color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.2),
+              color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.2),
             ),
             const SizedBox(height: 16),
             Text(
@@ -3029,7 +3029,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.6),
+                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 8),
@@ -3039,7 +3039,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
               style: TextStyle(
                 fontSize: 14,
                 height: 1.6,
-                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withOpacity(0.4),
+                color: (isDark ? Colors.white : theme.colorScheme.onSurface).withValues(alpha: 0.4),
               ),
             ),
             const SizedBox(height: 24),
@@ -3054,7 +3054,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
                   label: Text(L10n.of(context).ui_search_lyrics_online),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: widget.accentColor,
-                    side: BorderSide(color: widget.accentColor.withOpacity(0.4)),
+                    side: BorderSide(color: widget.accentColor.withValues(alpha: 0.4)),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
@@ -3065,7 +3065,7 @@ class _LyricsPanelState extends State<_LyricsPanel> {
                   label: Text(L10n.of(context).ui_select_lyrics_file),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: widget.accentColor,
-                    side: BorderSide(color: widget.accentColor.withOpacity(0.4)),
+                    side: BorderSide(color: widget.accentColor.withValues(alpha: 0.4)),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),

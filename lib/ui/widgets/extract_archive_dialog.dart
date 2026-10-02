@@ -119,7 +119,7 @@ class _ExtractArchiveDialogState extends State<ExtractArchiveDialog> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.secondary.withOpacity(0.1),
+                      color: theme.colorScheme.secondary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(Broken.archive, color: theme.colorScheme.secondary, size: 24),
@@ -135,7 +135,7 @@ class _ExtractArchiveDialogState extends State<ExtractArchiveDialog> {
                         ),
                         Text(
                           widget.archiveName,
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.textTheme.bodySmall?.color?.withOpacity(0.6)),
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6)),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -151,9 +151,9 @@ class _ExtractArchiveDialogState extends State<ExtractArchiveDialog> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.35),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(0.45)),
+                  border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: 0.45)),
                 ),
                 child: Row(
                   children: [
@@ -165,7 +165,7 @@ class _ExtractArchiveDialogState extends State<ExtractArchiveDialog> {
                         children: [
                           Text(
                             msgExtractTargetFolder,
-                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.55)),
+                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
                           ),
                           const SizedBox(height: 2),
                           Text(
@@ -182,7 +182,7 @@ class _ExtractArchiveDialogState extends State<ExtractArchiveDialog> {
                       onPressed: _pickDirectory,
                       tooltip: msgBrowse,
                       style: IconButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primary.withOpacity(0.08),
+                        backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.08),
                         padding: const EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),

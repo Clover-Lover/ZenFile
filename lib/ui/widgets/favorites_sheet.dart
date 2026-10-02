@@ -114,7 +114,7 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
                           l10n.msg551f98ba,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                         ),
                       )
                     else
@@ -140,7 +140,7 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
         width: 36,
         height: 4,
         decoration: BoxDecoration(
-          color: theme.colorScheme.onSurface.withOpacity(0.22),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.22),
           borderRadius: BorderRadius.circular(2),
         ),
       ),
@@ -184,7 +184,7 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
             child: Text(
               l10n.ui_favorites_swipe_hint,
               style: TextStyle(
-                color: theme.colorScheme.onSurface.withOpacity(0.55),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                 fontSize: 12,
               ),
             ),
@@ -226,7 +226,7 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
                           Icon(
                             isDirectory ? Broken.folder : Broken.document,
                             size: 22,
-                            color: isDirectory ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: isDirectory ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                           if (isRemote)
                             Positioned(
@@ -265,7 +265,7 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
               icon: Icon(
                 Icons.more_vert,
                 size: 22,
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -410,7 +410,7 @@ class _FavoritesSheetState extends State<FavoritesSheet> {
               '${favs.length}',
               style: TextStyle(
                 fontSize: 11,
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             ),
           ],

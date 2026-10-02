@@ -784,7 +784,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                 ],
               ),
             ),
-            Divider(height: 0.5, thickness: 0.5, color: theme.dividerColor.withOpacity(0.08)),
+            Divider(height: 0.5, thickness: 0.5, color: theme.dividerColor.withValues(alpha: 0.08)),
           ],
         ),
       ),
@@ -830,7 +830,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Divider(height: 0.5, thickness: 0.5, color: theme.dividerColor.withOpacity(0.08)),
+            Divider(height: 0.5, thickness: 0.5, color: theme.dividerColor.withValues(alpha: 0.08)),
             SizedBox(
               height: kToolbarHeight,
               child: Row(
@@ -938,7 +938,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
             size: 22,
             color: selected
                 ? theme.colorScheme.primary
-                : theme.colorScheme.onSurface.withOpacity(0.45),
+                : theme.colorScheme.onSurface.withValues(alpha: 0.45),
           ),
           const SizedBox(height: 2),
           Text(
@@ -948,7 +948,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
               fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
               color: selected
                   ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurface.withOpacity(0.55),
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.55),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

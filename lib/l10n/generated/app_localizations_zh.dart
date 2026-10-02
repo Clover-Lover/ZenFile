@@ -7878,6 +7878,40 @@ class L10nZh extends L10n {
   String share_safe_unsupported(Object count) {
     return '有 $count 个文件无法去除元数据（可能已加密），已按普通分享发送';
   }
+
+  @override
+  String get ui_ftp_password => 'FTP 密码';
+
+  @override
+  String get ui_ftp_password_required => '请设置密码，否则 FTP 服务器将拒绝所有客户端登录';
+
+  @override
+  String get ui_web_share_password => '访问口令';
+
+  @override
+  String get ui_web_share_password_hint => '留空则不启用鉴权（仅建议在可信局域网使用）';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return '已为公网访问自动生成口令：$password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel => '公网分享必须设置访问口令';
+
+  @override
+  String get crypt_auto_encrypt_section => '自动加密';
+
+  @override
+  String get crypt_auto_encrypt_title => '自动加密新增文件';
+
+  @override
+  String get crypt_auto_encrypt_desc => '对已原地加密的目录开启实时监听，新文件写入完成后自动加密（需常驻通知）';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '正在保护 $count 个目录，新文件将自动加密';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -10552,7 +10586,7 @@ class L10nZhTw extends L10nZh {
   String get junk_clean_title => '垃圾清理';
 
   @override
-  String get junk_clean_scanning => '正在扫描垃圾文件…';
+  String get junk_clean_scanning => '正在掃描垃圾檔案…';
 
   @override
   String junk_clean_scannable(Object size) {
@@ -10563,29 +10597,29 @@ class L10nZhTw extends L10nZh {
   String get junk_clean_button => '立即清理';
 
   @override
-  String get junk_clean_confirm_title => '清理垃圾文件';
+  String get junk_clean_confirm_title => '清理垃圾檔案';
 
   @override
   String junk_clean_confirm_body(Object size) {
-    return '将清理应用缓存与临时文件，预计释放 $size。备份、崩溃报告和快传接收的文件不会被删除。';
+    return '將清理應用快取與暫存檔案，預計釋放 $size。備份、當機報告和快傳接收的檔案不會被刪除。';
   }
 
   @override
-  String get junk_clean_cache_item => '应用缓存（缩略图、远程缓存）';
+  String get junk_clean_cache_item => '應用快取（縮圖、遠端快取）';
 
   @override
-  String get junk_clean_temp_item => '临时文件（下载残留等）';
+  String get junk_clean_temp_item => '暫存檔案（下載殘留等）';
 
   @override
   String junk_clean_done(Object size) {
-    return '已释放 $size';
+    return '已釋放 $size';
   }
 
   @override
-  String get junk_clean_none => '没有可清理的垃圾文件';
+  String get junk_clean_none => '沒有可清理的垃圾檔案';
 
   @override
-  String get junk_clean_failed => '清理失败，请稍后重试';
+  String get junk_clean_failed => '清理失敗，請稍後重試';
 
   @override
   String get cat_vault => '保險箱';
@@ -15278,16 +15312,16 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get crypt_params_locked_hint =>
-      '加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。';
+      '加密參數在建立後不可修改：改動會讓既有密文再也解不回明文名稱（磁碟上的密文名稱是依建立時的參數產生）。需要不同參數，請新建一份設定。';
 
   @override
-  String get vault_encrypt_new_files => '加密新增文件';
+  String get vault_encrypt_new_files => '加密新增檔案';
 
   @override
-  String get vault_encrypt_new_files_none => '没有发现需要加密的新文件';
+  String get vault_encrypt_new_files_none => '沒有發現需要加密的新檔案';
 
   @override
-  String get vault_encrypt_new_files_done => '新增文件已加密并合并进本目录';
+  String get vault_encrypt_new_files_done => '新增檔案已加密並合併進本目錄';
 
   @override
   String get vault_encrypt_files => '+ 加密檔案';
@@ -15723,5 +15757,39 @@ class L10nZhTw extends L10nZh {
   @override
   String share_safe_unsupported(Object count) {
     return '有 $count 個檔案無法移除中繼資料（可能已加密），已改用一般分享送出';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP 密碼';
+
+  @override
+  String get ui_ftp_password_required => '請設定密碼，否則 FTP 伺服器將拒絕所有用戶端登入';
+
+  @override
+  String get ui_web_share_password => '存取密碼';
+
+  @override
+  String get ui_web_share_password_hint => '留空則不啟用驗證（僅建議在可信區域網路使用）';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return '已為網際網路存取自動產生密碼：$password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel => '網際網路分享必須設定存取密碼';
+
+  @override
+  String get crypt_auto_encrypt_section => '自動加密';
+
+  @override
+  String get crypt_auto_encrypt_title => '自動加密新增檔案';
+
+  @override
+  String get crypt_auto_encrypt_desc => '對已原地加密的目錄開啟即時監聽，新檔案寫入完成後自動加密（需常駐通知）';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '正在保護 $count 個目錄，新檔案將自動加密';
   }
 }

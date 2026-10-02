@@ -2852,8 +2852,7 @@ class L10nRu extends L10n {
       'Кэш приложения (миниатюры, кэш удалённых файлов)';
 
   @override
-  String get junk_clean_temp_item =>
-      'Временные файлы (остатки загрузок)';
+  String get junk_clean_temp_item => 'Временные файлы (остатки загрузок)';
 
   @override
   String junk_clean_done(Object size) {
@@ -2864,8 +2863,7 @@ class L10nRu extends L10n {
   String get junk_clean_none => 'Нет мусорных файлов для очистки';
 
   @override
-  String get junk_clean_failed =>
-      'Не удалось очистить, попробуйте позже';
+  String get junk_clean_failed => 'Не удалось очистить, попробуйте позже';
 
   @override
   String get cat_vault => 'Сейф';
@@ -7912,8 +7910,7 @@ class L10nRu extends L10n {
   String get vault_encrypt_new_files => 'Шифровать новые файлы';
 
   @override
-  String get vault_encrypt_new_files_none =>
-      'Нет новых файлов для шифрования';
+  String get vault_encrypt_new_files_none => 'Нет новых файлов для шифрования';
 
   @override
   String get vault_encrypt_new_files_done =>
@@ -8388,5 +8385,43 @@ class L10nRu extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return 'Не удалось удалить метаданные у $count файл(ов) (возможно, они зашифрованы) — отправлены как есть';
+  }
+
+  @override
+  String get ui_ftp_password => 'Пароль FTP';
+
+  @override
+  String get ui_ftp_password_required =>
+      'Установите пароль, иначе FTP-сервер будет отклонять всех клиентов';
+
+  @override
+  String get ui_web_share_password => 'Пароль доступа';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'Оставьте пустым, чтобы отключить аутентификацию (только доверенная LAN)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'Автоматически созданный пароль для доступа через интернет: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'Для общего доступа через интернет требуется пароль доступа';
+
+  @override
+  String get crypt_auto_encrypt_section => 'Автошифрование';
+
+  @override
+  String get crypt_auto_encrypt_title => 'Автошифрование новых файлов';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'Отслеживает зашифрованные на месте каталоги и автоматически шифрует новые файлы после записи (требуется постоянное уведомление)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return 'Защищено каталогов: $count; новые файлы будут шифроваться автоматически';
   }
 }

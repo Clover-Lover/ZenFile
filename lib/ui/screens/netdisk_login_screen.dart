@@ -186,7 +186,7 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            color: theme.colorScheme.primary.withOpacity(0.06),
+            color: theme.colorScheme.primary.withValues(alpha: 0.06),
             child: Row(
               children: [
                 Icon(Icons.info_outline_rounded,
@@ -197,7 +197,7 @@ class _NetdiskLoginScreenState extends State<NetdiskLoginScreen> {
                     l10n.netdisk_login_hint,
                     style: TextStyle(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ),

@@ -198,7 +198,7 @@ class _VaultSessionUnlockBottomSheetState
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.12),
+              color: Colors.black.withValues(alpha: 0.12),
               blurRadius: 24,
               offset: const Offset(0, -4),
             ),
@@ -216,7 +216,7 @@ class _VaultSessionUnlockBottomSheetState
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withOpacity(0.15),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -250,7 +250,7 @@ class _VaultSessionUnlockBottomSheetState
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: _isError
                         ? theme.colorScheme.error
-                        : theme.colorScheme.onSurface.withOpacity(0.65),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -276,12 +276,12 @@ class _VaultSessionUnlockBottomSheetState
                       fontSize: 13,
                       letterSpacing: 0.3,
                       fontWeight: FontWeight.normal,
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                     filled: true,
                     fillColor: theme.brightness == Brightness.dark
-                        ? Colors.white.withOpacity(0.04)
-                        : Colors.black.withOpacity(0.02),
+                        ? Colors.white.withValues(alpha: 0.04)
+                        : Colors.black.withValues(alpha: 0.02),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -355,7 +355,8 @@ class _VaultSessionUnlockBottomSheetState
 /// - 否则弹出 [VaultSessionUnlockBottomSheet] 验证保险箱密码 / 指纹，
 ///   成功返回 `true`（并标记会话已解锁），取消或验证失败返回 `false`。
 ///
-/// 调用方应在返回 `false` 时中止当前加密相关操作。
+/// 调用方应在返回 `false` 时中止当前**明文出口**操作（解密/预览/导出/永久删除）；
+/// 加密属「保护方向」，不设此闸（2026-10-02 起，加密入口已全部改为主密码检查）。
 ///
 /// ⚠️ 若用户尚未设置保险箱密码（理论上保险箱页会引导先设置），无门禁可验证，
 /// 直接放行（返回 `true`），避免把用户锁死在无法继续的状态。

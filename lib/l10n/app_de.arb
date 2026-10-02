@@ -792,7 +792,8 @@
   "ui_favorites_swipe_hint": "Wischen Sie vom unteren Bildschirmrand nach oben, um die Favoriten zu öffnen",
   "@ui_favorites_swipe_hint": {
     "description": "ui\\widgets\\favorites_sheet.dart"
-  },  "@ui_new_favorite": {
+  },
+  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "Zu Favoriten hinzufügen",
@@ -1269,8 +1270,12 @@
   "@ui_month_group_header": {
     "description": "ui\\screens\\media_category_screen.dart",
     "placeholders": {
-      "year": {"type": "int"},
-      "month": {"type": "int"}
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
     }
   },
   "msgb8140039": "Älteste zuerst (nach Monat gruppiert)",
@@ -1834,7 +1839,6 @@
     "description": "ui\\screens\\more_settings_screen.dart"
   },
   "msg64a6476a": "Standard",
-
   "app_icon_classic2": "Klassisch 2",
   "@app_icon_classic2": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -1906,7 +1910,8 @@
   "app_icon_sunset_zf": "Abendrot-Lila",
   "@app_icon_sunset_zf": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  },  "@title": {
+  },
+  "@title": {
     "type": "text"
   },
   "title": "App-Symbol gewechselt zu {title}",
@@ -3232,17 +3237,29 @@
   "update_err_rate_limit": "GitHub-Limit erreicht. Bitte später erneut versuchen.",
   "update_err_http": "Der Server hat einen Fehler zurückgegeben (HTTP {code})",
   "@update_err_http": {
-    "placeholders": { "code": { "type": "String" } }
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   },
   "update_err_malformed": "Unerwartete Antwort vom Server. Bitte später erneut versuchen.",
   "update_err_version_unknown": "Aktuelle Version nicht lesbar. Starte die App neu und versuche es erneut.",
   "update_remote_version": "Neueste: {version}",
   "@update_remote_version": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
   "update_checked_at": "Geprüft um {time}",
   "@update_checked_at": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "update_degraded_hint": "Auf Web-Prüfung zurückgestuft – In-App-Download nicht möglich",
   "update_source_label": "Update-Quelle",
@@ -3252,7 +3269,6 @@
   "update_source_dialog_desc": "Leer lassen für die offizielle GitHub-API. Du kannst einen Mirror oder einen eigenen Endpunkt eintragen, der JSON in gleicher Struktur liefert; REPO in der URL steht für den Repository-Pfad.",
   "update_source_hint": "https://example.com/…/releases/latest",
   "update_source_invalid": "Ungültige Adresse – sie muss mit http:// oder https:// beginnen",
-
   "ui_paste_and_clear": "Einfügen und leeren",
   "ui_cut_paste_hint": "Ausschneiden = Verschieben; danach wird geleert",
   "ui_search_in_settings": "In den Einstellungen suchen",
@@ -4574,7 +4590,6 @@
       "count": {
         "type": "int"
       },
-
       "folderCount": {
         "type": "int"
       },
@@ -4602,8 +4617,7 @@
   "prop_hash_failed": "Hash-Berechnung fehlgeschlagen",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  }
-,
+  },
   "msg_add_subtitle": "Untertitel hinzufügen",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8210,7 +8224,7 @@
   },
   "ui_transfers": "Verbindungen",
   "ui_profile": "Profil",
-  "msg_coming_soon": "Bald verfügbar",
+  "msg_coming_soon": "Bald verfügbar",
   "toolbox_text_editor": "Texteditor",
   "@toolbox_text_editor": {
     "description": "toolbox: text editor entry"
@@ -8244,17 +8258,31 @@
     "description": "text editor: import text file"
   },
   "ui_bottom_tab_bar": "Navigationsleiste",
-  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "@ui_bottom_tab_bar": {
+    "description": "Navigation bar (visibility + position)"
+  },
   "ui_persistent_tab_bar": "Navigationsleiste auf anderen Seiten beibehalten",
   "ui_pick_bottom_tab": "Untereintrag wählen",
-  "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
+  "@ui_pick_bottom_tab": {
+    "description": "Choose bottom entry"
+  },
   "ui_long_press_switch": "Lange drücken zum Ändern",
-  "@ui_long_press_switch": {"description": "Long press to change"},
+  "@ui_long_press_switch": {
+    "description": "Long press to change"
+  },
   "ui_bottom_tab_slot": "Slot {index}",
-  "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
+  "@ui_bottom_tab_slot": {
+    "description": "Slot {index}",
+    "placeholders": {
+      "index": {
+        "type": "Object"
+      }
+    }
+  },
   "ui_bottom_tab_custom_hint": "Untereinträge können durch beliebige Verknüpfungen ersetzt werden",
-  "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
-,
+  "@ui_bottom_tab_custom_hint": {
+    "description": "Bottom entries can be replaced with any shortcut"
+  },
   "app_icon_original": "Klassisches Symbol",
   "@app_icon_original": {
     "description": "Classic app icon"
@@ -8266,8 +8294,7 @@
   "cut_to_other_window": "In das andere Fenster ausschneiden",
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
-  }
-,
+  },
   "auto_open_created_folder": "Erstellte Ordner automatisch öffnen",
   "@auto_open_created_folder": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -8275,8 +8302,7 @@
   "auto_open_created_folder_desc": "Nach der Erstellung automatisch in den Ordner wechseln",
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  }
-,
+  },
   "paste_keep_clipboard": "Zwischenablage nach dem Einfügen behalten",
   "@paste_keep_clipboard": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
@@ -8284,9 +8310,7 @@
   "paste_keep_clipboard_desc": "Ohne Häkchen wird die Zwischenablage nach dem Einfügen geleert",
   "@paste_keep_clipboard_desc": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
-  }
-
-,
+  },
   "netdisk": "Netzlaufwerk",
   "@netdisk": {
     "description": "ui\\screens\\transfers_screen.dart"
@@ -8332,21 +8356,85 @@
     "description": "services\\remote\\netdisk"
   },
   "share_normal_share": "Normale Freigabe",
-  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "@share_normal_share": {
+    "description": "Share mode: share original files as-is"
+  },
   "share_normal_share_hint": "Originaldatei ohne Änderungen teilen",
-  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "@share_normal_share_hint": {
+    "description": "Share mode hint: original file is not modified"
+  },
   "share_safe_share": "Sichere Freigabe",
-  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "@share_safe_share": {
+    "description": "Share mode: strip metadata (EXIF/GPS) before sharing"
+  },
   "share_safe_share_hint": "Entfernt Standort-, Kamera- und Dokumentdaten; die Originaldatei bleibt unverändert",
-  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "@share_safe_share_hint": {
+    "description": "Safe share hint: strips location/camera privacy data, original unchanged"
+  },
   "share_nothing_found": "Keine teilbaren Elemente gefunden.",
-  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "@share_nothing_found": {
+    "description": "Share: no shareable items found"
+  },
   "share_prepare_error": "Fehler beim Vorbereiten der Dateien: {error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "@share_prepare_error": {
+    "description": "Share: error while preparing files (with error text)",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "share_preparing_title": "Teilen wird vorbereitet…",
-  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "@share_preparing_title": {
+    "description": "Share: loading dialog title while preparing files"
+  },
   "share_preparing_body": "Dateien werden verarbeitet, bitte warten",
-  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "@share_preparing_body": {
+    "description": "Share: loading dialog body while preparing files"
+  },
   "share_safe_unsupported": "Bei {count} Datei(en) konnten die Metadaten nicht entfernt werden (möglicherweise verschlüsselt); sie wurden unverändert geteilt",
-  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
+  "@share_safe_unsupported": {
+    "description": "Safe share: files that could not be stripped were shared as-is",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "ui_ftp_password": "FTP-Passwort",
+  "@ui_ftp_password": {
+    "description": "Security setting: ui_ftp_password"
+  },
+  "ui_ftp_password_required": "Bitte ein Passwort festlegen, sonst weist der FTP-Server alle Clients ab",
+  "@ui_ftp_password_required": {
+    "description": "Security setting: ui_ftp_password_required"
+  },
+  "ui_web_share_password": "Zugriffspasswort",
+  "@ui_web_share_password": {
+    "description": "Security setting: ui_web_share_password"
+  },
+  "ui_web_share_password_hint": "Leer lassen, um die Authentifizierung zu deaktivieren (nur für vertrauenswürdige LANs empfohlen)",
+  "@ui_web_share_password_hint": {
+    "description": "Security setting: ui_web_share_password_hint"
+  },
+  "ui_web_share_password_generated": "Automatisch generiertes Passwort für den Internetzugriff: {password}",
+  "@ui_web_share_password_generated": {
+    "description": "Security setting: ui_web_share_password_generated"
+  },
+  "ui_web_share_password_required_for_tunnel": "Für das Internet-Sharing ist ein Zugriffspasswort erforderlich",
+  "@ui_web_share_password_required_for_tunnel": {
+    "description": "Security setting: ui_web_share_password_required_for_tunnel"
+  },
+  "crypt_auto_encrypt_section": "Auto-Verschlüsselung",
+  "@crypt_auto_encrypt_section": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_section"
+  },
+  "crypt_auto_encrypt_title": "Neue Dateien automatisch verschlüsseln",
+  "@crypt_auto_encrypt_title": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_title"
+  },
+  "crypt_auto_encrypt_desc": "Überwacht direk-verschlüsselte Verzeichnisse und verschlüsselt neue Dateien automatisch nach dem Schreiben (dauerhafte Benachrichtigung erforderlich)",
+  "@crypt_auto_encrypt_desc": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_desc"
+  },
+  "crypt_auto_encrypt_watching": "{count} Verzeichnis(se) werden geschützt; neue Dateien werden automatisch verschlüsselt",
+  "@crypt_auto_encrypt_watching": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_watching"
+  }
 }

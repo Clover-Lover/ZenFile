@@ -49,7 +49,9 @@
         android:requestLegacyExternalStorage="true"
         android:enableOnBackInvokedCallback="true"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:allowAudioPlaybackCapture="true">
+        android:allowAudioPlaybackCapture="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -452,6 +454,13 @@
 
         <service
             android:name=".WebSharingForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- 原地加密目录实时监听（新文件自动加密），事件回传 Dart 侧决策 -->
+        <service
+            android:name=".CryptWatchForegroundService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync" />

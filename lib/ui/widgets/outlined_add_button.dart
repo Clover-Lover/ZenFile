@@ -20,7 +20,7 @@ class OutlinedAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final iconColor = color ?? theme.colorScheme.primary;
-    final borderColor = iconColor.withOpacity(0.5);
+    final borderColor = iconColor.withValues(alpha: 0.5);
 
     return IconButton(
       visualDensity: VisualDensity.compact,

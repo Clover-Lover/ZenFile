@@ -466,9 +466,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
 
   /// 处理加密操作
   Future<void> _handleEncrypt(BuildContext context, FileManagerProvider provider, String path) async {
-    // 需求5：加密前先过保险箱会话闸门——本次启动已解锁则免验证，
-    // 未解锁则弹窗验证，重启应用后必须重新验证一次。
-    if (!await requireVaultSessionUnlock(context)) return;
+    // 加密是「保护方向」操作，不过保险箱会话闸门（闸门只守明文出口：解密/预览/导出）。
     if (!await _ensureMasterPassword(context)) return;
 
     // 选择加密模式
@@ -623,18 +621,18 @@ class _PaneBrowserState extends State<PaneBrowser> {
         curve: Curves.easeInOut,
         margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(isActive ? 1.0 : 0.85),
+          color: theme.colorScheme.surface.withValues(alpha: isActive ? 1.0 : 0.85),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isActive
-                ? theme.colorScheme.primary.withOpacity(0.3)
-                : theme.colorScheme.outline.withOpacity(0.08),
+                ? theme.colorScheme.primary.withValues(alpha: 0.3)
+                : theme.colorScheme.outline.withValues(alpha: 0.08),
             width: isActive ? 1.0 : 0.5,
           ),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.03),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.03),
                     blurRadius: 2,
                     spreadRadius: 0,
                   ),
@@ -650,7 +648,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                   if (tab.isLoading)
                     LinearProgressIndicator(
                       minHeight: 2.0,
-                      backgroundColor: theme.colorScheme.primary.withOpacity(
+                      backgroundColor: theme.colorScheme.primary.withValues(alpha: 
                         0.1,
                       ),
                       valueColor: AlwaysStoppedAnimation<Color>(
@@ -673,8 +671,8 @@ class _PaneBrowserState extends State<PaneBrowser> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       decoration: BoxDecoration(
                         color: isActive
-                            ? theme.colorScheme.primary.withOpacity(0.28)
-                            : theme.colorScheme.surfaceVariant.withOpacity(
+                            ? theme.colorScheme.primary.withValues(alpha: 0.28)
+                            : theme.colorScheme.surfaceVariant.withValues(alpha: 
                                 0.25,
                               ),
                         border: Border(
@@ -719,10 +717,10 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: theme.colorScheme.primary
-                                              .withOpacity(0.12),
+                                              .withValues(alpha: 0.12),
                                           border: Border.all(
                                             color: theme.colorScheme.primary
-                                                .withOpacity(0.45),
+                                                .withValues(alpha: 0.45),
                                             width: 0.5,
                                           ),
                                         ),
@@ -761,7 +759,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                     Broken.folder,
                                     size: 12,
                                     color: theme.colorScheme.onSurface
-                                        .withOpacity(0.65),
+                                        .withValues(alpha: 0.65),
                                   ),
                                   const SizedBox(width: 4),
                                   ConstrainedBox(
@@ -780,7 +778,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600,
                                         color: theme.colorScheme.onSurface
-                                            .withOpacity(0.75),
+                                            .withValues(alpha: 0.75),
                                       ),
                                     ),
                                   ),
@@ -789,7 +787,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                     Broken.document,
                                     size: 12,
                                     color: theme.colorScheme.onSurface
-                                        .withOpacity(0.65),
+                                        .withValues(alpha: 0.65),
                                   ),
                                   const SizedBox(width: 4),
                                   ConstrainedBox(
@@ -808,7 +806,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600,
                                         color: theme.colorScheme.onSurface
-                                            .withOpacity(0.75),
+                                            .withValues(alpha: 0.75),
                                       ),
                                     ),
                                   ),
@@ -833,8 +831,8 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                     borderRadius: BorderRadius.circular(11),
                                     // 接近实色的背景，覆盖到文件计数时不透出下层文字
                                     color: provider.isCut
-                                        ? Colors.orange.withOpacity(0.92)
-                                        : theme.colorScheme.primary.withOpacity(
+                                        ? Colors.orange.withValues(alpha: 0.92)
+                                        : theme.colorScheme.primary.withValues(alpha: 
                                             0.92,
                                           ),
                                     border: Border.all(
@@ -995,7 +993,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                                   color: theme
                                                       .colorScheme
                                                       .primary
-                                                      .withOpacity(0.08),
+                                                      .withValues(alpha: 0.08),
                                                   shape: BoxShape.circle,
                                                 ),
                                                 child: Icon(
@@ -1004,7 +1002,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                                   color: theme
                                                       .colorScheme
                                                       .primary
-                                                      .withOpacity(0.6),
+                                                      .withValues(alpha: 0.6),
                                                 ),
                                               ),
                                               const SizedBox(height: 16),
@@ -1308,9 +1306,9 @@ class _PaneBrowserState extends State<PaneBrowser> {
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+                    ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
                     : isHighlighted
-                    ? theme.colorScheme.primary.withOpacity(0.05)
+                    ? theme.colorScheme.primary.withValues(alpha: 0.05)
                     : Colors.transparent,
                 border: isHighlighted
                     ? Border(
@@ -1334,7 +1332,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.primary.withOpacity(0.1),
+                                : theme.colorScheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Icon(
@@ -1452,7 +1450,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                       parts.join(' • '),
                                       style: theme.textTheme.bodySmall?.copyWith(
                                         color: theme.textTheme.bodySmall?.color
-                                            ?.withOpacity(0.55),
+                                            ?.withValues(alpha: 0.55),
                                         fontSize: 10.5,
                                       ),
                                       maxLines: 1,
@@ -1553,9 +1551,9 @@ class _PaneBrowserState extends State<PaneBrowser> {
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+                    ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
                     : isHighlighted
-                    ? theme.colorScheme.primary.withOpacity(0.05)
+                    ? theme.colorScheme.primary.withValues(alpha: 0.05)
                     : Colors.transparent,
                 border: isHighlighted
                     ? Border(
@@ -1577,7 +1575,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? theme.colorScheme.primary
-                            : iconColor.withOpacity(0.1),
+                            : iconColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: ClipRRect(
@@ -1622,7 +1620,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                     ),
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: theme.textTheme.bodySmall?.color
-                                          ?.withOpacity(0.55),
+                                          ?.withValues(alpha: 0.55),
                                       fontSize: 9,
                                       letterSpacing: -0.2,
                                     ),
@@ -1636,7 +1634,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                 FileUtils.formatBytesCompact(file.size, 1),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.textTheme.bodySmall?.color
-                                      ?.withOpacity(0.55),
+                                      ?.withValues(alpha: 0.55),
                                   fontSize: 9,
                                   letterSpacing: -0.2,
                                 ),
@@ -1730,9 +1728,9 @@ class _PaneBrowserState extends State<PaneBrowser> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withOpacity(0.25), width: 1.2),
+          border: Border.all(color: color.withValues(alpha: 0.25), width: 1.2),
         ),
         child: Row(
           children: [
@@ -1744,7 +1742,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
-                  color: theme.colorScheme.onSurface.withOpacity(0.9),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
                 ),
               ),
             ),
@@ -1754,7 +1752,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -1773,7 +1771,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
               child: Container(
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Broken.close_square, color: color, size: 13),
@@ -1807,6 +1805,16 @@ class _CompactMediaThumbnail extends StatefulWidget {
 
 class _CompactMediaThumbnailState extends State<_CompactMediaThumbnail> {
   static final Map<String, Uint8List?> _apkIconCache = {};
+
+  // 图标缓存上限：APK 图标每张几 KB~几十 KB，条目数封顶防止极端场景
+  // （几万个 APK 的目录）内存无限增长；超限时丢弃最早写入的条目。
+  static void _apkIconCachePut(String path, Uint8List? bytes) {
+    if (!_apkIconCache.containsKey(path) && _apkIconCache.length >= 500) {
+      _apkIconCache.remove(_apkIconCache.keys.first);
+    }
+    _apkIconCache[path] = bytes;
+  }
+
   Uint8List? _videoThumb;
   Uint8List? _audioThumb;
   Uint8List? _apkIcon;
@@ -2015,7 +2023,7 @@ class _CompactMediaThumbnailState extends State<_CompactMediaThumbnail> {
     }
     try {
       final iconBytes = await AppManagerService.getApkIcon(path);
-      _apkIconCache[path] = iconBytes;
+      _apkIconCachePut(path, iconBytes);
       if (mounted && iconBytes != null) {
         setState(() {
           _apkIcon = iconBytes;
@@ -2301,7 +2309,7 @@ class _CompactMediaThumbnailState extends State<_CompactMediaThumbnail> {
             child: Container(
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 shape: BoxShape.circle,
               ),
               child: Icon(Broken.music, color: Colors.white, size: 10),

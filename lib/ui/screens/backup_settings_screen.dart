@@ -176,7 +176,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
                     subtitle: Text(
                       '${conn.type} · ${conn.host}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                     onTap: () => Navigator.pop(ctx, conn),
@@ -221,12 +221,12 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
         title: Text(l10n.ui_backup_confirm_title, style: TextStyle(color: theme.colorScheme.onSurface)),
         content: Text(
           l10n.ui_backup_confirm_message(_backupDirPath),
-          style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.8)),
+          style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.8)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.ui_cancel, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.7))),
+            child: Text(l10n.ui_cancel, style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7))),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -268,12 +268,12 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
         title: Text(l10n.ui_restore_restart_title, style: TextStyle(color: theme.colorScheme.onSurface)),
         content: Text(
           l10n.ui_restore_restart_message,
-          style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.8)),
+          style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.8)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.ui_cancel, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.7))),
+            child: Text(l10n.ui_cancel, style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7))),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -300,11 +300,11 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
 
     final scaffoldBg = theme.scaffoldBackgroundColor;
     final cardBg = isDark
-        ? Colors.white.withOpacity(0.04)
-        : Colors.black.withOpacity(0.03);
+        ? Colors.white.withValues(alpha: 0.04)
+        : Colors.black.withValues(alpha: 0.03);
     final borderCol = isDark
-        ? Colors.white.withOpacity(0.08)
-        : Colors.black.withOpacity(0.08);
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.black.withValues(alpha: 0.08);
 
     return Scaffold(
       backgroundColor: scaffoldBg,
@@ -392,7 +392,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.12),
+                  color: iconColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: iconColor, size: 24),
@@ -413,7 +413,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
                     Text(
                       subtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -421,7 +421,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
               ),
               Icon(
                 Icons.chevron_right,
-                color: theme.colorScheme.onSurface.withOpacity(0.4),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
               ),
             ],
           ),
@@ -502,7 +502,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
             Text(
               '${l10n.ui_backup_file} (${_backupFiles.length})',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -516,7 +516,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
               Text(
                 l10n.ui_no_backup_files,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
               )
             else
@@ -542,13 +542,13 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
-              ? theme.colorScheme.primary.withOpacity(0.1)
-              : theme.colorScheme.surface.withOpacity(0.5),
+              ? theme.colorScheme.primary.withValues(alpha: 0.1)
+              : theme.colorScheme.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
-                ? theme.colorScheme.primary.withOpacity(0.4)
-                : theme.colorScheme.onSurface.withOpacity(0.08),
+                ? theme.colorScheme.primary.withValues(alpha: 0.4)
+                : theme.colorScheme.onSurface.withValues(alpha: 0.08),
           ),
         ),
         child: Row(
@@ -556,7 +556,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
             Icon(
               isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
               size: 20,
-              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.4),
+              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -576,7 +576,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
                   Text(
                     '${_formatFileSize(file.size)} · ${_formatDateTime(file.modified)}',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ],
@@ -601,7 +601,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
           child: Text(
             label,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -610,7 +610,7 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
           child: Text(
             value,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.8),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
         ),

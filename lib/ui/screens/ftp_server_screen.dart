@@ -184,6 +184,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
     }
 
     final controller = TextEditingController(text: _ftpService.username);
+    final passwordController = TextEditingController(text: _ftpService.password);
     showDialog(
       context: context,
       builder: (context) {
@@ -192,12 +193,26 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
           backgroundColor: theme.scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(L10n.of(context).msg3bce2199, style: TextStyle(fontWeight: FontWeight.bold)),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              labelText: L10n.of(context).ui_username,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  labelText: L10n.of(context).ui_username,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: L10n.of(context).ui_ftp_password,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ],
           ),
           actions: [
             TextButton(
@@ -207,7 +222,18 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
             ElevatedButton(
               onPressed: () {
                 if (controller.text.trim().isNotEmpty) {
-                  _ftpService.configure(username: controller.text.trim(), anonymous: false);
+                  // 匿名关闭后必须校验密码，空密码会让所有客户端被拒之门外
+                  if (passwordController.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(L10n.of(context).ui_ftp_password_required)),
+                    );
+                    return;
+                  }
+                  _ftpService.configure(
+                    username: controller.text.trim(),
+                    password: passwordController.text.trim(),
+                    anonymous: false,
+                  );
                   Navigator.pop(context);
                   setState(() {});
                 } else {
@@ -271,11 +297,17 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                     );
                     return;
                   }
-                  _ftpService.configure(
-                    anonymous: !_ftpService.anonymous,
-                    username: !_ftpService.anonymous ? 'Anonymous' : 'admin',
-                  );
-                  setState(() {});
+                  if (_ftpService.anonymous) {
+                    // 切到需要认证的模式：必须先设置用户名和密码
+                    _showUserDialog();
+                  } else {
+                    _ftpService.configure(
+                      anonymous: true,
+                      username: 'Anonymous',
+                      password: '',
+                    );
+                    setState(() {});
+                  }
                   break;
                 case 'shortcut':
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -360,9 +392,9 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: isDark ? theme.colorScheme.surfaceVariant.withOpacity(0.3) : theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                          color: isDark ? theme.colorScheme.surfaceVariant.withValues(alpha: 0.3) : theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.05)),
+                          border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.05)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,7 +409,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: (isActive ? Colors.teal : Colors.amber).withOpacity(0.4),
+                                        color: (isActive ? Colors.teal : Colors.amber).withValues(alpha: 0.4),
                                         blurRadius: 8,
                                         spreadRadius: 1,
                                       ),
@@ -397,7 +429,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                               children: [
                                 Text(
                                   L10n.of(context).msg7ae644e4,
-                                  style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontWeight: FontWeight.w500),
+                                  style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontWeight: FontWeight.w500),
                                 ),
                                 Text(
                                   L10n.of(context).ui_connected,
@@ -411,7 +443,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                               children: [
                                 Text(
                                   L10n.of(context).msg5d57821d,
-                                  style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontWeight: FontWeight.w500),
+                                  style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontWeight: FontWeight.w500),
                                 ),
                                 SelectableText(
                                   'ftp://${_ftpService.ipAddress}:${_ftpService.port}',
@@ -427,9 +459,9 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                       // Settings Card
                       Container(
                         decoration: BoxDecoration(
-                          color: isDark ? theme.colorScheme.surfaceVariant.withOpacity(0.3) : theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                          color: isDark ? theme.colorScheme.surfaceVariant.withValues(alpha: 0.3) : theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.05)),
+                          border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.05)),
                         ),
                         child: Column(
                           children: [
@@ -461,7 +493,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                               title: Text(L10n.of(context).msg5d57821d, style: const TextStyle(fontWeight: FontWeight.w500)),
                               trailing: Text(
                                 '${_ftpService.port}',
-                                style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontWeight: FontWeight.bold),
+                                style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontWeight: FontWeight.bold),
                               ),
                               onTap: _showPortDialog,
                             ),
@@ -471,7 +503,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
                               title: Text(L10n.of(context).ui_username, style: const TextStyle(fontWeight: FontWeight.w500)),
                               trailing: Text(
                                 _ftpService.anonymous ? L10n.of(context).ui_anonymous : _ftpService.username,
-                                style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontWeight: FontWeight.bold),
+                                style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6), fontWeight: FontWeight.bold),
                               ),
                               onTap: _showUserDialog,
                             ),
@@ -489,7 +521,7 @@ class _FtpServerScreenState extends State<FtpServerScreen> {
 
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Divider(color: theme.colorScheme.onSurface.withOpacity(0.08)),
+                              child: Divider(color: theme.colorScheme.onSurface.withValues(alpha: 0.08)),
                             ),
 
                              // FTPES Row

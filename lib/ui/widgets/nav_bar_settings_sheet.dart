@@ -57,7 +57,7 @@ class _NavBarSettingsSheetBody extends StatelessWidget {
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.onSurface.withOpacity(0.15),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -88,7 +88,7 @@ class _NavBarSettingsSheetBody extends StatelessWidget {
                     l10n.msg309e2a28,
                     style: TextStyle(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -104,7 +104,7 @@ class _NavBarSettingsSheetBody extends StatelessWidget {
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color:
-                                theme.colorScheme.onSurface.withOpacity(0.75),
+                                theme.colorScheme.onSurface.withValues(alpha: 0.75),
                           ),
                         ),
                       ),
@@ -121,7 +121,7 @@ class _NavBarSettingsSheetBody extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface.withOpacity(0.75),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -169,9 +169,9 @@ class NavBarPositionSegments extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.colorScheme.onSurface.withOpacity(0.1)),
+        border: Border.all(color: theme.colorScheme.onSurface.withValues(alpha: 0.1)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -207,7 +207,7 @@ class NavBarPositionSegments extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
           color: selected
-              ? theme.colorScheme.primary.withOpacity(0.15)
+              ? theme.colorScheme.primary.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(9),
         ),
@@ -218,7 +218,7 @@ class NavBarPositionSegments extends StatelessWidget {
             fontWeight: selected ? FontWeight.bold : FontWeight.w500,
             color: selected
                 ? theme.colorScheme.primary
-                : theme.colorScheme.onSurface.withOpacity(0.6),
+                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ),
@@ -254,13 +254,13 @@ class _NavBarPositionTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: selected
-              ? theme.colorScheme.primary.withOpacity(0.08)
-              : theme.colorScheme.surface.withOpacity(0.5),
+              ? theme.colorScheme.primary.withValues(alpha: 0.08)
+              : theme.colorScheme.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: selected
-                ? theme.colorScheme.primary.withOpacity(0.4)
-                : theme.colorScheme.outline.withOpacity(0.1),
+                ? theme.colorScheme.primary.withValues(alpha: 0.4)
+                : theme.colorScheme.outline.withValues(alpha: 0.1),
             width: selected ? 1.5 : 1,
           ),
         ),
@@ -270,8 +270,8 @@ class _NavBarPositionTile extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: selected
-                    ? theme.colorScheme.primary.withOpacity(0.15)
-                    : theme.colorScheme.onSurface.withOpacity(0.05),
+                    ? theme.colorScheme.primary.withValues(alpha: 0.15)
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -279,7 +279,7 @@ class _NavBarPositionTile extends StatelessWidget {
                 size: 20,
                 color: selected
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withOpacity(0.5),
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(width: 14),
@@ -302,7 +302,7 @@ class _NavBarPositionTile extends StatelessWidget {
                     subtitle,
                     style: TextStyle(
                       fontSize: 11.5,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ],

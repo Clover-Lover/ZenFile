@@ -236,6 +236,12 @@ class CryptMountService {
   /// 用户解密/清空后残留的登记不得让明文目录重新被判成加密目录。
   static const String _kInPlaceContainerDirsKey = 'crypt_inplace_container_dirs';
 
+  /// 「原地加密容器目录登记表」发生变化时的回调（供自动加密服务刷新监听表）。
+  ///
+  /// 用回调而非 import 反向依赖：登记表是底层存储，自动加密服务在其上层；
+  /// 由服务在 init 时赋值，未赋值时登记照常工作。
+  static Future<void> Function(List<String> dirs)? onInPlaceContainerDirsChanged;
+
   /// 读取所有「整体原地加密但目录名保持明文」的容器目录（已 POSIX 归一）
   static Future<List<String>> loadInPlaceContainerDirs() async {
     try {
@@ -264,6 +270,9 @@ class CryptMountService {
       dirs.add(normalized);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_kInPlaceContainerDirsKey, jsonEncode(dirs));
+      try {
+        await onInPlaceContainerDirsChanged?.call(dirs);
+      } catch (_) {}
     } catch (_) {}
   }
 
@@ -279,6 +288,9 @@ class CryptMountService {
       if (kept.length == dirs.length) return;
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_kInPlaceContainerDirsKey, jsonEncode(kept));
+      try {
+        await onInPlaceContainerDirsChanged?.call(kept);
+      } catch (_) {}
     } catch (_) {}
   }
 

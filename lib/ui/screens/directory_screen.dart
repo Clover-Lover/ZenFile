@@ -161,6 +161,11 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       remoteRoot: provider.activeRootPath,
       connName: provider.activeTab.remoteConnection?.name ?? '',
       rootLabel: L10n.of(context).msgc2b9f4b9,
+      // 冲突期间 currentPath 可能是密文物理路径（plainNameClash 直达），
+      // labels 用解密后的虚拟路径显示；targets 仍由 currentPath 计算
+      // （导航必须走物理路径，虚拟路径会被同名明文目录短路劫持）。
+      displayPath:
+          provider.activeTab.isRemote ? null : provider.cryptDisplayPath(currentPath),
     );
     final labels = bc.labels;
     final targets = bc.targets;
@@ -231,16 +236,16 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     required bool isActive,
   }) {
     final bgColor = isActive
-        ? theme.colorScheme.primary.withOpacity(0.15)
-        : theme.colorScheme.surfaceVariant.withOpacity(0.5);
+        ? theme.colorScheme.primary.withValues(alpha: 0.15)
+        : theme.colorScheme.surfaceVariant.withValues(alpha: 0.5);
     final textColor = isActive
         ? theme.colorScheme.primary
-        : theme.colorScheme.onSurface.withOpacity(0.75);
+        : theme.colorScheme.onSurface.withValues(alpha: 0.75);
     final fontWeight = isActive ? FontWeight.bold : FontWeight.w500;
     const arrowWidth = 8.0;
     final borderColor = isActive
-        ? theme.colorScheme.primary.withOpacity(0.4)
-        : theme.colorScheme.onSurface.withOpacity(0.12);
+        ? theme.colorScheme.primary.withValues(alpha: 0.4)
+        : theme.colorScheme.onSurface.withValues(alpha: 0.12);
     final clipper = _BreadcrumbClipper(
       hasLeftIndent: !isFirst,
       hasRightArrow: true,
@@ -307,10 +312,10 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                       height: 22,
                       width: 22,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.10),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.10),
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withOpacity(0.25),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.25),
                           width: 1,
                         ),
                       ),
@@ -359,10 +364,10 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                         width: 22,
                         margin: const EdgeInsets.only(left: 8),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withOpacity(0.10),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.10),
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(
-                            color: theme.colorScheme.primary.withOpacity(0.25),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.25),
                             width: 1,
                           ),
                         ),
@@ -458,8 +463,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       decoration: BoxDecoration(
         color: AppTheme.getAmoledSurface(theme),
         border: Border(
-          top: BorderSide(color: theme.dividerColor.withOpacity(0.08), width: 0.5),
-          bottom: BorderSide(color: theme.dividerColor.withOpacity(0.08), width: 0.5),
+          top: BorderSide(color: theme.dividerColor.withValues(alpha: 0.08), width: 0.5),
+          bottom: BorderSide(color: theme.dividerColor.withValues(alpha: 0.08), width: 0.5),
         ),
       ),
       child: Row(
@@ -469,7 +474,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
           IconButton(
             icon: Icon(
               Broken.arrow_left_2,
-              color: provider.canGoBack ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.3),
+              color: provider.canGoBack ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.3),
             ),
             tooltip: L10n.of(context).ui_nav_back,
             onPressed: provider.canGoBack ? () => _goBack(provider) : null,
@@ -478,7 +483,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
           IconButton(
             icon: Icon(
               Broken.arrow_right_3,
-              color: provider.canGoForward ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.3),
+              color: provider.canGoForward ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.3),
             ),
             tooltip: L10n.of(context).ui_nav_forward,
             onPressed: provider.canGoForward ? () => _goForward(provider) : null,
@@ -516,7 +521,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
           IconButton(
             icon: Icon(
               Broken.arrow_up_1,
-              color: provider.canGoUp ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.3),
+              color: provider.canGoUp ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.3),
             ),
             tooltip: L10n.of(context).ui_go_up,
             onPressed: provider.canGoUp ? () => _goUp(provider) : null,
@@ -874,8 +879,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
 
   /// 处理加密操作
   Future<void> _handleEncrypt(BuildContext context, FileManagerProvider provider, String path) async {
-    // 需求5：加密前先过保险箱会话闸门（已解锁免验证 / 未解锁弹窗 / 重启后重验）
-    if (!await requireVaultSessionUnlock(context)) return;
+    // 加密是「保护方向」操作，不过保险箱会话闸门（闸门只守明文出口：解密/预览/导出）。
+    // 主密码检查必须保留——那是真正执行加密的钥匙（首次使用会引导设置）。
     if (!await _ensureMasterPassword(context)) return;
 
     final mode = await BulkCryptActions.promptEncryptionMode(context);
@@ -1126,7 +1131,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), borderRadius: BorderRadius.circular(2))),
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2))),
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -1172,13 +1177,13 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                         width: 42,
                         height: 42,
                         decoration: BoxDecoration(
-                          color: isSelected ? theme.colorScheme.primary.withOpacity(0.2) : theme.colorScheme.surfaceVariant,
+                          color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.2) : theme.colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(vol.isInternal ? Broken.folder_open : Icons.sd_storage_rounded, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface, size: 24),
                       ),
                       title: Text(vol.isInternal ? L10n.of(context).msg21cefa9b : vol.name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.w600, fontSize: 16)),
-                      subtitle: Text(vol.path, style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.6))),
+                      subtitle: Text(vol.path, style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
                       trailing: isSelected ? Icon(Icons.check_circle, color: theme.colorScheme.primary) : null,
                       onTap: () {
                         Navigator.pop(ctx);
@@ -1192,13 +1197,13 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                       width: 42,
                       height: 42,
                       decoration: BoxDecoration(
-                        color: provider.rootPath == '/' ? theme.colorScheme.primary.withOpacity(0.2) : theme.colorScheme.surfaceVariant,
+                        color: provider.rootPath == '/' ? theme.colorScheme.primary.withValues(alpha: 0.2) : theme.colorScheme.surfaceVariant,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(Broken.cpu, color: provider.rootPath == '/' ? theme.colorScheme.primary : theme.colorScheme.onSurface, size: 24),
                     ),
                     title: Text(L10n.of(context).msgd730e478, style: TextStyle(fontWeight: provider.rootPath == '/' ? FontWeight.bold : FontWeight.w600, fontSize: 16)),
-                    subtitle: Text('/', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.6))),
+                    subtitle: Text('/', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
                     trailing: provider.rootPath == '/' ? Icon(Icons.check_circle, color: theme.colorScheme.primary) : null,
                     onTap: () {
                       Navigator.pop(ctx);
@@ -1213,13 +1218,13 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                         width: 42,
                         height: 42,
                         decoration: BoxDecoration(
-                          color: isSelected ? theme.colorScheme.primary.withOpacity(0.2) : theme.colorScheme.surfaceVariant,
+                          color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.2) : theme.colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(Broken.folder_favorite, color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface, size: 24),
                       ),
                       title: Text(item.label, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.w600, fontSize: 16)),
-                      subtitle: Text(item.path, style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.6))),
+                      subtitle: Text(item.path, style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -1310,13 +1315,13 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                           width: 42,
                           height: 42,
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withOpacity(0.12),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(iconData, color: theme.colorScheme.primary, size: 22),
                         ),
                         title: Text(conn.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                        subtitle: Text('${conn.type} • ${conn.host}', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withOpacity(0.6))),
+                        subtitle: Text('${conn.type} • ${conn.host}', style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6))),
                         trailing: IconButton(
                           icon: const Icon(Broken.trash, size: 20, color: Colors.redAccent),
                           tooltip: L10n.of(context).msgcc51d6c2,
@@ -1468,7 +1473,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                 if (provider.isLoading)
                   LinearProgressIndicator(
                     minHeight: 2.5,
-                    backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                    backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
                     valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
                   ),
                 Expanded(
@@ -1540,10 +1545,10 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                               : 0.0,
                                           padding: const EdgeInsets.symmetric(horizontal: 8),
                                           decoration: BoxDecoration(
-                                            color: theme.colorScheme.surfaceVariant.withOpacity(0.25),
+                                            color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.25),
                                             border: Border(
                                               bottom: BorderSide(
-                                                color: theme.colorScheme.outline.withOpacity(0.08),
+                                                color: theme.colorScheme.outline.withValues(alpha: 0.08),
                                               ),
                                             ),
                                           ),
@@ -1567,9 +1572,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                           margin: const EdgeInsets.only(right: 6),
                                                           decoration: BoxDecoration(
                                                             shape: BoxShape.circle,
-                                                            color: theme.colorScheme.primary.withOpacity(0.12),
+                                                            color: theme.colorScheme.primary.withValues(alpha: 0.12),
                                                             border: Border.all(
-                                                              color: theme.colorScheme.primary.withOpacity(0.45),
+                                                              color: theme.colorScheme.primary.withValues(alpha: 0.45),
                                                               width: 0.5,
                                                             ),
                                                           ),
@@ -1593,7 +1598,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                     // 中间：文件/文件夹计数（开启计数且非多选时显示，固定不随滚动消失）
                                                     if (provider.showFolderFileCount && !isSelectionMode) ...[
                                                       const SizedBox(width: 10),
-                                                      Icon(Broken.folder, size: 13, color: theme.colorScheme.onSurface.withOpacity(0.7)),
+                                                      Icon(Broken.folder, size: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                                                       const SizedBox(width: 4),
                                                       ConstrainedBox(
                                                         constraints: const BoxConstraints(maxWidth: 90),
@@ -1606,12 +1611,12 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                           style: TextStyle(
                                                             fontSize: 11,
                                                             fontWeight: FontWeight.w600,
-                                                            color: theme.colorScheme.onSurface.withOpacity(0.8),
+                                                            color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                                                           ),
                                                         ),
                                                       ),
                                                       const SizedBox(width: 12),
-                                                      Icon(Broken.document, size: 13, color: theme.colorScheme.onSurface.withOpacity(0.7)),
+                                                      Icon(Broken.document, size: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                                                       const SizedBox(width: 4),
                                                       ConstrainedBox(
                                                         constraints: const BoxConstraints(maxWidth: 90),
@@ -1624,7 +1629,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                           style: TextStyle(
                                                             fontSize: 11,
                                                             fontWeight: FontWeight.w600,
-                                                            color: theme.colorScheme.onSurface.withOpacity(0.8),
+                                                            color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                                                           ),
                                                         ),
                                                       ),
@@ -1644,8 +1649,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(11),
                                                         color: provider.isCut
-                                                            ? Colors.orange.withOpacity(0.92)
-                                                            : theme.colorScheme.primary.withOpacity(0.92),
+                                                            ? Colors.orange.withValues(alpha: 0.92)
+                                                            : theme.colorScheme.primary.withValues(alpha: 0.92),
                                                         border: Border.all(
                                                           color: provider.isCut
                                                               ? Colors.orange
@@ -1716,13 +1721,13 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                   Container(
                                     padding: const EdgeInsets.all(24),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+                                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Icon(
                                       Broken.folder_open,
                                       size: 72,
-                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+                                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
                                     ),
                                   ),
                                   const SizedBox(height: 24),
@@ -1738,7 +1743,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                     L10n.of(context).msg551f98ba,
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.55),
+                                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.55),
                                         ),
                                   ),
                                 ],
@@ -1970,9 +1975,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.25), width: 1.5),
+          border: Border.all(color: color.withValues(alpha: 0.25), width: 1.5),
         ),
         child: Row(
           children: [
@@ -1984,14 +1989,14 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13.5,
-                  color: theme.colorScheme.onSurface.withOpacity(0.9),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
                 ),
               ),
             ),
             TextButton.icon(
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                backgroundColor: color.withOpacity(0.15),
+                backgroundColor: color.withValues(alpha: 0.15),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: () => provider.toggleHideFoldersInFilter(),
@@ -2016,7 +2021,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Broken.close_square, color: color, size: 16),
@@ -2150,8 +2155,8 @@ class _AnimatedTitleButtonState extends State<_AnimatedTitleButton> with SingleT
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(14),
-            splashColor: theme.colorScheme.primary.withOpacity(0.3),
-            highlightColor: theme.colorScheme.primary.withOpacity(0.15),
+            splashColor: theme.colorScheme.primary.withValues(alpha: 0.3),
+            highlightColor: theme.colorScheme.primary.withValues(alpha: 0.15),
             onTapDown: (_) => _controller.forward(),
             onTapCancel: () => _controller.reverse(),
             onTap: () {
@@ -2171,7 +2176,7 @@ class _AnimatedTitleButtonState extends State<_AnimatedTitleButton> with SingleT
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.15),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(Broken.arrow_down_2, size: 16, color: theme.colorScheme.primary),

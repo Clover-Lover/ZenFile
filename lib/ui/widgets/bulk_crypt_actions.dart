@@ -52,12 +52,12 @@ class BulkCryptActions {
   }
 
   /// 对 [provider] 当前选中的本地未加密项执行批量加密。
-  /// 已包含保险箱会话闸门与主密码检查。
+  /// 加密是「保护方向」操作，不要求保险箱会话闸门（闸门只守明文出口：解密/预览/导出）；
+  /// 主密码检查必须保留——那是真正执行加密的钥匙。
   static Future<void> encryptSelected(
     BuildContext context,
     FileManagerProvider provider,
   ) async {
-    if (!await requireVaultSessionUnlock(context)) return;
     if (!await ensureMasterPassword(context)) return;
     if (!context.mounted) return;
     final l10n = L10n.of(context);
@@ -266,7 +266,8 @@ class BulkCryptActions {
   /// 远程加密目录（cryptremote://）：选择本地文件，加密后上传到当前远程目录。
   ///
   /// 密文只存在于后端，本地没有任何残留；文件名与内容均按当前挂载点的
-  /// 加密配置加密。会话闸门由 provider 内部处理。
+  /// 加密配置加密。加密是「保护方向」操作，不过保险箱会话闸门
+  /// （`encryptUploadToRemoteCrypt` 本就无闸，注释按 2026-10-02 需求修正）。
   static Future<void> encryptUploadRemoteCrypt(
     BuildContext context,
     FileManagerProvider provider,
@@ -299,6 +300,7 @@ class BulkCryptActions {
   ///
   /// 进度弹窗与本地「原地加密」完全一致（双层圆环：外圈整体、内圈当前文件字节），
   /// 历史实现用的是单圈圆形遮罩，与本地观感不一致（用户反馈）。
+  /// 加密是「保护方向」操作，不要求保险箱会话闸门（明文出口才验）。
   static Future<void> encryptRemoteInPlace(
     BuildContext context,
     FileManagerProvider provider,
@@ -306,7 +308,6 @@ class BulkCryptActions {
   ) async {
     final valid = paths.where((p) => p.isNotEmpty).toList();
     if (valid.isEmpty) return;
-    if (!await requireVaultSessionUnlock(context)) return;
     if (!await ensureMasterPassword(context)) return;
     if (!context.mounted) return;
     final l10n = L10n.of(context);

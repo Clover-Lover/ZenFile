@@ -11,6 +11,15 @@ class FTPSocket {
   final Logger logger;
   final int timeout;
   final SecurityType securityType;
+
+  /// ── ZenFile 本地补丁（2026-10-02）─────────────────────────────────────
+  /// 是否跳过 TLS 证书校验。**默认 false（严格校验）**。
+  ///
+  /// 上游在 FTPS/FTPES 两条路径写死 `onBadCertificate: (_) => true`，
+  /// 等于对中间人攻击完全敞开。现改为显式 opt-in：仅当调用方明确传入
+  /// `insecureSkipVerify: true`（并自行承担自签名证书风险）时才跳过校验。
+  final bool insecureSkipVerify;
+
   late RawSocket _socket;
   TransferMode transferMode = TransferMode.passive;
   TransferType _transferType = TransferType.auto;
@@ -45,7 +54,7 @@ class FTPSocket {
   /// 数据连接是本地可立即判定的连接（同机房/局域网），8s 已非常宽裕。
   Duration dataConnectTimeout;
 
-  FTPSocket(this.host, this.port, this.securityType, this.logger, this.timeout)
+  FTPSocket(this.host, this.port, this.securityType, this.logger, this.timeout, {this.insecureSkipVerify = false})
       : dataConnectTimeout =
             Duration(seconds: timeout < 8 ? timeout : 8);
 
@@ -239,7 +248,7 @@ class FTPSocket {
           host,
           port,
           timeout: timeout,
-          onBadCertificate: (certificate) => true,
+          onBadCertificate: insecureSkipVerify ? (certificate) => true : null,
         );
       } else {
         _socket = await RawSocket.connect(
@@ -269,7 +278,7 @@ class FTPSocket {
       }
 
       _socket = await RawSecureSocket.secure(_socket,
-          onBadCertificate: (certificate) => true);
+          onBadCertificate: insecureSkipVerify ? (certificate) => true : null);
     }
 
     if ([SecurityType.ftpes, SecurityType.ftps].contains(securityType)) {

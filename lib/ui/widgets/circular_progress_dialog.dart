@@ -92,7 +92,7 @@ class CircularProgressDialog extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withValues(alpha: 0.4),
                     blurRadius: 30,
                     spreadRadius: 2,
                     offset: const Offset(0, 12),
@@ -110,7 +110,7 @@ class CircularProgressDialog extends StatelessWidget {
                       strokeWidth: 8,
                       backgroundColor: Colors.transparent,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.primary.withOpacity(0.08),
+                        theme.colorScheme.primary.withValues(alpha: 0.08),
                       ),
                     ),
                   ),
@@ -146,7 +146,7 @@ class CircularProgressDialog extends StatelessWidget {
                         strokeWidth: 5,
                         backgroundColor: Colors.transparent,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          innerGreen.withOpacity(0.10),
+                          innerGreen.withValues(alpha: 0.10),
                         ),
                       ),
                     ),
@@ -216,7 +216,7 @@ class CircularProgressDialog extends StatelessWidget {
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               color: theme.colorScheme.onSurface
-                                  .withOpacity(0.6),
+                                  .withValues(alpha: 0.6),
                             ),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
@@ -239,10 +239,10 @@ class CircularProgressDialog extends StatelessWidget {
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: theme.colorScheme
                                           .onSurface
-                                          .withOpacity(0.6),
+                                          .withValues(alpha: 0.6),
                                       side: BorderSide(
                                         color: theme.colorScheme.outline
-                                            .withOpacity(0.2),
+                                            .withValues(alpha: 0.2),
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -270,7 +270,7 @@ class CircularProgressDialog extends StatelessWidget {
                                           theme.colorScheme.primary,
                                       side: BorderSide(
                                         color: theme.colorScheme.primary
-                                            .withOpacity(0.3),
+                                            .withValues(alpha: 0.3),
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:

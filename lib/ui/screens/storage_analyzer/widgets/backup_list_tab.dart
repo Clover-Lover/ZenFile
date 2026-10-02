@@ -91,7 +91,7 @@ class _BackupListTabState extends State<BackupListTab> {
               topLeft: Radius.circular(28),
               topRight: Radius.circular(28),
             ),
-            border: Border.all(color: theme.dividerColor.withOpacity(0.08)),
+            border: Border.all(color: theme.dividerColor.withValues(alpha: 0.08)),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
           child: SafeArea(
@@ -105,7 +105,7 @@ class _BackupListTabState extends State<BackupListTab> {
                       width: 56,
                       height: 56,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.08),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: ClipRRect(
@@ -134,7 +134,7 @@ class _BackupListTabState extends State<BackupListTab> {
                           Text(
                             '${isApks ? L10n.of(context).ui_app_split_apk : L10n.of(context).ui_app_single_apk} • v${item['version']}',
                             style: TextStyle(
-                              color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+                              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
                               fontSize: 12,
                             ),
                             maxLines: 1,
@@ -158,7 +158,7 @@ class _BackupListTabState extends State<BackupListTab> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                Divider(color: theme.dividerColor.withOpacity(0.1)),
+                Divider(color: theme.dividerColor.withValues(alpha: 0.1)),
                 const SizedBox(height: 12),
                 
                 // Actions List
@@ -242,7 +242,7 @@ class _BackupListTabState extends State<BackupListTab> {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: color, size: 20),
@@ -274,7 +274,7 @@ class _BackupListTabState extends State<BackupListTab> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.08),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.08),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -295,7 +295,7 @@ class _BackupListTabState extends State<BackupListTab> {
                     : L10n.of(context).ui_app_backup_empty_subtitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                  color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
                   fontSize: 13,
                 ),
               ),
@@ -320,7 +320,7 @@ class _BackupListTabState extends State<BackupListTab> {
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: theme.dividerColor.withOpacity(0.06),
+              color: theme.dividerColor.withValues(alpha: 0.06),
               width: 1.0,
             ),
           ),
@@ -336,7 +336,7 @@ class _BackupListTabState extends State<BackupListTab> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.08),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ClipRRect(
@@ -366,7 +366,7 @@ class _BackupListTabState extends State<BackupListTab> {
                         Text(
                           '${isApks ? L10n.of(context).ui_app_split_apk : L10n.of(context).ui_app_single_apk} • v${item['version']}',
                           style: TextStyle(
-                            color: theme.textTheme.bodySmall?.color?.withOpacity(0.55),
+                            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.55),
                             fontSize: 11,
                           ),
                           maxLines: 1,
@@ -427,7 +427,7 @@ class _ApkIconWidget extends StatelessWidget {
             fit: BoxFit.contain,
           );
         }
-        return Icon(Broken.box, size: size * 0.8, color: Theme.of(context).colorScheme.primary.withOpacity(0.5));
+        return Icon(Broken.box, size: size * 0.8, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5));
       },
     );
   }

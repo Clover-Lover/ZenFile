@@ -45,7 +45,7 @@ class FolderGridItem extends StatelessWidget {
 
     final child = Card(
       color: isSelected
-          ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+          ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
           : theme.colorScheme.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -53,7 +53,7 @@ class FolderGridItem extends StatelessWidget {
         side: BorderSide(
           color: isSelected
               ? theme.colorScheme.primary
-              : theme.dividerColor.withOpacity(0.1),
+              : theme.dividerColor.withValues(alpha: 0.1),
           width: isSelected ? 1.5 : 1.0,
         ),
       ),
@@ -104,7 +104,7 @@ class FolderGridItem extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? theme.colorScheme.primary
-                                    : theme.colorScheme.primary.withOpacity(0.1),
+                                    : theme.colorScheme.primary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: (() {
@@ -296,7 +296,7 @@ class FolderGridItem extends StatelessWidget {
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     fontSize: 10 * (1 + (iconScale - 1) * 0.2),
                                     color: theme.textTheme.bodySmall?.color
-                                        ?.withOpacity(0.6),
+                                        ?.withValues(alpha: 0.6),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -335,7 +335,7 @@ class FolderGridItem extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.9),
+                    color: Colors.orange.withValues(alpha: 0.9),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -393,10 +393,10 @@ class FolderGridItem extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.all(4.0),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.06),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.25),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.25),
                     width: 1.5,
                   ),
                 ),

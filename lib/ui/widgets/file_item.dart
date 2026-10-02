@@ -73,7 +73,7 @@ class FileItem extends StatelessWidget {
     final child = Card(
       margin: cardMargin,
       color: isSelected
-          ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+          ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
           : theme.colorScheme.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -81,7 +81,7 @@ class FileItem extends StatelessWidget {
         side: BorderSide(
           color: isSelected
               ? theme.colorScheme.primary
-              : theme.dividerColor.withOpacity(0.1),
+              : theme.dividerColor.withValues(alpha: 0.1),
           width: isSelected ? 1.5 : 1.0,
         ),
       ),
@@ -108,7 +108,7 @@ class FileItem extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? theme.colorScheme.primary
-                                : iconColor.withOpacity(0.1),
+                                : iconColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: ClipRRect(
@@ -203,7 +203,7 @@ class FileItem extends StatelessWidget {
                                                 .textTheme
                                                 .bodySmall
                                                 ?.color
-                                                ?.withOpacity(0.6),
+                                                ?.withValues(alpha: 0.6),
                                           ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -215,7 +215,7 @@ class FileItem extends StatelessWidget {
                                   FileUtils.formatBytes(file.size, 2),
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: theme.textTheme.bodySmall?.color
-                                        ?.withOpacity(0.6),
+                                        ?.withValues(alpha: 0.6),
                                   ),
                                 ),
                               ],
@@ -282,10 +282,10 @@ class FileItem extends StatelessWidget {
               child: Container(
                 margin: cardMargin,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.06),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.25),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.25),
                     width: 1.5,
                   ),
                 ),
@@ -319,6 +319,16 @@ class MediaThumbnail extends StatefulWidget {
 
 class _MediaThumbnailState extends State<MediaThumbnail> {
   static final Map<String, Uint8List?> _apkIconCache = {};
+
+  // 图标缓存上限：APK 图标每张几 KB~几十 KB，条目数封顶防止极端场景
+  // （几万个 APK 的目录）内存无限增长；超限时丢弃最早写入的条目。
+  static void _apkIconCachePut(String path, Uint8List? bytes) {
+    if (!_apkIconCache.containsKey(path) && _apkIconCache.length >= 500) {
+      _apkIconCache.remove(_apkIconCache.keys.first);
+    }
+    _apkIconCache[path] = bytes;
+  }
+
   Uint8List? _videoThumb;
   Uint8List? _audioThumb;
   Uint8List? _apkIcon;
@@ -574,7 +584,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
     }
     try {
       final iconBytes = await AppManagerService.getApkIcon(path);
-      _apkIconCache[path] = iconBytes;
+      _apkIconCachePut(path, iconBytes);
       if (mounted && iconBytes != null) {
         setState(() {
           _apkIcon = iconBytes;
@@ -587,9 +597,8 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
     if (!mounted) return;
     try {
       final mediaProvider = context.read<MediaProvider>();
-      final match = mediaProvider.audios
-          .where((s) => s.data == widget.file.path)
-          .firstOrNull;
+      // O(1) 路径查表（此前 where().firstOrNull 每项全表扫描，O(n²)）
+      final match = mediaProvider.audioByPath(widget.file.path);
       if (match != null) {
         final artwork = await OnAudioQuery().queryArtwork(
           match.id,
@@ -892,7 +901,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -956,7 +965,7 @@ class _TrailingInfoWidget extends StatelessWidget {
             use24Hour: provider.use24HourFormat,
           ),
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
             fontSize: 12.0 * (1 + (iconScale - 1) * 0.3),
           ),
         ),
@@ -970,7 +979,7 @@ class _TrailingInfoWidget extends StatelessWidget {
           child: Text(
             FileUtils.formatBytes(item.size, 1),
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
               fontSize: 12.0 * (1 + (iconScale - 1) * 0.3),
             ),
           ),
@@ -989,7 +998,7 @@ class _TrailingInfoWidget extends StatelessWidget {
               child: Text(
                 label,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+                  color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
                   fontSize: 12.0 * (1 + (iconScale - 1) * 0.3),
                 ),
               ),

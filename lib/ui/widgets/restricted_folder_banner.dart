@@ -24,7 +24,7 @@ class RestrictedFolderBanner extends StatelessWidget {
 
     final bgGradient = isDark
         ? const LinearGradient(colors: [Color(0xFF1E293B), Color(0xFF0F172A)])
-        : LinearGradient(colors: [theme.colorScheme.primary.withOpacity(0.15), theme.colorScheme.primary.withOpacity(0.05)]);
+        : LinearGradient(colors: [theme.colorScheme.primary.withValues(alpha: 0.15), theme.colorScheme.primary.withValues(alpha: 0.05)]);
 
     return Center(
       child: SingleChildScrollView(
@@ -34,10 +34,10 @@ class RestrictedFolderBanner extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: bgGradient,
               borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: theme.colorScheme.primary.withOpacity(0.3), width: 1.5),
+              border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3), width: 1.5),
               boxShadow: [
                 BoxShadow(
-                  color: theme.colorScheme.primary.withOpacity(0.15),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.15),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
@@ -50,7 +50,7 @@ class RestrictedFolderBanner extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.2),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(Broken.lock, size: 48, color: theme.colorScheme.primary),
@@ -64,14 +64,14 @@ class RestrictedFolderBanner extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   L10n.of(context).android11androiddataandroidobbzenfile,
-                  style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface.withOpacity(0.8), height: 1.4),
+                  style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.8), height: 1.4),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
                 if (onGoBack != null)
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                      backgroundColor: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                       foregroundColor: theme.colorScheme.onSurface,
                       minimumSize: const Size.fromHeight(48),
                       elevation: 2,

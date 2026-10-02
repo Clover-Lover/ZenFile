@@ -4,6 +4,7 @@ import 'package:zenfile/l10n/generated/app_localizations.dart';
 import '../../providers/file_manager_provider.dart';
 import '../../services/crypt/crypt_profile.dart';
 import '../../services/crypt/crypt_profile_service.dart';
+import '../../services/crypt_auto_encrypt_service.dart';
 import 'crypt_mount_edit_screen.dart';
 
 /// 加密设置页面
@@ -151,15 +152,60 @@ class _CryptSettingsScreenState extends State<CryptSettingsScreen> {
                     child: Text(
                       l10n.crypt_profile_empty,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.55),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                       ),
                     ),
                   )
                 else
                   ..._profiles.map((p) => _buildProfileTile(p, theme, l10n)),
                 const SizedBox(height: 12),
+                // ② 自动加密新增文件（原地加密容器目录的实时监听 + 兜底补加密）
+                _buildSectionHeader(
+                  theme,
+                  icon: Icons.enhanced_encryption_outlined,
+                  title: l10n.crypt_auto_encrypt_section,
+                ),
+                _buildAutoEncryptTile(theme, l10n),
+                const SizedBox(height: 12),
               ],
             ),
+    );
+  }
+
+  /// 「自动加密新增文件」开关：对已登记的原地加密容器目录开启
+  /// FileObserver 实时监听（前台服务）+ 启动时兜底补加密。
+  Widget _buildAutoEncryptTile(ThemeData theme, L10n l10n) {
+    final service = CryptAutoEncryptService.instance;
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: SwitchListTile(
+        value: service.enabled,
+        onChanged: (v) async {
+          await service.setEnabled(v);
+          if (mounted) setState(() {});
+        },
+        secondary: Icon(
+          Icons.enhanced_encryption_outlined,
+          color: service.enabled
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+        ),
+        title: Text(
+          l10n.crypt_auto_encrypt_title,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            service.enabled && service.watchedDirs.isNotEmpty
+                ? l10n.crypt_auto_encrypt_watching(service.watchedDirs.length)
+                : l10n.crypt_auto_encrypt_desc,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -194,7 +240,7 @@ class _CryptSettingsScreenState extends State<CryptSettingsScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
           child: Icon(Icons.key_outlined, color: theme.colorScheme.primary),
         ),
         title: Row(
@@ -212,7 +258,7 @@ class _CryptSettingsScreenState extends State<CryptSettingsScreen> {
                 margin: const EdgeInsets.only(left: 8),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.12),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -284,7 +330,7 @@ class _CryptSettingsScreenState extends State<CryptSettingsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.08),
+        color: theme.colorScheme.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

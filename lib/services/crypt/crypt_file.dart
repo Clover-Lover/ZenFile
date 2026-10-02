@@ -198,10 +198,20 @@ class CryptFile {
     );
   }
 
-  /// 从指定偏移写入明文数据（自动加密）
+  /// 从指定偏移写入明文数据（自动加密，块级读-改-写）
   ///
-  /// [offset] 明文偏移（从 0 开始）
-  /// [data] 要写入的明文数据
+  /// [offset] 明文偏移（从 0 开始）；[data] 要写入的明文数据。
+  /// 语义：从 [offset] 覆盖写入，写入后的文件明文长度恰为 `offset + data.length`
+  /// （与旧实现一致：旧实现把 `[0..offset)` + data 整体重加密写回，超出部分被截断）。
+  ///
+  /// 性能：rclone crypt 每块的 nonce 由「文件头 nonce + 块号」派生，块与块之间
+  /// 相互独立，因此修改 [offset..] 之后的内容只需重写受影响的块。旧实现会把
+  /// `[0..offset)` 全部读入内存并**整文件重加密重写**，文件越大内存和 IO 越爆炸。
+  ///
+  /// ⚠️ 平台差异（重要）：append 模式句柄在 Android（O_APPEND）上**写入永远
+  /// 落在 EOF**，setPosition 只影响读取；Windows 上定位写则被尊重。因此按
+  /// 模式分流：write 模式走定位写；append 模式只有「纯尾部追加」走顺序写，
+  /// 其余通过临时文件重建后原子替换。
   Future<void> write(int offset, List<int> data) async {
     _ensureOpen();
     if (_mode == CryptFileMode.read) {
@@ -210,42 +220,176 @@ class CryptFile {
 
     if (data.isEmpty) return;
 
-    // 简化实现：将数据分块加密后写入
-    // 注意：这是一个简化实现，不支持在文件中间插入数据（会覆盖后续内容）
-    // 完整的随机写入需要读取-修改-写回受影响的块
-
-    final encrypter = RcloneStreamEncrypter(
-      dataKey: _crypt.derivedKeys.dataKey,
-      header: _header,
-    );
-
-    // 如果 offset > 0，需要先读取现有数据并保留
-    // 统一处理：读取现有内容（如果需要），然后重新加密整个文件
-    // 这样可以确保所有块使用连续的 nonce，且避免 append 模式下 setPosition 不生效的问题
-    List<int> allData;
-    if (offset == 0) {
-      allData = data;
-    } else {
-      // 读取现有数据到 offset 位置
-      final existingData = await read(0, offset);
-      allData = <int>[...existingData, ...data];
+    final header = _header;
+    if (header == null) {
+      throw StateError('文件头未初始化，无法确定块 nonce');
     }
 
-    final encrypted = <int>[
-      ...encrypter.process(allData),
-      ...encrypter.finish(),
-    ];
+    final plainData = Uint8List.fromList(data);
+    final oldPlainLen = _decryptedSize;
 
-    // 关闭当前文件，用 writeAsBytes 写入整个文件，然后重新打开
-    // 注意：append 模式下 setPosition 不影响写入位置，所以需要这种方式
+    // offset 超出现有明文长度时按追加处理（与旧实现的 read 夹取行为一致）
+    final effectiveOffset = offset > oldPlainLen ? oldPlainLen : offset;
+    final newPlainLen = effectiveOffset + plainData.length;
+    final newBlockCount = (newPlainLen + cryptBlockSize - 1) ~/ cryptBlockSize;
+    final firstChanged = effectiveOffset ~/ cryptBlockSize;
+
+    // 1. 先在内存中生成所有受影响块的新密文（拼接旧块头需要 _raf 仍可读）
+    final changedCount = newBlockCount - firstChanged;
+    final newBlocks = List<Uint8List>.filled(changedCount, Uint8List(0));
+    final secretBox = SecretBox(_crypt.derivedKeys.dataKey);
+    for (var i = 0; i < changedCount; i++) {
+      final blockIndex = firstChanged + i;
+      newBlocks[i] = await _encryptBlock(
+        header, secretBox, blockIndex,
+        effectiveOffset, plainData, newPlainLen,
+      );
+    }
+
+    if (_mode == CryptFileMode.write) {
+      // write 模式：FileMode.write 句柄支持定位写（O_TRUNC 已在 open 时发生）
+      for (var i = 0; i < changedCount; i++) {
+        final blockIndex = firstChanged + i;
+        await _raf.setPosition(
+            fileHeaderSize + blockIndex * (cryptBlockSize + blockOverhead));
+        await _raf.writeFrom(newBlocks[i]);
+      }
+      await _truncateToNewLayout(newBlockCount, newPlainLen);
+      _decryptedSize = newPlainLen;
+      return;
+    }
+
+    // append 模式
+    final pureAppend = effectiveOffset == oldPlainLen &&
+        oldPlainLen % cryptBlockSize == 0;
+    if (pureAppend) {
+      // 纯尾部追加：所有新块都位于现有密文之后，顺序写入自然落在 EOF。
+      // 先定位到 EOF：Windows append 按当前位置写；Android O_APPEND 下无影响。
+      await _raf.setPosition(await _raf.length());
+      for (final block in newBlocks) {
+        await _raf.writeFrom(block);
+      }
+      _decryptedSize = newPlainLen;
+      return;
+    }
+
+    // 中间写入 / 末尾残块扩展：O_APPEND 定位写不可用 → 临时文件重建后替换
+    await _rebuildViaTempFile(header, firstChanged, newBlocks, newPlainLen);
+  }
+
+  /// 生成第 [blockIndex] 块的新密文（cipher+tag）。
+  ///
+  /// 块头若位于覆盖起点之前（跨块写入的首块），从旧密文解出对应前缀拼接。
+  Future<Uint8List> _encryptBlock(
+    RcloneFileHeader header,
+    SecretBox secretBox,
+    int blockIndex,
+    int effectiveOffset,
+    Uint8List plainData,
+    int newPlainLen,
+  ) async {
+    final blockPlainStart = blockIndex * cryptBlockSize;
+    final blockPlainLen = (cryptBlockSize < newPlainLen - blockPlainStart)
+        ? cryptBlockSize
+        : newPlainLen - blockPlainStart;
+    final newBlockPlain = Uint8List(blockPlainLen);
+
+    final headKeepLen = effectiveOffset > blockPlainStart
+        ? (effectiveOffset - blockPlainStart < blockPlainLen
+            ? effectiveOffset - blockPlainStart
+            : blockPlainLen)
+        : 0;
+    if (headKeepLen > 0) {
+      final oldBlockPlain =
+          _decryptBlock(await _readEncryptedBlock(blockIndex), blockIndex);
+      newBlockPlain.setRange(0, headKeepLen, oldBlockPlain);
+    }
+    final dataStart = blockPlainStart + headKeepLen - effectiveOffset;
+    if (dataStart < plainData.length) {
+      final copyLen = blockPlainLen - headKeepLen < plainData.length - dataStart
+          ? blockPlainLen - headKeepLen
+          : plainData.length - dataStart;
+      newBlockPlain.setRange(headKeepLen, headKeepLen + copyLen, plainData, dataStart);
+    }
+
+    // 用该块派生的 nonce 加密（pinenacl 返回 nonce+cipher+tag，去掉 nonce）
+    final blockNonce = deriveBlockNonce(header.nonce, blockIndex);
+    final sealed = secretBox.encrypt(newBlockPlain, nonce: blockNonce);
+    return Uint8List.fromList(sealed.sublist(secretBoxNonceLength));
+  }
+
+  /// 长度变化时把密文文件截断到新的块布局
+  Future<void> _truncateToNewLayout(int newBlockCount, int newPlainLen) async {
+    final lastPlainLen = newPlainLen - (newBlockCount - 1) * cryptBlockSize;
+    final newEncLen = fileHeaderSize +
+        (newBlockCount - 1) * (cryptBlockSize + blockOverhead) +
+        lastPlainLen +
+        blockOverhead;
+    final curEncLen = await _raf.length();
+    if (curEncLen != newEncLen) {
+      await _raf.truncate(newEncLen);
+    }
+  }
+
+  /// append 模式下无法定位写时的重建路径：
+  /// 临时文件 = 头 + 未变化块（从旧文件流式拷贝）+ 新块 → 原子替换。
+  /// 内存占用 O(新块)，未变化前缀零重加密、零明文驻留。
+  Future<void> _rebuildViaTempFile(
+    RcloneFileHeader header,
+    int firstChanged,
+    List<Uint8List> newBlocks,
+    int newPlainLen,
+  ) async {
+    final tmpPath = '$_path.zw';
     await _raf.close();
-    await File(_path).writeAsBytes(encrypted);
 
-    // 重新打开文件：使用 append 模式（不会截断文件）
-    // 注意：write 模式下使用 FileMode.write 会截断文件，导致刚刚写入的数据丢失
+    final oldRaf = await File(_path).open(mode: FileMode.read);
+    final tmpRaf = await File(tmpPath).open(mode: FileMode.write);
+    try {
+      await tmpRaf.writeFrom(header.toBytes());
+      // 流式拷贝未变化的块 [0, firstChanged)
+      final preservedEnd =
+          fileHeaderSize + firstChanged * (cryptBlockSize + blockOverhead);
+      await oldRaf.setPosition(fileHeaderSize);
+      var copied = fileHeaderSize;
+      final chunk = Uint8List(1 << 20);
+      while (copied < preservedEnd) {
+        final n =
+            (preservedEnd - copied < chunk.length) ? preservedEnd - copied : chunk.length;
+        final bytes = await oldRaf.read(n);
+        if (bytes.isEmpty) break;
+        await tmpRaf.writeFrom(bytes);
+        copied += bytes.length;
+      }
+      for (final block in newBlocks) {
+        await tmpRaf.writeFrom(block);
+      }
+    } finally {
+      await oldRaf.close();
+      await tmpRaf.close();
+    }
+
+    // 原子替换（Windows 上目标被占用时 rename 会失败，先删再换）
+    final tmpFile = File(tmpPath);
+    try {
+      await tmpFile.rename(_path);
+    } catch (_) {
+      await File(_path).delete();
+      await tmpFile.rename(_path);
+    }
     _raf = await File(_path).open(mode: FileMode.append);
+    _decryptedSize = newPlainLen;
+  }
 
-    _decryptedSize = allData.length;
+  /// 读取第 [blockIndex] 个密文块（cipher+tag）
+  Future<Uint8List> _readEncryptedBlock(int blockIndex) async {
+    final blockSize = cryptBlockSize + blockOverhead;
+    await _raf.setPosition(fileHeaderSize + blockIndex * blockSize);
+    final blockData = await _raf.read(blockSize);
+    if (blockData.length < blockOverhead) {
+      throw FormatException('Invalid encrypted block size: ${blockData.length}');
+    }
+    return Uint8List.fromList(blockData);
   }
 
   /// 刷新缓冲区

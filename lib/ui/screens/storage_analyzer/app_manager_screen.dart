@@ -227,7 +227,7 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
           indicatorColor: theme.colorScheme.primary,
           labelColor: theme.colorScheme.primary,
-          unselectedLabelColor: theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
+          unselectedLabelColor: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
           tabs: [
             Tab(text: L10n.of(context).ui_app_installed_user_apps),
             Tab(text: L10n.of(context).ui_app_system_packages),
@@ -251,7 +251,7 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: theme.dividerColor.withOpacity(0.08)),
+                        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.08)),
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -271,7 +271,7 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
                                     ? L10n.of(context).ui_app_search_backup
                                     : L10n.of(context).msg8936ded6,
                                 hintStyle: TextStyle(
-                                  color: theme.textTheme.bodyMedium?.color?.withOpacity(0.4),
+                                  color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.4),
                                 ),
                                 border: InputBorder.none,
                               ),
@@ -289,7 +289,7 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: theme.dividerColor.withOpacity(0.08)),
+                        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.08)),
                       ),
                       child: const Icon(Icons.sort_rounded, size: 22),
                     ),
@@ -374,9 +374,9 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.08),
+        color: theme.colorScheme.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.15), width: 1.2),
+        border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.15), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -398,7 +398,7 @@ class _AppManagerScreenState extends State<AppManagerScreen> with SingleTickerPr
             L10n.of(context).ui_app_usage_access_description,
             style: TextStyle(
               fontSize: 12.5,
-              color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
               height: 1.3,
             ),
           ),

@@ -9,6 +9,8 @@
 /// 调用方注入 [attempt]（真实操作）与 [reconnect]（重建客户端）。
 library;
 
+import 'dart:async';
+
 /// 连接类 / 会话类错误的关键词（小写包含匹配）。
 ///
 /// 命中即认为「重建连接后重试一次可能救回来」。相反，认证失败、权限不足、
@@ -48,11 +50,22 @@ const List<String> kRemoteConnectionLostMarkers = <String>[
   'read timed out',
   'socket timed out',
   'socket timeout',
+  // Dart 侧超时（Future.timeout 抛 TimeoutException）。必须纳入：SMB 的典型
+  // 时序是「原生 smbj withSoTimeout(60s) 还没炸、Dart 侧 30s 超时先炸」，
+  // 到达判定层的错误文案是 "TimeoutException after 0:00:30..."，与上面任何
+  // Java 侧 marker 都不匹配 → 会话假死后重连分支永远不触发，用户只能退出
+  // 连接重进（2026-10-02 排查结论：2f220a88 补的 Java 文案 marker 因此落空）。
+  // 会话假活但服务器单纯慢时的代价只是「重建连接 + 多试一次」，可接受。
+  'timeoutexception',
 ];
 
 /// 该错误是否属于「连接/会话已失效」类（重连可能救回来）。
 bool isRemoteConnectionLostError(Object? error) {
   if (error == null) return false;
+  // Dart 侧 Future.timeout 抛的 TimeoutException 直接按类型判定：它意味着
+  // 「规定时间内没有拿到结果」，对长连接协议而言最常见的成因就是底层连接
+  // 已死（静默丢包 / 被回收），重建连接重试是对用户最透明的恢复路径。
+  if (error is TimeoutException) return true;
   final s = error.toString().toLowerCase();
   if (s.isEmpty) return false;
   for (final marker in kRemoteConnectionLostMarkers) {

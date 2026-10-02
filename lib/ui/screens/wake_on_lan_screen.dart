@@ -74,7 +74,7 @@ class _WakeOnLanScreenState extends State<WakeOnLanScreen> {
         final theme = Theme.of(ctx);
         // 提示文字更灰，避免被误认为已输入的文字
         final hintStyle = TextStyle(
-            color: theme.colorScheme.onSurface.withOpacity(0.38));
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.38));
         return Padding(
           padding: EdgeInsets.only(
               bottom: MediaQuery.of(ctx).viewInsets.bottom),
@@ -259,13 +259,13 @@ class _WakeOnLanScreenState extends State<WakeOnLanScreen> {
                 children: [
                   Icon(Broken.electricity,
                       size: 56,
-                      color: theme.colorScheme.onSurface.withOpacity(0.2)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.2)),
                   const SizedBox(height: 12),
                   Text(
                     l10n.wol_empty,
                     style: TextStyle(
                         color:
-                            theme.colorScheme.onSurface.withOpacity(0.5)),
+                            theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                 ],
               ),
@@ -279,7 +279,7 @@ class _WakeOnLanScreenState extends State<WakeOnLanScreen> {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor:
-                        theme.colorScheme.primary.withOpacity(0.12),
+                        theme.colorScheme.primary.withValues(alpha: 0.12),
                     child: Icon(Broken.monitor,
                         color: theme.colorScheme.primary),
                   ),
@@ -289,7 +289,7 @@ class _WakeOnLanScreenState extends State<WakeOnLanScreen> {
                     '${device.mac}  ·  ${device.broadcast.isEmpty ? '255.255.255.255' : device.broadcast}:${device.port}',
                     style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,

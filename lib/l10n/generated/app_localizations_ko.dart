@@ -7606,8 +7606,7 @@ class L10nKo extends L10n {
   String get vault_encrypt_new_files_none => '암호화할 새 파일이 없습니다';
 
   @override
-  String get vault_encrypt_new_files_done =>
-      '새 파일을 암호화하여 이 폴더에 병합했습니다';
+  String get vault_encrypt_new_files_done => '새 파일을 암호화하여 이 폴더에 병합했습니다';
 
   @override
   String get vault_encrypt_files => '+ 파일 암호화';
@@ -8056,5 +8055,43 @@ class L10nKo extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return '$count개 파일은 메타데이터를 제거할 수 없어(암호화 가능성) 그대로 공유했습니다';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP 비밀번호';
+
+  @override
+  String get ui_ftp_password_required =>
+      '비밀번호를 설정하세요. 설정하지 않으면 FTP 서버가 모든 클라이언트의 로그인을 거부합니다';
+
+  @override
+  String get ui_web_share_password => '접근 비밀번호';
+
+  @override
+  String get ui_web_share_password_hint =>
+      '비워 두면 인증을 사용하지 않습니다(신뢰할 수 있는 LAN에서만 권장)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return '인터넷 접근용 비밀번호가 자동 생성되었습니다: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      '인터넷 공유에는 접근 비밀번호가 필요합니다';
+
+  @override
+  String get crypt_auto_encrypt_section => '자동 암호화';
+
+  @override
+  String get crypt_auto_encrypt_title => '새 파일 자동 암호화';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      '암호화된 디렉터리를 실시간 감시하여, 새 파일의 쓰기가 완료되면 자동으로 암호화합니다(상시 알림 필요)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '$count개의 디렉터리를 보호 중입니다. 새 파일은 자동으로 암호화됩니다';
   }
 }

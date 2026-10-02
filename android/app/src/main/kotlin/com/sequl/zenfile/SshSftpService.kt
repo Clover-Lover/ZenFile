@@ -79,6 +79,10 @@ class SshSftpService {
     /** 取消哨兵：置 true 后正在进行的传输通过 monitor 立即中止 */
     private val cancelFlags = ConcurrentHashMap<String, Boolean>()
 
+    /** 应用私有目录（由 MainActivity 在注册通道时注入），TOFU known_hosts 存放处 */
+    @Volatile
+    var appFilesDir: File? = null
+
     // ── 连接管理 ────────────────────────────────────────────────────────────
 
     /** 建立 SSH 连接，返回 sessionId。
@@ -111,8 +115,16 @@ class SshSftpService {
             session.setPassword(password)
         }
         val config = Properties().apply {
-            // 不校验主机密钥（内网 NAS 场景；若需严格校验可改为 ask/known_hosts）
-            put("StrictHostKeyChecking", "no")
+            // TOFU 主机密钥校验（2026-10-02）：首次连接记录指纹并信任，之后
+            // 不匹配即拒绝（MITM 防护）。known_hosts 存于应用私有目录；
+            // filesDir 未注入（理论上不可能）时退回旧的 no-check 行为，
+            // 避免把老用户全部锁在门外。
+            if (appFilesDir != null) {
+                jsch.hostKeyRepository = TofuHostKeyRepository(File(appFilesDir, "sftp_known_hosts"))
+                put("StrictHostKeyChecking", "yes")
+            } else {
+                put("StrictHostKeyChecking", "no")
+            }
             // 启用保活，避免长传输被中间设备掐断
             put("ServerAliveInterval", "30")
             put("ServerAliveCountMax", "3")

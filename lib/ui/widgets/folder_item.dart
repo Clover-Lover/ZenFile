@@ -58,7 +58,7 @@ class FolderItem extends StatelessWidget {
     final child = Card(
       margin: cardMargin,
       color: isSelected
-          ? theme.colorScheme.primaryContainer.withOpacity(0.4)
+          ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
           : theme.colorScheme.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -66,7 +66,7 @@ class FolderItem extends StatelessWidget {
         side: BorderSide(
           color: isSelected
               ? theme.colorScheme.primary
-              : theme.dividerColor.withOpacity(0.1),
+              : theme.dividerColor.withValues(alpha: 0.1),
           width: isSelected ? 1.5 : 1.0,
         ),
       ),
@@ -113,7 +113,7 @@ class FolderItem extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.primary.withOpacity(0.1),
+                                : theme.colorScheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: (() {
@@ -308,7 +308,7 @@ class FolderItem extends StatelessWidget {
                                     parts.join(' • '),
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: theme.textTheme.bodySmall?.color
-                                          ?.withOpacity(0.6),
+                                          ?.withValues(alpha: 0.6),
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -375,10 +375,10 @@ class FolderItem extends StatelessWidget {
               child: Container(
                 margin: cardMargin,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.06),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.25),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.25),
                     width: 1.5,
                   ),
                 ),

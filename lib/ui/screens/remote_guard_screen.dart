@@ -505,7 +505,7 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
             gradient: LinearGradient(
               colors: isDark
                   ? [const Color(0xFF0F172A), const Color(0xFF1E293B), const Color(0xFF020617)]
-                  : [theme.colorScheme.primaryContainer.withOpacity(0.4), theme.colorScheme.surface, theme.colorScheme.surface],
+                  : [theme.colorScheme.primaryContainer.withValues(alpha: 0.4), theme.colorScheme.surface, theme.colorScheme.surface],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -559,11 +559,11 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.12),
+            color: theme.colorScheme.primary.withValues(alpha: 0.12),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.08),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
                 blurRadius: 24,
                 spreadRadius: 2,
               ),
@@ -585,7 +585,7 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13.5,
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ),
@@ -611,9 +611,9 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.45),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.12)),
+        border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.12)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -622,7 +622,7 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
         title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
         subtitle: Text(
           subtitle,
-          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withOpacity(0.55)),
+          style: TextStyle(fontSize: 12.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
         ),
         trailing: trailing,
       ),
@@ -650,11 +650,11 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.12),
+            color: theme.colorScheme.primary.withValues(alpha: 0.12),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.08),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
                 blurRadius: 24,
                 spreadRadius: 2,
               ),
@@ -679,7 +679,7 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
             fontWeight: FontWeight.w600,
             color: _isError
                 ? theme.colorScheme.error
-                : theme.colorScheme.onSurface.withOpacity(0.6),
+                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
         const SizedBox(height: 36),
@@ -703,11 +703,11 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
                   fontSize: 14,
                   letterSpacing: 0.3,
                   fontWeight: FontWeight.normal,
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                 ),
                 hintMaxLines: 2,
                 filled: true,
-                fillColor: isDark ? Colors.white.withOpacity(0.04) : Colors.black.withOpacity(0.02),
+                fillColor: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.black.withValues(alpha: 0.02),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
@@ -793,7 +793,7 @@ class _RemoteGuardScreenState extends State<RemoteGuardScreen>
           style: TextStyle(
             fontSize: 14.5,
             fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
         const Spacer(flex: 2),

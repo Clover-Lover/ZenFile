@@ -1,5 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+/// 给 [base] 文本主题整体套用本地字体族（Outfit / JetBrains Mono / Montserrat）。
+///
+/// 此前这三款字体经 google_fonts **运行时联网下载**，弱网首次启动会阻塞或
+/// 闪烁；现改为 pubspec 声明的本地 assets（见 pubspec.yaml fonts 段），
+/// 字重文件（400/500/600/700）已按需打包。
+TextTheme _localFontTextTheme(TextTheme base, String fontFamily) {
+  return base.copyWith(
+    displayLarge: base.displayLarge?.copyWith(fontFamily: fontFamily),
+    displayMedium: base.displayMedium?.copyWith(fontFamily: fontFamily),
+    displaySmall: base.displaySmall?.copyWith(fontFamily: fontFamily),
+    headlineLarge: base.headlineLarge?.copyWith(fontFamily: fontFamily),
+    headlineMedium: base.headlineMedium?.copyWith(fontFamily: fontFamily),
+    headlineSmall: base.headlineSmall?.copyWith(fontFamily: fontFamily),
+    titleLarge: base.titleLarge?.copyWith(fontFamily: fontFamily),
+    titleMedium: base.titleMedium?.copyWith(fontFamily: fontFamily),
+    titleSmall: base.titleSmall?.copyWith(fontFamily: fontFamily),
+    bodyLarge: base.bodyLarge?.copyWith(fontFamily: fontFamily),
+    bodyMedium: base.bodyMedium?.copyWith(fontFamily: fontFamily),
+    bodySmall: base.bodySmall?.copyWith(fontFamily: fontFamily),
+    labelLarge: base.labelLarge?.copyWith(fontFamily: fontFamily),
+    labelMedium: base.labelMedium?.copyWith(fontFamily: fontFamily),
+    labelSmall: base.labelSmall?.copyWith(fontFamily: fontFamily),
+  );
+}
 
 class AppTheme {
   static const Color seedColor = Color(0xFF369FE7);
@@ -84,15 +108,15 @@ class AppTheme {
         break;
       case 'outfit':
         effectiveFontFamily = 'Outfit';
-        textTheme = GoogleFonts.outfitTextTheme(baseTextTheme);
+        textTheme = _localFontTextTheme(baseTextTheme, 'Outfit');
         break;
       case 'jetbrains':
         effectiveFontFamily = 'JetBrains Mono';
-        textTheme = GoogleFonts.jetBrainsMonoTextTheme(baseTextTheme);
+        textTheme = _localFontTextTheme(baseTextTheme, 'JetBrains Mono');
         break;
       case 'montserrat':
         effectiveFontFamily = 'Montserrat';
-        textTheme = GoogleFonts.montserratTextTheme(baseTextTheme);
+        textTheme = _localFontTextTheme(baseTextTheme, 'Montserrat');
         break;
       case 'custom':
         effectiveFontFamily = 'CustomFont';

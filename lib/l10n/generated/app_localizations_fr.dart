@@ -2839,8 +2839,7 @@ class L10nFr extends L10n {
   String get junk_clean_title => 'Nettoyage';
 
   @override
-  String get junk_clean_scanning =>
-      'Analyse des fichiers inutiles…';
+  String get junk_clean_scanning => 'Analyse des fichiers inutiles…';
 
   @override
   String junk_clean_scannable(Object size) {
@@ -2851,8 +2850,7 @@ class L10nFr extends L10n {
   String get junk_clean_button => 'Nettoyer';
 
   @override
-  String get junk_clean_confirm_title =>
-      'Nettoyer les fichiers inutiles';
+  String get junk_clean_confirm_title => 'Nettoyer les fichiers inutiles';
 
   @override
   String junk_clean_confirm_body(Object size) {
@@ -2876,8 +2874,7 @@ class L10nFr extends L10n {
   String get junk_clean_none => 'Aucun fichier inutile à nettoyer';
 
   @override
-  String get junk_clean_failed =>
-      'Échec du nettoyage, réessayez plus tard';
+  String get junk_clean_failed => 'Échec du nettoyage, réessayez plus tard';
 
   @override
   String get cat_vault => 'Coffre-fort';
@@ -7953,12 +7950,10 @@ class L10nFr extends L10n {
       'Les paramètres de chiffrement sont verrouillés après la création. Les modifier rend les fichiers chiffrés existants illisibles, car les noms sur le disque ont été générés avec ces réglages. Créez un nouveau profil si vous avez besoin d\'autres paramètres.';
 
   @override
-  String get vault_encrypt_new_files =>
-      'Chiffrer les nouveaux fichiers';
+  String get vault_encrypt_new_files => 'Chiffrer les nouveaux fichiers';
 
   @override
-  String get vault_encrypt_new_files_none =>
-      'Aucun nouveau fichier à chiffrer';
+  String get vault_encrypt_new_files_none => 'Aucun nouveau fichier à chiffrer';
 
   @override
   String get vault_encrypt_new_files_done =>
@@ -8443,5 +8438,44 @@ class L10nFr extends L10n {
   @override
   String share_safe_unsupported(Object count) {
     return 'Impossible de supprimer les métadonnées de $count fichier(s) (peut-être chiffrés) ; ils ont été partagés tels quels';
+  }
+
+  @override
+  String get ui_ftp_password => 'Mot de passe FTP';
+
+  @override
+  String get ui_ftp_password_required =>
+      'Veuillez définir un mot de passe, sinon le serveur FTP refusera tous les clients';
+
+  @override
+  String get ui_web_share_password => 'Mot de passe d\'accès';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'Laisser vide pour désactiver l\'authentification (LAN de confiance uniquement)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'Mot de passe généré automatiquement pour l\'accès Internet : $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'Un mot de passe d\'accès est requis pour le partage Internet';
+
+  @override
+  String get crypt_auto_encrypt_section => 'Chiffrement automatique';
+
+  @override
+  String get crypt_auto_encrypt_title =>
+      'Chiffrer automatiquement les nouveaux fichiers';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'Surveille les dossiers chiffrés sur place et chiffre automatiquement les nouveaux fichiers une fois écrits (notification persistante requise)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '$count dossier(s) protégé(s) ; les nouveaux fichiers seront chiffrés automatiquement';
   }
 }

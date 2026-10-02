@@ -226,7 +226,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 24,
                 offset: const Offset(0, -4),
               ),
@@ -246,7 +246,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                         height: 4,
                         margin: const EdgeInsets.only(top: 4, bottom: 16),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.onSurface.withOpacity(0.15),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -266,7 +266,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                       final isSelected = _activeRootPath == vol.path;
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                        color: isSelected ? theme.colorScheme.primaryContainer.withOpacity(0.4) : theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                        color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4) : theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -281,7 +281,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                             width: 44,
                             height: 44,
                             decoration: BoxDecoration(
-                              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.08),
+                              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Icon(
@@ -302,7 +302,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                             vol.path,
                             style: TextStyle(
                               fontSize: 12,
-                              color: theme.colorScheme.onSurface.withOpacity(0.5),
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -323,7 +323,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                     }),
                     Card(
                       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                      color: _activeRootPath == '/' ? theme.colorScheme.primaryContainer.withOpacity(0.4) : theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                      color: _activeRootPath == '/' ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4) : theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -338,7 +338,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            color: _activeRootPath == '/' ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.08),
+                            color: _activeRootPath == '/' ? theme.colorScheme.primary : theme.colorScheme.primary.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -359,7 +359,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                           '/',
                           style: TextStyle(
                             fontSize: 12,
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           ),
                         ),
                         trailing: _activeRootPath == '/' 
@@ -458,12 +458,12 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
 
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 4),
-                        color: isSelected ? theme.colorScheme.primaryContainer.withOpacity(0.5) : theme.colorScheme.surface,
+                        color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5) : theme.colorScheme.surface,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
-                            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withOpacity(0.1),
+                            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.1),
                             width: isSelected ? 1.5 : 1.0,
                           ),
                         ),
@@ -487,7 +487,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                                     width: 48,
                                     height: 48,
                                     decoration: BoxDecoration(
-                                      color: isSelected ? theme.colorScheme.primary : (item.isDirectory ? theme.colorScheme.primary.withOpacity(0.1) : iconColor.withOpacity(0.1)),
+                                      color: isSelected ? theme.colorScheme.primary : (item.isDirectory ? theme.colorScheme.primary.withValues(alpha: 0.1) : iconColor.withValues(alpha: 0.1)),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: (!isSelected && !item.isDirectory && FileUtils.isArchive(item.name))
@@ -518,7 +518,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                                         Text(
                                           FileUtils.formatBytes(item.size, 2),
                                           style: theme.textTheme.bodySmall?.copyWith(
-                                            color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                                            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
                                           ),
                                         ),
                                       ],

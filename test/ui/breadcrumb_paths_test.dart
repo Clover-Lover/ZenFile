@@ -265,4 +265,61 @@ void main() {
           connName: '115');
     });
   });
+
+  /// displayPath（2026-10-02）：冲突期间 currentPath 是**密文物理路径**
+  /// （plainNameClash 条目直达），labels 要用解密后的虚拟路径显示；
+  /// targets 必须仍由 currentPath 计算 —— 导航走物理路径，虚拟路径会被
+  /// 「明文已存在」短路劫持到明文目录上。
+  group('displayPath：labels 用显示路径、targets 保持物理路径', () {
+    const physical = '/storage/emulated/0/DCIM/jX0p4rbZYQaKUlXTWGzRBQ';
+    const display = '/storage/emulated/0/DCIM/Camera';
+
+    test('labels 来自 displayPath（明文名），targets 来自 currentPath（物理路径）', () {
+      final bc = FileManagerProvider.breadcrumbPaths(
+        currentPath: physical,
+        isRemoteTab: false,
+        remoteRoot: '/',
+        rootLabel: '根目录',
+        displayPath: display,
+      );
+
+      expect(bc.labels, ['根目录', 'storage', 'emulated', '0', 'DCIM', 'Camera']);
+      expect(bc.targets, [
+        '/',
+        '/storage',
+        '/storage/emulated',
+        '/storage/emulated/0',
+        '/storage/emulated/0/DCIM',
+        physical,
+      ]);
+    });
+
+    test('displayPath 与 currentPath 段数一致 ⇒ labels/targets 仍一一对应', () {
+      final bc = FileManagerProvider.breadcrumbPaths(
+        currentPath: physical,
+        isRemoteTab: false,
+        remoteRoot: '/',
+        displayPath: display,
+      );
+      expect(bc.labels.length, bc.targets.length);
+      expect(bc.targets.last, physical, reason: '最后一段必须指向当前物理路径');
+      // 点 DCIM 段应落在物理父目录（不含密文名）
+      final idx = bc.labels.indexOf('DCIM');
+      expect(bc.targets[idx], '/storage/emulated/0/DCIM');
+    });
+
+    test('不传 displayPath 时行为完全不变（既有用例不受影响）', () {
+      final bc = FileManagerProvider.breadcrumbPaths(
+        currentPath: physical,
+        isRemoteTab: false,
+        remoteRoot: '/',
+        rootLabel: '根目录',
+      );
+      expect(
+        bc.labels,
+        ['根目录', 'storage', 'emulated', '0', 'DCIM', 'jX0p4rbZYQaKUlXTWGzRBQ'],
+      );
+      expect(bc.targets.last, physical);
+    });
+  });
 }

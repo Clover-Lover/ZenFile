@@ -1589,6 +1589,49 @@ class MainActivity : AudioServiceFragmentActivity() {
             }
         }
 
+        // 原地加密目录实时监听（新文件自动加密）：Dart 下发监听表，
+        // 原生 FileObserver 事件经 CryptWatchForegroundService.eventChannel 回传 Dart。
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sequl.zenfile/crypt_watch").apply {
+            CryptWatchForegroundService.eventChannel = this
+            setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "start" -> {
+                        val paths = call.argument<List<String>>("paths") ?: emptyList()
+                        val title = call.argument<String>("title") ?: "ZenFile 自动加密"
+                        val contentText = call.argument<String>("contentText") ?: "正在保护已加密目录"
+                        try {
+                            val intent = Intent(this@MainActivity, CryptWatchForegroundService::class.java).apply {
+                                putExtra("action", "start")
+                                putExtra("paths", paths.toTypedArray())
+                                putExtra("title", title)
+                                putExtra("contentText", contentText)
+                            }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(intent)
+                            } else {
+                                startService(intent)
+                            }
+                            result.success(true)
+                        } catch (e: Exception) {
+                            result.error("START_FAILED", e.message, null)
+                        }
+                    }
+                    "stop" -> {
+                        try {
+                            val intent = Intent(this@MainActivity, CryptWatchForegroundService::class.java).apply {
+                                putExtra("action", "stop")
+                            }
+                            startService(intent)
+                            result.success(true)
+                        } catch (e: Exception) {
+                            result.error("STOP_FAILED", e.message, null)
+                        }
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+        }
+
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sequl.zenfile/web_sharing_service").setMethodCallHandler { call, result ->
             when (call.method) {
                 "startWebSharingService" -> {
@@ -1793,6 +1836,10 @@ class MainActivity : AudioServiceFragmentActivity() {
         // 原生 SSH/SFTP 通道（JSch，硬件加速加解密）
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sequl.zenfile/sftpNative").setMethodCallHandler { call, result ->
             val ssh = SshSftpService.instance
+            // 注入私有目录供 TOFU known_hosts 使用（首次记录主机指纹，之后防 MITM）
+            if (ssh.appFilesDir == null) {
+                ssh.appFilesDir = applicationContext.filesDir
+            }
             executor.execute {
                 try {
                     when (call.method) {

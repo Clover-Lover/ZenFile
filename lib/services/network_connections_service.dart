@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/network_connection_model.dart';
 import 'remote/remote_client.dart';
@@ -51,6 +52,34 @@ class NetworkConnectionsService {
 
   static Future<void> init() async {
     _prefs ??= await SharedPreferences.getInstance();
+    await _loadSecretsFromSecureStorage();
+    await _migratePlaintextCredentialsIfNeeded();
+  }
+
+  /// 启动时把 secure storage 中已保存的凭据载入内存缓存，
+  /// 供同步的 [getConnections] 水合使用。
+  static Future<void> _loadSecretsFromSecureStorage() async {
+    final str = _prefs?.getString(_keyConnections);
+    if (str == null || str.isEmpty) return;
+    try {
+      final list = json.decode(str) as List<dynamic>;
+      for (final raw in list) {
+        final id = (raw as Map<String, dynamic>)['id'] as String?;
+        if (id == null || _secrets.containsKey(id)) continue;
+        try {
+          final value = await _secure.read(key: _credKey(id));
+          if (value != null && value.isNotEmpty) {
+            final decoded = json.decode(value) as Map<String, dynamic>;
+            _secrets[id] = {
+              'password': (decoded['password'] as String?) ?? '',
+              'sshKeyPassword': (decoded['sshKeyPassword'] as String?) ?? '',
+            };
+          }
+        } catch (_) {
+          // 单条读取失败只影响该连接的凭据水合，不阻塞启动
+        }
+      }
+    } catch (_) {}
   }
 
   static List<NetworkConnectionModel> getConnections() {
@@ -60,15 +89,111 @@ class NetworkConnectionsService {
     try {
       final list = json.decode(str) as List<dynamic>;
       return list
-          .map((e) => NetworkConnectionModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => _hydrateCredentials(NetworkConnectionModel.fromJson(e as Map<String, dynamic>)))
           .toList();
     } catch (_) {
       return [];
     }
   }
 
+  // ── 凭据安全存储 ─────────────────────────────────────────────────────────
+  //
+  // 连接口令 / SSH 私钥口令属高敏数据，历史上曾以明文 JSON 存于
+  // SharedPreferences（可被云备份 / adb backup 导出）。现统一迁入
+  // FlutterSecureStorage（Android Keystore / iOS Keychain），SharedPreferences
+  // 中只保留脱敏后的连接元数据。`init()` 时一次性完成旧数据迁移。
+
+  static const FlutterSecureStorage _secure = FlutterSecureStorage();
+  static String _credKey(String id) => 'rc_cred_$id';
+
+  /// 连接 id → {password, sshKeyPassword}（内存缓存，init 时填充）
+  static final Map<String, Map<String, String>> _secrets = {};
+
+  static NetworkConnectionModel _hydrateCredentials(NetworkConnectionModel conn) {
+    final secrets = _secrets[conn.id];
+    if (secrets == null) return conn;
+    return NetworkConnectionModel(
+      id: conn.id,
+      name: conn.name,
+      type: conn.type,
+      host: conn.host,
+      port: conn.port,
+      username: conn.username,
+      password: conn.password.isNotEmpty ? conn.password : (secrets['password'] ?? ''),
+      rootPath: conn.rootPath,
+      protocol: conn.protocol,
+      sshKeyPath: conn.sshKeyPath,
+      sshKeyPassword: conn.sshKeyPassword ?? secrets['sshKeyPassword'],
+      authMethod: conn.authMethod,
+    );
+  }
+
+  static Future<void> _storeCredentials(NetworkConnectionModel conn) async {
+    _secrets[conn.id] = {
+      'password': conn.password,
+      'sshKeyPassword': conn.sshKeyPassword ?? '',
+    };
+    try {
+      await _secure.write(key: _credKey(conn.id), value: json.encode(_secrets[conn.id]));
+    } catch (_) {
+      // secure storage 写失败时保留内存缓存，本会话仍可用；下次保存会重试
+    }
+  }
+
+  static Future<void> _deleteCredentials(String id) async {
+    _secrets.remove(id);
+    try {
+      await _secure.delete(key: _credKey(id));
+    } catch (_) {}
+  }
+
+  /// 一次性迁移：把旧版明文存于 SharedPreferences 的口令搬进 secure storage，
+  /// 并将 JSON 重写为脱敏版本（password / sshKeyPassword 置空）。
+  static Future<void> _migratePlaintextCredentialsIfNeeded() async {
+    final str = _prefs?.getString(_keyConnections);
+    if (str == null || str.isEmpty) return;
+    try {
+      final list = json.decode(str) as List<dynamic>;
+      var migrated = false;
+      for (final raw in list) {
+        final map = raw as Map<String, dynamic>;
+        final id = map['id'] as String?;
+        if (id == null) continue;
+        final password = (map['password'] as String?) ?? '';
+        final sshKeyPassword = map['sshKeyPassword'] as String?;
+        final hasPlaintext = password.isNotEmpty || (sshKeyPassword != null && sshKeyPassword.isNotEmpty);
+        if (hasPlaintext) {
+          _secrets[id] = {'password': password, 'sshKeyPassword': sshKeyPassword ?? ''};
+          try {
+            await _secure.write(key: _credKey(id), value: json.encode(_secrets[id]));
+          } catch (_) {}
+          map['password'] = '';
+          map['sshKeyPassword'] = null;
+          migrated = true;
+        }
+      }
+      if (migrated) {
+        await _prefs?.setString(_keyConnections, json.encode(list));
+      }
+    } catch (_) {
+      // 迁移失败不影响启动：明文数据仍在原处，下次启动重试
+    }
+  }
+
+  /// 序列化连接列表为脱敏 JSON：password / sshKeyPassword 不落 SharedPreferences，
+  /// 真实凭据只存 secure storage（见 [_storeCredentials]）。
+  static String _scrubbedJson(List<NetworkConnectionModel> connections) {
+    return json.encode(connections.map((e) {
+      final map = e.toJson();
+      map['password'] = '';
+      map['sshKeyPassword'] = null;
+      return map;
+    }).toList());
+  }
+
   static Future<void> saveConnection(NetworkConnectionModel conn) async {
     await init();
+    await _storeCredentials(conn);
     final current = getConnections();
     final index = current.indexWhere((c) => c.id == conn.id);
     if (index >= 0) {
@@ -76,16 +201,15 @@ class NetworkConnectionsService {
     } else {
       current.add(conn);
     }
-    final str = json.encode(current.map((e) => e.toJson()).toList());
-    await _prefs?.setString(_keyConnections, str);
+    await _prefs?.setString(_keyConnections, _scrubbedJson(current));
   }
 
   static Future<void> deleteConnection(String id) async {
     await init();
+    await _deleteCredentials(id);
     final current = getConnections();
     current.removeWhere((c) => c.id == id);
-    final str = json.encode(current.map((e) => e.toJson()).toList());
-    await _prefs?.setString(_keyConnections, str);
+    await _prefs?.setString(_keyConnections, _scrubbedJson(current));
   }
 
   /// 判断连接类型是否为 SMB（局域网）。标签本地化（中文「局域网/SMB」、英文

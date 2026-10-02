@@ -1293,7 +1293,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
 
     await showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.55),
+      barrierColor: Colors.black.withValues(alpha: 0.55),
       builder: (ctx) => BatchRenameDialog(
         provider: context.read<FileManagerProvider>(),
         selectedPaths: filePaths,
@@ -1354,7 +1354,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     Icon(
                       Broken.document_copy,
                       size: 14,
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                   ],
                 ),
@@ -2060,7 +2060,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
   }
 
   Future<void> _handleEncrypt(BuildContext context, String path) async {
-    if (!await requireVaultSessionUnlock(context)) return;
+    // 加密是「保护方向」操作，不过保险箱会话闸门（闸门只守明文出口）。
     if (!await _ensureMasterPassword(context)) return;
     final mode = await BulkCryptActions.promptEncryptionMode(context);
     if (mode == null) return;
@@ -2948,7 +2948,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         return SafeArea(
           top: false,
           child: Material(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
@@ -2997,7 +2997,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         color: theme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -3012,10 +3012,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.06),
+                color: theme.colorScheme.primary.withValues(alpha: 0.06),
                 border: Border(
                   bottom: BorderSide(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -3458,10 +3458,23 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     }
   }
 
+  // _groupByMonth 结果缓存：分组是 O(n)（含逐项日期解析，可能触发 statSync），
+  // 而该页有大量 setState，任意一次都会触发 build 重新分组。以「源列表引用 +
+  // locale」为失效条件；列表由 provider 整体替换，原地修改不存在。
+  Object? _groupCacheSource;
+  String? _groupCacheLocale;
+  Object? _groupCacheResult;
+
   Map<String, List<T>> _groupByMonth<T>(
     List<T> items,
     DateTime Function(T) getDate,
   ) {
+    final locale = L10n.of(context).localeName;
+    if (identical(_groupCacheSource, items) &&
+        _groupCacheLocale == locale &&
+        _groupCacheResult is Map<String, List<T>>) {
+      return _groupCacheResult as Map<String, List<T>>;
+    }
     final groups = <String, List<T>>{};
     for (final item in items) {
       final date = getDate(item);
@@ -3470,6 +3483,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       ).ui_month_group_header(date.year, date.month);
       groups.putIfAbsent(monthKey, () => []).add(item);
     }
+    _groupCacheSource = items;
+    _groupCacheLocale = locale;
+    _groupCacheResult = groups;
     return groups;
   }
 
@@ -3518,12 +3534,12 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer.withOpacity(
+                        color: theme.colorScheme.primaryContainer.withValues(alpha: 
                           0.35,
                         ),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withOpacity(0.15),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.15),
                         ),
                       ),
                       child: Text(
@@ -3551,7 +3567,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.outlineVariant.withOpacity(
+                        color: theme.colorScheme.outlineVariant.withValues(alpha: 
                           0.3,
                         ),
                         thickness: 1,
@@ -3593,7 +3609,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     children: [
                       const SizedBox(height: 12),
                       Divider(
-                        color: theme.colorScheme.outlineVariant.withOpacity(
+                        color: theme.colorScheme.outlineVariant.withValues(alpha: 
                           0.15,
                         ),
                         thickness: 1.5,
@@ -3642,7 +3658,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   width: double.infinity,
                   height: double.infinity,
                   placeholderBuilder: (context) => Container(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     child: const Center(
                       child: Icon(Broken.image, size: 24, color: Colors.grey),
                     ),
@@ -3655,7 +3671,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   height: double.infinity,
                   cacheWidth: 300,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     child: const Center(
                       child: Icon(Broken.image, size: 24, color: Colors.grey),
                     ),
@@ -3778,7 +3794,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 ? _toggleSelection(null, item.id)
                 : _toggleSelection(path, null),
             child: Container(
-              color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
               child: Center(
                 child: FileTypeIcon(
                   icon: Broken.image,
@@ -3796,7 +3812,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
@@ -3816,7 +3832,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Broken.cloud, color: Colors.white, size: 12),
@@ -3830,7 +3846,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
               color: isSelected
                   ? theme.colorScheme.primary
-                  : Colors.white.withOpacity(0.8),
+                  : Colors.white.withValues(alpha: 0.8),
               size: 24,
             ),
           )
@@ -3856,7 +3872,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -4057,7 +4073,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                       File(path),
                       fit: BoxFit.cover,
                       placeholderBuilder: (context) => Container(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         child: Center(
                           child: FileTypeIcon(
                             icon: Broken.image,
@@ -4073,7 +4089,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                       fit: BoxFit.cover,
                       cacheWidth: 120,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         child: Center(
                           child: FileTypeIcon(
                             icon: Broken.image,
@@ -4093,7 +4109,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withValues(alpha: 0.55),
                   borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(6),
                     topLeft: Radius.circular(8),
@@ -4110,7 +4126,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : Colors.white.withOpacity(0.8),
+                    : Colors.white.withValues(alpha: 0.8),
                 size: 20,
               ),
             ),
@@ -4128,7 +4144,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               dateStr,
               style: TextStyle(
                 fontSize: 12,
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             )
           : null,
@@ -4281,7 +4297,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
@@ -4301,7 +4317,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Broken.cloud, color: Colors.white, size: 12),
@@ -4315,7 +4331,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
               color: isSelected
                   ? theme.colorScheme.primary
-                  : Colors.white.withOpacity(0.8),
+                  : Colors.white.withValues(alpha: 0.8),
               size: 24,
             ),
           )
@@ -4341,7 +4357,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -4564,7 +4580,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withValues(alpha: 0.55),
                   borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(6),
                     topLeft: Radius.circular(8),
@@ -4581,7 +4597,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : Colors.white.withOpacity(0.8),
+                    : Colors.white.withValues(alpha: 0.8),
                 size: 20,
               ),
             ),
@@ -4593,7 +4609,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               dateStr,
               style: TextStyle(
                 fontSize: 12,
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             )
           : null,
@@ -4712,7 +4728,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 1),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withOpacity(0.9),
+                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.9),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10),
@@ -4740,7 +4756,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withValues(alpha: 0.55),
                   borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(6),
                     topLeft: Radius.circular(10),
@@ -4774,7 +4790,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withValues(alpha: 0.55),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Broken.cloud, color: Colors.white, size: 10),
@@ -4797,7 +4813,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: theme.colorScheme.onSurface.withOpacity(0.55),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
           fontSize: 11,
         ),
       ),
@@ -4987,7 +5003,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer.withOpacity(0.2),
+              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -5031,7 +5047,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 10,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ),
@@ -5045,7 +5061,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.6),
+                  color: Colors.black.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -5066,7 +5082,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : Colors.white.withOpacity(0.8),
+                    : Colors.white.withValues(alpha: 0.8),
                 size: 24,
               ),
             )
@@ -5080,7 +5096,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -5128,7 +5144,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -5165,7 +5181,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withValues(alpha: 0.55),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Broken.cloud, color: Colors.white, size: 10),
@@ -5184,7 +5200,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             ? '${FileUtils.formatBytes(size, 1)} • ${FileUtils.formatDate(modified)}'
             : FileUtils.formatBytes(size, 1),
         style: TextStyle(
-          color: theme.colorScheme.onSurface.withOpacity(0.6),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           fontSize: 11,
         ),
       ),
@@ -5331,9 +5347,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: color.withOpacity(0.15)),
+              border: Border.all(color: color.withValues(alpha: 0.15)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -5342,7 +5358,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.15),
+                    color: color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -5373,7 +5389,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   FileUtils.formatBytes(size, 2),
                   style: TextStyle(
                     fontSize: 10,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
                 if (showDate)
@@ -5381,7 +5397,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     dateStr.split(',').first,
                     style: TextStyle(
                       fontSize: 9,
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                   ),
               ],
@@ -5395,7 +5411,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : Colors.white.withOpacity(0.8),
+                    : Colors.white.withValues(alpha: 0.8),
                 size: 24,
               ),
             )
@@ -5408,7 +5424,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -5426,7 +5442,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Broken.cloud, color: Colors.white, size: 12),
@@ -5466,7 +5482,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.15),
+              color: iconColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: isApk
@@ -5530,7 +5546,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
+                  color: Colors.black.withValues(alpha: 0.55),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Broken.cloud, color: Colors.white, size: 10),
@@ -5549,7 +5565,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             ? '${FileUtils.formatBytes(size, 1)} • ${FileUtils.formatDate(modified)}'
             : FileUtils.formatBytes(size, 1),
         style: TextStyle(
-          color: theme.colorScheme.onSurface.withOpacity(0.6),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           fontSize: 11,
         ),
       ),
@@ -5693,9 +5709,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: iconColor.withOpacity(0.15)),
+              border: Border.all(color: iconColor.withValues(alpha: 0.15)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -5704,7 +5720,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.15),
+                    color: iconColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -5742,7 +5758,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   FileUtils.formatBytes(size, 2),
                   style: TextStyle(
                     fontSize: 10,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
                 if (showDate)
@@ -5750,7 +5766,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                     dateStr.split(',').first,
                     style: TextStyle(
                       fontSize: 9,
-                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                   ),
               ],
@@ -5764,7 +5780,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 isSelected ? Broken.tick_square : Icons.check_box_outline_blank,
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : Colors.white.withOpacity(0.8),
+                    : Colors.white.withValues(alpha: 0.8),
                 size: 24,
               ),
             )
@@ -5777,7 +5793,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -5795,7 +5811,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               child: Container(
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Broken.cloud, color: Colors.white, size: 12),
@@ -5853,13 +5869,13 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           Icon(
             _emptyIcon,
             size: 72,
-            color: theme.colorScheme.onSurface.withOpacity(0.2),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
           ),
           const SizedBox(height: 16),
           Text(
             L10n.of(context).ui_not_found_title(_title.toLowerCase()),
             style: TextStyle(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               fontSize: 16,
             ),
           ),
@@ -5878,7 +5894,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           Icon(
             Broken.info_circle,
             size: 72,
-            color: theme.colorScheme.onSurface.withOpacity(0.2),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
           ),
           const SizedBox(height: 16),
           Padding(
@@ -5887,7 +5903,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               L10n.of(context).ui_media_load_failed,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                 fontSize: 16,
               ),
             ),
@@ -5926,7 +5942,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
 
   Widget _buildScopeToggle(ThemeData theme) {
     final isLocal = _scopeFilter == _ScopeFilter.local;
-    final outlineColor = theme.colorScheme.outline.withOpacity(0.5);
+    final outlineColor = theme.colorScheme.outline.withValues(alpha: 0.5);
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
       child: Row(
@@ -5939,7 +5955,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               decoration: BoxDecoration(
                 color: isLocal
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.surfaceContainerHighest.withOpacity(
+                    : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 
                         0.4,
                       ),
                 borderRadius: BorderRadius.circular(12),
@@ -6008,7 +6024,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               decoration: BoxDecoration(
                 color: !isLocal
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.surfaceContainerHighest.withOpacity(
+                    : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 
                         0.4,
                       ),
                 borderRadius: BorderRadius.circular(12),
@@ -6155,7 +6171,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       child: Container(
         height: 30,
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.25),
+          color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.25),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -6328,12 +6344,12 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                         radius: 16,
                         color: theme.colorScheme.primary,
                         backgroundColor: theme.colorScheme.onSurface
-                            .withOpacity(0.1),
+                            .withValues(alpha: 0.1),
                       ),
                     ),
                   ),
                   Material(
-                    color: theme.colorScheme.primaryContainer.withOpacity(0.5),
+                    color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(13),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -6405,7 +6421,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: theme.colorScheme.onSurface
-                                          .withOpacity(0.6),
+                                          .withValues(alpha: 0.6),
                                     ),
                                   ),
                                 ],
@@ -6413,7 +6429,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                             ),
                             Icon(
                               Icons.chevron_right_rounded,
-                              color: theme.colorScheme.onSurface.withOpacity(
+                              color: theme.colorScheme.onSurface.withValues(alpha: 
                                 0.4,
                               ),
                               size: 24,
@@ -6463,7 +6479,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Material(
-        color: theme.colorScheme.primaryContainer.withOpacity(0.5),
+        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(13),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -6522,7 +6538,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -6530,7 +6546,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                 ),
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   size: 24,
                 ),
               ],
@@ -6943,7 +6959,7 @@ class _RemoteImageThumbState extends State<_RemoteImageThumb> {
         borderRadius: BorderRadius.circular(10),
         child: _loading
             ? Container(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 child: const Center(
                   child: SizedBox(
                     width: 18,
@@ -6970,7 +6986,7 @@ class _RemoteImageThumbState extends State<_RemoteImageThumb> {
                             height: double.infinity,
                             cacheWidth: 300,
                             errorBuilder: (c, e, s) => Container(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.grey.withValues(alpha: 0.1),
                               child: const Center(
                                 child: Icon(
                                   Broken.image,
@@ -6981,7 +6997,7 @@ class _RemoteImageThumbState extends State<_RemoteImageThumb> {
                             ),
                           ))
                   : Container(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha: 0.1),
                       child: const Center(
                         child: Icon(Broken.image, size: 24, color: Colors.grey),
                       ),
@@ -7087,7 +7103,7 @@ class _CachedImageTileState extends State<_CachedImageTile> {
                   height: double.infinity,
                   gaplessPlayback: true,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     child: const Center(
                       child: Icon(Broken.image, size: 24, color: Colors.grey),
                     ),
@@ -7157,7 +7173,7 @@ class _RemoteVideoTileWidgetState extends State<_RemoteVideoTileWidget> {
                       height: double.infinity,
                       gaplessPlayback: true,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         child: const Center(
                           child: Icon(
                             Broken.video,
@@ -7177,7 +7193,7 @@ class _RemoteVideoTileWidgetState extends State<_RemoteVideoTileWidget> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                    colors: [Colors.transparent, Colors.black.withValues(alpha: 0.5)],
                   ),
                 ),
               ),
@@ -7187,7 +7203,7 @@ class _RemoteVideoTileWidgetState extends State<_RemoteVideoTileWidget> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -7316,12 +7332,12 @@ class _VideoListThumbnailState extends State<_VideoListThumbnail> {
                 height: double.infinity,
                 gaplessPlayback: true,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+                  color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                   child: Center(
                     child: Icon(
                       Broken.video,
                       size: 20,
-                      color: theme.colorScheme.onPrimaryContainer.withOpacity(
+                      color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 
                         0.6,
                       ),
                     ),
@@ -7330,12 +7346,12 @@ class _VideoListThumbnailState extends State<_VideoListThumbnail> {
               )
             else if (_loaded)
               Container(
-                color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                 child: Center(
                   child: Icon(
                     Broken.video,
                     size: 20,
-                    color: theme.colorScheme.onPrimaryContainer.withOpacity(
+                    color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 
                       0.6,
                     ),
                   ),
@@ -7343,7 +7359,7 @@ class _VideoListThumbnailState extends State<_VideoListThumbnail> {
               )
             else
               Container(
-                color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                 child: const Center(
                   child: SizedBox(
                     width: 14,
@@ -7357,7 +7373,7 @@ class _VideoListThumbnailState extends State<_VideoListThumbnail> {
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -7456,7 +7472,7 @@ class _CachedVideoTileState extends State<_CachedVideoTile> {
                       height: double.infinity,
                       gaplessPlayback: true,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         child: const Center(
                           child: Icon(
                             Broken.video,
@@ -7476,7 +7492,7 @@ class _CachedVideoTileState extends State<_CachedVideoTile> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                    colors: [Colors.transparent, Colors.black.withValues(alpha: 0.5)],
                   ),
                 ),
               ),
@@ -7486,7 +7502,7 @@ class _CachedVideoTileState extends State<_CachedVideoTile> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -7502,7 +7518,7 @@ class _CachedVideoTileState extends State<_CachedVideoTile> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.7),
+                  color: Colors.black.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -7588,7 +7604,7 @@ class _LocalVideoTileState extends State<_LocalVideoTile> {
             height: double.infinity,
             gaplessPlayback: true,
             errorBuilder: (context, error, stackTrace) => Container(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               child: const Center(
                 child: Icon(Broken.video, size: 24, color: Colors.grey),
               ),
@@ -7600,7 +7616,7 @@ class _LocalVideoTileState extends State<_LocalVideoTile> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.5)],
                 ),
               ),
             ),
@@ -7610,7 +7626,7 @@ class _LocalVideoTileState extends State<_LocalVideoTile> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -7625,7 +7641,7 @@ class _LocalVideoTileState extends State<_LocalVideoTile> {
             right: 0,
             bottom: 0,
             child: Container(
-              color: Colors.black.withOpacity(0.55),
+              color: Colors.black.withValues(alpha: 0.55),
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               child: Text(
                 widget.title,
@@ -7692,7 +7708,7 @@ class _SelectedFrame extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
         decoration: BoxDecoration(
-          color: primary.withOpacity(0.14),
+          color: primary.withValues(alpha: 0.14),
           border: Border.all(color: primary, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -7709,7 +7725,7 @@ class _SelectedFrame extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border.all(color: primary, width: 3),
                 borderRadius: BorderRadius.circular(10),
-                color: primary.withOpacity(0.16),
+                color: primary.withValues(alpha: 0.16),
               ),
             ),
           ),
@@ -7765,9 +7781,9 @@ class _FolderGridItemState extends State<FolderGridItem> {
         borderRadius: BorderRadius.circular(20),
         child: Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: Border.all(
-              color: theme.colorScheme.outlineVariant.withOpacity(0.4),
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
             ),
           ),
           child: Stack(
@@ -7793,7 +7809,7 @@ class _FolderGridItemState extends State<FolderGridItem> {
                   ),
                   child: Icon(
                     Broken.folder_2,
-                    color: theme.colorScheme.primary.withOpacity(0.5),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
                     size: 40,
                   ),
                 ),
@@ -7804,7 +7820,7 @@ class _FolderGridItemState extends State<FolderGridItem> {
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.85),
+                        Colors.black.withValues(alpha: 0.85),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -7836,7 +7852,7 @@ class _FolderGridItemState extends State<FolderGridItem> {
                     Text(
                       '$_count ${L10n.of(context).items}',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.75),
+                        color: Colors.white.withValues(alpha: 0.75),
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                       ),
@@ -7878,7 +7894,7 @@ class _MediaFolderCover extends StatelessWidget {
         child: Center(
           child: Icon(
             Broken.music,
-            color: theme.colorScheme.primary.withOpacity(0.5),
+            color: theme.colorScheme.primary.withValues(alpha: 0.5),
             size: 40,
           ),
         ),
@@ -7906,7 +7922,7 @@ class _MediaFolderCover extends StatelessWidget {
             child: Center(
               child: Icon(
                 Broken.video,
-                color: theme.colorScheme.primary.withOpacity(0.5),
+                color: theme.colorScheme.primary.withValues(alpha: 0.5),
                 size: 40,
               ),
             ),
@@ -7920,7 +7936,7 @@ class _MediaFolderCover extends StatelessWidget {
         File(samplePath),
         fit: BoxFit.cover,
         placeholderBuilder: (context) =>
-            Container(color: Colors.grey.withOpacity(0.1)),
+            Container(color: Colors.grey.withValues(alpha: 0.1)),
       );
     }
     return Image.file(
@@ -7928,11 +7944,11 @@ class _MediaFolderCover extends StatelessWidget {
       fit: BoxFit.cover,
       cacheWidth: 200,
       errorBuilder: (context, error, stackTrace) => Container(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         child: Center(
           child: Icon(
             Broken.image,
-            color: theme.colorScheme.primary.withOpacity(0.5),
+            color: theme.colorScheme.primary.withValues(alpha: 0.5),
             size: 40,
           ),
         ),
@@ -7967,9 +7983,9 @@ class _MediaFolderTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: Border.all(
-              color: theme.colorScheme.outlineVariant.withOpacity(0.4),
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
             ),
           ),
           child: Stack(
@@ -7991,7 +8007,7 @@ class _MediaFolderTile extends StatelessWidget {
                   ),
                   child: Icon(
                     Broken.folder_2,
-                    color: theme.colorScheme.primary.withOpacity(0.5),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
                     size: 40,
                   ),
                 ),
@@ -8001,7 +8017,7 @@ class _MediaFolderTile extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.85),
+                        Colors.black.withValues(alpha: 0.85),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -8018,7 +8034,7 @@ class _MediaFolderTile extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.45),
+                      color: Colors.black.withValues(alpha: 0.45),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -8057,7 +8073,7 @@ class _MediaFolderTile extends StatelessWidget {
                     Text(
                       '$count ${L10n.of(context).items}',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.75),
+                        color: Colors.white.withValues(alpha: 0.75),
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                       ),

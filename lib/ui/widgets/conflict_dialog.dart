@@ -176,7 +176,7 @@ class _ConflictDialogState extends State<ConflictDialog> {
             Text(
               L10n.of(context).msg_file_exists_desc(widget.fileName),
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.8),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
               ),
             ),
             const SizedBox(height: 20),
@@ -242,7 +242,7 @@ class _ConflictDialogState extends State<ConflictDialog> {
                         L10n.of(context).msge59e35b5,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface.withOpacity(0.8),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                         ),
                       ),
                     ),
@@ -365,10 +365,10 @@ class _ConflictDialogState extends State<ConflictDialog> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isNewer ? theme.colorScheme.primary.withOpacity(0.4) : theme.dividerColor.withOpacity(0.1),
+          color: isNewer ? theme.colorScheme.primary.withValues(alpha: 0.4) : theme.dividerColor.withValues(alpha: 0.1),
           width: isNewer ? 1.8 : 1.0,
         ),
       ),
@@ -392,7 +392,7 @@ class _ConflictDialogState extends State<ConflictDialog> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.15),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -416,7 +416,7 @@ class _ConflictDialogState extends State<ConflictDialog> {
             dateText,
             style: TextStyle(
               fontSize: 11,
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],

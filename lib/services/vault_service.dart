@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'crypt/scrypt.dart';
 
 /// 保险箱中的一个加密条目（纯 UI 模型，不再持久化）。
 ///
@@ -56,8 +59,9 @@ class VaultFileRecord {
 /// ## 历史沿革
 /// 旧版（V1/V2/V3）把解锁密码同时当作文件加密密钥，改密需逐条重加密；
 /// 该格式已彻底移除。门禁凭据沿用 `vault_salt` / `vault_password_hash`
-/// 两个键（算法同为 `sha256(password + salt)`），因此老用户的原密码无需
-/// 迁移即可继续解锁。
+/// 两个键：历史记录为 `sha256(password + salt)`，可无感解锁；校验通过后
+/// 自动透明升级为 `scrypt`（见 `vault_password_scheme`），新设密码一律
+/// 使用 scrypt，防止 6 位数字 PIN 被快速穷举。
 class VaultService {
   static const String _kSalt = 'vault_salt';
   static const String _kHash = 'vault_password_hash';
@@ -107,17 +111,36 @@ class VaultService {
   static Future<void> setPassword(String password) async {
     final prefs = await SharedPreferences.getInstance();
     final salt = base64Encode(_randomBytes(16));
+    final hash = await _scryptHash(password, salt);
     await prefs.setString(_kSalt, salt);
-    await prefs.setString(_kHash, _hash(password, salt));
+    await prefs.setString(_kHash, hash);
+    await prefs.setString(_kScheme, _kSchemeScrypt);
   }
 
   /// 校验解锁密码
+  ///
+  /// 旧版门禁哈希是单轮 sha256（可被快速穷举），这里对新密码统一使用
+  /// scrypt（内存困难）派生；发现存量 sha256 记录且密码验证通过时，
+  /// 透明升级为 scrypt，用户无感知。
   static Future<bool> verifyPassword(String password) async {
     final prefs = await SharedPreferences.getInstance();
     final salt = prefs.getString(_kSalt);
     final hash = prefs.getString(_kHash);
     if (salt == null || hash == null) return false;
-    return hash == _hash(password, salt);
+    final scheme = prefs.getString(_kScheme) ?? _kSchemeLegacySha256;
+    if (scheme == _kSchemeScrypt) {
+      return hash == await _scryptHash(password, salt);
+    }
+    final legacyOk = hash == _legacyHash(password, salt);
+    if (legacyOk) {
+      // 静默升级：旧 sha256 记录 → scrypt
+      try {
+        await setPassword(password);
+      } catch (_) {
+        // 升级失败不影响本次解锁结果
+      }
+    }
+    return legacyOk;
   }
 
   /// 修改解锁密码。
@@ -133,12 +156,35 @@ class VaultService {
     return true;
   }
 
-  /// 门禁哈希：sha256(password + salt)
+  /// 门禁哈希方案标识
+  static const String _kScheme = 'vault_password_scheme';
+  static const String _kSchemeLegacySha256 = 'sha256';
+  static const String _kSchemeScrypt = 'scrypt-v1';
+
+  /// 旧版门禁哈希：sha256(password + salt)
   ///
-  /// 与旧版算法保持一致，因此历史 `vault_salt` / `vault_password_hash`
-  /// 可直接沿用，用户无需重新设置密码。
-  static String _hash(String password, String salt) =>
+  /// 仅用于校验存量记录（历史 `vault_salt` / `vault_password_hash`），
+  /// 新写入一律走 [_scryptHash]。
+  static String _legacyHash(String password, String salt) =>
       crypto.sha256.convert(utf8.encode(password + salt)).toString();
+
+  /// scrypt 门禁哈希（N=16384, r=8, p=1，内存困难，6 位数字 PIN 无法秒级穷举）。
+  ///
+  /// scrypt 在主 isolate 执行会卡 UI（约需 16MB 内存 + 数十毫秒），
+  /// 因此放入独立 isolate 计算。
+  static Future<String> _scryptHash(String password, String salt) async {
+    return Isolate.run(() {
+      final derived = scrypt(
+        utf8.encode(password),
+        utf8.encode(salt),
+        N: 16384,
+        r: 8,
+        p: 1,
+        keyLength: 32,
+      );
+      return base64Encode(derived);
+    });
+  }
 
   static List<int> _randomBytes(int n) =>
       List<int>.generate(n, (_) => _secureRandom.nextInt(256));

@@ -799,7 +799,8 @@
   "ui_favorites_swipe_hint": "画面の下から上にスワイプして「お気に入り」を開けます",
   "@ui_favorites_swipe_hint": {
     "description": "ui\\widgets\\favorites_sheet.dart"
-  },  "@ui_new_favorite": {
+  },
+  "@ui_new_favorite": {
     "description": "directory_screen.dart"
   },
   "ui_new_favorite": "お気に入りに追加",
@@ -1276,8 +1277,12 @@
   "@ui_month_group_header": {
     "description": "ui\\screens\\media_category_screen.dart",
     "placeholders": {
-      "year": {"type": "int"},
-      "month": {"type": "int"}
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
     }
   },
   "msgb8140039": "古いもの順（月別グループ）",
@@ -1841,7 +1846,6 @@
     "description": "ui\\screens\\more_settings_screen.dart"
   },
   "msg64a6476a": "デフォルト",
-
   "app_icon_classic2": "クラシック 2",
   "@app_icon_classic2": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -1913,7 +1917,8 @@
   "app_icon_sunset_zf": "サンセットパープル",
   "@app_icon_sunset_zf": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  },  "@title": {
+  },
+  "@title": {
     "type": "text"
   },
   "title": "アプリアイコンを{title}に切り替えました",
@@ -3239,17 +3244,29 @@
   "update_err_rate_limit": "GitHub のリクエスト上限に達しました。しばらくしてから再試行してください",
   "update_err_http": "サーバーエラーが返されました（HTTP {code}）",
   "@update_err_http": {
-    "placeholders": { "code": { "type": "String" } }
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   },
   "update_err_malformed": "サーバーの応答データが異常です。しばらくしてから再試行してください",
   "update_err_version_unknown": "現在のバージョン番号を取得できません。アプリを再起動して再試行してください",
   "update_remote_version": "最新：{version}",
   "@update_remote_version": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
   "update_checked_at": "確認時刻：{time}",
   "@update_checked_at": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "update_degraded_hint": "ウェブ検出に切り替えました（アプリ内ダウンロードは不可）",
   "update_source_label": "更新ソース",
@@ -3259,7 +3276,6 @@
   "update_source_dialog_desc": "空欄の場合は GitHub 公式 API を使用します。ミラーまたは自作のエンドポイント（GitHub と同じ構造の JSON を返すもの）を入力できます。URL 内の REPO はリポジトリパスを表します。",
   "update_source_hint": "https://example.com/…/releases/latest",
   "update_source_invalid": "URL が無効です。http:// または https:// で始めてください",
-
   "ui_paste_and_clear": "貼り付けて消去",
   "ui_cut_paste_hint": "切り取りは移動です。貼り付け後に自動で消去",
   "ui_search_in_settings": "設定内を検索",
@@ -4581,7 +4597,6 @@
       "count": {
         "type": "int"
       },
-
       "folderCount": {
         "type": "int"
       },
@@ -4609,8 +4624,7 @@
   "prop_hash_failed": "ハッシュ計算に失敗",
   "@prop_hash_failed": {
     "description": "Hash computation failed"
-  }
-,
+  },
   "msg_add_subtitle": "字幕を追加",
   "@msg_add_subtitle": {
     "description": "Add subtitle option in video player more menu"
@@ -8217,7 +8231,7 @@
   },
   "ui_transfers": "接続",
   "ui_profile": "プロフィール",
-  "msg_coming_soon": "近日公開",
+  "msg_coming_soon": "近日公開",
   "toolbox_text_editor": "テキストエディタ",
   "@toolbox_text_editor": {
     "description": "toolbox: text editor entry"
@@ -8251,17 +8265,31 @@
     "description": "text editor: import text file"
   },
   "ui_bottom_tab_bar": "ナビゲーションバー",
-  "@ui_bottom_tab_bar": {"description": "Navigation bar (visibility + position)"},
+  "@ui_bottom_tab_bar": {
+    "description": "Navigation bar (visibility + position)"
+  },
   "ui_persistent_tab_bar": "他のページでもナビゲーションバーを表示",
   "ui_pick_bottom_tab": "下部エントリを選択",
-  "@ui_pick_bottom_tab": {"description": "Choose bottom entry"},
+  "@ui_pick_bottom_tab": {
+    "description": "Choose bottom entry"
+  },
   "ui_long_press_switch": "長押しで変更できます",
-  "@ui_long_press_switch": {"description": "Long press to change"},
+  "@ui_long_press_switch": {
+    "description": "Long press to change"
+  },
   "ui_bottom_tab_slot": "スロット {index}",
-  "@ui_bottom_tab_slot": {"description": "Slot {index}", "placeholders": {"index": {"type": "Object"}}},
+  "@ui_bottom_tab_slot": {
+    "description": "Slot {index}",
+    "placeholders": {
+      "index": {
+        "type": "Object"
+      }
+    }
+  },
   "ui_bottom_tab_custom_hint": "下部エントリは任意のショートカットに置き換えられます",
-  "@ui_bottom_tab_custom_hint": {"description": "Bottom entries can be replaced with any shortcut"}
-,
+  "@ui_bottom_tab_custom_hint": {
+    "description": "Bottom entries can be replaced with any shortcut"
+  },
   "app_icon_original": "クラシックアイコン",
   "@app_icon_original": {
     "description": "Classic app icon"
@@ -8273,8 +8301,7 @@
   "cut_to_other_window": "別のウィンドウへ切り取り",
   "@cut_to_other_window": {
     "description": "ui\\widgets\\cut_destination_sheet.dart"
-  }
-,
+  },
   "auto_open_created_folder": "作成したフォルダーを自動で開く",
   "@auto_open_created_folder": {
     "description": "ui\\screens\\more_settings_screen.dart"
@@ -8282,8 +8309,7 @@
   "auto_open_created_folder_desc": "フォルダー作成後に自動的にそのフォルダーへ移動",
   "@auto_open_created_folder_desc": {
     "description": "ui\\screens\\more_settings_screen.dart"
-  }
-,
+  },
   "paste_keep_clipboard": "貼り付け後にクリップボードを保持",
   "@paste_keep_clipboard": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
@@ -8291,9 +8317,7 @@
   "paste_keep_clipboard_desc": "チェックなしの場合、貼り付け後にクリップボードを自動クリア",
   "@paste_keep_clipboard_desc": {
     "description": "ui\\widgets\\clipboard_menu_sheet.dart"
-  }
-
-,
+  },
   "netdisk": "ネットドライブ",
   "@netdisk": {
     "description": "ui\\screens\\transfers_screen.dart"
@@ -8339,21 +8363,85 @@
     "description": "services\\remote\\netdisk"
   },
   "share_normal_share": "通常共有",
-  "@share_normal_share": { "description": "Share mode: share original files as-is" },
+  "@share_normal_share": {
+    "description": "Share mode: share original files as-is"
+  },
   "share_normal_share_hint": "元のファイルを変更せずに共有します",
-  "@share_normal_share_hint": { "description": "Share mode hint: original file is not modified" },
+  "@share_normal_share_hint": {
+    "description": "Share mode hint: original file is not modified"
+  },
   "share_safe_share": "安全に共有",
-  "@share_safe_share": { "description": "Share mode: strip metadata (EXIF/GPS) before sharing" },
+  "@share_safe_share": {
+    "description": "Share mode: strip metadata (EXIF/GPS) before sharing"
+  },
   "share_safe_share_hint": "位置情報・カメラ情報・文書の作成者などのプライバシーデータを削除。元のファイルは変更されません",
-  "@share_safe_share_hint": { "description": "Safe share hint: strips location/camera privacy data, original unchanged" },
+  "@share_safe_share_hint": {
+    "description": "Safe share hint: strips location/camera privacy data, original unchanged"
+  },
   "share_nothing_found": "共有できる項目が見つかりません。",
-  "@share_nothing_found": { "description": "Share: no shareable items found" },
+  "@share_nothing_found": {
+    "description": "Share: no shareable items found"
+  },
   "share_prepare_error": "ファイルの準備中にエラーが発生しました：{error}",
-  "@share_prepare_error": { "description": "Share: error while preparing files (with error text)", "placeholders": {"error": {}} },
+  "@share_prepare_error": {
+    "description": "Share: error while preparing files (with error text)",
+    "placeholders": {
+      "error": {}
+    }
+  },
   "share_preparing_title": "共有の準備中…",
-  "@share_preparing_title": { "description": "Share: loading dialog title while preparing files" },
+  "@share_preparing_title": {
+    "description": "Share: loading dialog title while preparing files"
+  },
   "share_preparing_body": "ファイルを処理しています。しばらくお待ちください",
-  "@share_preparing_body": { "description": "Share: loading dialog body while preparing files" },
+  "@share_preparing_body": {
+    "description": "Share: loading dialog body while preparing files"
+  },
   "share_safe_unsupported": "{count} 件のファイルはメタデータを削除できず（暗号化の可能性）、そのまま共有しました",
-  "@share_safe_unsupported": { "description": "Safe share: files that could not be stripped were shared as-is", "placeholders": {"count": {}} }
+  "@share_safe_unsupported": {
+    "description": "Safe share: files that could not be stripped were shared as-is",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "ui_ftp_password": "FTP パスワード",
+  "@ui_ftp_password": {
+    "description": "Security setting: ui_ftp_password"
+  },
+  "ui_ftp_password_required": "パスワードを設定してください。設定しない場合、FTP サーバーはすべてのクライアントを拒否します",
+  "@ui_ftp_password_required": {
+    "description": "Security setting: ui_ftp_password_required"
+  },
+  "ui_web_share_password": "アクセスパスワード",
+  "@ui_web_share_password": {
+    "description": "Security setting: ui_web_share_password"
+  },
+  "ui_web_share_password_hint": "空欄の場合は認証を無効化します（信頼できる LAN のみ推奨）",
+  "@ui_web_share_password_hint": {
+    "description": "Security setting: ui_web_share_password_hint"
+  },
+  "ui_web_share_password_generated": "インターネットアクセス用パスワードを自動生成しました：{password}",
+  "@ui_web_share_password_generated": {
+    "description": "Security setting: ui_web_share_password_generated"
+  },
+  "ui_web_share_password_required_for_tunnel": "インターネット共有にはアクセスパスワードが必要です",
+  "@ui_web_share_password_required_for_tunnel": {
+    "description": "Security setting: ui_web_share_password_required_for_tunnel"
+  },
+  "crypt_auto_encrypt_section": "自動暗号化",
+  "@crypt_auto_encrypt_section": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_section"
+  },
+  "crypt_auto_encrypt_title": "新規ファイルを自動暗号化",
+  "@crypt_auto_encrypt_title": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_title"
+  },
+  "crypt_auto_encrypt_desc": "暗号化済みディレクトリを監視し、書き込み完了した新規ファイルを自動的に暗号化します（常駐通知が必要）",
+  "@crypt_auto_encrypt_desc": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_desc"
+  },
+  "crypt_auto_encrypt_watching": "{count} 個のディレクトリを保護中。新規ファイルは自動的に暗号化されます",
+  "@crypt_auto_encrypt_watching": {
+    "description": "Auto-encrypt new files feature: crypt_auto_encrypt_watching"
+  }
 }

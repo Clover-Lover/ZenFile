@@ -190,7 +190,7 @@ class _NetdiskHomeScreenState extends State<NetdiskHomeScreen> {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
+                        color: color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(_iconFor(conn), color: color, size: 24),
@@ -205,7 +205,7 @@ class _NetdiskHomeScreenState extends State<NetdiskHomeScreen> {
                         l10n.netdisk_logged_in,
                         style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
@@ -227,12 +227,12 @@ class _NetdiskHomeScreenState extends State<NetdiskHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.cloud_outlined,
-              size: 64, color: theme.colorScheme.onSurface.withOpacity(0.15)),
+              size: 64, color: theme.colorScheme.onSurface.withValues(alpha: 0.15)),
           const SizedBox(height: 20),
           Text(
             l10n.netdisk_empty,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -240,7 +240,7 @@ class _NetdiskHomeScreenState extends State<NetdiskHomeScreen> {
           Text(
             l10n.netdisk_empty_hint,
             style: TextStyle(
-              color: theme.colorScheme.onSurface.withOpacity(0.4),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
               fontSize: 14,
             ),
           ),
@@ -282,7 +282,7 @@ class _NetdiskHomeScreenState extends State<NetdiskHomeScreen> {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2B6CB0).withOpacity(0.1),
+                  color: const Color(0xFF2B6CB0).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(Broken.cloud, color: Color(0xFF2B6CB0), size: 22),
@@ -298,7 +298,7 @@ class _NetdiskHomeScreenState extends State<NetdiskHomeScreen> {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF6A00).withOpacity(0.1),
+                  color: const Color(0xFFFF6A00).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child:

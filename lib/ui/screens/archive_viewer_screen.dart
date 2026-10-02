@@ -622,12 +622,12 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
 
                           return Card(
                             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                            color: isSelected ? theme.colorScheme.primaryContainer.withOpacity(0.4) : theme.colorScheme.surface,
+                            color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4) : theme.colorScheme.surface,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                               side: BorderSide(
-                                color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withOpacity(0.1),
+                                color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.1),
                                 width: isSelected ? 1.5 : 1.0,
                               ),
                             ),
@@ -651,7 +651,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
                                       width: 48,
                                       height: 48,
                                       decoration: BoxDecoration(
-                                        color: isSelected ? theme.colorScheme.primary : (item.isDirectory ? theme.colorScheme.primary.withOpacity(0.1) : iconColor.withOpacity(0.1)),
+                                        color: isSelected ? theme.colorScheme.primary : (item.isDirectory ? theme.colorScheme.primary.withValues(alpha: 0.1) : iconColor.withValues(alpha: 0.1)),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: (!isSelected && !item.isDirectory && FileUtils.isArchive(item.name))
@@ -681,7 +681,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
                                             Text(
                                               FileUtils.formatBytes(item.size, 2),
                                               style: theme.textTheme.bodySmall?.copyWith(
-                                                color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                                                color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
                                               ),
                                             ),
                                           ],

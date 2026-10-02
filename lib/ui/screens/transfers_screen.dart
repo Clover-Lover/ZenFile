@@ -95,7 +95,7 @@ class TransfersScreen extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: theme.colorScheme.onSurface.withOpacity(0.18),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.18),
                         width: 1,
                       ),
                       borderRadius: BorderRadius.circular(12),
@@ -105,7 +105,7 @@ class TransfersScreen extends StatelessWidget {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: item.color.withOpacity(0.15),
+                          color: item.color.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(item.icon, color: item.color, size: 24),
@@ -113,7 +113,7 @@ class TransfersScreen extends StatelessWidget {
                       title: Text(item.title),
                       trailing: Icon(
                         Icons.chevron_right,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
                       onTap: () {
                         Navigator.push(

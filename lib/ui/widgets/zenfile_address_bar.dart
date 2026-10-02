@@ -245,15 +245,15 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
             child: Material(
               elevation: 12,
               borderRadius: BorderRadius.circular(16),
-              color: theme.colorScheme.surface.withOpacity(0.95),
-              shadowColor: Colors.black.withOpacity(0.4),
+              color: theme.colorScheme.surface.withValues(alpha: 0.95),
+              shadowColor: Colors.black.withValues(alpha: 0.4),
               child: Container(
                 constraints: BoxConstraints(
                   maxHeight: (size.height * 0.35).clamp(150.0, 300.0),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: theme.dividerColor.withOpacity(0.15)),
+                  border: Border.all(color: theme.dividerColor.withValues(alpha: 0.15)),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
@@ -274,7 +274,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                               child: Text(
                                 L10n.of(context).msg7d6c1284,
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                   fontStyle: FontStyle.italic,
                                 ),
                                 textAlign: TextAlign.center,
@@ -303,7 +303,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                   leading: Icon(
                                     isDir ? Broken.folder : Broken.document,
                                     size: 20,
-                                    color: isDir ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.6),
+                                    color: isDir ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                   ),
                                   title: Text(
                                     displayName,
@@ -315,7 +315,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                     fullPath,
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -412,16 +412,16 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
         height: 48,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceVariant.withOpacity(0.35),
+          color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.35),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: _isEditing ? theme.colorScheme.primary.withOpacity(0.5) : theme.dividerColor.withOpacity(0.1),
+            color: _isEditing ? theme.colorScheme.primary.withValues(alpha: 0.5) : theme.dividerColor.withValues(alpha: 0.1),
             width: _isEditing ? 1.5 : 1.0,
           ),
           boxShadow: _isEditing
               ? [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.08),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.08),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   )
@@ -435,7 +435,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
               icon: Icon(
                 _isEditing ? Broken.arrow_left : Broken.edit,
                 size: 20,
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
               onPressed: () {
                 if (_isEditing) {
@@ -497,7 +497,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(8),
                                           border: Border.all(
-                                            color: theme.dividerColor.withOpacity(0.25),
+                                            color: theme.dividerColor.withValues(alpha: 0.25),
                                             width: 1,
                                           ),
                                         ),
@@ -508,7 +508,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                             fontWeight: isLast ? FontWeight.bold : FontWeight.w500,
                                             color: isLast
                                                 ? theme.colorScheme.primary
-                                                : theme.colorScheme.onSurface.withOpacity(0.8),
+                                                : theme.colorScheme.onSurface.withValues(alpha: 0.8),
                                           ),
                                         ),
                                       ),
@@ -520,12 +520,12 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                           decoration: BoxDecoration(
-                                            color: theme.colorScheme.surface.withOpacity(0.92),
+                                            color: theme.colorScheme.surface.withValues(alpha: 0.92),
                                             borderRadius: BorderRadius.circular(16),
-                                            border: Border.all(color: theme.colorScheme.primary.withOpacity(0.35), width: 1.5),
+                                            border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.35), width: 1.5),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: theme.colorScheme.shadow.withOpacity(0.18),
+                                                color: theme.colorScheme.shadow.withValues(alpha: 0.18),
                                                 blurRadius: 16,
                                                 offset: const Offset(0, 8),
                                               ),
@@ -614,7 +614,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                           duration: const Duration(milliseconds: 200),
                                           decoration: BoxDecoration(
                                             color: isDragOverSegment
-                                                ? theme.colorScheme.primary.withOpacity(0.18)
+                                                ? theme.colorScheme.primary.withValues(alpha: 0.18)
                                                 : Colors.transparent,
                                             borderRadius: BorderRadius.circular(8),
                                             border: isDragOverSegment
@@ -631,7 +631,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                                   Icon(
                                     Broken.arrow_right_3,
                                     size: 14,
-                                    color: theme.colorScheme.onSurface.withOpacity(0.35),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
                                   ),
                               ],
                             );

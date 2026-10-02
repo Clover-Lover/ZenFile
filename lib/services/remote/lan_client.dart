@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'remote_client.dart';
+import 'remote_session_recovery.dart';
 
 /// Discovered server entry on the local network.
 class LanDiscoveredServer {
@@ -515,6 +516,11 @@ class LanClient extends RemoteClient {
   ///
   /// 不能只信 Dart 侧的 [_isConnected]：应用切后台 / 网络切换后 socket 会被
   /// 回收，标记却还是 true（假连接），下一次操作必然失败。
+  ///
+  /// ⚠️ 原生 `isAlive` 只读 `Connection.isConnected`（纯状态检查、无网络 IO），
+  /// 「静默死亡」（切后台被系统回收 / 中间 NAT 回收，无 RST）时它仍返回 true。
+  /// 所以状态层通过后还要做一次**真实轻量 IO**（列根目录 = 枚举共享，健康会话
+  /// 亚秒级完成）才算数，否则回前台体检对 SMB 形同虚设。
   @override
   Future<bool> checkAlive() async {
     final id = _sessionId;
@@ -525,10 +531,19 @@ class LanClient extends RemoteClient {
           .timeout(const Duration(seconds: 5));
       if (alive != true) {
         _isConnected = false;
+        return false;
       }
-      return alive == true;
     } catch (_) {
       // 原生查询失败（通道异常 / 会话已被原生清理）同样视为不可用。
+      return false;
+    }
+    // 真实 IO 探测：失败（含超时）一律判为不可用。约定不抛异常。
+    try {
+      await listDirectory('/', forceRefresh: true)
+          .timeout(const Duration(seconds: 8));
+      return true;
+    } catch (_) {
+      _isConnected = false;
       return false;
     }
   }
@@ -656,6 +671,10 @@ class LanClient extends RemoteClient {
         }).timeout(const Duration(seconds: 30));
         return; // 成功则直接返回
       } on PlatformException catch (e) {
+        // 连接/会话类失效：会话假死时每次内部重试都要白耗满 30s 超时，
+        // 3 次 ≈ 90s 才轮到上层恢复。立即上抛，交由上层（_withRemoteRetry /
+        // loadDirectory 的重建分支）重建连接后重试，对用户更透明。
+        if (isRemoteConnectionLostError(e)) rethrow;
         lastError = e;
         // 如果是"文件不存在"类错误，不重试直接返回
         final msg = (e.message ?? '').toLowerCase();
@@ -667,10 +686,9 @@ class LanClient extends RemoteClient {
           await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
         }
       } on TimeoutException {
-        lastError = Exception('SMB delete timed out');
-        if (attempt < maxRetries - 1) {
-          await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
-        }
+        // Dart 侧 30s 超时先于原生 smbj 60s SO 超时触发，是会话假死最常见
+        // 的表现，同上：立即上交给上层重建重试，不在内部空耗重试次数。
+        rethrow;
       }
     }
     // 所有重试都失败，抛出最后一个错误
