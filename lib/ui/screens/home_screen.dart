@@ -879,6 +879,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
           return [Broken.folder, L10n.of(context).ui_file, 1, false, slot];
         case 'tab_settings':
           return [Broken.setting_2, L10n.of(context).cat_settings, _settingsTabIndex, false, slot];
+        case 'tab_recent':
+          // 最近页走壳内导航（与默认 slot3 一致）
+          return [Broken.clock, L10n.of(context).cat_recent, -1, true, slot];
         default:
           return [Broken.link, L10n.of(context).ui_transfers, 2, false, slot];
       }
@@ -991,6 +994,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
         case 'tab_settings':
           _settingsTabBuilt = true;
           _switchTab(_settingsTabIndex);
+          return;
+        case 'tab_recent':
+          ShellNavigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AllRecentFilesScreen(
+                onNavigateTab: (i) => _switchTab(i),
+              ),
+            ),
+          );
           return;
         default:
           _switchTab(2);

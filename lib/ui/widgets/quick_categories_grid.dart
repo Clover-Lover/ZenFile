@@ -405,6 +405,12 @@ class QuickCategoriesGrid extends StatefulWidget {
             'icon': Broken.setting_2,
           },
           {
+            'type': 'builtin',
+            'key': 'tab_recent',
+            'label': l10n.cat_recent,
+            'icon': Broken.clock,
+          },
+          {
             'type': 'custom_entry',
             'key': 'custom_entry',
             'label':
@@ -2171,7 +2177,8 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
         case 1:
           return l10n.ui_file;
         case 3:
-          return l10n.cat_settings;
+          // v3.4b2 起第 4 槽默认「最近」（原「设置」已被替换）
+          return l10n.cat_recent;
         default:
           return l10n.ui_transfers;
       }
@@ -2184,6 +2191,8 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
           return l10n.ui_file;
         case 'tab_settings':
           return l10n.cat_settings;
+        case 'tab_recent':
+          return l10n.cat_recent;
         default:
           return l10n.ui_transfers;
       }
@@ -2199,7 +2208,7 @@ class _CustomizeCategoriesSheetState extends State<_CustomizeCategoriesSheet> {
     );
     final entry = map[cfg['key']];
     if (entry != null) return entry['label'] as String;
-    return slot == 3 ? l10n.cat_settings : l10n.ui_transfers;
+    return slot == 3 ? l10n.cat_recent : l10n.ui_transfers;
   }
 
   @override
