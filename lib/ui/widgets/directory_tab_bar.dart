@@ -4,20 +4,47 @@ import '../../providers/file_manager_provider.dart';
 import '../../core/icon_fonts/broken_icons.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 
-class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
+class DirectoryTabBar extends StatefulWidget implements PreferredSizeWidget {
   final FileManagerProvider provider;
   final ScrollController? scrollController;
 
   const DirectoryTabBar({super.key, required this.provider, this.scrollController});
 
   @override
+  State<DirectoryTabBar> createState() => _DirectoryTabBarState();
+
+  @override
   Size get preferredSize => const Size.fromHeight(32);
+}
+
+class _DirectoryTabBarState extends State<DirectoryTabBar> {
+  /// 上一次构建时的标签页数量，用于感知「新建标签页」。
+  /// 新建时列表自动滚到最右：新标签页露出，旧标签页被往左挤出可视区。
+  int? _lastTabCount;
+
+  void _maybeScrollToEndOnNewTab(int currentCount) {
+    final controller = widget.scrollController;
+    if (controller == null || !controller.hasClients) return;
+    final prev = _lastTabCount;
+    if (prev != null && currentCount > prev) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !controller.hasClients) return;
+        controller.animateTo(
+          controller.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+    _lastTabCount = currentCount;
+  }
 
   @override
   Widget build(BuildContext context) {
+    _maybeScrollToEndOnNewTab(widget.provider.tabs.length);
     final theme = Theme.of(context);
-    final tabs = provider.tabs;
-    final activeIndex = provider.activeTabIndex;
+    final tabs = widget.provider.tabs;
+    final activeIndex = widget.provider.activeTabIndex;
 
     // 无背景色 Container —— 让标签页栏直接浮在 Scaffold 背景上，
     // 与上方 AppBar 视觉融合为一整块顶部区域（与分类页一致）。
@@ -27,24 +54,24 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Expanded(
             child: Listener(
-              onPointerDown: (_) => provider.setTabBarInteracting(true),
-              onPointerUp: (_) => provider.setTabBarInteracting(false),
-              onPointerCancel: (_) => provider.setTabBarInteracting(false),
+              onPointerDown: (_) => widget.provider.setTabBarInteracting(true),
+              onPointerUp: (_) => widget.provider.setTabBarInteracting(false),
+              onPointerCancel: (_) => widget.provider.setTabBarInteracting(false),
               child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              controller: scrollController,
+              controller: widget.scrollController,
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               itemCount: tabs.length,
               itemBuilder: (context, index) {
                 final tab = tabs[index];
-                final isRoot = tab.currentPath == provider.rootPath;
+                final isRoot = tab.currentPath == widget.provider.rootPath;
                 // 双窗口多标签：标签页栏同时承载两个 pane 的标签页。
                 // 焦点 pane 的标签用主色高亮；另一 pane 的标签用次级高亮（secondary 边框），
                 // 方便区分左右窗口当前各自显示的是哪个标签。
-                final isSplitMulti = provider.isSplitMultiTabActive;
-                final pane0 = provider.paneTabIndex(0);
-                final pane1 = provider.paneTabIndex(1);
+                final isSplitMulti = widget.provider.isSplitMultiTabActive;
+                final pane0 = widget.provider.paneTabIndex(0);
+                final pane1 = widget.provider.paneTabIndex(1);
                 final bool inFocusPane = isSplitMulti && index == activeIndex;
                 final bool inOtherPane =
                     isSplitMulti && !inFocusPane && (index == pane0 || index == pane1);
@@ -73,13 +100,13 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
                         : theme.colorScheme.surfaceVariant.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10),
                     child: InkWell(
-                      onTap: () => provider.setActiveTab(index),
+                      onTap: () => widget.provider.setActiveTab(index),
                       onDoubleTap: () {
                         if (tabs.length > 1 && !tab.isPinned) {
-                          provider.closeTab(index);
+                          widget.provider.closeTab(index);
                         }
                       },
-                      onLongPress: () => _showCloseTabSheet(context, provider, index),
+                      onLongPress: () => _showCloseTabSheet(context, widget.provider, index),
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         constraints: const BoxConstraints(minWidth: 60, maxWidth: 120),
@@ -136,7 +163,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             icon: const Icon(Broken.add, size: 20),
             tooltip: L10n.of(context).msgb52d4a73,
-            onPressed: () => provider.addTab(provider.rootPath),
+            onPressed: () => widget.provider.addTab(widget.provider.rootPath),
           ),
           // 关闭所有标签页按钮：点击弹出多语言确认，确认后
           // 单窗口保留 1 个、双窗口新建 2 个本地根目录标签。
@@ -145,7 +172,7 @@ class DirectoryTabBar extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             icon: const Icon(Broken.close_circle, size: 18),
             tooltip: L10n.of(context).ui_close_all_tabs,
-            onPressed: () => _confirmCloseAllTabs(context, provider),
+            onPressed: () => _confirmCloseAllTabs(context, widget.provider),
           ),
         ],
       ),
