@@ -927,10 +927,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.5.0';
+  static const String _latestChangelogVersion = 'v3.5.1';
 
   /// 全部版本的更新日志，**最新在最前**。
   static const List<_Changelog> _changelogs = <_Changelog>[
+    _v351,
     _v350,
     _v341,
     _v340,
@@ -939,6 +940,40 @@ class _UpdateScreenState extends State<UpdateScreen> {
   ];
 
   /// ── 当前版本：v3.5.0 ────────────────────────────────────────────────
+  /// ── 当前版本：v3.5.1 ────────────────────────────────────────────────
+  static const _Changelog _v351 = _Changelog(
+    version: 'v3.5.1',
+    date: '2026-10-03',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '全局备份新增「敏感信息加密」：远程服务器密码、保险箱密码与哈希、网盘令牌等敏感项可整体加密进备份文件。备份时设置口令，恢复时输入对口令即自动还原，无需逐项重配；口令留空则保持仅备份非敏感设置（论坛反馈）',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复 SMB 连接切后台较久后彻底冻结：前两轮修复未覆盖「客户端缓存的树连接已关闭」形态，现已在取出缓存时校验连接状态并自动重建，回前台不再冻结（论坛反馈）',
+        '修复 SMB 断连后 Dart 侧会话失效判定漏匹配（原生异常的关键文案未回传）导致远程页面卡死、只能重启应用的问题',
+        '修复保险箱「自动加密」在相机重建同名明文目录场景下 pending 监听永不转正、以及目录名解密冲突（同名明文目录已存在）卡死无法收敛的问题',
+        '修复自动加密前台服务对带 IN_ISDIR 标志的目录级 inotify 事件做精确等值比较失配，导致同名目录重建后不再被监听、新增文件不被自动加密',
+      ]),
+      _ChangeSection('🛠️ 安全与维护', [
+        '关闭发布版本的调试日志输出（SMB/WebDAV 取证日志、自动加密日志），不再在用户设备上落盘',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'Settings backup now supports "sensitive-data encryption": remote-server passwords, vault passwords/hashes and cloud-drive tokens are encrypted into the backup as a block. Set a passphrase when backing up; restoring with the matching passphrase brings everything back automatically - no more re-entering credentials one by one. Leaving the passphrase empty keeps the previous behavior of backing up only non-sensitive settings (forum feedback)',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed SMB connections freezing hard after staying in the background for a while: a form not covered by the previous two fixes ("the cached tree connection was closed on the client side") is now detected by checking the connection state when the cache is fetched and rebuilt automatically, so returning to the app no longer freezes (forum feedback)',
+        'Fixed SMB drops going undetected on the Dart side (the key exception text in the cause chain was not forwarded) which left the remote page stuck until the app was restarted',
+        'Fixed the vault "auto-encrypt" getting stuck when the camera recreated a plain-text folder with the same name (pending watch never promoted) and when decrypting a directory name clashed with an existing plain-text folder (conflict never converged)',
+        'Fixed the auto-encrypt foreground service doing an exact match on directory-level inotify events carrying the IN_ISDIR flag, so a recreated same-name folder stopped being watched and new files were no longer auto-encrypted',
+      ]),
+      _ChangeSection('🛠️ Security & Maintenance', [
+        'Debug logging (SMB/WebDAV forensic logs, auto-encrypt logs) is turned off in release builds and no longer writes to the device',
+      ]),
+    ],
+  );
+
   static const _Changelog _v350 = _Changelog(
     version: 'v3.5.0',
     date: '2026-10-03',

@@ -2740,6 +2740,27 @@ class L10nKo extends L10n {
   String get ui_nav => '로컬';
 
   @override
+  String get ui_backup_passphrase_title => '백업 암호';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      '백업 중인 민감 정보(원격 연결 비밀번호, 금고 비밀번호 등)를 암호화할 암호를 입력하세요. 비워 두면 민감 정보가 백업되지 않으며 복원 후 수동으로 다시 설정해야 합니다.';
+
+  @override
+  String get ui_restore_passphrase_title => '백업 암호 입력';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      '이 백업에는 암호화된 민감 정보가 포함되어 있습니다. 복원하려면 백업 암호를 입력하세요. 건너뛰면 복원 후 수동으로 다시 설정해야 합니다.';
+
+  @override
+  String get ui_backup_passphrase_wrong => '암호가 올바르지 않습니다. 다시 입력하세요';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      '민감 정보 복원을 건너뛰었습니다. 비밀번호는 수동으로 다시 설정해야 합니다';
+
+  @override
   String get update_err_network => '서버에 연결할 수 없습니다. 네트워크를 확인한 후 다시 시도하세요';
 
   @override

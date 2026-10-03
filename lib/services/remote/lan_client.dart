@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import '../webdav_debug_log.dart';
 import 'remote_client.dart';
 import 'remote_session_recovery.dart';
 
@@ -475,6 +476,9 @@ class LanClient extends RemoteClient {
         _sessionId = result;
         _isConnected = true;
         _resolvedUsername = candidate;
+        WebdavDebugLog.log(
+          '[smb] connect ok host=$host user=$candidate sid=${result.substring(0, 8)}',
+        );
         if (failures.isNotEmpty) {
           // 首个候选（标准空用户名）被拒、靠后面的候选救回来：留一笔日志，
           // 便于定位"某些固件只认 anonymous/guest"这类差异。
@@ -489,6 +493,7 @@ class LanClient extends RemoteClient {
         _sessionId = null;
         final label = candidate.isEmpty ? '<空用户名>' : candidate;
         failures.add('"$label"(${e.code}: ${e.message})');
+        WebdavDebugLog.log('[smb] connect FAIL host=$host user=$label err=${e.code}: ${e.message}');
         if (isLast) {
           throw Exception(
             'SMB connect failed: ${e.code}: ${e.message}'
@@ -524,25 +529,32 @@ class LanClient extends RemoteClient {
   @override
   Future<bool> checkAlive() async {
     final id = _sessionId;
-    if (!_isConnected || id == null) return false;
+    if (!_isConnected || id == null) {
+      WebdavDebugLog.log('[smb] checkAlive: dart-side disconnected (isConnected=false)');
+      return false;
+    }
     try {
       final alive = await _channel
           .invokeMethod<bool>('isAlive', {'sessionId': id})
           .timeout(const Duration(seconds: 5));
       if (alive != true) {
+        WebdavDebugLog.log('[smb] checkAlive: native isConnected=false (session ${id.substring(0, 8)})');
         _isConnected = false;
         return false;
       }
-    } catch (_) {
+    } catch (e) {
       // 原生查询失败（通道异常 / 会话已被原生清理）同样视为不可用。
+      WebdavDebugLog.log('[smb] checkAlive: isAlive query failed: $e');
       return false;
     }
     // 真实 IO 探测：失败（含超时）一律判为不可用。约定不抛异常。
     try {
       await listDirectory('/', forceRefresh: true)
           .timeout(const Duration(seconds: 8));
+      WebdavDebugLog.log('[smb] checkAlive: ALIVE (probe ok) session ${id.substring(0, 8)}');
       return true;
-    } catch (_) {
+    } catch (e) {
+      WebdavDebugLog.log('[smb] checkAlive: probe FAILED → dead: $e');
       _isConnected = false;
       return false;
     }
@@ -607,7 +619,15 @@ class LanClient extends RemoteClient {
     final result = await _channel.invokeMethod<List<dynamic>>(
       'listDirectory',
       {'sessionId': session, 'path': normalized, 'forceRefresh': forceRefresh},
-    ).timeout(const Duration(seconds: 30));
+    ).timeout(const Duration(seconds: 30), onTimeout: () {
+      WebdavDebugLog.log('[smb] list TIMEOUT(30s) path=$normalized sid=${session.substring(0, 8)}');
+      throw TimeoutException('listDirectory timeout after 30s: $normalized');
+    }).catchError((Object e) {
+      // 关键取证点：这里能看到 Windows 端会话失效时的真实文案
+      // （如 STATUS_USER_SESSION_DELETED —— 冻结排查的核心证据）。
+      WebdavDebugLog.log('[smb] list FAIL path=$normalized err=$e');
+      throw e;
+    });
 
     if (result == null) return <RemoteFileItem>[];
 

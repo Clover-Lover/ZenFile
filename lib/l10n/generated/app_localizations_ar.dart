@@ -2824,6 +2824,27 @@ class L10nAr extends L10n {
   String get ui_nav => 'محلي';
 
   @override
+  String get ui_backup_passphrase_title => 'كلمة مرور النسخ الاحتياطي';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'أدخل كلمة المرور لتشفير البيانات الحساسة في النسخة الاحتياطية (كلمات مرور الاتصالات البعيدة والخزنة وما إلى ذلك). اتركها فارغة لاستبعادها؛ وستحتاج إلى إعادة تهيئتها بعد الاستعادة.';
+
+  @override
+  String get ui_restore_passphrase_title => 'أدخل كلمة مرور النسخة الاحتياطية';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'تحتوي هذه النسخة الاحتياطية على بيانات حساسة مشفرة. أدخل كلمة المرور لاستعادتها؛ وإلا فستحتاج إلى إعادة تهيئة كلمات المرور يدويًا بعد الاستعادة.';
+
+  @override
+  String get ui_backup_passphrase_wrong => 'كلمة المرور خاطئة، حاول مرة أخرى';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'لم تتم استعادة البيانات الحساسة؛ يجب إعادة تهيئة كلمات المرور يدويًا';
+
+  @override
   String get update_err_network =>
       'تعذّر الاتصال بالخادم. تحقّق من الشبكة ثم أعد المحاولة';
 

@@ -145,7 +145,13 @@ class CryptWatchForegroundService : Service() {
         val observer = object : FileObserver(path, WATCH_MASK) {
             override fun onEvent(event: Int, relativePath: String?) {
                 if (relativePath == null) return
-                val eventName = when (event) {
+                // ⚠️ inotify 原始 mask 会 OR 上标志位（目录事件必带 IN_ISDIR
+                // 0x40000000）：`event == FileObserver.CREATE` 这类**精确等值
+                // 比较**对目录级事件全部失配 ⇒ mkdir 重建的同名目录永远匹配
+                // 不上 ⇒ pending 永不转正（2026-10-03 用户实测）。先掩掉
+                // 标志位只留事件类型，再比较。
+                val type = event and FileObserver.ALL_EVENTS
+                val eventName = when (type) {
                     FileObserver.CLOSE_WRITE -> "close_write"
                     FileObserver.MOVED_TO -> "moved_to"
                     FileObserver.CREATE -> "create"
@@ -154,7 +160,7 @@ class CryptWatchForegroundService : Service() {
                     FileObserver.MOVE_SELF -> "move_self"
                     else -> return
                 }
-                if (event == FileObserver.DELETE_SELF || event == FileObserver.MOVE_SELF) {
+                if (type == FileObserver.DELETE_SELF || type == FileObserver.MOVE_SELF) {
                     // 被监听目录自身没了（可能是 Dart merge 完并入后删掉了
                     // 明文兄弟目录）：停掉 observer；pending 转正而来的要重新
                     // 挂回 pending 监听，等相机下次重建。
@@ -166,7 +172,19 @@ class CryptWatchForegroundService : Service() {
                             }
                         }
                         if (promotedPending.remove(path)) {
-                            registerPending(path)
+                            // 重新挂回 pending 前先看目录是否已被相机重建：merge
+                            // 删除与相机 mkdir 之间存在竞态 —— 相机可能在 DELETE_SELF
+                            // 之前就重建了同名目录（新照片已经在里面）。此时目录已
+                            // 存在，pending 的 CREATE 永远不会来，必须直接转正监听
+                            // （后续文件事件的 CLOSE_WRITE 会触发 Dart 侧并入）。
+                            val f = File(path)
+                            if (f.isDirectory) {
+                                promotedPending.add(path)
+                                watchDir(path)
+                                deliverEvent(path, f.name, "create")
+                            } else {
+                                registerPending(path)
+                            }
                         }
                     }
                     return
@@ -200,7 +218,10 @@ class CryptWatchForegroundService : Service() {
             override fun onEvent(event: Int, relativePath: String?) {
                 if (relativePath == null) return
                 val child = pendingByParent[parent]?.get(relativePath) ?: return
-                if (event != FileObserver.CREATE && event != FileObserver.MOVED_TO) return
+                // mkdir 触发的 CREATE 带 IN_ISDIR 标志位 ⇒ 精确等值比较失配
+                // ⇒ 转正永不触发；先掩掉标志位再比较（同 watchDir）。
+                val type = event and FileObserver.ALL_EVENTS
+                if (type != FileObserver.CREATE && type != FileObserver.MOVED_TO) return
                 mainHandler.post {
                     val map = pendingByParent[parent] ?: return@post
                     if (map.remove(relativePath) == null) return@post

@@ -1109,8 +1109,13 @@ class CryptOperations {
     //
     // 作业用的是**当前（仍是密文名的）目录路径**；阶段 ② 不会改任何目录名，
     // 所以这些路径在并行解密期间始终有效。目录改名推迟到阶段 ③。
+    //
+    // ⚠️ 明文文件必须跳过：CryptBatchRunner 对单作业失败是 fail 整批语义，
+    // 混合目录（部分已解密/孤儿重修）里只要有一个明文文件，整批就失败，
+    // 阶段 ③ 的目录改名永远走不到 ⇒ 冲突永远无法收敛（2026-10-03 实测）。
     final jobs = <CryptBatchJob>[];
     for (final file in allFiles) {
+      if (!await isEncryptedFile(file)) continue;
       final stat = await File(file).stat();
       final decryptedPath = p.join(
         p.dirname(file),
@@ -1156,7 +1161,17 @@ class CryptOperations {
       final encryptedDirName = p.basename(encryptedDirPath);
       final decryptedDirName = _mount.crypt.decryptDirName(encryptedDirName);
       final decryptedDirPath = p.join(dir, decryptedDirName);
-      await Directory(encryptedDirPath).rename(decryptedDirPath);
+      final target = Directory(decryptedDirPath);
+      if (await target.exists()) {
+        // plainNameClash（2026-10-03 用户实测）：同名明文目录已存在且非空
+        // ⇒ rename 报 errno 39 ⇒ 半完成态（文件已解密、目录名未还原），
+        // 随后注销登记产生「无登记密文名孤儿」⇒ 自动加密/解密/监听全部
+        // 失明，重试解密永远 errno 39。⇒ 目标已存在时改为「内容逐项并入
+        // + 删除空壳」，等效完成目录名解密，冲突收敛。
+        await _mergeDecryptedDirInto(Directory(encryptedDirPath), target);
+      } else {
+        await Directory(encryptedDirPath).rename(decryptedDirPath);
+      }
     }
 
     // 该目录已整体解密：注销「挂载点根容器」登记（连带其子目录记录），
@@ -1164,6 +1179,43 @@ class CryptOperations {
     // ⚠️ 放在这里（而不是各调用方）是为了让加/解密流程成为唯一真相源：
     // 保险箱页、pane、媒体页、VFS 都会调本方法，判断散到调用方必然漏。
     await CryptMountService.removeInPlaceContainerDir(encryptedDirPath);
+  }
+
+  /// 把 [src]（内容已解密为明文）的全部内容逐项并入 [dst]，最后删除已空的
+  /// [src]。仅用于目录名解密时目标明文目录已存在的 plainNameClash 场景。
+  /// 同分区 rename 零拷贝；dst 同名文件保留、src 侧生成唯一名（不覆盖用户
+  /// 已有文件）；src 删除失败（有未收敛残留）时抛出，由上层报错、下次
+  /// 重试解密继续走本方法收敛。
+  Future<void> _mergeDecryptedDirInto(Directory src, Directory dst) async {
+    await for (final e in src.list(followLinks: false)) {
+      final name = p.basename(e.path);
+      var target = p.join(dst.path, name);
+      if (e is Directory) {
+        final t = Directory(target);
+        if (await t.exists()) {
+          // 同名子目录：递归并入（不必同名密文——本方法处理的是明文内容）
+          await _mergeDecryptedDirInto(e, t);
+          continue;
+        }
+        await e.rename(target);
+      } else if (e is File) {
+        if (await File(target).exists()) {
+          final ext = p.extension(name);
+          final base = p.basenameWithoutExtension(name);
+          var i = 1;
+          do {
+            target = p.join(dst.path, '$base ($i)$ext');
+            i++;
+          } while (await File(target).exists());
+        }
+        await e.rename(target);
+      } else {
+        // 符号链接等非常规条目：留在 src，由末尾 delete 失败暴露
+        continue;
+      }
+    }
+    // 非 recursive：只有 src 已空才成功——有残留说明没并入干净，必须抛
+    await src.delete();
   }
 
   /// 列出目录下所有文件（递归）。实现在纯 Dart 的 [CryptTreeWalker]。

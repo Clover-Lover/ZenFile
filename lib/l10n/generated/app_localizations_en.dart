@@ -2830,6 +2830,27 @@ class L10nEn extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String get ui_backup_passphrase_title => 'Backup passphrase';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'Enter a passphrase to encrypt sensitive data in the backup (remote connection passwords, vault passwords, etc.). Leave empty to exclude sensitive data; you will need to reconfigure it after restore.';
+
+  @override
+  String get ui_restore_passphrase_title => 'Enter backup passphrase';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'This backup contains encrypted sensitive data. Enter the passphrase to restore it; skipping means you must reconfigure passwords manually after restore.';
+
+  @override
+  String get ui_backup_passphrase_wrong => 'Wrong passphrase, try again';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'Sensitive data was not restored; passwords must be reconfigured manually';
+
+  @override
   String get update_err_network =>
       'Can\'t reach the server. Check your network and try again.';
 

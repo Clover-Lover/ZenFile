@@ -2733,6 +2733,26 @@ class L10nZh extends L10n {
   String get ui_nav => '本地';
 
   @override
+  String get ui_backup_passphrase_title => '备份口令';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      '输入备份口令以加密备份中的敏感信息（远程连接密码、保险箱密码等）。留空则不备份敏感信息，恢复后需手动重新配置。';
+
+  @override
+  String get ui_restore_passphrase_title => '输入备份口令';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      '此备份包含加密的敏感信息。输入备份口令以恢复；跳过则需在恢复后手动重新配置密码。';
+
+  @override
+  String get ui_backup_passphrase_wrong => '备份口令错误，请重试';
+
+  @override
+  String get ui_restore_secrets_skipped => '已跳过敏感信息恢复，相关密码需手动重新配置';
+
+  @override
   String get update_err_network => '无法连接服务器，请检查网络后重试';
 
   @override
@@ -10632,6 +10652,26 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_nav => '本地';
+
+  @override
+  String get ui_backup_passphrase_title => '備份密碼';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      '輸入備份密碼以加密備份中的敏感資訊（遠端連線密碼、保險箱密碼等）。留空則不備份敏感資訊，還原後需手動重新設定。';
+
+  @override
+  String get ui_restore_passphrase_title => '輸入備份密碼';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      '此備份包含加密的敏感資訊。輸入備份密碼以還原；略過則需在還原後手動重新設定密碼。';
+
+  @override
+  String get ui_backup_passphrase_wrong => '備份密碼錯誤，請重試';
+
+  @override
+  String get ui_restore_secrets_skipped => '已略過敏感資訊還原，相關密碼需手動重新設定';
 
   @override
   String get update_err_network => '無法連接伺服器，請檢查網路後重試';

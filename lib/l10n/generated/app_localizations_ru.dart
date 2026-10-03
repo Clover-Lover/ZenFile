@@ -2878,6 +2878,27 @@ class L10nRu extends L10n {
   String get ui_nav => 'Локальный';
 
   @override
+  String get ui_backup_passphrase_title => 'Пароль резервной копии';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'Введите пароль для шифрования конфиденциальных данных в резервной копии (пароли удалённых подключений, хранилища и т.д.). Оставьте пустым, чтобы исключить их; после восстановления потребуется ручная настройка.';
+
+  @override
+  String get ui_restore_passphrase_title => 'Введите пароль резервной копии';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'Эта резервная копия содержит зашифрованные конфиденциальные данные. Введите пароль для их восстановления; при пропуске пароли придётся настроить вручную после восстановления.';
+
+  @override
+  String get ui_backup_passphrase_wrong => 'Неверный пароль, попробуйте снова';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'Конфиденциальные данные не восстановлены; пароли нужно настроить вручную';
+
+  @override
   String get update_err_network =>
       'Не удаётся подключиться к серверу. Проверьте сеть и повторите попытку.';
 

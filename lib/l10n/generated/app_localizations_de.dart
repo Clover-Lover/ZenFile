@@ -2871,6 +2871,28 @@ class L10nDe extends L10n {
   String get ui_nav => 'Lokal';
 
   @override
+  String get ui_backup_passphrase_title => 'Backup-Passphrase';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'Geben Sie eine Passphrase ein, um vertrauliche Daten im Backup zu verschlüsseln (Remote-Passwörter, Tresor-Passwörter usw.). Leer lassen, um vertrauliche Daten auszuschließen; diese müssen nach der Wiederherstellung neu konfiguriert werden.';
+
+  @override
+  String get ui_restore_passphrase_title => 'Backup-Passphrase eingeben';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'Dieses Backup enthält verschlüsselte vertrauliche Daten. Geben Sie die Passphrase ein, um sie wiederherzustellen; andernfalls müssen die Passwörter nach der Wiederherstellung manuell neu konfiguriert werden.';
+
+  @override
+  String get ui_backup_passphrase_wrong =>
+      'Falsche Passphrase, bitte erneut versuchen';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'Vertrauliche Daten wurden nicht wiederhergestellt; Passwörter müssen manuell neu konfiguriert werden';
+
+  @override
   String get update_err_network =>
       'Keine Verbindung zum Server. Prüfe dein Netzwerk und versuche es erneut.';
 

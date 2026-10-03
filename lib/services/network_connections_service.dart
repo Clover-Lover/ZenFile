@@ -147,6 +147,40 @@ class NetworkConnectionsService {
     } catch (_) {}
   }
 
+  /// 备份导出：所有连接的凭据（id → {password, sshKeyPassword}）。
+  ///
+  /// 仅供全局备份链路调用；返回值必须先经备份口令加密（见
+  /// BackupSecretsCodec）才能落盘，绝不能以明文写进任何文件或日志。
+  static Map<String, Map<String, String>> exportAllCredentials() {
+    return _secrets.map(
+      (id, secrets) => MapEntry(id, Map<String, String>.from(secrets)),
+    );
+  }
+
+  /// 备份恢复导入：写回内存缓存并逐条落 FlutterSecureStorage。
+  ///
+  /// [credentials] 形如 {id: {password, sshKeyPassword}}（来自备份 JSON
+  /// 解密后的 connection_credentials 段）。暂不存在的连接 id 写了也无妨，
+  /// 凭据按 id 与后续恢复的连接元数据对齐。
+  static Future<void> importAllCredentials(
+    Map<String, dynamic> credentials,
+  ) async {
+    for (final entry in credentials.entries) {
+      final value = entry.value;
+      if (value is! Map) continue;
+      final secrets = <String, String>{
+        'password': (value['password'] as String?) ?? '',
+        'sshKeyPassword': (value['sshKeyPassword'] as String?) ?? '',
+      };
+      _secrets[entry.key] = secrets;
+      try {
+        await _secure.write(key: _credKey(entry.key), value: json.encode(secrets));
+      } catch (_) {
+        // secure storage 写失败时保留内存缓存，本会话仍可用
+      }
+    }
+  }
+
   /// 一次性迁移：把旧版明文存于 SharedPreferences 的口令搬进 secure storage，
   /// 并将 JSON 重写为脱敏版本（password / sshKeyPassword 置空）。
   static Future<void> _migratePlaintextCredentialsIfNeeded() async {

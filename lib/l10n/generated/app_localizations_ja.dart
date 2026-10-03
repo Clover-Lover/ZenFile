@@ -2742,6 +2742,27 @@ class L10nJa extends L10n {
   String get ui_nav => 'ローカル';
 
   @override
+  String get ui_backup_passphrase_title => 'バックアップパスワード';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'バックアップ内の機密情報（リモート接続のパスワード、保管庫のパスワードなど）を暗号化するパスワードを入力してください。空欄の場合、機密情報はバックアップされず、復元後に手動で再設定が必要です。';
+
+  @override
+  String get ui_restore_passphrase_title => 'バックアップパスワードを入力';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'このバックアップには暗号化された機密情報が含まれています。復元するにはバックアップパスワードを入力してください。スキップした場合は復元後に手動で再設定が必要です。';
+
+  @override
+  String get ui_backup_passphrase_wrong => 'パスワードが正しくありません、再入力してください';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      '機密情報の復元をスキップしました。パスワードは手動で再設定してください';
+
+  @override
   String get update_err_network => 'サーバーに接続できません。ネットワークを確認して再試行してください';
 
   @override

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:zenfile/services/webdav_debug_log.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/file_item_model.dart';
@@ -6073,10 +6074,12 @@ class FileManagerProvider extends ChangeNotifier {
     final last = _remoteReconnectAt[conn.id];
     if (last != null && now.difference(last) < _remoteReconnectCooldown) {
       debugPrint('[ZenFile] 远程重连冷却中，跳过重建: ${conn.name}');
+      WebdavDebugLog.log('[smb] rebuild SKIP (cooldown ${now.difference(last).inMilliseconds}ms) conn=${conn.name}');
       return false;
     }
     _remoteReconnectAt[conn.id] = now;
     final old = tab.remoteClient;
+    WebdavDebugLog.log('[smb] rebuild START conn=${conn.name} host=${conn.host}');
     try {
       final fresh = NetworkConnectionsService.buildRemoteClient(conn);
       await fresh.connect();
@@ -6088,10 +6091,12 @@ class FileManagerProvider extends ChangeNotifier {
       debugPrint(
         '[ZenFile] 远程连接已自动重建: ${conn.name}(${conn.id}) path=${tab.currentPath}',
       );
+      WebdavDebugLog.log('[smb] rebuild OK conn=${conn.name}');
       notifyListeners();
       return true;
     } catch (e) {
       debugPrint('[ZenFile] 远程连接自动重建失败: ${conn.name} → $e');
+      WebdavDebugLog.log('[smb] rebuild FAIL conn=${conn.name} err=$e');
       return false;
     }
   }
@@ -6133,9 +6138,11 @@ class FileManagerProvider extends ChangeNotifier {
     bool alive;
     try {
       alive = await client.checkAlive().timeout(const Duration(seconds: 8));
-    } catch (_) {
+    } catch (e) {
+      WebdavDebugLog.log('[smb] resume checkAlive threw: $e');
       alive = false;
     }
+    WebdavDebugLog.log('[smb] resume checkAlive result=$alive conn=${tab.remoteConnection?.name}');
     if (alive) return;
     debugPrint(
       '[ZenFile] 回前台体检：远程会话已失效，重建连接 ${tab.remoteConnection?.name}',
@@ -6327,12 +6334,17 @@ class FileManagerProvider extends ChangeNotifier {
         } catch (e) {
           // 会话被系统/服务器回收时（切后台、网络切换）自动重建连接并重试一次。
           // 否则用户回到应用看到的目录会一直加载失败，且只能退出连接重进。
-          if (!activeTab.isCryptRemote && isRemoteConnectionLostError(e)) {
+          final lost = !activeTab.isCryptRemote && isRemoteConnectionLostError(e);
+          WebdavDebugLog.log(
+            '[smb] load FAIL path=$path lost=$lost err=$e',
+          );
+          if (!activeTab.isCryptRemote && lost) {
             final reconnected = await _rebuildRemoteClient(activeTab);
             if (!reconnected) rethrow;
             debugPrint('[ZenFile] 列目录失败已重建连接并重试: $path');
             remoteItems = await activeTab.remoteClient!
                 .listDirectory(path, forceRefresh: true);
+            WebdavDebugLog.log('[smb] load RETRY OK after rebuild path=$path items=${remoteItems.length}');
           } else {
             rethrow;
           }
@@ -6353,6 +6365,7 @@ class FileManagerProvider extends ChangeNotifier {
         activeTab.currentFiles = [...remoteFolders, ...remoteFiles];
       } catch (e) {
         debugPrint('Error loading remote directory: $e');
+        WebdavDebugLog.log('[smb] load FINAL FAIL (silent keep-old-list) path=$path err=$e');
         // 修复A（问题1）：取消/网络抖动/服务端临时错误不应清空已显示的远程目录，
         // 保留上次成功的列表，避免目录瞬间变空（用户可下拉重试）。isLoading 已在
         // 下方统一置 false 并 notifyListeners()，这里不再 currentFiles = []。

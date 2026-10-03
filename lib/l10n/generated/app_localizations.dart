@@ -5212,6 +5212,42 @@ abstract class L10n {
   /// **'本地'**
   String get ui_nav;
 
+  /// No description provided for @ui_backup_passphrase_title.
+  ///
+  /// In zh, this message translates to:
+  /// **'备份口令'**
+  String get ui_backup_passphrase_title;
+
+  /// No description provided for @ui_backup_passphrase_hint.
+  ///
+  /// In zh, this message translates to:
+  /// **'输入备份口令以加密备份中的敏感信息（远程连接密码、保险箱密码等）。留空则不备份敏感信息，恢复后需手动重新配置。'**
+  String get ui_backup_passphrase_hint;
+
+  /// No description provided for @ui_restore_passphrase_title.
+  ///
+  /// In zh, this message translates to:
+  /// **'输入备份口令'**
+  String get ui_restore_passphrase_title;
+
+  /// No description provided for @ui_restore_passphrase_hint.
+  ///
+  /// In zh, this message translates to:
+  /// **'此备份包含加密的敏感信息。输入备份口令以恢复；跳过则需在恢复后手动重新配置密码。'**
+  String get ui_restore_passphrase_hint;
+
+  /// No description provided for @ui_backup_passphrase_wrong.
+  ///
+  /// In zh, this message translates to:
+  /// **'备份口令错误，请重试'**
+  String get ui_backup_passphrase_wrong;
+
+  /// No description provided for @ui_restore_secrets_skipped.
+  ///
+  /// In zh, this message translates to:
+  /// **'已跳过敏感信息恢复，相关密码需手动重新配置'**
+  String get ui_restore_secrets_skipped;
+
   /// No description provided for @update_err_network.
   ///
   /// In zh, this message translates to:

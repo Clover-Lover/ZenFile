@@ -2891,6 +2891,28 @@ class L10nEs extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String get ui_backup_passphrase_title => 'Frase de contraseña de copia';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'Introduzca una frase de contraseña para cifrar la información sensible de la copia (contraseñas de conexiones remotas, de la caja fuerte, etc.). Déjelo vacío para excluirla; deberá reconfigurarse tras la restauración.';
+
+  @override
+  String get ui_restore_passphrase_title => 'Introducir frase de contraseña';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'Esta copia contiene información sensible cifrada. Introduzca la frase de contraseña para restaurarla; si la omite, deberá reconfigurar las contraseñas manualmente tras la restauración.';
+
+  @override
+  String get ui_backup_passphrase_wrong =>
+      'Frase de contraseña incorrecta, inténtelo de nuevo';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'No se restauró la información sensible; las contraseñas deben reconfigurarse manualmente';
+
+  @override
   String get update_err_network =>
       'No se puede conectar al servidor. Comprueba tu red e inténtalo de nuevo.';
 

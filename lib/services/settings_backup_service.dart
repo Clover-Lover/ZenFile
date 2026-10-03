@@ -13,7 +13,10 @@ import '../services/remote/sftp_client.dart';
 import '../services/remote/webdav_client.dart';
 import '../services/remote/lan_client.dart';
 import '../services/remote/saf_client.dart';
+import '../services/backup_secrets_codec.dart';
 import '../services/crypt/crypt_mount_service.dart';
+import '../services/crypt/crypt_profile.dart';
+import '../services/crypt/crypt_profile_service.dart';
 
 class BackupFileInfo {
   final String name;
@@ -29,11 +32,32 @@ class BackupFileInfo {
   });
 }
 
+/// 恢复结果：success 之外还要暴露敏感块的恢复情况，
+/// 供 UI 在「跳过敏感信息」时提示用户。
+class SettingsRestoreResult {
+  final bool success;
+
+  /// 备份文件里是否带有加密敏感块（v2 且包含 secrets）
+  final bool hasSecrets;
+
+  /// 敏感块是否成功恢复（= false 且 hasSecrets = true 表示被用户跳过或口令未过）
+  final bool secretsRestored;
+
+  const SettingsRestoreResult({
+    required this.success,
+    this.hasSecrets = false,
+    this.secretsRestored = false,
+  });
+}
+
 class SettingsBackupService {
   static const String defaultBackupDirPath =
       '/storage/emulated/0/ZenFile/Backups/Settings';
   static const String _backupFileNamePrefix = 'zenfile_settings_backup';
   static const String _backupDirPrefKey = 'settings_backup_dir_path';
+
+  /// 备份文件格式版本：v2 = {schema, settings, secrets?}；v1 = 扁平 prefs 表
+  static const int _schemaVersion = 2;
 
   /// 获取当前配置的备份目录路径（本地绝对路径或 remote://{connId}|{remotePath}）
   static Future<String> getBackupDirPath() async {
@@ -181,11 +205,11 @@ class SettingsBackupService {
     return '${_backupFileNamePrefix}_$ts.json';
   }
 
-  /// 敏感键黑名单：这些键包含凭据/口令/令牌，绝不写入明文备份文件
-  /// （备份 JSON 可能被上传到远程 FTP/SFTP，泄露面不可控）。
-  /// 恢复后需要用户重新输入对应凭据。
+  /// 敏感键黑名单：这些键包含凭据/口令/令牌/门禁哈希，绝不进明文 JSON。
+  /// 方案 A（2026-10-03 用户拍板）：它们整体进 `secrets` 加密块，用用户输入
+  /// 的备份口令加密后落盘（见 BackupSecretsCodec）；口令留空 = 不备份敏感项。
   static const Set<String> _sensitivePrefKeys = {
-    // 保险箱 / 远程守卫门禁凭据
+    // 保险箱 / 远程守卫门禁凭据（scrypt+salt 哈希，非明文，但同样进加密块）
     'vault_salt',
     'vault_password_hash',
     'vault_password_scheme',
@@ -203,15 +227,22 @@ class SettingsBackupService {
     'virustotal_api_key',
   };
 
-  /// 备份当前所有 SharedPreferences 设置到 JSON 文件
-  static Future<bool> backupSettings(BuildContext context) async {
+  /// 备份当前所有 SharedPreferences 设置到 JSON 文件。
+  ///
+  /// [passphrase] 备份口令：非空时把敏感凭据（[_sensitivePrefKeys] + 远程
+  /// 连接密码/SSH 口令 + 挂载点密码 + 加密档案）加密进 `secrets` 块；
+  /// 留空 = 只备份非敏感设置（文件结构与旧版 v1 扁平格式完全一致）。
+  static Future<bool> backupSettings(
+    BuildContext context, {
+    String? passphrase,
+  }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final allPrefs = prefs.getKeys();
       final Map<String, dynamic> backupData = {};
 
       // 排除备份路径自身，避免恢复后把旧的备份目录路径也恢复回来；
-      // 再排除全部敏感键，防止口令/令牌随明文 JSON 外泄
+      // 敏感键统一走 secrets 加密块（有口令）或整体不备份（无口令）
       final keysToBackup = allPrefs
           .where((k) => k != _backupDirPrefKey && !_sensitivePrefKeys.contains(k))
           .toList();
@@ -221,11 +252,22 @@ class SettingsBackupService {
         backupData[key] = value;
       }
 
-      // ⚠️ 安全变更：不再把加密挂载点明文密码写入备份（旧版会写入
-      // `_crypt_mount_passwords`）。恢复侧保留对该键的兼容读取，
-      // 以支持旧版备份文件，但新备份一律不生成该键。
+      final String jsonString;
+      final hasPassphrase = passphrase != null && passphrase.isNotEmpty;
+      if (hasPassphrase) {
+        final secretsPayload = await _collectSecretsPayload(prefs);
+        final secretsBlock =
+            await BackupSecretsCodec.encrypt(secretsPayload, passphrase);
+        jsonString = const JsonEncoder.withIndent('  ').convert(<String, dynamic>{
+          'schema': _schemaVersion,
+          'settings': backupData,
+          'secrets': secretsBlock,
+        });
+      } else {
+        // 无口令：保持 v1 扁平结构，旧版应用也能恢复
+        jsonString = const JsonEncoder.withIndent('  ').convert(backupData);
+      }
 
-      final jsonString = const JsonEncoder.withIndent('  ').convert(backupData);
       final dirPath = await getBackupDirPath();
       final fileName = _generateBackupFileName();
 
@@ -282,8 +324,134 @@ class SettingsBackupService {
     }
   }
 
-  /// 从 JSON 备份文件恢复设置到 SharedPreferences
-  static Future<bool> restoreSettings(BuildContext context, String filePath) async {
+  /// 收集敏感信息负载（会被整体加密后才落盘）。
+  ///
+  /// 覆盖四类凭据：
+  /// 1. prefs 敏感键（门禁哈希 / ftp / web_share / token 等）
+  /// 2. 远程连接密码 + SSH 私钥口令（FlutterSecureStorage）
+  /// 3. 加密挂载点密码（FlutterSecureStorage，按物理路径对齐）
+  /// 4. 加密配置档案 + 路径绑定（CryptProfile 多密码架构）
+  static Future<Map<String, dynamic>> _collectSecretsPayload(
+    SharedPreferences prefs,
+  ) async {
+    final prefsSecrets = <String, dynamic>{};
+    for (final key in _sensitivePrefKeys) {
+      final value = prefs.get(key);
+      if (value != null) prefsSecrets[key] = value;
+    }
+
+    Map<String, dynamic> connectionCredentials = {};
+    try {
+      connectionCredentials =
+          NetworkConnectionsService.exportAllCredentials().map(
+        (id, secrets) => MapEntry(id, <String, dynamic>{...secrets}),
+      );
+    } catch (_) {}
+
+    Map<String, dynamic> mountPasswords = {};
+    try {
+      mountPasswords = await CryptMountService.exportPasswords();
+    } catch (_) {}
+
+    String? cryptProfiles;
+    String? cryptProfileBindings;
+    try {
+      final profiles = await CryptProfileService.instance.loadProfiles();
+      if (profiles.isNotEmpty) {
+        cryptProfiles = jsonEncode(profiles.map((pr) => pr.toJson()).toList());
+      }
+      final bindings = await CryptProfileService.instance.loadBindings();
+      if (bindings.isNotEmpty) {
+        cryptProfileBindings = jsonEncode(bindings);
+      }
+    } catch (_) {}
+
+    return <String, dynamic>{
+      'prefs': prefsSecrets,
+      'connection_credentials': connectionCredentials,
+      'mount_passwords': mountPasswords,
+      if (cryptProfiles != null) 'crypt_profiles': cryptProfiles,
+      if (cryptProfileBindings != null) 'crypt_profile_bindings': cryptProfileBindings,
+    };
+  }
+
+  /// 把解密后的敏感信息负载写回各存储（prefs / secure storage）。
+  /// 每一段独立容错：一段失败不影响其余恢复。
+  static Future<void> _applySecrets(Map<String, dynamic> secrets) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final prefsSecrets = secrets['prefs'];
+    if (prefsSecrets is Map<String, dynamic>) {
+      for (final entry in prefsSecrets.entries) {
+        final key = entry.key;
+        final value = entry.value;
+        try {
+          if (value is String) {
+            await prefs.setString(key, value);
+          } else if (value is int) {
+            await prefs.setInt(key, value);
+          } else if (value is double) {
+            await prefs.setDouble(key, value);
+          } else if (value is bool) {
+            await prefs.setBool(key, value);
+          } else if (value is List) {
+            await prefs.setStringList(key, value.cast<String>());
+          }
+        } catch (_) {}
+      }
+    }
+
+    final creds = secrets['connection_credentials'];
+    if (creds is Map<String, dynamic>) {
+      try {
+        await NetworkConnectionsService.importAllCredentials(creds);
+      } catch (_) {}
+    }
+
+    final mounts = secrets['mount_passwords'];
+    if (mounts is Map<String, dynamic>) {
+      try {
+        await CryptMountService.restorePasswords(mounts);
+      } catch (_) {}
+    }
+
+    final profilesRaw = secrets['crypt_profiles'];
+    if (profilesRaw is String && profilesRaw.isNotEmpty) {
+      try {
+        final list = jsonDecode(profilesRaw);
+        if (list is List) {
+          final profiles = list
+              .whereType<Map<String, dynamic>>()
+              .map(CryptProfile.fromJson)
+              .toList();
+          await CryptProfileService.instance.saveProfiles(profiles);
+        }
+      } catch (_) {}
+    }
+
+    final bindingsRaw = secrets['crypt_profile_bindings'];
+    if (bindingsRaw is String && bindingsRaw.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(bindingsRaw);
+        if (decoded is Map) {
+          await CryptProfileService.instance.saveBindings(
+            decoded.map((k, v) => MapEntry(k.toString(), v.toString())),
+          );
+        }
+      } catch (_) {}
+    }
+  }
+
+  /// 从 JSON 备份文件恢复设置到 SharedPreferences。
+  ///
+  /// [askPassphrase]：备份带 `secrets` 加密块时由本服务回调 UI 取口令；
+  /// 返回 null/空串 = 跳过敏感信息恢复；[wrongPassphrase] = 上一次口令
+  /// 错误，UI 应提示重输。v1 旧版扁平备份不受影响。
+  static Future<SettingsRestoreResult> restoreSettings(
+    BuildContext context,
+    String filePath, {
+    Future<String?> Function(bool wrongPassphrase)? askPassphrase,
+  }) async {
     try {
       if (!filePath.toLowerCase().endsWith('.json')) {
         if (context.mounted) {
@@ -291,7 +459,7 @@ class SettingsBackupService {
             SnackBar(content: Text(L10n.of(context).ui_restore_invalid_file)),
           );
         }
-        return false;
+        return const SettingsRestoreResult(success: false);
       }
 
       String jsonString;
@@ -322,12 +490,27 @@ class SettingsBackupService {
               SnackBar(content: Text(L10n.of(context).ui_restore_invalid_file)),
             );
           }
-          return false;
+          return const SettingsRestoreResult(success: false);
         }
         jsonString = await file.readAsString();
       }
 
-      final backupData = jsonDecode(jsonString) as Map<String, dynamic>;
+      final decoded = jsonDecode(jsonString);
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException('Invalid backup file');
+      }
+
+      // v2：{schema, settings, secrets?}；v1（旧版/无口令）：扁平 prefs 表
+      Map<String, dynamic> backupData;
+      Map<String, dynamic>? secretsBlock;
+      if (decoded['schema'] == _schemaVersion &&
+          decoded['settings'] is Map<String, dynamic>) {
+        backupData = decoded['settings'] as Map<String, dynamic>;
+        final rawSecrets = decoded['secrets'];
+        if (rawSecrets is Map<String, dynamic>) secretsBlock = rawSecrets;
+      } else {
+        backupData = decoded;
+      }
 
       final prefs = await SharedPreferences.getInstance();
 
@@ -352,7 +535,7 @@ class SettingsBackupService {
         }
       }
 
-      // 恢复加密挂载点的密码到 FlutterSecureStorage
+      // 恢复加密挂载点的密码到 FlutterSecureStorage（旧版 v1 备份兼容）
       try {
         final cryptPasswords = backupData['_crypt_mount_passwords'];
         if (cryptPasswords is Map<String, dynamic>) {
@@ -368,19 +551,45 @@ class SettingsBackupService {
         }
       } catch (_) {}
 
+      // v2 敏感块恢复：回调 UI 要口令，口令错可重试，null = 跳过
+      var secretsRestored = false;
+      if (secretsBlock != null && askPassphrase != null) {
+        var wrong = false;
+        while (true) {
+          final pass = await askPassphrase(wrong);
+          if (pass == null || pass.isEmpty) break;
+          try {
+            await _applySecrets(
+              await BackupSecretsCodec.decrypt(secretsBlock, pass),
+            );
+            secretsRestored = true;
+            break;
+          } on BackupPassphraseException {
+            wrong = true;
+          } on FormatException {
+            // 块损坏：不再重试，按跳过处理
+            break;
+          }
+        }
+      }
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).ui_restore_success)),
         );
       }
-      return true;
+      return SettingsRestoreResult(
+        success: true,
+        hasSecrets: secretsBlock != null,
+        secretsRestored: secretsRestored,
+      );
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).ui_restore_failed(e.toString()))),
         );
       }
-      return false;
+      return const SettingsRestoreResult(success: false);
     }
   }
 }

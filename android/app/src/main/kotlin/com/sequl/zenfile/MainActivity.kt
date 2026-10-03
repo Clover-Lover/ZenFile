@@ -1597,12 +1597,19 @@ class MainActivity : AudioServiceFragmentActivity() {
                 when (call.method) {
                     "start" -> {
                         val paths = call.argument<List<String>>("paths") ?: emptyList()
+                        // ⚠️ 2026-10-03 修复：此前漏传 pendingPaths ⇒ Service 端
+                        // getStringArrayExtra("pendingPaths") 恒为 null ⇒ pending 监听
+                        // 从未注册 ⇒ 相机重建的同名明文目录（merge 后被删再重建）运行中
+                        // 永远无人监听，只有重启时的 catch-up 兜底才会合并。
+                        val pendingPaths =
+                            call.argument<List<String>>("pendingPaths") ?: emptyList()
                         val title = call.argument<String>("title") ?: "ZenFile 自动加密"
                         val contentText = call.argument<String>("contentText") ?: "正在保护已加密目录"
                         try {
                             val intent = Intent(this@MainActivity, CryptWatchForegroundService::class.java).apply {
                                 putExtra("action", "start")
                                 putExtra("paths", paths.toTypedArray())
+                                putExtra("pendingPaths", pendingPaths.toTypedArray())
                                 putExtra("title", title)
                                 putExtra("contentText", contentText)
                             }
@@ -1828,7 +1835,22 @@ class MainActivity : AudioServiceFragmentActivity() {
                     }
                 } catch (e: Throwable) {
                     e.printStackTrace()
-                    runOnUiThread { result.error("SMB_ERROR", e.message ?: e.toString(), null) }
+                    // ⚠️ Dart 侧的会话失效判定（isRemoteConnectionLostError）靠**错误
+                    // 消息文本**匹配关键词（"connection reset" / "Socket timeout" 等）。
+                    // SmbService 各处用自定义 Exception 包装 smbj 异常，底层错误只留在
+                    // cause 链里 —— 只回传 e.message 会把关键证据全部丢掉，快速失败类
+                    // 断连（RST/网络切换）在 Dart 侧匹配不到任何 marker，自动重建分支
+                    // 永远不触发，远程页面表现为「冻结」只能重启应用（2026-10-03 排查
+                    // 结论：云电脑 SMB 直连 vs 路由器子网代理的差异正是命中此坑）。
+                    // 这里把整条 cause 链的消息拍平进 message 一并回传。
+                    val sb = StringBuilder(e.message ?: e.toString())
+                    var curCause = e.cause
+                    while (curCause != null) {
+                        val m = curCause.message
+                        if (!m.isNullOrBlank() && sb.indexOf(m) < 0) sb.append(" <- ").append(m)
+                        curCause = curCause.cause
+                    }
+                    runOnUiThread { result.error("SMB_ERROR", sb.toString(), null) }
                 }
             }
         }

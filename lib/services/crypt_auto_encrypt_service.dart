@@ -79,6 +79,14 @@ class CryptAutoEncryptService extends ChangeNotifier {
 
   final Map<String, Timer> _shadowMergeTimers = {};
 
+  /// 影子明文目录轮询保底（2026-10-03）：FileObserver 事件链在部分环境
+  /// （Android 11+ FUSE 上其他 App 的写入）不可靠甚至整体静默——三轮真机
+  /// 报障均只有重启兜底生效。轮询不依赖任何事件，直接查磁盘：影子目录存在
+  /// 且非空 → 走与事件相同的防抖合并。事件链正常时 merge 幂等提前跳过，
+  /// 轮询只是空查几个 stat；事件链哑火时它就是唯一生效路径。
+  static const Duration shadowPollInterval = Duration(seconds: 30);
+  Timer? _shadowPollTimer;
+
   /// 影子明文目录成功并入密文容器后的回调（provider 注册它来刷新全部本地
   /// 标签页）：相机重建的同名明文目录被并入后，「密文 + 同名明文」并存态
   /// 自动收敛为一条，无需用户手动刷新（2026-10-02 用户报障收尾）。
@@ -86,6 +94,8 @@ class CryptAutoEncryptService extends ChangeNotifier {
 
   /// 取证日志开关（发版必须为 false；排查自动加密问题时临时置 true，
   /// 日志落公共目录 .nomedia/crypt_auto_encrypt.log，挂载盘/MTP 直读）。
+  /// 2026-10-03 自动加密四轮排查 + SMB 冻结取证全部完毕（用户已确认
+  /// 合并加密与冻结修复均生效），按红线改回 false。
   static bool logEnabled = false;
 
   /// 取证日志文件（公共目录 .nomedia 下，无 adb 也可经 MTP/挂载读取）。
@@ -172,6 +182,7 @@ class CryptAutoEncryptService extends ChangeNotifier {
     } else {
       await _stopNative();
       _serviceStarted = false;
+      _syncShadowPollTimer();
       notifyListeners();
     }
   }
@@ -206,7 +217,65 @@ class CryptAutoEncryptService extends ChangeNotifier {
         }
       }
     }
+    _syncShadowPollTimer();
+    // 空计划自愈重试（2026-10-03 取证：某次启动 resolvePlan 全 0 且此后
+    // 永不重跑 ⇒ 监听/轮询整体空转）。启动早期挂载点/主密码配置可能尚未
+    // 就绪（getMasterConfig 返回 null ⇒ 来源 B 全跳过），重试窗口覆盖它。
+    if (enabled && plan.containerDirs.isEmpty) {
+      if (_emptyPlanRetries < 5) {
+        _emptyPlanRetries++;
+        unawaited(_log('plan empty, retry #$_emptyPlanRetries in 10s'));
+        Future.delayed(const Duration(seconds: 10), () {
+          if (enabled) unawaited(refreshWatchPaths());
+        });
+      } else {
+        unawaited(_log('plan empty, retries exhausted'));
+      }
+    } else if (plan.containerDirs.isNotEmpty) {
+      _emptyPlanRetries = 0;
+    }
     notifyListeners();
+  }
+
+  /// 空计划连续重试计数（成功解析到容器即归零）
+  int _emptyPlanRetries = 0;
+
+  /// 轮询保底启停：有影子目录且开关打开 → 周期轮询；否则取消。
+  void _syncShadowPollTimer() {
+    if (enabled && _shadowPlainToCipher.isNotEmpty) {
+      _shadowPollTimer ??= Timer.periodic(shadowPollInterval, (_) {
+        unawaited(_pollShadowDirs());
+      });
+    } else {
+      _shadowPollTimer?.cancel();
+      _shadowPollTimer = null;
+    }
+  }
+
+  /// 轮询保底：影子明文目录存在且非空 → 走与事件相同的防抖合并。
+  /// 只查直接子项是否有内容（merge 自己会跳过已加密项，空目录留给
+  /// 相机继续写，避免刚 mkdir 就被我们删掉导致相机报错）。
+  Future<void> _pollShadowDirs() async {
+    if (!enabled || _shadowPlainToCipher.isEmpty) return;
+    // 快照遍历：循环内有 await，_resolveWatchPlan 可能并发 clear/重填原表
+    // （Dart 对迭代中的 Map 做修改会抛 ConcurrentModificationError）。
+    final snapshot = Map.of(_shadowPlainToCipher);
+    for (final entry in snapshot.entries) {
+      final plainDir = entry.key;
+      final cipherDir = entry.value;
+      try {
+        final dir = Directory(plainDir);
+        if (!await dir.exists()) continue;
+        var hasContent = false;
+        await for (final e in dir.list(followLinks: false)) {
+          hasContent = true;
+          break;
+        }
+        if (!hasContent) continue;
+        unawaited(_log('poll: non-empty shadow dir $plainDir -> merge'));
+        _onShadowPlainDirEvent(plainDir, cipherDir, 'poll');
+      } catch (_) {}
+    }
   }
 
   Future<void> _stopNative() async {
@@ -282,11 +351,14 @@ class CryptAutoEncryptService extends ChangeNotifier {
         if (t == FileSystemEntityType.directory) {
           // 已存在（相机已重建）：直接监听，事件走并入分流
           watchDirs.add(shadowPath);
+          unawaited(_log('container: $container, shadow exists: $shadowPath'));
         } else {
           pending.add(shadowPath);
+          unawaited(_log('container: $container, shadow pending: $shadowPath'));
         }
       } catch (_) {
         pending.add(shadowPath);
+        unawaited(_log('container: $container, shadow pending(err): $shadowPath'));
       }
     }
 
@@ -300,31 +372,52 @@ class CryptAutoEncryptService extends ChangeNotifier {
 
     // ── 来源 B：原地加密父目录登记表 → 扫描其下的密文名子目录 ──
     try {
-      for (final parentPath in await CryptMountService.loadEncryptedDirs()) {
+      final registered = await CryptMountService.loadEncryptedDirs();
+      unawaited(_log(
+        'sourceB: registered parents=${registered.length}: $registered',
+      ));
+      for (final parentPath in registered) {
         if (parentPath.isEmpty) continue;
+        bool parentExists;
         try {
-          if (!await Directory(parentPath).exists()) continue; // 陈旧记录
+          parentExists = await Directory(parentPath).exists();
         } catch (_) {
-          continue;
+          parentExists = false;
+        }
+        if (!parentExists) {
+          unawaited(_log('sourceB: parent missing, skip: $parentPath'));
+          continue; // 陈旧记录
         }
         final parentMount = await _resolveMountForDir(parentPath);
-        if (parentMount == null) continue;
+        if (parentMount == null) {
+          // 启动早期主密码配置可能未就绪 —— 打点 + 靠 refreshWatchPaths
+          // 的空计划重试自愈（2026-10-03 取证：此处曾静默跳过 ⇒ 全 0 空转）
+          unawaited(
+            _log('sourceB: no mount for parent, skip: $parentPath'),
+          );
+          continue;
+        }
         final List<FileSystemEntity> children;
         try {
           children =
               await Directory(parentPath).list(followLinks: false).toList();
-        } catch (_) {
+        } catch (e) {
+          unawaited(_log('sourceB: list failed $parentPath: $e'));
           continue;
         }
         for (final entity in children) {
           if (entity is! Directory) continue;
           final name = p.basename(entity.path);
           // 与保险箱列表/merge② 完全同源的判据：往返校验
-          if (!CryptOperations.isCipherDirName(name, parentMount)) continue;
+          final cipher = CryptOperations.isCipherDirName(name, parentMount);
+          unawaited(_log('sourceB: child=$name cipher=$cipher'));
+          if (!cipher) continue;
           await collectContainer(p.normalize(entity.path), parentMount);
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      unawaited(_log('sourceB FAILED: $e'));
+    }
 
     unawaited(_log(
       'resolvePlan: containers=${containerDirs.length}, '
@@ -396,6 +489,7 @@ class CryptAutoEncryptService extends ChangeNotifier {
     String cipherDir,
     String event,
   ) {
+    unawaited(_log('shadow event: $event on $plainDir'));
     if (event == 'delete' || event == 'delete_self' || event == 'move_self') {
       // 目录被（可能是我们自己的 merge）删掉：清防抖，等原生 pending 转正
       _shadowMergeTimers.remove(plainDir)?.cancel();
@@ -413,6 +507,18 @@ class CryptAutoEncryptService extends ChangeNotifier {
     _catchUpBusyDirs.add(cipherDir);
     unawaited(_log('shadow merge start: $plainDir -> $cipherDir'));
     try {
+      // 容器已不存在（被解密/手动删除）：清掉 stale 映射并重解析监听表，
+      // 否则事件/poll 会拿死映射持续空转（2026-10-03 日志：13 次
+      // Directory not found 噪音）。
+      if (!await Directory(cipherDir).exists()) {
+        if (_shadowPlainToCipher.remove(plainDir) != null) {
+          unawaited(
+            _log('shadow merge: cipher dir gone, refresh: $cipherDir'),
+          );
+          unawaited(refreshWatchPaths());
+        }
+        return;
+      }
       final mount = _containerMounts[p.normalize(cipherDir)] ??
           await _resolveMountForDir(cipherDir);
       if (mount == null) {
@@ -509,6 +615,7 @@ class CryptAutoEncryptService extends ChangeNotifier {
   Future<void> runCatchUp() async {
     // 只处理密文容器目录；同名明文兄弟目录由 merge 的②逻辑（含实时并入）覆盖
     final dirs = (await _resolveWatchPlan()).containerDirs;
+    unawaited(_log('catchUp: dirs=${dirs.length}'));
     // 注意不要把 _watchedDirs 覆盖成 containerDirs：watchedDirs 还包含
     // 已存在的影子明文目录（refreshWatchPaths 负责，这里只做兜底合并）。
     for (final dir in dirs) {
@@ -566,6 +673,8 @@ class CryptAutoEncryptService extends ChangeNotifier {
   @override
   void dispose() {
     _channel.setMethodCallHandler(null);
+    _shadowPollTimer?.cancel();
+    _shadowPollTimer = null;
     super.dispose();
   }
 }

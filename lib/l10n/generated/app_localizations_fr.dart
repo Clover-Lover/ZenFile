@@ -2889,6 +2889,28 @@ class L10nFr extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String get ui_backup_passphrase_title => 'Phrase secrète de sauvegarde';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'Saisissez une phrase secrète pour chiffrer les données sensibles de la sauvegarde (mots de passe des connexions distantes, du coffre, etc.). Laissez vide pour exclure les données sensibles ; elles devront être reconfigurées après la restauration.';
+
+  @override
+  String get ui_restore_passphrase_title => 'Saisir la phrase secrète';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'Cette sauvegarde contient des données sensibles chiffrées. Saisissez la phrase secrète pour les restaurer ; sinon, les mots de passe devront être reconfigurés manuellement après la restauration.';
+
+  @override
+  String get ui_backup_passphrase_wrong =>
+      'Phrase secrète incorrecte, réessayez';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'Données sensibles non restaurées ; les mots de passe doivent être reconfigurés manuellement';
+
+  @override
   String get update_err_network =>
       'Impossible de joindre le serveur. Vérifiez votre réseau et réessayez.';
 

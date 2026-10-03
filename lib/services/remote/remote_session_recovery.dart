@@ -57,6 +57,28 @@ const List<String> kRemoteConnectionLostMarkers = <String>[
   // 连接重进（2026-10-02 排查结论：2f220a88 补的 Java 文案 marker 因此落空）。
   // 会话假活但服务器单纯慢时的代价只是「重建连接 + 多试一次」，可接受。
   'timeoutexception',
+  // SMB2 状态码类会话失效（smbj SMB2ApiException 的 message 就是状态码常量
+  // 名，不含空格也不带 cause —— cause 链拍平救不了它们）。典型场景：手机切
+  // 后台期间组网路径短暂中断，Windows 端会话已被回收，TCP 恢复后第一次操作
+  // 服务器直接回 STATUS_USER_SESSION_DELETED / STATUS_NETWORK_SESSION_EXPIRED
+  // （2026-10-03 冻结报障实锤：服务器侧 SMB 会话消失但 TCP 仍 ESTABLISHED）。
+  // 注意 smbj 文案里是下划线、无空格，两种写法都要覆盖。
+  'session expired',
+  'session_expired',
+  'session deleted',
+  'session_deleted',
+  // SmbService 对 session 已不在 sessions 表时的原文（原生端会话被清理 /
+  // sessionId 失效）。
+  'invalid or disconnected session',
+  // smbj 缓存的树连接对象已被关闭（Share.close() 置 disconnected 标志后，
+  // 后续所有操作抛 "DiskShare has already been closed" —— 原生侧缓存永不
+  // 失效 + checkAlive 只探 connection.isConnected 所以永远判 ALIVE）。典型
+  // 场景：手机切后台再返回后第一次操作（2026-10-03 双端日志实锤：服务器侧
+  // TCP+SMB 会话全程健在，纯属客户端缓存对象失效）。Kotlin 侧 getShare 已
+  // 加自愈（发现 closed 即移除缓存重建树连接），此 marker 是 Dart 侧兜底：
+  // 万一原生自愈没拦住，走重建客户端 + 重试也能恢复，不再冻结页面。
+  'has already been closed',
+  'share has been closed',
 ];
 
 /// 该错误是否属于「连接/会话已失效」类（重连可能救回来）。

@@ -209,6 +209,69 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
     }
   }
 
+  /// 备份口令输入弹窗。返回 null = 用户取消/跳过敏感信息。
+  Future<String?> _showPassphraseDialog({
+    required String title,
+    required String hint,
+    String? errorText,
+  }) async {
+    final l10n = L10n.of(context);
+    final theme = Theme.of(context);
+    final controller = TextEditingController();
+    final result = await showDialog<String>(
+      context: context,
+      builder: (ctx) {
+        String? dialogError = errorText;
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) => AlertDialog(
+            backgroundColor: theme.scaffoldBackgroundColor,
+            title: Text(title, style: TextStyle(color: theme.colorScheme.onSurface)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hint,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: controller,
+                  obscureText: true,
+                  autofocus: true,
+                  onChanged: (_) {
+                    if (dialogError != null) {
+                      setDialogState(() => dialogError = null);
+                    }
+                  },
+                  decoration: InputDecoration(
+                    labelText: title,
+                    errorText: dialogError,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, null),
+                child: Text(l10n.ui_cancel, style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7))),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, controller.text),
+                child: Text(l10n.ui_confirm),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    controller.dispose();
+    return result;
+  }
+
   Future<void> _performBackup() async {
     final l10n = L10n.of(context);
     final theme = Theme.of(context);
@@ -238,7 +301,18 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
 
     if (confirmed != true) return;
 
-    final success = await SettingsBackupService.backupSettings(context);
+    // 备份口令：非空时敏感凭据（远程连接密码、保险箱配置等）加密进备份；
+    // 留空确认 = 不备份敏感信息（v1 扁平格式，恢复后需手动重配密码）
+    final passphrase = await _showPassphraseDialog(
+      title: l10n.ui_backup_passphrase_title,
+      hint: l10n.ui_backup_passphrase_hint,
+    );
+    if (passphrase == null) return; // 用户取消
+
+    final success = await SettingsBackupService.backupSettings(
+      context,
+      passphrase: passphrase,
+    );
     if (success) {
       await _loadBackupInfo();
     }
@@ -285,8 +359,23 @@ class _BackupSettingsScreenState extends State<BackupSettingsScreen> {
 
     if (confirmed != true) return;
 
-    final success = await SettingsBackupService.restoreSettings(context, _selectedBackupPath!);
-    if (success && mounted) {
+    final result = await SettingsBackupService.restoreSettings(
+      context,
+      _selectedBackupPath!,
+      askPassphrase: (wrong) => _showPassphraseDialog(
+        title: l10n.ui_restore_passphrase_title,
+        hint: l10n.ui_restore_passphrase_hint,
+        errorText: wrong ? l10n.ui_backup_passphrase_wrong : null,
+      ),
+    );
+    if (result.success && mounted) {
+      if (result.hasSecrets && !result.secretsRestored) {
+        // 用户跳过敏感信息或未输对口令：提示后再重启
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.ui_restore_secrets_skipped)),
+        );
+        await Future<void>.delayed(const Duration(seconds: 2));
+      }
       // 恢复成功后直接重启应用，不再额外弹窗
       SystemNavigator.pop();
     }

@@ -109,6 +109,40 @@ class CryptMountService {
     await prefs.setString(_kMountPointsKey, jsonEncode(list));
   }
 
+  /// 备份导出：物理路径 → 挂载点密码。
+  ///
+  /// 仅供全局备份链路调用；返回值必须先经备份口令加密（BackupSecretsCodec）
+  /// 才能落盘。键用物理路径明文（与 prefs 里挂载点配置对齐），落备份文件前
+  /// 会被整体加密，不泄露路径与密码。
+  static Future<Map<String, String>> exportPasswords() async {
+    final mounts = await loadMountPoints();
+    final out = <String, String>{};
+    for (final m in mounts) {
+      if (m.config.password.isNotEmpty) {
+        out[m.physicalPath] = m.config.password;
+      }
+    }
+    return out;
+  }
+
+  /// 备份恢复：把备份里的挂载点密码写回 FlutterSecureStorage。
+  ///
+  /// [passwords] 为 {物理路径: 密码}（解密后的 mount_passwords 段）；落
+  /// secure storage 时键按 [_pathHash] 哈希。须在挂载点配置（prefs）恢复
+  /// 之后调用，否则对应挂载点不存在、密码只是提前写好待用。
+  static Future<void> restorePasswords(Map<String, dynamic> passwords) async {
+    for (final entry in passwords.entries) {
+      final password = entry.value;
+      if (password is! String || password.isEmpty) continue;
+      try {
+        await _secureStorage.write(
+          key: '$_kPasswordPrefix${_pathHash(entry.key)}',
+          value: password,
+        );
+      } catch (_) {}
+    }
+  }
+
   /// 添加一个加密挂载点
   static Future<void> addMountPoint(CryptMountPoint mount) async {
     final mounts = await loadMountPoints();
@@ -196,6 +230,13 @@ class CryptMountService {
       dirs.add(normalized);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_kEncryptedDirsKey, jsonEncode(dirs));
+      // ⚠️ 这张表（父目录登记）也必须通知：自动加密服务的监听表来源 B
+      // 靠它——不通知则加/解密后监听表一直是 stale 的（2026-10-03 日志：
+      // 解密后 stale 映射空转 13 次 Directory not found）。回调名是历史
+      // 命名，语义 = 「原地加密相关登记发生变化」。
+      try {
+        await onInPlaceContainerDirsChanged?.call(dirs);
+      } catch (_) {}
     } catch (_) {}
   }
 
@@ -215,6 +256,11 @@ class CryptMountService {
       if (kept.length == dirs.length) return;
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_kEncryptedDirsKey, jsonEncode(kept));
+      // 同 addEncryptedDir：注销也要通知（解密后监听表必须立刻重解析，
+      // 否则 stale 影子映射继续对已删除的容器空转）
+      try {
+        await onInPlaceContainerDirsChanged?.call(kept);
+      } catch (_) {}
     } catch (_) {}
   }
 

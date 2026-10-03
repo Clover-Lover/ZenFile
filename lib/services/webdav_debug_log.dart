@@ -59,7 +59,7 @@ class WebdavDebugLog {
   /// 2026-09-30 网盘取证期间曾临时置 true 采集 `[netdisk:*]` 序列；
   /// **发版前已按红线改回 false**（今后每次取证结束都要改回并 grep 复核）。
   /// 与 [aoDiagnostics] 已解耦 ⇒ 打开它也不会带上那条 11 秒的裸原生悬垂窗口。
-  static bool enabled = false;
+  static bool enabled = false; // 2026-10-03 SMB 冻结第三轮取证完毕（DiskShare 缓存自愈修复验证通过），按红线改回 false
 
   /// AO（音频输出）延迟回读诊断的**独立开关**，默认关闭。
   ///

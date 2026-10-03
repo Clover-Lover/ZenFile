@@ -1818,11 +1818,36 @@ class SmbService {
     /**
      * Returns the [DiskShare] for [shareName], connecting to it lazily and
      * caching the result so repeated operations do not re-open the tree.
+     *
+     * Self-healing: a cached share can be closed behind our back (smbj tears
+     * down tree connects when the session/transport state machine decides to;
+     * observed when Android backgrounds the app). Every later operation on the
+     * stale object then throws "DiskShare has already been closed" forever,
+     * while [checkAlive] keeps reporting ALIVE because it only probes
+     * [com.hierynomus.smbj.connection.Connection.isConnected] — the page
+     * freezes with the old list and never recovers (2026-10-03 dual-side log
+     * evidence: server-side TCP + SMB session stayed healthy the whole time).
+     * So on retrieval we validate via [Share.isConnected] (the same
+     * disconnected flag that triggers the "already been closed" error) and
+     * transparently rebuild the tree connect when it is stale.
      */
     private fun getShare(entry: SmbSessionEntry, shareName: String): DiskShare {
-        return entry.shares.computeIfAbsent(shareName) {
-            entry.session.connectShare(shareName) as DiskShare
+        val existing = entry.shares[shareName]
+        if (existing != null) {
+            val alive = try { existing.isConnected } catch (_: Throwable) { false }
+            if (alive) return existing
+            Log.w("SmbService", "Cached share '$shareName' is closed; reconnecting tree")
+            try { existing.close() } catch (_: Throwable) {}
+            entry.shares.remove(shareName, existing)
         }
+        val fresh = entry.session.connectShare(shareName) as DiskShare
+        val prev = entry.shares.putIfAbsent(shareName, fresh)
+        if (prev != null) {
+            // Another thread reconnected first; use its share and drop ours.
+            try { fresh.close() } catch (_: Throwable) {}
+            return prev
+        }
+        return fresh
     }
 
     /**
