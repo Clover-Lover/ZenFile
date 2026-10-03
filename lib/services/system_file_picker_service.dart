@@ -30,6 +30,26 @@ class SystemFilePickerService {
     }
   }
 
+  /// 注册「原生侧主动推送选文件请求」的回调。
+  ///
+  /// 用于 `onNewIntent`：MainActivity 是 singleTask，ZenFile 已在后台运行时第三方
+  /// 再次调起选文件不会走 onCreate，此时原生侧没有机会回答 Dart 的查询，只能主动推。
+  /// 不注册的话，这种「ZenFile 在后台」场景只会把首页带到前台，选文件界面不出现。
+  static void setIntentHandler(void Function(SystemFilePickerInfo info) handler) {
+    _channel.setMethodCallHandler((call) async {
+      if (call.method != 'onPickerIntent') return;
+      final args = call.arguments;
+      if (args is! Map) return;
+      handler(
+        SystemFilePickerInfo(
+          isPicker: args['isPicker'] == true,
+          allowMultiple: args['allowMultiple'] == true,
+          mime: args['mime'] as String?,
+        ),
+      );
+    });
+  }
+
   /// 把选中的文件路径回传给调起方，并结束本页（原生侧 setResult + finish）。
   static Future<bool> finishPick(List<String> paths) async {
     try {

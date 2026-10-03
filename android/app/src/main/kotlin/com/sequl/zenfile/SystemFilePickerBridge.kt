@@ -40,22 +40,46 @@ class SystemFilePickerBridge(private val activity: Activity) {
     var mimeType: String? = null
         private set
 
+    /** 供原生主动推送「新的 picker 请求」给 Dart 侧（onNewIntent 场景）。 */
+    private var channel: MethodChannel? = null
+
+    /** 主动把 picker 请求推给 Dart 侧；Dart 未注册处理器时静默忽略。 */
+    private fun pushToDart() {
+        channel?.invokeMethod(
+            "onPickerIntent",
+            mapOf(
+                "isPicker" to true,
+                "allowMultiple" to allowMultiple,
+                "mime" to mimeType
+            )
+        )
+    }
+
     /**
      * 读取启动 intent，判定是否为系统文件选择器模式。
      * 必须在 Activity 的 super.onCreate() **之前**调用 —— Dart 侧启动后会异步查询本状态。
+     *
+     * [notifyDart] 为 true 时，若 Dart 侧已经注册了处理器，还会主动把这次的 picker
+     * 请求推给它。用于 `onNewIntent`：MainActivity 是 singleTask，ZenFile 已在后台时
+     * 第三方调起不会走 onCreate，只有靠主动推送才能让 Dart 侧切到选文件界面。
      */
-    fun onLaunchIntent(intent: Intent?) {
+    fun onLaunchIntent(intent: Intent?, notifyDart: Boolean = false) {
         val action = intent?.action
-        if (action == Intent.ACTION_GET_CONTENT || action == Intent.ACTION_PICK) {
+        if (action == Intent.ACTION_GET_CONTENT ||
+            action == Intent.ACTION_PICK ||
+            action == Intent.ACTION_OPEN_DOCUMENT
+        ) {
             isPickerLaunch = true
             allowMultiple = intent?.getBooleanExtra(Intent.EXTRA_ALLOW_MULTIPLE, false) ?: false
             mimeType = intent?.type
+            if (notifyDart) pushToDart()
         }
     }
 
     /** 注册供 Dart 侧调用的通道。 */
     fun registerChannel(messenger: BinaryMessenger) {
-        MethodChannel(messenger, CHANNEL).setMethodCallHandler { call, result ->
+        channel = MethodChannel(messenger, CHANNEL)
+        channel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "getPickerInfo" -> {
                     result.success(
@@ -108,7 +132,11 @@ class SystemFilePickerBridge(private val activity: Activity) {
             data.clipData = clip
             data.data = uris[0]
         }
+        // OPEN_DOCUMENT 的调用方通常会 takePersistableUriPermission() 长期持有这个 URI
+        // （例如把选中的文件记进自己的数据库），少了 PERSISTABLE 标记那次调用会失败。
+        // GET_CONTENT 场景带上也无害。
         data.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        data.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
         activity.setResult(Activity.RESULT_OK, data)
         activity.finish()
         return true

@@ -122,13 +122,29 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
 
-            <!-- System file picker entry: 第三方 App 用 ACTION_GET_CONTENT 选文件时，
-                 ZenFile 作为可选来源出现在系统 chooser 中，直接打开自己的文件浏览器，
-                 选完通过 ZenFileDocumentsProvider 的 document URI 回传。 -->
+            <!-- System file picker entry: 第三方 App 选文件时，ZenFile 作为可选来源
+                 出现在系统 chooser 中，直接打开自己的文件浏览器，选完通过
+                 ZenFileDocumentsProvider 的 document URI 回传。
+
+                 三个 action 都必须注册，缺一个就会漏掉一批调用方：
+                 - GET_CONTENT：会弹 chooser，ZenFile 与其他来源并列（QQ / 微信多数走这个）
+                 - OPEN_DOCUMENT：默认由系统 DocumentsUI 独占，但第三方 Activity 同样可以
+                   注册；注册后系统解析出多个候选，ZenFile 才会出现在消歧对话框里。
+                   这是「只看到 ZenFile Storage 侧边栏」场景的关键补充。
+                 - PICK：老式选文件入口
+
+                 ⚠️ OPEN_DOCUMENT 的 filter 只声明 DEFAULT（不声明 OPENABLE）：
+                 filter 里的 category 必须是 intent category 的超集，调用方通常不带
+                 OPENABLE，多声明不会更严格但容易让人误判，保持最小集即可。 -->
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.OPEN_DOCUMENT" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>
             <intent-filter>

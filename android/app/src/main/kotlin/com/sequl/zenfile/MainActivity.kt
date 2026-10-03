@@ -161,6 +161,17 @@ class MainActivity : AudioServiceFragmentActivity() {
         }
     }
 
+    /**
+     * MainActivity 是 singleTask：ZenFile 已在后台运行时，第三方 App 再次调起选文件
+     * **不会**走 onCreate，只会回调到这里。必须重新判定并主动推送给 Dart 侧，
+     * 否则用户看到的只是被带到前台的 ZenFile 首页，选文件界面根本不会出现。
+     */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        systemFilePickerBridge.onLaunchIntent(intent, notifyDart = true)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // 崩溃取证必须在 super.onCreate() **之前**：那一步会创建 FlutterEngine、
         // 加载 libflutter.so / libmpv.so，正是「启动即崩」的主要发生地。

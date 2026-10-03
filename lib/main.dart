@@ -552,6 +552,17 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
     _initializeApplication();
     _initAudioNotificationClickListener();
     _loadSystemPickerInfo();
+    // ZenFile 已在后台时第三方再次调起选文件不会走 onCreate，靠原生主动推送。
+    SystemFilePickerService.setIntentHandler(_onSystemPickerIntent);
+  }
+
+  /// 原生侧 onNewIntent 主动推送的选文件请求（ZenFile 已在后台运行的场景）。
+  void _onSystemPickerIntent(SystemFilePickerInfo info) {
+    if (!mounted || !info.isPicker) return;
+    setState(() {
+      _pickerInfo = info;
+      _pickerInfoChecked = true;
+    });
   }
 
   /// 查询本次是否为「系统文件选择器」启动（被第三方 App 调起选文件）。
