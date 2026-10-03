@@ -4273,8 +4273,14 @@ abstract class L10n {
   /// web_sharing_screen.dart internet tunnel activation failure toast
   ///
   /// In zh, this message translates to:
-  /// **'婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error}'**
+  /// **'激活互联网分享链接失败：{error}'**
   String web_share_internet_failed(String error);
+
+  /// file_manager_provider.dart remote (SMB/WebDAV) directory load failure toast
+  ///
+  /// In zh, this message translates to:
+  /// **'远程目录加载失败：{error}'**
+  String ui_remote_load_failed(String error);
 
   /// ui\widgets\background_operation_progress_dialog.dart
   ///

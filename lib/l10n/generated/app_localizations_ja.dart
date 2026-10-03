@@ -2231,7 +2231,12 @@ class L10nJa extends L10n {
 
   @override
   String web_share_internet_failed(String error) {
-    return '銈ゃ兂銈裤兗銉嶃儍銉堝叡鏈夈儶銉炽偗銇湁鍔瑰寲銇け鏁椼仐銇俱仐銇? $error';
+    return 'インターネット共有リンクの有効化に失敗しました: $error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return 'リモートディレクトリの読み込みに失敗しました: $error';
   }
 
   @override

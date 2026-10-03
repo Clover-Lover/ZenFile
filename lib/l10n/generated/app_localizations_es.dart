@@ -2363,6 +2363,11 @@ class L10nEs extends L10n {
   }
 
   @override
+  String ui_remote_load_failed(String error) {
+    return 'Error al cargar el directorio remoto: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Procesando...';
 
   @override

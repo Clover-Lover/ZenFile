@@ -2352,7 +2352,12 @@ class L10nRu extends L10n {
 
   @override
   String web_share_internet_failed(String error) {
-    return '袧械 褍写邪谢芯褋褜 邪泻褌懈胁懈褉芯胁邪褌褜 褋褋褘谢泻褍 写谢褟 懈薪褌械褉薪械褌-写芯褋褌褍锌邪: $error';
+    return 'Не удалось активировать ссылку для интернет-доступа: $error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return 'Не удалось загрузить удалённый каталог: $error';
   }
 
   @override

@@ -2318,6 +2318,11 @@ class L10nEn extends L10n {
   }
 
   @override
+  String ui_remote_load_failed(String error) {
+    return 'Failed to load remote directory: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Processing...';
 
   @override

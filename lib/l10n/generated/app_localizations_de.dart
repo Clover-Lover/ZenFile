@@ -2349,6 +2349,11 @@ class L10nDe extends L10n {
   }
 
   @override
+  String ui_remote_load_failed(String error) {
+    return 'Remoteverzeichnis konnte nicht geladen werden: $error';
+  }
+
+  @override
   String get msg67bd9375 => 'Verarbeitung...';
 
   @override

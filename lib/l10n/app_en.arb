@@ -2748,6 +2748,7 @@
   },
   "msg6466e61e": "Activate Internet Share Link",
   "web_share_internet_failed": "Failed to activate Internet share link: {error}",
+  "ui_remote_load_failed": "Failed to load remote directory: {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },

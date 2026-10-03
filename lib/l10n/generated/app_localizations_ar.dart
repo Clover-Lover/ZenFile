@@ -2305,7 +2305,12 @@ class L10nAr extends L10n {
 
   @override
   String web_share_internet_failed(String error) {
-    return '賮卮賱 鬲賮毓賷賱 乇丕亘胤 丕賱賲卮丕乇賰丞 毓亘乇 丕賱廿賳鬲乇賳鬲: $error';
+    return 'فشل تفعيل رابط المشاركة عبر الإنترنت: $error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return 'فشل تحميل الدليل البعيد: $error';
   }
 
   @override

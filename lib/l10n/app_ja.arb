@@ -2744,7 +2744,8 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "インターネット共有リンクを有効化",
-  "web_share_internet_failed": "銈ゃ兂銈裤兗銉嶃儍銉堝叡鏈夈儶銉炽偗銇湁鍔瑰寲銇け鏁椼仐銇俱仐銇? {error}",
+  "web_share_internet_failed": "インターネット共有リンクの有効化に失敗しました: {error}",
+  "ui_remote_load_failed": "リモートディレクトリの読み込みに失敗しました: {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },

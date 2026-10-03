@@ -6326,6 +6326,9 @@ class FileManagerProvider extends ChangeNotifier {
       if (recordHistory && path.isNotEmpty) {
         _pushPathToHistory(path);
       }
+      // 记住进入前的路径：列目录失败时要回滚（见下方 catch），否则面包屑会
+      // 停在目标路径而内容仍是上一层（用户反馈的「路径多一级、下面没变化」）。
+      final String previousPath = activeTab.currentPath;
       try {
         activeTab.currentPath = path;
         List<RemoteFileItem> remoteItems;
@@ -6365,10 +6368,28 @@ class FileManagerProvider extends ChangeNotifier {
         activeTab.currentFiles = [...remoteFolders, ...remoteFiles];
       } catch (e) {
         debugPrint('Error loading remote directory: $e');
-        WebdavDebugLog.log('[smb] load FINAL FAIL (silent keep-old-list) path=$path err=$e');
+        WebdavDebugLog.log('[smb] load FINAL FAIL (keep-old-list + rollback path) path=$path err=$e');
         // 修复A（问题1）：取消/网络抖动/服务端临时错误不应清空已显示的远程目录，
         // 保留上次成功的列表，避免目录瞬间变空（用户可下拉重试）。isLoading 已在
         // 下方统一置 false 并 notifyListeners()，这里不再 currentFiles = []。
+        //
+        // ⚠️ 但 currentPath 必须一并回滚：它在上面已被改成目标路径，若只保留旧列表
+        // 而不回滚路径，就会出现「面包屑已进入 Music、内容仍是上层共享列表」的错位
+        // 状态（用户反馈：点共享名后目录多一级、下面没变化），且后续的新建/上传会
+        // 拿这个打不开的路径当目标。回滚后 UI 保持「留在原地」的一致状态。
+        activeTab.currentPath = previousPath;
+        // 失败必须让用户看见：否则点共享名后「没反应」，用户无法区分是没点中还是
+        // 列目录失败。同时把真实异常带出来 —— release 包已关闭 WebdavDebugLog，
+        // 用户截图这条提示就是唯一的现场证据。
+        final ctx = _gateContext(null);
+        if (ctx != null && ctx.mounted) {
+          ScaffoldMessenger.of(ctx).showSnackBar(
+            SnackBar(
+              content: Text(L10n.of(ctx).ui_remote_load_failed('$e')),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
       activeTab.isLoading = false;
       _persistTabs();

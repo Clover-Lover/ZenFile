@@ -2740,7 +2740,8 @@
     "description": "ui\\screens\\web_sharing_screen.dart"
   },
   "msg6466e61e": "Activer le lien de partage Internet",
-  "web_share_internet_failed": "脡chec de l'activation du lien de partage Internet : {error}",
+  "web_share_internet_failed": "Échec de l'activation du lien de partage Internet : {error}",
+  "ui_remote_load_failed": "Échec du chargement du répertoire distant : {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },

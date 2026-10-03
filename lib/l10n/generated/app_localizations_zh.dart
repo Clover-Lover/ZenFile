@@ -2222,7 +2222,12 @@ class L10nZh extends L10n {
 
   @override
   String web_share_internet_failed(String error) {
-    return '婵€娲讳簰鑱旂綉鍒嗕韩閾炬帴澶辫触锛歿error';
+    return '激活互联网分享链接失败：$error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return '远程目录加载失败：$error';
   }
 
   @override
@@ -10146,7 +10151,12 @@ class L10nZhTw extends L10nZh {
 
   @override
   String web_share_internet_failed(String error) {
-    return '鍟熺敤缍查殯缍茶矾鍒嗕韩閫ｇ祼澶辨晽锛歿error';
+    return '啟用網際網路分享連結失敗：$error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return '遠端目錄載入失敗：$error';
   }
 
   @override

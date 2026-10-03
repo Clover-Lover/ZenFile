@@ -2741,6 +2741,7 @@
   },
   "msg6466e61e": "Activar Enlace de Compartición por Internet",
   "web_share_internet_failed": "Error al activar el enlace para compartir por Internet: {error}",
+  "ui_remote_load_failed": "Error al cargar el directorio remoto: {error}",
   "@msg67bd9375": {
     "description": "ui\\widgets\\background_operation_progress_dialog.dart"
   },

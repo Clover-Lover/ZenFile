@@ -2359,7 +2359,12 @@ class L10nFr extends L10n {
 
   @override
   String web_share_internet_failed(String error) {
-    return '脡chec de l\'activation du lien de partage Internet : $error';
+    return 'Échec de l\'activation du lien de partage Internet : $error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return 'Échec du chargement du répertoire distant : $error';
   }
 
   @override
