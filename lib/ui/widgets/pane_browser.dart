@@ -205,13 +205,18 @@ class _PaneBrowserState extends State<PaneBrowser> {
     required bool isGrid,
   }) {
     final folder = _parentDirectoryItem(provider, tab);
+    // 多选态下点击父目录项 = 先退出多选，再返回上级。
+    void onTap() {
+      if (tab.selectedPaths.isNotEmpty) provider.clearSelection();
+      _goUp(provider, tab);
+    }
     if (isGrid) {
       return FolderGridItem(
         folder: folder,
         isSelected: false,
         iconScale: provider.iconScale,
         itemPaddingMultiplier: provider.itemPaddingMultiplier,
-        onTap: () => _goUp(provider, tab),
+        onTap: onTap,
         onLongPress: null,
         onIconTap: null,
         onAction: (_) {},
@@ -225,7 +230,7 @@ class _PaneBrowserState extends State<PaneBrowser> {
       false,
       tab.remoteConnection,
       isParentItem: true,
-      onTapOverride: () => _goUp(provider, tab),
+      onTapOverride: onTap,
     );
   }
 
@@ -576,7 +581,8 @@ class _PaneBrowserState extends State<PaneBrowser> {
         ? provider.activeTabIndex == widget.tabIndex
         : true;
     final isSelectionMode = tab.selectedPaths.isNotEmpty;
-    final showParentDirectory = !isSelectionMode && _canGoUp(provider, tab);
+    // 多选态下也保留父目录项，避免双窗口列表上跳错位误触。
+    final showParentDirectory = _canGoUp(provider, tab);
     // 应用全局「按类别过滤」后的显示列表（单/双窗口统一），文件夹始终保留
     final displayFiles = provider.getDisplayFilesForTab(tab);
 

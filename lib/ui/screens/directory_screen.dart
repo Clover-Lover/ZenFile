@@ -628,13 +628,18 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     required bool isGrid,
   }) {
     final folder = _parentDirectoryItem(provider);
+    // 多选态下点击父目录项 = 先退出多选，再返回上级。
+    void onTap() {
+      if (provider.isSelectionMode) provider.clearSelection();
+      _goUp(provider);
+    }
     if (isGrid) {
       return FolderGridItem(
         folder: folder,
         isSelected: false,
         iconScale: provider.iconScale,
         itemPaddingMultiplier: provider.itemPaddingMultiplier,
-        onTap: () => _goUp(provider),
+        onTap: onTap,
         onLongPress: null,
         onIconTap: null,
         onAction: (_) {},
@@ -645,7 +650,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       isSelected: false,
       iconScale: provider.iconScale,
       itemPaddingMultiplier: provider.itemPaddingMultiplier,
-      onTap: () => _goUp(provider),
+      onTap: onTap,
       onLongPress: null,
       onIconTap: null,
       onAction: (_) {},
@@ -1367,7 +1372,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       builder: (context, provider, child) {
         final theme = Theme.of(context);
         final isSelectionMode = provider.isSelectionMode;
-        final showParentDirectory = !isSelectionMode && provider.canGoUp;
+        // 多选模式下也保留父目录项与顶部固定区域：避免列表整体上跳、相邻文件错位误触。
+        // 父目录项不参与多选（isSelected 恒 false、无长按），点击 = 退出多选并返回上级。
+        final showParentDirectory = provider.canGoUp;
 
         // 单窗口 ↔ 双窗口切换：重置操作栏为展开（理由见 _lastSplitScreen 字段注释）。
         // 这里直接改字段、不调 setState —— 本帧随后就用新值渲染，不必多等一帧。
@@ -1466,8 +1473,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                   ),
             body: Column(
               children: [
-                // 顶部固定区域（标签页 + 路径面包屑）
-                if (!isSelectionMode) _buildFixedTopArea(context, provider),
+                // 顶部固定区域（标签页 + 路径面包屑）：多选时也保留，避免列表上跳错位。
+                _buildFixedTopArea(context, provider),
                 if (provider.filterType != FileFilterType.all)
                   _buildActiveFilterBanner(context, provider),
                 if (provider.isLoading)
@@ -1539,8 +1546,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                           curve: Curves.easeInOut,
                                           height: (progressMin ||
                                                   provider.hasClipboard ||
-                                                  (provider.showFolderFileCount &&
-                                                      !isSelectionMode))
+                                                  provider.showFolderFileCount)
                                               ? 28.0
                                               : 0.0,
                                           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -1595,8 +1601,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
                                                           ),
                                                         ),
                                                       ),
-                                                    // 中间：文件/文件夹计数（开启计数且非多选时显示，固定不随滚动消失）
-                                                    if (provider.showFolderFileCount && !isSelectionMode) ...[
+                                                    // 中间：文件/文件夹计数（开启计数即显示，多选时也保留，避免顶部区域高度变化导致列表跳动）
+                                                    if (provider.showFolderFileCount) ...[
                                                       const SizedBox(width: 10),
                                                       Icon(Broken.folder, size: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                                                       const SizedBox(width: 4),
