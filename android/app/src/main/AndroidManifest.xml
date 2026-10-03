@@ -123,19 +123,20 @@
             </intent-filter>
 
             <!-- System file picker entry: 第三方 App 选文件时，ZenFile 作为可选来源
-                 出现在系统 chooser 中，直接打开自己的文件浏览器，选完通过
-                 ZenFileDocumentsProvider 的 document URI 回传。
+                 出现在系统 chooser / 消歧对话框中，直接打开自己的文件浏览器，
+                 选完通过 ZenFileDocumentsProvider 的 document URI 回传。
 
-                 三个 action 都必须注册，缺一个就会漏掉一批调用方：
+                 三个 action 都必须注册，缺一个就漏掉一批调用方：
                  - GET_CONTENT：会弹 chooser，ZenFile 与其他来源并列（QQ / 微信多数走这个）
-                 - OPEN_DOCUMENT：默认由系统 DocumentsUI 独占，但第三方 Activity 同样可以
-                   注册；注册后系统解析出多个候选，ZenFile 才会出现在消歧对话框里。
-                   这是「只看到 ZenFile Storage 侧边栏」场景的关键补充。
+                 - OPEN_DOCUMENT：调用方（官方示例写法）会 addCategory(OPENABLE)，
+                   filter 里没有 OPENABLE 时 ZenFile 直接不匹配，系统只剩 DocumentsUI
+                   一个候选 ⇒ 不弹消歧、直接进「ZenFile Storage」简陋页。
+                   2026-10-04 真机验证过这个坑：漏 OPENABLE 时用户只能看到 provider。
                  - PICK：老式选文件入口
 
-                 ⚠️ OPEN_DOCUMENT 的 filter 只声明 DEFAULT（不声明 OPENABLE）：
-                 filter 里的 category 必须是 intent category 的超集，调用方通常不带
-                 OPENABLE，多声明不会更严格但容易让人误判，保持最小集即可。 -->
+                 ⚠️ category 匹配规则：调用方声明的 category 必须全部出现在 filter 里；
+                 filter 多声明无害（覆盖更多调用方），少声明才会被排除。三个 filter
+                 都带 OPENABLE 即可同时覆盖带/不带该 category 的调用方。 -->
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -145,11 +146,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.OPEN_DOCUMENT" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
                 <data android:mimeType="*/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>

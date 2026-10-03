@@ -1,7 +1,12 @@
 package com.sequl.zenfile
 
+import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Point
+import android.media.MediaMetadataRetriever
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
@@ -9,6 +14,8 @@ import android.provider.DocumentsProvider
 import android.webkit.MimeTypeMap
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.security.MessageDigest
 
 class ZenFileDocumentsProvider : DocumentsProvider() {
 
@@ -93,6 +100,106 @@ class ZenFileDocumentsProvider : DocumentsProvider() {
         return ParcelFileDescriptor.open(file, accessMode)
     }
 
+    // ===== 缩略图：让 DocumentsUI 渲染的「打开文档」列表显示图片/视频缩略图 =====
+    // 做法与 AOSP FileSystemProvider 一致：解码 → 写 provider 私有缓存 → 返回只读 fd。
+    // 不支持的类型直接抛 FileNotFoundException，DocumentsUI 会回退到通用 MIME 图标。
+
+    override fun openDocumentThumbnail(
+        documentId: String,
+        sizeHint: Point,
+        signal: CancellationSignal?
+    ): AssetFileDescriptor {
+        val file = getFileForDocId(documentId)
+        if (!file.isFile) throw FileNotFoundException("No thumbnail for $documentId")
+
+        val mime = getMimeType(file)
+        val bitmap = when {
+            mime.startsWith("image/") -> decodeImageThumbnail(file, signal)
+            mime.startsWith("video/") -> decodeVideoThumbnail(file, signal)
+            else -> null
+        } ?: throw FileNotFoundException("Thumbnail not available for $documentId")
+
+        val out = thumbnailCacheFile(documentId)
+        // 先写临时文件再原子改名：并发请求同一 docId 时不会读到写了一半的文件。
+        val tmp = File(out.parentFile, ".tmp-" + out.name)
+        try {
+            FileOutputStream(tmp).use { fos -> bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fos) }
+            if (!tmp.renameTo(out)) {
+                out.delete()
+                if (!tmp.renameTo(out)) throw FileNotFoundException("Failed to write thumbnail")
+            }
+        } finally {
+            tmp.delete()
+            bitmap.recycle()
+        }
+        return AssetFileDescriptor(
+            ParcelFileDescriptor.open(out, ParcelFileDescriptor.MODE_READ_ONLY),
+            0,
+            out.length()
+        )
+    }
+
+    /** 图片缩略图：按尺寸算 inSampleSize 后整图解码，避免大图 OOM。 */
+    private fun decodeImageThumbnail(file: File, signal: CancellationSignal?): Bitmap? {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.absolutePath, bounds)
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+
+        var sample = 1
+        while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= THUMB_MAX_DIMENSION) {
+            sample *= 2
+        }
+        val opts = BitmapFactory.Options().apply { inSampleSize = sample }
+        signal?.throwIfCanceled()
+        return BitmapFactory.decodeFile(file.absolutePath, opts)
+    }
+
+    /** 视频缩略图：取关键帧。失败返回 null，由调用方回退到通用图标。 */
+    private fun decodeVideoThumbnail(file: File, signal: CancellationSignal?): Bitmap? {
+        val retriever = MediaMetadataRetriever()
+        return try {
+            retriever.setDataSource(file.absolutePath)
+            signal?.throwIfCanceled()
+            retriever.getFrameAtTime(
+                0,
+                MediaMetadataRetriever.OPTION_CLOSEST_SYNC
+            )
+        } catch (e: Exception) {
+            null
+        } finally {
+            try {
+                retriever.release()
+            } catch (e: Exception) {
+                // release 失败不影响结果
+            }
+        }
+    }
+
+    /**
+     * 缩略图缓存文件：cacheDir/saf_thumbs/<md5(documentId)>.jpg。
+     * 超过上限整目录清空即可（缩略图随时可重建，不需要精确的 LRU）。
+     */
+    private fun thumbnailCacheFile(documentId: String): File {
+        val dir = File(context!!.cacheDir, "saf_thumbs")
+        if (!dir.exists()) dir.mkdirs()
+        val existing = dir.listFiles()
+        if (existing != null && existing.size > THUMB_CACHE_MAX_FILES) {
+            existing.forEach { it.delete() }
+        }
+        val digest = MessageDigest.getInstance("MD5")
+            .digest(documentId.toByteArray(Charsets.UTF_8))
+            .joinToString("") { "%02x".format(it) }
+        return File(dir, "$digest.jpg")
+    }
+
+    private companion object {
+        /** 缩略图最长边目标（px），与 DocumentsUI 常用的请求尺寸同量级。 */
+        const val THUMB_MAX_DIMENSION = 512
+
+        /** 缩略图缓存文件数上限，超过即整目录清空。 */
+        const val THUMB_CACHE_MAX_FILES = 128
+    }
+
     override fun createDocument(
         parentDocumentId: String?,
         mimeType: String?,
@@ -159,7 +266,9 @@ class ZenFileDocumentsProvider : DocumentsProvider() {
         val finalFlags = if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
             flags or DocumentsContract.Document.FLAG_DIR_SUPPORTS_CREATE
         } else {
-            flags
+            // 告诉 DocumentsUI 这个文档可以请求缩略图（openDocumentThumbnail），
+            // 否则图片/视频在系统选择器里只显示通用 MIME 图标。
+            flags or DocumentsContract.Document.FLAG_SUPPORTS_THUMBNAIL
         }
 
         val row = result.newRow()
