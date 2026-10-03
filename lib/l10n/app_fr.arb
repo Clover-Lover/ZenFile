@@ -8265,7 +8265,7 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "Conserver la barre de navigation sur les autres pages",
-  "ui_pick_bottom_tab": "Choisir une entrée en bas",
+  "ui_pick_bottom_tab": "Personnaliser les entrées",
   "@ui_pick_bottom_tab": {
     "description": "Choose bottom entry"
   },

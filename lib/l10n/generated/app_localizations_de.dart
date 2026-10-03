@@ -8295,7 +8295,7 @@ class L10nDe extends L10n {
       'Navigationsleiste auf anderen Seiten beibehalten';
 
   @override
-  String get ui_pick_bottom_tab => 'Untereintrag wählen';
+  String get ui_pick_bottom_tab => 'Einträge anpassen';
 
   @override
   String get ui_long_press_switch => 'Lange drücken zum Ändern';

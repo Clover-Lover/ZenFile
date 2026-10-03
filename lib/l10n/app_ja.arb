@@ -8269,7 +8269,7 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "他のページでもナビゲーションバーを表示",
-  "ui_pick_bottom_tab": "下部エントリを選択",
+  "ui_pick_bottom_tab": "エントリをカスタマイズ",
   "@ui_pick_bottom_tab": {
     "description": "Choose bottom entry"
   },

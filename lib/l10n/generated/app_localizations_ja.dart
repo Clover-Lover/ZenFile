@@ -7951,7 +7951,7 @@ class L10nJa extends L10n {
   String get ui_persistent_tab_bar => '他のページでもナビゲーションバーを表示';
 
   @override
-  String get ui_pick_bottom_tab => '下部エントリを選択';
+  String get ui_pick_bottom_tab => 'エントリをカスタマイズ';
 
   @override
   String get ui_long_press_switch => '長押しで変更できます';

@@ -7781,7 +7781,7 @@ class L10nZh extends L10n {
   String get ui_persistent_tab_bar => '导航栏常驻其他页面';
 
   @override
-  String get ui_pick_bottom_tab => '选择底部入口';
+  String get ui_pick_bottom_tab => '自定义入口';
 
   @override
   String get ui_long_press_switch => '长按可替换';
@@ -15661,7 +15661,7 @@ class L10nZhTw extends L10nZh {
   String get ui_persistent_tab_bar => '導覽列常駐其他頁面';
 
   @override
-  String get ui_pick_bottom_tab => '選擇底部入口';
+  String get ui_pick_bottom_tab => '自訂入口';
 
   @override
   String get ui_long_press_switch => '長按可替換';

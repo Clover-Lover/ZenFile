@@ -8265,7 +8265,7 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "إبقاء شريط التنقل على الصفحات الأخرى",
-  "ui_pick_bottom_tab": "اختيار عنصر سفلي",
+  "ui_pick_bottom_tab": "تخصيص العناصر",
   "@ui_pick_bottom_tab": {
     "description": "Choose bottom entry"
   },

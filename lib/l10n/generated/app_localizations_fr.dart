@@ -8330,7 +8330,7 @@ class L10nFr extends L10n {
       'Conserver la barre de navigation sur les autres pages';
 
   @override
-  String get ui_pick_bottom_tab => 'Choisir une entrée en bas';
+  String get ui_pick_bottom_tab => 'Personnaliser les entrées';
 
   @override
   String get ui_long_press_switch => 'Appui long pour changer';

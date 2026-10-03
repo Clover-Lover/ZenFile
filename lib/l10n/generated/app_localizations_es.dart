@@ -8313,7 +8313,7 @@ class L10nEs extends L10n {
       'Mantener la barra de navegación en otras páginas';
 
   @override
-  String get ui_pick_bottom_tab => 'Elegir entrada inferior';
+  String get ui_pick_bottom_tab => 'Personalizar entradas';
 
   @override
   String get ui_long_press_switch => 'Mantén pulsado para cambiar';

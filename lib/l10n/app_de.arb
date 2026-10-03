@@ -8262,7 +8262,7 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "Navigationsleiste auf anderen Seiten beibehalten",
-  "ui_pick_bottom_tab": "Untereintrag wählen",
+  "ui_pick_bottom_tab": "Einträge anpassen",
   "@ui_pick_bottom_tab": {
     "description": "Choose bottom entry"
   },

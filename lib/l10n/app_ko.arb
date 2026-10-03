@@ -8265,7 +8265,7 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "다른 페이지에서도 내비게이션 바 유지",
-  "ui_pick_bottom_tab": "하단 항목 선택",
+  "ui_pick_bottom_tab": "항목 사용자 정의",
   "@ui_pick_bottom_tab": {
     "description": "Choose bottom entry"
   },

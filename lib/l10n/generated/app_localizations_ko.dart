@@ -7958,7 +7958,7 @@ class L10nKo extends L10n {
   String get ui_persistent_tab_bar => '다른 페이지에서도 내비게이션 바 유지';
 
   @override
-  String get ui_pick_bottom_tab => '하단 항목 선택';
+  String get ui_pick_bottom_tab => '항목 사용자 정의';
 
   @override
   String get ui_long_press_switch => '길게 누르면 변경할 수 있습니다';

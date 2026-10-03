@@ -8574,9 +8574,9 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "导航栏常驻其他页面",
-  "ui_pick_bottom_tab": "选择底部入口",
+  "ui_pick_bottom_tab": "自定义入口",
   "@ui_pick_bottom_tab": {
-    "description": "Choose bottom entry"
+    "description": "Customize bottom entries"
   },
   "ui_long_press_switch": "长按可替换",
   "@ui_long_press_switch": {

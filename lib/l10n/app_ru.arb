@@ -8265,7 +8265,7 @@
     "description": "Navigation bar (visibility + position)"
   },
   "ui_persistent_tab_bar": "Сохранять панель навигации на других страницах",
-  "ui_pick_bottom_tab": "Выберите элемент внизу",
+  "ui_pick_bottom_tab": "Настроить элементы",
   "@ui_pick_bottom_tab": {
     "description": "Choose bottom entry"
   },

@@ -456,56 +456,95 @@ class QuickCategoriesGrid extends StatefulWidget {
               ),
               const SizedBox(height: 8),
               Flexible(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    for (final opt in options)
-                      ListTile(
-                        dense: true,
-                        leading: Icon(
-                          opt['icon'] as IconData,
-                          size: 20,
-                          color: theme.colorScheme.primary,
-                        ),
-                        title: Text(
-                          opt['label'] as String,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing:
-                            (currentType == opt['type'] &&
-                                    currentKey == opt['key'])
-                                ? Icon(
-                                    Broken.check,
-                                    size: 18,
-                                    color: theme.colorScheme.primary,
-                                  )
-                                : null,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // 两列布局：中间纵向分割线，避免单列过长需要滚动。
+                    final all = [
+                      ...options,
+                      if (current != null)
+                        {
+                          'type': 'reset',
+                          'key': '',
+                          'label': l10n.ui_restore_default,
+                          'icon': Broken.refresh,
+                          'isReset': true,
+                        },
+                    ];
+                    final half = (all.length / 2).ceil();
+                    final left = all.sublist(0, half);
+                    final right = all.sublist(half);
+                    Widget buildCell(Map<String, dynamic> opt) {
+                      final isReset = opt['isReset'] == true;
+                      final selected = !isReset &&
+                          currentType == opt['type'] &&
+                          currentKey == opt['key'];
+                      return InkWell(
                         onTap: () => Navigator.pop(sheetContext, {
                           'type': opt['type'] as String,
                           'key': opt['key'] as String,
                         }),
-                      ),
-                    if (current != null)
-                      ListTile(
-                        dense: true,
-                        leading: Icon(
-                          Broken.refresh,
-                          size: 20,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                        ),
-                        title: Text(
-                          l10n.ui_restore_default,
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                opt['icon'] as IconData,
+                                size: 20,
+                                color: isReset
+                                    ? theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.6)
+                                    : theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  opt['label'] as String,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: isReset
+                                      ? TextStyle(
+                                          color: theme.colorScheme.onSurface
+                                              .withValues(alpha: 0.7),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                              if (selected)
+                                Icon(
+                                  Broken.check,
+                                  size: 18,
+                                  color: theme.colorScheme.primary,
+                                ),
+                            ],
                           ),
                         ),
-                        onTap: () => Navigator.pop(
-                          sheetContext,
-                          {'type': 'reset', 'key': ''},
+                      );
+                    }
+
+                    Widget buildCol(List<Map<String, dynamic>> cells) {
+                      return ListView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [for (final c in cells) buildCell(c)],
+                      );
+                    }
+
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(child: buildCol(left)),
+                        Container(
+                          width: 1,
+                          color: theme.colorScheme.outlineVariant
+                              .withValues(alpha: 0.3),
                         ),
-                      ),
-                  ],
+                        Expanded(child: buildCol(right)),
+                      ],
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 8),

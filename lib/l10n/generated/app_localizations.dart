@@ -14584,10 +14584,10 @@ abstract class L10n {
   /// **'导航栏常驻其他页面'**
   String get ui_persistent_tab_bar;
 
-  /// Choose bottom entry
+  /// Customize bottom entries
   ///
   /// In zh, this message translates to:
-  /// **'选择底部入口'**
+  /// **'自定义入口'**
   String get ui_pick_bottom_tab;
 
   /// Long press to change
