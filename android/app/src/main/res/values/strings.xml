@@ -5,4 +5,6 @@
     <!-- 1×1 启动小组件：label 显示在小组件选择器，description 为其副标题 -->
     <string name="zenfile_icon_widget_label">ZenFile</string>
     <string name="zenfile_icon_widget_description">App icon made from your imported image</string>
+    <!-- 系统文件选择器：选中的文件不在 provider 暴露的内部存储 root 下时的提示 -->
+    <string name="picker_only_internal_storage">仅支持内部存储（/storage/emulated/0）下的文件</string>
 </resources>

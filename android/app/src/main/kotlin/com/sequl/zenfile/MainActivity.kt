@@ -71,6 +71,10 @@ class MainActivity : AudioServiceFragmentActivity() {
     private val SAF_REQUEST_CODE = 10002
     private var equalizer: Equalizer? = null
 
+    // 系统文件选择器（ACTION_GET_CONTENT / ACTION_PICK）桥接：第三方 App 调起选文件时，
+    // 由它把 Dart 侧选中的文件转成 document URI 回传。实现见 SystemFilePickerBridge.kt。
+    private val systemFilePickerBridge by lazy { SystemFilePickerBridge(this) }
+
     private val ACTION_CANCEL_OPERATION = "com.sequl.zenfile.ACTION_CANCEL_OPERATION"
     private var notificationsChannel: MethodChannel? = null
 
@@ -162,6 +166,9 @@ class MainActivity : AudioServiceFragmentActivity() {
         // 加载 libflutter.so / libmpv.so，正是「启动即崩」的主要发生地。
         // 同步执行少量 IO（读系统退出记录 + 写几 KB 报告），耗时毫秒级。
         CrashForensics.captureOnStartup(this)
+        // 系统文件选择器入口：必须在 super.onCreate() **之前**读取 intent —— Dart 侧
+        // 启动后会异步查询该状态（getPickerInfo），晚于 onCreate 返回。
+        systemFilePickerBridge.onLaunchIntent(intent)
         super.onCreate(savedInstanceState)
         try {
             Shizuku.addBinderReceivedListenerSticky {
@@ -339,6 +346,7 @@ class MainActivity : AudioServiceFragmentActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         storageEventChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, STORAGE_CHANNEL)
+        systemFilePickerBridge.registerChannel(flutterEngine.dartExecutor.binaryMessenger)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "checkStatus" -> {

@@ -34,6 +34,7 @@ import 'services/pin_service.dart';
 import 'services/recycle_bin_service.dart';
 import 'services/audio_background_handler.dart';
 import 'ui/screens/home_screen.dart';
+import 'ui/screens/internal_file_picker_screen.dart';
 import 'ui/screens/audio_player/audio_player_screen.dart';
 import 'ui/screens/remote_guard_screen.dart';
 import 'services/remote_guard_service.dart';
@@ -42,6 +43,7 @@ import 'services/update_apk_cache.dart';
 import 'services/update_check_service.dart';
 import 'ui/screens/update_screen.dart';
 import 'services/crypt_auto_encrypt_service.dart';
+import 'services/system_file_picker_service.dart';
 
 final GlobalKey<_ZenFileAppState> appStateKey = GlobalKey<_ZenFileAppState>();
 
@@ -517,6 +519,10 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   // 启动版本检测：本进程是否已跑过（权限从设置页回来时不会重复弹）+ 弹窗是否正在显示。
   bool _updatePromptChecked = false;
   bool _updatePromptShowing = false;
+  // 被第三方 App 以「选文件」为目的调起时的上下文（系统文件选择器模式）。
+  // 查询完成前 _pickerInfoChecked 为 false，首页保持空屏等待结果。
+  SystemFilePickerInfo _pickerInfo = SystemFilePickerInfo.none;
+  bool _pickerInfoChecked = false;
 
   @override
   void initState() {
@@ -545,6 +551,19 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
     _locale = _localeFromCode(savedLocale);
     _initializeApplication();
     _initAudioNotificationClickListener();
+    _loadSystemPickerInfo();
+  }
+
+  /// 查询本次是否为「系统文件选择器」启动（被第三方 App 调起选文件）。
+  /// ⚠️ 在 initState 里启动但**不 await**：`runApp()` 之前任何挂住的 await 都会让
+  /// 界面起不来（见 main() 中相关说明）。这里只登记 Future，结果回来后 setState。
+  Future<void> _loadSystemPickerInfo() async {
+    final info = await SystemFilePickerService.getInfo();
+    if (!mounted) return;
+    setState(() {
+      _pickerInfo = info;
+      _pickerInfoChecked = true;
+    });
   }
 
   /// 读取「启动应用保护」开关，决定是否在冷启动时显示 PIN 闸门
@@ -1553,7 +1572,7 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
               },
               home: _isResolvingIntent
                   ? const _IntentLoadingScreen()
-                  : (_hasPermission == null || !_appLockChecked
+                  : (!_pickerInfoChecked || _hasPermission == null || !_appLockChecked
                       ? const Scaffold()
                       : (_hasPermission == true
                       ? (_appLockEnabled && !_appUnlocked
@@ -1561,7 +1580,9 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
                               mode: RemoteGuardMode.appLock,
                               onUnlocked: _onAppUnlocked,
                             )
-                          : HomeScreen(toggleTheme: _toggleTheme))
+                          : (_pickerInfo.isPicker
+                              ? _SystemFilePickerHost(info: _pickerInfo)
+                              : HomeScreen(toggleTheme: _toggleTheme)))
                       : _StoragePermissionShield(
                               onRequestPermission: _requestStoragePermission,
                               onOpenSettings: _openManageExternalStorageSettings,
@@ -1573,6 +1594,57 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
         );
       },
     );
+  }
+}
+
+/// 系统文件选择器宿主页：被第三方 App 调起选文件时，直接打开 ZenFile **自己的**
+/// 文件浏览器（InternalFilePickerScreen），用户选完后把结果回传给调起方，
+/// 原生侧随即 setResult 并 finish 本页。
+///
+/// 这样用户在 QQ / 微信等 App 里选文件时用的是 ZenFile 的完整浏览体验，
+/// 而不是系统选择器里由 DocumentsUI 渲染的简陋「ZenFile Storage」列表。
+class _SystemFilePickerHost extends StatefulWidget {
+  final SystemFilePickerInfo info;
+
+  const _SystemFilePickerHost({required this.info});
+
+  @override
+  State<_SystemFilePickerHost> createState() => _SystemFilePickerHostState();
+}
+
+class _SystemFilePickerHostState extends State<_SystemFilePickerHost> {
+  bool _opened = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // 等首页第一帧绘制完再推选择页，避免在 build 过程中操作 Navigator。
+    WidgetsBinding.instance.addPostFrameCallback((_) => _openPicker());
+  }
+
+  Future<void> _openPicker() async {
+    if (_opened) return;
+    _opened = true;
+    final provider = context.read<FileManagerProvider>();
+    final picked = await InternalFilePickerScreen.show(
+      context,
+      rootPath: provider.rootPath,
+      pickDirectory: false,
+    );
+    if (!mounted) return;
+    if (picked == null || picked.isEmpty) {
+      await SystemFilePickerService.cancelPick();
+      return;
+    }
+    // 调起方未允许多选时只回传第一个。
+    final paths = widget.info.allowMultiple ? picked : picked.take(1).toList();
+    // 成功与否原生侧都会结束本页（成功回传 URI，失败按「取消」处理）。
+    await SystemFilePickerService.finishPick(paths);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
 
