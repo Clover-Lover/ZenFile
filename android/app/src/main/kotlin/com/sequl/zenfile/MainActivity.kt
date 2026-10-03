@@ -166,7 +166,9 @@ class MainActivity : AudioServiceFragmentActivity() {
      * **不会**走 onCreate，只会回调到这里。必须重新判定并主动推送给 Dart 侧，
      * 否则用户看到的只是被带到前台的 ZenFile 首页，选文件界面根本不会出现。
      */
-    override fun onNewIntent(intent: Intent?) {
+    // ⚠️ 参数必须声明为非空 `Intent`：Java 侧是 platform type，写成可空 `Intent?`
+    // 会导致「overrides nothing」编译失败（真机构建已实测过一次）。
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         systemFilePickerBridge.onLaunchIntent(intent, notifyDart = true)
