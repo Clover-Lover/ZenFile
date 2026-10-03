@@ -179,6 +179,11 @@ class ClipboardTask {
   final NetworkConnectionModel? remoteConnection;
   final DateTime createdAt;
 
+  /// 「粘贴后保留剪贴板内容」勾选态：挂在任务对象上，
+  /// 关闭再打开剪贴板弹窗仍保留；多任务各自独立。
+  /// 剪切任务粘贴后始终清除（源文件已移走），此字段不生效。
+  bool keepAfterPaste;
+
   ClipboardTask({
     required this.paths,
     required this.isCut,
@@ -187,6 +192,7 @@ class ClipboardTask {
     this.isRemote = false,
     this.remoteItems,
     this.remoteConnection,
+    this.keepAfterPaste = false,
   }) : createdAt = DateTime.now();
 }
 

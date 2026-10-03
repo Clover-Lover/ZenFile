@@ -34,8 +34,8 @@ Future<void> showClipboardMenuSheet(
 }) {
   final l10n = L10n.of(context);
   final theme = Theme.of(context);
-  // 每任务独立的「粘贴后保留」状态（内存态，默认不勾选 → 粘贴后自动清除）。
-  final keepByTask = <ClipboardTask, bool>{};
+  // 勾选态直接挂在 ClipboardTask.keepAfterPaste 上（随任务对象保留，
+  // 关闭再打开弹窗不丢、多任务各自独立），不再用弹窗局部 map。
   const maxPanelHeight = 340.0;
 
   return showDialog<void>(
@@ -92,12 +92,10 @@ Future<void> showClipboardMenuSheet(
                                   task: task,
                                   folderIconOption:
                                       provider.folderIconOption,
-                                  keepClipboard:
-                                      keepByTask[task] ?? false,
+                                  keepClipboard: task.keepAfterPaste,
                                   onToggleKeep: (v) {
-                                    setSheetState(
-                                      () => keepByTask[task] = v,
-                                    );
+                                    task.keepAfterPaste = v;
+                                    setSheetState(() {});
                                   },
                                   onPasteTask: () async {
                                     Navigator.pop(sheetContext);
@@ -105,7 +103,7 @@ Future<void> showClipboardMenuSheet(
                                       i,
                                       clearAfterPaste: task.isCut
                                           ? true
-                                          : !(keepByTask[task] ?? false),
+                                          : !task.keepAfterPaste,
                                     );
                                   },
                                   onRemoveTask: () {
@@ -177,7 +175,7 @@ Future<void> showClipboardMenuSheet(
                                     i,
                                     clearAfterPaste: task.isCut
                                         ? true
-                                        : !(keepByTask[task] ?? false),
+                                        : !task.keepAfterPaste,
                                   );
                                 }
                               },
