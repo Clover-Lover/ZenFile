@@ -89,8 +89,10 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
       _portController.text = existing.port.toString();
       _usernameController.text = existing.username;
       _passwordController.text = existing.password;
-      // 编辑已有连接：用户名为空即视为匿名访问（勾选框仅 SMB 类型显示）
-      _anonymousLogin = existing.username.isEmpty;
+      // 编辑已有连接：**不再**按「用户名为空」自动勾选「匿名登录」。
+      // 匿名必须由用户显式勾选 —— 否则打开一个历史匿名连接时，用户会
+      // 毫无察觉地继续以 guest/匿名会话连接，服务器进而隐藏部分共享
+      // （见 _validateBasicForm 的说明）。勾选框仅 SMB 类型显示。
       _pathController.text = existing.rootPath;
       _sshKeyPath = existing.sshKeyPath;
       _sshKeyPasswordController.text = existing.sshKeyPassword ?? '';
@@ -379,6 +381,16 @@ class _NetworkConnectionWizardScreenState extends State<NetworkConnectionWizardS
     final l10n = L10n.of(context);
     if (_nameController.text.trim().isEmpty) return l10n.msg65c7ecb6;
     if (_hostController.text.trim().isEmpty) return l10n.msg69e3963c;
+    // 禁止静默匿名：SMB 未显式勾选「匿名登录」却未填用户名时不予放行。
+    // 否则会以空凭据走 guest/匿名会话 —— 服务器（如 Samba 的
+    // `access based share enum`）会向其隐藏部分共享，用户却以为在用自己的
+    // 账号（用户反馈：质感文件能看到 Book，ZenFile 看不到）。
+    // 要匿名访问，必须显式勾选「匿名登录」。
+    if (_isSmbSelected &&
+        !_anonymousLogin &&
+        _usernameController.text.trim().isEmpty) {
+      return l10n.msg0b62b5ce;
+    }
     return null;
   }
 
