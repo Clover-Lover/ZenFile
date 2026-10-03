@@ -1449,28 +1449,17 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
             // 状态栏高度铺成一条 surface 色背景条 —— 即「浏览页比分类页多出来的那一层」，
             // 与标签页栏显隐、多标签开关均无关系。
             primary: false,
-            appBar: isSelectionMode
-                ? AppBar(
-                    primary: false,
-                    automaticallyImplyLeading: isSelectionMode,
-                    surfaceTintColor: Colors.transparent,
-                    scrolledUnderElevation: 0,
-                    titleSpacing: 0,
-                    centerTitle: true,
-                    title: const SizedBox.shrink(),
-                    // 显式占用 actions：右侧抽屉（endDrawer）已下线（收藏夹改为底部
-                    // 面板），这里保留空占位，右上角不出现任何操作按钮。
-                    actions: const [SizedBox.shrink()],
-                  )
-                : AppBar(
-                    primary: false,
-                    automaticallyImplyLeading: false,
-                    surfaceTintColor: Colors.transparent,
-                    scrolledUnderElevation: 0,
-                    toolbarHeight: 0,
-                    // 顶部/底部导航栏由 HomeScreen 统一提供，此处置空工具栏。
-                    actions: const [SizedBox.shrink()],
-                  ),
+            // 多选/普通模式 appBar 均置空高度：避免多选时 appBar 占高导致列表整体下移错位。
+            // 退出多选由系统返回键（home_screen PopScope）与点选已选文件取消承担。
+            appBar: AppBar(
+              primary: false,
+              automaticallyImplyLeading: false,
+              surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
+              toolbarHeight: 0,
+              // 顶部/底部导航栏由 HomeScreen 统一提供，此处置空工具栏。
+              actions: const [SizedBox.shrink()],
+            ),
             body: Column(
               children: [
                 // 顶部固定区域（标签页 + 路径面包屑）：多选时也保留，避免列表上跳错位。
