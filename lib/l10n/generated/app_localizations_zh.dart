@@ -1,0 +1,15845 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Chinese (`zh`).
+class L10nZh extends L10n {
+  L10nZh([String locale = 'zh']) : super(locale);
+
+  @override
+  String get msg6f3e533a => '正在打开共享文档...';
+
+  @override
+  String get msgbca59325 => '正在解析安全内容流';
+
+  @override
+  String get zenfile => 'ZenFile 需要存储权限才能无缝管理、组织和显示您的媒体文件。';
+
+  @override
+  String e(Object e) {
+    return '清理缓存目录失败: $e';
+  }
+
+  @override
+  String get msg21cefa9b => '内部存储';
+
+  @override
+  String get smb => '局域网/SMB';
+
+  @override
+  String get msg05d3c93c => '成功移动项目';
+
+  @override
+  String get msgb7e3a1c2 => '成功复制项目';
+
+  @override
+  String e1(Object e) {
+    return '传输失败：$e';
+  }
+
+  @override
+  String get msga45bac47 => '操作已取消';
+
+  @override
+  String e2(Object e) {
+    return '连接远程服务器失败：$e';
+  }
+
+  @override
+  String e3(Object e) {
+    return '创建文件夹出错：$e';
+  }
+
+  @override
+  String get msg3df5ef6c => '压缩超出限制';
+
+  @override
+  String get msg5e32276d => '未知艺术家';
+
+  @override
+  String get msg497ec49d => '本地文件夹';
+
+  @override
+  String e4(Object e) {
+    return '下载远程文件失败: $e';
+  }
+
+  @override
+  String get msg6b9ca1dd => '无法将文件夹移动到自身或相同位置';
+
+  @override
+  String e5(Object e) {
+    return '移动项目失败：$e';
+  }
+
+  @override
+  String get msg5238524c => '无法将文件夹复制到自身或相同位置';
+
+  @override
+  String e6(Object e) {
+    return '复制项目失败：$e';
+  }
+
+  @override
+  String get msgc806d0fa => '压缩包';
+
+  @override
+  String get msg03070d08 => '安装包';
+
+  @override
+  String get ftp => 'FTP共享';
+
+  @override
+  String get web => 'Web共享';
+
+  @override
+  String get msge86bd662 => '设备相册（自动）';
+
+  @override
+  String get msg16166a01 => '设备音频库（自动）';
+
+  @override
+  String get msgbb34b7ec => '内部存储（扫描所有文件夹）';
+
+  @override
+  String get msg26a1f2d9 => '设备相册（截图）';
+
+  @override
+  String get msg39e11368 => '正在解压安装包...';
+
+  @override
+  String get apk => '安装包中未找到可安装的APK';
+
+  @override
+  String get apk1 => '无法启动分包APK安装器';
+
+  @override
+  String get msg2f0138ad => '正在压缩文件';
+
+  @override
+  String get msga2292820 => '压缩包创建成功';
+
+  @override
+  String get msg0683ca6b => '正在解压压缩包';
+
+  @override
+  String get msg1f216eda => '压缩包解压成功';
+
+  @override
+  String get msg5fa802be => '操作失败';
+
+  @override
+  String get msg8fccf382 => '是/否';
+
+  @override
+  String get msgc18fb099 => '解压成功，是否打开所在位置？';
+
+  @override
+  String get msg_compress_open_location => '压缩成功，是否打开所在位置？';
+
+  @override
+  String get msg4367e85a => '未找到可压缩的文件';
+
+  @override
+  String get msg60a4545d => '不支持的格式';
+
+  @override
+  String get msg226519e7 => '未找到压缩包文件';
+
+  @override
+  String get msg88d150c7 => '未找到可分享的项目。';
+
+  @override
+  String e7(Object e) {
+    return '读取共享文件出错：$e';
+  }
+
+  @override
+  String get zenfilesmbvirtualstoragebridgen =>
+      'ZenFile 局域网/SMB Virtual Storage Bridge\\n';
+
+  @override
+  String get msgf3a485df => '新建文件夹';
+
+  @override
+  String get msge48a7157 => '新建文件';
+
+  @override
+  String get zenfilebackupssettings => '设置已备份到 ZenFile/Backups/Settings/';
+
+  @override
+  String get json => '请选择有效的 .json 设置备份文件';
+
+  @override
+  String e8(Object e) {
+    return '设置恢复失败: $e';
+  }
+
+  @override
+  String url(Object url) {
+    return '无法打开链接 $url';
+  }
+
+  @override
+  String get zenfile1 => '关于 ZenFile';
+
+  @override
+  String get v1041 => 'v1.0.43 (查看)';
+
+  @override
+  String get ui_view_update => '版本更新';
+
+  @override
+  String get update_github_check => 'GitHub 版本检测';
+
+  @override
+  String update_current_version(String version) {
+    return '当前版本：$version';
+  }
+
+  @override
+  String get update_checking => '正在检查更新…';
+
+  @override
+  String get update_latest => '当前已是最新版本';
+
+  @override
+  String update_new_version(String version) {
+    return '发现新版本：$version';
+  }
+
+  @override
+  String get update_check_failed => '检查更新失败，请检查网络连接后重试';
+
+  @override
+  String get update_retry => '重试';
+
+  @override
+  String get update_dialog_ignore => '忽略';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_startup_prompt => '启动时弹窗提醒';
+
+  @override
+  String get update_dialog_no_remind => '不再提醒';
+
+  @override
+  String get update_prompt_off_hint => '已关闭启动弹窗提醒，可在「版本更新」页重新开启';
+
+  @override
+  String get update_changelog_empty => '该版本未提供更新日志';
+
+  @override
+  String get update_ignored_hint => '已忽略该版本的启动提示';
+
+  @override
+  String get update_download_install => '下载安装';
+
+  @override
+  String get update_downloading => '正在下载更新…';
+
+  @override
+  String get update_download_failed => '下载失败，请重试';
+
+  @override
+  String get update_view_github => '前往 GitHub 查看';
+
+  @override
+  String get zenfileflutter =>
+      'ZenFile 是一款基于 Flutter 构建的精美、流畅、开源的文件管理器和离线媒体中心。专为极致性能、干净的毛玻璃美学和无缝用户体验而设计。';
+
+  @override
+  String get msga12ebf50 => '极速体验';
+
+  @override
+  String get msgfccb5a01 => '无状态缓存与异步扫描';
+
+  @override
+  String get msg6d8fbdac => '加密安全工作区';
+
+  @override
+  String get ftpsftpwebdav => '支持 FTP、局域网、SFTP 和 WebDAV';
+
+  @override
+  String get msge8f352b9 => '精美界面';
+
+  @override
+  String get amoled => 'AMOLED 纯黑 & 绚丽主题';
+
+  @override
+  String get msge8069659 => '在仓库中加星';
+
+  @override
+  String get telegram => '加入 Telegram 频道';
+
+  @override
+  String get msg5f84adea => '与好友分享应用';
+
+  @override
+  String get zenfilehttpsgithubcoml930203811zenfilereleases =>
+      '推荐 ZenFile，一款精美的离线文件管理器和媒体中心：https://github.com/l930203811/ZenFile/releases';
+
+  @override
+  String get github => '查看 GitHub 源代码';
+
+  @override
+  String get sequeldpdnsorg => '联系邮箱：1@sequel.dpdns.org';
+
+  @override
+  String get msged8518d7 => '邮箱已复制到剪贴板';
+
+  @override
+  String get qq => 'QQ 群号已复制到剪贴板';
+
+  @override
+  String get bysequel => '用心打造 ❤️ by Sequel';
+
+  @override
+  String get zenfile2 => '修改版本 © 2026 ZenFile。保留所有权利。';
+
+  @override
+  String get based_on_nfile => '基于 Senzme 的 NFile 开发。原始版权 © 2026 NFile。';
+
+  @override
+  String get msg138d3725 => '您的支持是我持续更新的动力 ❤️';
+
+  @override
+  String get msgccd097a7 => '支付宝';
+
+  @override
+  String get msgbffe28c8 => '微信支付';
+
+  @override
+  String get msg0537b04e => '长按图片可保存到相册，感谢您的支持！';
+
+  @override
+  String get zenfilev1041 => '下载 ZenFile';
+
+  @override
+  String get msg9d287020 => '123云盘';
+
+  @override
+  String get msgb2b41b6a => '115网盘';
+
+  @override
+  String get msg77ee718b => '百度网盘';
+
+  @override
+  String get msgbff1432a => '夸克网盘';
+
+  @override
+  String get msge03395d0 => 'PikPak网盘';
+
+  @override
+  String get svg => '新增 SVG 文件完整支持（缩略图预览与查看）';
+
+  @override
+  String get ziprar7ztargz => '新增压缩包格式颜色区分（zip/rar/7z/tar/gz 各有专属颜色）';
+
+  @override
+  String get msg09a6e11b => '新增远程文件先下载再播放功能';
+
+  @override
+  String get msg1c3206b8 => '修复分类页解压后无法跳转到浏览页的问题';
+
+  @override
+  String get msgb1e4da91 => '修复「查看缓存目录」和「解压后打开所在位置」导致页面卡死的问题';
+
+  @override
+  String get yyyymmdd => '优化文件日期格式为 yyyy-MM-dd';
+
+  @override
+  String get msg4c425252 => '优化默认启用 24 小时制时间显示';
+
+  @override
+  String get msg1eaf4abb => '路径栏全面优化（更紧凑的面包屑按钮和箭头样式）';
+
+  @override
+  String get msgd3381817 => '标签栏和路径栏整体上移，为文件列表留出更多空间';
+
+  @override
+  String get msg342688b2 => '双窗口头部区域精简（高度缩减30%）';
+
+  @override
+  String get msg8954452f => '双窗口模式下远程服务器替换未激活标签页';
+
+  @override
+  String get msgac5a0315 => '返回手势优化：选中状态下返回清除选中而非退出页面';
+
+  @override
+  String get msg1904388e => '双指右滑打开抽屉页，双指左滑切换分类/浏览页';
+
+  @override
+  String get msg2762c070 => '新增双指滑动开关（常规与行为设置中可关闭）';
+
+  @override
+  String get msg48dca69a => '进度条改为圆环线条样式，中心显示百分比数字';
+
+  @override
+  String get windows => '远程路径兼容性修复（Windows平台路径分隔符问题）';
+
+  @override
+  String get msg65eefc98 => '地址栏开关改为控制美化后的路径面包屑';
+
+  @override
+  String get msg96a6856a => '默认主页设置（可选择分类页或浏览页作为启动页）';
+
+  @override
+  String get msg250213fd => '全新安装包图标（自然禅意风格）';
+
+  @override
+  String get msg7f53e8b1 => '圆形百分比进度条（复制/移动文件时显示）';
+
+  @override
+  String get msg051469b5 => '操作成功后自动关闭进度条，无需手动确认';
+
+  @override
+  String get msge4c4d5e2 => '文件操作菜单改为底部弹出（不再遮挡标签栏）';
+
+  @override
+  String get msga33dbb51 => '选择模式操作栏移至屏幕底部（含已选数量指示器）';
+
+  @override
+  String get msge6c84f11 => '修复：切换图标后点击进入应用详情';
+
+  @override
+  String get msg46b8ca8f => '修复：远程复制后切换本地页面异常';
+
+  @override
+  String get msgb3dea5f5 => '文本查看器长按菜单支持复制和全选（已汉化）';
+
+  @override
+  String get msga4c92214 => '拖放弹窗布局优化（更紧凑）';
+
+  @override
+  String get msg32854144 => '分类页图标支持圆形/方形背景切换';
+
+  @override
+  String get msg3a93e257 => '分类图标形状设置（外观与主题中切换）';
+
+  @override
+  String get zenfile3 => 'ZenFile 首次发布';
+
+  @override
+  String get msg47b760ed => '多标签页支持';
+
+  @override
+  String get ftpsftpwebdavsmb => '远程服务器连接（FTP/SFTP/WebDAV/SMB）';
+
+  @override
+  String get msg4b736dfb => '文件加密保险柜';
+
+  @override
+  String get ftpwebdav => 'FTP/WebDAV 服务器功能';
+
+  @override
+  String get msg03257c2d => '自定义主题与外观设置';
+
+  @override
+  String get msg5cce42e6 => '远程服务器文件拖放操作优化';
+
+  @override
+  String get msg074f1ce7 => '自定义应用桌面图标功能完善';
+
+  @override
+  String get msg5c66ffab => '远程服务器文件列表中长按可能触发拖放操作弹窗（下版本修复）';
+
+  @override
+  String get bug1sequeldpdnsorgqq792408214 =>
+      '如果您有任何优化建议或发现Bug，欢迎通过邮箱 1@sequel.dpdns.org 或QQ群 792408214 反馈给我们。';
+
+  @override
+  String get msgd054a84c => '长按保存图片';
+
+  @override
+  String get msgb3b83e12 => '图片加载失败';
+
+  @override
+  String get msgc2790d54 => '需要存储权限才能保存图片';
+
+  @override
+  String get msg1292d351 => '图片已保存到相册';
+
+  @override
+  String e9(Object e) {
+    return '保存失败: $e';
+  }
+
+  @override
+  String get msg7a4ee0c7 => '没有可分享的文件';
+
+  @override
+  String get msg45326802 => '成功删除项目';
+
+  @override
+  String e10(Object e) {
+    return '分享出错：$e';
+  }
+
+  @override
+  String get msg4fb42e6e => '已复制到剪贴板';
+
+  @override
+  String get msge5212c58 => '已剪切到剪贴板';
+
+  @override
+  String get msgc8ce4b36 => '重命名';
+
+  @override
+  String get msgf139c5cf => '输入新名称';
+
+  @override
+  String get msg_rename_extension_warning_title => '后缀名变更';
+
+  @override
+  String get msg_rename_extension_warning_content =>
+      '您正在修改文件后缀名，这可能导致文件无法正常打开。确定要继续吗？';
+
+  @override
+  String get msg_rename_extension_confirm => '确认修改';
+
+  @override
+  String get msg53518c22 => '删除文件';
+
+  @override
+  String get msg47809e5d => '无最近文件';
+
+  @override
+  String get msg7a7e6c25 => '新创建或下载的文件将显示在这里。';
+
+  @override
+  String get msg765d1698 => '删除所选项目';
+
+  @override
+  String get msg365f2f0a => '项目删除成功 ✓';
+
+  @override
+  String successcount(Object successCount) {
+    return '已成功添加 $successCount 个项目到压缩包 ✓';
+  }
+
+  @override
+  String count(Object count) {
+    return '已粘贴 $count 个项目到压缩包 ✓';
+  }
+
+  @override
+  String get msg39cb3352 => '无法读取压缩包';
+
+  @override
+  String get msg99abedc6 => '解压到当前文件夹';
+
+  @override
+  String get msg8d0cfb58 => '添加文件';
+
+  @override
+  String get msg5bf1fb72 => '无损音频';
+
+  @override
+  String get msg47cab5ae => '定时关闭';
+
+  @override
+  String get msg50c1b248 => '后台播放已停止';
+
+  @override
+  String get msg6d16d396 => '后台播放已启用';
+
+  @override
+  String get msg3038d9b8 => '随机播放: 关';
+
+  @override
+  String get msg29eed1da => '后台播放';
+
+  @override
+  String get msg4aa059f7 => '点击停止后台播放';
+
+  @override
+  String get msg8f7f4490 => '显示带控制按钮的通知';
+
+  @override
+  String get msgb7c87215 => '音效与均衡器';
+
+  @override
+  String get msgfc449780 => '音频文件信息';
+
+  @override
+  String get msgb4fbc92c => '备份与恢复';
+
+  @override
+  String get zenfilebackupssettings1 => '将当前设置备份到已选择的路径';
+
+  @override
+  String get json1 => '从下方列表中选择备份文件进行恢复';
+
+  @override
+  String get msg534c621a => '备份目录';
+
+  @override
+  String get msg396b7d3f => '文件大小';
+
+  @override
+  String get msgc047ee32 => '最后备份时间';
+
+  @override
+  String get msg917fd6ef => '没有可导出的数据。';
+
+  @override
+  String get sqlite => 'SQLite数据库阅读器';
+
+  @override
+  String get msg03a0d224 => '表结构';
+
+  @override
+  String get sql => 'SQL控制台';
+
+  @override
+  String get msge2f0fe67 => '打开数据库失败';
+
+  @override
+  String get msg8bb11da4 => '此数据库中未找到表。';
+
+  @override
+  String get msg7796aa3e => '搜索行...';
+
+  @override
+  String get msg15f26697 => '未找到行';
+
+  @override
+  String get msg0eaa935b => '未加载结构详情。';
+
+  @override
+  String get sql1 => 'SQL 编辑器';
+
+  @override
+  String get select => 'SELECT模板';
+
+  @override
+  String get csv => '导出结果为CSV';
+
+  @override
+  String get select1 => '执行SELECT查询以查看结果。';
+
+  @override
+  String get msgd1ad9002 => '执行查询出错。';
+
+  @override
+  String targetpath(Object targetPath) {
+    return '已复制路径: $targetPath';
+  }
+
+  @override
+  String get msg6ed14da7 => '下一级';
+
+  @override
+  String get msgcd0b9aca => '删除选中';
+
+  @override
+  String get msgee14ee27 => '确定要删除此项目吗？此操作无法撤销。';
+
+  @override
+  String filenamecreatedname(Object createdName, Object fileName) {
+    return '\"$fileName\" 已存在，已创建 \"$createdName\"。';
+  }
+
+  @override
+  String foldernamecreatedname(Object createdName, Object folderName) {
+    return '\"$folderName\" 已存在，已创建 \"$createdName\"。';
+  }
+
+  @override
+  String get msgbd165c40 => '创建新的空白文本文档';
+
+  @override
+  String get msg68ac91eb => '新建压缩包';
+
+  @override
+  String get msg881f6a80 => '压缩当前文件夹内容';
+
+  @override
+  String get msg97301f64 => '查看和排序选项';
+
+  @override
+  String get msg829cb1dd => '列表视图';
+
+  @override
+  String get msg0a4ebb8d => '大小和间距选项';
+
+  @override
+  String get msg88062f93 => '图标和文件夹大小';
+
+  @override
+  String get msga7c781f5 => '大小和间距';
+
+  @override
+  String get msga2946a1a => '排序方式';
+
+  @override
+  String get za => '名称 (Z-A)';
+
+  @override
+  String get msg2e2a26bb => '大小（大）';
+
+  @override
+  String get msgf437ace4 => '仅此文件夹';
+
+  @override
+  String get msg551f98ba => '此目录不包含任何文件或子文件夹。';
+
+  @override
+  String get ui_favorites => '收藏夹';
+
+  @override
+  String get ui_favorites_swipe_hint => '从屏幕底部上滑即可打开收藏夹';
+
+  @override
+  String get ui_new_favorite => '新建收藏';
+
+  @override
+  String get ui_favorite => '收藏';
+
+  @override
+  String msg_favorited(Object name) {
+    return '已收藏 $name';
+  }
+
+  @override
+  String get ui_add_to_favorites => '添加为收藏';
+
+  @override
+  String get ui_group => '分组';
+
+  @override
+  String get ui_new_group => '新建分组';
+
+  @override
+  String get ui_group_name => '分组名称';
+
+  @override
+  String get ui_default_group => '默认分组';
+
+  @override
+  String get ui_add => '添加';
+
+  @override
+  String get ui_edit_favorite => '编辑收藏';
+
+  @override
+  String get ui_select_group => '选择分组';
+
+  @override
+  String get ui_save => '保存';
+
+  @override
+  String get ui_rename_group => '重命名分组';
+
+  @override
+  String get ui_delete_group => '删除分组';
+
+  @override
+  String msg_delete_group_confirm(Object name) {
+    return '删除分组「$name」将同时删除其中的所有收藏，此操作不可撤销。';
+  }
+
+  @override
+  String get msg_please_enter_path => '请输入路径';
+
+  @override
+  String get msg_please_enter_name => '请输入名称';
+
+  @override
+  String get msg_please_enter_group_name => '请输入分组名称';
+
+  @override
+  String get msg_favorite_exists => '该路径已收藏';
+
+  @override
+  String get msg4dfc167a => '启用此文件夹的自定义排序';
+
+  @override
+  String get msge4c84f81 => '添加快捷方式';
+
+  @override
+  String get msgd730e478 => '系统根目录';
+
+  @override
+  String get msg35546526 => '网络连接';
+
+  @override
+  String get msg67a6ea5e => '添加网络连接';
+
+  @override
+  String get msgcc51d6c2 => '移除连接';
+
+  @override
+  String get msg6e0f9cef => '首页分类';
+
+  @override
+  String get msge9691076 => '空文件夹';
+
+  @override
+  String get msg17093362 => '取消操作';
+
+  @override
+  String get msg681c0f39 => '全局搜索';
+
+  @override
+  String get msg0c36f64f => '仅文档';
+
+  @override
+  String get msg26b041dd => '仅音频';
+
+  @override
+  String get msge632ba85 => '仅压缩包';
+
+  @override
+  String label(Object label) {
+    return '$label 筛选已激活';
+  }
+
+  @override
+  String get msg0e77af8a => '隐藏文件夹';
+
+  @override
+  String e11(Object e) {
+    return '加载出错：$e';
+  }
+
+  @override
+  String get msg5937f822 => '（空白幻灯片）';
+
+  @override
+  String get msg360d0b37 => '保存成功 ✓';
+
+  @override
+  String get pdf => 'PDF显示设置';
+
+  @override
+  String get msg09c933bf => '优化大型、设计复杂或扫描文档的渲染性能。';
+
+  @override
+  String get msg701a85d4 => '标准模式';
+
+  @override
+  String get msg2722d1a7 => '最适合文本文档';
+
+  @override
+  String get msgb2b08d54 => '适合宣传册和照片';
+
+  @override
+  String get msg8b519c02 => '页面布局';
+
+  @override
+  String get msg7f2cd152 => '连续（垂直滚动列表）';
+
+  @override
+  String get msg151ea324 => '滚动方向';
+
+  @override
+  String get msg7d45ded6 => '垂直（从上到下滚动）';
+
+  @override
+  String get msg176ef589 => '启用文本选择';
+
+  @override
+  String get msg864f8706 => '关闭可显著提升页面渲染速度并消除滚动卡顿。';
+
+  @override
+  String get msgd28847a2 => '新建文档';
+
+  @override
+  String get msg3007c452 => '更多选项';
+
+  @override
+  String get msg452dba7c => '自动换行';
+
+  @override
+  String get msgc31f9440 => '显示行号';
+
+  @override
+  String get msg1d93c30b => '用其他应用打开';
+
+  @override
+  String get msgace80573 => '（空文件）';
+
+  @override
+  String get msg030f48bd => '用应用打开';
+
+  @override
+  String get msgfd96af00 => '分享功能即将推出';
+
+  @override
+  String get ui_share => '分享';
+
+  @override
+  String get ftp1 => 'FTP服务器已成功停止';
+
+  @override
+  String ftpe(Object e) {
+    return '启动FTP服务器出错：$e';
+  }
+
+  @override
+  String get msg5c202e56 => '请在更改配置前停止服务器';
+
+  @override
+  String get msgfca29cb3 => '更改端口';
+
+  @override
+  String get msg8a0b5bf5 => '无效的端口号';
+
+  @override
+  String get msg3bce2199 => '设置用户名';
+
+  @override
+  String get msg0b62b5ce => '用户名不能为空';
+
+  @override
+  String get ftp2 => 'FTP 服务器';
+
+  @override
+  String get msg5ab96a6d => '编辑设置前请先停止服务器';
+
+  @override
+  String get msgc400f106 => '更改目录';
+
+  @override
+  String get msgb5eb59fc => '设置用户';
+
+  @override
+  String get msg70c53afb => '匿名访问';
+
+  @override
+  String get msg8e2021aa => '创建快捷方式';
+
+  @override
+  String get msgd70e9bdf => '未激活';
+
+  @override
+  String get msg7ae644e4 => '网络状态';
+
+  @override
+  String get msg5d57821d => '服务器地址';
+
+  @override
+  String get msgfefea1b3 => '主目录';
+
+  @override
+  String get msg124d9054 => '显示隐藏文件';
+
+  @override
+  String get tlsftp => '基于显式 TLS 的安全 FTP 连接';
+
+  @override
+  String get msg1f4c1042 => '文件夹';
+
+  @override
+  String get msgf2ef53c0 => '在此文件夹中搜索...';
+
+  @override
+  String get msgfff96ede => '更多操作';
+
+  @override
+  String get msg88e45bb8 => '搜索您的存储';
+
+  @override
+  String query(Object _query) {
+    return '未找到匹配 \"$_query\" 的内容';
+  }
+
+  @override
+  String get msge109d1ea => '仪表盘刷新成功';
+
+  @override
+  String get msg05cea075 => '再按一次退出应用';
+
+  @override
+  String get msg7498c202 => '退出应用';
+
+  @override
+  String get msg03247b17 => '确定要退出吗？再次按返回键或点击退出以关闭应用。';
+
+  @override
+  String get msg354c1c9a => '刷新仪表盘';
+
+  @override
+  String get msg19021d08 => '自定义快捷分类';
+
+  @override
+  String get html => 'HTML 预览';
+
+  @override
+  String get msgfba1f416 => '输入文件夹名称';
+
+  @override
+  String get msg33b0b21c => '选择文件夹';
+
+  @override
+  String get msgff3200cc => '清除选择';
+
+  @override
+  String get msg4614630a => '文件夹为空';
+
+  @override
+  String get msg5dc1fa7b => '使用此文件夹';
+
+  @override
+  String get selectStorageDrive => '选择存储驱动器';
+
+  @override
+  String get markdown => 'Markdown 预览';
+
+  @override
+  String get items => '个项目';
+
+  @override
+  String count1(Object count) {
+    return '确定要永久删除选中的 $count 个项目吗？';
+  }
+
+  @override
+  String count2(Object count) {
+    return '已成功删除 $count 个项目';
+  }
+
+  @override
+  String pastedcountdestdir(Object destDir, Object pastedCount) {
+    return '已粘贴 $pastedCount 个项目到 $destDir';
+  }
+
+  @override
+  String get msgfadbb0bc => '没有可分享的文件。';
+
+  @override
+  String get msg3ad97542 => '未找到可重命名的物理文件';
+
+  @override
+  String get msg1303e638 => '修改时间';
+
+  @override
+  String get prop_created => '创建时间';
+
+  @override
+  String get msg5bab3781 => '媒体信息';
+
+  @override
+  String get msg880a18f3 => '已选择项目';
+
+  @override
+  String get msgea9ecb93 => '总大小';
+
+  @override
+  String get msg5556baa3 => '长按打开方式...';
+
+  @override
+  String get msg631cd220 => '确认删除';
+
+  @override
+  String name(Object name) {
+    return '已删除 $name';
+  }
+
+  @override
+  String get msgcd8264f1 => '在位置中显示';
+
+  @override
+  String get msg2a4cfb07 => '打开方式...';
+
+  @override
+  String get msg8bf52387 => '文件未找到或不可分享。';
+
+  @override
+  String get msg419be096 => '粘贴到此处';
+
+  @override
+  String get msg5093bc80 => '最新优先';
+
+  @override
+  String get msgbc74b5a8 => '按日期';
+
+  @override
+  String get msgef7ae768 => '最新优先（按月分组）';
+
+  @override
+  String get msgb8140039 => '最旧优先（按月分组）';
+
+  @override
+  String ui_month_group_header(int year, int month) {
+    return '$year年$month月';
+  }
+
+  @override
+  String get msg424a0110 => '未知日期';
+
+  @override
+  String get msgb19671d6 => '全部项目';
+
+  @override
+  String get msg11fea612 => '日期和时间';
+
+  @override
+  String get msg12e86877 => '文件大小 / 项目数';
+
+  @override
+  String get msg7908038f => '无 / 隐藏信息';
+
+  @override
+  String get msg9136d4dc => '不在右侧显示额外信息';
+
+  @override
+  String get msg84986f91 => '显示最后修改日期和时间';
+
+  @override
+  String get msgfc000737 => '文件显示大小，文件夹显示项目数';
+
+  @override
+  String get msg83de16cc => '选择尾部信息样式';
+
+  @override
+  String get msgaa2a18a1 => '选择当三点操作按钮隐藏时，文件和文件夹右侧显示的内容。';
+
+  @override
+  String get msg26e4c5d6 => '显示地址栏';
+
+  @override
+  String get windows1 => '在文件列表顶部显示可编辑的Windows资源管理器风格地址栏';
+
+  @override
+  String get msg74e86197 => '直接以文件夹（相册）首选视图打开图片/视频快捷分类';
+
+  @override
+  String get msga1fbf3c6 => '隐藏安卓导航栏';
+
+  @override
+  String get msg02dddc02 => '隐藏底部导航栏以最大化屏幕空间（上滑可显示）';
+
+  @override
+  String get msg50923c95 => '清除所有已记住的\"打开方式\"关联';
+
+  @override
+  String get msg6fdc09ac => '跳过\"打开方式\"对话框';
+
+  @override
+  String get msg0a4b0442 => '绕过应用选择对话框，直接使用默认查看器打开文件';
+
+  @override
+  String get msge1157984 => '选择启动时进入分类页或浏览页';
+
+  @override
+  String get msgae1854a2 => '选择单指或双指左右滑动切换页面';
+
+  @override
+  String get msg11b1ec65 => '在浏览页显示操作按钮栏，含后退、前进、新建、复制标签页、向上';
+
+  @override
+  String get msg7e7765b6 => '显示以点(.)开头的系统文件和文件夹';
+
+  @override
+  String get msg86f3d70f => '显示文件夹和文件计数标题';
+
+  @override
+  String get msg40e9c325 => '在存储标题栏下显示文件夹和文件总数';
+
+  @override
+  String get ampm24 => '在列表中切换12小时（AM/PM）和24小时时间格式';
+
+  @override
+  String get msg25ee6612 => '在列表中隐藏时间和日期';
+
+  @override
+  String get msg337359a6 => '完全隐藏文件和文件夹的修改日期和时间';
+
+  @override
+  String get msga517863e => '计算并显示目录中的文件和文件夹总数';
+
+  @override
+  String get msg59a24fcb => '计算并显示目录中所有文件的总大小（可能影响列表性能）';
+
+  @override
+  String get msg309e2a28 => '在顶部或底部显示导航栏位置';
+
+  @override
+  String get msge34c23ff => '顶部';
+
+  @override
+  String get msg3341e3ed => '导航栏显示在页面顶部';
+
+  @override
+  String get msg8c414b06 => '底部';
+
+  @override
+  String get msg5d2c8e7f => '导航栏显示在页面底部';
+
+  @override
+  String get msg9b7639ac => '在浏览和媒体页面的选择操作栏中仅显示图标';
+
+  @override
+  String get msgdd69671b => '返回时短暂闪烁并滚动到刚退出的文件夹';
+
+  @override
+  String get msg57736228 => '显示实际的图片和视频缩略图而非通用文件图标';
+
+  @override
+  String get msg1eda8a50 => '允许文件名换行显示3行而非截断';
+
+  @override
+  String get msgc7196afd => '隐藏文件夹和文件旁边的三点菜单按钮';
+
+  @override
+  String get msgad54815d => '长按并拖动文件夹或文件将其移动到其他文件夹';
+
+  @override
+  String get msg5dff8f2d => '拖放文件时显示选项弹窗（复制、移动、压缩）';
+
+  @override
+  String get msg4b0a7063 => '允许在单独的标签页中打开多个文件夹以便快速导航';
+
+  @override
+  String get msgf04ac00d => '并排浏览两个目录并轻松传输文件';
+
+  @override
+  String get msgd1591ba4 => '启动应用时打开上次浏览的文件夹';
+
+  @override
+  String get msg25792550 => '将删除的文件和文件夹移至隐藏的回收站而非永久删除';
+
+  @override
+  String get msg1b9633fe => '主题色 / 动态主题';
+
+  @override
+  String get msg64db4c2d => '文件夹图标样式';
+
+  @override
+  String get msgece44aa5 => '应用抽屉按钮样式';
+
+  @override
+  String get amoled1 => 'AMOLED 纯黑模式';
+
+  @override
+  String get amoled2 => '在深色模式下为AMOLED屏幕使用纯黑背景';
+
+  @override
+  String get msg5228b59f => '应用排版 / 字体';
+
+  @override
+  String get msge7d18d73 => '自定义快捷方式';
+
+  @override
+  String get msg036fe6a4 => '重新排列和切换快捷分类项目的可见性';
+
+  @override
+  String get msgead3e5c5 => '搜索设置...';
+
+  @override
+  String get msg2590095f => '设置分类';
+
+  @override
+  String get msgfdae44c3 => '常规与行为';
+
+  @override
+  String get msgeae34685 => '默认屏幕、导航控制和快捷方式';
+
+  @override
+  String get msg91b228b8 => '主题、应用图标、文件夹样式和排版';
+
+  @override
+  String get msgad6e8bb8 => '文件浏览器选项';
+
+  @override
+  String get msg8ddc4963 => '地址栏、隐藏文件、标签页和拖放';
+
+  @override
+  String get msg45db4e2a => '文件夹大小、计数和时间/日期格式';
+
+  @override
+  String get msg09ca4d86 => '默认相册视图和缩略图预览';
+
+  @override
+  String get msgeb3693fb => '打开操作和默认查看器配置';
+
+  @override
+  String get msg3a6a39ae => '回收站开关和自动删除时长';
+
+  @override
+  String get msg9edfaff3 => '备份或恢复所有应用设置';
+
+  @override
+  String get msg99c9cc56 => '尝试搜索其他关键词';
+
+  @override
+  String get msga432d127 => '默认主页';
+
+  @override
+  String get msg226fc6ae => '分类页';
+
+  @override
+  String get msgd48a082d => '滑动切换页面';
+
+  @override
+  String get msgaac01f32 => '单指滑动';
+
+  @override
+  String get msg59c7debc => '记住上次打开的文件夹';
+
+  @override
+  String get msgce732d8a => '隐藏底部栏（首页/浏览）的文字标签，更简洁紧凑';
+
+  @override
+  String get msg1cfeaace => '文件浏览器与导航';
+
+  @override
+  String get msgd33e3082 => '高亮退出文件夹';
+
+  @override
+  String get msga4333788 => '媒体与默认操作';
+
+  @override
+  String get msg20c87c8e => '默认相册首选视图';
+
+  @override
+  String get msg72b1f919 => '所有默认查看器选择已重置';
+
+  @override
+  String get msge99f4762 => '启用回收站';
+
+  @override
+  String get msg2c8a394a => '浏览页';
+
+  @override
+  String get msg2c3c5a35 => '图标形状';
+
+  @override
+  String get msg267fcd86 => '每3天';
+
+  @override
+  String get msg9104c0c5 => '每两周';
+
+  @override
+  String days(Object days) {
+    return '每$days天';
+  }
+
+  @override
+  String get msg673ad9d4 => '远程服务器缓存已清除';
+
+  @override
+  String get msgd9f142c4 => '自动清理缓存';
+
+  @override
+  String get msg5472ef41 => '立即清除网络服务器下载的缓存文件';
+
+  @override
+  String get msgac7687d9 => '浏览远程服务器缓存文件所在目录';
+
+  @override
+  String get msg225f6249 => '为网络服务器上的图片和视频显示缩略图预览';
+
+  @override
+  String get materialyou => 'Material You（动态壁纸取色）';
+
+  @override
+  String get msg05cff3ad => '活力橙';
+
+  @override
+  String get msg5ed35657 => '皇家紫';
+
+  @override
+  String get msge74a7283 => '琥珀金';
+
+  @override
+  String get msg3904ba87 => '赛博粉';
+
+  @override
+  String get msgd58d230a => '蓝宝石';
+
+  @override
+  String get msg508b005e => '青柠绿';
+
+  @override
+  String get msgefdde083 => '日落桃';
+
+  @override
+  String get msg628e73a9 => '默认蓝（标志性蓝色）';
+
+  @override
+  String get msg8244d240 => '经典实心';
+
+  @override
+  String get msgf08d9b15 => '现代圆角';
+
+  @override
+  String get msge5fba3dd => '星标特别';
+
+  @override
+  String get msgfe4254dc => '文档片段';
+
+  @override
+  String get msg84719fd5 => '极简描边';
+
+  @override
+  String get zenfile4 => '断线描边';
+
+  @override
+  String get vuesax => '分类网格 / Vuesax 网格';
+
+  @override
+  String get msg5dc988f4 => '汉堡菜单 / 经典菜单';
+
+  @override
+  String get msgd06ba04f => 'M3 表现派 1';
+
+  @override
+  String get msg5090469e => 'M3 表现派 2';
+
+  @override
+  String get d => 'M3 表现派 3';
+
+  @override
+  String get msg67836b24 => '极简风';
+
+  @override
+  String get msgf08c8dc4 => '玻璃拟态';
+
+  @override
+  String get msgdesign6 => '赛博朋克';
+
+  @override
+  String get msgdesign7 => '新拟态';
+
+  @override
+  String get msgdesign8 => '经典 2';
+
+  @override
+  String get msgdesign9 => '经典 3';
+
+  @override
+  String get msgdesign10 => '用户设计 1';
+
+  @override
+  String get msgdesign11 => '用户设计 2';
+
+  @override
+  String get msg7372dc9f => '自定义图标';
+
+  @override
+  String get msg3004e40a => '默认标志（自然禅意）';
+
+  @override
+  String get msgc540e940 => '点阵与无衬线';
+
+  @override
+  String get msg00ea5776 => '欧菲特现代无衬线';
+
+  @override
+  String get msg7bdbfaa5 => '捷脑科技等宽';
+
+  @override
+  String get msgdcb4082d => '蒙特都市无衬线';
+
+  @override
+  String get msg9d7001d9 => '自定义导入字体';
+
+  @override
+  String get msgc2f5e9e4 => '标志性默认';
+
+  @override
+  String get msg6a7c758f => '从不（禁用自动删除）';
+
+  @override
+  String days1(Object days) {
+    return '$days 天后';
+  }
+
+  @override
+  String get msgfe76ae54 => '选择启动应用时默认显示的页面';
+
+  @override
+  String get msg8af2412a => '启动时显示快捷分类页面';
+
+  @override
+  String get msg245c3258 => '启动时显示文件浏览页面';
+
+  @override
+  String get msg4439669d => '选择用单指或双指左右滑动切换页面';
+
+  @override
+  String get msg46978666 => '单指左右滑动切换分类页、浏览页或打开抽屉';
+
+  @override
+  String get msgbc9bf336 => '双指滑动';
+
+  @override
+  String get msg563871d3 => '双指左右滑动切换分类页、浏览页或打开抽屉';
+
+  @override
+  String get msgca71ac0c => '选择主题色';
+
+  @override
+  String get msg732630c1 => '选择文件夹图标样式';
+
+  @override
+  String get msgf9224d98 => '选择抽屉按钮样式';
+
+  @override
+  String get msgc337ecfa => '选择分类图标形状';
+
+  @override
+  String get msgf18bc3d9 => '应用启动器图标';
+
+  @override
+  String get logo => '为应用启动器图标选择一个自定义Logo。注意某些启动器可能需要几秒钟才能更新。';
+
+  @override
+  String get msg64a6476a => '默认标志';
+
+  @override
+  String get app_icon_classic2 => '经典 2';
+
+  @override
+  String get app_icon_classic3 => '经典金';
+
+  @override
+  String get app_icon_cyberpunk => '赛博朋克';
+
+  @override
+  String get app_icon_glassmorphism => '玻璃拟态';
+
+  @override
+  String get app_icon_m3_expressive => 'M3 表现';
+
+  @override
+  String get app_icon_minimal_flat => '极简扁平';
+
+  @override
+  String get app_icon_neumorphism => '新拟态';
+
+  @override
+  String get app_icon_classic4 => '经典 4';
+
+  @override
+  String get app_icon_3d_gradient => '3D 渐变';
+
+  @override
+  String get app_icon_glossy_blue => '光泽蓝';
+
+  @override
+  String get app_icon_paper_gray => '浅灰纸纹';
+
+  @override
+  String get app_icon_metal_frost => '磨砂金属';
+
+  @override
+  String get app_icon_blue_folder => '蓝色文件夹';
+
+  @override
+  String get app_icon_blue_gold => '深蓝鎏金';
+
+  @override
+  String get app_icon_blue_folder_white => '蓝白文件夹';
+
+  @override
+  String get app_icon_blue_folder_gradient => '渐变蓝文件夹';
+
+  @override
+  String get app_icon_deep_blue_gold => '深蓝鎏金文件夹';
+
+  @override
+  String get app_icon_sunset_zf => '暮色红紫';
+
+  @override
+  String title(Object title) {
+    return '应用图标已切换为 $title';
+  }
+
+  @override
+  String get msgad76161f => '选择自定义图标';
+
+  @override
+  String get pngjpgwebp => '请选择图片文件（PNG/JPG/WEBP）';
+
+  @override
+  String get msgb06c5c34 => '自定义图标已应用';
+
+  @override
+  String e12(Object e) {
+    return '应用自定义图标失败: $e';
+  }
+
+  @override
+  String get msg375c9eb8 => '原始简洁几何风格';
+
+  @override
+  String get msg817e321b => '高科技复古点阵标题 + 简洁正文';
+
+  @override
+  String get msg3c2a24cc => '超流畅、极简且高级的几何美学';
+
+  @override
+  String get msg978f8d11 => '干净且未来感的开发者等宽风格';
+
+  @override
+  String get msg93b657aa => '大胆、现代且醒目的字体排版';
+
+  @override
+  String get msg9db40ad6 => '您加载的自定义字体文件';
+
+  @override
+  String get zenfile5 => '选择一种精美的字体来自定义ZenFile的整体视觉主题';
+
+  @override
+  String get msg7372efa5 => '替换自定义字体文件';
+
+  @override
+  String get msg3186839b => '加载所选字体文件失败。';
+
+  @override
+  String get opentypeotftruetypettf =>
+      '请选择有效的 OpenType (.otf) 或 TrueType (.ttf) 字体文件.';
+
+  @override
+  String get msgcf42dedc => '移除自定义字体';
+
+  @override
+  String get msg2b9abfaa => '自定义字体已移除。';
+
+  @override
+  String get msgfdef8c23 => '7 天';
+
+  @override
+  String get msg25436ba3 => '15 天';
+
+  @override
+  String get msg85e7f60c => '30 天（推荐）';
+
+  @override
+  String get msgd61e706f => '从不（手动清理）';
+
+  @override
+  String get msgf0ef894a => '自动删除回收站时长';
+
+  @override
+  String get msg1200d6b7 => '回收站中的项目将在此时长后被永久删除。';
+
+  @override
+  String get msg432fbb31 => '删除连接';
+
+  @override
+  String msgdeleteconn(Object name) {
+    return '确定要删除 \"$name\" 吗？';
+  }
+
+  @override
+  String get msg3358aa10 => '添加连接';
+
+  @override
+  String get msgc9c900d0 => '暂无远程连接';
+
+  @override
+  String get ftpsftpwebdavsmb1 => '添加 FTP、SFTP、WebDav 或 SMB 连接';
+
+  @override
+  String e13(Object e) {
+    return '连接失败：$e';
+  }
+
+  @override
+  String get msgb5bc0bf1 => '正在解析主机地址...';
+
+  @override
+  String get msgc3d4e5f6 => '正在检查端口状态...';
+
+  @override
+  String get msg3005ba4d => '正在验证凭据...';
+
+  @override
+  String get msgab36a8c6 => '正在挂载存储卷...';
+
+  @override
+  String name1(Object name) {
+    return '\"$name\" 添加成功！';
+  }
+
+  @override
+  String connectedtype(Object name) {
+    return '\"$name\" 连接成功！';
+  }
+
+  @override
+  String get msgdf434415 => '系统应用已禁用';
+
+  @override
+  String get documentsui => '您的设备没有启用默认的系统文件/文档应用（DocumentsUI），';
+
+  @override
+  String get androidnn => '这是 Android 选择和挂载目录所必需的。\\n\\n';
+
+  @override
+  String get saf_enable_docs => '或启用它以使用 SAF 目录功能。';
+
+  @override
+  String get msgb2af4e30 => '请检查\"文件\"或\"文档\"系统应用是否在设备设置中被禁用，';
+
+  @override
+  String safe(Object e) {
+    return '请求 SAF 文件夹失败：$e';
+  }
+
+  @override
+  String get msg65c7ecb6 => '请输入连接名称';
+
+  @override
+  String get msg69e3963c => '请输入服务器地址/主机名';
+
+  @override
+  String get msgce1ec2ce => '远程连接';
+
+  @override
+  String get msg25557d1f => '标准文件传输协议';
+
+  @override
+  String get ssh => 'SSH安全文件传输服务器';
+
+  @override
+  String get http => 'HTTP网页分布式创作';
+
+  @override
+  String get androidsd => 'Android 存储访问框架 (SD 卡 / 外部存储)';
+
+  @override
+  String get msg8486035b => '选择网络服务';
+
+  @override
+  String get naszenfile => '将远程服务器或 NAS 共享挂载为 ZenFile 存储列表中的动态驱动器。';
+
+  @override
+  String selectedtype(Object _selectedType) {
+    return '$_selectedType 设置';
+  }
+
+  @override
+  String get msg5c808d9a => '输入连接详情以链接此网络存储卷。';
+
+  @override
+  String get nas => '例如：办公室 NAS、家庭共享';
+
+  @override
+  String get dav => '例如：192.168.1.100 或 192.168.1.100/dav';
+
+  @override
+  String get naslocal => '例如：192.168.1.100 或 nas.local';
+
+  @override
+  String get dav1 => '例如：/dav 或 /';
+
+  @override
+  String get anonymousadmin => '例如：anonymous 或 admin';
+
+  @override
+  String get msgeec70cd2 => '密码（可选）';
+
+  @override
+  String get msgf1fa9d44 => '正在创建挂载点...';
+
+  @override
+  String selectedtype1(Object _selectedType) {
+    return '请稍候，我们正在建立与 $_selectedType 服务器的可靠连接。';
+  }
+
+  @override
+  String e14(Object e) {
+    return '恢复项目出错：$e';
+  }
+
+  @override
+  String e15(Object e) {
+    return '删除项目出错：$e';
+  }
+
+  @override
+  String get msg62187f1b => '确定要永久删除回收站中的所有项目吗？此操作不可逆。';
+
+  @override
+  String get msg8cd6bc18 => '清空回收站';
+
+  @override
+  String get msga4dfc0c6 => '回收站已成功清空';
+
+  @override
+  String get msg07d80ac5 => '搜索已删除文件...';
+
+  @override
+  String get msg96d2b75f => '永久删除';
+
+  @override
+  String get msg0d824a24 => '回收站为空';
+
+  @override
+  String get msg4c478216 => '原始位置';
+
+  @override
+  String get msgc44a57b6 => '正在下载文本...';
+
+  @override
+  String get msgd6d8292d => '正在缓冲媒体...';
+
+  @override
+  String e16(Object e) {
+    return '下载失败：$e';
+  }
+
+  @override
+  String get msg66d723c5 => '缓冲超时，请检查网络连接';
+
+  @override
+  String get msg53082c55 => '无法粘贴到相同位置';
+
+  @override
+  String get msg108feeed => '正在复制...';
+
+  @override
+  String get msg2d4b44ec => '成功粘贴项目';
+
+  @override
+  String filenamee(Object e, Object fileName) {
+    return '上传\"$fileName\"失败：$e';
+  }
+
+  @override
+  String newname(Object newName) {
+    return '已重命名为 \"$newName\"';
+  }
+
+  @override
+  String get msg4b342999 => '删除项目';
+
+  @override
+  String e17(Object e) {
+    return '删除失败：$e';
+  }
+
+  @override
+  String get msg79d7fef7 => '新建远程文件夹';
+
+  @override
+  String get msga98473f2 => '文件夹名称';
+
+  @override
+  String e18(Object e) {
+    return '创建文件夹失败：$e';
+  }
+
+  @override
+  String get msg5ca05a9b => '远程目录';
+
+  @override
+  String get msga636c09d => '复制到本地设备';
+
+  @override
+  String get msga4c461a4 => '下载文件到本地剪贴板';
+
+  @override
+  String get msg425502fa => '下载并从服务器删除';
+
+  @override
+  String get msgc2b9f4b9 => '根目录';
+
+  @override
+  String get msg2f7cd487 => '上传本地剪贴板到服务器';
+
+  @override
+  String get msg905c34fa => '粘贴远程剪贴板';
+
+  @override
+  String get msg8439c155 => '连接已断开';
+
+  @override
+  String get msgda43df27 => '重试连接';
+
+  @override
+  String get msga21f6ab1 => '空目录';
+
+  @override
+  String get msge1c538b8 => '在此上传剪贴板内容';
+
+  @override
+  String e19(Object e) {
+    return '下载失败: $e';
+  }
+
+  @override
+  String get msg50eaf94d => '删除确认';
+
+  @override
+  String get msgcb0da17b => '正在删除...';
+
+  @override
+  String get msg4805c385 => '应用管理';
+
+  @override
+  String get msg93bc1f09 => '刷新列表';
+
+  @override
+  String get msg32e490fe => '已安装的用户应用';
+
+  @override
+  String get apk2 => '已备份的APK';
+
+  @override
+  String get msg8936ded6 => '搜索包名或名称...';
+
+  @override
+  String get msgd8b3fc58 => '按大小排序';
+
+  @override
+  String get msgbe1399f0 => '按字母排序';
+
+  @override
+  String get msg9ad67f11 => '按备份日期排序';
+
+  @override
+  String get msgb0681bd4 => '精确存储计算';
+
+  @override
+  String get msg34cd846c => '授予使用情况访问权限';
+
+  @override
+  String get msga22ddaae => '存储分析';
+
+  @override
+  String get msgaae779d4 => '重新扫描存储';
+
+  @override
+  String get msg7ae97495 => '正在扫描设备存储';
+
+  @override
+  String get msga5e5bf71 => '总存储';
+
+  @override
+  String get msg652be256 => '分类明细';
+
+  @override
+  String get msgb1a2c3d4 => '初始化中...';
+
+  @override
+  String get msgc2d3e4f5 => '正在读取系统存储...';
+
+  @override
+  String get msgd3e4f5a6 => '正在计算应用占用空间...';
+
+  @override
+  String get msge4f5a6b7 => '正在分析文件、分类资源并读取已安装应用占用空间...';
+
+  @override
+  String msgf5a6b7c8(Object size) {
+    return '$size 可用';
+  }
+
+  @override
+  String msga6b7c8d9(Object size, Object percent) {
+    return '$size 已用（$percent%）';
+  }
+
+  @override
+  String msgb7c8d9e0(Object percent) {
+    return '占总存储的 $percent%';
+  }
+
+  @override
+  String get msgc8d9e0f1 => '系统/其他';
+
+  @override
+  String ui_drag_archive_created(Object name) {
+    return '压缩包\"$name\"创建成功';
+  }
+
+  @override
+  String ui_drag_archive_failed(Object error) {
+    return '创建压缩包失败：$error';
+  }
+
+  @override
+  String get ui_backup_success => '设置已备份到 ZenFile/Backups/Settings/';
+
+  @override
+  String ui_backup_failed(Object error) {
+    return '备份失败：$error';
+  }
+
+  @override
+  String get ui_restore_invalid_file => '请选择有效的 .json 设置备份文件';
+
+  @override
+  String get ui_restore_success => '设置恢复成功！';
+
+  @override
+  String ui_restore_failed(Object error) {
+    return '恢复失败：$error';
+  }
+
+  @override
+  String get msgeb3d7d70 => '卸载应用';
+
+  @override
+  String get msg6eb319a1 => '正在备份所选应用...';
+
+  @override
+  String get msg7fbfdce6 => '未找到应用';
+
+  @override
+  String get msg753cdb55 => '启动应用';
+
+  @override
+  String get apk3 => '备份APK';
+
+  @override
+  String get apk4 => '正在备份APK...';
+
+  @override
+  String get apk5 => '备份APK失败';
+
+  @override
+  String get apk6 => '分享APK文件';
+
+  @override
+  String get copy_package_name => '复制包名';
+
+  @override
+  String get msga0b18169 => '分享备份文件';
+
+  @override
+  String get msgb443cd06 => '删除备份文件';
+
+  @override
+  String e20(Object e) {
+    return '加载文件出错：$e';
+  }
+
+  @override
+  String get msg24c6ab0f => '文件保存成功';
+
+  @override
+  String count3(Object count) {
+    return '已替换 $count 处';
+  }
+
+  @override
+  String get msgffb01e5b => '纯文本';
+
+  @override
+  String get msg7902d9c0 => '选择语法';
+
+  @override
+  String get msgc856a077 => '查找 / 替换';
+
+  @override
+  String get msg7f2c95cd => '保存文件';
+
+  @override
+  String get msg084e9388 => '解锁缩放';
+
+  @override
+  String get msgf387265a => '自动换行: 开';
+
+  @override
+  String get msg1045ba75 => '自动换行: 关';
+
+  @override
+  String get msg96f0ad7d => '编辑锁定: 开';
+
+  @override
+  String get msg349ab61d => '编辑锁定: 关';
+
+  @override
+  String get msg0cee3cd1 => '隐藏行号';
+
+  @override
+  String selectedlanguage(Object _selectedLanguage) {
+    return '语法 ($_selectedLanguage)';
+  }
+
+  @override
+  String get msg0dac421f => '替换为...';
+
+  @override
+  String get msg52709ae1 => '全部替换';
+
+  @override
+  String get msg4ecba8f6 => '制表符';
+
+  @override
+  String e21(Object e) {
+    return '加载保险箱出错：$e';
+  }
+
+  @override
+  String get msg4828116a => '隐藏文件';
+
+  @override
+  String get msg3bf31dfe => '输入密码解锁';
+
+  @override
+  String get pin => '输入PIN码解锁钱包';
+
+  @override
+  String get pin1 => '设置您的4位钱包PIN码';
+
+  @override
+  String get pin2 => '确认您的4位PIN码';
+
+  @override
+  String get msgbb590f19 => '私人保险箱';
+
+  @override
+  String get msgaa43fa46 => '全部清除';
+
+  @override
+  String get msgc16eed0e => '播放速度';
+
+  @override
+  String get msg8f106217 => '锁定控制';
+
+  @override
+  String get msg1f41f25d => '重复模式';
+
+  @override
+  String get msg4d2abc8c => '媒体路径已复制到剪贴板。';
+
+  @override
+  String get http1 => '本地 HTTP 共享服务器已停止。';
+
+  @override
+  String get msg2904d894 => '正在建立安全代理中继...';
+
+  @override
+  String get msga1b2c3d4 => '返回上一级';
+
+  @override
+  String get msga1b2c3d5 => '如何设置Shizuku？';
+
+  @override
+  String get msga1b2c3d6 => '需要存储权限';
+
+  @override
+  String get msga1b2c3d7 => '授予权限';
+
+  @override
+  String get msg_media_only_permission_title => '仅媒体文件权限';
+
+  @override
+  String get msg_media_only_permission_desc =>
+      '当前仅授予媒体文件访问权限，文件管理器将无法正常使用重命名、剪切、删除等功能。请授予「所有文件管理权限」以获得完整功能。';
+
+  @override
+  String get msg_grant_full_storage_permission => '确定';
+
+  @override
+  String get msg_permission_request_title => '授权请求';
+
+  @override
+  String get msg_permission_request_desc =>
+      '为了访问您设备上的文件，您需要手动为 ZenFile 授予[所有文件访问]权限，点击确定后进入设置界面，选择[ZenFile]并开启授权。';
+
+  @override
+  String get ui_open_settings => '打开设置';
+
+  @override
+  String get ui_open_settings_desc => '存储权限已被永久拒绝，请前往系统设置手动授予文件管理权限。';
+
+  @override
+  String get msg2c146598 => '互联网云隧道已上线！临时链接已激活。';
+
+  @override
+  String get msg4a5d26f4 => '链接已复制到剪贴板！';
+
+  @override
+  String type(Object type) {
+    return '使用其他设备扫描以立即打开 $type。';
+  }
+
+  @override
+  String get msgc8390d74 => '网页共享中心';
+
+  @override
+  String get msg5345cdce => '互联网分享链接';
+
+  @override
+  String get http2 => 'HTTP本地共享服务器';
+
+  @override
+  String get wifi => '允许同一 Wi-Fi 下的其他设备通过网页浏览器访问、查看和流式传输您的文件。';
+
+  @override
+  String get msg73c512df => '服务器在线并流式传输中';
+
+  @override
+  String get url1 => '复制 URL';
+
+  @override
+  String get msg22b03c02 => '二维码';
+
+  @override
+  String sharedir(Object shareDir) {
+    return '共享目录：$shareDir';
+  }
+
+  @override
+  String get msge6a29aa4 => '服务器空闲';
+
+  @override
+  String get wifi1 => '请确保其他设备与此设备处于同一 Wi-Fi 网络，然后启动服务器。';
+
+  @override
+  String get msg974465c1 => '启动网页服务器';
+
+  @override
+  String get msg27d5bd3c =>
+      '生成一个安全的临时公共隧道链接。与互联网上任何地方的任何人分享此链接，让他们高速下载文件，无论文件大小。';
+
+  @override
+  String get msg66a09a42 => '临时分享链接（有效期 24 小时）：';
+
+  @override
+  String get msg879058ce => '复制链接';
+
+  @override
+  String get msg7ed199f8 => '已连接的浏览器客户端';
+
+  @override
+  String get msgb77e4adf => '等待传入的互联网下载...';
+
+  @override
+  String get msga61778bc => '互联网共享未激活';
+
+  @override
+  String get msga3c80551 => '停用云共享';
+
+  @override
+  String get msg6466e61e => '激活互联网分享链接';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '激活互联网分享链接失败：$error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return '远程目录加载失败：$error';
+  }
+
+  @override
+  String get msg67bd9375 => '正在处理...';
+
+  @override
+  String get msg3fa72416 => '正在重命名文件...';
+
+  @override
+  String get msg7dbbef0e => '请稍候，正在更新文件夹内容';
+
+  @override
+  String get msg1a2d9a44 => '原始名称 (%)';
+
+  @override
+  String get msgcb029197 => '顺序编号 (#)';
+
+  @override
+  String get msgb6d8a14f => '三位顺序编号 (###)';
+
+  @override
+  String n(Object n) {
+    return '不带扩展名的文件名 ($n)';
+  }
+
+  @override
+  String de(Object de) {
+    return '带点的扩展名 ($de)';
+  }
+
+  @override
+  String e22(Object e) {
+    return '不带点的扩展名 ($e)';
+  }
+
+  @override
+  String n1(Object N) {
+    return '带扩展名的完整文件名 ($N)';
+  }
+
+  @override
+  String get msg0e9dc63a => '名称模式';
+
+  @override
+  String get msg4a63edba => '扩展名';
+
+  @override
+  String get msga420ad79 => '起始编号';
+
+  @override
+  String get msg9857973d => '查找文本';
+
+  @override
+  String get msg1605701e => '替换为';
+
+  @override
+  String get msgd35f80c8 => '替换内容';
+
+  @override
+  String get msg32c61dab => '重命名预览';
+
+  @override
+  String get msg92642e0e => '返回编辑';
+
+  @override
+  String get msgde88d67a => '文件已存在';
+
+  @override
+  String get msge59e35b5 => '应用于所有剩余冲突';
+
+  @override
+  String get msg27dfaae5 => '保留两者';
+
+  @override
+  String get msg6cfbf05d => '重命名文件';
+
+  @override
+  String get msg25f747ce => '创建压缩包';
+
+  @override
+  String get msged5f808e => '压缩格式';
+
+  @override
+  String get mb => '分卷大小（MB，可选）';
+
+  @override
+  String get msgac52af6a => '留空则创建单个压缩包';
+
+  @override
+  String get msgdf2ef7f5 => '为每个文件创建单独的压缩包';
+
+  @override
+  String get msgb52d4a73 => '新建标签页';
+
+  @override
+  String get msg4e9c344a => '复制标签页';
+
+  @override
+  String get msg7716532d => '关闭其他标签页';
+
+  @override
+  String get msgd78603eb => '双击关闭标签页';
+
+  @override
+  String selectedcount(Object selectedCount) {
+    return '$selectedCount 个项目';
+  }
+
+  @override
+  String e23(Object e) {
+    return '创建压缩包失败：$e';
+  }
+
+  @override
+  String get msgc4d7eece => '解压压缩包';
+
+  @override
+  String get msgf15821d0 => '解压到文件夹';
+
+  @override
+  String get msg_extract_to => '解压到…';
+
+  @override
+  String get ui_current_directory => '当前目录';
+
+  @override
+  String get ui_custom_directory => '自定义目录';
+
+  @override
+  String get msgff69affd => '密码（如果已加密）';
+
+  @override
+  String get msg67eda5e6 => '全部文件';
+
+  @override
+  String get msg8b2fcb31 => '显示此目录中的所有文件和文件夹';
+
+  @override
+  String get pdfword => 'PDF、Word 文档、电子表格、文本和电子书';
+
+  @override
+  String get jpegpngwebp => 'JPEG、PNG、WebP 和原始照片格式';
+
+  @override
+  String get mp3wavaac => 'MP3、WAV、AAC 和高保真音频';
+
+  @override
+  String get mp4mkvwebm => 'MP4、MKV、WebM 和高分辨率视频片段';
+
+  @override
+  String get zip7zrar => 'ZIP、7Z、RAR 和其他压缩文件';
+
+  @override
+  String get msg6d3e48cc => '选择一个类别以仅显示匹配的文件';
+
+  @override
+  String e24(Object e) {
+    return '远程缩略图加载失败: $e';
+  }
+
+  @override
+  String get msg32a1bd25 => '1 项';
+
+  @override
+  String count4(Object count) {
+    return '$count 项';
+  }
+
+  @override
+  String get msg9d69d7a0 => '正在移动文件...';
+
+  @override
+  String get ui_transferring_files => '传输文件';
+
+  @override
+  String get ui_time_remaining => '剩下';
+
+  @override
+  String get zenfile6 => 'ZenFile 自定义原生体验';
+
+  @override
+  String get built_in_zenfile_viewer => 'ZenFile 内置查看器';
+
+  @override
+  String get msg42be43e6 => '系统外部应用';
+
+  @override
+  String get msgd1fca831 => '使用设备上的第三方应用打开';
+
+  @override
+  String get msgdb75b769 => '仅一次';
+
+  @override
+  String get msg959429a5 => '浏览设备文件';
+
+  @override
+  String get msgc31116e3 => '添加新连接';
+
+  @override
+  String get msgf1d4ff50 => '自定义';
+
+  @override
+  String get msg490ac572 => '未固定快捷方式。点击自定义添加。';
+
+  @override
+  String get msg445a43cb => '长按图标拖动排列分类图标';
+
+  @override
+  String get msg944d5ecd => '添加文件夹/文件快捷方式';
+
+  @override
+  String get msg4f356348 => '自定义路径';
+
+  @override
+  String get msg94733bec => '删除快捷方式';
+
+  @override
+  String get msg5c29ad2f => '恢复位置';
+
+  @override
+  String get msg21de5dd7 => '自定义扫描位置：';
+
+  @override
+  String get msg4bb81f99 => '未添加自定义路径。';
+
+  @override
+  String get msgf544c399 => '10月';
+
+  @override
+  String get msgc0615eb3 => '12月';
+
+  @override
+  String get msg54355dd8 => '最近文件';
+
+  @override
+  String get msgd5eac3a3 => '受限系统文件夹';
+
+  @override
+  String get android11androiddataandroidobbzenfile =>
+      'Android 11+ 限制了对 Android/data 和 Android/obb 文件夹的标准访问，以保护应用数据。要查看和修改这些文件，ZenFile 需要高级权限。';
+
+  @override
+  String get root => '使用 Root 访问（超级用户）';
+
+  @override
+  String get shizukuroot => '授予Shizuku访问权限（无需Root）';
+
+  @override
+  String get fusebypass => '一键兼容访问';
+
+  @override
+  String selectedcount1(Object selectedCount) {
+    return '已选择 $selectedCount 项';
+  }
+
+  @override
+  String selectedcount2(Object selectedCount) {
+    return '确定要删除 $selectedCount 个项目吗？此操作无法撤销。';
+  }
+
+  @override
+  String get msga9b87614 => '已取消置顶所选项目';
+
+  @override
+  String get msg84e4fac9 => '取消置顶';
+
+  @override
+  String get msg3be9abab => '正在计算大小...';
+
+  @override
+  String get msg7704aa2c => '已选择路径：';
+
+  @override
+  String label1(Object label) {
+    return '已复制 $label 到剪贴板';
+  }
+
+  @override
+  String selectedcount3(Object selectedCount) {
+    return '已选择 $selectedCount 个项目';
+  }
+
+  @override
+  String get msg8b73264b => '文件（长按选择打开方式）';
+
+  @override
+  String get msgc5c0646c => '复制所选';
+
+  @override
+  String get msg8e6d4604 => '剪切所选';
+
+  @override
+  String get msg1058354c => '属性与信息';
+
+  @override
+  String usedstoragestr(Object usedStorageStr) {
+    return '已使用 $usedStorageStr';
+  }
+
+  @override
+  String freestoragestr(Object freeStorageStr) {
+    return '$freeStorageStr 可用';
+  }
+
+  @override
+  String get msgc823e21b => '取消固定标签页';
+
+  @override
+  String get msg7d6c1284 => '未找到匹配的目录或文件';
+
+  @override
+  String path(Object path) {
+    return '路径不存在: $path';
+  }
+
+  @override
+  String get msg6cbbf7d9 => '输入绝对路径...';
+
+  @override
+  String get msgf13fc21c => '远程';
+
+  @override
+  String get msg41e625d1 => '添加远程连接';
+
+  @override
+  String get msg8755e992 => '浅色模式';
+
+  @override
+  String get msg1cf6fcd3 => '更多设置';
+
+  @override
+  String get msgeef7e30c => '精品媒体套件';
+
+  @override
+  String msg2ad64aa7(Object urlString) {
+    return '无法打开链接：$urlString';
+  }
+
+  @override
+  String get msg30d17f96 => '核心亮点';
+
+  @override
+  String get msgaba638c4 => '保险箱安全';
+
+  @override
+  String get msgd309e9ea => '服务器中心';
+
+  @override
+  String get msg4a5f936c => '联系与分享';
+
+  @override
+  String get msg4d48a010 => 'ZenFile - 精美文件管理器';
+
+  @override
+  String get msg1f4c0192 => '请作者喝杯咖啡 ☕';
+
+  @override
+  String get msg2eceaa85 => '打赏作者';
+
+  @override
+  String get msg305734ce => '更新日志';
+
+  @override
+  String get msg1c80891a => '新增浏览页远程文件缩略图预览';
+
+  @override
+  String get msg212f8f9e => '修复远程文件无法打开播放的问题';
+
+  @override
+  String get msgd0cf310e => '优化远程文件缓存目录统一管理';
+
+  @override
+  String get msg072f2022 => '单指滑动切换页面改为双指滑动（避免误触返回手势）';
+
+  @override
+  String get msg66517dc4 => '字体选项标题全面汉化';
+
+  @override
+  String get msgacad92c8 => '移除\"阻止左侧返回手势打开抽屉\"功能';
+
+  @override
+  String get msg09d0e1b6 => '修复：备用图标切换不生效';
+
+  @override
+  String get msg2d1872c8 => '文本编辑器菜单全面汉化';
+
+  @override
+  String get msg2e35eef7 => '双面板文件浏览器';
+
+  @override
+  String get msge96aa2cd => '内置媒体播放器';
+
+  @override
+  String get msg49a6c41e => '应用图标切换（多种风格可选）';
+
+  @override
+  String get msg4d82be7c => '下版本更新计划';
+
+  @override
+  String get msg2c8957dd => '已知问题';
+
+  @override
+  String get msg11cb01fc => '远程服务器边缓存边播放视频';
+
+  @override
+  String get msg60a4d643 => '自定义图标上传后桌面图标不会更改（下版本完善）';
+
+  @override
+  String get msg9e68ea42 => '保存失败，请重试';
+
+  @override
+  String get cat_images => '图片';
+
+  @override
+  String get cat_videos => '视频';
+
+  @override
+  String get cat_audios => '音频';
+
+  @override
+  String get cat_documents => '文档';
+
+  @override
+  String get cat_downloads => '下载';
+
+  @override
+  String get cat_screenshots => '截图';
+
+  @override
+  String get cat_recent => '最近';
+
+  @override
+  String get cat_network => '远程';
+
+  @override
+  String get cat_apps => '应用';
+
+  @override
+  String get cat_settings => '设置';
+
+  @override
+  String get cat_storage => '空间';
+
+  @override
+  String get cat_service => '服务';
+
+  @override
+  String get cat_manage => '管理';
+
+  @override
+  String get cat_config => '配置';
+
+  @override
+  String get cat_analyze => '分析';
+
+  @override
+  String get cat_clean => '清理';
+
+  @override
+  String get junk_clean_title => '垃圾清理';
+
+  @override
+  String get junk_clean_scanning => '正在扫描垃圾文件…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '可清理 $size';
+  }
+
+  @override
+  String get junk_clean_button => '立即清理';
+
+  @override
+  String get junk_clean_confirm_title => '清理垃圾文件';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return '将清理应用缓存与临时文件，预计释放 $size。备份、崩溃报告和快传接收的文件不会被删除。';
+  }
+
+  @override
+  String get junk_clean_cache_item => '应用缓存（缩略图、远程缓存）';
+
+  @override
+  String get junk_clean_temp_item => '临时文件（下载残留等）';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '已释放 $size';
+  }
+
+  @override
+  String get junk_clean_none => '没有可清理的垃圾文件';
+
+  @override
+  String get junk_clean_failed => '清理失败，请稍后重试';
+
+  @override
+  String get cat_vault => '保险箱';
+
+  @override
+  String get cat_vault_desc => '安全存储';
+
+  @override
+  String get cat_quick_categories => '分类';
+
+  @override
+  String get ui_nav => '本地';
+
+  @override
+  String get ui_backup_passphrase_title => '备份口令';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      '输入备份口令以加密备份中的敏感信息（远程连接密码、保险箱密码等）。留空则不备份敏感信息，恢复后需手动重新配置。';
+
+  @override
+  String get ui_restore_passphrase_title => '输入备份口令';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      '此备份包含加密的敏感信息。输入备份口令以恢复；跳过则需在恢复后手动重新配置密码。';
+
+  @override
+  String get ui_backup_passphrase_wrong => '备份口令错误，请重试';
+
+  @override
+  String get ui_restore_secrets_skipped => '已跳过敏感信息恢复，相关密码需手动重新配置';
+
+  @override
+  String get update_err_network => '无法连接服务器，请检查网络后重试';
+
+  @override
+  String get update_err_timeout => '连接超时，请检查网络或代理后重试';
+
+  @override
+  String get update_err_rate_limit => 'GitHub 请求过于频繁，请稍后再试';
+
+  @override
+  String update_err_http(String code) {
+    return '服务器返回异常（HTTP $code）';
+  }
+
+  @override
+  String get update_err_malformed => '服务器返回数据异常，请稍后重试';
+
+  @override
+  String get update_err_version_unknown => '无法获取当前版本号，请重启应用后重试';
+
+  @override
+  String update_remote_version(String version) {
+    return '远端最新：$version';
+  }
+
+  @override
+  String update_checked_at(String time) {
+    return '检查时间：$time';
+  }
+
+  @override
+  String get update_degraded_hint => '已降级为网页检测，无法应用内下载';
+
+  @override
+  String get update_source_label => '更新源';
+
+  @override
+  String get update_source_default => 'GitHub 官方';
+
+  @override
+  String get update_source_custom => '自定义源';
+
+  @override
+  String get update_source_dialog_title => '自定义更新源';
+
+  @override
+  String get update_source_dialog_desc =>
+      '留空则使用 GitHub 官方接口。可填入镜像或自建接口，需返回与 GitHub 相同结构的 JSON；地址中的 REPO 代表仓库路径。';
+
+  @override
+  String get update_source_hint => 'https://example.com/…/releases/latest';
+
+  @override
+  String get update_source_invalid => '地址无效，需以 http:// 或 https:// 开头';
+
+  @override
+  String get ui_paste_and_clear => '粘贴并清除';
+
+  @override
+  String get ui_cut_paste_hint => '剪切为移动，粘贴后自动清空';
+
+  @override
+  String get ui_search_in_settings => '在设置中搜索';
+
+  @override
+  String get ui_search_group_nav => '导航';
+
+  @override
+  String get ui_home => '主页';
+
+  @override
+  String get ui_recycle_bin => '回收站';
+
+  @override
+  String get ui_dark_mode => '深色模式';
+
+  @override
+  String get ui_personalize_settings => '设置';
+
+  @override
+  String get ui_compress => '压缩';
+
+  @override
+  String get ui_copy => '复制';
+
+  @override
+  String get ui_cut => '剪切';
+
+  @override
+  String get ui_move => '移动';
+
+  @override
+  String get ui_apply => '应用';
+
+  @override
+  String get ui_delete => '删除';
+
+  @override
+  String get ui_select_all => '全选';
+
+  @override
+  String get ui_cancel => '取消';
+
+  @override
+  String get ui_confirm => '确定';
+
+  @override
+  String get ui_move_here => '移动到此处';
+
+  @override
+  String get ui_properties => '属性';
+
+  @override
+  String get ui_info => '信息';
+
+  @override
+  String get ui_open => '打开';
+
+  @override
+  String get ui_close => '关闭';
+
+  @override
+  String get ui_more => '更多';
+
+  @override
+  String get ui_appearance_theme => '外观与主题';
+
+  @override
+  String get ui_list_layout_style => '列表与布局样式';
+
+  @override
+  String get ui_media_preferences => '媒体偏好';
+
+  @override
+  String get ui_file_actions_viewers => '文件操作与查看器';
+
+  @override
+  String get ui_no_settings_found => '未找到设置';
+
+  @override
+  String get ui_show_action_bar => '显示操作按钮';
+
+  @override
+  String get ui_show_remote_cloud_badge => '显示远程文件云徽';
+
+  @override
+  String get msg_remote_cloud_badge => '在浏览页远程文件与文件夹图标左上角显示云图标，便于区分本地与远程文件';
+
+  @override
+  String get ui_use_24h_format => '使用24小时制';
+
+  @override
+  String get ui_show_folder_contents_count => '显示文件夹内容计数';
+
+  @override
+  String get ui_set_as_home => '设为首页';
+
+  @override
+  String get ui_show_folder_size => '显示文件夹大小';
+
+  @override
+  String get ui_show_bottom_action_bar => '导航栏位置';
+
+  @override
+  String get ui_hide_action_text => '隐藏操作栏文字标签';
+
+  @override
+  String get ui_show_media_previews => '本地媒体缩略图';
+
+  @override
+  String get ui_adaptive_multiline_names => '自适应多行文件名';
+
+  @override
+  String get ui_hide_action_menu_buttons => '隐藏三点操作按钮';
+
+  @override
+  String get ui_show_action_menu_buttons => '显示三点操作按钮';
+
+  @override
+  String get ui_action_menu_subtitle => '选择三点菜单按钮的显示模式，关闭后文件和文件夹右侧将不显示三点按钮';
+
+  @override
+  String get ui_action_menu_mode_all => '全部显示';
+
+  @override
+  String get ui_action_menu_mode_single => '仅在单窗口模式显示';
+
+  @override
+  String get ui_action_menu_mode_dual => '仅在双窗口模式显示';
+
+  @override
+  String get ui_time_date_format => '时间与日期显示';
+
+  @override
+  String get ui_select_time_date_format => '选择日期与时间格式';
+
+  @override
+  String get ui_date_format => '日期格式';
+
+  @override
+  String get ui_time_format => '时间格式';
+
+  @override
+  String get ui_date_fmt_dmy => '日/月/年';
+
+  @override
+  String get ui_date_fmt_mdy => '月/日/年';
+
+  @override
+  String get ui_date_fmt_ymd => '年/月/日';
+
+  @override
+  String get ui_time_fmt_12h => '12小时制（上午/下午）';
+
+  @override
+  String get ui_time_fmt_24h => '24小时制';
+
+  @override
+  String get ui_select_action_menu_mode => '选择显示模式';
+
+  @override
+  String get ui_enable_drag_drop => '启用拖放';
+
+  @override
+  String get ui_confirm_drag_drop => '确认拖放操作';
+
+  @override
+  String get ui_enable_multi_tabs => '启用多标签页';
+
+  @override
+  String get ui_multi_tab_scope_title => '多标签页适用范围';
+
+  @override
+  String get ui_multi_tab_scope_single_only => '仅在单窗口';
+
+  @override
+  String get ui_multi_tab_scope_split_only => '仅在双窗口';
+
+  @override
+  String get ui_multi_tab_scope_all => '全部';
+
+  @override
+  String get ui_multi_tab_scope_split_only_desc => '仅在双窗口分屏模式下启用多标签页';
+
+  @override
+  String get ui_multi_tab_scope_all_desc => '单窗口与双窗口模式均启用多标签页';
+
+  @override
+  String get ui_multi_tab_scope_subtitle => '选择多标签页生效的窗口范围';
+
+  @override
+  String get ui_enable_split_screen => '启用分屏';
+
+  @override
+  String get ui_password_auth => '密码认证';
+
+  @override
+  String get ui_ssh_key_auth => 'SSH 密钥认证';
+
+  @override
+  String get ui_private_key_file => '私钥文件';
+
+  @override
+  String get ui_passphrase => '密码短语';
+
+  @override
+  String get ui_optional => '可选';
+
+  @override
+  String get ui_ssh_key_password_hint => '仅当私钥文件受密码保护时需要填写';
+
+  @override
+  String get ui_single_window => '单窗口';
+
+  @override
+  String get ui_dual_window => '双窗口';
+
+  @override
+  String get ui_filter_by_category => '按类别过滤';
+
+  @override
+  String get ui_all_files => '全部';
+
+  @override
+  String get ui_filter_others => '其它';
+
+  @override
+  String get ui_remember_filter => '记住过滤';
+
+  @override
+  String get msg_remember_filter_desc => '关闭后仅本次生效';
+
+  @override
+  String get ui_app_icon => '应用图标';
+
+  @override
+  String get ui_emerald_green => '霓虹青';
+
+  @override
+  String get ui_deep_red => '深红';
+
+  @override
+  String get ui_square => '方形';
+
+  @override
+  String get ui_circle => '圆形';
+
+  @override
+  String get ui_1_day_after => '1 天后';
+
+  @override
+  String get ui_no_auto_clean => '不自动清理';
+
+  @override
+  String get ui_daily => '每天';
+
+  @override
+  String get ui_weekly => '每周';
+
+  @override
+  String get ui_monthly => '每月';
+
+  @override
+  String ui_every_n_days(Object days) {
+    return '每$days天';
+  }
+
+  @override
+  String ui_clear_cache_failed(Object e) {
+    return '清除缓存失败: $e';
+  }
+
+  @override
+  String get ui_clear_remote_cache => '清除远程缓存';
+
+  @override
+  String get ui_view_cache_dir => '查看缓存目录';
+
+  @override
+  String get ui_remote_media_thumbnail => '远程媒体缩略图';
+
+  @override
+  String ui_auto_clean_remote_cache(Object label) {
+    return '定期自动清理远程服务器缓存文件: $label';
+  }
+
+  @override
+  String ui_custom_font_with_name(Object name) {
+    return '自定义字体（$name）';
+  }
+
+  @override
+  String get ui_import_custom_font => '导入自定义字体文件 (.ttf/.otf)';
+
+  @override
+  String ui_custom_font_applied(Object name) {
+    return '自定义字体\"$name\"已成功应用！';
+  }
+
+  @override
+  String get ui_invalid_file_type => '无效的文件类型';
+
+  @override
+  String get ui_language => '语言';
+
+  @override
+  String get ui_follow_system => '自动（跟随系统）';
+
+  @override
+  String get ui_hide_nav_labels => '隐藏底部导航标签';
+
+  @override
+  String get ui_reset_default_viewers => '重置默认文件查看器';
+
+  @override
+  String get ui_trailing_info_when_hidden => '三点禁用尾部信息';
+
+  @override
+  String get ui_go_up => '上一级';
+
+  @override
+  String ui_cut_copy_items(String prefix, int count) {
+    return '$prefix · $count 项';
+  }
+
+  @override
+  String get ui_clipboard => '剪贴板';
+
+  @override
+  String get ui_clear => '清除';
+
+  @override
+  String get ui_paste => '粘贴';
+
+  @override
+  String get ui_file_name => '文件名';
+
+  @override
+  String get ui_create => '创建';
+
+  @override
+  String get ui_create_new_directory => '创建新目录';
+
+  @override
+  String get ui_layout_mode => '布局模式';
+
+  @override
+  String get ui_grid_view => '网格视图';
+
+  @override
+  String get ui_name_asc => '名称 (A-Z)';
+
+  @override
+  String get ui_newest => '最新';
+
+  @override
+  String get ui_oldest => '最旧';
+
+  @override
+  String get ui_size_small => '大小（小）';
+
+  @override
+  String get ui_type => '类型';
+
+  @override
+  String get ui_storage_volume => '存储卷';
+
+  @override
+  String get ui_browse => '浏览';
+
+  @override
+  String get ui_new => '新建';
+
+  @override
+  String ui_folders_count(int count) {
+    return '文件夹：$count';
+  }
+
+  @override
+  String ui_files_count(int count) {
+    return '文件：$count';
+  }
+
+  @override
+  String get ui_selection_mode => '选择模式';
+
+  @override
+  String get ui_storage_and_sd => '存储卷和SD卡';
+
+  @override
+  String get ui_images_only => '仅图片';
+
+  @override
+  String get ui_videos_only => '仅视频';
+
+  @override
+  String get ui_show_folders => '显示文件夹';
+
+  @override
+  String get ui_files => '文件';
+
+  @override
+  String get ui_delete_file_confirm => '确定要删除此文件吗？此操作无法撤销。';
+
+  @override
+  String get ui_done => '完成';
+
+  @override
+  String get ui_name => '名称';
+
+  @override
+  String get ui_path => '路径';
+
+  @override
+  String get ui_size => '大小';
+
+  @override
+  String get ui_permissions => '权限';
+
+  @override
+  String get ui_contains => '包含';
+
+  @override
+  String get ui_extract => '解压';
+
+  @override
+  String get ui_pin_to_top => '置顶';
+
+  @override
+  String get msg_select_all => '全选';
+
+  @override
+  String get ui_pinned_selected => '已将所选项目置顶';
+
+  @override
+  String get ui_filter_by_type => '按类型筛选文件';
+
+  @override
+  String get ui_default_scan_locations => '默认扫描位置：';
+
+  @override
+  String get ui_exclude_location => '排除位置';
+
+  @override
+  String get ui_add_custom_path => '添加自定义路径';
+
+  @override
+  String ui_added_custom_paths(int count) {
+    return '已添加 $count 个自定义路径';
+  }
+
+  @override
+  String get ui_close_tab => '关闭标签页';
+
+  @override
+  String get ui_close_all_tabs => '关闭所有标签';
+
+  @override
+  String get ui_close_all_tabs_message => '确定要关闭所有打开的标签页吗？此操作不可撤销。';
+
+  @override
+  String ui_not_found_title(String title) {
+    return '未找到 $title';
+  }
+
+  @override
+  String get ui_oldest_first => '最旧优先';
+
+  @override
+  String get ui_sort_options => '排序选项';
+
+  @override
+  String get ui_show_player_controller => '显示播放器控制器';
+
+  @override
+  String get ui_hide_player_controller => '隐藏播放器控制器';
+
+  @override
+  String get ui_scanning_category => '正在扫描默认目录，已加载内容可正常操作';
+
+  @override
+  String get ui_refresh => '刷新';
+
+  @override
+  String get ui_refresh_done => '刷新完成';
+
+  @override
+  String ui_selected_count(int count) {
+    return '$count 已选择';
+  }
+
+  @override
+  String ui_permanently_delete_name(String name) {
+    return '永久删除\"$name\"？';
+  }
+
+  @override
+  String ui_copied_count(int count) {
+    return '已复制 $count 个项目到剪贴板';
+  }
+
+  @override
+  String ui_cut_count(int count) {
+    return '已剪切 $count 个项目到剪贴板';
+  }
+
+  @override
+  String get ui_read => '读取';
+
+  @override
+  String get ui_write => '写入';
+
+  @override
+  String get ui_file => '文件';
+
+  @override
+  String get ui_backup_settings => '开始备份';
+
+  @override
+  String get ui_restore_settings => '开始恢复';
+
+  @override
+  String get ui_backup_info => '备份信息';
+
+  @override
+  String get ui_backup_file => '备份文件';
+
+  @override
+  String get ui_no_backup_file => '暂无备份文件';
+
+  @override
+  String get ui_remote_connection => '远程连接';
+
+  @override
+  String ui_step_n_of_3(Object step) {
+    return '第 $step / 3 步';
+  }
+
+  @override
+  String get ui_choose_network_service => '选择网络服务';
+
+  @override
+  String get ui_connection_name => '连接名称';
+
+  @override
+  String get ui_protocol => '协议';
+
+  @override
+  String get ui_port => '端口';
+
+  @override
+  String get ui_path_label => '路径';
+
+  @override
+  String get ui_username_optional => '用户名（可选）';
+
+  @override
+  String get ui_share_name_optional => '共享名（可选）';
+
+  @override
+  String get ui_share_name_hint => '如 /Public，留空则自动探测';
+
+  @override
+  String get ui_smb_desc => '局域网与 SMB NAS 共享';
+
+  @override
+  String get ui_connection_suffix => '连接';
+
+  @override
+  String get ui_back => '返回';
+
+  @override
+  String get ui_connect => '连接';
+
+  @override
+  String get ui_web_share => '网页共享';
+
+  @override
+  String get ui_network => '远程';
+
+  @override
+  String get log_i18n_full => '全面国际化中英文界面';
+
+  @override
+  String get log_fix_selection_count => '修复文件选择数量不显示的问题';
+
+  @override
+  String get log_fix_remote_title => '修复远程连接页面标题显示异常';
+
+  @override
+  String get log_svg_thumbnail_category => 'SVG 缩略图在分类页面中正常显示';
+
+  @override
+  String get log_language_btn_top => '语言切换按钮移至设置页顶部';
+
+  @override
+  String get log_fix_category_missing => '修复英文模式下部分分类不显示';
+
+  @override
+  String get log_text_editor => '新增文本编辑器功能：新建文件、另存为、撤销/重做';
+
+  @override
+  String get log_text_editor_settings => '文本编辑器设置持久化（自动换行、行号、阅读模式）';
+
+  @override
+  String get log_10_languages => '支持10种多国语言（中文、英语、日语、韩语、德语、法语、西班牙语、俄语、阿拉伯语）';
+
+  @override
+  String get log_fix_l10n_hardcode => '修复多处 l10n 硬编码问题';
+
+  @override
+  String get log_language_scroll => '优化语言选择界面支持滚动';
+
+  @override
+  String get log_remote_media_cache => '远程媒体文件点击后立即打开播放器，后台缓存并显示进度';
+
+  @override
+  String get log_remote_to_remote => '新增远程服务器到远程服务器的复制/剪切功能';
+
+  @override
+  String get log_remote_cut_progress => '修复远程剪切操作进度条显示异常';
+
+  @override
+  String get log_audio_scan_stable => '优化音频分类扫描稳定性';
+
+  @override
+  String get log_extract_dialog_redesign => '重新设计解压对话框，支持当前目录/自定义目录选择';
+
+  @override
+  String get log_vault_quick_category => '将保险箱快捷方式添加到快捷分类（默认关闭）';
+
+  @override
+  String get log_vault_l10n_fix => '修复保险箱页面英文硬编码和添加多文件时卡死的问题';
+
+  @override
+  String get log_compression_path_fix => '统一三点按钮和长按菜单的压缩路径，修复压缩包名称错误';
+
+  @override
+  String get log_compression_progress => '优化压缩进度对话框，支持多阶段进度显示和可靠自动关闭';
+
+  @override
+  String get log_web_share_category => '网页共享门户支持分类显示文件（文件夹、视频、音频、图片、文档、其他）';
+
+  @override
+  String get log_web_share_l10n => '网页共享门户支持根据 App 语言自动切换多语言显示';
+
+  @override
+  String get log_music_lyrics_fullscreen_removed => '音乐播放器移除歌词全屏面板功能';
+
+  @override
+  String get log_music_lyrics_centered => '音乐播放器当前歌词改为居中对齐显示';
+
+  @override
+  String get log_music_player_button => '音乐分类页顶部添加音乐播放器快捷按钮，方便继续收听';
+
+  @override
+  String get log_music_remember_progress => '音乐播放器记住播放进度，下次自动续播';
+
+  @override
+  String get log_image_icon_redesign => '重新设计图片文件图标，显示格式标签（jpg、png 等）';
+
+  @override
+  String get log_doc_icon_redesign => '重新设计文档文件图标，显示格式标签';
+
+  @override
+  String get log_archive_icon_redesign => '重新设计压缩包图标，显示格式标签（zip、7z、rar 等）';
+
+  @override
+  String get log_music_lrc_lyrics => '音乐播放器支持自动加载 LRC 歌词及手动选择歌词文件';
+
+  @override
+  String get log_remote_copy_paste_fix => '修复远程服务器复制文件到本地粘贴时进度条无响应且文件未出现的问题';
+
+  @override
+  String get log_navbar_position_setting => '新增导航栏位置设置，支持顶部或底部显示导航栏';
+
+  @override
+  String get log_browse_top_area_optimize => '启用底部导航栏时，优化浏览页顶部区域布局，增加文件列表显示空间';
+
+  @override
+  String get log_thanks_feedback =>
+      '感谢以下用户反馈与建议：越界、猕猴桃、Sir Jagadeesh Chandra Bose、Silence';
+
+  @override
+  String get log_smb_native_rewrite =>
+      'SMB 客户端完全重写，通过 Android 原生 smbj 库实现真实 SMB 协议，支持自动探测共享名';
+
+  @override
+  String get log_ftp_sftp_streaming =>
+      '修复 FTP/SFTP 流式播放，使用原生 Socket 独立数据连接，支持边缓存边播放';
+
+  @override
+  String get log_remote_l10n_fix => '修复远程连接页硬编码字符串，新增 SMB 协议描述与连接名称后缀的 l10n 翻译';
+
+  @override
+  String get log_image_viewer_menu => '图片浏览器右上角菜单改为底部弹窗，9 个操作项，黑色半透明背景提升可见性';
+
+  @override
+  String get log_breadcrumb_border =>
+      '面包屑按钮新增 V 形完整边框，使用 CustomPaint 绘制，相邻按钮无缝衔接且有清晰边界';
+
+  @override
+  String get log_three_dot_button_position => '文件/文件夹三点操作按钮调整到卡片右上角，避免拖动时误触';
+
+  @override
+  String get log_three_dot_button_setting =>
+      '三点操作按钮设置项改为「显示三点操作按钮」，支持全部显示/仅单窗口/仅双窗口三种模式';
+
+  @override
+  String get log_category_back_select => '分类页多选模式下按返回键取消选择，而不是退出类别';
+
+  @override
+  String get log_desktop_lyric => '新增桌面歌词悬浮窗，支持权限检查、拖动位置、单击切换播放/暂停';
+
+  @override
+  String get log_notification_panel => '修复下拉通知栏不显示播放控制面板，暂停时保留通知，权限拒绝时提示用户';
+
+  @override
+  String get log_lyric_word_highlight =>
+      '悬浮歌词支持逐字高亮，使用 SpannableStringBuilder 实现卡拉OK效果';
+
+  @override
+  String get log_floating_window_resize => '悬浮歌词窗口支持长按显示缩放手柄，拖拽调整窗口大小与文字大小';
+
+  @override
+  String get log_background_play_fix =>
+      '修复开启后台播放时暂停音乐的问题，attach 复用 player 实例不中断播放';
+
+  @override
+  String get log_category_button_sync => '修复未开启后台播放时音频类别页播放按钮显示旧音频信息，返回时刷新按钮状态';
+
+  @override
+  String get log_build_stability =>
+      '修复 R8 编译 OOM、x86_64/armv7 启动白屏，调整 Gradle JVM 内存与 ABI 下载';
+
+  @override
+  String get log_lyric_scale_animation => '逐字歌词过渡动画新增放大效果，修复同步问题，固定 300ms 过渡时长';
+
+  @override
+  String get log_quick_action_panel => '重新调整了顶部导航栏按钮，新增快捷操作页面，在浏览页可左滑弹出快捷操作面板';
+
+  @override
+  String get log_favorites => '新增了收藏夹，用户可以收藏本地或远程文件/文件夹收藏到快捷操作面板的收藏夹中';
+
+  @override
+  String get log_drawer_redesign => '重构了抽屉页，抽屉页更加简洁美观，持久化记住抽屉页所有展开/折叠状态，操作更加便捷';
+
+  @override
+  String get log_video_player_rotation => '视频播放器新增了顺时针旋转画面，新增缩放比例';
+
+  @override
+  String get log_category_reorder =>
+      '优化了分类页可长按类别图标拖动调整位置顺序，新增每行 3 列/4 列可选，现在支持重命名类别名称';
+
+  @override
+  String get log_compression_fix => '修复了压缩一些问题';
+
+  @override
+  String get log_progress_bar_redesign => '重新设计了进度条窗口样式';
+
+  @override
+  String get log_dual_pane_status_bar => '双窗口模式顶部新增状态栏，显示激活窗口指示器和剪贴板内容摘要';
+
+  @override
+  String get log_transfer_fixes => '修复传输进度条不更新、无法取消、远程列表空白、传输速度不显示等问题';
+
+  @override
+  String get log_drawer_font_consistency => '修复了抽屉页「设置」按钮字体与其他栏目不一致的问题';
+
+  @override
+  String get log_landscape_layout => '优化平板/车机横屏模式下的文件网格布局';
+
+  @override
+  String get log_progress_i18n => '进度条窗口新增完整的多语言翻译支持';
+
+  @override
+  String get msg_remember_choice => '记住此选择，后续操作默认使用';
+
+  @override
+  String get ui_caching => '正在缓存中，请稍后...';
+
+  @override
+  String get ui_username => '用户名';
+
+  @override
+  String get ui_anonymous => '匿名';
+
+  @override
+  String get ui_start => '启动';
+
+  @override
+  String get ui_stop => '停止';
+
+  @override
+  String get ui_connected => '已连接';
+
+  @override
+  String get ui_activated => '已激活';
+
+  @override
+  String get ui_web_sharing_center => '网页共享中心';
+
+  @override
+  String get ui_local_web_share => '本地网页共享';
+
+  @override
+  String get ui_http_local_share_server => 'HTTP本地共享服务器';
+
+  @override
+  String get ui_server_idle => '服务器空闲';
+
+  @override
+  String get ui_pick_files_folders => '选择文件和文件夹';
+
+  @override
+  String get ui_secure_storage => '安全存储';
+
+  @override
+  String get ui_protected_total_space => '已保护总空间';
+
+  @override
+  String get ui_hidden_files_count => '已隐藏文件';
+
+  @override
+  String get ui_search_obfuscated => '搜索混淆文件...';
+
+  @override
+  String get ui_vault_empty => '您的安全保险箱为空';
+
+  @override
+  String get ui_hide_files => '隐藏文件';
+
+  @override
+  String get ui_global_search => '全局搜索';
+
+  @override
+  String get ui_all => '全部';
+
+  @override
+  String get ui_folders => '文件夹';
+
+  @override
+  String get ui_images => '图片';
+
+  @override
+  String get ui_videos => '视频';
+
+  @override
+  String get ui_audio => '音频';
+
+  @override
+  String get ui_documents => '文档';
+
+  @override
+  String get ui_no_matching_files => '未找到匹配文件';
+
+  @override
+  String get ui_try_modify_search => '请尝试修改搜索文本以查找隐藏项目。';
+
+  @override
+  String get ui_vault_empty_desc =>
+      'AES-256-GCM 强加密使文件完全无法被系统或其他应用打开，并从媒体扫描器中隐藏。点击下方按钮来保护它们。';
+
+  @override
+  String ui_copied_n_items(Object count) {
+    return '已复制 $count 个项目到剪贴板';
+  }
+
+  @override
+  String ui_cut_n_items(Object count) {
+    return '已剪切 $count 个项目到剪贴板';
+  }
+
+  @override
+  String get ui_copy_tooltip => '复制';
+
+  @override
+  String get ui_cut_tooltip => '剪切';
+
+  @override
+  String get ui_delete_tooltip => '删除';
+
+  @override
+  String get ui_search_this_folder => '搜索此文件夹';
+
+  @override
+  String ui_search_files_subfolders_in(Object path) {
+    return '搜索文件和子文件夹于：$path';
+  }
+
+  @override
+  String get ui_no_results => '未找到结果';
+
+  @override
+  String ui_no_match_for(Object query) {
+    return '未找到匹配 \"$query\" 的内容';
+  }
+
+  @override
+  String ui_n_selected(Object count, Object size) {
+    return '$count 已选择 ($size)';
+  }
+
+  @override
+  String get ui_select_language_title => '选择语言';
+
+  @override
+  String get ui_select_language_desc => '请选择您偏好的语言';
+
+  @override
+  String get ui_language_chinese => '中文';
+
+  @override
+  String get ui_language_english => 'English';
+
+  @override
+  String msgDefaultZoom(Object fontSize) {
+    return '默认缩放 (${fontSize}pt)';
+  }
+
+  @override
+  String get msgLockZoom => '锁定缩放';
+
+  @override
+  String get ui_background => '后台';
+
+  @override
+  String get ui_overall_progress => '总体进度';
+
+  @override
+  String get ui_archive_name => '压缩包名称';
+
+  @override
+  String get ui_compression_level => '压缩级别';
+
+  @override
+  String get ui_delete_source_after => '完成后删除源文件';
+
+  @override
+  String get ui_no_compression => '无（仅存储）';
+
+  @override
+  String get ui_fast => '快速';
+
+  @override
+  String get ui_standard => '标准';
+
+  @override
+  String get ui_maximum => '最大';
+
+  @override
+  String get ui_new_txt => '新建文本';
+
+  @override
+  String get ui_save_as => '另存为';
+
+  @override
+  String get ui_undo => '撤销';
+
+  @override
+  String get ui_redo => '重做';
+
+  @override
+  String ui_add_selected(Object count) {
+    return '添加所选 ($count)';
+  }
+
+  @override
+  String ui_pin_selected(Object count) {
+    return '使用所选 ($count)';
+  }
+
+  @override
+  String get msg_file_exists => '文件已存在';
+
+  @override
+  String msg_file_exists_desc(String fileName) {
+    return '目标文件夹中已存在同名文件\"$fileName\"。您想怎么处理？';
+  }
+
+  @override
+  String get msg_existing_file => '现有文件';
+
+  @override
+  String get msg_cancel_paste => '取消粘贴';
+
+  @override
+  String get msg_skip_file => '跳过';
+
+  @override
+  String get msg_overwrite_file => '替换';
+
+  @override
+  String get msg_newer => '较新';
+
+  @override
+  String get msg_new_file_name => '新文件名';
+
+  @override
+  String get msg_vault_choose_mode => '选择保护模式';
+
+  @override
+  String get msg_vault_mode_desc => '选择如何保护选中的文件。安全文件将使用 AES-256-GCM 强加密。';
+
+  @override
+  String get ui_secure_import => '安全导入（沙盒）';
+
+  @override
+  String get ui_in_place_scramble => '原地混淆（快速）';
+
+  @override
+  String get msg_scrambling => '正在混淆加密...';
+
+  @override
+  String msg_protected_count(Object successCount) {
+    return '成功保护 $successCount 个项目。';
+  }
+
+  @override
+  String msg_protect_failed_count(Object failCount) {
+    return '失败锁定 $failCount 个项目。';
+  }
+
+  @override
+  String msg_restored(Object name) {
+    return '已将「$name」恢复到原始位置。';
+  }
+
+  @override
+  String msg_restore_failed(Object error) {
+    return '恢复文件失败：$error';
+  }
+
+  @override
+  String get msg_decrypting => '正在安全解密...';
+
+  @override
+  String get msg_security_details => '安全详情';
+
+  @override
+  String get ui_restore_unhide => '恢复（取消隐藏）';
+
+  @override
+  String get msg_permanent_delete => '永久删除？';
+
+  @override
+  String msg_permanent_delete_content(Object name) {
+    return '确定要永久删除「$name」吗？此操作无法撤销。';
+  }
+
+  @override
+  String get msg_file_deleted => '文件已永久删除。';
+
+  @override
+  String msg_delete_failed(Object error) {
+    return '删除文件失败：$error';
+  }
+
+  @override
+  String get msg_original_name => '原始名称';
+
+  @override
+  String get msg_original_path => '原始路径';
+
+  @override
+  String get msg_scrambled_path => '混淆路径';
+
+  @override
+  String get msg_size_label => '大小';
+
+  @override
+  String get msg_locked_at => '锁定时间';
+
+  @override
+  String get msg_protection_mode => '保护模式';
+
+  @override
+  String get msg_in_place_scrambling => '原地混淆';
+
+  @override
+  String get msg_isolated_move => '隔离移动（沙盒）';
+
+  @override
+  String get web_share_search => '搜索文件和文件夹...';
+
+  @override
+  String get web_share_upload => '上传';
+
+  @override
+  String get web_share_drop_title => '拖拽文件到此处上传';
+
+  @override
+  String get web_share_drop_desc => '文件将立即上传到此共享文件夹';
+
+  @override
+  String get web_share_empty_search => '没有匹配的项目';
+
+  @override
+  String get web_share_empty_desc => '检查拼写或尝试不同的搜索词';
+
+  @override
+  String get web_share_copy_link => '复制链接';
+
+  @override
+  String get web_share_download => '下载';
+
+  @override
+  String web_share_uploading(String name) {
+    return '正在上传 $name...';
+  }
+
+  @override
+  String get web_share_upload_success => '上传成功';
+
+  @override
+  String web_share_upload_failed(String name) {
+    return '上传 $name 失败';
+  }
+
+  @override
+  String get web_share_preview_unsupported => '不支持预览此文件类型';
+
+  @override
+  String get web_share_preview_download => '点击下方下载按钮保存到您的设备';
+
+  @override
+  String get web_share_footer => '通过 ZenFile 安全共享和流式传输文件';
+
+  @override
+  String get web_share_parent_dir => '上级目录';
+
+  @override
+  String get web_share_go_up => '返回上一级';
+
+  @override
+  String web_share_items_count(int count) {
+    return '$count 个项目';
+  }
+
+  @override
+  String get web_share_link_copied => '链接已复制到剪贴板';
+
+  @override
+  String get web_share_copy_failed => '复制链接失败';
+
+  @override
+  String get web_share_local => '本地 Wi-Fi 共享';
+
+  @override
+  String get web_share_internet => '互联网共享';
+
+  @override
+  String get web_share_category_folders => '文件夹';
+
+  @override
+  String get web_share_category_videos => '视频';
+
+  @override
+  String get web_share_category_audio => '音频';
+
+  @override
+  String get web_share_category_images => '图片';
+
+  @override
+  String get web_share_category_documents => '文档';
+
+  @override
+  String get web_share_category_others => '其他';
+
+  @override
+  String get web_share_loading_preview => '正在加载预览...';
+
+  @override
+  String get web_share_preview_error => '无法流式传输文档。您仍然可以直接下载。';
+
+  @override
+  String get msg_custom_shortcut => '自定义图标';
+
+  @override
+  String get msg_add_custom_shortcut => '添加到主屏幕';
+
+  @override
+  String get msg_shortcut_added => '已添加到主屏幕';
+
+  @override
+  String get msg_shortcut_failed => '添加失败，请重试';
+
+  @override
+  String get ui_lyrics_loaded => '歌词已加载';
+
+  @override
+  String get ui_lyrics_load_failed => '无法解析该歌词文件';
+
+  @override
+  String get ui_select_lyrics_file => '导入本地歌词';
+
+  @override
+  String get ui_no_lyrics_found => '未找到歌词';
+
+  @override
+  String get ui_lyrics_auto_load_hint =>
+      '将 .lrc 歌词文件放在音频同目录下\n（文件名与音频相同）即可自动加载';
+
+  @override
+  String get ui_lyrics_panel => '歌词全屏面板';
+
+  @override
+  String get ui_show_lyrics => '显示歌词';
+
+  @override
+  String get ui_hide_lyrics => '隐藏歌词';
+
+  @override
+  String get ui_sound_effects_speed => '音效与播放速度';
+
+  @override
+  String get ui_pitch_adjustment => '音调调节';
+
+  @override
+  String get ui_restore_default => '恢复默认';
+
+  @override
+  String get ui_sound_effects => '音效';
+
+  @override
+  String get eq_presets => '均衡器预设';
+
+  @override
+  String get eq_custom => '自定义';
+
+  @override
+  String get eq_system => '系统均衡器';
+
+  @override
+  String get eq_unavailable => '此设备不支持均衡器';
+
+  @override
+  String get eq_open_system => '打开系统均衡器';
+
+  @override
+  String get eq_system_hint =>
+      '内置播放器使用 libmpv 音频输出。如需应用均衡器效果，请使用系统均衡器（影响所有音频输出）。';
+
+  @override
+  String get eq_apply_hint => '请在下方选择预设，然后点击打开系统均衡器在系统均衡器中应用。';
+
+  @override
+  String get eq_preset_flat => '原声';
+
+  @override
+  String get eq_preset_vocal => 'HD 人声';
+
+  @override
+  String get eq_preset_bass => '低音';
+
+  @override
+  String get eq_preset_live => '现场';
+
+  @override
+  String get eq_preset_jazz => '爵士';
+
+  @override
+  String get ui_playback_queue => '播放队列';
+
+  @override
+  String get ui_repeat_off => '循环：关闭';
+
+  @override
+  String get ui_repeat_one => '循环：单曲';
+
+  @override
+  String get ui_repeat_all => '循环：全部';
+
+  @override
+  String get ui_shuffle_on => '随机播放：开';
+
+  @override
+  String get ui_play_mode_sequential => '列表播放';
+
+  @override
+  String get ui_play_mode_list_loop => '列表循环';
+
+  @override
+  String get ui_play_mode_single_loop => '单曲循环';
+
+  @override
+  String get ui_play_mode_shuffle => '随机播放';
+
+  @override
+  String get ui_lyrics_mode_off => '歌词关闭';
+
+  @override
+  String get ui_lyrics_mode_single_line => '单行歌词';
+
+  @override
+  String get ui_lyrics_mode_multi_line => '多行歌词';
+
+  @override
+  String get ui_lyrics_mode_full_panel => '全屏歌词';
+
+  @override
+  String ui_minutes_format(int minutes) {
+    return '$minutes 分钟';
+  }
+
+  @override
+  String ui_sleep_timer_set(int minutes) {
+    return '睡眠定时器已设置为 $minutes 分钟。';
+  }
+
+  @override
+  String get ui_enter_minutes => '输入分钟数';
+
+  @override
+  String get ui_sleep_timer_end => '定时时间到，已暂停播放';
+
+  @override
+  String get ui_close_player => '关闭播放器';
+
+  @override
+  String get ui_open_player => '打开播放器';
+
+  @override
+  String get ui_now_playing => '正在播放';
+
+  @override
+  String get ui_resume_playback => '继续播放';
+
+  @override
+  String get ui_single => '单曲';
+
+  @override
+  String get ui_add_remote_path => '添加远程路径';
+
+  @override
+  String get ui_select_remote_server => '选择远程服务器';
+
+  @override
+  String get ui_no_remote_connections => '没有已保存的远程连接';
+
+  @override
+  String get ui_retry => '重试';
+
+  @override
+  String get ui_media_load_failed => '媒体加载失败，请检查存储权限后重试';
+
+  @override
+  String get ui_no_subfolders => '无子文件夹';
+
+  @override
+  String get ui_select_this_folder => '选择当前文件夹';
+
+  @override
+  String ui_downloading_file(String file) {
+    return '下载中: $file';
+  }
+
+  @override
+  String ui_sent(String amount) {
+    return '已发送: $amount';
+  }
+
+  @override
+  String ui_recycle_restore_success(int count) {
+    return '已成功恢复 $count 个项目';
+  }
+
+  @override
+  String ui_recycle_restore_failed(String error) {
+    return '恢复项目出错：$error';
+  }
+
+  @override
+  String get ui_recycle_perm_delete_title => '永久删除？';
+
+  @override
+  String ui_recycle_perm_delete_message(int count) {
+    return '确定要永久删除这些 $count 个项目吗？此操作无法撤销。';
+  }
+
+  @override
+  String ui_recycle_perm_delete_success(int count) {
+    return '已永久删除 $count 个项目';
+  }
+
+  @override
+  String ui_recycle_perm_delete_failed(String error) {
+    return '删除项目出错：$error';
+  }
+
+  @override
+  String get ui_recycle_empty_title => '清空回收站？';
+
+  @override
+  String ui_recycle_empty_failed(String error) {
+    return '清空回收站出错：$error';
+  }
+
+  @override
+  String ui_recycle_selected_count(int count) {
+    return '已选择 $count 项';
+  }
+
+  @override
+  String ui_recycle_deleted_at(String date, String size) {
+    return '已删除：$date • $size';
+  }
+
+  @override
+  String get ui_recycle_restore => '恢复';
+
+  @override
+  String get ui_recycle_empty_hint => '启用回收站后删除的项目将显示在这里。您可以恢复它们或永久删除。';
+
+  @override
+  String get ui_recycle_disabled_hint =>
+      '回收站已关闭。开启后，删除的文件和文件夹将暂存到这里，可随时恢复或永久删除。';
+
+  @override
+  String get ui_recycle_deleted_date => '回收日期';
+
+  @override
+  String get ui_recycle_type => '类型';
+
+  @override
+  String get ui_recycle_file => '文件';
+
+  @override
+  String get ui_db_browse_data => '浏览数据';
+
+  @override
+  String get ui_db_table_schema => '表结构';
+
+  @override
+  String get ui_db_sql_console => 'SQL控制台';
+
+  @override
+  String ui_db_export_success(String fileName) {
+    return '成功导出到 $fileName';
+  }
+
+  @override
+  String ui_db_export_failed(String error) {
+    return '导出失败：$error';
+  }
+
+  @override
+  String get ui_db_export_csv => '导出表为CSV';
+
+  @override
+  String get ui_db_primary_key => '主键';
+
+  @override
+  String get ui_db_not_null => '非空';
+
+  @override
+  String ui_db_type(String type) {
+    return '类型：$type';
+  }
+
+  @override
+  String ui_db_default(String value) {
+    return '默认值：$value';
+  }
+
+  @override
+  String get ui_db_execute_query => '执行查询';
+
+  @override
+  String get ui_db_enter_query => '在此输入SELECT查询...';
+
+  @override
+  String ui_db_showing_range(int start, int end) {
+    return '显示 $start - $end';
+  }
+
+  @override
+  String ui_db_query_returned(int count) {
+    return '查询返回 $count 行';
+  }
+
+  @override
+  String get ui_app_installed_user_apps => '已安装的用户应用';
+
+  @override
+  String get ui_app_system_packages => '系统包';
+
+  @override
+  String get ui_app_backup_apk => '已备份的APK';
+
+  @override
+  String get ui_app_precise_storage => '精确存储计算';
+
+  @override
+  String get ui_app_grant_usage_access => '授予使用情况访问权限';
+
+  @override
+  String get ui_app_usage_access_description =>
+      '如需查看精确的应用存储大小（APK + 数据 + 缓存），而不仅是安装包大小，请在系统设置中为 ZenFile 启用使用情况访问权限。';
+
+  @override
+  String get ui_backup_apk_open_folder => '打开备份目录';
+
+  @override
+  String ui_backup_apk_success_with_path(String path) {
+    return '已成功备份到 $path，是否打开所在目录？';
+  }
+
+  @override
+  String get ui_backup_apk_open => '打开';
+
+  @override
+  String get ui_clear_remote_cache_success => '远程缓存已清理。';
+
+  @override
+  String get ui_clear_remote_cache_failed => '清理远程缓存失败。';
+
+  @override
+  String get ui_app_system_settings => '系统设置 / 详情';
+
+  @override
+  String get ui_app_restore_install => '恢复 / 安装应用';
+
+  @override
+  String get ui_app_size_label => '大小：';
+
+  @override
+  String get ui_app_installed_label => '安装时间：';
+
+  @override
+  String get ui_app_backup_date_label => '备份时间：';
+
+  @override
+  String get ui_batch_backup_progress => '正在备份所选应用...';
+
+  @override
+  String ui_batch_backup_success(int count) {
+    return '已成功备份 $count 个应用到 ZenFile/Backups/Apps/';
+  }
+
+  @override
+  String ui_batch_backup_failed(String error) {
+    return '备份部分应用失败：$error';
+  }
+
+  @override
+  String get ui_app_search_backup => '搜索备份...';
+
+  @override
+  String get ui_app_sort_by_install_date => '按安装日期排序';
+
+  @override
+  String get ui_app_no_backup_found => '未找到备份';
+
+  @override
+  String get ui_app_backup_empty_subtitle => '已备份的 APK 和 APKS 文件列表将显示在此处。';
+
+  @override
+  String ui_app_backup_search_not_found(String query) {
+    return '找不到与\"$query\"匹配的备份';
+  }
+
+  @override
+  String ui_app_backup_size_date(String size, String date) {
+    return '大小：$size • 备份日期：$date';
+  }
+
+  @override
+  String get ui_app_split_apk => '分包 (APKS)';
+
+  @override
+  String get ui_app_single_apk => '单个APK';
+
+  @override
+  String get ui_desktop_lyric => '桌面歌词';
+
+  @override
+  String get msg_overlay_permission_required => '需要悬浮窗权限才能显示桌面歌词，请前往设置授权后重试';
+
+  @override
+  String get msg_notification_permission_denied => '需要通知权限才能显示播放控制面板，是否前往设置开启？';
+
+  @override
+  String get msg_open_settings => '去设置';
+
+  @override
+  String get msg_notification_not_granted => '通知权限未授予，无法显示播放控制通知。请前往设置开启通知权限。';
+
+  @override
+  String get msg_notification_blocked_hint =>
+      '通知栏未生效，可能是系统通知渠道被禁用或电池优化限制了后台运行。请在系统设置中检查通知权限和电池优化设置。';
+
+  @override
+  String get msg_audio_service_init_failed =>
+      '后台播放服务初始化失败，通知栏控制按钮无法显示。请尝试重启应用；若问题持续，请在系统设置中清除应用数据后重新打开。';
+
+  @override
+  String get msg_notification_channel_disabled =>
+      '通知渠道已被禁用。请前往系统设置 → 应用管理 → ZenFile → 通知，找到\"ZenFile Audio Player\"渠道并将其启用。';
+
+  @override
+  String get ui_search_lyrics_online => '在线搜索歌词';
+
+  @override
+  String get ui_lyrics_searching => '正在搜索歌词...';
+
+  @override
+  String get ui_lyrics_download_success_enhanced => '增强歌词下载成功！逐字显示已就绪';
+
+  @override
+  String get ui_lyrics_download_success => '歌词下载成功';
+
+  @override
+  String get ui_lyrics_not_found_online => '未找到匹配的歌词，试试调整歌曲信息后重试';
+
+  @override
+  String get ui_lyric_search_song_title => '歌曲名';
+
+  @override
+  String get ui_lyric_search_artist => '歌手';
+
+  @override
+  String get msg_rotate_video => '旋转画面';
+
+  @override
+  String get msg_aspect_fit => '原始比例';
+
+  @override
+  String get msg_aspect_fill => '拉伸填充';
+
+  @override
+  String get msg_aspect_center => '居中';
+
+  @override
+  String get msg_aspect_16_9 => '16:9';
+
+  @override
+  String get msg_aspect_4_3 => '4:3';
+
+  @override
+  String get msg_aspect_custom => '自定义';
+
+  @override
+  String get msg_aspect_fill_screen => '填充屏幕';
+
+  @override
+  String get msg_custom_aspect_ratio => '自定义缩放比例';
+
+  @override
+  String get drawer_tools => '工具';
+
+  @override
+  String get open_with_native => '使用本应用打开';
+
+  @override
+  String get open_with_external => '使用外部系统选择器打开';
+
+  @override
+  String get open_once => '仅一次';
+
+  @override
+  String get open_always => '始终';
+
+  @override
+  String get pick_file_type => '选择文件类型';
+
+  @override
+  String get file_type_text => '文本';
+
+  @override
+  String get file_type_audio => '音频';
+
+  @override
+  String get file_type_video => '视频';
+
+  @override
+  String get file_type_image => '图像';
+
+  @override
+  String get file_type_text_desc => '以文本方式打开';
+
+  @override
+  String get file_type_audio_desc => '以音频方式播放';
+
+  @override
+  String get file_type_video_desc => '以视频方式播放';
+
+  @override
+  String get file_type_image_desc => '以图像方式查看';
+
+  @override
+  String get drawer_edit_connection => '编辑';
+
+  @override
+  String get cat_system => '系统';
+
+  @override
+  String get cat_backup_restore => '备份/恢复';
+
+  @override
+  String get cat_backup_restore_desc => '备份';
+
+  @override
+  String get cat_storage_volume => '存储';
+
+  @override
+  String get ui_columns_per_row => '每行显示';
+
+  @override
+  String get ui_2columns => '2列';
+
+  @override
+  String get ui_3columns => '3列';
+
+  @override
+  String get ui_4columns => '4列';
+
+  @override
+  String get ui_show_custom_entry => '自定义';
+
+  @override
+  String get msge8b8e9b3 => '常用功能';
+
+  @override
+  String get msg04b7de53 => '常用功能快捷入口';
+
+  @override
+  String get prop_read => '读取';
+
+  @override
+  String get prop_write => '写入';
+
+  @override
+  String get prop_folder_directory => '文件夹 / 目录';
+
+  @override
+  String get prop_file => '文件';
+
+  @override
+  String prop_contains_format(int folderCount, int fileCount) {
+    return '$folderCount 个子文件夹, $fileCount 个文件';
+  }
+
+  @override
+  String get prop_bytes => '字节';
+
+  @override
+  String prop_items_selected(int count) {
+    return '已选择 $count 项';
+  }
+
+  @override
+  String prop_items_summary(int count, int folderCount, int fileCount) {
+    return '$count 项（$folderCount 个文件夹, $fileCount 个文件）';
+  }
+
+  @override
+  String get prop_calc_hash => '计算哈希值';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => '哈希计算中…';
+
+  @override
+  String get prop_hash_failed => '哈希计算失败';
+
+  @override
+  String get msg_add_subtitle => '添加字幕';
+
+  @override
+  String get msg_subtitle_menu => '字幕';
+
+  @override
+  String get msg_subtitle_size => '字幕大小';
+
+  @override
+  String get msg_subtitle_position => '字幕位置';
+
+  @override
+  String get msg_subtitle_pos_top => '顶部';
+
+  @override
+  String get msg_subtitle_pos_bottom => '底部';
+
+  @override
+  String get msg_subtitle_no_background => '移除字幕背景';
+
+  @override
+  String get msg_auto_clean_cache => '自动清理缓存';
+
+  @override
+  String get msg_auto_clean_cache_hint => '点击设置自动清理时间间隔';
+
+  @override
+  String get msg_auto_clean_cache_picker_hint => '滑动选择自动清理时间间隔';
+
+  @override
+  String get msg_cache_clean_unit_day => '天';
+
+  @override
+  String get msg_cache_clean_unit_hour => '小时';
+
+  @override
+  String get msg_cache_clean_unit_minute => '分钟';
+
+  @override
+  String get msg_cache_clean_confirm => '确认';
+
+  @override
+  String get msg_quick_actions => '快捷操作';
+
+  @override
+  String get msg_hwdec => '硬解';
+
+  @override
+  String get msg_swdec => '软解';
+
+  @override
+  String get msg_toggle_decode => '切换硬解/软解';
+
+  @override
+  String get msg_subtitle_on => '开启字幕';
+
+  @override
+  String get msg_subtitle_off => '关闭字幕';
+
+  @override
+  String get msg_no_subtitle => '暂无字幕';
+
+  @override
+  String get msg_audio_track => '音轨';
+
+  @override
+  String get msg_subtitle_track => '字幕轨';
+
+  @override
+  String get msg_no_audio_track => '无音轨';
+
+  @override
+  String get msg_no_subtitle_track => '无字幕轨';
+
+  @override
+  String get msg_playlist => '播放列表';
+
+  @override
+  String get msg_no_playlist => '暂无播放列表';
+
+  @override
+  String get msg_slide_to_unlock => '滑动/点击解锁';
+
+  @override
+  String get msg_seconds_short => '秒';
+
+  @override
+  String get msg_speed_2x => '倍速 2.0x';
+
+  @override
+  String get log_v1_1_1_line1 => '📹 视频播放器';
+
+  @override
+  String get log_v1_1_1_line2 =>
+      '支持外挂字幕：自动识别与视频同目录、同文件名的字幕文件（如 .srt、.ass），同时保留手动加载字幕文件的入口。';
+
+  @override
+  String get log_v1_1_1_line3 => '新增自定义画面缩放比例，可灵活适配各类异形屏及非标准比例屏幕。';
+
+  @override
+  String get log_v1_1_1_line4 => '🎵 音频播放器';
+
+  @override
+  String get log_v1_1_1_line5 => '修复了在平板、车机等横屏设备上的界面显示异常问题，提升大屏体验。';
+
+  @override
+  String get log_v1_1_1_line6 => '📂 文件浏览与操作';
+
+  @override
+  String get log_v1_1_1_line7 => '优化侧滑菜单与快捷操作弹窗的宽度一致性，视觉更统一。';
+
+  @override
+  String get log_v1_1_1_line8 => '快捷操作面板中的常用功能现支持折叠/展开，且状态会持久记忆，下次打开保留您的偏好。';
+
+  @override
+  String get log_v1_1_1_line9 =>
+      '调整文件打开逻辑：点击文件默认使用本应用直接打开；如需切换其他应用，可在选中文件后，通过顶部三点菜单或底部操作栏的\"更多\"选项选择\"打开方式\"。';
+
+  @override
+  String get log_v1_1_1_line10 => '🗂️ 分类页界面';
+
+  @override
+  String get log_v1_1_1_line11 => '默认布局改为每行4列，显示更紧凑高效。';
+
+  @override
+  String get log_v1_1_1_line12 => '您可在\"自定义快捷方式\"设置中自由切换每行3列或4列。';
+
+  @override
+  String get log_v1_1_1_line13 => '支持长按分类图标并拖拽，随意调整类别排列顺序。';
+
+  @override
+  String get ui_close_category => '关闭类别';
+
+  @override
+  String get ui_open_category => '开启类别';
+
+  @override
+  String get msg_custom_scan_paths => '自定义扫描位置';
+
+  @override
+  String get notification_web_share_local_title => 'ZenFile 本地网页共享';
+
+  @override
+  String get notification_web_share_internet_title => 'ZenFile 互联网网页共享';
+
+  @override
+  String notification_web_share_running(Object url) {
+    return '运行于 $url';
+  }
+
+  @override
+  String get notification_ftp_title => 'ZenFile FTP 服务器';
+
+  @override
+  String notification_ftp_running(Object ip, Object port) {
+    return '运行于 ftp://$ip:$port';
+  }
+
+  @override
+  String get ui_download_links => '下载链接';
+
+  @override
+  String get msg_editor_lines => '行';
+
+  @override
+  String get msg_editor_modified => '已修改';
+
+  @override
+  String get go_to_path => '跳转路径';
+
+  @override
+  String get copy_path => '复制路径';
+
+  @override
+  String get enter_path_hint => '输入绝对路径...';
+
+  @override
+  String get breadcrumb_context_title => '面包屑选项';
+
+  @override
+  String get ui_instrumental_track_hint => '此歌曲为没有填词的纯音乐，请您欣赏';
+
+  @override
+  String get changelog_section_new => '✨ 新增功能';
+
+  @override
+  String get changelog_section_optimizations => '🔧 优化';
+
+  @override
+  String get changelog_section_fixes => '🐛 问题修复';
+
+  @override
+  String get changelog_section_known_issues => '⚠️ 已知问题';
+
+  @override
+  String get changelog_v1127_new_1 => '收藏夹：新增「+」按钮，可手动添加自定义路径/名称的收藏项，并按分组聚合显示。';
+
+  @override
+  String get changelog_v1127_new_2 => '收藏夹：收藏项现支持编辑（名称/路径/分组）；分组支持折叠/展开并持久化保存。';
+
+  @override
+  String get changelog_v1127_new_3 =>
+      '收藏夹：所有收藏入口（三点菜单/长按弹窗/顶部「+」按钮）均可选择分组；长按分组可重命名/删除，长按收藏项可编辑/删除。';
+
+  @override
+  String get changelog_v1127_opt_1 =>
+      '系统性修复安卓 15/16 UI 卡顿（渲染层规避 Impeller 回退 + IO 层 + 解码层三维优化）。';
+
+  @override
+  String get changelog_v1127_fix_1 => '修复选择模式下「收藏」未弹出分组选择的问题。';
+
+  @override
+  String get changelog_v1127_known_1 =>
+      'SMB / FTP / SFTP 远程视频播放在部分场景下仍可能出现卡顿，正在持续优化中。';
+
+  @override
+  String get batch_rename_title => '批量重命名';
+
+  @override
+  String batch_rename_subtitle(Object count) {
+    return '正在配置 $count 个项目';
+  }
+
+  @override
+  String get batch_rename_empty_preview => '（空）';
+
+  @override
+  String batch_rename_tooltip_basename(Object n) {
+    return '不带扩展名的文件名 ($n)';
+  }
+
+  @override
+  String batch_rename_tooltip_ext_with_dot(Object de) {
+    return '带点的扩展名 ($de)';
+  }
+
+  @override
+  String batch_rename_tooltip_ext_no_dot(Object e) {
+    return '不带点的扩展名 ($e)';
+  }
+
+  @override
+  String batch_rename_tooltip_full_name(Object N) {
+    return '带扩展名的完整文件名 ($N)';
+  }
+
+  @override
+  String get batch_rename_hint_pattern => '例如：Image_#';
+
+  @override
+  String get batch_rename_hint_extension => 'txt';
+
+  @override
+  String get batch_rename_label_padding => '填充';
+
+  @override
+  String get batch_rename_hint_padding => '例如：3';
+
+  @override
+  String get batch_rename_hint_start => '例如：1';
+
+  @override
+  String get batch_rename_hint_find => '搜索词';
+
+  @override
+  String get batch_rename_label_fewer_options => '更少选项';
+
+  @override
+  String get batch_rename_btn_preview => '预览';
+
+  @override
+  String get batch_rename_btn_cancel => '取消';
+
+  @override
+  String get batch_rename_btn_confirm => '确定';
+
+  @override
+  String batch_rename_preview_subtitle(Object count) {
+    return '正在查看 $count 个项目';
+  }
+
+  @override
+  String get batch_rename_btn_apply => '应用更改';
+
+  @override
+  String get msg_pdf_quick_presets => '快速性能预设';
+
+  @override
+  String get msg_pdf_smooth_mode => '流畅模式';
+
+  @override
+  String get msg_pdf_detail_tuning => '详细调节选项';
+
+  @override
+  String get msg_pdf_single_page_scroll => '单页（逐页滑动）';
+
+  @override
+  String get msg_pdf_horizontal_scroll => '水平（从左到右滑动）';
+
+  @override
+  String get msg_pdf_continuous => '连续';
+
+  @override
+  String get msg_pdf_single_page => '单页';
+
+  @override
+  String get msg_pdf_vertical => '垂直';
+
+  @override
+  String get msg_pdf_horizontal => '水平';
+
+  @override
+  String get changelog_v1125_new_1 => '音频播放器歌词按钮支持四种状态循环切换，播放模式按钮整合随机播放。';
+
+  @override
+  String get changelog_v1125_opt_1 =>
+      '优化应用启动时的媒体扫描调度（并发与节流），缓解部分机型打开应用几秒后卡死的问题。';
+
+  @override
+  String get changelog_v1125_opt_2 => '分类页「网络」分类现在实时显示已保存的服务器数量。';
+
+  @override
+  String get changelog_v1125_opt_3 => '分类页数量文本与「选择存储驱动器」标题加入多语言翻译。';
+
+  @override
+  String get changelog_v1125_fix_1 =>
+      '修复清除应用数据后重新打开应用不再弹出「所有文件访问」授权弹窗、随后打开音频文件闪退的问题。';
+
+  @override
+  String get changelog_v1125_fix_2 =>
+      '修复安卓 13+ 与安卓 11 通知栏媒体控制卡片不显示的问题（提前创建通知渠道并按系统版本分流播放态逻辑）。';
+
+  @override
+  String get changelog_v1125_fix_3 => '修复分类页网格视图中已选中的项目无法再次点击取消选中的问题。';
+
+  @override
+  String get changelog_v1125_fix_4 =>
+      '改进 SMB / FTP / SFTP 远程视频流式播放稳定性，修复播放几秒后画面卡死、最终导致应用无响应闪退的问题。';
+
+  @override
+  String get changelog_v1125_known_1 =>
+      'SMB / FTP / SFTP 远程视频播放在部分场景下仍可能出现卡顿，正在持续优化中。';
+
+  @override
+  String get changelog_v1126_opt_1 => 'SMB 下载提速：移除双缓冲预取，改为单线程顺序读写，大幅提升大文件传输速度。';
+
+  @override
+  String get changelog_v1126_opt_2 => '移除备用图标集，显著减小安装包（APK）体积。';
+
+  @override
+  String get changelog_v1126_opt_3 => '细节优化：抽屉「网络」列表三点按钮改为右对齐，快捷操作页标题支持自动换行。';
+
+  @override
+  String get changelog_v1126_fix_1 =>
+      '修复 FTP 下载速度被错误限制在 30-40MB/s 的问题（写入刷新间隔过小导致）。';
+
+  @override
+  String get changelog_v1126_fix_2 => '修复远程客户端（SMB/FTP/SFTP）取消传输、列表卡顿与刷新三类问题。';
+
+  @override
+  String get changelog_v1126_fix_3 => '修复 openlist 残留导致的相关异常。';
+
+  @override
+  String get changelog_v1126_known_1 =>
+      'SMB / FTP / SFTP 远程视频播放在部分场景下仍可能出现卡顿，正在持续优化中。';
+
+  @override
+  String get ui_select_backup_path => '自定义备份路径';
+
+  @override
+  String get ui_backup_path_local => '本地';
+
+  @override
+  String get ui_backup_path_remote => '远程';
+
+  @override
+  String get ui_select_remote_connection => '选择远程连接';
+
+  @override
+  String get ui_no_backup_files => '暂无备份文件';
+
+  @override
+  String get ui_please_select_backup_file => '请选择要恢复的备份文件';
+
+  @override
+  String get ui_restore_restart_title => '需要重启';
+
+  @override
+  String get ui_restore_restart_message => '部分设置需要重启应用才能生效，是否立即重启？';
+
+  @override
+  String get ui_restart => '重启';
+
+  @override
+  String get ui_later => '稍后';
+
+  @override
+  String get ui_parent_directory => '上级目录';
+
+  @override
+  String get ui_compress_progress => '正在压缩';
+
+  @override
+  String get ui_extract_progress => '正在解压';
+
+  @override
+  String get ui_speed => '速度';
+
+  @override
+  String get ui_file_size => '文件大小';
+
+  @override
+  String get changelog_v1128_new_1 => '快捷操作页新增单/双窗口切换按钮，与设置—文件浏览器选项中的「启用分屏」同步';
+
+  @override
+  String get changelog_v1128_new_2 =>
+      '查看与排序选项支持按类别多选过滤（图片/视频/音频/文档/压缩包/安装包/其它可叠加），并可记住过滤条件';
+
+  @override
+  String get changelog_v1128_new_3 => '分类页新增「备份/恢复」快捷入口，并默认启用';
+
+  @override
+  String get changelog_v1128_new_4 => '远程文件与文件夹显示云徽标，新增「显示远程文件云徽」开关';
+
+  @override
+  String get changelog_v1128_opt_1 =>
+      '压缩大文件或多个文件时不再崩溃卡死：改为流式压缩/解压，常驻内存约 1MB，并加入内存阈值保护与分卷切割合并';
+
+  @override
+  String get changelog_v1128_opt_2 => '优化远程视频（SMB/FTP/SFTP）播放卡顿，消除脉冲式卡顿';
+
+  @override
+  String get changelog_v1128_opt_3 => '双窗口模式下，排序、大小/间距、按类别过滤均同步生效';
+
+  @override
+  String get changelog_v1128_opt_4 => '分类页图标统一为应用主题主色；各分类显示存储占用大小';
+
+  @override
+  String get changelog_v1128_opt_5 => '全局搜索默认从当前文件夹开始（存储根目录退化为全局搜索）';
+
+  @override
+  String get changelog_v1128_fix_1 => '修复关闭「记住过滤」后仍持久化上次过滤条件的问题';
+
+  @override
+  String get changelog_v1128_known_1 => '双窗口模式下「大小/间距」调整暂未生效，将于后续版本优化';
+
+  @override
+  String get changelog_v1129_opt_1 =>
+      '分类页与浏览页顶部/底部导航的「分类」「浏览」按钮合二为一，改为居中翻转切换按钮（分类页显示「浏览」、浏览页显示「分类」）。';
+
+  @override
+  String get changelog_v1129_opt_2 =>
+      '重命名文件时自动选中文件名主体（不含扩展名）、光标落在扩展名前，避免误改后缀名；覆盖所有入口：三点菜单、长按菜单、图片预览、全局搜索、选择态、远程、冲突对话框。';
+
+  @override
+  String get changelog_v1129_opt_3 => '压缩包大图（>4MB）预览修复并支持滑动切换；单张预览失败不再拖垮整组。';
+
+  @override
+  String get changelog_v1129_opt_4 => '远程媒体缩略图加载改为并发限流与唯一临时文件名，加载更稳定、不再串图。';
+
+  @override
+  String get changelog_v1129_opt_5 => '双窗口模式下隐藏远程云徽，界面更简洁。';
+
+  @override
+  String get changelog_v1129_opt_6 => '分类页「图片」与「截图」图标互换（图片显示相机图标、截图显示图片图标）。';
+
+  @override
+  String get changelog_v1129_fix_1 => '修复同名文件缩略图缓存不更新、远程与本地同名文件缩略图串图的问题。';
+
+  @override
+  String get changelog_v1129_fix_2 => '修复压缩包解压完成后点击「确定」无法跳转目录的问题。';
+
+  @override
+  String get changelog_v1129_fix_3 => '修复远程目录「显示文件夹内容计数」始终为 0 的问题。';
+
+  @override
+  String get changelog_v1129_fix_4 =>
+      '修复单窗口模式打开远程客户端时覆盖已打开连接、远程标签页标题未固定为连接名的问题。';
+
+  @override
+  String get changelog_v1129_fix_5 => '修复浏览页面包屑水平滑动误触页面切换的问题。';
+
+  @override
+  String get changelog_v1129_fix_6 => '修复分类页长按拖动类别排序时横向拖动误触左右切页的问题。';
+
+  @override
+  String get changelog_v1129_fix_7 => '修复截图文件在图片类别「按文件夹」下钻后消失的问题。';
+
+  @override
+  String get changelog_v1129_fix_8 => '修复压缩包图片预览因名称归一化不匹配导致全部无法预览、解压失败无反馈等问题。';
+
+  @override
+  String get changelog_v1129_fix_9 => '全局搜索空状态与删除确认文案支持多语言（去除硬编码英文）。';
+
+  @override
+  String get changelog_v1129_known_1 =>
+      'SMB / FTP / SFTP 远程视频播放在部分场景下仍可能出现卡顿，正在持续优化中。';
+
+  @override
+  String get ui_global_search_hint => '搜索文件、应用和设置';
+
+  @override
+  String get ui_delete_item_confirm => '确定要删除此项目吗？此操作无法撤销。';
+
+  @override
+  String ui_delete_items_confirm(int count) {
+    return '确定要删除选中的 $count 个项目吗？此操作无法撤销。';
+  }
+
+  @override
+  String get changelog_v1130_new_1 =>
+      '远程保护 PIN 码：设置 4 位 PIN 后，访问已保存远程服务器、进入编辑页、分类页切换到远程范围时需先解锁，保护远程数据隐私';
+
+  @override
+  String get changelog_v1130_new_2 => '分类页「本地/远程」切换：所有支持远程目录的类别可独立切换本地/远程内容';
+
+  @override
+  String get changelog_v1130_new_3 =>
+      '备份功能（本地→远程）：支持「自动备份」与「立即备份」，新增文件检测自动触发，只备份该类别格式文件';
+
+  @override
+  String get changelog_v1130_new_4 => '远程连接向导新增「测试」按钮，可先验证连接再保存配置';
+
+  @override
+  String get changelog_v1130_new_5 => '视频/音频类别菜单新增「播放器控制器显隐」开关';
+
+  @override
+  String get changelog_v1130_new_6 => '统一「打开方式」弹窗：浏览页/最近页/分类页 三点与长按菜单均弹应用内选择弹窗';
+
+  @override
+  String get changelog_v1130_new_7 =>
+      '未知格式文件选「本应用打开」后弹出类型选择器（文本/音频/视频/图像）并以内置查看器打开';
+
+  @override
+  String get changelog_v1130_opt_1 => '分类页/浏览页「分类」「浏览」按钮合二为一，居中翻转切换';
+
+  @override
+  String get changelog_v1130_opt_2 => '重命名自动选中文件名主体（不含扩展名），光标落扩展名前';
+
+  @override
+  String get changelog_v1130_opt_3 => '网格/列表视图切换整合进排序菜单';
+
+  @override
+  String get changelog_v1130_opt_4 => '每个类别独立记忆「文件夹/全部项目」查看模式，视频/音频默认文件夹查看';
+
+  @override
+  String get changelog_v1130_opt_5 => '下载类别支持远程备份';
+
+  @override
+  String get changelog_v1130_opt_6 => '远程图片/视频缩略图按需下载显示';
+
+  @override
+  String get changelog_v1130_opt_7 => '本地扫描排除应用缓存目录，修复打开远程缩略图后本地图片重复';
+
+  @override
+  String get changelog_v1130_opt_8 => '远程文件三点菜单与长按批量删除/重命名/复制/剪切/定位操作生效';
+
+  @override
+  String get changelog_v1130_opt_9 => '远程文件夹下钻保留目录结构（DCIM/Pictures 等顶层目录）';
+
+  @override
+  String get changelog_v1130_fix_1 => '修复 MIUI 存储权限误判导致启动弹窗循环卡死';
+
+  @override
+  String get changelog_v1130_fix_2 => '修复分类页长按拖动类别图标误触左右切页';
+
+  @override
+  String get changelog_v1130_fix_3 => '修复截图在图片类别「按文件夹」下钻后消失';
+
+  @override
+  String get ui_remote_guard => '远程守卫';
+
+  @override
+  String get ui_remote_guard_desc => '设置密码保护远程服务器访问，每次启动应用或手动锁定后需输入密码才能进入远程服务器';
+
+  @override
+  String get ui_remote_guard_enabled => '已启用';
+
+  @override
+  String get ui_remote_guard_disabled => '已禁用';
+
+  @override
+  String get ui_remote_guard_set_pin => '设置PIN码';
+
+  @override
+  String get ui_remote_guard_enter_pin => '输入PIN码';
+
+  @override
+  String get ui_remote_guard_confirm_pin => '确认PIN码';
+
+  @override
+  String get ui_remote_guard_pin_mismatch => '两次输入的PIN码不一致，请重新输入';
+
+  @override
+  String get ui_remote_guard_wrong_pin => 'PIN码错误，请重试';
+
+  @override
+  String get ui_remote_guard_change_pin => '修改密码';
+
+  @override
+  String get ui_remote_guard_pin_hint => '可含字母、数字或符号的密码';
+
+  @override
+  String get ui_remote_guard_lock_now => '立即锁定';
+
+  @override
+  String get ui_remote_guard_lock_now_desc => '锁定后需要重新输入PIN码才能访问远程服务器';
+
+  @override
+  String get ui_security_settings => '安全设置';
+
+  @override
+  String get ui_remote_guard_switch_desc => '保护已保存的远程服务器，访问前需验证PIN码';
+
+  @override
+  String get ui_app_lock => '启动应用保护';
+
+  @override
+  String get ui_app_lock_desc => '启动应用时需输入密码解锁才能进入';
+
+  @override
+  String get ui_app_lock_set_pin_first => '启用前请先设置密码';
+
+  @override
+  String get ui_remote_guard_enter_current_pin => '请输入当前 PIN 码';
+
+  @override
+  String get ui_remote_guard_reencrypting => '正在重新加密已隐藏文件…';
+
+  @override
+  String get ui_remote_guard_pin_changed => 'PIN 码已修改';
+
+  @override
+  String get ui_remote_guard_change_pin_failed => '部分文件重新加密失败，PIN 码未更改';
+
+  @override
+  String get ui_change_vault_pin_desc => '修改安全设置与保险箱解锁密码，不影响已加密文件';
+
+  @override
+  String get ui_auto_backup => '自动备份';
+
+  @override
+  String get ui_backup => '备份';
+
+  @override
+  String get ui_backup_now => '立即备份';
+
+  @override
+  String get ui_local => '本地';
+
+  @override
+  String get ui_no_remote_path => '未添加自定义远程路径';
+
+  @override
+  String get ui_remote => '远程';
+
+  @override
+  String get ui_sync_done => '备份完成';
+
+  @override
+  String get ui_syncing => '正在备份...';
+
+  @override
+  String get ui_test => '测试';
+
+  @override
+  String get ui_test_failed => '测试失败';
+
+  @override
+  String get ui_test_failed_reason => '失败原因';
+
+  @override
+  String get ui_test_success => '测试成功';
+
+  @override
+  String get ui_test_success_desc => '连接成功，服务器配置正确';
+
+  @override
+  String get ui_show_remote_files => '显示远程文件';
+
+  @override
+  String get ui_hide_remote_files => '隐藏远程文件';
+
+  @override
+  String get changelog_v1130_new_8 => '视频播放器新增「软解 / 硬解」切换开关，可按设备解码能力在画质与性能间择优。';
+
+  @override
+  String get changelog_v1130_new_9 => '分类页刷新完成后显示「刷新完成」提示，并适配多语言。';
+
+  @override
+  String get changelog_v1130_opt_10 =>
+      '图片 / 视频 / 截图新增磁盘缓存：启动后分类列表秒级呈现，无需每次重新扫描媒体库（解决大存储多文件设备每次启动需等待约 1 分钟的问题）。';
+
+  @override
+  String get changelog_v1130_opt_11 =>
+      '分类页计数即时正确：缓存恢复后立刻刷新数量与列表，不再显示上一次启动遗留的陈旧计数。';
+
+  @override
+  String get changelog_v1130_opt_12 =>
+      '音频加载改为「独占式优先」：先加载音频、再加载视频 / 图片，避免大存储设备媒体库争抢导致音频被挤掉归零。';
+
+  @override
+  String get changelog_v1130_opt_13 =>
+      '音频索引缓存改为原子写入 + 隔离线程解码：写入中途被杀不会留下损坏文件，主线程也不再因超大缓存卡顿或 OOM。';
+
+  @override
+  String get changelog_v1130_opt_14 => '音频加载重试保留最大结果集，防止媒体库繁忙返回的部分结果覆盖已显示内容。';
+
+  @override
+  String get changelog_v1130_fix_4 =>
+      '修复大存储多文件设备（如 512G 存储、上万媒体文件）启动后音频类别被清空、视频图片加载完成后音频消失的问题。';
+
+  @override
+  String get changelog_v1130_fix_5 =>
+      '修复发布构建编译错误（SongModel.getMap 调用方式、VideoController 无 dispose()）。';
+
+  @override
+  String get changelog_v1131_fix_1 =>
+      '修复别的应用/浏览页删除文件后分类页残留空白图标（新增 pruneDeletedMediaPaths + pruneDeletedMedia 即时裁剪机制）';
+
+  @override
+  String get changelog_v1131_fix_2 =>
+      '修复非媒体类别（文档/压缩包/下载/安装包）浏览页删除或移动后分类页残留空白图标';
+
+  @override
+  String get changelog_v1131_fix_3 => '修复分类页媒体总大小启动时「显示约1秒→归零→重载恢复」的闪烁问题';
+
+  @override
+  String get changelog_v1131_fix_4 => '修复分类页全选混入远程/本地文件（本地页面全选只选本地，远程页面全选只选远程）';
+
+  @override
+  String get changelog_v1131_fix_5 => '修复远程删除文件后不刷新的问题';
+
+  @override
+  String get changelog_v1131_fix_6 =>
+      '修复图片浏览页删除后 siblingItems 残留预览图、三点按钮删除后列表不刷新、本地删除后缩略图残留（getter 缓存失效）';
+
+  @override
+  String get changelog_v1131_fix_7 =>
+      '修复远程图片删除后缩略图残留、「在位置中显示」跳转到本地缓存路径、删除仅删本地缓存未删远程原文件';
+
+  @override
+  String get changelog_v1131_fix_8 => '修复图片浏览页三点按钮「在位置中显示」不跳转';
+
+  @override
+  String get changelog_v1131_fix_9 =>
+      '修复长按弹窗批量备份 APK 后 SnackBar 不弹窗、进度对话框卡住不消失（多次迭代修复，最终采用 rootNavigator + backupDialogOpen 标志位模式）、无法按返回键取消';
+
+  @override
+  String get changelog_v1131_fix_10 =>
+      '已备份 APK 弹窗新增「打开所在位置」按钮，点击直接跳转到 APK 所在目录；修复「打开所在位置」需手动返回才可见的问题（先 popUntil(isFirst) 再切 Tab）';
+
+  @override
+  String get changelog_v1131_fix_11 =>
+      '批量操作栏「清除」按钮标题改为「取消」，备份/分享/卸载按钮硬编码中文改为多语言';
+
+  @override
+  String get changelog_v1131_fix_12 =>
+      '修复刷新按钮扫描不到非媒体（安装包 APK 加载不出），修正分类分支逻辑并新增 onlyApk 参数补扫';
+
+  @override
+  String get changelog_v1131_fix_13 =>
+      '简化「修改 PIN 码」入口：首页点击直接进入数字键盘，移除远程守卫页冗余的「远程守卫」开关与「立即锁定」';
+
+  @override
+  String get changelog_v1131_fix_14 =>
+      '修复自动备份开关打开后不生效的问题（新增 _autoSyncTriggered 守卫）；修复远程目录删文件后再次备份提示成功但实际未备份的问题';
+
+  @override
+  String get changelog_v1131_fix_15 =>
+      '修复浏览页标签页左右滑动误触页面切换（新增 tabBarInteracting 标志位 + Listener 保护）';
+
+  @override
+  String get changelog_v1131_fix_16 =>
+      '新增 ui_app_open_location、ui_batch_backup、ui_batch_share、ui_batch_uninstall、ui_batch_uninstall_confirm 翻译键，10 种语言全部补齐';
+
+  @override
+  String get changelog_v1132_new_1 =>
+      '局域网唤醒（WOL）：抽屉页「工具」栏新增入口，支持添加/编辑/删除设备（名称、MAC 地址、广播地址、端口），一键发送魔术包唤醒局域网内的电脑/设备，设备列表本地持久化存储，10 语言完整本地化';
+
+  @override
+  String get changelog_v1132_new_2 =>
+      '图片编辑器：图片查看页新增「编辑」按钮（顶部工具栏 + 3 点菜单），5 个编辑 Tab：调整（亮度/对比度/饱和度）、滤镜（原图/黑白/复古/胶片/冷/暖）、缩放（精确尺寸输入 + 锁定宽高比 + 6 种证件照预设：护照 413×531、一寸 295×413、二寸 413×579、小一寸 260×378、大一寸 390×567、美国签证 600×600）、旋转翻转（90°/180°/270° + 水平/垂直）、裁剪（手柄手势 + 比例约束）';
+
+  @override
+  String get changelog_v1132_new_3 =>
+      '一键去元数据：图片查看页 3 点菜单新增「清除元数据」，重新编码剥离 EXIF/GPS/ICC 等全部元数据，另存为新文件';
+
+  @override
+  String get changelog_v1132_new_4 =>
+      '沉浸式信息条：图片查看页触摸后底部显示文件名·尺寸·大小·格式；属性弹窗新增 Dimensions 行';
+
+  @override
+  String get changelog_v1132_fix_1 =>
+      '修复分类页按文件夹查看时全选按钮跨文件夹全选：图片/视频/音频/截图/文档/压缩包/下载/安装包共 8 个类别，进入文件夹多选后点全选不再选中其他文件夹的文件；仅在「全部项目」查看时全选所有文件';
+
+  @override
+  String get changelog_v1132_fix_2 =>
+      '修复图片类别按文件夹查看时截图文件夹（DCIM/Screenshots）全选按钮失效';
+
+  @override
+  String get changelog_v1132_fix_3 => '修复图片/截图查看页「在位置中显示」无法跳转到浏览页（本地与远程路径均适用）';
+
+  @override
+  String get changelog_v1132_fix_4 =>
+      '修复应用管理批量操作备份按钮标题显示「正在备份...」（已改为「备份」，10 语言同步更新）';
+
+  @override
+  String get changelog_v1132_fix_5 => '修复图片查看器 Dismissible 滑动块缺失闭合括号导致的编译错误';
+
+  @override
+  String get changelog_v1132_fix_6 => '修复分类页全选按钮混入远程/本地文件（按当前范围过滤）';
+
+  @override
+  String get changelog_v1132_fix_7 =>
+      '修复非媒体类别（文档/压缩包/下载/安装包）浏览页删除或移动后分类页残留空白图标';
+
+  @override
+  String get changelog_v1132_fix_8 => '修复远程图片删除后缩略图残留、siblingItems 列表未同步更新';
+
+  @override
+  String get changelog_v1132_fix_9 =>
+      '修复分类页媒体总大小启动后「显示约 1 秒 → 归零 → 重新加载恢复」的闪烁问题';
+
+  @override
+  String get changelog_v1132_fix_10 =>
+      '修复标签页左右滑动误触切换页面（新增 tabBarInteracting 标志位保护）';
+
+  @override
+  String get changelog_v1132_fix_11 =>
+      '修复自动备份开关不生效（新增 _autoSyncTriggered 守卫 + isLoaded 状态检查）';
+
+  @override
+  String get changelog_v1132_fix_12 => '修复备份逻辑错乱（远程缺失文件时重新上传而非丢弃记录）';
+
+  @override
+  String get changelog_v1132_fix_13 =>
+      '修复「打开所在位置」需手动按返回键才能看到跳转（改为 popUntil(isFirst) 一次性弹回首页）';
+
+  @override
+  String get changelog_v1132_fix_14 =>
+      '修复刷新按钮扫描不到非媒体文件（如 APK 加载不出），补充 onlyApk 参数并修正分类分支逻辑';
+
+  @override
+  String get changelog_v1132_fix_15 =>
+      '修复批量备份进度对话框卡住不消失（改用 rootNavigator 模式 + backupDialogOpen 标志位）';
+
+  @override
+  String get ui_batch_backup => '备份';
+
+  @override
+  String get ui_batch_share => '分享';
+
+  @override
+  String get ui_batch_uninstall => '卸载';
+
+  @override
+  String ui_batch_uninstall_confirm(Object count) {
+    return '确定要卸载选中的 $count 个应用吗？';
+  }
+
+  @override
+  String get ui_app_open_location => '打开所在位置';
+
+  @override
+  String get img_dimensions => '尺寸';
+
+  @override
+  String get edit_image => '编辑图片';
+
+  @override
+  String get editor_adjust => '调整';
+
+  @override
+  String get editor_filters => '滤镜';
+
+  @override
+  String get editor_resize => '缩放尺寸';
+
+  @override
+  String get editor_crop => '裁剪';
+
+  @override
+  String get ui_draw => '绘图';
+
+  @override
+  String get ui_edit => '编辑';
+
+  @override
+  String get ui_color => '颜色';
+
+  @override
+  String get ui_width => '粗细';
+
+  @override
+  String get ui_text => '文本';
+
+  @override
+  String get ui_rect => '矩形';
+
+  @override
+  String get ui_ellipse => '椭圆';
+
+  @override
+  String get ui_line => '直线';
+
+  @override
+  String get ui_mosaic => '马赛克';
+
+  @override
+  String get ui_pen => '画笔';
+
+  @override
+  String get ui_arrow => '箭头';
+
+  @override
+  String get ui_brush_size => '笔刷大小';
+
+  @override
+  String get editor_rotate_flip => '旋转与翻转';
+
+  @override
+  String get editor_flip => '翻转';
+
+  @override
+  String get editor_brightness => '亮度';
+
+  @override
+  String get editor_contrast => '对比度';
+
+  @override
+  String get editor_saturation => '饱和度';
+
+  @override
+  String get editor_exact_dimensions => '精确尺寸';
+
+  @override
+  String get editor_width => '宽';
+
+  @override
+  String get editor_height => '高';
+
+  @override
+  String get editor_lock_ratio => '锁定宽高比';
+
+  @override
+  String get editor_passport_413_531 => '护照';
+
+  @override
+  String get editor_preset_1inch => '一寸';
+
+  @override
+  String get editor_preset_2inch => '二寸';
+
+  @override
+  String get editor_preset_small_1inch => '小一寸';
+
+  @override
+  String get editor_preset_large_1inch => '大一寸';
+
+  @override
+  String get editor_preset_us_visa => '美国签证';
+
+  @override
+  String get editor_id_presets => '证件照预设';
+
+  @override
+  String get editor_quality => '质量（文件大小）';
+
+  @override
+  String get editor_mode_pixel => '像素';
+
+  @override
+  String get editor_mode_physical => '物理尺寸';
+
+  @override
+  String get editor_physical_title => '物理尺寸 → 像素（DPI 转换）';
+
+  @override
+  String get editor_width_mm => '宽 (mm)';
+
+  @override
+  String get editor_height_mm => '高 (mm)';
+
+  @override
+  String get editor_dpi => 'DPI';
+
+  @override
+  String get editor_preset_id_photo => '证件照 35×25mm';
+
+  @override
+  String get editor_preset_passport => '护照 35×45mm';
+
+  @override
+  String get editor_preset_us_visa_mm => '美签 51×51mm';
+
+  @override
+  String editor_pixel_auto(int w, int h) {
+    return '→ $w × $h px';
+  }
+
+  @override
+  String get editor_pixel_result => '像素（自动计算）';
+
+  @override
+  String get editor_width_px => '宽度 (px)';
+
+  @override
+  String get editor_height_px => '高度 (px)';
+
+  @override
+  String get editor_file_size_limit_title => '文件大小限制（JPEG）';
+
+  @override
+  String get editor_file_size_limit_label => '目标大小 (KB)，留空=不限';
+
+  @override
+  String get editor_strip_metadata => '清除全部元数据（EXIF / GPS / ICC）';
+
+  @override
+  String get editor_save_as_copy => '另存为副本';
+
+  @override
+  String get editor_overwrite_original => '覆盖原文件';
+
+  @override
+  String get editor_reset => '重置';
+
+  @override
+  String get editor_exit_confirm_title => '退出编辑？';
+
+  @override
+  String get editor_exit_confirm_message => '未保存的修改将会丢失';
+
+  @override
+  String get editor_exit_discard => '退出';
+
+  @override
+  String get editor_filter_original => '原图';
+
+  @override
+  String get editor_filter_bw => '黑白';
+
+  @override
+  String get editor_filter_sepia => '怀旧棕';
+
+  @override
+  String get editor_filter_vintage => '复古';
+
+  @override
+  String get editor_filter_cool => '冷色';
+
+  @override
+  String get editor_filter_warm => '暖色';
+
+  @override
+  String get editor_strip_only => '仅清除元数据';
+
+  @override
+  String get editor_saved => '图片已保存';
+
+  @override
+  String editor_save_failed(Object e) {
+    return '保存失败：$e';
+  }
+
+  @override
+  String get editor_processing => '处理中…';
+
+  @override
+  String get editor_aspect_free => '自由';
+
+  @override
+  String get editor_aspect_square => '正方形';
+
+  @override
+  String get editor_aspect_4_3 => '4:3';
+
+  @override
+  String get editor_aspect_3_4 => '3:4';
+
+  @override
+  String get editor_scale => '缩放比例';
+
+  @override
+  String get menu_edit_image => '编辑';
+
+  @override
+  String get img_rotate => '旋转';
+
+  @override
+  String get img_info_format => '格式';
+
+  @override
+  String get img_info_file_time => '时间';
+
+  @override
+  String get img_info_file_info => '文件信息';
+
+  @override
+  String get img_info_save_path => '保存路径';
+
+  @override
+  String get img_info_shoot_location => '拍摄地点';
+
+  @override
+  String get img_info_camera_params => '拍摄参数';
+
+  @override
+  String get img_info_device => '设备';
+
+  @override
+  String get img_info_shutter => '快门';
+
+  @override
+  String get img_info_iso => 'ISO';
+
+  @override
+  String get img_info_ev => 'EV';
+
+  @override
+  String get img_info_aperture => '光圈';
+
+  @override
+  String get img_info_focal_length => '焦距';
+
+  @override
+  String get img_info_flash => '闪光灯';
+
+  @override
+  String get img_info_histogram => '直方图';
+
+  @override
+  String get img_info_no_exif => '无 EXIF 信息';
+
+  @override
+  String get img_info_no_location => '无位置信息';
+
+  @override
+  String get menu_remove_metadata => '清除元数据';
+
+  @override
+  String get editor_downloading => '正在下载图片…';
+
+  @override
+  String get editor_unsupported => '此图片格式不支持编辑';
+
+  @override
+  String editor_output_size(Object size) {
+    return '输出：$size';
+  }
+
+  @override
+  String get quick_transfer => '快传';
+
+  @override
+  String get quick_transfer_send => '我要发送';
+
+  @override
+  String get quick_transfer_receive => '我要接收';
+
+  @override
+  String get quick_transfer_send_hint =>
+      '选择要分享的文件夹，对侧设备在同一 Wi-Fi 下用浏览器打开地址即可下载文件。';
+
+  @override
+  String get quick_transfer_receive_hint =>
+      '选择接收文件的保存目录，对侧设备在同一 Wi-Fi 下用浏览器打开地址即可上传文件到本机。';
+
+  @override
+  String get quick_transfer_share_dir => '分享目录';
+
+  @override
+  String get quick_transfer_save_dir => '保存到';
+
+  @override
+  String get quick_transfer_default_share => '默认：内部存储根目录';
+
+  @override
+  String get quick_transfer_default_save => '默认：内部存储根目录';
+
+  @override
+  String get quick_transfer_online => '已开启';
+
+  @override
+  String get quick_transfer_address => '本机地址';
+
+  @override
+  String get quick_transfer_copy => '复制';
+
+  @override
+  String get quick_transfer_copied => '已复制地址';
+
+  @override
+  String get quick_transfer_send_tip => '将上方地址发给对方，对方在浏览器中打开即可下载所选目录内的文件。';
+
+  @override
+  String get quick_transfer_receive_tip => '将上方地址发给对方，对方在浏览器中打开后可将文件上传到本机所选目录。';
+
+  @override
+  String get quick_transfer_connected => '已连接设备';
+
+  @override
+  String quick_transfer_started(Object url) {
+    return '快传已开启：$url';
+  }
+
+  @override
+  String get quick_transfer_stopped => '快传已停止';
+
+  @override
+  String get quick_transfer_running => '快传服务运行中，请先停止';
+
+  @override
+  String quick_transfer_running_at(Object url) {
+    return '运行中：$url';
+  }
+
+  @override
+  String quick_transfer_failed(Object error) {
+    return '快传开启失败：$error';
+  }
+
+  @override
+  String get wol_title => '局域网唤醒';
+
+  @override
+  String get wol_add_device => '添加设备';
+
+  @override
+  String get wol_edit_device => '编辑设备';
+
+  @override
+  String get wol_name => '设备名称';
+
+  @override
+  String get wol_name_hint => '例如：我的电脑';
+
+  @override
+  String get wol_mac => 'MAC 地址';
+
+  @override
+  String get wol_broadcast => '广播地址';
+
+  @override
+  String get wol_port => '端口';
+
+  @override
+  String get wol_wake => '唤醒';
+
+  @override
+  String get wol_sent => '唤醒指令已发送';
+
+  @override
+  String get wol_send_failed => '发送失败，请检查网络连接';
+
+  @override
+  String get wol_invalid_mac => 'MAC 地址格式无效';
+
+  @override
+  String get wol_empty => '暂无设备，点击右下角按钮添加';
+
+  @override
+  String wol_delete_confirm(Object name) {
+    return '确定删除设备「$name」吗？';
+  }
+
+  @override
+  String get editor_undo => '撤销';
+
+  @override
+  String get editor_text_hint => '请输入文本';
+
+  @override
+  String get editor_font_bold => '加粗';
+
+  @override
+  String get editor_font_italic => '斜体';
+
+  @override
+  String get editor_font_underline => '下划线';
+
+  @override
+  String get wol_port_hint => '选填';
+
+  @override
+  String get quick_transfer_nearby_devices => '附近设备';
+
+  @override
+  String get quick_transfer_scanning => '正在扫描附近设备…';
+
+  @override
+  String get quick_transfer_scan_hint => '双方都需打开快传并保持本页面在前台';
+
+  @override
+  String get quick_transfer_tap_to_connect => '点击设备名发起连接';
+
+  @override
+  String quick_transfer_connecting(Object name) {
+    return '正在连接 $name…';
+  }
+
+  @override
+  String quick_transfer_connected_as(Object role) {
+    return '已连接（本机为 $role）';
+  }
+
+  @override
+  String get quick_transfer_role_owner => '发送端';
+
+  @override
+  String get quick_transfer_role_client => '接收端';
+
+  @override
+  String get quick_transfer_select_files => '选择要发送的文件 / 文件夹';
+
+  @override
+  String quick_transfer_selected_summary(Object count, Object size) {
+    return '已选 $count 项，共 $size';
+  }
+
+  @override
+  String get quick_transfer_begin_send => '开始发送';
+
+  @override
+  String quick_transfer_incoming(Object name) {
+    return '收到来自 $name 的发送请求';
+  }
+
+  @override
+  String quick_transfer_incoming_files(Object count, Object size) {
+    return '$count 个文件，共 $size';
+  }
+
+  @override
+  String get quick_transfer_accept => '接受';
+
+  @override
+  String get quick_transfer_reject => '拒绝';
+
+  @override
+  String get quick_transfer_sending => '正在发送…';
+
+  @override
+  String get quick_transfer_receiving => '正在接收…';
+
+  @override
+  String get quick_transfer_complete => '传输完成';
+
+  @override
+  String get quick_transfer_waiting_peer => '等待对方连接…';
+
+  @override
+  String get quick_transfer_connected_waiting_files => '已连接，等待对方发送文件…';
+
+  @override
+  String get quick_transfer_permission_why =>
+      'WiFi Direct 扫描需要位置/附近设备权限，不会收集您的地理位置';
+
+  @override
+  String get quick_transfer_permission_required => '快传需要位置/附近设备权限以发现附近设备';
+
+  @override
+  String get quick_transfer_not_supported => '当前设备不支持 WiFi Direct 快传';
+
+  @override
+  String get quick_transfer_disconnect => '断开';
+
+  @override
+  String get quick_transfer_cancel => '取消';
+
+  @override
+  String get quick_transfer_save_to => '保存到';
+
+  @override
+  String get quick_transfer_send_mode => '发送';
+
+  @override
+  String get quick_transfer_receive_mode => '接收';
+
+  @override
+  String get quick_transfer_device_name => '本机名称';
+
+  @override
+  String get quick_transfer_retry => '重试';
+
+  @override
+  String get quick_transfer_permission_grant => '授权并继续';
+
+  @override
+  String get quick_transfer_open_settings => '去设置页开启';
+
+  @override
+  String get quick_transfer_wifi_required =>
+      '请先打开 WLAN（WiFi），快传需要 WiFi Direct 建组';
+
+  @override
+  String get quick_transfer_create_group_failed =>
+      '建立快传连接失败，请确保已开启 WLAN 并授予位置/附近设备权限后重试';
+
+  @override
+  String get quick_transfer_receive_path => '接收路径';
+
+  @override
+  String get quick_transfer_change_path => '更改';
+
+  @override
+  String get quick_transfer_back => '返回';
+
+  @override
+  String get quick_transfer_send_button => '发送';
+
+  @override
+  String get quick_transfer_receive_button => '接收';
+
+  @override
+  String get quick_transfer_open_location => '打开文件所在位置';
+
+  @override
+  String get quick_transfer_receive_complete => '接收完成';
+
+  @override
+  String quick_transfer_files_saved_to(Object path) {
+    return '文件已保存到 $path';
+  }
+
+  @override
+  String get quick_transfer_connect_btn => '连接';
+
+  @override
+  String get quick_transfer_connected_btn => '已连接';
+
+  @override
+  String get quick_transfer_forget_device => '移除设备';
+
+  @override
+  String get quick_transfer_peer_unreachable => '无法连接到该设备，请确保对方已打开快传并在附近。';
+
+  @override
+  String get quick_transfer_available_peers => '可连接设备';
+
+  @override
+  String quick_transfer_selected_count(Object count) {
+    return '已选 $count 项';
+  }
+
+  @override
+  String get changelog_v1133_new_1 =>
+      '快传功能（局域网传输）：独立快传页面（发送/接收双模式）、附近设备雷达扫描发现、设备连接/已连接状态、传输前确认机制、接收完成后一键在本应用浏览页打开、权限说明，全 10 语言。';
+
+  @override
+  String get changelog_v1133_new_2 => '分类图标标签显隐开关';
+
+  @override
+  String get changelog_v1133_new_3 => 'AMOLED 全页纯黑主题';
+
+  @override
+  String get changelog_v1133_new_4 => '后台播放防休眠（电池优化白名单 + 唤醒锁）';
+
+  @override
+  String get changelog_v1133_new_5 =>
+      '图片编辑器：物理尺寸(mm+DPI)、预设模板(证件照/护照/美签)、文件大小限制';
+
+  @override
+  String get changelog_v1133_new_6 => '音频均衡器 5 预设（原声/HD人声/低音/现场/爵士）';
+
+  @override
+  String get changelog_v1133_new_7 =>
+      '视频播放器：内嵌多音轨/多字幕轨选择；手势优化（双击暂停/播放、长按倍速、左右滑快进/快退）';
+
+  @override
+  String get changelog_v1133_new_8 => '抽屉 / 自定义快捷方式：入口新增「快传」';
+
+  @override
+  String get changelog_v1133_opt_1 =>
+      '图片查看器：顶部信息条重构（尺寸/时间/格式/大小/EXIF）、旋转改为纯预览不保存、EXIF 实时显示、文件名标题恢复';
+
+  @override
+  String get changelog_v1133_opt_2 =>
+      '视频播放器：底部按钮布局/排序、竖屏溢出修复、系统自动横屏进全屏、缩放比例(填充屏幕 cover)、全屏横屏摄像头黑边修复';
+
+  @override
+  String get changelog_v1133_opt_3 => '音频播放器：均衡器预设切换生效、低音/人声失真修复';
+
+  @override
+  String get changelog_v1133_opt_4 => '视频音量：播放器滑块与系统媒体音量实时同步';
+
+  @override
+  String get changelog_v1133_opt_5 => '音频播放模式：重启后持久化记忆';
+
+  @override
+  String get changelog_v1133_opt_6 => '图片编辑：裁剪比例（正方形/4:3/3:4/证件照）修复';
+
+  @override
+  String get changelog_v1133_fix_1 => '文本编辑器打开未知文件「文本打开」错误提示硬编码 → 多语言';
+
+  @override
+  String get changelog_v1133_fix_2 => '桌面歌词权限提示中文硬编码 Toast → 多语言';
+
+  @override
+  String get changelog_v1133_fix_3 => '目录选择器「固定所选」按钮硬编码中文 → 多语言';
+
+  @override
+  String get changelog_v1133_fix_4 => '受限目录（Android/data｜obb）复制到本地/远程报错二次修复';
+
+  @override
+  String get changelog_v1133_fix_5 => '长按菜单：复刻 v1.1.32 显示结构 + 高对比背景 + 描边';
+
+  @override
+  String get changelog_v1134_fix_1 =>
+      '修复网页共享被其他设备访问时应用界面卡死的问题——全量扫描已改为异步执行，不再阻塞 UI 线程。';
+
+  @override
+  String get changelog_v1134_fix_2 =>
+      '修复 FTP 连不上/选错网卡：重写本地 IP 选择逻辑，优先 wlan/eth 接口，跳过 Docker/VPN/虚拟网卡，避免回退到不可达地址。';
+
+  @override
+  String get changelog_v1134_fix_3 =>
+      'FTP 共享支持自定义端口：可在设置中配置并持久化，运行中修改即时生效并自动重启监听。';
+
+  @override
+  String get changelog_v1134_fix_4 =>
+      '修复 FTP 控制端口绑定与 PASV：改用具体局域网 IP 绑定控制端口、简化 PASV 地址解析，修复 VPN/代理场景下的连接失败。';
+
+  @override
+  String get changelog_v1134_fix_5 =>
+      '新增「FTP 服务器已停止」提示，替换原先服务器停止时错误的「更改端口 未激活」提示。';
+
+  @override
+  String get changelog_v1134_fix_6 =>
+      '文本编辑器保存/另存为合并为单一保存按钮，点击弹出菜单选择「保存」或「另存为」。';
+
+  @override
+  String get changelog_v1134_new_1 => '新增分类页工具箱入口。';
+
+  @override
+  String get changelog_v1134_new_2 => '将私人保险箱、局域网唤醒、快传整合进工具箱，集中管理。';
+
+  @override
+  String get changelog_v1134_new_3 =>
+      '快传已记住设备：自动记住已连接设备，下次一键点击连接重连；已记住列表支持单独删除设备。';
+
+  @override
+  String get changelog_v1134_opt_1 => '快传对称化传输：连接成功后双方均可主动发送，移除收发模式切换与顶部切换按钮。';
+
+  @override
+  String get changelog_v1134_opt_2 =>
+      '快传 UI 整体美化：分区卡片化、设备行卡片化、图标徽章、填充式选择框、进度页圆形徽章，视觉更统一。';
+
+  @override
+  String get changelog_v1134_opt_3 =>
+      '快传主界面紧凑化：收紧卡片内边距与各项间距，减少首屏滚动，进入即可看到雷达/设备列表。';
+
+  @override
+  String get ftp_server_stopped => 'FTP 服务器已停止';
+
+  @override
+  String get cat_toolbox => '工具箱';
+
+  @override
+  String get cat_toolbox_desc => '工具';
+
+  @override
+  String quick_transfer_waiting_for_x(Object name) {
+    return '等待 $name 点击连接…';
+  }
+
+  @override
+  String get quick_transfer_ask_peer_connect => '请让对端设备也在快传中点击本机的「连接」按钮';
+
+  @override
+  String get ui_scan_shares => '扫描共享名';
+
+  @override
+  String get ui_scanning_shares => '正在扫描共享名…';
+
+  @override
+  String get ui_select_share_to_fill => '点击共享名自动填入';
+
+  @override
+  String get ui_no_shares_found => '未找到共享名';
+
+  @override
+  String get ui_anonymous_login => '匿名登录';
+
+  @override
+  String ui_share_scan_failed(Object error) {
+    return '扫描共享名失败：$error';
+  }
+
+  @override
+  String get ui_scan_lan_devices => '扫描局域网共享设备';
+
+  @override
+  String get ui_scanning_lan => '正在扫描局域网设备…';
+
+  @override
+  String get ui_lan_no_devices => '未发现局域网共享设备';
+
+  @override
+  String get ui_lan_scan_hint => '点击设备自动填入地址与共享名';
+
+  @override
+  String get ui_enter_host_first => '请先填写主机地址与端口';
+
+  @override
+  String get vault_enter_password => '输入密码解锁';
+
+  @override
+  String get vault_set_password => '设置密码';
+
+  @override
+  String get vault_confirm_password => '再次输入以确认';
+
+  @override
+  String get vault_pins_mismatch => '两次输入的密码不一致';
+
+  @override
+  String get vault_incorrect_password => '密码错误，请重试';
+
+  @override
+  String get vault_password_set => '密码已设置';
+
+  @override
+  String get vault_next => '下一步';
+
+  @override
+  String get vault_unlock => '解锁';
+
+  @override
+  String get vault_use_keypad => '使用数字键盘';
+
+  @override
+  String get vault_use_text_input => '使用字母数字';
+
+  @override
+  String get vault_fingerprint => '使用指纹解锁';
+
+  @override
+  String get vault_fingerprint_failed => '指纹验证失败';
+
+  @override
+  String get vault_min_length => '密码至少需要 4 位';
+
+  @override
+  String get vault_pwd_alphanumeric => '可含字母、数字或符号的密码';
+
+  @override
+  String get vault_enable_fingerprint => '启用指纹解锁';
+
+  @override
+  String get vault_biometric_desc => '使用指纹快速解锁保险箱';
+
+  @override
+  String get vault_export_backup => '导出备份';
+
+  @override
+  String get vault_export_backup_desc => '导出加密的保险箱备份 (.zip)';
+
+  @override
+  String get vault_import_backup => '导入备份';
+
+  @override
+  String get vault_backup_restore => '备份/恢复';
+
+  @override
+  String get vault_import_backup_desc => '从备份文件 (.zip) 还原保险箱';
+
+  @override
+  String get vault_uninstall_warning_title => '卸载警告';
+
+  @override
+  String get vault_uninstall_warning => '卸载应用会清空沙盒加密，建议先导出备份';
+
+  @override
+  String get vault_backup_exported => '备份已导出到';
+
+  @override
+  String get vault_backup_imported => '已导入条目';
+
+  @override
+  String get vault_export_failed => '备份导出失败';
+
+  @override
+  String get vault_import_failed => '备份导入失败';
+
+  @override
+  String get ui_font_size => '字体';
+
+  @override
+  String get ui_line_width => '线粗';
+
+  @override
+  String archive_open_failed_with_reason(String e) {
+    return '无法打开: $e';
+  }
+
+  @override
+  String archive_extract_failed_with_reason(String e) {
+    return '解压失败: $e';
+  }
+
+  @override
+  String get archive_unsupported_format => '文件内容为空或解压失败，可能文件过大、已损坏或使用了不支持的压缩方式';
+
+  @override
+  String get vault_export_backup_confirm => '备份文件将保存到以下位置：';
+
+  @override
+  String get vault_import_only_zip => '仅支持 .zip 格式的备份文件';
+
+  @override
+  String get vault_import_password_hint => '该备份使用另一组密码，请使用备份时的密码重新解锁保险箱';
+
+  @override
+  String get vault_open_backup_location => '是否打开备份文件所在位置？';
+
+  @override
+  String get open_file => '打开';
+
+  @override
+  String get open_in_location => '打开文件所在位置';
+
+  @override
+  String get open_with_title => '打开方式';
+
+  @override
+  String get share_permission_title => '需要权限';
+
+  @override
+  String get share_permission_message => 'ZenFile 没有权限访问该文件，请重新分享或授予权限后重试。';
+
+  @override
+  String get qqGroup => 'QQ 群：792408214';
+
+  @override
+  String get emailCopied => '邮箱已复制到剪贴板';
+
+  @override
+  String get vt_scanning => '正在通过 VirusTotal 扫描（哈希查询）...';
+
+  @override
+  String get vt_uploading => '正在上传文件到 VirusTotal 并等待分析，约需 1-2 分钟...';
+
+  @override
+  String get vt_safe_title => '扫描结果：安全';
+
+  @override
+  String get vt_risk_title => '扫描结果：检测到风险';
+
+  @override
+  String get vt_unknown_title => '扫描结果：未收录';
+
+  @override
+  String vt_malicious_count(Object n) {
+    return '报毒引擎：$n';
+  }
+
+  @override
+  String vt_suspicious_count(Object n) {
+    return '可疑引擎：$n';
+  }
+
+  @override
+  String vt_harmless_count(Object n) {
+    return '安全引擎：$n';
+  }
+
+  @override
+  String vt_undetected_count(Object n) {
+    return '未检出引擎：$n';
+  }
+
+  @override
+  String get vt_not_found_msg => '该文件尚未被 VirusTotal 收录。可上传进行完整扫描，或跳过扫描继续安装。';
+
+  @override
+  String vt_scan_failed(Object error) {
+    return '扫描失败：$error';
+  }
+
+  @override
+  String get vt_no_key_msg =>
+      '未配置 VirusTotal API Key，已跳过扫描直接安装。可在设置中配置后获得安装前自动扫描。';
+
+  @override
+  String get vt_continue_install => '仍然安装';
+
+  @override
+  String get vt_upload_scan => '上传完整扫描';
+
+  @override
+  String get vt_open_report => '查看详细报告';
+
+  @override
+  String get vt_apikey_title => 'VirusTotal API Key';
+
+  @override
+  String get vt_apikey_subtitle => '安装 APK 前自动安全扫描（在 virustotal.com 免费申请）';
+
+  @override
+  String get vt_apikey_dialog_title => '配置 VirusTotal API Key';
+
+  @override
+  String get vt_apikey_hint => '粘贴你的 API Key（免费版限 4 次/分钟）';
+
+  @override
+  String get vt_save => '保存';
+
+  @override
+  String get vt_key_saved => 'VirusTotal API Key 已保存';
+
+  @override
+  String get vt_key_invalid => 'API Key 无效，请检查后重试';
+
+  @override
+  String vt_key_masked(Object mask) {
+    return '已配置（$mask）';
+  }
+
+  @override
+  String get vt_scan_before_install => '正在扫描 APK（VirusTotal）...';
+
+  @override
+  String get vt_skip => '跳过';
+
+  @override
+  String get vt_retry => '重试';
+
+  @override
+  String get vt_cancel => '取消';
+
+  @override
+  String get vt_analyzing => '正在等待 VirusTotal 分析结果...';
+
+  @override
+  String get vt_settings_title => 'APK 安装安全扫描';
+
+  @override
+  String get vt_settings_subtitle => '安装 APK 前自动检测恶意软件（基于 VirusTotal）';
+
+  @override
+  String get vt_what_is_title => '这是什么？';
+
+  @override
+  String get vt_what_is_desc =>
+      '开启后，安装 APK 前会自动通过 VirusTotal 检测文件是否包含恶意软件。未配置 API Key 时安装行为与之前一致，不会影响正常使用。';
+
+  @override
+  String get vt_api_key_label => 'API Key';
+
+  @override
+  String get vt_current_key_configured => '已配置';
+
+  @override
+  String get vt_not_configured => '未配置';
+
+  @override
+  String get vt_api_key_hint => '粘贴你的 VirusTotal API Key';
+
+  @override
+  String get vt_save_key => '保存并验证';
+
+  @override
+  String get vt_how_to_get_title => '如何获取 API Key？';
+
+  @override
+  String get vt_step_1 => '1. 打开 virustotal.com 并登录（可用 Google 账号免费注册）';
+
+  @override
+  String get vt_step_2 => '2. 点击右上角头像，选择「API key」';
+
+  @override
+  String get vt_step_3 => '3. 点击复制图标，复制你的 API Key';
+
+  @override
+  String get vt_step_4 => '4. 回到本页面，粘贴到上方输入框';
+
+  @override
+  String get vt_step_5 => '5. 点击「保存并验证」，无效的 Key 会被提示';
+
+  @override
+  String get vt_open_vt => '打开官网';
+
+  @override
+  String get vt_limit_note => '免费账号限额：4 次请求/分钟，日常安装扫描足够使用。';
+
+  @override
+  String get vt_privacy_note =>
+      '隐私提示：默认仅上传文件哈希进行查询，不会上传文件本身；仅在你主动选择「上传完整扫描」时才会上传文件。';
+
+  @override
+  String get vt_silent_install => '静默安装';
+
+  @override
+  String get vt_silent_install_ready => '已获取 Root 或 Shizuku 权限，开启后安装无需手动确认';
+
+  @override
+  String get vt_silent_install_requires => '需要 Root 或 Shizuku 权限才能启用';
+
+  @override
+  String get vt_install_success => '安装成功';
+
+  @override
+  String get vt_keep_apk => '安装后保留安装包';
+
+  @override
+  String get vt_keep_apk_desc => '开启后安装时复制临时副本，防止系统安装器自动删除源 APK';
+
+  @override
+  String get apk_open_mode_title => 'APK 打开方式';
+
+  @override
+  String get apk_open_mode_desc =>
+      '使用系统选择器打开 APK，允许 InstallerX 等第三方安装器接管；关闭则使用内置安装器。';
+
+  @override
+  String get vt_install => '安装';
+
+  @override
+  String get vt_direct_install => '直接安装';
+
+  @override
+  String get biometric_verify_hint => '请验证指纹以继续';
+
+  @override
+  String get biometric_reason_vault => '验证指纹以解锁保险箱';
+
+  @override
+  String get biometric_reason_remote_guard => '验证指纹以通过远程守卫';
+
+  @override
+  String get biometric_reason_app_lock => '验证指纹以进入应用';
+
+  @override
+  String get vt_install_settings_title => 'APK 安装设置';
+
+  @override
+  String get vt_install_settings_subtitle => '静默安装、保留安装包、安全扫描';
+
+  @override
+  String get ui_noise_filter_images_subtitle => '隐藏图标/超小图片 (<30KB)';
+
+  @override
+  String get ui_noise_filter_videos_subtitle => '隐藏短视频/碎片 (<1MB)';
+
+  @override
+  String get ui_noise_filter_screenshots_subtitle => '隐藏通知/快捷方式图标 (<5KB)';
+
+  @override
+  String get ui_noise_filter_audios_subtitle => '隐藏音效/提示音/录音 (<60秒)';
+
+  @override
+  String get ui_noise_filter_documents_subtitle => '隐藏损坏/空文档 (0KB)';
+
+  @override
+  String get ui_noise_filter_archives_subtitle => '隐藏损坏/空压缩包 (<100B)';
+
+  @override
+  String get ui_noise_filter_downloads_subtitle => '隐藏损坏/空下载 (0KB)';
+
+  @override
+  String get ui_noise_filter_apks_subtitle => '隐藏损坏/极小安装包 (<100KB)';
+
+  @override
+  String get ui_media_filter_title => '过滤设置';
+
+  @override
+  String get ui_media_filter_description => '自定义该分类下需要过滤的文件条件';
+
+  @override
+  String get ui_media_filter_master_switch => '启用智能过滤';
+
+  @override
+  String get ui_media_filter_master_hint => '开启后将按下方规则过滤小文件、短视频/音频等噪声';
+
+  @override
+  String get ui_media_filter_rules => '过滤规则';
+
+  @override
+  String get ui_media_filter_restore_default => '恢复默认';
+
+  @override
+  String get ui_category_settings_title => '类别设置';
+
+  @override
+  String get ui_category_settings_description => '管理该分类的过滤规则与扫描位置';
+
+  @override
+  String get ui_excluded_folders_title => '屏蔽文件夹';
+
+  @override
+  String get ui_excluded_folders_empty => '暂无屏蔽文件夹，添加后该分类将不再扫描此文件夹下的文件';
+
+  @override
+  String get ui_add_excluded_folder => '添加屏蔽文件夹';
+
+  @override
+  String get ui_remove_excluded_folder => '移除屏蔽';
+
+  @override
+  String get vt_extracting => '正在解压安装包…';
+
+  @override
+  String get vt_no_apk_in_bundle => '安装包中未找到可安装的APK';
+
+  @override
+  String get vt_split_installer_launch_failed => '无法启动分包APK安装器';
+
+  @override
+  String get vt_extract_failed => '解压安装包失败：';
+
+  @override
+  String get vt_open_report_failed => '无法打开报告链接';
+
+  @override
+  String get vt_silent_fallback => '已尝试静默安装，权限不足，改用系统安装器';
+
+  @override
+  String get ui_nav_back => '后退';
+
+  @override
+  String get ui_nav_forward => '前进';
+
+  @override
+  String get ui_custom_theme => '自定义';
+
+  @override
+  String get ui_preset_colors => '预设颜色';
+
+  @override
+  String get crypt_settings_title => '密码配置';
+
+  @override
+  String get vault_config_password => '密码配置';
+
+  @override
+  String get cl211_features => '新增功能';
+
+  @override
+  String get cl211_feat_1 =>
+      '应用图标支持导入自定义图片：设置 → 外观与主题 → 应用图标，选择图片后可在桌面添加为快捷方式或 1×1 小组件。同时修复了此前点击提示「已添加」但桌面没有图标的问题；部分系统限制快捷方式时，可改用桌面小组件。';
+
+  @override
+  String get cl211_feat_2 =>
+      '删除文件的二次确认可按需关闭：删除弹窗新增「删除不再提示」复选框，设置 → 文件操作与查看器新增「删除文件确认」开关，关闭后删除不再弹出确认。';
+
+  @override
+  String get cl211_ui => '界面与交互';
+
+  @override
+  String get cl211_ui_1 =>
+      '所有进度弹窗统一为双层圆环：外圈显示整体进度、内圈（绿色）显示当前文件进度，已覆盖复制/剪切、压缩/解压、加密/解密、保险箱导入加密与恢复解密、类别备份等场景。';
+
+  @override
+  String get cl211_ui_2 => '视频播放控制按钮整体缩小并下移，贴近进度条上方，不再遮挡画面中心。';
+
+  @override
+  String get cl211_ui_3 => '保险箱原地加密列表新增「移除」：仅从列表移除，磁盘上的加密文件不受影响。';
+
+  @override
+  String get cl211_fixes => '问题修复';
+
+  @override
+  String get cl211_fix_1 =>
+      '修复部分机型播放视频黑屏（只有声音没有画面）的问题：由 1.1.42 引入的渲染兼容问题导致，现已改为通用渲染；并新增自动检测，硬解异常时自动切换软解续播，无需手动设置。';
+
+  @override
+  String get cl211_fix_2 => '修复 SMB / FTP / SFTP 播放远程视频「播几秒卡几秒」、拖动进度条又跳回开头的问题。';
+
+  @override
+  String get cl211_fix_3 => '修复 FTP 打开目录、返回上一级偶尔需要等待很久的问题。';
+
+  @override
+  String get cl211_fix_4 =>
+      '修复压缩大文件或多文件时进度停在 100% 长时间不动的问题：改为流式逐文件压缩，内存占用大幅降低，进度持续推进。';
+
+  @override
+  String get cl211_fix_5 =>
+      '修复音乐播放器把所有音频都显示为「FLAC • 24-bit」的问题，现在按真实格式显示，无损格式还会显示实际位深。';
+
+  @override
+  String get cl211_fix_6 => '修复配置保险箱密码或原地加密后，打开任意未加密文件都会要求验证保险箱密码的问题。';
+
+  @override
+  String get cl211_fix_7 =>
+      '修复保险箱提示的两处错误：解密密码输入错误时误提示「请先设置主密码」；加密/解密的结果提示在非中文界面下仍显示中文。';
+
+  @override
+  String get cl212_features => '新增功能';
+
+  @override
+  String get cl212_feat_1 =>
+      'APK 打开方式可切换：设置 → APK 安装设置新增「APK 打开方式」，可在「内置安装器」与「系统选择器」之间切换。选择系统选择器后，ZenFile 不再强制拦截 APK 打开，InstallerX、InstallWithOptions 等第三方安装器可正常接管，批量安装无需再长按逐个选择「打开方式」。';
+
+  @override
+  String get cl212_ui => '界面与交互';
+
+  @override
+  String get cl212_ui_1 =>
+      '「大小和间距」可调范围扩大：卡片间距滑块下限由 40% 放宽到 -50%，0% 时卡片边框紧贴、负值可让相邻卡片边框重叠成一条线；同时默认值改为 0%（新用户首次启动即贴边，已调整过的用户保持原值）。';
+
+  @override
+  String get cl212_ui_2 => '自定义快捷方式弹窗：「图标形状」与「每行显示」由并排按钮改为下拉选择，布局更紧凑统一。';
+
+  @override
+  String get cl212_fixes => '问题修复';
+
+  @override
+  String get cl212_fix_1 =>
+      '指纹解锁改为默认关闭：安装后「设置 → 安全设置」中的指纹解锁默认处于关闭状态，需主动开启，避免新装或升级后自动启用生物识别解锁。';
+
+  @override
+  String get cl212_fix_2 =>
+      '修复 APK 安全扫描配置好 API Key 后、关闭再打开开关无法再次进入配置页重新配置 Key 的问题；现在开关打开与点击卡片均可进入配置页修改 Key。';
+
+  @override
+  String get cl212_fix_3 =>
+      '修复「静默安装」在已授权 Shizuku 的情况下仍提示「权限不足」无法安装的问题：Shizuku 路径改用系统 PackageInstaller 会话安装，不再依赖被部分系统禁止的 shell 安装命令。';
+
+  @override
+  String get cl213_fixes => '问题修复';
+
+  @override
+  String get cl213_feat_2 =>
+      '远程文件「打开方式」可持久化：选择「始终用本应用 / 外部应用打开」后，同类型文件直接打开，不再重复弹窗询问。';
+
+  @override
+  String get cl213_fix_1 => '修复：远程图片查看器左右滑动只在已下载的图片之间循环，现可翻页浏览远程目录中的其它图片并按需下载。';
+
+  @override
+  String get cl213_fix_2 =>
+      '修复：连接测试弹窗等界面在韩语、日语、德语等语言下误显示中文（历史占位值未翻译），现已补全各语言译文。';
+
+  @override
+  String get cl213_fix_3 => '修复：繁体中文（台湾）界面此前有部分文案显示为简体。';
+
+  @override
+  String get cl213_features => '远程浏览与错误提示';
+
+  @override
+  String get cl213_feat_1 =>
+      'FTP / WebDAV / SFTP / SMB 等远程客户端的报错，由原始英文异常改为清晰的多语言文字提示（如：连接失败、登录失败、超时、权限不足、文件不存在），便于理解问题原因。';
+
+  @override
+  String get remote_err_cancelled => '操作已取消';
+
+  @override
+  String get remote_err_auth => '登录失败：用户名或密码错误。若使用密钥登录，请确认私钥文件与密码正确。';
+
+  @override
+  String get remote_err_not_connected => '尚未连接到服务器，请先连接后重试。';
+
+  @override
+  String get remote_err_not_found => '文件或文件夹不存在（可能已被移动或删除）。';
+
+  @override
+  String get remote_err_timeout => '连接超时：服务器响应过慢或网络不稳定，请稍后重试。';
+
+  @override
+  String get remote_err_connection => '无法连接到服务器：请检查地址、端口、网络，以及服务器是否已开启。';
+
+  @override
+  String get remote_err_reconnect => '与服务器的连接已断开，正在尝试重新连接。';
+
+  @override
+  String get remote_err_download => '下载失败，请检查网络后重试。';
+
+  @override
+  String get remote_err_upload => '上传失败，请检查网络后重试。';
+
+  @override
+  String get remote_err_delete => '删除失败，请重试。';
+
+  @override
+  String get remote_err_rename => '重命名失败，请重试。';
+
+  @override
+  String get remote_err_create_dir => '创建文件夹失败，请重试。';
+
+  @override
+  String get remote_err_dir_open => '无法打开该文件夹，请确认你有访问权限。';
+
+  @override
+  String remote_err_server(Object code) {
+    return '服务器返回错误（状态码 $code），请联系服务器管理员。';
+  }
+
+  @override
+  String get remote_err_generic => '操作失败，请重试。';
+
+  @override
+  String get app_icon_add_title => '添加到桌面';
+
+  @override
+  String get app_icon_add_body =>
+      'Android 不允许用外部图片直接替换应用主图标。可用下面的方式把自定义图片放到桌面：';
+
+  @override
+  String get app_icon_add_shortcut => '快捷方式';
+
+  @override
+  String get app_icon_add_shortcut_desc => '在桌面新增一个带自定义图片的启动图标';
+
+  @override
+  String get app_icon_add_widget => '桌面小组件';
+
+  @override
+  String get app_icon_add_widget_desc => '1×1 小组件，兼容所有启动器';
+
+  @override
+  String get app_icon_add_change_image => '更换图片';
+
+  @override
+  String get app_icon_add_change_image_desc => '重新选择一张图片作为图标';
+
+  @override
+  String get app_icon_add_cancelled => '未添加：操作已取消';
+
+  @override
+  String get app_icon_add_unsupported => '当前启动器不支持自动添加，请长按桌面手动添加';
+
+  @override
+  String get vault_encrypt_done => '加密成功';
+
+  @override
+  String get vault_decrypt_done => '解密成功';
+
+  @override
+  String vault_encrypt_partial(Object failed, Object success) {
+    return '加密完成，$success 成功，$failed 失败';
+  }
+
+  @override
+  String vault_decrypt_partial(Object failed, Object success) {
+    return '解密成功，$success 成功，$failed 失败';
+  }
+
+  @override
+  String get vault_no_encrypted_selected => '没有选中的加密项';
+
+  @override
+  String vault_decrypt_confirm_multi_desc(Object count) {
+    return '确定要解密选中的 $count 个文件吗？解密后文件将恢复为普通文件。';
+  }
+
+  @override
+  String get vault_removed_from_list => '已从列表移除';
+
+  @override
+  String get cl210_feat_6 =>
+      '新增分贝仪：可在工具箱或侧边栏打开，实时测量环境噪音分贝值，并显示噪声曲线、环境判定与对听力的影响提示。';
+
+  @override
+  String get cl210_features => '新增功能';
+
+  @override
+  String get cl210_feat_1 => '视频支持后台播放：菜单新增「后台播放」，关闭播放页后仍可在通知栏控制播放、暂停与进度。';
+
+  @override
+  String get cl210_feat_2 => '视频定时关闭：可设置 15 / 30 / 45 / 60 分钟后停止播放，已设置时可随时取消。';
+
+  @override
+  String get cl210_feat_3 => '文件夹新增「打开方式」：此前只有文件有该入口，网格、列表与双窗格视图均已支持。';
+
+  @override
+  String get cl210_feat_4 => '属性入口补全：浏览页、最近页与分类页的三点菜单均可查看文件或文件夹属性。';
+
+  @override
+  String get cl210_feat_5 => '设为首页支持取消：已设为首页的文件夹，菜单中会显示「取消设为首页」。';
+
+  @override
+  String get cl210_ui => '界面与交互';
+
+  @override
+  String get cl210_ui_1 => '三点菜单改为图标宫格：图标在上、文字在下，长标题两行显示，并按项数自动排列为三列或四列。';
+
+  @override
+  String get cl210_ui_2 => '统一浏览页与分类页的菜单顺序，「设为首页」与「在位置中显示」位于同一位置。';
+
+  @override
+  String get cl210_ui_3 => '优化图标宫格对齐：多语言长标题换行时，同一排图标仍保持在同一水平线。';
+
+  @override
+  String get cl210_ui_4 => '文件与文件夹的三点按钮改为竖排样式，覆盖网格、列表与紧凑三种视图。';
+
+  @override
+  String get cl210_ui_5 => '视频播放优化：左右拖动快进快退不再中断播放；锁定按钮移至左侧中部并常驻显示。';
+
+  @override
+  String get cl210_fixes => '问题修复';
+
+  @override
+  String get cl210_fix_1 =>
+      '修复在受限的 Android/data、Android/obb 目录中无法新建文件、文件夹与压缩包的问题：修正写入路径策略，并将授权方式改为按应用目录逐个授权。';
+
+  @override
+  String get cl210_fix_2 =>
+      '新建不再无提示地失败：失败时会显示具体原因；在 Android/data 根目录新建时会提示先进入具体应用目录。';
+
+  @override
+  String get cl210_fix_3 => '修复分类页多选「置顶」无效的问题（置顶已保存但列表未重新排序），并修正菜单文案为「取消置顶」。';
+
+  @override
+  String get cl210_fix_4 => '修复「取消设为首页」无效的问题：此前首页设置未被真正清除。';
+
+  @override
+  String get cl210_fix_5 => '修复部分页面「属性」点击无响应的问题。';
+
+  @override
+  String get cl200_notice => '版本与包名变更（务必阅读）';
+
+  @override
+  String get cl200_notice_1 =>
+      '版本号升级至 2.0.0，包名（应用 ID）由 com.sequl.zenfile 变更为 com.sequl.zenfile2。2.0 会作为独立应用安装，不会覆盖旧的 1.x 版本。';
+
+  @override
+  String get cl200_notice_2 =>
+      '变更原因：保险箱的加密架构在本版本大改，已不再兼容旧版保险箱数据。改用新包名可让新旧两版并存，避免覆盖安装导致旧版保险箱数据丢失。';
+
+  @override
+  String get cl200_notice_3 =>
+      '请先自行备份：在旧版中打开「保险箱 → 备份/恢复 → 导出备份」，再在新版中打开「保险箱 → 备份/恢复 → 导入备份」。';
+
+  @override
+  String get cl200_notice_4 =>
+      '确认新版数据完整无误后再卸载旧版。沙盒加密文件存放在应用私有目录，卸载应用会一并清除，切勿先卸载。';
+
+  @override
+  String get cl200_notice_5 => '包名变更后，Shizuku 等按包名授予的权限需要在新版中重新授权一次。';
+
+  @override
+  String get cl200_vault => '保险箱';
+
+  @override
+  String get cl200_vault_1 => '多密码档案：可为不同目录绑定不同的密码档案，加解密全部在本机完成，主密码与加盐只保存在本机。';
+
+  @override
+  String get cl200_vault_2 =>
+      '远程加密目录：可直接关联网盘上的 rclone crypt 加密目录，客户端解密后以明文列出，音视频支持流式播放，无需整体下载。';
+
+  @override
+  String get cl200_vault_3 =>
+      '原地加密：把文件「就地」加密，位置与目录结构保持不变，浏览页会加上🔐徽标，其它应用只能看到密文文件名。';
+
+  @override
+  String get cl200_vault_4 => '帮助页：保险箱首页右上角的「已激活」已换成「帮助」入口，里面有功能亮点、基本操作与兼容性说明。';
+
+  @override
+  String get cl200_settings => '设置调整';
+
+  @override
+  String get cl200_settings_1 => '原保险箱首页的「安全设置」已迁移到「设置」页面，入口更统一。';
+
+  @override
+  String get cl200_fixes => '修复与优化';
+
+  @override
+  String get cl200_fix_1 => '修复浏览页远程加密目录的文件图标全部显示为未知格式的问题。';
+
+  @override
+  String get cl200_fix_2 =>
+      '修复远程加密音视频无法流式播放、图片无法渲染的问题（部分网盘不返回文件大小，会导致解密大小为 0）。';
+
+  @override
+  String get cl200_fix_3 => '修复远程加密目录缩略图无法加载的问题。';
+
+  @override
+  String get cl200_fix_4 => '优化流式传输性能：去掉每块的冗余网络请求，远程加密媒体的播放与拖动体验大幅提升。';
+
+  @override
+  String get vault_help => '帮助';
+
+  @override
+  String get vault_help_title => '保险箱帮助';
+
+  @override
+  String get vault_help_intro =>
+      '保险箱采用与 rclone 相同的 crypt 加密格式，加解密全部在本机完成，密钥不会离开本机。';
+
+  @override
+  String get vault_help_highlights => '功能亮点';
+
+  @override
+  String get vault_help_hl1_title => '零知识加密';
+
+  @override
+  String get vault_help_hl1_desc => '主密码与加盐仅保存在本机，云服务与任何第三方都无法解密你的文件。';
+
+  @override
+  String get vault_help_hl2_title => '兼容 rclone 与 OpenList';
+
+  @override
+  String get vault_help_hl2_desc => '使用相同的 crypt 格式，电脑上的 rclone 可直接解密同一批文件。';
+
+  @override
+  String get vault_help_hl3_title => '多套密码 + 远程直读';
+
+  @override
+  String get vault_help_hl3_desc => '可为不同目录绑定不同密码档案；远程密文目录无需整体下载即可解密浏览与播放。';
+
+  @override
+  String get vault_help_basics => '基本操作';
+
+  @override
+  String get vault_help_b1_title => '① 先配置主密码';
+
+  @override
+  String get vault_help_b1_desc => '在「密码配置」中设置主密码与加盐并牢记，它与保险箱解锁密码相互独立。';
+
+  @override
+  String get vault_help_b2_title => '② 加密文件';
+
+  @override
+  String get vault_help_b2_desc => '在浏览页选择文件后点击加密，再选择「原地加密」或「沙盒加密」。';
+
+  @override
+  String get vault_help_b3_title => '③ 查看与打开';
+
+  @override
+  String get vault_help_b3_desc => '加密条目集中在保险箱中列出，点击会自动临时解密后预览。';
+
+  @override
+  String get vault_help_b4_title => '④ 解密还原';
+
+  @override
+  String get vault_help_b4_desc => '选中条目点击解密，即可还原为普通文件并放回原位置。';
+
+  @override
+  String get vault_help_b5_title => '⑤ 备份与恢复';
+
+  @override
+  String get vault_help_b5_desc => '通过「备份/恢复」导出含加密配置的备份，卸载应用前务必先导出。';
+
+  @override
+  String get vault_help_compat => '兼容性';
+
+  @override
+  String get vault_help_c1_title => '加密格式';
+
+  @override
+  String get vault_help_c1_desc =>
+      '内容为 XSalsa20-Poly1305，文件名经 EME 加密后以 base32/base64 编码，可带 .bin 后缀。';
+
+  @override
+  String get vault_help_c2_title => '网盘与同步';
+
+  @override
+  String get vault_help_c2_desc => '密文可被任意网盘或同步工具正常同步，服务端只能看到密文，不会泄露真实文件名。';
+
+  @override
+  String get vault_help_c3_title => '已知限制';
+
+  @override
+  String get vault_help_c3_desc =>
+      '加密后文件名会显著变长，超长文件名可能失败；请在本应用内重命名，直接改密文名会导致无法解密。';
+
+  @override
+  String get vault_help_inplace => '原地加密';
+
+  @override
+  String get vault_help_inplace_intro =>
+      '原地加密会把文件「就地」加密：内容替换为密文、文件名替换为密文名，文件仍留在原来的文件夹中，不会进入保险箱私有目录。';
+
+  @override
+  String get vault_help_ip1_title => '与原目录的关系';
+
+  @override
+  String get vault_help_ip1_desc => '文件位置与目录结构保持不变，浏览页会给已加密文件加上🔐徽标。';
+
+  @override
+  String get vault_help_ip2_title => '其它应用看到什么';
+
+  @override
+  String get vault_help_ip2_desc => '其它文件管理器与播放器只能看到无意义的密文文件名且无法打开，这正是保护效果。';
+
+  @override
+  String get vault_help_ip3_title => '适合的场景';
+
+  @override
+  String get vault_help_ip3_desc => '需要保留原目录结构，并让第三方网盘继续同步这些文件的场景。';
+
+  @override
+  String get vault_help_ip4_title => '风险与建议';
+
+  @override
+  String get vault_help_ip4_desc =>
+      '加密会直接替换原文件，中断可能留下残留文件；重要文件请先备份，解密时目标目录需有写入权限。';
+
+  @override
+  String get vault_help_notice => '注意事项';
+
+  @override
+  String get vault_help_n1 => '已用于加密文件的密码与加盐不可修改，若需更换请新建一份加密配置。';
+
+  @override
+  String get vault_help_n2 => '沙盒加密的文件存放在应用私有目录，卸载应用会一并清除。';
+
+  @override
+  String get vault_help_n3 => '忘记主密码将无法恢复任何已加密文件，请务必导出备份并妥善保存。';
+
+  @override
+  String get vault_remote_encrypt => '远程加密';
+
+  @override
+  String get vault_import_source_title => '选择加密来源';
+
+  @override
+  String get vault_import_source_remote => '远程';
+
+  @override
+  String get vault_import_source_remote_desc => '关联远程加密目录，或将本地文件加密后上传到远程';
+
+  @override
+  String get vault_link_remote_crypt_desc =>
+      '关联服务器上已有的 rclone crypt 密文目录（在客户端解密）';
+
+  @override
+  String get vault_encrypt_upload => '加密上传到远程';
+
+  @override
+  String get vault_encrypt_upload_desc => '选择本地文件，加密后上传到远程服务器';
+
+  @override
+  String get vault_encrypt_uploading => '正在加密上传…';
+
+  @override
+  String get vault_encrypt_upload_done => '加密上传完成';
+
+  @override
+  String get vault_encrypt_upload_failed => '加密上传失败';
+
+  @override
+  String get crypt_remote_upload => '加密上传';
+
+  @override
+  String get crypt_remote_download => '解密下载';
+
+  @override
+  String get crypt_remote_downloading => '正在解密下载…';
+
+  @override
+  String get crypt_remote_download_done => '解密下载完成';
+
+  @override
+  String get crypt_remote_download_failed => '解密下载失败';
+
+  @override
+  String get vault_remote_crypt_open_failed => '打开远程加密文件失败';
+
+  @override
+  String get vault_remote_crypt_unsupported => '该类型暂不支持远程加密流式播放';
+
+  @override
+  String get vault_link_remote_crypt => '关联远程加密目录';
+
+  @override
+  String get vault_link_remote_crypt_success => '已关联远程加密目录';
+
+  @override
+  String get vault_unlink_remote_crypt => '取消关联';
+
+  @override
+  String get vault_exporting => '正在导出...';
+
+  @override
+  String get vault_importing => '正在导入...';
+
+  @override
+  String get vault_importing_backup => '正在导入备份...';
+
+  @override
+  String get vault_restoring => '正在恢复...';
+
+  @override
+  String get vault_decrypting => '正在解密...';
+
+  @override
+  String get vault_decrypt_open_progress => '正在解密并打开...';
+
+  @override
+  String get crash_report_saved => '检测到上次异常退出，诊断报告已保存到 ZenFile/crash';
+
+  @override
+  String get vault_import_backup_confirm =>
+      '导入将用备份内容覆盖当前保险箱沙盒与加密配置（解锁密码不受影响）。是否继续？';
+
+  @override
+  String vault_load_error(Object error) {
+    return '加载保险箱出错：$error';
+  }
+
+  @override
+  String get vault_restore_folder_hint => '文件夹请长按后选择「恢复」到原位置查看';
+
+  @override
+  String vault_decrypt_open_failed(Object error) {
+    return '解密并打开项目失败：$error';
+  }
+
+  @override
+  String get vault_badge_inplace => '原地';
+
+  @override
+  String get vault_badge_sandbox => '沙盒';
+
+  @override
+  String get vault_item_folder => '文件夹';
+
+  @override
+  String get crypt_need_master_title => '尚未设置加密主密码';
+
+  @override
+  String get crypt_need_master_body => '原地加密与沙盒加密都使用「加密设置」中的主密码，请先前往设置。';
+
+  @override
+  String get crypt_master_banner =>
+      '此处配置的主密码与加盐用于原地加密和沙盒加密，请务必牢记；它与保险箱解锁密码相互独立。';
+
+  @override
+  String get crypt_profile_name => '加密名称';
+
+  @override
+  String get crypt_profile_name_hint => '例如：工作 / 私人';
+
+  @override
+  String get crypt_profile_name_required => '请输入加密名称';
+
+  @override
+  String get crypt_profile_name_duplicate => '该名称已存在，请更换';
+
+  @override
+  String get crypt_profile_title_new => '新建加密配置';
+
+  @override
+  String get crypt_profile_title_edit => '编辑加密配置';
+
+  @override
+  String get crypt_profile_section => '密码配置';
+
+  @override
+  String get crypt_profile_add => '新建配置';
+
+  @override
+  String get crypt_profile_default => '默认';
+
+  @override
+  String get crypt_profile_set_default => '设为默认配置';
+
+  @override
+  String get crypt_profile_set_default_desc => '未绑定配置的文件将使用此配置';
+
+  @override
+  String get crypt_profile_default_done => '已更新默认配置';
+
+  @override
+  String get crypt_profile_delete_message => '删除该配置后，使用它加密的文件将无法解密。';
+
+  @override
+  String get crypt_profile_empty => '暂无加密配置';
+
+  @override
+  String get crypt_profile_action_config => '配置';
+
+  @override
+  String get crypt_profile_select_title => '选择加密配置';
+
+  @override
+  String get crypt_profile_bound_done => '已绑定该加密配置';
+
+  @override
+  String get crypt_profile_credential_locked => '不可修改';
+
+  @override
+  String get crypt_profile_credential_locked_desc =>
+      '密码与加盐决定密钥，修改后已加密文件将无法解密；如需更换请新建配置。';
+
+  @override
+  String get crypt_profile_suffix_none => '无后缀';
+
+  @override
+  String get crypt_profile_sandbox_title => '切换沙盒配置';
+
+  @override
+  String get crypt_profile_sandbox_message =>
+      '沙盒整体只使用一套配置，切换后沙盒内其他文件可能显示为密文。是否继续？';
+
+  @override
+  String get crypt_mount_section => '加密位置';
+
+  @override
+  String get crypt_settings_subtitle => '管理加密文件夹和挂载点';
+
+  @override
+  String get crypt_add_mount => '添加加密文件夹';
+
+  @override
+  String get crypt_edit_mount => '编辑加密文件夹';
+
+  @override
+  String get crypt_no_mounts_title => '暂无加密文件夹';
+
+  @override
+  String get crypt_no_mounts_subtitle => '点击下方按钮添加第一个加密文件夹';
+
+  @override
+  String get crypt_field_name => '名称';
+
+  @override
+  String get crypt_field_name_hint => '可选，留空则使用文件夹名';
+
+  @override
+  String get crypt_field_path => '文件夹路径';
+
+  @override
+  String get crypt_field_path_hint => '选择要加密的文件夹';
+
+  @override
+  String get crypt_field_password => '密码';
+
+  @override
+  String get crypt_field_confirm_password => '确认密码';
+
+  @override
+  String get crypt_error_path_required => '请选择文件夹路径';
+
+  @override
+  String get crypt_error_password_required => '请输入密码';
+
+  @override
+  String get crypt_error_password_short => '密码至少4个字符';
+
+  @override
+  String get crypt_error_password_mismatch => '两次输入的密码不一致';
+
+  @override
+  String get crypt_section_mode => '加密模式';
+
+  @override
+  String get crypt_mode_inplace => '原地加密';
+
+  @override
+  String get crypt_mode_inplace_desc => '文件保留在原位置，文件名和内容被加密';
+
+  @override
+  String get crypt_mode_sandbox => '沙盒加密';
+
+  @override
+  String get crypt_mode_sandbox_desc => '文件移动到沙盒目录，更安全但访问稍慢';
+
+  @override
+  String get crypt_section_advanced => '高级选项';
+
+  @override
+  String get crypt_advanced_toggle => '显示高级加密选项';
+
+  @override
+  String get crypt_field_filename_enc => '文件名加密';
+
+  @override
+  String get crypt_field_dirname_enc => '加密目录名';
+
+  @override
+  String get crypt_field_filename_encoding => '文件名编码';
+
+  @override
+  String get crypt_field_suffix => '加密后缀';
+
+  @override
+  String get crypt_field_salt => '盐（可选）';
+
+  @override
+  String get crypt_field_salt_hint => '留空则自动生成';
+
+  @override
+  String get crypt_action_browse => '浏览';
+
+  @override
+  String get crypt_delete_title => '删除加密文件夹';
+
+  @override
+  String crypt_delete_message(Object name) {
+    return '确定要删除\"$name\"的加密配置吗？文件本身不会被删除。';
+  }
+
+  @override
+  String get crypt_filename_enc => '文件名加密';
+
+  @override
+  String get crypt_share_title => '分享加密文件夹';
+
+  @override
+  String get crypt_share_hint => '扫描二维码可导入加密配置，但需要手动输入密码才能解密文件';
+
+  @override
+  String get crypt_action_share => '分享';
+
+  @override
+  String get crypt_share_password_note => '二维码中不包含密码，请通过安全渠道单独告知密码';
+
+  @override
+  String get crypt_action_encrypt => '立即加密';
+
+  @override
+  String get crypt_action_decrypt => '解密';
+
+  @override
+  String get crypt_encrypt_title => '加密确认';
+
+  @override
+  String get crypt_encrypt_message =>
+      '此操作将加密文件夹中的所有文件和子文件夹。加密后，其他文件管理器将无法查看文件内容和文件名。确定要继续吗？';
+
+  @override
+  String get crypt_encrypting => '正在加密...';
+
+  @override
+  String get crypt_encrypt_success => '加密完成';
+
+  @override
+  String crypt_encrypt_failed(Object error) {
+    return '加密失败：$error';
+  }
+
+  @override
+  String get crypt_decrypt_title => '解密确认';
+
+  @override
+  String get crypt_decrypt_message =>
+      '此操作将解密文件夹中的所有文件和子文件夹。解密后，文件将恢复为普通文件。确定要继续吗？';
+
+  @override
+  String get crypt_decrypting => '正在解密...';
+
+  @override
+  String get crypt_decrypt_success => '解密完成';
+
+  @override
+  String crypt_decrypt_failed(Object error) {
+    return '解密失败：$error';
+  }
+
+  @override
+  String get crypt_filename_enc_off => '关闭';
+
+  @override
+  String get crypt_filename_enc_standard => '标准';
+
+  @override
+  String get crypt_filename_enc_obfuscate => '混淆';
+
+  @override
+  String get crypt_filename_enc_base64 => 'Base64';
+
+  @override
+  String get crypt_filename_enc_base32 => 'Base32';
+
+  @override
+  String get crypt_filename_enc_base32768 => 'Base32768';
+
+  @override
+  String get crypt_dirname_enc_yes => '是';
+
+  @override
+  String get crypt_dirname_enc_no => '否';
+
+  @override
+  String get crypt_params_locked_hint =>
+      '加密参数在创建后不可修改：改动会让已有密文再也解不回明文名（磁盘上的密文名是按创建时的参数生成的）。需要不同参数，请新建一份配置。';
+
+  @override
+  String get vault_encrypt_new_files => '加密新增文件';
+
+  @override
+  String get vault_encrypt_new_files_none => '没有发现需要加密的新文件';
+
+  @override
+  String get vault_encrypt_new_files_done => '新增文件已加密并合并进本目录';
+
+  @override
+  String get vault_encrypt_files => '+ 加密文件';
+
+  @override
+  String get vault_select_encryption_method => '选择加密方式';
+
+  @override
+  String get vault_inplace_encrypt => '原地加密';
+
+  @override
+  String get vault_inplace_encrypt_desc => '文件留在原目录，加密后文件名变为加密格式，浏览页显示🔐图徽';
+
+  @override
+  String get vault_sandbox_encrypt => '沙盒加密';
+
+  @override
+  String get vault_sandbox_encrypt_desc => '文件移动到保险箱私有目录，隐藏文件名，仅在保险箱页面可见';
+
+  @override
+  String get vault_need_set_password => '需要先设置加密主密码';
+
+  @override
+  String get vault_need_set_password_desc => '请先在加密设置中配置加密主密码和加盐，保存后即可进行原地加密。';
+
+  @override
+  String get vault_go_set_password => '去设置主密码';
+
+  @override
+  String get vault_encrypting => '正在加密...';
+
+  @override
+  String get vault_encrypting_desc => '正在加密选中的文件/文件夹，请稍候...';
+
+  @override
+  String vault_inplace_encrypt_done(Object count) {
+    return '原地加密完成，共加密 $count 个文件/文件夹';
+  }
+
+  @override
+  String vault_encrypt_failed(Object error) {
+    return '加密失败: $error';
+  }
+
+  @override
+  String get vault_inplace_section => '原地加密';
+
+  @override
+  String get vault_open_location => '打开位置';
+
+  @override
+  String get vault_decrypt_action => '解密';
+
+  @override
+  String get vault_decrypt_confirm_title => '解密文件';
+
+  @override
+  String vault_decrypt_confirm_desc(Object name) {
+    return '确定要解密「$name」吗？解密后文件将恢复为普通文件。';
+  }
+
+  @override
+  String get vault_decrypt_success => '解密成功';
+
+  @override
+  String vault_decrypt_failed(Object error) {
+    return '解密失败: $error';
+  }
+
+  @override
+  String get crypt_set_master_password => '设置加密主密码';
+
+  @override
+  String get vault_section_unencrypted => '未加密文件';
+
+  @override
+  String get vault_section_inplace_files => '原地加密文件';
+
+  @override
+  String get vault_section_sandbox_files => '沙盒加密文件';
+
+  @override
+  String get vault_import_files => '导入文件/文件夹';
+
+  @override
+  String get vault_action_encrypt => '加密';
+
+  @override
+  String vault_import_done(Object enc, Object plain) {
+    return '导入完成：未加密 $plain 项，已加密 $enc 项';
+  }
+
+  @override
+  String vault_import_partial(Object enc, Object failed, Object plain) {
+    return '导入完成：未加密 $plain 项，已加密 $enc 项，失败 $failed 项';
+  }
+
+  @override
+  String vault_import_failed_detail(Object error) {
+    return '导入失败：$error';
+  }
+
+  @override
+  String get vault_no_files => '暂无文件';
+
+  @override
+  String get vault_decrypt_password_mismatch => '已配置的密码或盐无法解密该文件，请输入正确的主密码和盐。';
+
+  @override
+  String get vault_remove_from_list => '移除';
+
+  @override
+  String get security_vault_switch_desc => '启用私人保险箱功能';
+
+  @override
+  String get security_verify_password_desc => '请输入密码以进入安全设置';
+
+  @override
+  String get vault_verify_password_title => '验证密码';
+
+  @override
+  String get vault_verify_password_hint => '请输入安全设置密码';
+
+  @override
+  String get vault_go_security_settings => '前往安全设置';
+
+  @override
+  String get security_settings_subtitle => '保险箱、远程守卫、启动应用保护与指纹解锁';
+
+  @override
+  String get vault_disabled_hint => '保险箱已关闭，请在「设置 → 安全设置」中开启';
+
+  @override
+  String get security_set_password_desc => '请设置安全设置密码，用于进入安全设置与解锁保险箱';
+
+  @override
+  String get security_confirm_password => '请再次输入密码以确认';
+
+  @override
+  String get biometric_reason_security_settings => '验证指纹以进入安全设置';
+
+  @override
+  String get toolbox_scan => '扫一扫';
+
+  @override
+  String get scan_result_title => '扫描结果';
+
+  @override
+  String get scan_copy => '复制';
+
+  @override
+  String get scan_copied => '已复制到剪贴板';
+
+  @override
+  String get scan_open_link => '打开链接';
+
+  @override
+  String get scan_continue => '继续扫描';
+
+  @override
+  String get scan_torch => '手电筒';
+
+  @override
+  String get scan_switch_camera => '切换摄像头';
+
+  @override
+  String get scan_camera_error => '无法访问相机，请检查相机权限';
+
+  @override
+  String get scan_hint => '将二维码/条形码放入框内即可自动扫描';
+
+  @override
+  String get scan_from_gallery => '从相册选择';
+
+  @override
+  String get scan_no_barcode => '未在图片中检测到二维码或条形码';
+
+  @override
+  String get ui_backup_confirm_title => '确认备份';
+
+  @override
+  String ui_backup_confirm_message(String path) {
+    return '将备份到以下路径：\n$path\n\n是否继续？';
+  }
+
+  @override
+  String get ui_cancel_set_as_home => '取消设为首页';
+
+  @override
+  String get ui_unpin => '取消置顶';
+
+  @override
+  String get decibel_meter_title => '分贝仪';
+
+  @override
+  String get decibel_meter_current => '当前分贝值';
+
+  @override
+  String get decibel_meter_verdict => '环境判定';
+
+  @override
+  String get decibel_meter_curve => '噪声曲线';
+
+  @override
+  String get decibel_meter_start => '开始测量';
+
+  @override
+  String get decibel_meter_stop => '停止测量';
+
+  @override
+  String get decibel_meter_level_quiet => '安静';
+
+  @override
+  String get decibel_meter_level_normal => '一般';
+
+  @override
+  String get decibel_meter_level_noisy => '较吵';
+
+  @override
+  String get decibel_meter_level_very_noisy => '很吵';
+
+  @override
+  String get decibel_meter_level_dangerous => '危险';
+
+  @override
+  String get decibel_meter_health_impact => '对人体的影响';
+
+  @override
+  String get decibel_meter_health_safe => '正常环境，对人体无危害。';
+
+  @override
+  String get decibel_meter_health_moderate => '较嘈杂，长时间暴露可能影响听力。';
+
+  @override
+  String get decibel_meter_health_harmful => '非常吵，长时间暴露会损伤听力。';
+
+  @override
+  String get decibel_meter_health_dangerous => '危险级别，立即远离并保护听力！';
+
+  @override
+  String get decibel_meter_examples => '常见场景举例';
+
+  @override
+  String get decibel_meter_examples_safe => '普通室内谈话（约50-60 dB）、安静的办公室、冰箱嗡嗡声。';
+
+  @override
+  String get decibel_meter_examples_moderate => '吸尘器（约70 dB）、繁忙街道、嘈杂的餐厅或商店。';
+
+  @override
+  String get decibel_meter_examples_harmful => '摩托车（约90 dB）、工厂车间、割草机、繁忙交通路口。';
+
+  @override
+  String get decibel_meter_examples_dangerous =>
+      '电锯（约110 dB）、摇滚音乐会前排、爆竹、喷气式飞机起飞。';
+
+  @override
+  String get decibel_meter_perm_denied => '需要麦克风权限才能测量环境音量，请在设置中开启。';
+
+  @override
+  String get decibel_meter_perm_title => '需要麦克风权限';
+
+  @override
+  String get decibel_meter_perm_settings =>
+      '麦克风权限已被永久拒绝，请前往系统设置中为 ZenFile 开启麦克风权限后重试。';
+
+  @override
+  String get decibel_meter_perm_open_settings => '去设置';
+
+  @override
+  String get msg_background_play => '后台播放';
+
+  @override
+  String get msg_sleep_timer => '定时关闭';
+
+  @override
+  String get msg_background_play_active => '已进入后台播放，可通过通知栏控制';
+
+  @override
+  String get ui_delete_confirm_enabled => '删除文件确认';
+
+  @override
+  String get ui_delete_confirm_subtitle => '删除文件时显示二次确认弹窗，关闭后直接删除';
+
+  @override
+  String get ui_delete_confirm_dont_ask => '删除不再提示';
+
+  @override
+  String get video_auto_fallback_soft => '检测到硬解异常，已自动切换为软解';
+
+  @override
+  String get video_vo_compat => '视频渲染异常，已切换为兼容渲染模式';
+
+  @override
+  String get audio_opensles_title => '音频输出（AO）模式';
+
+  @override
+  String get audio_opensles_desc =>
+      '音效类应用（如 RootlessJamesDSP）只能接管 AudioTrack 档位；OpenSL ES 的会话号由系统分配，音效软件无法接管。切换立即生效。';
+
+  @override
+  String get ui_transfers => '连接';
+
+  @override
+  String get ui_profile => '我的';
+
+  @override
+  String get msg_coming_soon => '即将推出';
+
+  @override
+  String get toolbox_text_editor => '文本编辑器';
+
+  @override
+  String get ui_video_progress_always_show => '进度条常驻';
+
+  @override
+  String get video_playback_info => '播放信息';
+
+  @override
+  String get ui_image_fit_width => '适应宽度';
+
+  @override
+  String get ui_image_fit_height => '适应高度';
+
+  @override
+  String get ui_image_fit_original => '原始大小';
+
+  @override
+  String get ui_image_fit_mode => '显示模式';
+
+  @override
+  String get ui_text_editor_import => '导入文本文件';
+
+  @override
+  String get ui_bottom_tab_bar => '导航栏';
+
+  @override
+  String get ui_persistent_tab_bar => '导航栏常驻其他页面';
+
+  @override
+  String get ui_pick_bottom_tab => '自定义入口';
+
+  @override
+  String get ui_long_press_switch => '长按可替换';
+
+  @override
+  String ui_bottom_tab_slot(Object index) {
+    return '位置 $index';
+  }
+
+  @override
+  String get ui_bottom_tab_custom_hint => '底部入口可替换为任意快捷方式';
+
+  @override
+  String get app_icon_original => '经典图标';
+
+  @override
+  String get cut_to_clipboard => '剪切到剪贴板';
+
+  @override
+  String get cut_to_other_window => '剪切到另一窗口';
+
+  @override
+  String get auto_open_created_folder => '新建文件夹自动打开';
+
+  @override
+  String get auto_open_created_folder_desc => '创建文件夹后自动进入该文件夹';
+
+  @override
+  String get paste_keep_clipboard => '粘贴后保留剪贴板内容';
+
+  @override
+  String get paste_keep_clipboard_desc => '不勾选时粘贴完成后自动清空剪贴板';
+
+  @override
+  String get netdisk => '网盘';
+
+  @override
+  String get netdisk_add => '添加网盘';
+
+  @override
+  String get netdisk_quark => '夸克网盘';
+
+  @override
+  String get netdisk_alipan => '阿里云盘';
+
+  @override
+  String get netdisk_logged_in => '已登录';
+
+  @override
+  String get netdisk_empty => '尚未添加网盘';
+
+  @override
+  String get netdisk_empty_hint => '添加网盘后可浏览、下载和播放网盘文件';
+
+  @override
+  String get netdisk_login_hint => '请在打开的官方页面中完成登录，登录成功后自动返回';
+
+  @override
+  String get netdisk_login_loading => '正在加载登录页面…';
+
+  @override
+  String get netdisk_auth_expired => '登录已过期，请重新登录';
+
+  @override
+  String get netdisk_unsupported => '该网盘暂不支持此操作';
+
+  @override
+  String get share_normal_share => '普通分享';
+
+  @override
+  String get share_normal_share_hint => '分享原始文件，不做任何修改';
+
+  @override
+  String get share_safe_share => '安全分享';
+
+  @override
+  String get share_safe_share_hint => '去除拍摄地点、相机信息、文档作者等隐私数据，不改动原文件';
+
+  @override
+  String get share_nothing_found => '未找到可分享的项目。';
+
+  @override
+  String share_prepare_error(Object error) {
+    return '准备分享文件时出错：$error';
+  }
+
+  @override
+  String get share_preparing_title => '正在准备分享…';
+
+  @override
+  String get share_preparing_body => '正在处理文件，请稍候';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '有 $count 个文件无法去除元数据（可能已加密），已按普通分享发送';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP 密码';
+
+  @override
+  String get ui_ftp_password_required => '请设置密码，否则 FTP 服务器将拒绝所有客户端登录';
+
+  @override
+  String get ui_web_share_password => '访问口令';
+
+  @override
+  String get ui_web_share_password_hint => '留空则不启用鉴权（仅建议在可信局域网使用）';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return '已为公网访问自动生成口令：$password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel => '公网分享必须设置访问口令';
+
+  @override
+  String get crypt_auto_encrypt_section => '自动加密';
+
+  @override
+  String get crypt_auto_encrypt_title => '自动加密新增文件';
+
+  @override
+  String get crypt_auto_encrypt_desc => '对已原地加密的目录开启实时监听，新文件写入完成后自动加密（需常驻通知）';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '正在保护 $count 个目录，新文件将自动加密';
+  }
+}
+
+/// The translations for Chinese, as used in Taiwan (`zh_TW`).
+class L10nZhTw extends L10nZh {
+  L10nZhTw() : super('zh_TW');
+
+  @override
+  String get msg6f3e533a => '正在開啟共享檔案...';
+
+  @override
+  String get msgbca59325 => '正在解析安全內容流';
+
+  @override
+  String get zenfile => 'ZenFile 需要儲存許可權才能無縫管理、組織和顯示您的媒體檔案。';
+
+  @override
+  String e(Object e) {
+    return '清理快取目錄失敗: $e';
+  }
+
+  @override
+  String get msg21cefa9b => '內部儲存';
+
+  @override
+  String get smb => '區域網/SMB';
+
+  @override
+  String get msg05d3c93c => '成功移動專案';
+
+  @override
+  String get msgb7e3a1c2 => '成功複製專案';
+
+  @override
+  String e1(Object e) {
+    return '傳輸失敗：$e';
+  }
+
+  @override
+  String get msga45bac47 => '操作已取消';
+
+  @override
+  String e2(Object e) {
+    return '連線遠端伺服器失敗：$e';
+  }
+
+  @override
+  String e3(Object e) {
+    return '建立資料夾出錯：$e';
+  }
+
+  @override
+  String get msg3df5ef6c => '壓縮超出限制';
+
+  @override
+  String get msg5e32276d => '未知藝術家';
+
+  @override
+  String get msg497ec49d => '本地資料夾';
+
+  @override
+  String e4(Object e) {
+    return '下載遠端檔案失敗: $e';
+  }
+
+  @override
+  String get msg6b9ca1dd => '無法將資料夾移動到自身或相同位置';
+
+  @override
+  String e5(Object e) {
+    return '移動專案失敗：$e';
+  }
+
+  @override
+  String get msg5238524c => '無法將資料夾複製到自身或相同位置';
+
+  @override
+  String e6(Object e) {
+    return '複製專案失敗：$e';
+  }
+
+  @override
+  String get msgc806d0fa => '壓縮包';
+
+  @override
+  String get msg03070d08 => '安裝包';
+
+  @override
+  String get ftp => 'FTP共享';
+
+  @override
+  String get web => 'Web共享';
+
+  @override
+  String get msge86bd662 => '裝置相簿（自動）';
+
+  @override
+  String get msg16166a01 => '裝置音訊庫（自動）';
+
+  @override
+  String get msgbb34b7ec => '內部儲存（掃描所有資料夾）';
+
+  @override
+  String get msg26a1f2d9 => '裝置相簿（截圖）';
+
+  @override
+  String get msg39e11368 => '正在解壓安裝包...';
+
+  @override
+  String get apk => '安裝包中未找到可安裝的APK';
+
+  @override
+  String get apk1 => '無法啟動分包APK安裝器';
+
+  @override
+  String get msg2f0138ad => '正在壓縮檔案';
+
+  @override
+  String get msga2292820 => '壓縮包建立成功';
+
+  @override
+  String get msg0683ca6b => '正在解壓壓縮包';
+
+  @override
+  String get msg1f216eda => '壓縮包解壓成功';
+
+  @override
+  String get msg5fa802be => '操作失敗';
+
+  @override
+  String get msg8fccf382 => '是/否';
+
+  @override
+  String get msgc18fb099 => '解壓成功，是否開啟所在位置？';
+
+  @override
+  String get msg_compress_open_location => '壓縮成功，是否開啟所在位置？';
+
+  @override
+  String get msg4367e85a => '未找到可壓縮的檔案';
+
+  @override
+  String get msg60a4545d => '不支援的格式';
+
+  @override
+  String get msg226519e7 => '未找到壓縮包檔案';
+
+  @override
+  String get msg88d150c7 => '未找到可分享的專案。';
+
+  @override
+  String e7(Object e) {
+    return '讀取共享檔案出錯：$e';
+  }
+
+  @override
+  String get zenfilesmbvirtualstoragebridgen =>
+      'ZenFile 區域網/SMB Virtual Storage Bridge\\n';
+
+  @override
+  String get msgf3a485df => '新建資料夾';
+
+  @override
+  String get msge48a7157 => '新建檔案';
+
+  @override
+  String get zenfilebackupssettings => '設定已備份到 ZenFile/Backups/Settings/';
+
+  @override
+  String get json => '請選擇有效的 .json 設定備份檔案';
+
+  @override
+  String e8(Object e) {
+    return '設定恢復失敗: $e';
+  }
+
+  @override
+  String url(Object url) {
+    return '無法開啟連結 $url';
+  }
+
+  @override
+  String get zenfile1 => '關於 ZenFile';
+
+  @override
+  String get v1041 => 'v1.0.43 (檢視)';
+
+  @override
+  String get ui_view_update => '版本更新';
+
+  @override
+  String get update_github_check => 'GitHub 版本偵測';
+
+  @override
+  String update_current_version(String version) {
+    return '目前版本：$version';
+  }
+
+  @override
+  String get update_checking => '正在檢查更新…';
+
+  @override
+  String get update_latest => '目前已是最新版本';
+
+  @override
+  String update_new_version(String version) {
+    return '發現新版本：$version';
+  }
+
+  @override
+  String get update_check_failed => '檢查更新失敗，請檢查網路連線後重試';
+
+  @override
+  String get update_retry => '重試';
+
+  @override
+  String get update_dialog_ignore => '忽略';
+
+  @override
+  String get update_dialog_update => '更新';
+
+  @override
+  String get update_startup_prompt => '啟動時彈窗提醒';
+
+  @override
+  String get update_dialog_no_remind => '不再提醒';
+
+  @override
+  String get update_prompt_off_hint => '已關閉啟動彈窗提醒，可在「版本更新」頁重新開啟';
+
+  @override
+  String get update_changelog_empty => '該版本未提供更新日誌';
+
+  @override
+  String get update_ignored_hint => '已忽略該版本的啟動提示';
+
+  @override
+  String get update_download_install => '下載安裝';
+
+  @override
+  String get update_downloading => '正在下載更新…';
+
+  @override
+  String get update_download_failed => '下載失敗，請重試';
+
+  @override
+  String get update_view_github => '前往 GitHub 查看';
+
+  @override
+  String get zenfileflutter =>
+      'ZenFile 是一款基於 Flutter 構建的精美、流暢、開源的檔案管理器和離線媒體中心。專為極致效能、乾淨的毛玻璃美學和無縫使用者體驗而設計。';
+
+  @override
+  String get msga12ebf50 => '極速體驗';
+
+  @override
+  String get msgfccb5a01 => '無狀態快取與非同步掃描';
+
+  @override
+  String get msg6d8fbdac => '加密安全工作區';
+
+  @override
+  String get ftpsftpwebdav => '支援 FTP、區域網、SFTP 和 WebDAV';
+
+  @override
+  String get msge8f352b9 => '精美介面';
+
+  @override
+  String get amoled => 'AMOLED 純黑 & 絢麗主題';
+
+  @override
+  String get msge8069659 => '在倉庫中加星';
+
+  @override
+  String get telegram => '加入 Telegram 頻道';
+
+  @override
+  String get msg5f84adea => '與好友分享應用';
+
+  @override
+  String get zenfilehttpsgithubcoml930203811zenfilereleases =>
+      '推薦 ZenFile，一款精美的離線檔案管理器和媒體中心：https://github.com/l930203811/ZenFile/releases';
+
+  @override
+  String get github => '檢視 GitHub 原始碼';
+
+  @override
+  String get sequeldpdnsorg => '聯絡郵箱：1@sequel.dpdns.org';
+
+  @override
+  String get msged8518d7 => '郵箱已複製到剪貼簿';
+
+  @override
+  String get qq => 'QQ 群號已複製到剪貼簿';
+
+  @override
+  String get bysequel => '用心打造 ❤️ by Sequel';
+
+  @override
+  String get zenfile2 => '修改版本 © 2026 ZenFile。保留所有權利。';
+
+  @override
+  String get based_on_nfile => '基於 Senzme 的 NFile 開發。原始版權 © 2026 NFile。';
+
+  @override
+  String get msg138d3725 => '您的支援是我持續更新的動力 ❤️';
+
+  @override
+  String get msgccd097a7 => '支付寶';
+
+  @override
+  String get msgbffe28c8 => '微信支付';
+
+  @override
+  String get msg0537b04e => '長按圖片可儲存到相簿，感謝您的支援！';
+
+  @override
+  String get zenfilev1041 => '下載 ZenFile';
+
+  @override
+  String get msg9d287020 => '123雲盤';
+
+  @override
+  String get msgb2b41b6a => '115網盤';
+
+  @override
+  String get msg77ee718b => '百度網盤';
+
+  @override
+  String get msgbff1432a => '夸克網盤';
+
+  @override
+  String get msge03395d0 => 'PikPak網盤';
+
+  @override
+  String get svg => '新增 SVG 檔案完整支援（縮圖預覽與檢視）';
+
+  @override
+  String get ziprar7ztargz => '新增壓縮包格式顏色區分（zip/rar/7z/tar/gz 各有專屬顏色）';
+
+  @override
+  String get msg09a6e11b => '新增遠端檔案先下載再播放功能';
+
+  @override
+  String get msg1c3206b8 => '修復分類頁解壓後無法跳轉到瀏覽頁的問題';
+
+  @override
+  String get msgb1e4da91 => '修復「檢視快取目錄」和「解壓後開啟所在位置」導致頁面卡死的問題';
+
+  @override
+  String get yyyymmdd => '最佳化檔案日期格式為 yyyy-MM-dd';
+
+  @override
+  String get msg4c425252 => '最佳化預設啟用 24 小時制時間顯示';
+
+  @override
+  String get msg1eaf4abb => '路徑欄全面最佳化（更緊湊的麵包屑按鈕和箭頭樣式）';
+
+  @override
+  String get msgd3381817 => '標籤欄和路徑欄整體上移，為檔案列表留出更多空間';
+
+  @override
+  String get msg342688b2 => '雙視窗頭部區域精簡（高度縮減30%）';
+
+  @override
+  String get msg8954452f => '雙視窗模式下遠端伺服器替換未啟用標籤頁';
+
+  @override
+  String get msgac5a0315 => '返回手勢最佳化：選中狀態下返回清除選中而非退出頁面';
+
+  @override
+  String get msg1904388e => '雙指右滑開啟抽屜頁，雙指左滑切換分類/瀏覽頁';
+
+  @override
+  String get msg2762c070 => '新增雙指滑動開關（常規與行為設定中可關閉）';
+
+  @override
+  String get msg48dca69a => '進度條改為圓環線條樣式，中心顯示百分比數字';
+
+  @override
+  String get windows => '遠端路徑相容性修復（Windows平臺路徑分隔符問題）';
+
+  @override
+  String get msg65eefc98 => '位址列開關改為控制美化後的路徑麵包屑';
+
+  @override
+  String get msg96a6856a => '預設主頁設定（可選擇分類頁或瀏覽頁作為啟動頁）';
+
+  @override
+  String get msg250213fd => '全新安裝包圖示（自然禪意風格）';
+
+  @override
+  String get msg7f53e8b1 => '圓形百分比進度條（複製/移動檔案時顯示）';
+
+  @override
+  String get msg051469b5 => '操作成功後自動關閉進度條，無需手動確認';
+
+  @override
+  String get msge4c4d5e2 => '檔案操作選單改為底部彈出（不再遮擋標籤欄）';
+
+  @override
+  String get msga33dbb51 => '選擇模式操作欄移至螢幕底部（含已選數量指示器）';
+
+  @override
+  String get msge6c84f11 => '修復：切換圖示後點選進入應用詳情';
+
+  @override
+  String get msg46b8ca8f => '修復：遠端複製後切換本地頁面異常';
+
+  @override
+  String get msgb3dea5f5 => '文字檢視器長按選單支援複製和全選（已漢化）';
+
+  @override
+  String get msga4c92214 => '拖放彈窗佈局最佳化（更緊湊）';
+
+  @override
+  String get msg32854144 => '分類頁圖示支援圓形/方形背景切換';
+
+  @override
+  String get msg3a93e257 => '分類圖示形狀設定（外觀與主題中切換）';
+
+  @override
+  String get zenfile3 => 'ZenFile 首次釋出';
+
+  @override
+  String get msg47b760ed => '多標籤頁支援';
+
+  @override
+  String get ftpsftpwebdavsmb => '遠端伺服器連線（FTP/SFTP/WebDAV/SMB）';
+
+  @override
+  String get msg4b736dfb => '檔案加密保險櫃';
+
+  @override
+  String get ftpwebdav => 'FTP/WebDAV 伺服器功能';
+
+  @override
+  String get msg03257c2d => '自定義主題與外觀設定';
+
+  @override
+  String get msg5cce42e6 => '遠端伺服器檔案拖放操作最佳化';
+
+  @override
+  String get msg074f1ce7 => '自定義應用桌面圖示功能完善';
+
+  @override
+  String get msg5c66ffab => '遠端伺服器檔案列表中長按可能觸發拖放操作彈窗（下版本修復）';
+
+  @override
+  String get bug1sequeldpdnsorgqq792408214 =>
+      '如果您有任何最佳化建議或發現Bug，歡迎透過郵箱 1@sequel.dpdns.org 或QQ群 792408214 反饋給我們。';
+
+  @override
+  String get msgd054a84c => '長按儲存圖片';
+
+  @override
+  String get msgb3b83e12 => '圖片載入失敗';
+
+  @override
+  String get msgc2790d54 => '需要儲存許可權才能儲存圖片';
+
+  @override
+  String get msg1292d351 => '圖片已儲存到相簿';
+
+  @override
+  String e9(Object e) {
+    return '儲存失敗: $e';
+  }
+
+  @override
+  String get msg7a4ee0c7 => '沒有可分享的檔案';
+
+  @override
+  String get msg45326802 => '成功刪除專案';
+
+  @override
+  String e10(Object e) {
+    return '分享出錯：$e';
+  }
+
+  @override
+  String get msg4fb42e6e => '已複製到剪貼簿';
+
+  @override
+  String get msge5212c58 => '已剪下到剪貼簿';
+
+  @override
+  String get msgc8ce4b36 => '重新命名';
+
+  @override
+  String get msgf139c5cf => '輸入新名稱';
+
+  @override
+  String get msg_rename_extension_warning_title => '副檔名變更';
+
+  @override
+  String get msg_rename_extension_warning_content =>
+      '您正在修改檔案副檔名，這可能導致檔案無法正常開啟。確定要繼續嗎？';
+
+  @override
+  String get msg_rename_extension_confirm => '確認修改';
+
+  @override
+  String get msg53518c22 => '刪除檔案';
+
+  @override
+  String get msg47809e5d => '無最近檔案';
+
+  @override
+  String get msg7a7e6c25 => '新建立或下載的檔案將顯示在這裡。';
+
+  @override
+  String get msg765d1698 => '刪除所選專案';
+
+  @override
+  String get msg365f2f0a => '專案刪除成功 ✓';
+
+  @override
+  String successcount(Object successCount) {
+    return '已成功新增 $successCount 個專案到壓縮包 ✓';
+  }
+
+  @override
+  String count(Object count) {
+    return '已貼上 $count 個專案到壓縮包 ✓';
+  }
+
+  @override
+  String get msg39cb3352 => '無法讀取壓縮包';
+
+  @override
+  String get msg99abedc6 => '解壓到當前資料夾';
+
+  @override
+  String get msg8d0cfb58 => '新增檔案';
+
+  @override
+  String get msg5bf1fb72 => '無損音訊';
+
+  @override
+  String get msg47cab5ae => '定時關閉';
+
+  @override
+  String get msg50c1b248 => '後臺播放已停止';
+
+  @override
+  String get msg6d16d396 => '後臺播放已啟用';
+
+  @override
+  String get msg3038d9b8 => '隨機播放: 關';
+
+  @override
+  String get msg29eed1da => '後臺播放';
+
+  @override
+  String get msg4aa059f7 => '點選停止後臺播放';
+
+  @override
+  String get msg8f7f4490 => '顯示帶控制按鈕的通知';
+
+  @override
+  String get msgb7c87215 => '音效與均衡器';
+
+  @override
+  String get msgfc449780 => '音訊檔案資訊';
+
+  @override
+  String get msgb4fbc92c => '備份與恢復';
+
+  @override
+  String get zenfilebackupssettings1 => '將目前設定備份到已選擇的路徑';
+
+  @override
+  String get json1 => '從下方清單中選擇備份檔案進行恢復';
+
+  @override
+  String get msg534c621a => '備份目錄';
+
+  @override
+  String get msg396b7d3f => '檔案大小';
+
+  @override
+  String get msgc047ee32 => '最後備份時間';
+
+  @override
+  String get msg917fd6ef => '沒有可匯出的資料。';
+
+  @override
+  String get sqlite => 'SQLite資料庫閱讀器';
+
+  @override
+  String get msg03a0d224 => '表結構';
+
+  @override
+  String get sql => 'SQL控制檯';
+
+  @override
+  String get msge2f0fe67 => '開啟資料庫失敗';
+
+  @override
+  String get msg8bb11da4 => '此資料庫中未找到表。';
+
+  @override
+  String get msg7796aa3e => '搜尋行...';
+
+  @override
+  String get msg15f26697 => '未找到行';
+
+  @override
+  String get msg0eaa935b => '未載入結構詳情。';
+
+  @override
+  String get sql1 => 'SQL 編輯器';
+
+  @override
+  String get select => 'SELECT模板';
+
+  @override
+  String get csv => '匯出結果為CSV';
+
+  @override
+  String get select1 => '執行SELECT查詢以檢視結果。';
+
+  @override
+  String get msgd1ad9002 => '執行查詢出錯。';
+
+  @override
+  String targetpath(Object targetPath) {
+    return '已複製路徑: $targetPath';
+  }
+
+  @override
+  String get msg6ed14da7 => '下一級';
+
+  @override
+  String get msgcd0b9aca => '刪除選中';
+
+  @override
+  String get msgee14ee27 => '確定要刪除此專案嗎？此操作無法撤銷。';
+
+  @override
+  String filenamecreatedname(Object createdName, Object fileName) {
+    return '\"$fileName\" 已存在，已建立 \"$createdName\"。';
+  }
+
+  @override
+  String foldernamecreatedname(Object createdName, Object folderName) {
+    return '\"$folderName\" 已存在，已建立 \"$createdName\"。';
+  }
+
+  @override
+  String get msgbd165c40 => '建立新的空白文字檔案';
+
+  @override
+  String get msg68ac91eb => '新建壓縮包';
+
+  @override
+  String get msg881f6a80 => '壓縮當前資料夾內容';
+
+  @override
+  String get msg97301f64 => '檢視和排序選項';
+
+  @override
+  String get msg829cb1dd => '列表檢視';
+
+  @override
+  String get msg0a4ebb8d => '大小和間距選項';
+
+  @override
+  String get msg88062f93 => '圖示和資料夾大小';
+
+  @override
+  String get msga7c781f5 => '大小和間距';
+
+  @override
+  String get msga2946a1a => '排序方式';
+
+  @override
+  String get za => '名稱 (Z-A)';
+
+  @override
+  String get msg2e2a26bb => '大小（大）';
+
+  @override
+  String get msgf437ace4 => '僅此資料夾';
+
+  @override
+  String get msg551f98ba => '此目錄不包含任何檔案或子資料夾。';
+
+  @override
+  String get ui_favorites => '收藏夾';
+
+  @override
+  String get ui_favorites_swipe_hint => '從螢幕底部上滑即可開啟收藏夾';
+
+  @override
+  String get ui_new_favorite => '新增收藏';
+
+  @override
+  String get ui_favorite => '收藏';
+
+  @override
+  String msg_favorited(Object name) {
+    return '已收藏 $name';
+  }
+
+  @override
+  String get ui_add_to_favorites => '新增為收藏';
+
+  @override
+  String get ui_group => '分組';
+
+  @override
+  String get ui_new_group => '新增分組';
+
+  @override
+  String get ui_group_name => '分組名稱';
+
+  @override
+  String get ui_default_group => '預設分組';
+
+  @override
+  String get ui_add => '新增';
+
+  @override
+  String get ui_edit_favorite => '編輯收藏';
+
+  @override
+  String get ui_select_group => '選擇分組';
+
+  @override
+  String get ui_save => '儲存';
+
+  @override
+  String get ui_rename_group => '重新命名分組';
+
+  @override
+  String get ui_delete_group => '刪除分組';
+
+  @override
+  String msg_delete_group_confirm(Object name) {
+    return '刪除分組「$name」將同時刪除其中的所有收藏，此操作無法復原。';
+  }
+
+  @override
+  String get msg_please_enter_path => '請輸入路徑';
+
+  @override
+  String get msg_please_enter_name => '請輸入名稱';
+
+  @override
+  String get msg_please_enter_group_name => '請輸入分組名稱';
+
+  @override
+  String get msg_favorite_exists => '此路徑已收藏';
+
+  @override
+  String get msg4dfc167a => '啟用此資料夾的自定義排序';
+
+  @override
+  String get msge4c84f81 => '新增快捷方式';
+
+  @override
+  String get msgd730e478 => '系統根目錄';
+
+  @override
+  String get msg35546526 => '網路連線';
+
+  @override
+  String get msg67a6ea5e => '新增網路連線';
+
+  @override
+  String get msgcc51d6c2 => '移除連線';
+
+  @override
+  String get msg6e0f9cef => '首頁分類';
+
+  @override
+  String get msge9691076 => '空資料夾';
+
+  @override
+  String get msg17093362 => '取消操作';
+
+  @override
+  String get msg681c0f39 => '全域性搜尋';
+
+  @override
+  String get msg0c36f64f => '僅檔案';
+
+  @override
+  String get msg26b041dd => '僅音訊';
+
+  @override
+  String get msge632ba85 => '僅壓縮包';
+
+  @override
+  String label(Object label) {
+    return '$label 篩選已啟用';
+  }
+
+  @override
+  String get msg0e77af8a => '隱藏資料夾';
+
+  @override
+  String e11(Object e) {
+    return '載入出錯：$e';
+  }
+
+  @override
+  String get msg5937f822 => '（空白幻燈片）';
+
+  @override
+  String get msg360d0b37 => '儲存成功 ✓';
+
+  @override
+  String get pdf => 'PDF顯示設定';
+
+  @override
+  String get msg09c933bf => '最佳化大型、設計複雜或掃描檔案的渲染效能。';
+
+  @override
+  String get msg701a85d4 => '標準模式';
+
+  @override
+  String get msg2722d1a7 => '最適合文字檔案';
+
+  @override
+  String get msgb2b08d54 => '適合宣傳冊和照片';
+
+  @override
+  String get msg8b519c02 => '頁面佈局';
+
+  @override
+  String get msg7f2cd152 => '連續（垂直滾動列表）';
+
+  @override
+  String get msg151ea324 => '滾動方向';
+
+  @override
+  String get msg7d45ded6 => '垂直（從上到下滾動）';
+
+  @override
+  String get msg176ef589 => '啟用文字選擇';
+
+  @override
+  String get msg864f8706 => '關閉可顯著提升頁面渲染速度並消除滾動卡頓。';
+
+  @override
+  String get msgd28847a2 => '新建檔案';
+
+  @override
+  String get msg3007c452 => '更多選項';
+
+  @override
+  String get msg452dba7c => '自動換行';
+
+  @override
+  String get msgc31f9440 => '顯示行號';
+
+  @override
+  String get msg1d93c30b => '用其他應用開啟';
+
+  @override
+  String get msgace80573 => '（空檔案）';
+
+  @override
+  String get msg030f48bd => '用應用開啟';
+
+  @override
+  String get msgfd96af00 => '分享功能即將推出';
+
+  @override
+  String get ui_share => '分享';
+
+  @override
+  String get ftp1 => 'FTP伺服器已成功停止';
+
+  @override
+  String ftpe(Object e) {
+    return '啟動FTP伺服器出錯：$e';
+  }
+
+  @override
+  String get msg5c202e56 => '請在更改配置前停止伺服器';
+
+  @override
+  String get msgfca29cb3 => '更改埠';
+
+  @override
+  String get msg8a0b5bf5 => '無效的埠號';
+
+  @override
+  String get msg3bce2199 => '設定使用者名稱';
+
+  @override
+  String get msg0b62b5ce => '使用者名稱不能為空';
+
+  @override
+  String get ftp2 => 'FTP 伺服器';
+
+  @override
+  String get msg5ab96a6d => '編輯設定前請先停止伺服器';
+
+  @override
+  String get msgc400f106 => '更改目錄';
+
+  @override
+  String get msgb5eb59fc => '設定使用者';
+
+  @override
+  String get msg70c53afb => '匿名訪問';
+
+  @override
+  String get msg8e2021aa => '建立快捷方式';
+
+  @override
+  String get msgd70e9bdf => '未啟用';
+
+  @override
+  String get msg7ae644e4 => '網路狀態';
+
+  @override
+  String get msg5d57821d => '伺服器地址';
+
+  @override
+  String get msgfefea1b3 => '主目錄';
+
+  @override
+  String get msg124d9054 => '顯示隱藏檔案';
+
+  @override
+  String get tlsftp => '基於顯式 TLS 的安全 FTP 連線';
+
+  @override
+  String get msg1f4c1042 => '資料夾';
+
+  @override
+  String get msgf2ef53c0 => '在此資料夾中搜尋...';
+
+  @override
+  String get msgfff96ede => '更多操作';
+
+  @override
+  String get msg88e45bb8 => '搜尋您的儲存';
+
+  @override
+  String query(Object _query) {
+    return '未找到匹配 \"$_query\" 的內容';
+  }
+
+  @override
+  String get msge109d1ea => '儀表盤重新整理成功';
+
+  @override
+  String get msg05cea075 => '再按一次退出應用';
+
+  @override
+  String get msg7498c202 => '退出應用';
+
+  @override
+  String get msg03247b17 => '確定要退出嗎？再次按返回鍵或點選退出以關閉應用。';
+
+  @override
+  String get msg354c1c9a => '重新整理儀表盤';
+
+  @override
+  String get msg19021d08 => '自定義快捷分類';
+
+  @override
+  String get html => 'HTML 預覽';
+
+  @override
+  String get msgfba1f416 => '輸入資料夾名稱';
+
+  @override
+  String get msg33b0b21c => '選擇資料夾';
+
+  @override
+  String get msgff3200cc => '清除選擇';
+
+  @override
+  String get msg4614630a => '資料夾為空';
+
+  @override
+  String get msg5dc1fa7b => '使用此資料夾';
+
+  @override
+  String get selectStorageDrive => '選擇儲存裝置';
+
+  @override
+  String get markdown => 'Markdown 預覽';
+
+  @override
+  String get items => '個專案';
+
+  @override
+  String count1(Object count) {
+    return '確定要永久刪除選中的 $count 個專案嗎？';
+  }
+
+  @override
+  String count2(Object count) {
+    return '已成功刪除 $count 個專案';
+  }
+
+  @override
+  String pastedcountdestdir(Object destDir, Object pastedCount) {
+    return '已貼上 $pastedCount 個專案到 $destDir';
+  }
+
+  @override
+  String get msgfadbb0bc => '沒有可分享的檔案。';
+
+  @override
+  String get msg3ad97542 => '未找到可重新命名的物理檔案';
+
+  @override
+  String get msg1303e638 => '修改時間';
+
+  @override
+  String get prop_created => '建立時間';
+
+  @override
+  String get msg5bab3781 => '媒體資訊';
+
+  @override
+  String get msg880a18f3 => '已選擇專案';
+
+  @override
+  String get msgea9ecb93 => '總大小';
+
+  @override
+  String get msg5556baa3 => '長按開啟方式...';
+
+  @override
+  String get msg631cd220 => '確認刪除';
+
+  @override
+  String name(Object name) {
+    return '已刪除 $name';
+  }
+
+  @override
+  String get msgcd8264f1 => '在位置中顯示';
+
+  @override
+  String get msg2a4cfb07 => '開啟方式...';
+
+  @override
+  String get msg8bf52387 => '檔案未找到或不可分享。';
+
+  @override
+  String get msg419be096 => '貼上到此處';
+
+  @override
+  String get msg5093bc80 => '最新優先';
+
+  @override
+  String get msgbc74b5a8 => '按日期';
+
+  @override
+  String get msgef7ae768 => '最新優先（按月分組）';
+
+  @override
+  String get msgb8140039 => '最舊優先（按月分組）';
+
+  @override
+  String ui_month_group_header(int year, int month) {
+    return '$year年$month月';
+  }
+
+  @override
+  String get msg424a0110 => '未知日期';
+
+  @override
+  String get msgb19671d6 => '全部專案';
+
+  @override
+  String get msg11fea612 => '日期和時間';
+
+  @override
+  String get msg12e86877 => '檔案大小 / 專案數';
+
+  @override
+  String get msg7908038f => '無 / 隱藏資訊';
+
+  @override
+  String get msg9136d4dc => '不在右側顯示額外資訊';
+
+  @override
+  String get msg84986f91 => '顯示最後修改日期和時間';
+
+  @override
+  String get msgfc000737 => '檔案顯示大小，資料夾顯示專案數';
+
+  @override
+  String get msg83de16cc => '選擇尾部資訊樣式';
+
+  @override
+  String get msgaa2a18a1 => '選擇當三點操作按鈕隱藏時，檔案和資料夾右側顯示的內容。';
+
+  @override
+  String get msg26e4c5d6 => '顯示位址列';
+
+  @override
+  String get windows1 => '在檔案列表頂部顯示可編輯的Windows資源管理器風格位址列';
+
+  @override
+  String get msg74e86197 => '直接以資料夾（相簿）首選檢視開啟圖片/影片快捷分類';
+
+  @override
+  String get msga1fbf3c6 => '隱藏安卓導航欄';
+
+  @override
+  String get msg02dddc02 => '隱藏底部導航欄以最大化螢幕空間（上滑可顯示）';
+
+  @override
+  String get msg50923c95 => '清除所有已記住的\"開啟方式\"關聯';
+
+  @override
+  String get msg6fdc09ac => '跳過\"開啟方式\"對話方塊';
+
+  @override
+  String get msg0a4b0442 => '繞過應用選擇對話方塊，直接使用預設檢視器開啟檔案';
+
+  @override
+  String get msge1157984 => '選擇啟動時進入分類頁或瀏覽頁';
+
+  @override
+  String get msgae1854a2 => '選擇單指或雙指左右滑動切換頁面';
+
+  @override
+  String get msg11b1ec65 => '在瀏覽頁顯示操作按鈕欄，含後退、前進、新建、複製標籤頁、向上';
+
+  @override
+  String get msg7e7765b6 => '顯示以點(.)開頭的系統檔案和資料夾';
+
+  @override
+  String get msg86f3d70f => '顯示資料夾和檔案計數標題';
+
+  @override
+  String get msg40e9c325 => '在儲存標題欄下顯示資料夾和檔案總數';
+
+  @override
+  String get ampm24 => '在列表中切換12小時（AM/PM）和24小時時間格式';
+
+  @override
+  String get msg25ee6612 => '在列表中隱藏時間和日期';
+
+  @override
+  String get msg337359a6 => '完全隱藏檔案和資料夾的修改日期和時間';
+
+  @override
+  String get msga517863e => '計算並顯示目錄中的檔案和資料夾總數';
+
+  @override
+  String get msg59a24fcb => '計算並顯示目錄中所有檔案的總大小（可能影響列表效能）';
+
+  @override
+  String get msg309e2a28 => '在頂部或底部顯示導航欄位置';
+
+  @override
+  String get msge34c23ff => '頂部';
+
+  @override
+  String get msg3341e3ed => '導覽列顯示在頁面頂部';
+
+  @override
+  String get msg8c414b06 => '底部';
+
+  @override
+  String get msg5d2c8e7f => '導覽列顯示在頁面底部';
+
+  @override
+  String get msg9b7639ac => '在瀏覽和媒體頁面的選擇操作欄中僅顯示圖示';
+
+  @override
+  String get msgdd69671b => '返回時短暫閃爍並滾動到剛退出的資料夾';
+
+  @override
+  String get msg57736228 => '顯示實際的圖片和影片縮圖而非通用檔案圖示';
+
+  @override
+  String get msg1eda8a50 => '允許檔名換行顯示3行而非截斷';
+
+  @override
+  String get msgc7196afd => '隱藏資料夾和檔案旁邊的三點選單按鈕';
+
+  @override
+  String get msgad54815d => '長按並拖動資料夾或檔案將其移動到其他資料夾';
+
+  @override
+  String get msg5dff8f2d => '拖放檔案時顯示選項彈窗（複製、移動、壓縮）';
+
+  @override
+  String get msg4b0a7063 => '允許在單獨的標籤頁中開啟多個資料夾以便快速導航';
+
+  @override
+  String get msgf04ac00d => '並排瀏覽兩個目錄並輕鬆傳輸檔案';
+
+  @override
+  String get msgd1591ba4 => '啟動應用時開啟上次瀏覽的資料夾';
+
+  @override
+  String get msg25792550 => '將刪除的檔案和資料夾移至隱藏的回收站而非永久刪除';
+
+  @override
+  String get msg1b9633fe => '主題色 / 動態主題';
+
+  @override
+  String get msg64db4c2d => '資料夾圖示樣式';
+
+  @override
+  String get msgece44aa5 => '應用抽屜按鈕樣式';
+
+  @override
+  String get amoled1 => 'AMOLED 純黑模式';
+
+  @override
+  String get amoled2 => '在深色模式下為AMOLED螢幕使用純黑背景';
+
+  @override
+  String get msg5228b59f => '應用排版 / 字型';
+
+  @override
+  String get msge7d18d73 => '自定義快捷方式';
+
+  @override
+  String get msg036fe6a4 => '重新排列和切換快捷分類專案的可見性';
+
+  @override
+  String get msgead3e5c5 => '搜尋設定...';
+
+  @override
+  String get msg2590095f => '設定分類';
+
+  @override
+  String get msgfdae44c3 => '常規與行為';
+
+  @override
+  String get msgeae34685 => '預設螢幕、導航控制和快捷方式';
+
+  @override
+  String get msg91b228b8 => '主題、應用圖示、資料夾樣式和排版';
+
+  @override
+  String get msgad6e8bb8 => '檔案瀏覽器選項';
+
+  @override
+  String get msg8ddc4963 => '位址列、隱藏檔案、標籤頁和拖放';
+
+  @override
+  String get msg45db4e2a => '資料夾大小、計數和時間/日期格式';
+
+  @override
+  String get msg09ca4d86 => '預設相簿檢視和縮圖預覽';
+
+  @override
+  String get msgeb3693fb => '開啟操作和預設檢視器配置';
+
+  @override
+  String get msg3a6a39ae => '回收站開關和自動刪除時長';
+
+  @override
+  String get msg9edfaff3 => '備份或恢復所有應用設定';
+
+  @override
+  String get msg99c9cc56 => '嘗試搜尋其他關鍵詞';
+
+  @override
+  String get msga432d127 => '預設主頁';
+
+  @override
+  String get msg226fc6ae => '分類頁';
+
+  @override
+  String get msgd48a082d => '滑動切換頁面';
+
+  @override
+  String get msgaac01f32 => '單指滑動';
+
+  @override
+  String get msg59c7debc => '記住上次開啟的資料夾';
+
+  @override
+  String get msgce732d8a => '隱藏底部欄（首頁/瀏覽）的文字標籤，更簡潔緊湊';
+
+  @override
+  String get msg1cfeaace => '檔案瀏覽器與導航';
+
+  @override
+  String get msgd33e3082 => '高亮退出資料夾';
+
+  @override
+  String get msga4333788 => '媒體與預設操作';
+
+  @override
+  String get msg20c87c8e => '預設相簿首選檢視';
+
+  @override
+  String get msg72b1f919 => '所有預設檢視器選擇已重置';
+
+  @override
+  String get msge99f4762 => '啟用回收站';
+
+  @override
+  String get msg2c8a394a => '瀏覽頁';
+
+  @override
+  String get msg2c3c5a35 => '圖示形狀';
+
+  @override
+  String get msg267fcd86 => '每3天';
+
+  @override
+  String get msg9104c0c5 => '每兩週';
+
+  @override
+  String days(Object days) {
+    return '每$days天';
+  }
+
+  @override
+  String get msg673ad9d4 => '遠端伺服器快取已清除';
+
+  @override
+  String get msgd9f142c4 => '自動清理快取';
+
+  @override
+  String get msg5472ef41 => '立即清除網路伺服器下載的快取檔案';
+
+  @override
+  String get msgac7687d9 => '瀏覽遠端伺服器快取檔案所在目錄';
+
+  @override
+  String get msg225f6249 => '為網路伺服器上的圖片和影片顯示縮圖預覽';
+
+  @override
+  String get materialyou => 'Material You（動態桌布取色）';
+
+  @override
+  String get msg05cff3ad => '活力橙';
+
+  @override
+  String get msg5ed35657 => '皇家紫';
+
+  @override
+  String get msge74a7283 => '琥珀金';
+
+  @override
+  String get msg3904ba87 => '賽博粉';
+
+  @override
+  String get msgd58d230a => '藍寶石';
+
+  @override
+  String get msg508b005e => '青檸綠';
+
+  @override
+  String get msgefdde083 => '日落桃';
+
+  @override
+  String get msg628e73a9 => '預設藍（標誌性藍色）';
+
+  @override
+  String get msg8244d240 => '經典實心';
+
+  @override
+  String get msgf08d9b15 => '現代圓角';
+
+  @override
+  String get msge5fba3dd => '星標特別';
+
+  @override
+  String get msgfe4254dc => '檔案片段';
+
+  @override
+  String get msg84719fd5 => '極簡描邊';
+
+  @override
+  String get zenfile4 => '斷線描邊';
+
+  @override
+  String get vuesax => '分類網格 / Vuesax 網格';
+
+  @override
+  String get msg5dc988f4 => '漢堡選單 / 經典選單';
+
+  @override
+  String get msgd06ba04f => 'M3 表現派 1';
+
+  @override
+  String get msg5090469e => 'M3 表現派 2';
+
+  @override
+  String get d => 'M3 表現派 3';
+
+  @override
+  String get msg67836b24 => '極簡風';
+
+  @override
+  String get msgf08c8dc4 => '玻璃擬態';
+
+  @override
+  String get msgdesign6 => '賽博龐克';
+
+  @override
+  String get msgdesign7 => '新擬態';
+
+  @override
+  String get msgdesign8 => '經典 2';
+
+  @override
+  String get msgdesign9 => '經典 3';
+
+  @override
+  String get msgdesign10 => '使用者設計 1';
+
+  @override
+  String get msgdesign11 => '使用者設計 2';
+
+  @override
+  String get msg7372dc9f => '自定義圖示';
+
+  @override
+  String get msg3004e40a => '預設標誌（自然禪意）';
+
+  @override
+  String get msgc540e940 => '點陣與無襯線';
+
+  @override
+  String get msg00ea5776 => '歐菲特現代無襯線';
+
+  @override
+  String get msg7bdbfaa5 => '捷腦科技等寬';
+
+  @override
+  String get msgdcb4082d => '蒙特都市無襯線';
+
+  @override
+  String get msg9d7001d9 => '自定義匯入字型';
+
+  @override
+  String get msgc2f5e9e4 => '標誌性預設';
+
+  @override
+  String get msg6a7c758f => '從不（禁用自動刪除）';
+
+  @override
+  String days1(Object days) {
+    return '$days 天后';
+  }
+
+  @override
+  String get msgfe76ae54 => '選擇啟動應用時預設顯示的頁面';
+
+  @override
+  String get msg8af2412a => '啟動時顯示快捷分類頁面';
+
+  @override
+  String get msg245c3258 => '啟動時顯示檔案瀏覽頁面';
+
+  @override
+  String get msg4439669d => '選擇用單指或雙指左右滑動切換頁面';
+
+  @override
+  String get msg46978666 => '單指左右滑動切換分類頁、瀏覽頁或開啟抽屜';
+
+  @override
+  String get msgbc9bf336 => '雙指滑動';
+
+  @override
+  String get msg563871d3 => '雙指左右滑動切換分類頁、瀏覽頁或開啟抽屜';
+
+  @override
+  String get msgca71ac0c => '選擇主題色';
+
+  @override
+  String get msg732630c1 => '選擇資料夾圖示樣式';
+
+  @override
+  String get msgf9224d98 => '選擇抽屜按鈕樣式';
+
+  @override
+  String get msgc337ecfa => '選擇分類圖示形狀';
+
+  @override
+  String get msgf18bc3d9 => '應用啟動器圖示';
+
+  @override
+  String get logo => '為應用啟動器圖示選擇一個自定義Logo。注意某些啟動器可能需要幾秒鐘才能更新。';
+
+  @override
+  String get msg64a6476a => '預設標誌';
+
+  @override
+  String get app_icon_classic2 => '經典 2';
+
+  @override
+  String get app_icon_classic3 => '經典金';
+
+  @override
+  String get app_icon_cyberpunk => '賽博龐克';
+
+  @override
+  String get app_icon_glassmorphism => '玻璃擬態';
+
+  @override
+  String get app_icon_m3_expressive => 'M3 表現';
+
+  @override
+  String get app_icon_minimal_flat => '極簡扁平';
+
+  @override
+  String get app_icon_neumorphism => '新擬態';
+
+  @override
+  String get app_icon_classic4 => '經典 4';
+
+  @override
+  String get app_icon_3d_gradient => '3D 漸變';
+
+  @override
+  String get app_icon_glossy_blue => '光澤藍';
+
+  @override
+  String get app_icon_paper_gray => '淺灰紙紋';
+
+  @override
+  String get app_icon_metal_frost => '磨砂金屬';
+
+  @override
+  String get app_icon_blue_folder => '藍色資料夾';
+
+  @override
+  String get app_icon_blue_gold => '深藍鎏金';
+
+  @override
+  String get app_icon_blue_folder_white => '藍白資料夾';
+
+  @override
+  String get app_icon_blue_folder_gradient => '漸變藍資料夾';
+
+  @override
+  String get app_icon_deep_blue_gold => '深藍鎏金資料夾';
+
+  @override
+  String get app_icon_sunset_zf => '暮色紅紫';
+
+  @override
+  String title(Object title) {
+    return '應用圖示已切換為 $title';
+  }
+
+  @override
+  String get msgad76161f => '選擇自定義圖示';
+
+  @override
+  String get pngjpgwebp => '請選擇圖片檔案（PNG/JPG/WEBP）';
+
+  @override
+  String get msgb06c5c34 => '自定義圖示已應用';
+
+  @override
+  String e12(Object e) {
+    return '應用自定義圖示失敗: $e';
+  }
+
+  @override
+  String get msg375c9eb8 => '原始簡潔幾何風格';
+
+  @override
+  String get msg817e321b => '高科技復古點陣標題 + 簡潔正文';
+
+  @override
+  String get msg3c2a24cc => '超流暢、極簡且高階的幾何美學';
+
+  @override
+  String get msg978f8d11 => '乾淨且未來感的開發者等寬風格';
+
+  @override
+  String get msg93b657aa => '大膽、現代且醒目的字型排版';
+
+  @override
+  String get msg9db40ad6 => '您載入的自定義字型檔案';
+
+  @override
+  String get zenfile5 => '選擇一種精美的字型來自定義ZenFile的整體視覺主題';
+
+  @override
+  String get msg7372efa5 => '替換自定義字型檔案';
+
+  @override
+  String get msg3186839b => '載入所選字型檔案失敗。';
+
+  @override
+  String get opentypeotftruetypettf =>
+      '請選擇有效的 OpenType (.otf) 或 TrueType (.ttf) 字型檔案.';
+
+  @override
+  String get msgcf42dedc => '移除自定義字型';
+
+  @override
+  String get msg2b9abfaa => '自定義字型已移除。';
+
+  @override
+  String get msgfdef8c23 => '7 天';
+
+  @override
+  String get msg25436ba3 => '15 天';
+
+  @override
+  String get msg85e7f60c => '30 天（推薦）';
+
+  @override
+  String get msgd61e706f => '從不（手動清理）';
+
+  @override
+  String get msgf0ef894a => '自動刪除回收站時長';
+
+  @override
+  String get msg1200d6b7 => '回收站中的專案將在此時長後被永久刪除。';
+
+  @override
+  String get msg432fbb31 => '刪除連線';
+
+  @override
+  String msgdeleteconn(Object name) {
+    return '確定要刪除 \"$name\" 嗎？';
+  }
+
+  @override
+  String get msg3358aa10 => '新增連線';
+
+  @override
+  String get msgc9c900d0 => '暫無遠端連線';
+
+  @override
+  String get ftpsftpwebdavsmb1 => '新增 FTP、SFTP、WebDav 或 SMB 連線';
+
+  @override
+  String e13(Object e) {
+    return '連線失敗：$e';
+  }
+
+  @override
+  String get msgb5bc0bf1 => '正在解析主機地址...';
+
+  @override
+  String get msgc3d4e5f6 => '正在檢查埠狀態...';
+
+  @override
+  String get msg3005ba4d => '正在驗證憑據...';
+
+  @override
+  String get msgab36a8c6 => '正在掛載儲存卷...';
+
+  @override
+  String name1(Object name) {
+    return '\"$name\" 新增成功！';
+  }
+
+  @override
+  String connectedtype(Object name) {
+    return '\"$name\" 連線成功！';
+  }
+
+  @override
+  String get msgdf434415 => '系統應用已禁用';
+
+  @override
+  String get documentsui => '您的裝置沒有啟用預設的系統檔案/檔案應用（DocumentsUI），';
+
+  @override
+  String get androidnn => '這是 Android 選擇和掛載目錄所必需的。\\n\\n';
+
+  @override
+  String get saf_enable_docs => '或啟用它以使用 SAF 目錄功能。';
+
+  @override
+  String get msgb2af4e30 => '請檢查\"檔案\"或\"檔案\"系統應用是否在裝置設定中被禁用，';
+
+  @override
+  String safe(Object e) {
+    return '請求 SAF 資料夾失敗：$e';
+  }
+
+  @override
+  String get msg65c7ecb6 => '請輸入連線名稱';
+
+  @override
+  String get msg69e3963c => '請輸入伺服器地址/主機名';
+
+  @override
+  String get msgce1ec2ce => '遠端連線';
+
+  @override
+  String get msg25557d1f => '標準檔案傳輸協議';
+
+  @override
+  String get ssh => 'SSH安全檔案傳輸伺服器';
+
+  @override
+  String get http => 'HTTP網頁分散式創作';
+
+  @override
+  String get androidsd => 'Android 儲存訪問框架 (SD 卡 / 外部儲存)';
+
+  @override
+  String get msg8486035b => '選擇網路服務';
+
+  @override
+  String get naszenfile => '將遠端伺服器或 NAS 共享掛載為 ZenFile 儲存列表中的動態驅動器。';
+
+  @override
+  String selectedtype(Object _selectedType) {
+    return '$_selectedType 設定';
+  }
+
+  @override
+  String get msg5c808d9a => '輸入連線詳情以連結此網路儲存卷。';
+
+  @override
+  String get nas => '例如：辦公室 NAS、家庭共享';
+
+  @override
+  String get dav => '例如：192.168.1.100 或 192.168.1.100/dav';
+
+  @override
+  String get naslocal => '例如：192.168.1.100 或 nas.local';
+
+  @override
+  String get dav1 => '例如：/dav 或 /';
+
+  @override
+  String get anonymousadmin => '例如：anonymous 或 admin';
+
+  @override
+  String get msgeec70cd2 => '密碼（可選）';
+
+  @override
+  String get msgf1fa9d44 => '正在建立掛載點...';
+
+  @override
+  String selectedtype1(Object _selectedType) {
+    return '請稍候，我們正在建立與 $_selectedType 伺服器的可靠連線。';
+  }
+
+  @override
+  String e14(Object e) {
+    return '恢復專案出錯：$e';
+  }
+
+  @override
+  String e15(Object e) {
+    return '刪除專案出錯：$e';
+  }
+
+  @override
+  String get msg62187f1b => '確定要永久刪除回收站中的所有專案嗎？此操作不可逆。';
+
+  @override
+  String get msg8cd6bc18 => '清空回收站';
+
+  @override
+  String get msga4dfc0c6 => '回收站已成功清空';
+
+  @override
+  String get msg07d80ac5 => '搜尋已刪除檔案...';
+
+  @override
+  String get msg96d2b75f => '永久刪除';
+
+  @override
+  String get msg0d824a24 => '回收站為空';
+
+  @override
+  String get msg4c478216 => '原始位置';
+
+  @override
+  String get msgc44a57b6 => '正在下載文字...';
+
+  @override
+  String get msgd6d8292d => '正在緩衝媒體...';
+
+  @override
+  String e16(Object e) {
+    return '下載失敗：$e';
+  }
+
+  @override
+  String get msg66d723c5 => '緩衝超時，請檢查網路連線';
+
+  @override
+  String get msg53082c55 => '無法貼上到相同位置';
+
+  @override
+  String get msg108feeed => '正在複製...';
+
+  @override
+  String get msg2d4b44ec => '成功貼上專案';
+
+  @override
+  String filenamee(Object e, Object fileName) {
+    return '上傳\"$fileName\"失敗：$e';
+  }
+
+  @override
+  String newname(Object newName) {
+    return '已重新命名為 \"$newName\"';
+  }
+
+  @override
+  String get msg4b342999 => '刪除專案';
+
+  @override
+  String e17(Object e) {
+    return '刪除失敗：$e';
+  }
+
+  @override
+  String get msg79d7fef7 => '新建遠端資料夾';
+
+  @override
+  String get msga98473f2 => '資料夾名稱';
+
+  @override
+  String e18(Object e) {
+    return '建立資料夾失敗：$e';
+  }
+
+  @override
+  String get msg5ca05a9b => '遠端目錄';
+
+  @override
+  String get msga636c09d => '複製到本地裝置';
+
+  @override
+  String get msga4c461a4 => '下載檔案到本地剪貼簿';
+
+  @override
+  String get msg425502fa => '下載並從伺服器刪除';
+
+  @override
+  String get msgc2b9f4b9 => '根目錄';
+
+  @override
+  String get msg2f7cd487 => '上傳本地剪貼簿到伺服器';
+
+  @override
+  String get msg905c34fa => '貼上遠端剪貼簿';
+
+  @override
+  String get msg8439c155 => '連線已斷開';
+
+  @override
+  String get msgda43df27 => '重試連線';
+
+  @override
+  String get msga21f6ab1 => '空目錄';
+
+  @override
+  String get msge1c538b8 => '在此上傳剪貼簿內容';
+
+  @override
+  String e19(Object e) {
+    return '下載失敗: $e';
+  }
+
+  @override
+  String get msg50eaf94d => '刪除確認';
+
+  @override
+  String get msgcb0da17b => '正在刪除...';
+
+  @override
+  String get msg4805c385 => '應用管理';
+
+  @override
+  String get msg93bc1f09 => '重新整理列表';
+
+  @override
+  String get msg32e490fe => '已安裝的使用者應用';
+
+  @override
+  String get apk2 => '已備份的APK';
+
+  @override
+  String get msg8936ded6 => '搜尋包名或名稱...';
+
+  @override
+  String get msgd8b3fc58 => '按大小排序';
+
+  @override
+  String get msgbe1399f0 => '按字母排序';
+
+  @override
+  String get msg9ad67f11 => '按備份日期排序';
+
+  @override
+  String get msgb0681bd4 => '精確儲存計算';
+
+  @override
+  String get msg34cd846c => '授予使用情況訪問許可權';
+
+  @override
+  String get msga22ddaae => '儲存分析';
+
+  @override
+  String get msgaae779d4 => '重新掃描儲存';
+
+  @override
+  String get msg7ae97495 => '正在掃描裝置儲存';
+
+  @override
+  String get msga5e5bf71 => '總儲存';
+
+  @override
+  String get msg652be256 => '分類明細';
+
+  @override
+  String get msgb1a2c3d4 => 'Initializing...';
+
+  @override
+  String get msgc2d3e4f5 => 'Reading system memory...';
+
+  @override
+  String get msgd3e4f5a6 => 'Calculating app storage...';
+
+  @override
+  String get msge4f5a6b7 =>
+      'Analyzing files, categorizing assets, and reading installed apps space...';
+
+  @override
+  String msgf5a6b7c8(Object size) {
+    return '$size free';
+  }
+
+  @override
+  String msga6b7c8d9(Object size, Object percent) {
+    return '$size used ($percent%)';
+  }
+
+  @override
+  String msgb7c8d9e0(Object percent) {
+    return '$percent% of total storage';
+  }
+
+  @override
+  String get msgc8d9e0f1 => 'System / Other';
+
+  @override
+  String ui_drag_archive_created(Object name) {
+    return 'Archive \"$name\" created successfully';
+  }
+
+  @override
+  String ui_drag_archive_failed(Object error) {
+    return 'Failed to create archive: $error';
+  }
+
+  @override
+  String get ui_backup_success => '設定已備份到 ZenFile/Backups/Settings/';
+
+  @override
+  String ui_backup_failed(Object error) {
+    return '備份失敗：$error';
+  }
+
+  @override
+  String get ui_restore_invalid_file => '請選擇有效的 .json 設定備份檔案';
+
+  @override
+  String get ui_restore_success => '設定恢復成功！';
+
+  @override
+  String ui_restore_failed(Object error) {
+    return '恢復失敗：$error';
+  }
+
+  @override
+  String get msgeb3d7d70 => '解除安裝應用';
+
+  @override
+  String get msg6eb319a1 => '正在備份所選應用...';
+
+  @override
+  String get msg7fbfdce6 => '未找到應用';
+
+  @override
+  String get msg753cdb55 => '啟動應用';
+
+  @override
+  String get apk3 => '備份APK';
+
+  @override
+  String get apk4 => '正在備份APK...';
+
+  @override
+  String get apk5 => '備份APK失敗';
+
+  @override
+  String get apk6 => '分享APK檔案';
+
+  @override
+  String get copy_package_name => '複製包名';
+
+  @override
+  String get msga0b18169 => '分享備份檔案';
+
+  @override
+  String get msgb443cd06 => '刪除備份檔案';
+
+  @override
+  String e20(Object e) {
+    return '載入檔案出錯：$e';
+  }
+
+  @override
+  String get msg24c6ab0f => '檔案儲存成功';
+
+  @override
+  String count3(Object count) {
+    return '已替換 $count 處';
+  }
+
+  @override
+  String get msgffb01e5b => '純文字';
+
+  @override
+  String get msg7902d9c0 => '選擇語法';
+
+  @override
+  String get msgc856a077 => '查詢 / 替換';
+
+  @override
+  String get msg7f2c95cd => '儲存檔案';
+
+  @override
+  String get msg084e9388 => '解鎖縮放';
+
+  @override
+  String get msgf387265a => '自動換行: 開';
+
+  @override
+  String get msg1045ba75 => '自動換行: 關';
+
+  @override
+  String get msg96f0ad7d => '編輯鎖定: 開';
+
+  @override
+  String get msg349ab61d => '編輯鎖定: 關';
+
+  @override
+  String get msg0cee3cd1 => '隱藏行號';
+
+  @override
+  String selectedlanguage(Object _selectedLanguage) {
+    return '語法 ($_selectedLanguage)';
+  }
+
+  @override
+  String get msg0dac421f => '替換為...';
+
+  @override
+  String get msg52709ae1 => '全部替換';
+
+  @override
+  String get msg4ecba8f6 => '製表符';
+
+  @override
+  String e21(Object e) {
+    return '載入保險箱出錯：$e';
+  }
+
+  @override
+  String get msg4828116a => '隱藏檔案';
+
+  @override
+  String get msg3bf31dfe => '輸入密碼解鎖';
+
+  @override
+  String get pin => '輸入PIN碼解鎖錢包';
+
+  @override
+  String get pin1 => '設定您的4位錢包PIN碼';
+
+  @override
+  String get pin2 => '確認您的4位PIN碼';
+
+  @override
+  String get msgbb590f19 => '私人保險箱';
+
+  @override
+  String get msgaa43fa46 => '全部清除';
+
+  @override
+  String get msgc16eed0e => '播放速度';
+
+  @override
+  String get msg8f106217 => '鎖定控制';
+
+  @override
+  String get msg1f41f25d => '重複模式';
+
+  @override
+  String get msg4d2abc8c => '媒體路徑已複製到剪貼簿。';
+
+  @override
+  String get http1 => '本地 HTTP 共享伺服器已停止。';
+
+  @override
+  String get msg2904d894 => '正在建立安全代理中繼...';
+
+  @override
+  String get msga1b2c3d4 => '返回上一級';
+
+  @override
+  String get msga1b2c3d5 => '如何設定Shizuku？';
+
+  @override
+  String get msga1b2c3d6 => '需要儲存許可權';
+
+  @override
+  String get msga1b2c3d7 => '授予許可權';
+
+  @override
+  String get msg_media_only_permission_title => '僅媒體檔案許可權';
+
+  @override
+  String get msg_media_only_permission_desc =>
+      '目前僅授予媒體檔案存取許可權，檔案管理員將無法正常使用重新命名、剪下、刪除等功能。請授予「所有檔案管理許可權」以獲得完整功能。';
+
+  @override
+  String get msg_grant_full_storage_permission => '授予完整儲存許可權';
+
+  @override
+  String get ui_open_settings => '開啟設定';
+
+  @override
+  String get ui_open_settings_desc => '儲存許可權已被永久拒絕，請前往系統設定手動授予檔案管理許可權。';
+
+  @override
+  String get msg2c146598 => '網際網路雲隧道已上線！臨時連結已啟用。';
+
+  @override
+  String get msg4a5d26f4 => '連結已複製到剪貼簿！';
+
+  @override
+  String type(Object type) {
+    return '使用其他裝置掃描以立即開啟 $type。';
+  }
+
+  @override
+  String get msgc8390d74 => '網頁共享中心';
+
+  @override
+  String get msg5345cdce => '網際網路分享連結';
+
+  @override
+  String get http2 => 'HTTP本地共享伺服器';
+
+  @override
+  String get wifi => '允許同一 Wi-Fi 下的其他裝置透過網頁瀏覽器訪問、檢視和流式傳輸您的檔案。';
+
+  @override
+  String get msg73c512df => '伺服器線上並流式傳輸中';
+
+  @override
+  String get url1 => '複製 URL';
+
+  @override
+  String get msg22b03c02 => '二維碼';
+
+  @override
+  String sharedir(Object shareDir) {
+    return '共享目錄：$shareDir';
+  }
+
+  @override
+  String get msge6a29aa4 => '伺服器空閒';
+
+  @override
+  String get wifi1 => '請確保其他裝置與此裝置處於同一 Wi-Fi 網路，然後啟動伺服器。';
+
+  @override
+  String get msg974465c1 => '啟動網頁伺服器';
+
+  @override
+  String get msg27d5bd3c =>
+      '生成一個安全的臨時公共隧道連結。與網際網路上任何地方的任何人分享此連結，讓他們高速下載檔案，無論檔案大小。';
+
+  @override
+  String get msg66a09a42 => '臨時分享連結（有效期 24 小時）：';
+
+  @override
+  String get msg879058ce => '複製連結';
+
+  @override
+  String get msg7ed199f8 => '已連線的瀏覽器客戶端';
+
+  @override
+  String get msgb77e4adf => '等待傳入的網際網路下載...';
+
+  @override
+  String get msga61778bc => '網際網路共享未啟用';
+
+  @override
+  String get msga3c80551 => '停用雲共享';
+
+  @override
+  String get msg6466e61e => '啟用網際網路分享連結';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return '啟用網際網路分享連結失敗：$error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return '遠端目錄載入失敗：$error';
+  }
+
+  @override
+  String get msg67bd9375 => '正在處理...';
+
+  @override
+  String get msg3fa72416 => '正在重新命名檔案...';
+
+  @override
+  String get msg7dbbef0e => '請稍候，正在更新資料夾內容';
+
+  @override
+  String get msg1a2d9a44 => '原始名稱 (%)';
+
+  @override
+  String get msgcb029197 => '順序編號 (#)';
+
+  @override
+  String get msgb6d8a14f => '三位順序編號 (###)';
+
+  @override
+  String n(Object n) {
+    return '不帶副檔名的檔名 ($n)';
+  }
+
+  @override
+  String de(Object de) {
+    return '帶點的副檔名 ($de)';
+  }
+
+  @override
+  String e22(Object e) {
+    return '不帶點的副檔名 ($e)';
+  }
+
+  @override
+  String n1(Object N) {
+    return '帶副檔名的完整檔名 ($N)';
+  }
+
+  @override
+  String get msg0e9dc63a => '名稱模式';
+
+  @override
+  String get msg4a63edba => '副檔名';
+
+  @override
+  String get msga420ad79 => '起始編號';
+
+  @override
+  String get msg9857973d => '查詢文字';
+
+  @override
+  String get msg1605701e => '替換為';
+
+  @override
+  String get msgd35f80c8 => '替換內容';
+
+  @override
+  String get msg32c61dab => '重新命名預覽';
+
+  @override
+  String get msg92642e0e => '返回編輯';
+
+  @override
+  String get msgde88d67a => '檔案已存在';
+
+  @override
+  String get msge59e35b5 => '應用於所有剩餘衝突';
+
+  @override
+  String get msg27dfaae5 => '保留兩者';
+
+  @override
+  String get msg6cfbf05d => '重新命名檔案';
+
+  @override
+  String get msg25f747ce => '建立壓縮包';
+
+  @override
+  String get msged5f808e => '壓縮格式';
+
+  @override
+  String get mb => '分卷大小（MB，可選）';
+
+  @override
+  String get msgac52af6a => '留空則建立單個壓縮包';
+
+  @override
+  String get msgdf2ef7f5 => '為每個檔案建立單獨的壓縮包';
+
+  @override
+  String get msgb52d4a73 => '新建標籤頁';
+
+  @override
+  String get msg4e9c344a => '複製標籤頁';
+
+  @override
+  String get msg7716532d => '關閉其他標籤頁';
+
+  @override
+  String get msgd78603eb => '雙擊關閉標籤頁';
+
+  @override
+  String selectedcount(Object selectedCount) {
+    return '$selectedCount 個專案';
+  }
+
+  @override
+  String e23(Object e) {
+    return '建立壓縮包失敗：$e';
+  }
+
+  @override
+  String get msgc4d7eece => '解壓壓縮包';
+
+  @override
+  String get msgf15821d0 => '解壓到資料夾';
+
+  @override
+  String get msg_extract_to => '解壓縮到…';
+
+  @override
+  String get ui_current_directory => '目前目錄';
+
+  @override
+  String get ui_custom_directory => '自訂目錄';
+
+  @override
+  String get msgff69affd => '密碼（如果已加密）';
+
+  @override
+  String get msg67eda5e6 => '全部檔案';
+
+  @override
+  String get msg8b2fcb31 => '顯示此目錄中的所有檔案和資料夾';
+
+  @override
+  String get pdfword => 'PDF、Word 檔案、電子表格、文字和電子書';
+
+  @override
+  String get jpegpngwebp => 'JPEG、PNG、WebP 和原始照片格式';
+
+  @override
+  String get mp3wavaac => 'MP3、WAV、AAC 和高保真音訊';
+
+  @override
+  String get mp4mkvwebm => 'MP4、MKV、WebM 和高解析度影片片段';
+
+  @override
+  String get zip7zrar => 'ZIP、7Z、RAR 和其他壓縮檔案';
+
+  @override
+  String get msg6d3e48cc => '選擇一個類別以僅顯示匹配的檔案';
+
+  @override
+  String e24(Object e) {
+    return '遠端縮圖載入失敗: $e';
+  }
+
+  @override
+  String get msg32a1bd25 => '1 項';
+
+  @override
+  String count4(Object count) {
+    return '$count 項';
+  }
+
+  @override
+  String get msg9d69d7a0 => '正在移動檔案...';
+
+  @override
+  String get ui_transferring_files => '傳輸檔案';
+
+  @override
+  String get ui_time_remaining => '剩下';
+
+  @override
+  String get zenfile6 => 'ZenFile 自定義原生體驗';
+
+  @override
+  String get built_in_zenfile_viewer => 'ZenFile 內建檢視器';
+
+  @override
+  String get msg42be43e6 => '系統外部應用';
+
+  @override
+  String get msgd1fca831 => '使用裝置上的第三方應用開啟';
+
+  @override
+  String get msgdb75b769 => '僅一次';
+
+  @override
+  String get msg959429a5 => '瀏覽裝置檔案';
+
+  @override
+  String get msgc31116e3 => '新增新連線';
+
+  @override
+  String get msgf1d4ff50 => '自定義';
+
+  @override
+  String get msg490ac572 => '未固定快捷方式。點選自定義新增。';
+
+  @override
+  String get msg445a43cb => '拖動手柄 (=) 可重新排列首頁圖示。';
+
+  @override
+  String get msg944d5ecd => '新增資料夾/檔案快捷方式';
+
+  @override
+  String get msg4f356348 => '自定義路徑';
+
+  @override
+  String get msg94733bec => '刪除快捷方式';
+
+  @override
+  String get msg5c29ad2f => '恢復位置';
+
+  @override
+  String get msg21de5dd7 => '自定義掃描位置：';
+
+  @override
+  String get msg4bb81f99 => '未新增自定義路徑。';
+
+  @override
+  String get msgf544c399 => '10月';
+
+  @override
+  String get msgc0615eb3 => '12月';
+
+  @override
+  String get msg54355dd8 => '最近檔案';
+
+  @override
+  String get msgd5eac3a3 => '受限系統資料夾';
+
+  @override
+  String get android11androiddataandroidobbzenfile =>
+      'Android 11+ 限制了對 Android/data 和 Android/obb 資料夾的標準訪問，以保護應用資料。要檢視和修改這些檔案，ZenFile 需要高階許可權。';
+
+  @override
+  String get root => '使用 Root 訪問（超級使用者）';
+
+  @override
+  String get shizukuroot => '授予Shizuku訪問許可權（無需Root）';
+
+  @override
+  String selectedcount1(Object selectedCount) {
+    return '已選擇 $selectedCount 項';
+  }
+
+  @override
+  String selectedcount2(Object selectedCount) {
+    return '確定要刪除 $selectedCount 個專案嗎？此操作無法撤銷。';
+  }
+
+  @override
+  String get msga9b87614 => '已取消置頂所選專案';
+
+  @override
+  String get msg84e4fac9 => '取消置頂';
+
+  @override
+  String get msg3be9abab => '正在計算大小...';
+
+  @override
+  String get msg7704aa2c => '已選擇路徑：';
+
+  @override
+  String label1(Object label) {
+    return '已複製 $label 到剪貼簿';
+  }
+
+  @override
+  String selectedcount3(Object selectedCount) {
+    return '已選擇 $selectedCount 個專案';
+  }
+
+  @override
+  String get msg8b73264b => '檔案（長按選擇開啟方式）';
+
+  @override
+  String get msgc5c0646c => '複製所選';
+
+  @override
+  String get msg8e6d4604 => '剪下所選';
+
+  @override
+  String get msg1058354c => '屬性與資訊';
+
+  @override
+  String usedstoragestr(Object usedStorageStr) {
+    return '已使用 $usedStorageStr';
+  }
+
+  @override
+  String freestoragestr(Object freeStorageStr) {
+    return '$freeStorageStr 可用';
+  }
+
+  @override
+  String get msgc823e21b => '取消固定標籤頁';
+
+  @override
+  String get msg7d6c1284 => '未找到匹配的目錄或檔案';
+
+  @override
+  String path(Object path) {
+    return '路徑不存在: $path';
+  }
+
+  @override
+  String get msg6cbbf7d9 => '輸入絕對路徑...';
+
+  @override
+  String get msgf13fc21c => '遠端';
+
+  @override
+  String get msg41e625d1 => '新增遠端連線';
+
+  @override
+  String get msg8755e992 => '淺色模式';
+
+  @override
+  String get msg1cf6fcd3 => '更多設定';
+
+  @override
+  String get msgeef7e30c => '精品媒體套件';
+
+  @override
+  String msg2ad64aa7(Object urlString) {
+    return '無法開啟連結：$urlString';
+  }
+
+  @override
+  String get msg30d17f96 => '核心亮點';
+
+  @override
+  String get msgaba638c4 => '保險箱安全';
+
+  @override
+  String get msgd309e9ea => '伺服器中心';
+
+  @override
+  String get msg4a5f936c => '聯絡與分享';
+
+  @override
+  String get msg4d48a010 => 'ZenFile - 精美檔案管理器';
+
+  @override
+  String get msg1f4c0192 => '請作者喝杯咖啡 ☕';
+
+  @override
+  String get msg2eceaa85 => '打賞作者';
+
+  @override
+  String get msg305734ce => '更新日誌';
+
+  @override
+  String get msg1c80891a => '新增瀏覽頁遠端檔案縮圖預覽';
+
+  @override
+  String get msg212f8f9e => '修復遠端檔案無法開啟播放的問題';
+
+  @override
+  String get msgd0cf310e => '最佳化遠端檔案快取目錄統一管理';
+
+  @override
+  String get msg072f2022 => '單指滑動切換頁面改為雙指滑動（避免誤觸返回手勢）';
+
+  @override
+  String get msg66517dc4 => '字型選項標題全面漢化';
+
+  @override
+  String get msgacad92c8 => '移除\"阻止左側返回手勢開啟抽屜\"功能';
+
+  @override
+  String get msg09d0e1b6 => '修復：備用圖示切換不生效';
+
+  @override
+  String get msg2d1872c8 => '文字編輯器選單全面漢化';
+
+  @override
+  String get msg2e35eef7 => '雙面板檔案瀏覽器';
+
+  @override
+  String get msge96aa2cd => '內建媒體播放器';
+
+  @override
+  String get msg49a6c41e => '應用圖示切換（多種風格可選）';
+
+  @override
+  String get msg4d82be7c => '下版本更新計劃';
+
+  @override
+  String get msg2c8957dd => '已知問題';
+
+  @override
+  String get msg11cb01fc => '遠端伺服器邊快取邊播放影片';
+
+  @override
+  String get msg60a4d643 => '自定義圖示上傳後桌面圖示不會更改（下版本完善）';
+
+  @override
+  String get msg9e68ea42 => '儲存失敗，請重試';
+
+  @override
+  String get cat_images => '圖片';
+
+  @override
+  String get cat_videos => '影片';
+
+  @override
+  String get cat_audios => '音訊';
+
+  @override
+  String get cat_documents => '檔案';
+
+  @override
+  String get cat_downloads => '下載';
+
+  @override
+  String get cat_screenshots => '截圖';
+
+  @override
+  String get cat_recent => '最近';
+
+  @override
+  String get cat_network => '遠端';
+
+  @override
+  String get cat_apps => '應用';
+
+  @override
+  String get cat_settings => '設定';
+
+  @override
+  String get cat_storage => '空間';
+
+  @override
+  String get cat_service => '服務';
+
+  @override
+  String get cat_manage => '管理';
+
+  @override
+  String get cat_config => '配置';
+
+  @override
+  String get cat_analyze => '分析';
+
+  @override
+  String get cat_clean => '清理';
+
+  @override
+  String get junk_clean_title => '垃圾清理';
+
+  @override
+  String get junk_clean_scanning => '正在掃描垃圾檔案…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '可清理 $size';
+  }
+
+  @override
+  String get junk_clean_button => '立即清理';
+
+  @override
+  String get junk_clean_confirm_title => '清理垃圾檔案';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return '將清理應用快取與暫存檔案，預計釋放 $size。備份、當機報告和快傳接收的檔案不會被刪除。';
+  }
+
+  @override
+  String get junk_clean_cache_item => '應用快取（縮圖、遠端快取）';
+
+  @override
+  String get junk_clean_temp_item => '暫存檔案（下載殘留等）';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '已釋放 $size';
+  }
+
+  @override
+  String get junk_clean_none => '沒有可清理的垃圾檔案';
+
+  @override
+  String get junk_clean_failed => '清理失敗，請稍後重試';
+
+  @override
+  String get cat_vault => '保險箱';
+
+  @override
+  String get cat_vault_desc => '安全儲存';
+
+  @override
+  String get cat_quick_categories => '分類';
+
+  @override
+  String get ui_nav => '本地';
+
+  @override
+  String get ui_backup_passphrase_title => '備份密碼';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      '輸入備份密碼以加密備份中的敏感資訊（遠端連線密碼、保險箱密碼等）。留空則不備份敏感資訊，還原後需手動重新設定。';
+
+  @override
+  String get ui_restore_passphrase_title => '輸入備份密碼';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      '此備份包含加密的敏感資訊。輸入備份密碼以還原；略過則需在還原後手動重新設定密碼。';
+
+  @override
+  String get ui_backup_passphrase_wrong => '備份密碼錯誤，請重試';
+
+  @override
+  String get ui_restore_secrets_skipped => '已略過敏感資訊還原，相關密碼需手動重新設定';
+
+  @override
+  String get update_err_network => '無法連接伺服器，請檢查網路後重試';
+
+  @override
+  String get update_err_timeout => '連線逾時，請檢查網路或代理後重試';
+
+  @override
+  String get update_err_rate_limit => 'GitHub 要求過於頻繁，請稍後再試';
+
+  @override
+  String update_err_http(String code) {
+    return '伺服器回應異常（HTTP $code）';
+  }
+
+  @override
+  String get update_err_malformed => '伺服器回傳資料異常，請稍後重試';
+
+  @override
+  String get update_err_version_unknown => '無法取得目前版本號，請重新啟動應用程式後重試';
+
+  @override
+  String update_remote_version(String version) {
+    return '遠端最新：$version';
+  }
+
+  @override
+  String update_checked_at(String time) {
+    return '檢查時間：$time';
+  }
+
+  @override
+  String get update_degraded_hint => '已降級為網頁檢測，無法於應用程式內下載';
+
+  @override
+  String get update_source_label => '更新來源';
+
+  @override
+  String get update_source_default => 'GitHub 官方';
+
+  @override
+  String get update_source_custom => '自訂來源';
+
+  @override
+  String get update_source_dialog_title => '自訂更新來源';
+
+  @override
+  String get update_source_dialog_desc =>
+      '留空則使用 GitHub 官方介面。可填入鏡像或自建介面，需回傳與 GitHub 相同結構的 JSON；網址中的 REPO 代表倉庫路徑。';
+
+  @override
+  String get update_source_hint => 'https://example.com/…/releases/latest';
+
+  @override
+  String get update_source_invalid => '網址無效，需以 http:// 或 https:// 開頭';
+
+  @override
+  String get ui_paste_and_clear => '貼上並清除';
+
+  @override
+  String get ui_cut_paste_hint => '剪下為移動，貼上後自動清空';
+
+  @override
+  String get ui_search_in_settings => '在設定中搜尋';
+
+  @override
+  String get ui_search_group_nav => '導覽';
+
+  @override
+  String get ui_home => '主頁';
+
+  @override
+  String get ui_recycle_bin => '回收站';
+
+  @override
+  String get ui_dark_mode => '深色模式';
+
+  @override
+  String get ui_personalize_settings => '設定';
+
+  @override
+  String get ui_compress => '壓縮';
+
+  @override
+  String get ui_copy => '複製';
+
+  @override
+  String get ui_cut => '剪下';
+
+  @override
+  String get ui_move => 'Move';
+
+  @override
+  String get ui_apply => 'Apply';
+
+  @override
+  String get ui_delete => '刪除';
+
+  @override
+  String get ui_select_all => '全選';
+
+  @override
+  String get ui_cancel => '取消';
+
+  @override
+  String get ui_confirm => '確定';
+
+  @override
+  String get ui_move_here => '移動到此處';
+
+  @override
+  String get ui_properties => '屬性';
+
+  @override
+  String get ui_info => '資訊';
+
+  @override
+  String get ui_open => '開啟';
+
+  @override
+  String get ui_close => '關閉';
+
+  @override
+  String get ui_more => '更多';
+
+  @override
+  String get ui_appearance_theme => '外觀與主題';
+
+  @override
+  String get ui_list_layout_style => '列表與佈局樣式';
+
+  @override
+  String get ui_media_preferences => '媒體偏好';
+
+  @override
+  String get ui_file_actions_viewers => '檔案操作與檢視器';
+
+  @override
+  String get ui_no_settings_found => '未找到設定';
+
+  @override
+  String get ui_show_action_bar => '顯示操作按鈕';
+
+  @override
+  String get ui_show_remote_cloud_badge => '顯示遠端檔案雲徽';
+
+  @override
+  String get msg_remote_cloud_badge => '在瀏覽頁遠端檔案與資料夾圖示左上角顯示雲圖示，便於區分本機與遠端檔案';
+
+  @override
+  String get ui_use_24h_format => '使用24小時制';
+
+  @override
+  String get ui_show_folder_contents_count => '顯示資料夾內容計數';
+
+  @override
+  String get ui_set_as_home => '設為首頁';
+
+  @override
+  String get ui_show_folder_size => '顯示資料夾大小';
+
+  @override
+  String get ui_show_bottom_action_bar => '導航欄位置';
+
+  @override
+  String get ui_hide_action_text => '隱藏操作欄文字標籤';
+
+  @override
+  String get ui_show_media_previews => '本地媒體縮圖';
+
+  @override
+  String get ui_adaptive_multiline_names => '自適應多行檔名';
+
+  @override
+  String get ui_hide_action_menu_buttons => '隱藏三點操作按鈕';
+
+  @override
+  String get ui_show_action_menu_buttons => '顯示三點操作按鈕';
+
+  @override
+  String get ui_action_menu_subtitle => '選擇三點選單按鈕的顯示模式，關閉後檔案和資料夾右側將不顯示三點按鈕';
+
+  @override
+  String get ui_action_menu_mode_all => '全部顯示';
+
+  @override
+  String get ui_action_menu_mode_single => '僅在單視窗模式顯示';
+
+  @override
+  String get ui_action_menu_mode_dual => '僅在雙視窗模式顯示';
+
+  @override
+  String get ui_time_date_format => '時間與日期顯示';
+
+  @override
+  String get ui_select_time_date_format => '選擇日期與時間格式';
+
+  @override
+  String get ui_date_format => '日期格式';
+
+  @override
+  String get ui_time_format => '時間格式';
+
+  @override
+  String get ui_date_fmt_dmy => '日/月/年';
+
+  @override
+  String get ui_date_fmt_mdy => '月/日/年';
+
+  @override
+  String get ui_date_fmt_ymd => '年/月/日';
+
+  @override
+  String get ui_time_fmt_12h => '12小時制（上午/下午）';
+
+  @override
+  String get ui_time_fmt_24h => '24小時制';
+
+  @override
+  String get ui_select_action_menu_mode => '選擇顯示模式';
+
+  @override
+  String get ui_enable_drag_drop => '啟用拖放';
+
+  @override
+  String get ui_confirm_drag_drop => '確認拖放操作';
+
+  @override
+  String get ui_enable_multi_tabs => '啟用多標籤頁';
+
+  @override
+  String get ui_multi_tab_scope_title => '多標籤頁適用範圍';
+
+  @override
+  String get ui_multi_tab_scope_single_only => '僅在單視窗';
+
+  @override
+  String get ui_multi_tab_scope_split_only => '僅在雙視窗';
+
+  @override
+  String get ui_multi_tab_scope_all => '全部';
+
+  @override
+  String get ui_multi_tab_scope_split_only_desc => '僅在雙視窗分屏模式下啟用多標籤頁';
+
+  @override
+  String get ui_multi_tab_scope_all_desc => '單視窗與雙視窗模式均啟用多標籤頁';
+
+  @override
+  String get ui_multi_tab_scope_subtitle => '選擇多標籤頁生效的視窗範圍';
+
+  @override
+  String get ui_enable_split_screen => '啟用分屏';
+
+  @override
+  String get ui_password_auth => '密碼認證';
+
+  @override
+  String get ui_ssh_key_auth => 'SSH 金鑰認證';
+
+  @override
+  String get ui_private_key_file => '私鑰檔案';
+
+  @override
+  String get ui_passphrase => '密碼短語';
+
+  @override
+  String get ui_optional => '選填';
+
+  @override
+  String get ui_ssh_key_password_hint => '僅當私鑰檔案受密碼保護時需要填寫';
+
+  @override
+  String get ui_single_window => '單一視窗';
+
+  @override
+  String get ui_dual_window => '雙視窗';
+
+  @override
+  String get ui_filter_by_category => '按類別過濾';
+
+  @override
+  String get ui_all_files => '全部';
+
+  @override
+  String get ui_filter_others => '其它';
+
+  @override
+  String get ui_remember_filter => '記住過濾';
+
+  @override
+  String get msg_remember_filter_desc => '關閉後僅本次生效';
+
+  @override
+  String get ui_app_icon => '應用圖示';
+
+  @override
+  String get ui_emerald_green => '霓虹青';
+
+  @override
+  String get ui_deep_red => '深紅';
+
+  @override
+  String get ui_square => '方形';
+
+  @override
+  String get ui_circle => '圓形';
+
+  @override
+  String get ui_1_day_after => '1 天后';
+
+  @override
+  String get ui_no_auto_clean => '不自動清理';
+
+  @override
+  String get ui_daily => '每天';
+
+  @override
+  String get ui_weekly => '每週';
+
+  @override
+  String get ui_monthly => '每月';
+
+  @override
+  String ui_every_n_days(Object days) {
+    return '每$days天';
+  }
+
+  @override
+  String ui_clear_cache_failed(Object e) {
+    return '清除快取失敗: $e';
+  }
+
+  @override
+  String get ui_clear_remote_cache => '清除遠端快取';
+
+  @override
+  String get ui_view_cache_dir => '檢視快取目錄';
+
+  @override
+  String get ui_remote_media_thumbnail => '遠端媒體縮圖';
+
+  @override
+  String ui_auto_clean_remote_cache(Object label) {
+    return '定期自動清理遠端伺服器快取檔案: $label';
+  }
+
+  @override
+  String ui_custom_font_with_name(Object name) {
+    return '自定義字型（$name）';
+  }
+
+  @override
+  String get ui_import_custom_font => '匯入自定義字型檔案 (.ttf/.otf)';
+
+  @override
+  String ui_custom_font_applied(Object name) {
+    return '自定義字型\"$name\"已成功應用！';
+  }
+
+  @override
+  String get ui_invalid_file_type => '無效的檔案型別';
+
+  @override
+  String get ui_language => '語言';
+
+  @override
+  String get ui_follow_system => '自動（跟隨系統）';
+
+  @override
+  String get ui_hide_nav_labels => '隱藏底部導航標籤';
+
+  @override
+  String get ui_reset_default_viewers => '重置預設檔案檢視器';
+
+  @override
+  String get ui_trailing_info_when_hidden => '三點禁用尾部資訊';
+
+  @override
+  String get ui_go_up => '上一級';
+
+  @override
+  String ui_cut_copy_items(String prefix, int count) {
+    return '$prefix · $count 項';
+  }
+
+  @override
+  String get ui_clipboard => '剪貼簿';
+
+  @override
+  String get ui_clear => '清除';
+
+  @override
+  String get ui_paste => '貼上';
+
+  @override
+  String get ui_file_name => '檔名';
+
+  @override
+  String get ui_create => '建立';
+
+  @override
+  String get ui_create_new_directory => '建立新目錄';
+
+  @override
+  String get ui_layout_mode => '佈局模式';
+
+  @override
+  String get ui_grid_view => '網格檢視';
+
+  @override
+  String get ui_name_asc => '名稱 (A-Z)';
+
+  @override
+  String get ui_newest => '最新';
+
+  @override
+  String get ui_oldest => '最舊';
+
+  @override
+  String get ui_size_small => '大小（小）';
+
+  @override
+  String get ui_type => '型別';
+
+  @override
+  String get ui_storage_volume => '儲存卷';
+
+  @override
+  String get ui_browse => '瀏覽';
+
+  @override
+  String get ui_new => '新建';
+
+  @override
+  String ui_folders_count(int count) {
+    return '資料夾：$count';
+  }
+
+  @override
+  String ui_files_count(int count) {
+    return '檔案：$count';
+  }
+
+  @override
+  String get ui_selection_mode => '選擇模式';
+
+  @override
+  String get ui_storage_and_sd => '儲存卷和SD卡';
+
+  @override
+  String get ui_images_only => '僅圖片';
+
+  @override
+  String get ui_videos_only => '僅影片';
+
+  @override
+  String get ui_show_folders => '顯示資料夾';
+
+  @override
+  String get ui_files => '檔案';
+
+  @override
+  String get ui_delete_file_confirm => '確定要刪除此檔案嗎？此操作無法撤銷。';
+
+  @override
+  String get ui_done => '完成';
+
+  @override
+  String get ui_name => '名稱';
+
+  @override
+  String get ui_path => '路徑';
+
+  @override
+  String get ui_size => '大小';
+
+  @override
+  String get ui_permissions => '許可權';
+
+  @override
+  String get ui_contains => '包含';
+
+  @override
+  String get ui_extract => '解壓縮';
+
+  @override
+  String get ui_pin_to_top => '置頂';
+
+  @override
+  String get msg_select_all => '全選';
+
+  @override
+  String get ui_pinned_selected => '已將所選專案置頂';
+
+  @override
+  String get ui_filter_by_type => '按型別篩選檔案';
+
+  @override
+  String get ui_default_scan_locations => '預設掃描位置：';
+
+  @override
+  String get ui_exclude_location => '排除位置';
+
+  @override
+  String get ui_add_custom_path => '新增自定義路徑';
+
+  @override
+  String ui_added_custom_paths(int count) {
+    return '已新增 $count 個自定義路徑';
+  }
+
+  @override
+  String get ui_close_tab => '關閉標籤頁';
+
+  @override
+  String get ui_close_all_tabs => '關閉所有標籤';
+
+  @override
+  String get ui_close_all_tabs_message => '確定要關閉所有開啟的標籤頁嗎？此操作不可撤銷。';
+
+  @override
+  String ui_not_found_title(String title) {
+    return '未找到 $title';
+  }
+
+  @override
+  String get ui_oldest_first => '最舊優先';
+
+  @override
+  String get ui_sort_options => '排序選項';
+
+  @override
+  String get ui_show_player_controller => '顯示播放器控制器';
+
+  @override
+  String get ui_hide_player_controller => '隱藏播放器控制器';
+
+  @override
+  String get ui_scanning_category => '正在掃描預設目錄，已載入內容可正常操作';
+
+  @override
+  String get ui_refresh => '重新整理';
+
+  @override
+  String get ui_refresh_done => '重新整理完成';
+
+  @override
+  String ui_selected_count(int count) {
+    return '$count 已選擇';
+  }
+
+  @override
+  String ui_permanently_delete_name(String name) {
+    return '永久刪除\"$name\"？';
+  }
+
+  @override
+  String ui_copied_count(int count) {
+    return '已複製 $count 個專案到剪貼簿';
+  }
+
+  @override
+  String ui_cut_count(int count) {
+    return '已剪下 $count 個專案到剪貼簿';
+  }
+
+  @override
+  String get ui_read => '讀取';
+
+  @override
+  String get ui_write => '寫入';
+
+  @override
+  String get ui_file => '檔案';
+
+  @override
+  String get ui_backup_settings => '開始備份';
+
+  @override
+  String get ui_restore_settings => '開始還原';
+
+  @override
+  String get ui_backup_info => '備份資訊';
+
+  @override
+  String get ui_backup_file => '備份檔案';
+
+  @override
+  String get ui_no_backup_file => '暫無備份檔案';
+
+  @override
+  String get ui_remote_connection => '遠端連線';
+
+  @override
+  String ui_step_n_of_3(Object step) {
+    return '第 $step / 3 步';
+  }
+
+  @override
+  String get ui_choose_network_service => '選擇網路服務';
+
+  @override
+  String get ui_connection_name => '連線名稱';
+
+  @override
+  String get ui_protocol => '協議';
+
+  @override
+  String get ui_port => '埠';
+
+  @override
+  String get ui_path_label => '路徑';
+
+  @override
+  String get ui_username_optional => '使用者名稱（可選）';
+
+  @override
+  String get ui_share_name_optional => '共享名（可選）';
+
+  @override
+  String get ui_share_name_hint => '如 /Public，留空則自動探測';
+
+  @override
+  String get ui_smb_desc => '區域網與 SMB NAS 共享';
+
+  @override
+  String get ui_connection_suffix => '連線';
+
+  @override
+  String get ui_back => '返回';
+
+  @override
+  String get ui_connect => '連線';
+
+  @override
+  String get ui_web_share => '網頁共享';
+
+  @override
+  String get ui_network => '遠端';
+
+  @override
+  String get log_i18n_full => '全面國際化中英文介面';
+
+  @override
+  String get log_fix_selection_count => '修復檔案選擇數量不顯示的問題';
+
+  @override
+  String get log_fix_remote_title => '修復遠端連線頁面標題顯示異常';
+
+  @override
+  String get log_svg_thumbnail_category => 'SVG 縮圖在分類頁面中正常顯示';
+
+  @override
+  String get log_language_btn_top => '語言切換按鈕移至設定頁頂部';
+
+  @override
+  String get log_fix_category_missing => '修復英文模式下部分分類不顯示';
+
+  @override
+  String get log_text_editor => '新增文字編輯器功能：新建檔案、另存為、撤銷/重做';
+
+  @override
+  String get log_text_editor_settings => '文字編輯器設定持久化（自動換行、行號、閱讀模式）';
+
+  @override
+  String get log_10_languages => '支援10種多國語言（中文、英語、日語、韓語、德語、法語、西班牙語、俄語、阿拉伯語）';
+
+  @override
+  String get log_fix_l10n_hardcode => '修復多處 l10n 硬編碼問題';
+
+  @override
+  String get log_language_scroll => '最佳化語言選擇介面支援滾動';
+
+  @override
+  String get log_remote_media_cache => '遠端媒體檔案點選後立即開啟播放器，後臺快取並顯示進度';
+
+  @override
+  String get log_remote_to_remote => '新增遠端伺服器到遠端伺服器的複製/剪下功能';
+
+  @override
+  String get log_remote_cut_progress => '修復遠端剪下操作進度條顯示異常';
+
+  @override
+  String get log_audio_scan_stable => '最佳化音訊分類掃描穩定性';
+
+  @override
+  String get log_extract_dialog_redesign => '重新設計解壓對話方塊，支援當前目錄/自訂目錄選擇';
+
+  @override
+  String get log_vault_quick_category => '將保險箱快捷方式新增到快捷分類（預設關閉）';
+
+  @override
+  String get log_vault_l10n_fix => '修復保險箱頁面英文硬編碼和新增多檔案時卡死的問題';
+
+  @override
+  String get log_compression_path_fix => '統一三點按鈕和長按選單的壓縮路徑，修復壓縮包名稱錯誤';
+
+  @override
+  String get log_compression_progress => '最佳化壓縮排度對話方塊，支援多階段進度顯示和可靠自動關閉';
+
+  @override
+  String get log_web_share_category => '網頁共享入口支援分類顯示檔案（資料夾、影片、音訊、圖片、檔案、其他）';
+
+  @override
+  String get log_web_share_l10n => '網頁共享入口支援根據 App 語言自動切換多語言顯示';
+
+  @override
+  String get log_music_lyrics_fullscreen_removed => '音樂播放器移除歌詞全屏面板功能';
+
+  @override
+  String get log_music_lyrics_centered => '音樂播放器當前歌詞改為居中對齊顯示';
+
+  @override
+  String get log_music_player_button => '音樂分類頁頂部新增音樂播放器快捷按鈕，方便繼續收聽';
+
+  @override
+  String get log_music_remember_progress => '音樂播放器記住播放進度，下次自動續播';
+
+  @override
+  String get log_image_icon_redesign => '重新設計圖片檔案圖示，顯示格式標籤（jpg、png 等）';
+
+  @override
+  String get log_doc_icon_redesign => '重新設計檔案檔案圖示，顯示格式標籤';
+
+  @override
+  String get log_archive_icon_redesign => '重新設計壓縮包圖示，顯示格式標籤（zip、7z、rar 等）';
+
+  @override
+  String get log_music_lrc_lyrics => '音樂播放器支援自動載入 LRC 歌詞及手動選擇歌詞檔案';
+
+  @override
+  String get log_remote_copy_paste_fix => '修復遠端伺服器複製檔案到本機貼上時進度條無回應且檔案未出現的問題';
+
+  @override
+  String get log_navbar_position_setting => '新增導覽列位置設定，支援頂部或底部顯示導覽列';
+
+  @override
+  String get log_browse_top_area_optimize => '啟用底部導覽列時，最佳化瀏覽頁頂部區域佈局，增加檔案列表顯示空間';
+
+  @override
+  String get log_thanks_feedback =>
+      '感謝以下使用者回饋與建議：越界、獼猴桃、Sir Jagadeesh Chandra Bose、Silence';
+
+  @override
+  String get log_smb_native_rewrite =>
+      'SMB 使用者端完全重寫，透過 Android 原生 smbj 程式庫實現真實 SMB 協定，支援自動探測共享名';
+
+  @override
+  String get log_ftp_sftp_streaming =>
+      '修復 FTP/SFTP 串流播放，使用原生 Socket 獨立資料連線，支援邊快取邊播放';
+
+  @override
+  String get log_remote_l10n_fix => '修復遠端連線頁硬編碼字串，新增 SMB 協定描述與連線名稱字尾的 l10n 翻譯';
+
+  @override
+  String get log_image_viewer_menu => '圖片瀏覽器右上角選單改為底部彈窗，9 個操作項，黑色半透明背景提升可見性';
+
+  @override
+  String get log_breadcrumb_border =>
+      '麵包屑按鈕新增 V 形完整邊框，使用 CustomPaint 繪製，相鄰按鈕無縫銜接且有清晰邊界';
+
+  @override
+  String get log_three_dot_button_position => '檔案/資料夾三點操作按鈕調整到卡片右上角，避免拖動時誤觸';
+
+  @override
+  String get log_three_dot_button_setting =>
+      '三點操作按鈕設定項改為「顯示三點操作按鈕」，支援全部顯示/僅單視窗/僅雙視窗三種模式';
+
+  @override
+  String get log_category_back_select => '分類頁多選模式下按返回鍵取消選擇，而不是離開類別';
+
+  @override
+  String get log_desktop_lyric => '新增桌面歌詞懸浮窗，支援許可權檢查、拖動位置、單擊切換播放/暫停';
+
+  @override
+  String get log_notification_panel => '修復下拉通知欄不顯示播放控制面板，暫停時保留通知，許可權拒絕時提示使用者';
+
+  @override
+  String get log_lyric_word_highlight =>
+      '懸浮歌詞支援逐字高亮，使用 SpannableStringBuilder 實現卡拉OK效果';
+
+  @override
+  String get log_floating_window_resize => '懸浮歌詞視窗支援長按顯示縮放手柄，拖曳調整視窗大小與文字大小';
+
+  @override
+  String get log_background_play_fix =>
+      '修復開啟背景播放時暫停音樂的問題，attach 複用 player 例項不中斷播放';
+
+  @override
+  String get log_category_button_sync =>
+      '修復未開啟背景播放時音訊類別頁播放按鈕顯示舊音訊資訊，返回時重新整理按鈕狀態';
+
+  @override
+  String get log_build_stability =>
+      '修復 R8 編譯 OOM、x86_64/armv7 啟動白屏，調整 Gradle JVM 記憶體與 ABI 下載';
+
+  @override
+  String get log_lyric_scale_animation => '逐字歌詞過渡動畫新增放大效果，修復同步問題，固定 300ms 過渡時長';
+
+  @override
+  String get msg_remember_choice => '記住此選擇，後續操作預設使用';
+
+  @override
+  String get ui_caching => '正在快取中，請稍後...';
+
+  @override
+  String get ui_username => '使用者名稱';
+
+  @override
+  String get ui_anonymous => '匿名';
+
+  @override
+  String get ui_start => '啟動';
+
+  @override
+  String get ui_stop => '停止';
+
+  @override
+  String get ui_connected => '已連線';
+
+  @override
+  String get ui_activated => '已啟用';
+
+  @override
+  String get ui_web_sharing_center => '網頁共享中心';
+
+  @override
+  String get ui_local_web_share => '本地網頁共享';
+
+  @override
+  String get ui_http_local_share_server => 'HTTP本地共享伺服器';
+
+  @override
+  String get ui_server_idle => '伺服器空閒';
+
+  @override
+  String get ui_pick_files_folders => '選擇檔案和資料夾';
+
+  @override
+  String get ui_secure_storage => '安全儲存';
+
+  @override
+  String get ui_protected_total_space => '已保護總空間';
+
+  @override
+  String get ui_hidden_files_count => '已隱藏檔案';
+
+  @override
+  String get ui_search_obfuscated => '搜尋混淆檔案...';
+
+  @override
+  String get ui_vault_empty => '您的安全保險箱為空';
+
+  @override
+  String get ui_hide_files => '隱藏檔案';
+
+  @override
+  String get ui_global_search => '全域性搜尋';
+
+  @override
+  String get ui_all => '全部';
+
+  @override
+  String get ui_folders => '資料夾';
+
+  @override
+  String get ui_images => '圖片';
+
+  @override
+  String get ui_videos => '影片';
+
+  @override
+  String get ui_audio => '音訊';
+
+  @override
+  String get ui_documents => '檔案';
+
+  @override
+  String get ui_no_matching_files => '未找到匹配檔案';
+
+  @override
+  String get ui_try_modify_search => '請嘗試修改搜尋文字以查詢隱藏專案。';
+
+  @override
+  String get ui_vault_empty_desc =>
+      'AES-256-GCM 強加密使檔案完全無法被系統或其他應用程式開啟，並從媒體掃描器中隱藏。點選下方的按鈕來保護它們。';
+
+  @override
+  String ui_copied_n_items(Object count) {
+    return '已複製 $count 個專案到剪貼簿';
+  }
+
+  @override
+  String ui_cut_n_items(Object count) {
+    return '已剪下 $count 個專案到剪貼簿';
+  }
+
+  @override
+  String get ui_copy_tooltip => '複製';
+
+  @override
+  String get ui_cut_tooltip => '剪下';
+
+  @override
+  String get ui_delete_tooltip => '刪除';
+
+  @override
+  String get ui_search_this_folder => '搜尋此資料夾';
+
+  @override
+  String ui_search_files_subfolders_in(Object path) {
+    return '搜尋檔案和子資料夾於：$path';
+  }
+
+  @override
+  String get ui_no_results => '未找到結果';
+
+  @override
+  String ui_no_match_for(Object query) {
+    return '未找到匹配 \"$query\" 的內容';
+  }
+
+  @override
+  String ui_n_selected(Object count, Object size) {
+    return '$count 已選擇 ($size)';
+  }
+
+  @override
+  String get ui_select_language_title => '選擇語言';
+
+  @override
+  String get ui_select_language_desc => '請選擇您偏好的語言';
+
+  @override
+  String get ui_language_chinese => '中文';
+
+  @override
+  String get ui_language_english => 'English';
+
+  @override
+  String msgDefaultZoom(Object fontSize) {
+    return '預設縮放 (${fontSize}pt)';
+  }
+
+  @override
+  String get msgLockZoom => '鎖定縮放';
+
+  @override
+  String get ui_background => '後臺';
+
+  @override
+  String get ui_overall_progress => '總體進度';
+
+  @override
+  String get ui_archive_name => '壓縮包名稱';
+
+  @override
+  String get ui_compression_level => '壓縮級別';
+
+  @override
+  String get ui_delete_source_after => '完成後刪除原始檔';
+
+  @override
+  String get ui_no_compression => '無（僅儲存）';
+
+  @override
+  String get ui_fast => '快速';
+
+  @override
+  String get ui_standard => '標準';
+
+  @override
+  String get ui_maximum => '最大';
+
+  @override
+  String get ui_new_txt => '新建文字';
+
+  @override
+  String get ui_save_as => '另存為';
+
+  @override
+  String get ui_undo => '撤銷';
+
+  @override
+  String get ui_redo => '重做';
+
+  @override
+  String ui_add_selected(Object count) {
+    return '新增所選 ($count)';
+  }
+
+  @override
+  String ui_pin_selected(Object count) {
+    return '使用所選 ($count)';
+  }
+
+  @override
+  String get msg_file_exists => '檔案已存在';
+
+  @override
+  String msg_file_exists_desc(String fileName) {
+    return '目標資料夾中已存在同名檔案\"$fileName\"。您想怎麼處理？';
+  }
+
+  @override
+  String get msg_existing_file => '現有檔案';
+
+  @override
+  String get msg_cancel_paste => '取消貼上';
+
+  @override
+  String get msg_skip_file => '跳過';
+
+  @override
+  String get msg_overwrite_file => '替換';
+
+  @override
+  String get msg_newer => '較新';
+
+  @override
+  String get msg_new_file_name => '新檔案名稱';
+
+  @override
+  String get msg_vault_choose_mode => '選擇保護模式';
+
+  @override
+  String get msg_vault_mode_desc => '選擇如何保護選中的檔案。安全檔案將使用 AES-256-GCM 強加密。';
+
+  @override
+  String get ui_secure_import => '安全匯入（沙盒）';
+
+  @override
+  String get ui_in_place_scramble => '原地混淆（快速）';
+
+  @override
+  String get msg_scrambling => '正在混淆加密...';
+
+  @override
+  String msg_protected_count(Object successCount) {
+    return '成功保護 $successCount 個專案。';
+  }
+
+  @override
+  String msg_protect_failed_count(Object failCount) {
+    return '失敗鎖定 $failCount 個專案。';
+  }
+
+  @override
+  String msg_restored(Object name) {
+    return '已將「$name」恢復到原始位置。';
+  }
+
+  @override
+  String msg_restore_failed(Object error) {
+    return '恢復檔案失敗：$error';
+  }
+
+  @override
+  String get msg_decrypting => '正在安全解密...';
+
+  @override
+  String get msg_security_details => '安全詳情';
+
+  @override
+  String get ui_restore_unhide => '恢復（取消隱藏）';
+
+  @override
+  String get msg_permanent_delete => '永久刪除？';
+
+  @override
+  String msg_permanent_delete_content(Object name) {
+    return '確定要永久刪除「$name」嗎？此操作無法撤銷。';
+  }
+
+  @override
+  String get msg_file_deleted => '檔案已永久刪除。';
+
+  @override
+  String msg_delete_failed(Object error) {
+    return '刪除檔案失敗：$error';
+  }
+
+  @override
+  String get msg_original_name => '原始名稱';
+
+  @override
+  String get msg_original_path => '原始路徑';
+
+  @override
+  String get msg_scrambled_path => '混淆路徑';
+
+  @override
+  String get msg_size_label => '大小';
+
+  @override
+  String get msg_locked_at => '鎖定時間';
+
+  @override
+  String get msg_protection_mode => '保護模式';
+
+  @override
+  String get msg_in_place_scrambling => '原地混淆';
+
+  @override
+  String get msg_isolated_move => '隔離移動（沙盒）';
+
+  @override
+  String get web_share_search => '搜尋檔案和資料夾...';
+
+  @override
+  String get web_share_upload => '上傳';
+
+  @override
+  String get web_share_drop_title => '拖曳檔案到此處上傳';
+
+  @override
+  String get web_share_drop_desc => '檔案將立即上傳到此共享資料夾';
+
+  @override
+  String get web_share_empty_search => '沒有匹配的專案';
+
+  @override
+  String get web_share_empty_desc => '檢查拼寫或嘗試不同的搜尋詞';
+
+  @override
+  String get web_share_copy_link => '複製連結';
+
+  @override
+  String get web_share_download => '下載';
+
+  @override
+  String web_share_uploading(String name) {
+    return '正在上傳 $name...';
+  }
+
+  @override
+  String get web_share_upload_success => '上傳成功';
+
+  @override
+  String web_share_upload_failed(String name) {
+    return '上傳 $name 失敗';
+  }
+
+  @override
+  String get web_share_preview_unsupported => '不支援預覽此檔案型別';
+
+  @override
+  String get web_share_preview_download => '點選下方下載按鈕儲存到您的裝置';
+
+  @override
+  String get web_share_footer => '透過 ZenFile 安全共享和串流傳輸檔案';
+
+  @override
+  String get web_share_parent_dir => '上級目錄';
+
+  @override
+  String get web_share_go_up => '返回上一級';
+
+  @override
+  String web_share_items_count(int count) {
+    return '$count 個專案';
+  }
+
+  @override
+  String get web_share_link_copied => '連結已複製到剪貼簿';
+
+  @override
+  String get web_share_copy_failed => '複製連結失敗';
+
+  @override
+  String get web_share_local => '本地 Wi-Fi 共享';
+
+  @override
+  String get web_share_internet => '網際網路共享';
+
+  @override
+  String get web_share_category_folders => '資料夾';
+
+  @override
+  String get web_share_category_videos => '影片';
+
+  @override
+  String get web_share_category_audio => '音訊';
+
+  @override
+  String get web_share_category_images => '圖片';
+
+  @override
+  String get web_share_category_documents => '檔案';
+
+  @override
+  String get web_share_category_others => '其他';
+
+  @override
+  String get web_share_loading_preview => '正在載入預覽...';
+
+  @override
+  String get web_share_preview_error => '無法串流傳輸檔案。您仍然可以直接下載。';
+
+  @override
+  String get msg_custom_shortcut => '自訂圖示';
+
+  @override
+  String get msg_add_custom_shortcut => '加入主畫面';
+
+  @override
+  String get msg_shortcut_added => '已加入主畫面';
+
+  @override
+  String get msg_shortcut_failed => '加入失敗，請重試';
+
+  @override
+  String get ui_lyrics_loaded => '歌詞已載入';
+
+  @override
+  String get ui_lyrics_load_failed => '無法解析此歌詞檔案';
+
+  @override
+  String get ui_select_lyrics_file => '匯入本地歌詞';
+
+  @override
+  String get ui_no_lyrics_found => '未找到歌詞';
+
+  @override
+  String get ui_lyrics_auto_load_hint => '將 .lrc 歌詞檔案放在音訊同目錄下\n（檔名與音訊相同）即可自動載入';
+
+  @override
+  String get ui_lyrics_panel => '歌詞全螢幕面板';
+
+  @override
+  String get ui_show_lyrics => '顯示歌詞';
+
+  @override
+  String get ui_hide_lyrics => '隱藏歌詞';
+
+  @override
+  String get ui_sound_effects_speed => '音效與播放速度';
+
+  @override
+  String get ui_pitch_adjustment => '音調調節';
+
+  @override
+  String get ui_restore_default => '恢復預設';
+
+  @override
+  String get ui_sound_effects => '音效';
+
+  @override
+  String get eq_presets => '等化器預設';
+
+  @override
+  String get eq_custom => '自訂';
+
+  @override
+  String get eq_system => '系統等化器';
+
+  @override
+  String get eq_unavailable => '此裝置不支援等化器';
+
+  @override
+  String get eq_open_system => '開啟系統等化器';
+
+  @override
+  String get eq_system_hint =>
+      '內建播放器使用 libmpv 音訊輸出。如需應用等化器效果，請使用系統等化器（影響所有音訊輸出）。';
+
+  @override
+  String get eq_apply_hint => '請在下方選擇預設，然後點選開啟系統等化器在系統等化器中套用。';
+
+  @override
+  String get eq_preset_flat => '原聲';
+
+  @override
+  String get eq_preset_vocal => 'HD 人聲';
+
+  @override
+  String get eq_preset_bass => '低音';
+
+  @override
+  String get eq_preset_live => '現場';
+
+  @override
+  String get eq_preset_jazz => '爵士';
+
+  @override
+  String get ui_playback_queue => '播放佇列';
+
+  @override
+  String get ui_repeat_off => '迴圈：關閉';
+
+  @override
+  String get ui_repeat_one => '迴圈：單曲';
+
+  @override
+  String get ui_repeat_all => '迴圈：全部';
+
+  @override
+  String get ui_shuffle_on => '隨機播放：開';
+
+  @override
+  String get ui_play_mode_sequential => '列表播放';
+
+  @override
+  String get ui_play_mode_list_loop => '列表迴圈';
+
+  @override
+  String get ui_play_mode_single_loop => '單曲迴圈';
+
+  @override
+  String get ui_play_mode_shuffle => '隨機播放';
+
+  @override
+  String get ui_lyrics_mode_off => '歌詞關閉';
+
+  @override
+  String get ui_lyrics_mode_single_line => '單行歌詞';
+
+  @override
+  String get ui_lyrics_mode_multi_line => '多行歌詞';
+
+  @override
+  String get ui_lyrics_mode_full_panel => '全螢幕歌詞';
+
+  @override
+  String ui_minutes_format(int minutes) {
+    return '$minutes 分鐘';
+  }
+
+  @override
+  String ui_sleep_timer_set(int minutes) {
+    return '睡眠定時器已設定為 $minutes 分鐘。';
+  }
+
+  @override
+  String get ui_enter_minutes => '輸入分鐘數';
+
+  @override
+  String get ui_sleep_timer_end => '定時時間到，已暫停播放';
+
+  @override
+  String get ui_close_player => '關閉播放器';
+
+  @override
+  String get ui_open_player => '開啟播放器';
+
+  @override
+  String get ui_now_playing => '正在播放';
+
+  @override
+  String get ui_resume_playback => '繼續播放';
+
+  @override
+  String get ui_single => '單曲';
+
+  @override
+  String get ui_add_remote_path => '新增遠端路徑';
+
+  @override
+  String get ui_select_remote_server => '選擇遠端伺服器';
+
+  @override
+  String get ui_no_remote_connections => '沒有已儲存的遠端連線';
+
+  @override
+  String get ui_retry => '重試';
+
+  @override
+  String get ui_media_load_failed => '媒體載入失敗，請檢查儲存許可權後重試';
+
+  @override
+  String get ui_no_subfolders => '無子資料夾';
+
+  @override
+  String get ui_select_this_folder => '選擇目前資料夾';
+
+  @override
+  String ui_downloading_file(String file) {
+    return '下載中: $file';
+  }
+
+  @override
+  String ui_sent(String amount) {
+    return '已傳送: $amount';
+  }
+
+  @override
+  String ui_recycle_restore_success(int count) {
+    return '已成功恢復 $count 個專案';
+  }
+
+  @override
+  String ui_recycle_restore_failed(String error) {
+    return '恢復專案時出錯：$error';
+  }
+
+  @override
+  String get ui_recycle_perm_delete_title => '永久刪除？';
+
+  @override
+  String ui_recycle_perm_delete_message(int count) {
+    return '確定要永久刪除這 $count 個專案嗎？此操作無法撤銷。';
+  }
+
+  @override
+  String ui_recycle_perm_delete_success(int count) {
+    return '已永久刪除 $count 個專案';
+  }
+
+  @override
+  String ui_recycle_perm_delete_failed(String error) {
+    return '刪除專案時出錯：$error';
+  }
+
+  @override
+  String get ui_recycle_empty_title => '清空資源回收桶？';
+
+  @override
+  String ui_recycle_empty_failed(String error) {
+    return '清空資源回收桶時出錯：$error';
+  }
+
+  @override
+  String ui_recycle_selected_count(int count) {
+    return '已選取 $count 項';
+  }
+
+  @override
+  String ui_recycle_deleted_at(String date, String size) {
+    return '已刪除：$date • $size';
+  }
+
+  @override
+  String get ui_recycle_restore => '還原';
+
+  @override
+  String get ui_recycle_empty_hint => '啟用資源回收桶後刪除的專案將顯示在此處。您可以還原它們或永久刪除。';
+
+  @override
+  String get ui_recycle_deleted_date => '刪除日期';
+
+  @override
+  String get ui_recycle_type => '型別';
+
+  @override
+  String get ui_recycle_file => '檔案';
+
+  @override
+  String get ui_db_browse_data => '瀏覽資料';
+
+  @override
+  String get ui_db_table_schema => '資料表結構';
+
+  @override
+  String get ui_db_sql_console => 'SQL 控制檯';
+
+  @override
+  String ui_db_export_success(String fileName) {
+    return '成功匯出到 $fileName';
+  }
+
+  @override
+  String ui_db_export_failed(String error) {
+    return '匯出失敗：$error';
+  }
+
+  @override
+  String get ui_db_export_csv => '匯出資料表為 CSV';
+
+  @override
+  String get ui_db_primary_key => '主鍵';
+
+  @override
+  String get ui_db_not_null => '非空';
+
+  @override
+  String ui_db_type(String type) {
+    return '型別：$type';
+  }
+
+  @override
+  String ui_db_default(String value) {
+    return '預設值：$value';
+  }
+
+  @override
+  String get ui_db_execute_query => '執行查詢';
+
+  @override
+  String get ui_db_enter_query => '在這裡輸入 SELECT 查詢...';
+
+  @override
+  String ui_db_showing_range(int start, int end) {
+    return '顯示 $start - $end';
+  }
+
+  @override
+  String ui_db_query_returned(int count) {
+    return '查詢傳回 $count 列';
+  }
+
+  @override
+  String get ui_app_installed_user_apps => '已安裝的使用者應用';
+
+  @override
+  String get ui_app_system_packages => '系統套件';
+
+  @override
+  String get ui_app_backup_apk => '已備份的APK';
+
+  @override
+  String get ui_app_precise_storage => '精確儲存計算';
+
+  @override
+  String get ui_app_grant_usage_access => '授予使用狀況存取許可權';
+
+  @override
+  String get ui_app_usage_access_description =>
+      '如需檢視精確的應用儲存大小（APK + 資料 + 快取），而不僅是安裝包大小，請在系統設定中為 ZenFile 啟用使用狀況存取許可權。';
+
+  @override
+  String get ui_backup_apk_open_folder => '開啟備份目錄';
+
+  @override
+  String ui_backup_apk_success_with_path(String path) {
+    return '已成功備份到 $path，是否開啟所在目錄？';
+  }
+
+  @override
+  String get ui_backup_apk_open => '開啟';
+
+  @override
+  String get ui_clear_remote_cache_success => '遠端快取已清理。';
+
+  @override
+  String get ui_clear_remote_cache_failed => '清理遠端快取失敗。';
+
+  @override
+  String get ui_app_system_settings => '系統設定 / 詳細資料';
+
+  @override
+  String get ui_app_restore_install => '還原 / 安裝應用';
+
+  @override
+  String get ui_app_size_label => '大小：';
+
+  @override
+  String get ui_app_installed_label => '安裝時間：';
+
+  @override
+  String get ui_app_backup_date_label => '備份時間：';
+
+  @override
+  String get ui_batch_backup_progress => '正在備份所選應用...';
+
+  @override
+  String ui_batch_backup_success(int count) {
+    return '已成功備份 $count 個應用到 ZenFile/Backups/Apps/';
+  }
+
+  @override
+  String ui_batch_backup_failed(String error) {
+    return '備份部分應用失敗：$error';
+  }
+
+  @override
+  String get ui_app_search_backup => '搜尋備份...';
+
+  @override
+  String get ui_app_sort_by_install_date => '按安裝日期排序';
+
+  @override
+  String get ui_app_no_backup_found => '未找到備份';
+
+  @override
+  String get ui_app_backup_empty_subtitle => '已備份的 APK 和 APKS 檔案列表將顯示在此處。';
+
+  @override
+  String ui_app_backup_search_not_found(String query) {
+    return '找不到與「$query」匹配的備份';
+  }
+
+  @override
+  String ui_app_backup_size_date(String size, String date) {
+    return '大小：$size • 備份日期：$date';
+  }
+
+  @override
+  String get ui_app_split_apk => '分包 (APKS)';
+
+  @override
+  String get ui_app_single_apk => '單個APK';
+
+  @override
+  String get ui_desktop_lyric => '桌面歌詞';
+
+  @override
+  String get msg_overlay_permission_required => '需要懸浮窗許可權才能顯示桌面歌詞，請前往設定授權後重試';
+
+  @override
+  String get msg_notification_permission_denied =>
+      '需要通知許可權才能顯示播放控制面板，是否前往設定開啟？';
+
+  @override
+  String get msg_open_settings => '去設定';
+
+  @override
+  String get msg_notification_not_granted =>
+      '通知許可權未授予，無法顯示播放控制通知。請前往設定開啟通知許可權。';
+
+  @override
+  String get msg_notification_blocked_hint =>
+      '通知欄未生效，可能是系統通知渠道被停用或電池最佳化限制了背景執行。請在系統設定中檢查通知許可權和電池最佳化設定。';
+
+  @override
+  String get msg_audio_service_init_failed =>
+      '背景播放服務初始化失敗，通知欄控制按鈕無法顯示。請嘗試重啟應用；若問題持續，請在系統設定中清除應用資料後重新開啟。';
+
+  @override
+  String get msg_notification_channel_disabled =>
+      '通知渠道已被停用。請前往系統設定 → 應用管理 → ZenFile → 通知，找到「ZenFile Audio Player」渠道並將其啟用。';
+
+  @override
+  String get ui_search_lyrics_online => '線上搜尋歌詞';
+
+  @override
+  String get ui_lyrics_searching => '正在搜尋歌詞...';
+
+  @override
+  String get ui_lyrics_download_success_enhanced => '增強歌詞下載成功！逐字顯示已就緒';
+
+  @override
+  String get ui_lyrics_download_success => '歌詞下載成功';
+
+  @override
+  String get ui_lyrics_not_found_online => '未找到匹配的歌詞，試試調整歌曲資訊後重試';
+
+  @override
+  String get ui_lyric_search_song_title => '歌曲名稱';
+
+  @override
+  String get ui_lyric_search_artist => '歌手';
+
+  @override
+  String get msg_rotate_video => '旋轉畫面';
+
+  @override
+  String get msg_aspect_fit => '原始比例';
+
+  @override
+  String get msg_aspect_fill => '拉伸填滿';
+
+  @override
+  String get msg_aspect_center => '置中';
+
+  @override
+  String get msg_aspect_16_9 => '16:9';
+
+  @override
+  String get msg_aspect_4_3 => '4:3';
+
+  @override
+  String get msg_aspect_custom => '自訂';
+
+  @override
+  String get msg_aspect_fill_screen => '填充螢幕';
+
+  @override
+  String get msg_custom_aspect_ratio => '自訂縮放比例';
+
+  @override
+  String get drawer_tools => '工具';
+
+  @override
+  String get open_with_native => '使用本應用程式開啟';
+
+  @override
+  String get open_with_external => '使用外部系統選擇器開啟';
+
+  @override
+  String get open_once => '僅一次';
+
+  @override
+  String get open_always => '始終';
+
+  @override
+  String get pick_file_type => '選擇檔案型別';
+
+  @override
+  String get file_type_text => '文字';
+
+  @override
+  String get file_type_audio => '音訊';
+
+  @override
+  String get file_type_video => '影片';
+
+  @override
+  String get file_type_image => '影像';
+
+  @override
+  String get file_type_text_desc => '以文字方式開啟';
+
+  @override
+  String get file_type_audio_desc => '以音訊方式播放';
+
+  @override
+  String get file_type_video_desc => '以影片方式播放';
+
+  @override
+  String get file_type_image_desc => '以影像方式檢視';
+
+  @override
+  String get drawer_edit_connection => '編輯';
+
+  @override
+  String get cat_system => '系統';
+
+  @override
+  String get cat_backup_restore => '備份/恢復';
+
+  @override
+  String get cat_backup_restore_desc => '備份';
+
+  @override
+  String get cat_storage_volume => '儲存';
+
+  @override
+  String get ui_columns_per_row => '每行顯示';
+
+  @override
+  String get ui_2columns => '2列';
+
+  @override
+  String get ui_3columns => '3列';
+
+  @override
+  String get ui_4columns => '4列';
+
+  @override
+  String get ui_show_custom_entry => '自訂';
+
+  @override
+  String get msge8b8e9b3 => '常用功能';
+
+  @override
+  String get msg04b7de53 => '常用功能快捷入口';
+
+  @override
+  String get prop_read => 'Read';
+
+  @override
+  String get prop_write => 'Write';
+
+  @override
+  String get prop_folder_directory => 'Folder / Directory';
+
+  @override
+  String get prop_file => 'File';
+
+  @override
+  String prop_contains_format(int folderCount, int fileCount) {
+    return '$folderCount subfolder(s), $fileCount file(s)';
+  }
+
+  @override
+  String get prop_bytes => 'bytes';
+
+  @override
+  String prop_items_selected(int count) {
+    return '$count items selected';
+  }
+
+  @override
+  String prop_items_summary(int count, int folderCount, int fileCount) {
+    return '$count items ($folderCount folder(s), $fileCount file(s))';
+  }
+
+  @override
+  String get prop_calc_hash => '計算雜湊值';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => '雜湊計算中…';
+
+  @override
+  String get prop_hash_failed => '雜湊計算失敗';
+
+  @override
+  String get msg_add_subtitle => '新增字幕';
+
+  @override
+  String get msg_subtitle_menu => '字幕';
+
+  @override
+  String get msg_subtitle_size => '字幕大小';
+
+  @override
+  String get msg_subtitle_position => '字幕位置';
+
+  @override
+  String get msg_subtitle_pos_top => '頂部';
+
+  @override
+  String get msg_subtitle_pos_bottom => '底部';
+
+  @override
+  String get msg_subtitle_no_background => '移除字幕背景';
+
+  @override
+  String get msg_auto_clean_cache => '自動清理快取';
+
+  @override
+  String get msg_auto_clean_cache_hint => '點選設定自動清理時間間隔';
+
+  @override
+  String get msg_auto_clean_cache_picker_hint => '滑動選擇自動清理時間間隔';
+
+  @override
+  String get msg_cache_clean_unit_day => '天';
+
+  @override
+  String get msg_cache_clean_unit_hour => '小時';
+
+  @override
+  String get msg_cache_clean_unit_minute => '分鐘';
+
+  @override
+  String get msg_cache_clean_confirm => '確認';
+
+  @override
+  String get msg_quick_actions => '快捷操作';
+
+  @override
+  String get msg_hwdec => '硬解';
+
+  @override
+  String get msg_swdec => '軟解';
+
+  @override
+  String get msg_toggle_decode => '切換硬解/軟解';
+
+  @override
+  String get msg_subtitle_on => '開啟字幕';
+
+  @override
+  String get msg_subtitle_off => '關閉字幕';
+
+  @override
+  String get msg_no_subtitle => '暫無字幕';
+
+  @override
+  String get msg_audio_track => '音軌';
+
+  @override
+  String get msg_subtitle_track => '字幕軌';
+
+  @override
+  String get msg_no_audio_track => '無音軌';
+
+  @override
+  String get msg_no_subtitle_track => '無字幕軌';
+
+  @override
+  String get msg_playlist => '播放列表';
+
+  @override
+  String get msg_no_playlist => '暫無播放列表';
+
+  @override
+  String get msg_slide_to_unlock => '滑動/點選解鎖';
+
+  @override
+  String get msg_seconds_short => '秒';
+
+  @override
+  String get msg_speed_2x => '倍速 2.0x';
+
+  @override
+  String get log_v1_1_1_line1 => '📹 視訊播放器';
+
+  @override
+  String get log_v1_1_1_line2 =>
+      '支援外掛字幕：自動識別與影片同目錄、同檔名的字幕檔案（如 .srt、.ass），同時保留手動載入字幕檔案的入口。';
+
+  @override
+  String get log_v1_1_1_line3 => '新增自訂畫面縮放比例，可靈活適配各類異形螢幕及非標準比例螢幕。';
+
+  @override
+  String get log_v1_1_1_line4 => '🎵 音訊播放器';
+
+  @override
+  String get log_v1_1_1_line5 => '修復了在平板、車機等橫屏裝置上的介面顯示異常問題，提升大螢幕體驗。';
+
+  @override
+  String get log_v1_1_1_line6 => '📂 檔案瀏覽與操作';
+
+  @override
+  String get log_v1_1_1_line7 => '最佳化側滑選單與快捷操作彈窗的寬度一致性，視覺更統一。';
+
+  @override
+  String get log_v1_1_1_line8 => '快捷操作面板中的常用功能現支援摺疊/展開，且狀態會持久記憶，下次開啟保留您的偏好。';
+
+  @override
+  String get log_v1_1_1_line9 =>
+      '調整檔案開啟邏輯：點選檔案預設使用本應用直接開啟；如需切換其他應用，可在選中檔案後，透過頂部三點選單或底部操作列的「更多」選項選擇「開啟方式」。';
+
+  @override
+  String get log_v1_1_1_line10 => '🗂️ 分類頁介面';
+
+  @override
+  String get log_v1_1_1_line11 => '預設佈局改為每行4列，顯示更緊湊高效。';
+
+  @override
+  String get log_v1_1_1_line12 => '您可在「自訂快捷方式」設定中自由切換每行3列或4列。';
+
+  @override
+  String get log_v1_1_1_line13 => '支援長按分類圖示並拖曳，隨意調整類別排列順序。';
+
+  @override
+  String get ui_close_category => '關閉類別';
+
+  @override
+  String get ui_open_category => '開啟類別';
+
+  @override
+  String get msg_custom_scan_paths => '自定義掃描位置';
+
+  @override
+  String get notification_web_share_local_title => 'ZenFile 本地網頁共享';
+
+  @override
+  String get notification_web_share_internet_title => 'ZenFile 網際網路網頁共享';
+
+  @override
+  String notification_web_share_running(Object url) {
+    return '執行於 $url';
+  }
+
+  @override
+  String get notification_ftp_title => 'ZenFile FTP 伺服器';
+
+  @override
+  String notification_ftp_running(Object ip, Object port) {
+    return '執行於 ftp://$ip:$port';
+  }
+
+  @override
+  String get ui_download_links => '下載連結';
+
+  @override
+  String get msg_editor_lines => '行';
+
+  @override
+  String get msg_editor_modified => '已修改';
+
+  @override
+  String get go_to_path => '跳轉路徑';
+
+  @override
+  String get copy_path => '複製路徑';
+
+  @override
+  String get enter_path_hint => '輸入絕對路徑...';
+
+  @override
+  String get breadcrumb_context_title => '麵包屑選項';
+
+  @override
+  String get ui_instrumental_track_hint => '此歌曲為沒有填詞的純音樂，請您欣賞';
+
+  @override
+  String get changelog_section_new => '✨ 新增功能';
+
+  @override
+  String get changelog_section_optimizations => '🔧 最佳化';
+
+  @override
+  String get changelog_section_fixes => '🐛 問題修復';
+
+  @override
+  String get changelog_section_known_issues => '⚠️ 已知問題';
+
+  @override
+  String get changelog_v1127_new_1 => '收藏夾：新增「+」按鈕，可手動新增自訂路徑/名稱的收藏項，並依分組聚合顯示。';
+
+  @override
+  String get changelog_v1127_new_2 => '收藏夾：收藏項現可編輯（名稱/路徑/分組）；分組支援摺疊/展開並持久化儲存。';
+
+  @override
+  String get changelog_v1127_new_3 =>
+      '收藏夾：所有收藏入口（三點選單/長按彈窗/頂部「+」按鈕）均可選擇分組；長按分組可重新命名/刪除，長按收藏項可編輯/刪除。';
+
+  @override
+  String get changelog_v1127_opt_1 =>
+      '系統性修復 Android 15/16 UI 卡頓（渲染層規避 Impeller 回退 + IO 層 + 解碼層三維最佳化）。';
+
+  @override
+  String get changelog_v1127_fix_1 => '修復選擇模式下「收藏」未彈出分組選擇的問題。';
+
+  @override
+  String get changelog_v1127_known_1 =>
+      'SMB / FTP / SFTP 遠端影片播放於部分場景下仍可能出現卡頓，持續最佳化中。';
+
+  @override
+  String get batch_rename_title => '批次重新命名';
+
+  @override
+  String batch_rename_subtitle(Object count) {
+    return '正在配置 $count 個專案';
+  }
+
+  @override
+  String get batch_rename_empty_preview => '（空）';
+
+  @override
+  String batch_rename_tooltip_basename(Object n) {
+    return '不帶副檔名的檔案名 ($n)';
+  }
+
+  @override
+  String batch_rename_tooltip_ext_with_dot(Object de) {
+    return '帶點的副檔名 ($de)';
+  }
+
+  @override
+  String batch_rename_tooltip_ext_no_dot(Object e) {
+    return '不帶點的副檔名 ($e)';
+  }
+
+  @override
+  String batch_rename_tooltip_full_name(Object N) {
+    return '帶副檔名的完整檔案名 ($N)';
+  }
+
+  @override
+  String get batch_rename_hint_pattern => '例如：Image_#';
+
+  @override
+  String get batch_rename_hint_extension => 'txt';
+
+  @override
+  String get batch_rename_label_padding => '填充';
+
+  @override
+  String get batch_rename_hint_padding => '例如：3';
+
+  @override
+  String get batch_rename_hint_start => '例如：1';
+
+  @override
+  String get batch_rename_hint_find => '搜尋詞';
+
+  @override
+  String get batch_rename_label_fewer_options => '更少選項';
+
+  @override
+  String get batch_rename_btn_preview => '預覽';
+
+  @override
+  String get batch_rename_btn_cancel => '取消';
+
+  @override
+  String get batch_rename_btn_confirm => '確定';
+
+  @override
+  String batch_rename_preview_subtitle(Object count) {
+    return '正在檢視 $count 個專案';
+  }
+
+  @override
+  String get batch_rename_btn_apply => '應用更改';
+
+  @override
+  String get msg_pdf_quick_presets => '快速效能預設';
+
+  @override
+  String get msg_pdf_smooth_mode => '流暢模式';
+
+  @override
+  String get msg_pdf_detail_tuning => '詳細調節選項';
+
+  @override
+  String get msg_pdf_single_page_scroll => '單頁（逐頁滑動）';
+
+  @override
+  String get msg_pdf_horizontal_scroll => '水平（從左到右滑動）';
+
+  @override
+  String get msg_pdf_continuous => '連續';
+
+  @override
+  String get msg_pdf_single_page => '單頁';
+
+  @override
+  String get msg_pdf_vertical => '垂直';
+
+  @override
+  String get msg_pdf_horizontal => '水平';
+
+  @override
+  String get changelog_v1125_new_1 => '音訊播放器歌詞按鈕支援四種狀態迴圈切換，播放模式按鈕整合隨機播放。';
+
+  @override
+  String get changelog_v1125_opt_1 =>
+      '最佳化應用程式啟動時的媒體掃描排程（並行與節流），緩解部分機型開啟應用程式幾秒後卡死的問題。';
+
+  @override
+  String get changelog_v1125_opt_2 => '分類頁「網路」分類現在即時顯示已儲存的伺服器數量。';
+
+  @override
+  String get changelog_v1125_opt_3 => '分類頁數量文字與「選擇儲存磁碟機」標題加入多語言翻譯。';
+
+  @override
+  String get changelog_v1125_fix_1 =>
+      '修復清除應用程式資料後重新開啟應用程式不再彈出「所有檔案存取」授權彈窗、隨後開啟音訊檔案閃退的問題。';
+
+  @override
+  String get changelog_v1125_fix_2 =>
+      '修復 Android 13+ 與 Android 11 通知列媒體控制卡片不顯示的問題（提前建立通知頻道並按系統版本分流播放狀態邏輯）。';
+
+  @override
+  String get changelog_v1125_fix_3 => '修復分類頁網格檢視中已選取的專案無法再次點選取消選取的問題。';
+
+  @override
+  String get changelog_v1125_fix_4 =>
+      '改進 SMB / FTP / SFTP 遠端影片串流播放穩定性，修復播放幾秒後畫面卡死、最終導致應用程式無回應閃退的問題。';
+
+  @override
+  String get changelog_v1125_known_1 =>
+      'SMB / FTP / SFTP 遠端影片播放在部分場景下仍可能出現卡頓，正在持續最佳化中。';
+
+  @override
+  String get changelog_v1126_opt_1 =>
+      'SMB 下載提速：移除雙緩衝預取，改為單執行緒順序讀寫，大幅提升大檔案傳輸速度。';
+
+  @override
+  String get changelog_v1126_opt_2 => '移除備用圖示集，顯著減小安裝套件（APK）體積。';
+
+  @override
+  String get changelog_v1126_opt_3 =>
+      '細節最佳化：側選單「網路」清單的三點按鈕改為右對齊，快速操作頁標題支援自動換行。';
+
+  @override
+  String get changelog_v1126_fix_1 =>
+      '修復 FTP 下載速度被錯誤限制在 30-40MB/s 的問題（寫入重新整理間隔過小導致）。';
+
+  @override
+  String get changelog_v1126_fix_2 =>
+      '修復遠端使用者端（SMB/FTP/SFTP）取消傳輸、清單卡頓與重新整理三類問題。';
+
+  @override
+  String get changelog_v1126_fix_3 => '修復 openlist 殘留導致的相關異常。';
+
+  @override
+  String get changelog_v1126_known_1 =>
+      'SMB / FTP / SFTP 遠端影片播放於部分場景下仍可能出現卡頓，持續最佳化中。';
+
+  @override
+  String get ui_select_backup_path => '自訂備份路徑';
+
+  @override
+  String get ui_backup_path_local => '本機';
+
+  @override
+  String get ui_backup_path_remote => '遠端';
+
+  @override
+  String get ui_select_remote_connection => '選擇遠端連線';
+
+  @override
+  String get ui_no_backup_files => '暫無備份檔案';
+
+  @override
+  String get ui_please_select_backup_file => '請選擇要恢復的備份檔案';
+
+  @override
+  String get ui_restore_restart_title => '需要重新啟動';
+
+  @override
+  String get ui_restore_restart_message => '部分設定需要重新啟動應用程式才能生效，是否立即重新啟動？';
+
+  @override
+  String get ui_restart => '重新啟動';
+
+  @override
+  String get ui_later => '稍後';
+
+  @override
+  String get ui_parent_directory => '上層目錄';
+
+  @override
+  String get ui_speed => '速度';
+
+  @override
+  String get ui_file_size => '檔案大小';
+
+  @override
+  String get changelog_v1128_new_1 => '快捷操作頁新增單/雙視窗切換按鈕，與設定—檔案瀏覽器選項中的「啟用分屏」同步';
+
+  @override
+  String get changelog_v1128_new_2 =>
+      '檢視與排序選項支援依類別多選過濾（圖片/影片/音訊/檔案/壓縮包/安裝包/其它可疊加），並可記住過濾條件';
+
+  @override
+  String get changelog_v1128_new_3 => '分類頁新增「備份/還原」快捷入口，並預設啟用';
+
+  @override
+  String get changelog_v1128_new_4 => '遠端檔案與資料夾顯示雲徽標，新增「顯示遠端檔案雲徽」開關';
+
+  @override
+  String get changelog_v1128_opt_1 =>
+      '壓縮大檔案或多個檔案時不再崩潰卡死：改為串流壓縮/解壓，常駐記憶體約 1MB，並加入記憶體閾值保護與分卷切割合併';
+
+  @override
+  String get changelog_v1128_opt_2 => '最佳化遠端影片（SMB/FTP/SFTP）播放卡頓，消除脈衝式卡頓';
+
+  @override
+  String get changelog_v1128_opt_3 => '雙視窗模式下，排序、大小/間距、依類別過濾均同步生效';
+
+  @override
+  String get changelog_v1128_opt_4 => '分類頁圖示統一為應用主題主色；各分類顯示儲存佔用大小';
+
+  @override
+  String get changelog_v1128_opt_5 => '全域搜尋預設從目前資料夾開始（儲存根目錄退化為全域搜尋）';
+
+  @override
+  String get changelog_v1128_fix_1 => '修復關閉「記住過濾」後仍持久化上次過濾條件的問題';
+
+  @override
+  String get changelog_v1128_known_1 => '雙視窗模式下「大小/間距」調整暫未生效，將於後續版本最佳化';
+
+  @override
+  String get changelog_v1129_opt_1 =>
+      'Merged the separate \"Categories\" and \"Browse\" buttons in the category/browse page navigation into a single centered toggle (shows \"Browse\" on the categories page, \"Categories\" on the browse page).';
+
+  @override
+  String get changelog_v1129_opt_2 =>
+      'When renaming a file, the filename body (without extension) is now auto-selected with the cursor placed before the extension, preventing accidental extension changes. Covers all entry points: 3-dot menu, long-press menu, image viewer, global search, selection mode, remote, and conflict dialog.';
+
+  @override
+  String get changelog_v1129_opt_3 =>
+      'Fixed preview of large archive images (>4MB) and added swipe-to-switch between images; a single failed preview no longer breaks the whole group.';
+
+  @override
+  String get changelog_v1129_opt_4 =>
+      'Remote media thumbnails now use concurrency throttling and unique temp filenames for more stable loading without cross-mixing.';
+
+  @override
+  String get changelog_v1129_opt_5 =>
+      'Hide the remote cloud badge in split-screen (dual-pane) mode for a cleaner UI.';
+
+  @override
+  String get changelog_v1129_opt_6 =>
+      'Swapped the icons of the \"Images\" and \"Screenshots\" categories (Images now shows a camera icon, Screenshots shows an image icon).';
+
+  @override
+  String get changelog_v1129_fix_1 =>
+      'Fixed thumbnails not refreshing for same-named files, and cross-mixing of thumbnails between remote and local same-named files.';
+
+  @override
+  String get changelog_v1129_fix_2 =>
+      'Fixed the issue where tapping \"OK\" after extracting an archive did not navigate to the extracted folder.';
+
+  @override
+  String get changelog_v1129_fix_3 =>
+      'Fixed the remote folder \"item count\" always showing 0.';
+
+  @override
+  String get changelog_v1129_fix_4 =>
+      'Fixed single-pane mode overwriting an already-open remote connection when opening a new one, and the remote tab title not being fixed to the connection name.';
+
+  @override
+  String get changelog_v1129_fix_5 =>
+      'Fixed breadcrumb horizontal swipe accidentally triggering page switching in the browse page.';
+
+  @override
+  String get changelog_v1129_fix_6 =>
+      'Fixed long-press dragging of category tiles accidentally triggering left/right page switching.';
+
+  @override
+  String get changelog_v1129_fix_7 =>
+      'Fixed screenshots disappearing after drilling into a folder under the Images category\'s folder view.';
+
+  @override
+  String get changelog_v1129_fix_8 =>
+      'Fixed archive image preview failing entirely due to name normalization mismatch, and missing feedback on extraction failure.';
+
+  @override
+  String get changelog_v1129_fix_9 =>
+      'Global search empty state and delete confirmation texts now support multiple languages (removed hardcoded English).';
+
+  @override
+  String get changelog_v1129_known_1 =>
+      'SMB / FTP / SFTP remote video playback may still stutter in some scenarios; optimization is ongoing.';
+
+  @override
+  String get ui_global_search_hint => '搜尋檔案、應用程式與設定';
+
+  @override
+  String get ui_delete_item_confirm => '確定要刪除此專案嗎？此操作無法復原。';
+
+  @override
+  String ui_delete_items_confirm(int count) {
+    return '確定要刪除選中的 $count 個專案嗎？此操作無法復原。';
+  }
+
+  @override
+  String get changelog_v1130_new_1 =>
+      '遠端保護 PIN 碼：設定 4 位 PIN 後，訪問已儲存遠端伺服器、進入編輯頁、分類頁切換到遠端範圍時需先解鎖，保護遠端資料隱私';
+
+  @override
+  String get changelog_v1130_new_2 => '分類頁「本地/遠端」切換：所有支援遠端目錄的類別可獨立切換本地/遠端內容';
+
+  @override
+  String get changelog_v1130_new_3 =>
+      '備份功能（本地→遠端）：支援「自動備份」與「立即備份」，新增檔案檢測自動觸發，只備份該類別格式檔案';
+
+  @override
+  String get changelog_v1130_new_4 => '遠端連線嚮導新增「測試」按鈕，可先驗證連線再儲存配置';
+
+  @override
+  String get changelog_v1130_new_5 => '影片/音訊類別選單新增「播放器控制器顯隱」開關';
+
+  @override
+  String get changelog_v1130_new_6 => '統一「開啟方式」彈窗：瀏覽頁/最近頁/分類頁 三點與長按選單均彈應用內選擇彈窗';
+
+  @override
+  String get changelog_v1130_new_7 =>
+      '未知格式檔案選「本應用開啟」後彈出型別選擇器（文字/音訊/影片/影象）並以內建檢視器開啟';
+
+  @override
+  String get changelog_v1130_opt_1 => '分類頁/瀏覽頁「分類」「瀏覽」按鈕合二為一，居中翻轉切換';
+
+  @override
+  String get changelog_v1130_opt_2 => '重新命名自動選中檔名主體（不含副檔名），遊標落副檔名前';
+
+  @override
+  String get changelog_v1130_opt_3 => '網格/列表檢視切換整合進排序選單';
+
+  @override
+  String get changelog_v1130_opt_4 => '每個類別獨立記憶「資料夾/全部專案」檢視模式，影片/音訊預設資料夾檢視';
+
+  @override
+  String get changelog_v1130_opt_5 => '下載類別支援遠端備份';
+
+  @override
+  String get changelog_v1130_opt_6 => '遠端圖片/影片縮圖按需下載顯示';
+
+  @override
+  String get changelog_v1130_opt_7 => '本地掃描排除應用快取目錄，修復開啟遠端縮圖後本地圖片重複';
+
+  @override
+  String get changelog_v1130_opt_8 => '遠端檔案三點選單與長按批次刪除/重新命名/複製/剪下/定位操作生效';
+
+  @override
+  String get changelog_v1130_opt_9 => '遠端資料夾下鑽保留目錄結構（DCIM/Pictures 等頂層目錄）';
+
+  @override
+  String get changelog_v1130_fix_1 => '修復 MIUI 儲存許可權誤判導致啟動彈窗迴圈卡死';
+
+  @override
+  String get changelog_v1130_fix_2 => '修復分類頁長按拖動類別圖示誤觸左右切頁';
+
+  @override
+  String get changelog_v1130_fix_3 => '修復截圖在圖片類別「按資料夾」下鑽後消失';
+
+  @override
+  String get ui_remote_guard => '遠端守衛';
+
+  @override
+  String get ui_remote_guard_desc =>
+      '設定密碼保護遠端伺服器存取，每次啟動應用程式或手動鎖定後需輸入密碼才能進入遠端伺服器';
+
+  @override
+  String get ui_remote_guard_enabled => '已啟用';
+
+  @override
+  String get ui_remote_guard_disabled => '已禁用';
+
+  @override
+  String get ui_remote_guard_set_pin => '設定PIN碼';
+
+  @override
+  String get ui_remote_guard_enter_pin => '輸入PIN碼';
+
+  @override
+  String get ui_remote_guard_confirm_pin => '確認PIN碼';
+
+  @override
+  String get ui_remote_guard_pin_mismatch => '兩次輸入的PIN碼不一致，請重新輸入';
+
+  @override
+  String get ui_remote_guard_wrong_pin => 'PIN碼錯誤，請重試';
+
+  @override
+  String get ui_remote_guard_change_pin => '修改密碼';
+
+  @override
+  String get ui_remote_guard_pin_hint => '可含字母、數字或符號的密碼';
+
+  @override
+  String get ui_remote_guard_lock_now => '立即鎖定';
+
+  @override
+  String get ui_remote_guard_lock_now_desc => '鎖定後需要重新輸入PIN碼才能訪問遠端伺服器';
+
+  @override
+  String get ui_security_settings => '安全設定';
+
+  @override
+  String get ui_remote_guard_switch_desc => '保護已儲存的遠端伺服器，存取前需驗證PIN碼';
+
+  @override
+  String get ui_app_lock => '啟動應用保護';
+
+  @override
+  String get ui_app_lock_desc => '啟動應用程式時需輸入密碼解鎖才能進入';
+
+  @override
+  String get ui_app_lock_set_pin_first => '啟用前請先設定密碼';
+
+  @override
+  String get ui_remote_guard_enter_current_pin => '請輸入目前 PIN 碼';
+
+  @override
+  String get ui_remote_guard_reencrypting => '正在重新加密已隱藏檔案…';
+
+  @override
+  String get ui_remote_guard_pin_changed => 'PIN 碼已修改';
+
+  @override
+  String get ui_remote_guard_change_pin_failed => '部分檔案重新加密失敗，PIN 碼未變更';
+
+  @override
+  String get ui_change_vault_pin_desc => '修改安全設定與保險箱解鎖密碼，不影響已加密檔案';
+
+  @override
+  String get ui_auto_backup => '自動備份';
+
+  @override
+  String get ui_backup => '備份';
+
+  @override
+  String get ui_backup_now => '立即備份';
+
+  @override
+  String get ui_local => '本地';
+
+  @override
+  String get ui_no_remote_path => '未新增自定義遠端路徑';
+
+  @override
+  String get ui_remote => '遠端';
+
+  @override
+  String get ui_sync_done => '備份完成';
+
+  @override
+  String get ui_syncing => '正在備份...';
+
+  @override
+  String get ui_test => '測試';
+
+  @override
+  String get ui_test_failed => '測試失敗';
+
+  @override
+  String get ui_test_failed_reason => '失敗原因';
+
+  @override
+  String get ui_test_success => '測試成功';
+
+  @override
+  String get ui_test_success_desc => '連線成功，伺服器配置正確';
+
+  @override
+  String get ui_show_remote_files => '顯示遠端檔案';
+
+  @override
+  String get ui_hide_remote_files => '隱藏遠端檔案';
+
+  @override
+  String get changelog_v1130_new_8 => '影片播放器新增「軟解 / 硬解」切換開關，可依裝置解碼能力在畫質與效能間擇優。';
+
+  @override
+  String get changelog_v1130_new_9 => '分類頁重新整理完成後顯示「重新整理完成」提示，並支援多語系。';
+
+  @override
+  String get changelog_v1130_opt_10 =>
+      '圖片 / 影片 / 截圖新增磁碟快取：啟動後分類清單秒級呈現，無須每次重新掃描媒體庫（解決大容量多檔案裝置每次啟動需等待約 1 分鐘的問題）。';
+
+  @override
+  String get changelog_v1130_opt_11 =>
+      '分類頁計數即時正確：快取還原後立刻重新整理數量與清單，不再顯示上一次啟動遺留的陳舊計數。';
+
+  @override
+  String get changelog_v1130_opt_12 =>
+      '音訊載入改為「獨佔式優先」：先載入音訊、再載入影片 / 圖片，避免大容量裝置媒體庫爭搶導致音訊被擠掉歸零。';
+
+  @override
+  String get changelog_v1130_opt_13 =>
+      '音訊索引快取改為原子寫入 + 隔離執行緒解碼：寫入中途被中止不會留下損毀檔案，主執行緒也不再因超大快取卡頓或 OOM。';
+
+  @override
+  String get changelog_v1130_opt_14 => '音訊載入重試保留最大結果集，防止媒體庫忙碌時回傳的部分結果覆蓋已顯示內容。';
+
+  @override
+  String get changelog_v1130_fix_4 =>
+      '修復大容量多檔案裝置（如 512G 儲存、上萬媒體檔案）啟動後音訊類別被清空、影片圖片載入完成後音訊消失的問題。';
+
+  @override
+  String get changelog_v1130_fix_5 =>
+      '修復釋出建置編譯錯誤（SongModel.getMap 呼叫方式、VideoController 無 dispose()）。';
+
+  @override
+  String get changelog_v1131_fix_1 =>
+      'Fixed residual blank icons on category page after deleting files from browse page or other apps (new pruneDeletedMediaPaths + pruneDeletedMedia instant pruning mechanism)';
+
+  @override
+  String get changelog_v1131_fix_2 =>
+      'Fixed residual blank icons for non-media categories (Documents/Archives/Downloads/APKs) after delete or move in browse page';
+
+  @override
+  String get changelog_v1131_fix_3 =>
+      'Fixed category total size \"shows ~1 second → zeros out → reload restores\" flicker on startup';
+
+  @override
+  String get changelog_v1131_fix_4 =>
+      'Fixed category \"Select All\" mixing remote/local files (local page selects local only, remote page selects remote only)';
+
+  @override
+  String get changelog_v1131_fix_5 =>
+      'Fixed remote file deletion not refreshing the list';
+
+  @override
+  String get changelog_v1131_fix_6 =>
+      'Fixed image viewer residual siblingItems preview after delete, list not refreshing after 3-dot menu delete, and local delete thumbnail cache invalidation';
+
+  @override
+  String get changelog_v1131_fix_7 =>
+      'Fixed remote image residual thumbnail after delete, \"Show in Location\" navigating to local cache path instead of remote, and delete only removing local cache not remote original';
+
+  @override
+  String get changelog_v1131_fix_8 =>
+      'Fixed image viewer 3-dot menu \"Show in Location\" not navigating';
+
+  @override
+  String get changelog_v1131_fix_9 =>
+      'Fixed long-press batch backup APK SnackBar not showing, progress dialog stuck (multiple iterations, final solution uses rootNavigator + backupDialogOpen flag), and unable to cancel via back key';
+
+  @override
+  String get changelog_v1131_fix_10 =>
+      'Added \"Open Location\" button to backed-up APK popup; fixed issue requiring manual back press to see navigation (now popUntil(isFirst) then switch Tab)';
+
+  @override
+  String get changelog_v1131_fix_11 =>
+      'Changed batch action bar \"Clear\" button to \"Cancel\"; backup/share/uninstall buttons now use multilingual translations instead of hardcoded Chinese';
+
+  @override
+  String get changelog_v1131_fix_12 =>
+      'Fixed refresh button not scanning non-media files (APK not loading), corrected category branch logic and added onlyApk parameter for supplementary scan';
+
+  @override
+  String get changelog_v1131_fix_13 =>
+      'Simplified \"Change PIN\" entry: tap on vault home goes directly to number pad, removed redundant \"Remote Guard\" toggle and \"Lock Now\" from remote guard page';
+
+  @override
+  String get changelog_v1131_fix_14 =>
+      'Fixed auto-backup toggle not taking effect (new _autoSyncTriggered guard); fixed remote delete-then-backup falsely reporting success';
+
+  @override
+  String get changelog_v1131_fix_15 =>
+      'Fixed browse page Tab bar horizontal swipe accidentally triggering page switch (new tabBarInteracting flag + Listener protection)';
+
+  @override
+  String get changelog_v1131_fix_16 =>
+      'Added ui_app_open_location, ui_batch_backup, ui_batch_share, ui_batch_uninstall, ui_batch_uninstall_confirm translation keys, all 10 languages covered';
+
+  @override
+  String get changelog_v1132_new_1 =>
+      'Wake on LAN (WOL): New entry in Drawer → Tools. Add/Edit/Delete devices (name, MAC address, broadcast address, port), send magic packets to wake devices on LAN. Device list persisted locally. Full 10-language localization.';
+
+  @override
+  String get changelog_v1132_new_2 =>
+      'Image Editor: New \'Edit\' button on image viewer page (top toolbar + 3-dot menu). 5 editing tabs: Adjust (brightness/contrast/saturation), Filters (original/B&W/sepia/vintage/cool/warm), Resize (exact dimensions + lock aspect ratio + 6 ID-photo presets: Passport 413×531, 1-inch 295×413, 2-inch 413×579, Small 1-inch 260×378, Large 1-inch 390×567, US Visa 600×600), Rotate & Flip (90°/180°/270° + horizontal/vertical), Crop (handle gestures + aspect ratio constraints).';
+
+  @override
+  String get changelog_v1132_new_3 =>
+      'One-tap Metadata Removal: New \'Remove Metadata\' option in image viewer 3-dot menu. Re-encodes image stripping EXIF/GPS/ICC metadata, saves as new file.';
+
+  @override
+  String get changelog_v1132_new_4 =>
+      'Immersive Info Bar: Image viewer shows filename·dimensions·size·format on touch; Properties dialog adds Dimensions row.';
+
+  @override
+  String get changelog_v1132_fix_1 =>
+      'Fixed Select All button in category page cross-selecting files from other folders when browsing by folder: Images/Videos/Audios/Screenshots/Documents/Archives/Downloads/APKs — 8 categories now only select files within the current folder when in folder view; Select All selects all files only in \'All Items\' view.';
+
+  @override
+  String get changelog_v1132_fix_2 =>
+      'Fixed Select All button failing to select files in the Screenshots folder (DCIM/Screenshots) when browsing by folder in the Images category.';
+
+  @override
+  String get changelog_v1132_fix_3 =>
+      'Fixed \'Show in Location\' not navigating to the browse page for images/screenshots (works for both local and remote paths).';
+
+  @override
+  String get changelog_v1132_fix_4 =>
+      'Fixed batch operation backup button title showing \'Backing up...\' (changed to \'Backup\', updated across all 10 languages).';
+
+  @override
+  String get changelog_v1132_fix_5 =>
+      'Fixed image viewer Dismissible widget missing closing bracket causing compile errors.';
+
+  @override
+  String get changelog_v1132_fix_6 =>
+      'Fixed Select All in category page mixing remote/local files (now filters by current scope).';
+
+  @override
+  String get changelog_v1132_fix_7 =>
+      'Fixed residual blank icons on category page after deleting or moving files in non-media categories (Documents/Archives/Downloads/APKs).';
+
+  @override
+  String get changelog_v1132_fix_8 =>
+      'Fixed residual thumbnails and unsynchronized siblingItems after deleting remote images.';
+
+  @override
+  String get changelog_v1132_fix_9 =>
+      'Fixed category total size flickering \'shows ~1s → zeros out → reload restores\' on startup.';
+
+  @override
+  String get changelog_v1132_fix_10 =>
+      'Fixed tab bar horizontal swipe accidentally triggering page switch (new tabBarInteracting flag).';
+
+  @override
+  String get changelog_v1132_fix_11 =>
+      'Fixed auto-backup toggle not taking effect (new _autoSyncTriggered guard + isLoaded check).';
+
+  @override
+  String get changelog_v1132_fix_12 =>
+      'Fixed backup logic errors (re-uploads missing remote files instead of discarding records).';
+
+  @override
+  String get changelog_v1132_fix_13 =>
+      'Fixed \'Open Location\' requiring manual back press to see navigation (now uses popUntil(isFirst) to navigate home directly).';
+
+  @override
+  String get changelog_v1132_fix_14 =>
+      'Fixed refresh button not scanning non-media files (APKs not loading), corrected category branch logic and added onlyApk parameter.';
+
+  @override
+  String get changelog_v1132_fix_15 =>
+      'Fixed batch backup progress dialog stuck and not dismissing (switched to rootNavigator mode + backupDialogOpen flag).';
+
+  @override
+  String get ui_batch_backup => '備份';
+
+  @override
+  String get ui_batch_share => '分享';
+
+  @override
+  String get ui_batch_uninstall => '解除安裝';
+
+  @override
+  String ui_batch_uninstall_confirm(Object count) {
+    return '確定要解除安裝選中的 $count 個應用程式嗎？';
+  }
+
+  @override
+  String get ui_app_open_location => '開啟所在位置';
+
+  @override
+  String get img_dimensions => '尺寸';
+
+  @override
+  String get edit_image => 'Edit Image';
+
+  @override
+  String get editor_adjust => 'Adjust';
+
+  @override
+  String get editor_filters => 'Filters';
+
+  @override
+  String get editor_resize => 'Resize';
+
+  @override
+  String get editor_crop => 'Crop';
+
+  @override
+  String get ui_draw => '繪圖';
+
+  @override
+  String get ui_edit => '編輯';
+
+  @override
+  String get ui_color => '顏色';
+
+  @override
+  String get ui_width => '粗細';
+
+  @override
+  String get ui_text => '文字';
+
+  @override
+  String get ui_rect => '矩形';
+
+  @override
+  String get ui_ellipse => '橢圓';
+
+  @override
+  String get ui_line => '直線';
+
+  @override
+  String get ui_mosaic => '馬賽克';
+
+  @override
+  String get ui_pen => '畫筆';
+
+  @override
+  String get ui_arrow => '箭頭';
+
+  @override
+  String get ui_brush_size => '筆刷大小';
+
+  @override
+  String get editor_rotate_flip => 'Rotate & Flip';
+
+  @override
+  String get editor_flip => '翻轉';
+
+  @override
+  String get editor_brightness => 'Brightness';
+
+  @override
+  String get editor_contrast => 'Contrast';
+
+  @override
+  String get editor_saturation => 'Saturation';
+
+  @override
+  String get editor_exact_dimensions => 'Exact Dimensions';
+
+  @override
+  String get editor_width => 'Width';
+
+  @override
+  String get editor_height => 'Height';
+
+  @override
+  String get editor_lock_ratio => 'Lock aspect ratio';
+
+  @override
+  String get editor_passport_413_531 => '護照';
+
+  @override
+  String get editor_preset_1inch => '一寸';
+
+  @override
+  String get editor_preset_2inch => '二寸';
+
+  @override
+  String get editor_preset_small_1inch => '小一寸';
+
+  @override
+  String get editor_preset_large_1inch => '大一寸';
+
+  @override
+  String get editor_preset_us_visa => '美國簽證';
+
+  @override
+  String get editor_id_presets => '證件照預設';
+
+  @override
+  String get editor_quality => '品質（檔案大小）';
+
+  @override
+  String get editor_mode_pixel => '畫素';
+
+  @override
+  String get editor_mode_physical => '物理尺寸';
+
+  @override
+  String get editor_physical_title => '物理尺寸 → 畫素（DPI 轉換）';
+
+  @override
+  String get editor_width_mm => '寬 (mm)';
+
+  @override
+  String get editor_height_mm => '高 (mm)';
+
+  @override
+  String get editor_dpi => 'DPI';
+
+  @override
+  String get editor_preset_id_photo => '證件照 35×25mm';
+
+  @override
+  String get editor_preset_passport => '護照 35×45mm';
+
+  @override
+  String get editor_preset_us_visa_mm => '美簽 51×51mm';
+
+  @override
+  String editor_pixel_auto(int w, int h) {
+    return '→ $w × $h px';
+  }
+
+  @override
+  String get editor_pixel_result => '畫素（自動計算）';
+
+  @override
+  String get editor_width_px => '寬度 (px)';
+
+  @override
+  String get editor_height_px => '高度 (px)';
+
+  @override
+  String get editor_file_size_limit_title => '檔案大小限制（JPEG）';
+
+  @override
+  String get editor_file_size_limit_label => '目標大小 (KB)，留空=不限';
+
+  @override
+  String get editor_strip_metadata => 'Remove all metadata (EXIF / GPS / ICC)';
+
+  @override
+  String get editor_save_as_copy => 'Save as copy';
+
+  @override
+  String get editor_overwrite_original => 'Overwrite original';
+
+  @override
+  String get editor_reset => '重設';
+
+  @override
+  String get editor_exit_confirm_title => '退出編輯？';
+
+  @override
+  String get editor_exit_confirm_message => '未儲存的修改將會遺失';
+
+  @override
+  String get editor_exit_discard => '退出';
+
+  @override
+  String get editor_filter_original => 'Original';
+
+  @override
+  String get editor_filter_bw => 'B&W';
+
+  @override
+  String get editor_filter_sepia => 'Sepia';
+
+  @override
+  String get editor_filter_vintage => 'Vintage';
+
+  @override
+  String get editor_filter_cool => 'Cool';
+
+  @override
+  String get editor_filter_warm => 'Warm';
+
+  @override
+  String get editor_strip_only => 'Strip metadata only';
+
+  @override
+  String get editor_saved => 'Image saved';
+
+  @override
+  String editor_save_failed(Object e) {
+    return 'Save failed: $e';
+  }
+
+  @override
+  String get editor_processing => 'Processing...';
+
+  @override
+  String get editor_aspect_free => 'Free';
+
+  @override
+  String get editor_aspect_square => 'Square';
+
+  @override
+  String get editor_aspect_4_3 => '4:3';
+
+  @override
+  String get editor_aspect_3_4 => '3:4';
+
+  @override
+  String get editor_scale => 'Scale';
+
+  @override
+  String get menu_edit_image => 'Edit';
+
+  @override
+  String get img_rotate => '旋轉';
+
+  @override
+  String get img_info_format => '格式';
+
+  @override
+  String get img_info_file_time => '時間';
+
+  @override
+  String get img_info_file_info => '檔案資訊';
+
+  @override
+  String get img_info_save_path => '儲存路徑';
+
+  @override
+  String get img_info_shoot_location => '拍攝地點';
+
+  @override
+  String get img_info_camera_params => '拍攝引數';
+
+  @override
+  String get img_info_device => '裝置';
+
+  @override
+  String get img_info_shutter => '快門';
+
+  @override
+  String get img_info_iso => 'ISO';
+
+  @override
+  String get img_info_ev => 'EV';
+
+  @override
+  String get img_info_aperture => '光圈';
+
+  @override
+  String get img_info_focal_length => '焦距';
+
+  @override
+  String get img_info_flash => '閃光燈';
+
+  @override
+  String get img_info_histogram => '直方圖';
+
+  @override
+  String get img_info_no_exif => '無 EXIF 資訊';
+
+  @override
+  String get img_info_no_location => '無位置資訊';
+
+  @override
+  String get menu_remove_metadata => 'Remove Metadata';
+
+  @override
+  String get editor_downloading => 'Downloading image...';
+
+  @override
+  String get editor_unsupported => 'This image format cannot be edited';
+
+  @override
+  String editor_output_size(Object size) {
+    return 'Output: $size';
+  }
+
+  @override
+  String get quick_transfer => '快傳';
+
+  @override
+  String get quick_transfer_send => '我要傳送';
+
+  @override
+  String get quick_transfer_receive => '我要接收';
+
+  @override
+  String get quick_transfer_send_hint =>
+      '選擇要分享的資料夾，對側裝置在同一 Wi-Fi 下用瀏覽器開啟地址即可下載檔案。';
+
+  @override
+  String get quick_transfer_receive_hint =>
+      '選擇接收檔案的儲存目錄，對側裝置在同一 Wi-Fi 下用瀏覽器開啟地址即可上傳檔案到本機。';
+
+  @override
+  String get quick_transfer_share_dir => '分享目錄';
+
+  @override
+  String get quick_transfer_save_dir => '儲存到';
+
+  @override
+  String get quick_transfer_default_share => '預設：內部儲存根目錄';
+
+  @override
+  String get quick_transfer_default_save => '預設：內部儲存根目錄';
+
+  @override
+  String get quick_transfer_online => '已開啟';
+
+  @override
+  String get quick_transfer_address => '本機地址';
+
+  @override
+  String get quick_transfer_copy => '複製';
+
+  @override
+  String get quick_transfer_copied => '已複製地址';
+
+  @override
+  String get quick_transfer_send_tip => '將上方地址發給對方，對方在瀏覽器中開啟即可下載所選目錄內的檔案。';
+
+  @override
+  String get quick_transfer_receive_tip => '將上方地址發給對方，對方在瀏覽器中開啟後可將檔案上傳到本機所選目錄。';
+
+  @override
+  String get quick_transfer_connected => '已連線裝置';
+
+  @override
+  String quick_transfer_started(Object url) {
+    return '快傳已開啟：$url';
+  }
+
+  @override
+  String get quick_transfer_stopped => '快傳已停止';
+
+  @override
+  String get quick_transfer_running => '快傳服務執行中，請先停止';
+
+  @override
+  String quick_transfer_running_at(Object url) {
+    return '執行中：$url';
+  }
+
+  @override
+  String quick_transfer_failed(Object error) {
+    return '快傳開啟失敗：$error';
+  }
+
+  @override
+  String get wol_title => '區域網路喚醒';
+
+  @override
+  String get wol_add_device => '新增裝置';
+
+  @override
+  String get wol_edit_device => '編輯裝置';
+
+  @override
+  String get wol_name => '裝置名稱';
+
+  @override
+  String get wol_name_hint => '例如：我的電腦';
+
+  @override
+  String get wol_mac => 'MAC 位址';
+
+  @override
+  String get wol_broadcast => '廣播位址';
+
+  @override
+  String get wol_port => '連線埠';
+
+  @override
+  String get wol_wake => '喚醒';
+
+  @override
+  String get wol_sent => '喚醒指令已傳送';
+
+  @override
+  String get wol_send_failed => '傳送失敗，請檢查網路連線';
+
+  @override
+  String get wol_invalid_mac => 'MAC 位址格式無效';
+
+  @override
+  String get wol_empty => '尚無裝置，點選右下角按鈕新增';
+
+  @override
+  String wol_delete_confirm(Object name) {
+    return '確定刪除裝置「$name」嗎？';
+  }
+
+  @override
+  String get editor_undo => '撤銷';
+
+  @override
+  String get editor_text_hint => '請輸入文字';
+
+  @override
+  String get editor_font_bold => '粗體';
+
+  @override
+  String get editor_font_italic => '斜體';
+
+  @override
+  String get editor_font_underline => '底線';
+
+  @override
+  String get wol_port_hint => '選填';
+
+  @override
+  String get quick_transfer_nearby_devices => '附近裝置';
+
+  @override
+  String get quick_transfer_scanning => '正在掃描附近裝置…';
+
+  @override
+  String get quick_transfer_scan_hint => '雙方都需開啟快傳並保持本頁面在前臺';
+
+  @override
+  String get quick_transfer_tap_to_connect => '點選裝置名發起連線';
+
+  @override
+  String quick_transfer_connecting(Object name) {
+    return '正在連線 $name…';
+  }
+
+  @override
+  String quick_transfer_connected_as(Object role) {
+    return '已連線（本機為 $role）';
+  }
+
+  @override
+  String get quick_transfer_role_owner => '傳送端';
+
+  @override
+  String get quick_transfer_role_client => '接收端';
+
+  @override
+  String get quick_transfer_select_files => '選擇要傳送的檔案 / 資料夾';
+
+  @override
+  String quick_transfer_selected_summary(Object count, Object size) {
+    return '已選 $count 項，共 $size';
+  }
+
+  @override
+  String get quick_transfer_begin_send => '開始傳送';
+
+  @override
+  String quick_transfer_incoming(Object name) {
+    return '收到來自 $name 的傳送請求';
+  }
+
+  @override
+  String quick_transfer_incoming_files(Object count, Object size) {
+    return '$count 個檔案，共 $size';
+  }
+
+  @override
+  String get quick_transfer_accept => '接受';
+
+  @override
+  String get quick_transfer_reject => '拒絕';
+
+  @override
+  String get quick_transfer_sending => '正在傳送…';
+
+  @override
+  String get quick_transfer_receiving => '正在接收…';
+
+  @override
+  String get quick_transfer_complete => '傳輸完成';
+
+  @override
+  String get quick_transfer_waiting_peer => '等待對方連線…';
+
+  @override
+  String get quick_transfer_connected_waiting_files => '已連線，等待對方傳送檔案…';
+
+  @override
+  String get quick_transfer_permission_why =>
+      'WiFi Direct 掃描需要位置/附近裝置許可權，不會收集您的地理位置';
+
+  @override
+  String get quick_transfer_permission_required => '快傳需要位置 / 附近裝置許可權以發現附近裝置';
+
+  @override
+  String get quick_transfer_not_supported => '目前裝置不支援 WiFi Direct 快傳';
+
+  @override
+  String get quick_transfer_disconnect => '斷開';
+
+  @override
+  String get quick_transfer_cancel => '取消';
+
+  @override
+  String get quick_transfer_save_to => '儲存到';
+
+  @override
+  String get quick_transfer_send_mode => '傳送';
+
+  @override
+  String get quick_transfer_receive_mode => '接收';
+
+  @override
+  String get quick_transfer_device_name => '本機名稱';
+
+  @override
+  String get quick_transfer_retry => '重試';
+
+  @override
+  String get quick_transfer_permission_grant => '授權並繼續';
+
+  @override
+  String get quick_transfer_open_settings => '前往設定頁開啟';
+
+  @override
+  String get quick_transfer_wifi_required =>
+      '請先開啟 WLAN（WiFi），快傳需要 WiFi Direct 建組';
+
+  @override
+  String get quick_transfer_create_group_failed =>
+      '建立快傳連線失敗，請確保已開啟 WLAN 並授予位置/附近裝置許可權後重試';
+
+  @override
+  String get quick_transfer_receive_path => '接收路徑';
+
+  @override
+  String get quick_transfer_change_path => '更改';
+
+  @override
+  String get quick_transfer_back => '返回';
+
+  @override
+  String get quick_transfer_send_button => '傳送';
+
+  @override
+  String get quick_transfer_receive_button => '接收';
+
+  @override
+  String get quick_transfer_open_location => '開啟檔案所在位置';
+
+  @override
+  String get quick_transfer_receive_complete => '接收完成';
+
+  @override
+  String quick_transfer_files_saved_to(Object path) {
+    return '檔案已儲存至 $path';
+  }
+
+  @override
+  String get quick_transfer_connect_btn => '連線';
+
+  @override
+  String get quick_transfer_connected_btn => '已連線';
+
+  @override
+  String get quick_transfer_forget_device => '移除裝置';
+
+  @override
+  String get quick_transfer_peer_unreachable => '無法連線到該裝置，請確保對方已開啟快傳並在附近。';
+
+  @override
+  String get quick_transfer_available_peers => '可連線裝置';
+
+  @override
+  String quick_transfer_selected_count(Object count) {
+    return '已選 $count 項';
+  }
+
+  @override
+  String get changelog_v1133_new_1 =>
+      '快傳功能（區網傳輸）：獨立快傳頁面（傳送/接收雙模式）、附近裝置雷達掃描發現、裝置連線/已連線狀態、傳輸前確認機制、接收完成後一鍵在本應用瀏覽頁開啟、許可權說明，全 10 語言。';
+
+  @override
+  String get changelog_v1133_new_2 => '分類圖示標籤顯隱開關';
+
+  @override
+  String get changelog_v1133_new_3 => 'AMOLED 全頁純黑主題';
+
+  @override
+  String get changelog_v1133_new_4 => '背景播放防休眠（電池最佳化白名單 + 喚醒鎖）';
+
+  @override
+  String get changelog_v1133_new_5 =>
+      '圖片編輯器：實體尺寸(mm+DPI)、預設範本(證件照/護照/美簽)、檔案大小限制';
+
+  @override
+  String get changelog_v1133_new_6 => '音訊等化器 5 組預設（原聲/HD人聲/低音/現場/爵士）';
+
+  @override
+  String get changelog_v1133_new_7 =>
+      '影片播放器：內嵌多音軌/多字幕軌選擇；手勢最佳化（雙擊暫停/播放、長按倍速、左右滑快進/快退）';
+
+  @override
+  String get changelog_v1133_new_8 => '側邊欄 / 自訂快捷方式：新增「快傳」入口';
+
+  @override
+  String get changelog_v1133_opt_1 =>
+      '圖片檢視器：頂部資訊條重構（尺寸/時間/格式/大小/EXIF）、旋轉改為純預覽不儲存、EXIF 即時顯示、檔名標題還原';
+
+  @override
+  String get changelog_v1133_opt_2 =>
+      '影片播放器：底部按鈕佈局/排序、直向溢位修復、系統自動橫向進全螢幕、縮放比例(填滿螢幕 cover)、全螢幕橫向相機黑邊修復';
+
+  @override
+  String get changelog_v1133_opt_3 => '音訊播放器：等化器預設切換生效、低音/人聲失真修復';
+
+  @override
+  String get changelog_v1133_opt_4 => '影片音量：播放器滑桿與系統媒體音量即時同步';
+
+  @override
+  String get changelog_v1133_opt_5 => '音訊播放模式：重啟後持久化記憶';
+
+  @override
+  String get changelog_v1133_opt_6 => '圖片編輯：裁切比例（正方形/4:3/3:4/證件照）修復';
+
+  @override
+  String get changelog_v1133_fix_1 => '文字編輯器開啟未知檔案「文字開啟」錯誤提示硬編碼 → 多語言';
+
+  @override
+  String get changelog_v1133_fix_2 => '桌面歌詞許可權提示中文硬編碼 Toast → 多語言';
+
+  @override
+  String get changelog_v1133_fix_3 => '目錄選擇器「固定所選」按鈕硬編碼中文 → 多語言';
+
+  @override
+  String get changelog_v1133_fix_4 => '受限目錄（Android/data｜obb）複製到本機/遠端報錯二次修復';
+
+  @override
+  String get changelog_v1133_fix_5 => '長按選單：復刻 v1.1.32 顯示結構 + 高對比背景 + 描邊';
+
+  @override
+  String get changelog_v1134_fix_1 =>
+      '修復網頁共享被其他裝置存取時應用程式介面卡死的問題——全量掃描已改為非同步執行，不再阻塞 UI 執行緒。';
+
+  @override
+  String get changelog_v1134_fix_2 =>
+      '修復 FTP 連不上/選錯網路卡：重寫本地 IP 選擇邏輯，優先 wlan/eth 介面，跳過 Docker/VPN/虛擬網路卡，避免回退到不可達位址。';
+
+  @override
+  String get changelog_v1134_fix_3 =>
+      'FTP 共享支援自訂連線埠：可在設定中配置並持久化，執行中修改即時生效並自動重啟監聽。';
+
+  @override
+  String get changelog_v1134_fix_4 =>
+      '修復 FTP 控制連線埠繫結與 PASV：改用具體區域網路 IP 繫結控制連線埠、簡化 PASV 位址解析，修復 VPN/代理場景下的連線失敗。';
+
+  @override
+  String get changelog_v1134_fix_5 =>
+      '新增「FTP 伺服器已停止」提示，替換原先伺服器停止時錯誤的「更改連線埠 未啟用」提示。';
+
+  @override
+  String get changelog_v1134_fix_6 =>
+      '文字編輯器儲存/另存為合併為單一儲存按鈕，點選彈出選單選擇「儲存」或「另存為」。';
+
+  @override
+  String get changelog_v1134_new_1 => '新增分類頁工具箱入口。';
+
+  @override
+  String get changelog_v1134_new_2 => '將私人保險箱、區域網路喚醒、快傳整合進工具箱，集中管理。';
+
+  @override
+  String get changelog_v1134_new_3 =>
+      '快傳已記住裝置：自動記住已連線裝置，下次一鍵點選連線重連；已記住清單支援單獨刪除裝置。';
+
+  @override
+  String get changelog_v1134_opt_1 => '快傳對稱化傳輸：連線成功後雙方均可主動傳送，移除收發模式切換與頂部切換按鈕。';
+
+  @override
+  String get changelog_v1134_opt_2 =>
+      '快傳 UI 整體美化：分割槽卡片化、裝置列卡片化、圖示徽章、填滿式選取框、進度頁圓形徽章，視覺更統一。';
+
+  @override
+  String get changelog_v1134_opt_3 =>
+      '快傳主介面緊湊化：收緊卡片內邊距與各項間距，減少首屏捲動，進入即可看到雷達/裝置清單。';
+
+  @override
+  String get ftp_server_stopped => 'FTP 伺服器已停止';
+
+  @override
+  String get cat_toolbox => '工具箱';
+
+  @override
+  String get cat_toolbox_desc => '工具';
+
+  @override
+  String quick_transfer_waiting_for_x(Object name) {
+    return '等待 $name 點選連線…';
+  }
+
+  @override
+  String get quick_transfer_ask_peer_connect => '請讓對端裝置也在快傳中點選本機的「連線」按鈕';
+
+  @override
+  String get ui_scan_shares => '掃描共享名';
+
+  @override
+  String get ui_scanning_shares => '正在掃描共享名…';
+
+  @override
+  String get ui_select_share_to_fill => '點選共享名自動填入';
+
+  @override
+  String get ui_no_shares_found => '未找到共享名';
+
+  @override
+  String get ui_anonymous_login => '匿名登入';
+
+  @override
+  String ui_share_scan_failed(Object error) {
+    return '掃描共享名失敗：$error';
+  }
+
+  @override
+  String get ui_scan_lan_devices => '掃描區域網路共享裝置';
+
+  @override
+  String get ui_scanning_lan => '正在掃描區域網路裝置…';
+
+  @override
+  String get ui_lan_no_devices => '未發現區域網路共享裝置';
+
+  @override
+  String get ui_lan_scan_hint => '點選裝置自動填入位址與共用名稱';
+
+  @override
+  String get ui_enter_host_first => '請先填寫主機地址與連線埠';
+
+  @override
+  String get vault_enter_password => '輸入密碼解鎖';
+
+  @override
+  String get vault_set_password => '設定密碼';
+
+  @override
+  String get vault_confirm_password => '再次輸入以確認';
+
+  @override
+  String get vault_pins_mismatch => '兩次輸入的密碼不一致';
+
+  @override
+  String get vault_incorrect_password => '密碼錯誤，請重試';
+
+  @override
+  String get vault_password_set => '密碼已設定';
+
+  @override
+  String get vault_next => '下一步';
+
+  @override
+  String get vault_unlock => '解鎖';
+
+  @override
+  String get vault_use_keypad => '使用數字鍵盤';
+
+  @override
+  String get vault_use_text_input => '使用字母數字';
+
+  @override
+  String get vault_fingerprint => '使用指紋解鎖';
+
+  @override
+  String get vault_fingerprint_failed => '指紋驗證失敗';
+
+  @override
+  String get vault_min_length => '密碼至少需要 4 位';
+
+  @override
+  String get vault_pwd_alphanumeric => '可含字母、數字或符號的密碼';
+
+  @override
+  String get vault_enable_fingerprint => '啟用指紋解鎖';
+
+  @override
+  String get vault_biometric_desc => '使用指紋快速解鎖保險箱';
+
+  @override
+  String get vault_export_backup => '匯出備份';
+
+  @override
+  String get vault_export_backup_desc => '匯出加密的保險箱備份 (.zip)';
+
+  @override
+  String get vault_import_backup => '匯入備份';
+
+  @override
+  String get vault_backup_restore => '備份/還原';
+
+  @override
+  String get vault_import_backup_desc => '從備份檔案 (.zip) 還原保險箱';
+
+  @override
+  String get vault_uninstall_warning_title => '解除安裝警告';
+
+  @override
+  String get vault_uninstall_warning => '解除安裝應用會清空沙盒加密，建議先匯出備份';
+
+  @override
+  String get vault_backup_exported => '備份已匯出到';
+
+  @override
+  String get vault_backup_imported => '已匯入條目';
+
+  @override
+  String get vault_export_failed => '備份匯出失敗';
+
+  @override
+  String get vault_import_failed => '備份匯入失敗';
+
+  @override
+  String get ui_font_size => '字型';
+
+  @override
+  String get ui_line_width => '線粗';
+
+  @override
+  String archive_open_failed_with_reason(String e) {
+    return '無法開啟: $e';
+  }
+
+  @override
+  String archive_extract_failed_with_reason(String e) {
+    return '解壓失敗: $e';
+  }
+
+  @override
+  String get archive_unsupported_format => '檔案內容為空或解壓失敗，可能檔案過大、已損壞或使用了不支援的壓縮方式';
+
+  @override
+  String get vault_export_backup_confirm => '備份檔案將儲存到以下位置：';
+
+  @override
+  String get vault_import_only_zip => '僅支援 .zip 格式的備份檔案';
+
+  @override
+  String get vault_import_password_hint => '該備份使用另一組密碼，請使用備份時的密碼重新解鎖保險箱';
+
+  @override
+  String get vault_open_backup_location => '是否開啟備份檔案所在位置？';
+
+  @override
+  String get open_file => '開啟';
+
+  @override
+  String get open_in_location => '開啟檔案所在位置';
+
+  @override
+  String get open_with_title => '開啟方式';
+
+  @override
+  String get share_permission_title => '需要許可權';
+
+  @override
+  String get share_permission_message => 'ZenFile 沒有許可權存取該檔案，請重新分享或授予許可權後重試。';
+
+  @override
+  String get qqGroup => 'QQ 群：792408214';
+
+  @override
+  String get emailCopied => '郵箱已複製到剪貼簿';
+
+  @override
+  String get vt_scanning => '正在透過 VirusTotal 掃描（雜湊查詢）...';
+
+  @override
+  String get vt_uploading => '正在上傳檔案到 VirusTotal 並等待分析，約需 1-2 分鐘...';
+
+  @override
+  String get vt_safe_title => '掃描結果：安全';
+
+  @override
+  String get vt_risk_title => '掃描結果：偵測到風險';
+
+  @override
+  String get vt_unknown_title => '掃描結果：未收錄';
+
+  @override
+  String vt_malicious_count(Object n) {
+    return '報毒引擎：$n';
+  }
+
+  @override
+  String vt_suspicious_count(Object n) {
+    return '可疑引擎：$n';
+  }
+
+  @override
+  String vt_harmless_count(Object n) {
+    return '安全引擎：$n';
+  }
+
+  @override
+  String vt_undetected_count(Object n) {
+    return '未檢出引擎：$n';
+  }
+
+  @override
+  String get vt_not_found_msg => '該檔案尚未被 VirusTotal 收錄。可上傳進行完整掃描，或跳過掃描繼續安裝。';
+
+  @override
+  String vt_scan_failed(Object error) {
+    return '掃描失敗：$error';
+  }
+
+  @override
+  String get vt_no_key_msg =>
+      '未設定 VirusTotal API Key，已跳過掃描直接安裝。可在設定中設定後獲得安裝前自動掃描。';
+
+  @override
+  String get vt_continue_install => '仍然安裝';
+
+  @override
+  String get vt_upload_scan => '上傳完整掃描';
+
+  @override
+  String get vt_open_report => '檢視詳細報告';
+
+  @override
+  String get vt_apikey_title => 'VirusTotal API Key';
+
+  @override
+  String get vt_apikey_subtitle => '安裝 APK 前自動安全掃描（在 virustotal.com 免費申請）';
+
+  @override
+  String get vt_apikey_dialog_title => '設定 VirusTotal API Key';
+
+  @override
+  String get vt_apikey_hint => '貼上你的 API Key（免費版限 4 次/分鐘）';
+
+  @override
+  String get vt_save => '儲存';
+
+  @override
+  String get vt_key_saved => 'VirusTotal API Key 已儲存';
+
+  @override
+  String get vt_key_invalid => 'API Key 無效，請檢查後重試';
+
+  @override
+  String vt_key_masked(Object mask) {
+    return '已設定（$mask）';
+  }
+
+  @override
+  String get vt_scan_before_install => '正在掃描 APK（VirusTotal）...';
+
+  @override
+  String get vt_skip => '跳過';
+
+  @override
+  String get vt_retry => '重試';
+
+  @override
+  String get vt_cancel => '取消';
+
+  @override
+  String get vt_analyzing => '正在等待 VirusTotal 分析結果...';
+
+  @override
+  String get vt_settings_title => 'APK 安裝安全掃描';
+
+  @override
+  String get vt_settings_subtitle => '安裝 APK 前自動偵測惡意軟體（基於 VirusTotal）';
+
+  @override
+  String get vt_what_is_title => '這是什麼？';
+
+  @override
+  String get vt_what_is_desc =>
+      '開啟後，安裝 APK 前會自動透過 VirusTotal 偵測檔案是否包含惡意軟體。未設定 API Key 時安裝行為與之前一致，不會影響正常使用。';
+
+  @override
+  String get vt_api_key_label => 'API Key';
+
+  @override
+  String get vt_current_key_configured => '已設定';
+
+  @override
+  String get vt_not_configured => '未設定';
+
+  @override
+  String get vt_api_key_hint => '貼上你的 VirusTotal API Key';
+
+  @override
+  String get vt_save_key => '儲存並驗證';
+
+  @override
+  String get vt_how_to_get_title => '如何取得 API Key？';
+
+  @override
+  String get vt_step_1 => '1. 開啟 virustotal.com 並登入（可用 Google 帳號免費註冊）';
+
+  @override
+  String get vt_step_2 => '2. 點選右上角頭像，選擇「API key」';
+
+  @override
+  String get vt_step_3 => '3. 點選複製圖示，複製你的 API Key';
+
+  @override
+  String get vt_step_4 => '4. 回到本頁面，貼到上方輸入框';
+
+  @override
+  String get vt_step_5 => '5. 點選「儲存並驗證」，無效的 Key 會被提示';
+
+  @override
+  String get vt_open_vt => '開啟官網';
+
+  @override
+  String get vt_limit_note => '免費帳號限額：4 次請求/分鐘，日常安裝掃描足夠使用。';
+
+  @override
+  String get vt_privacy_note =>
+      '隱私提示：預設僅上傳檔案雜湊進行查詢，不會上傳檔案本身；僅在你主動選擇「上傳完整掃描」時才會上傳檔案。';
+
+  @override
+  String get vt_silent_install => '靜安裝';
+
+  @override
+  String get vt_silent_install_ready => '已取得 Root 或 Shizuku 許可權，開啟後安裝無需手動確認';
+
+  @override
+  String get vt_silent_install_requires => '需要 Root 或 Shizuku 許可權才能啟用';
+
+  @override
+  String get vt_install_success => '安裝成功';
+
+  @override
+  String get vt_keep_apk => '安裝後保留安裝包';
+
+  @override
+  String get vt_keep_apk_desc => '開啟後安裝時複製臨時副本，防止系統安裝器自動刪除來源 APK';
+
+  @override
+  String get apk_open_mode_title => 'APK 開啟方式';
+
+  @override
+  String get apk_open_mode_desc =>
+      '使用系統選擇器開啟 APK，允許 InstallerX 等第三方安裝器接管；關閉則使用內建安裝器。';
+
+  @override
+  String get vt_install => '安裝';
+
+  @override
+  String get vt_direct_install => '直接安裝';
+
+  @override
+  String get biometric_verify_hint => '請驗證指紋以繼續';
+
+  @override
+  String get biometric_reason_vault => '驗證指紋以解鎖保險箱';
+
+  @override
+  String get biometric_reason_remote_guard => '驗證指紋以透過遠端守衛';
+
+  @override
+  String get biometric_reason_app_lock => '驗證指紋以進入應用程式';
+
+  @override
+  String get vt_install_settings_title => 'APK 安裝設定';
+
+  @override
+  String get vt_install_settings_subtitle => '靜默安裝、保留安裝包、安全掃描';
+
+  @override
+  String get ui_noise_filter_images_subtitle => '隱藏圖示/超小圖片 (<30KB)';
+
+  @override
+  String get ui_noise_filter_videos_subtitle => '隱藏短影片/碎片 (<1MB)';
+
+  @override
+  String get ui_noise_filter_screenshots_subtitle => '隱藏通知/捷徑圖示 (<5KB)';
+
+  @override
+  String get ui_noise_filter_audios_subtitle => '隱藏音效/提示音/錄音 (<60秒)';
+
+  @override
+  String get ui_noise_filter_documents_subtitle => '隱藏損壞/空檔案 (0KB)';
+
+  @override
+  String get ui_noise_filter_archives_subtitle => '隱藏損壞/空壓縮檔 (<100B)';
+
+  @override
+  String get ui_noise_filter_downloads_subtitle => '隱藏損壞/空下載 (0KB)';
+
+  @override
+  String get ui_noise_filter_apks_subtitle => '隱藏損壞/極小安裝包 (<100KB)';
+
+  @override
+  String get ui_media_filter_title => '過濾設定';
+
+  @override
+  String get ui_media_filter_description => '自訂該分類下需要過濾的檔案條件';
+
+  @override
+  String get ui_media_filter_master_switch => '啟用智慧過濾';
+
+  @override
+  String get ui_media_filter_master_hint => '開啟後將按下方規則過濾小檔案、短影片/音訊等雜訊';
+
+  @override
+  String get ui_media_filter_rules => '過濾規則';
+
+  @override
+  String get ui_media_filter_restore_default => '恢復預設';
+
+  @override
+  String get ui_category_settings_title => '類別設定';
+
+  @override
+  String get ui_category_settings_description => '管理該分類的過濾規則與掃描位置';
+
+  @override
+  String get ui_excluded_folders_title => '遮蔽資料夾';
+
+  @override
+  String get ui_excluded_folders_empty => '暫無遮蔽資料夾，新增後該分類將不再掃描此資料夾下的檔案';
+
+  @override
+  String get ui_add_excluded_folder => '新增遮蔽資料夾';
+
+  @override
+  String get ui_remove_excluded_folder => '移除遮蔽';
+
+  @override
+  String get vt_extracting => '正在解壓安裝套件…';
+
+  @override
+  String get vt_no_apk_in_bundle => '安裝套件中找不到可安裝的APK';
+
+  @override
+  String get vt_split_installer_launch_failed => '無法啟動分包APK安裝程式';
+
+  @override
+  String get vt_extract_failed => '解壓安裝套件失敗：';
+
+  @override
+  String get vt_open_report_failed => '無法開啟報告連結';
+
+  @override
+  String get vt_silent_fallback => '已嘗試靜默安裝，許可權不足，改用系統安裝程式';
+
+  @override
+  String get ui_nav_back => '後退';
+
+  @override
+  String get ui_nav_forward => '前進';
+
+  @override
+  String get ui_custom_theme => '自訂';
+
+  @override
+  String get ui_preset_colors => '預設顏色';
+
+  @override
+  String get crypt_settings_title => '密碼配置';
+
+  @override
+  String get vault_config_password => '密碼配置';
+
+  @override
+  String get cl211_features => '新增功能';
+
+  @override
+  String get cl211_feat_1 =>
+      '應用程式圖示支援匯入自訂圖片：設定 → 外觀與主題 → 應用程式圖示，選擇圖片後可在桌面新增為捷徑或 1×1 小工具。同時修復了先前點選提示「已新增」但桌面沒有圖示的問題；部分系統限制捷徑時，可改用桌面小工具。';
+
+  @override
+  String get cl211_feat_2 =>
+      '刪除檔案的二次確認可視需要關閉：刪除彈窗新增「刪除不再提示」核取方塊，設定 → 檔案操作與檢視器新增「刪除檔案確認」開關，關閉後刪除不再彈出確認。';
+
+  @override
+  String get cl211_ui => '介面與互動';
+
+  @override
+  String get cl211_ui_1 =>
+      '所有進度彈窗統一為雙層圓環：外圈顯示整體進度、內圈（綠色）顯示目前檔案進度，已涵蓋複製/剪下、壓縮/解壓縮、加密/解密、保險箱匯入加密與復原解密、類別備份等場景。';
+
+  @override
+  String get cl211_ui_2 => '影片播放控制按鈕整體縮小並下移，貼近進度條上方，不再遮擋畫面中心。';
+
+  @override
+  String get cl211_ui_3 => '保險箱原地加密清單新增「移除」：僅從清單移除，磁碟上的加密檔案不受影響。';
+
+  @override
+  String get cl211_fixes => '問題修復';
+
+  @override
+  String get cl211_fix_1 =>
+      '修復部分機型播放影片黑屏（只有聲音沒有畫面）的問題：由 1.1.42 引入的渲染相容問題導致，現已改為通用渲染；並新增自動偵測，硬體解碼異常時自動切換軟體解碼續播，無需手動設定。';
+
+  @override
+  String get cl211_fix_2 => '修復 SMB / FTP / SFTP 播放遠端影片「播幾秒卡幾秒」、拖動進度條又跳回開頭的問題。';
+
+  @override
+  String get cl211_fix_3 => '修復 FTP 開啟目錄、返回上一層偶爾需要等待很久的問題。';
+
+  @override
+  String get cl211_fix_4 =>
+      '修復壓縮大檔案或多檔案時進度停在 100% 長時間不動的問題：改為串流式逐檔壓縮，記憶體佔用大幅降低，進度持續推進。';
+
+  @override
+  String get cl211_fix_5 =>
+      '修復音樂播放器把所有音訊都顯示為「FLAC • 24-bit」的問題，現在按真實格式顯示，無損格式還會顯示實際位深。';
+
+  @override
+  String get cl211_fix_6 => '修復設定保險箱密碼或原地加密後，開啟任意未加密檔案都會要求驗證保險箱密碼的問題。';
+
+  @override
+  String get cl211_fix_7 =>
+      '修復保險箱提示的兩處錯誤：解密密碼輸入錯誤時誤提示「請先設定主密碼」；加密/解密的結果提示在非中文介面下仍顯示中文。';
+
+  @override
+  String get cl212_features => '新增功能';
+
+  @override
+  String get cl212_feat_1 =>
+      'APK 開啟方式可切換：設定 → APK 安裝設定新增「APK 開啟方式」，可在「內建安裝器」與「系統選擇器」之間切換。選擇系統選擇器後，ZenFile 不再強制攔截 APK 開啟，InstallerX、InstallWithOptions 等第三方安裝器可正常接管，批次安裝無需再長按逐個選擇「開啟方式」。';
+
+  @override
+  String get cl212_ui => '介面與互動';
+
+  @override
+  String get cl212_ui_1 =>
+      '「大小與間距」可調範圍擴大：卡片間距滑桿下限由 40% 放寬到 -50%，0% 時卡片邊框緊貼、負值可讓相鄰卡片邊框重疊成一條線；同時預設值改為 0%（新安裝首次啟動即貼邊，已調整過的使用者保持原值）。';
+
+  @override
+  String get cl212_ui_2 => '自訂捷徑彈窗：「圖示形狀」與「每行顯示」由並排按鈕改為下拉選擇，版面更緊湊統一。';
+
+  @override
+  String get cl212_fixes => '問題修復';
+
+  @override
+  String get cl212_fix_1 =>
+      '指紋解鎖改為預設關閉：安裝後「設定 → 安全設定」中的指紋解鎖預設處於關閉狀態，需主動開啟，避免新安裝或升級後自動啟用生物辨識解鎖。';
+
+  @override
+  String get cl212_fix_2 =>
+      '修復 APK 安全掃描設定好 API Key 後、關閉再開啟開關無法再次進入設定頁重新設定的問題；現在開關開啟與點選卡片均可進入設定頁修改 Key。';
+
+  @override
+  String get cl212_fix_3 =>
+      '修復「靜默安裝」在已授權 Shizuku 的情況下仍提示「許可權不足」無法安裝的問題：Shizuku 路徑改為系統 PackageInstaller 會話安裝，不再依賴部分系統禁止的 shell 安裝指令。';
+
+  @override
+  String get cl213_fixes => '問題修復';
+
+  @override
+  String get cl213_feat_2 =>
+      '遠端檔案「開啟方式」可持久化：選擇「一律使用本應用程式 / 外部應用程式開啟」後，同類型檔案直接開啟，不再重複跳出視窗詢問。';
+
+  @override
+  String get cl213_fix_1 => '修復：遠端圖片檢視器左右滑動只在已下載的圖片之間循環，現可翻頁瀏覽遠端目錄中的其他圖片並按需下載。';
+
+  @override
+  String get cl213_fix_2 =>
+      '修復：連線測試視窗等介面在韓語、日語、德語等語言下誤顯示中文（歷史佔位值未翻譯），現已補齊各語言譯文。';
+
+  @override
+  String get cl213_fix_3 => '修復：繁體中文（台灣）介面先前有部分文案顯示為簡體。';
+
+  @override
+  String get cl213_features => '遠端瀏覽與錯誤提示';
+
+  @override
+  String get cl213_feat_1 =>
+      'FTP / WebDAV / SFTP / SMB 等遠端客戶端的報錯，由原始英文例外改為清晰的多語言文字提示（如：連線失敗、登入失敗、逾時、許可權不足、檔案不存在），便於理解問題原因。';
+
+  @override
+  String get remote_err_cancelled => '操作已取消';
+
+  @override
+  String get remote_err_auth => '登入失敗：使用者名稱或密碼錯誤。若使用金鑰登入，請確認私鑰檔案與密碼正確。';
+
+  @override
+  String get remote_err_not_connected => '尚未連線到伺服器，請先連線後重試。';
+
+  @override
+  String get remote_err_not_found => '檔案或資料夾不存在（可能已被移動或刪除）。';
+
+  @override
+  String get remote_err_timeout => '連線逾時：伺服器回應過慢或網路不穩定，請稍後重試。';
+
+  @override
+  String get remote_err_connection => '無法連線到伺服器：請檢查位址、連線埠、網路，以及伺服器是否已開啟。';
+
+  @override
+  String get remote_err_reconnect => '與伺服器的連線已中斷，正在嘗試重新連線。';
+
+  @override
+  String get remote_err_download => '下載失敗，請檢查網路後重試。';
+
+  @override
+  String get remote_err_upload => '上傳失敗，請檢查網路後重試。';
+
+  @override
+  String get remote_err_delete => '刪除失敗，請重試。';
+
+  @override
+  String get remote_err_rename => '重新命名失敗，請重試。';
+
+  @override
+  String get remote_err_create_dir => '建立資料夾失敗，請重試。';
+
+  @override
+  String get remote_err_dir_open => '無法開啟此資料夾，請確認你有存取許可權。';
+
+  @override
+  String remote_err_server(Object code) {
+    return '伺服器回傳錯誤（狀態碼 $code），請聯絡伺服器管理員。';
+  }
+
+  @override
+  String get remote_err_generic => '操作失敗，請重試。';
+
+  @override
+  String get app_icon_add_title => '新增到桌面';
+
+  @override
+  String get app_icon_add_body =>
+      'Android 不允許用外部圖片直接替換應用程式主圖示。可用以下方式把自訂圖片放到桌面：';
+
+  @override
+  String get app_icon_add_shortcut => '捷徑';
+
+  @override
+  String get app_icon_add_shortcut_desc => '在桌面新增一個帶自訂圖片的啟動圖示';
+
+  @override
+  String get app_icon_add_widget => '桌面小工具';
+
+  @override
+  String get app_icon_add_widget_desc => '1×1 小工具，相容所有啟動器';
+
+  @override
+  String get app_icon_add_change_image => '更換圖片';
+
+  @override
+  String get app_icon_add_change_image_desc => '重新選擇一張圖片作為圖示';
+
+  @override
+  String get app_icon_add_cancelled => '未新增：操作已取消';
+
+  @override
+  String get app_icon_add_unsupported => '目前啟動器不支援自動新增，請長按桌面手動新增';
+
+  @override
+  String get vault_encrypt_done => '加密成功';
+
+  @override
+  String get vault_decrypt_done => '解密成功';
+
+  @override
+  String vault_encrypt_partial(Object failed, Object success) {
+    return '加密完成，$success 成功，$failed 失敗';
+  }
+
+  @override
+  String vault_decrypt_partial(Object failed, Object success) {
+    return '解密成功，$success 成功，$failed 失敗';
+  }
+
+  @override
+  String get vault_no_encrypted_selected => '沒有選中的加密項';
+
+  @override
+  String vault_decrypt_confirm_multi_desc(Object count) {
+    return '確定要解密選中的 $count 個檔案嗎？解密後檔案將恢復為普通檔案。';
+  }
+
+  @override
+  String get vault_removed_from_list => '已從清單移除';
+
+  @override
+  String get cl210_feat_6 =>
+      '新增分貝儀：可從工具箱或側邊欄開啟，即時測量環境噪音分貝值，並顯示噪音曲線、環境判定與對聽力的影響提示。';
+
+  @override
+  String get cl210_features => '新增功能';
+
+  @override
+  String get cl210_feat_1 => '影片支援背景播放：選單新增「背景播放」，關閉播放頁後仍可從通知列控制播放、暫停與進度。';
+
+  @override
+  String get cl210_feat_2 => '影片定時關閉：可設定 15 / 30 / 45 / 60 分鐘後停止播放，已設定時可隨時取消。';
+
+  @override
+  String get cl210_feat_3 => '資料夾新增「開啟方式」：此前僅檔案有此專案，網格、清單與雙窗格檢視皆已支援。';
+
+  @override
+  String get cl210_feat_4 => '屬性入口補齊：瀏覽頁、最近頁與分類頁的三點選單皆可檢視檔案或資料夾的屬性。';
+
+  @override
+  String get cl210_feat_5 => '設為首頁支援取消：已設為首頁的資料夾，選單會顯示「取消設為首頁」。';
+
+  @override
+  String get cl210_ui => '介面與操作';
+
+  @override
+  String get cl210_ui_1 => '三點選單改為圖示方格：圖示在上、文字在下，長標題以兩行顯示，並依專案數量自動排為三欄或四欄。';
+
+  @override
+  String get cl210_ui_2 => '統一瀏覽頁與分類頁的選單順序，「設為首頁」與「在位置中顯示」位於相同位置。';
+
+  @override
+  String get cl210_ui_3 => '最佳化圖示方格對齊：翻譯後長標題換行時，同一排圖示仍維持在同一水平線。';
+
+  @override
+  String get cl210_ui_4 => '檔案與資料夾的三點按鈕改為直向，涵蓋網格、清單與精簡三種檢視。';
+
+  @override
+  String get cl210_ui_5 => '影片播放最佳化：左右拖曳快轉與倒轉不再中斷播放；鎖定按鈕移至左側中央並常駐顯示。';
+
+  @override
+  String get cl210_fixes => '問題修復';
+
+  @override
+  String get cl210_fix_1 =>
+      '修復在受限的 Android/data、Android/obb 目錄中無法建立檔案、資料夾與壓縮檔的問題：修正寫入路徑策略，並將授權方式改為依應用程式目錄逐個授權。';
+
+  @override
+  String get cl210_fix_2 =>
+      '建立失敗不再沒有回應：失敗時會顯示原因；在 Android/data 根目錄建立時會提示先進入應用程式目錄。';
+
+  @override
+  String get cl210_fix_3 => '修復分類頁多選選單「置頂」無效的問題（置頂已儲存但清單未重新排序），並修正選單文字為「取消置頂」。';
+
+  @override
+  String get cl210_fix_4 => '修復「取消設為首頁」無效的問題：首頁設定此前未被真正清除。';
+
+  @override
+  String get cl210_fix_5 => '修復部分頁面「屬性」點選沒有回應的問題。';
+
+  @override
+  String get cl200_notice => '版本與套件名稱變更（請務必閱讀）';
+
+  @override
+  String get cl200_notice_1 =>
+      '版本號升級至 2.0.0，套件名稱（應用程式 ID）由 com.sequl.zenfile 變更為 com.sequl.zenfile2。2.0 會以獨立應用程式安裝，不會覆蓋舊的 1.x 版本。';
+
+  @override
+  String get cl200_notice_2 =>
+      '變更原因：保險箱的加密架構在本版本大幅調整，已不再相容舊版保險箱資料。改用新套件名稱可讓新舊兩版並存，避免覆蓋安裝造成舊版保險箱資料遺失。';
+
+  @override
+  String get cl200_notice_3 =>
+      '請先自行備份：在舊版開啟「保險箱 → 備份/還原 → 匯出備份」，再到新版開啟「保險箱 → 備份/還原 → 匯入備份」。';
+
+  @override
+  String get cl200_notice_4 =>
+      '確認新版資料完整無誤後再移除舊版。沙盒加密檔案存放於應用程式私有目錄，移除應用程式時會一併清除，切勿先移除。';
+
+  @override
+  String get cl200_notice_5 => '套件名稱變更後，Shizuku 等依套件名稱授予的許可權需要在新版重新授權一次。';
+
+  @override
+  String get cl200_vault => '保險箱';
+
+  @override
+  String get cl200_vault_1 => '多組密碼設定：可為不同目錄繫結不同的密碼設定，加解密全部在本機完成，主密碼與加鹽只儲存在本機。';
+
+  @override
+  String get cl200_vault_2 =>
+      '遠端加密目錄：可直接關聯雲端上的 rclone crypt 加密目錄，由使用者端解密後以明文列出，影音支援串流播放，無須整包下載。';
+
+  @override
+  String get cl200_vault_3 =>
+      '原地加密：把檔案「就地」加密，位置與目錄結構維持不變，瀏覽頁會加上🔐徽標，其他應用程式只會看到密檔名。';
+
+  @override
+  String get cl200_vault_4 => '說明頁：保險箱首頁右上角的「已啟用」已改成「說明」入口，內含功能亮點、基本操作與相容性說明。';
+
+  @override
+  String get cl200_settings => '設定調整';
+
+  @override
+  String get cl200_settings_1 => '原保險箱首頁的「安全性設定」已移至「設定」頁面，入口更統一。';
+
+  @override
+  String get cl200_fixes => '修復與最佳化';
+
+  @override
+  String get cl200_fix_1 => '修復瀏覽頁遠端加密目錄的檔案圖示全部顯示為未知格式的問題。';
+
+  @override
+  String get cl200_fix_2 => '修復遠端加密影音無法串流播放、圖片無法顯示的問題（部分雲端不回傳檔案大小，會導致解密大小為 0）。';
+
+  @override
+  String get cl200_fix_3 => '修復遠端加密目錄縮圖無法載入的問題。';
+
+  @override
+  String get cl200_fix_4 => '最佳化串流效能：移除每個分塊多餘的網路請求，遠端加密媒體的播放與拖曳體驗大幅提升。';
+
+  @override
+  String get vault_help => '說明';
+
+  @override
+  String get vault_help_title => '保險箱說明';
+
+  @override
+  String get vault_help_intro =>
+      '保險箱採用與 rclone 相同的 crypt 加密格式，加解密全部在本機完成，金鑰不會離開本機。';
+
+  @override
+  String get vault_help_highlights => '功能亮點';
+
+  @override
+  String get vault_help_hl1_title => '零知識加密';
+
+  @override
+  String get vault_help_hl1_desc => '主密碼與加鹽僅儲存在本機，雲端服務與任何第三方都無法解密你的檔案。';
+
+  @override
+  String get vault_help_hl2_title => '相容 rclone 與 OpenList';
+
+  @override
+  String get vault_help_hl2_desc => '使用相同的 crypt 格式，電腦上的 rclone 可直接解密同一批檔案。';
+
+  @override
+  String get vault_help_hl3_title => '多組密碼 + 遠端直讀';
+
+  @override
+  String get vault_help_hl3_desc => '可為不同目錄繫結不同密碼設定；遠端密文目錄無須整包下載即可解密瀏覽與播放。';
+
+  @override
+  String get vault_help_basics => '基本操作';
+
+  @override
+  String get vault_help_b1_title => '① 先設定主密碼';
+
+  @override
+  String get vault_help_b1_desc => '在「密碼設定」中設定主密碼與加鹽並牢記，它與保險箱解鎖密碼彼此獨立。';
+
+  @override
+  String get vault_help_b2_title => '② 加密檔案';
+
+  @override
+  String get vault_help_b2_desc => '在瀏覽頁選取檔案後點選加密，再選擇「原地加密」或「沙盒加密」。';
+
+  @override
+  String get vault_help_b3_title => '③ 檢視與開啟';
+
+  @override
+  String get vault_help_b3_desc => '加密專案會集中在保險箱中列出，點選後會自動暫時解密並預覽。';
+
+  @override
+  String get vault_help_b4_title => '④ 解密還原';
+
+  @override
+  String get vault_help_b4_desc => '選取專案後點選解密，即可還原為一般檔案並放回原位置。';
+
+  @override
+  String get vault_help_b5_title => '⑤ 備份與還原';
+
+  @override
+  String get vault_help_b5_desc => '透過「備份/還原」匯出含加密設定的備份，解除安裝前務必先匯出。';
+
+  @override
+  String get vault_help_compat => '相容性';
+
+  @override
+  String get vault_help_c1_title => '加密格式';
+
+  @override
+  String get vault_help_c1_desc =>
+      '內容為 XSalsa20-Poly1305，檔名經 EME 加密後以 base32/base64 編碼，可帶 .bin 字尾。';
+
+  @override
+  String get vault_help_c2_title => '雲端與同步';
+
+  @override
+  String get vault_help_c2_desc => '密文可由任意雲端或同步工具正常同步，伺服器只會看到密文，不會洩漏真實檔名。';
+
+  @override
+  String get vault_help_c3_title => '已知限制';
+
+  @override
+  String get vault_help_c3_desc =>
+      '加密後檔名會明顯變長，過長檔名可能失敗；請在本應用程式內重新命名，直接改密文名將導致無法解密。';
+
+  @override
+  String get vault_help_inplace => '原地加密';
+
+  @override
+  String get vault_help_inplace_intro =>
+      '原地加密會把檔案「就地」加密：內容替換為密文、檔名替換為密文名，檔案仍留在原本的資料夾中，不會進入保險箱私有目錄。';
+
+  @override
+  String get vault_help_ip1_title => '與原目錄的關係';
+
+  @override
+  String get vault_help_ip1_desc => '檔案位置與目錄結構維持不變，瀏覽頁會為已加密檔案加上🔐徽標。';
+
+  @override
+  String get vault_help_ip2_title => '其他應用程式看到什麼';
+
+  @override
+  String get vault_help_ip2_desc => '其他檔案管理器與播放器只會看到無意義的密檔名且無法開啟，這正是保護效果。';
+
+  @override
+  String get vault_help_ip3_title => '適合的情境';
+
+  @override
+  String get vault_help_ip3_desc => '需要保留原目錄結構，並讓第三方雲端繼續同步這些檔案的情境。';
+
+  @override
+  String get vault_help_ip4_title => '風險與建議';
+
+  @override
+  String get vault_help_ip4_desc =>
+      '加密會直接取代原檔，中斷可能留下殘檔；重要檔案請先備份，解密時目標目錄需有寫入許可權。';
+
+  @override
+  String get vault_help_notice => '注意事項';
+
+  @override
+  String get vault_help_n1 => '已用於加密檔案的密碼與加鹽不可修改，若需更換請新增一組加密設定。';
+
+  @override
+  String get vault_help_n2 => '沙盒加密的檔案存放於應用程式私有目錄，解除安裝時會一併清除。';
+
+  @override
+  String get vault_help_n3 => '忘記主密碼將無法還原任何已加密檔案，請務必匯出備份並妥善儲存。';
+
+  @override
+  String get vault_remote_encrypt => '遠端加密';
+
+  @override
+  String get vault_import_source_title => '選擇加密來源';
+
+  @override
+  String get vault_import_source_remote => '遠端';
+
+  @override
+  String get vault_import_source_remote_desc => '關聯遠端加密目錄，或將本機檔案加密後上傳到遠端';
+
+  @override
+  String get vault_link_remote_crypt_desc =>
+      '關聯伺服器上已有的 rclone crypt 密文目錄（在使用者端解密）';
+
+  @override
+  String get vault_encrypt_upload => '加密上傳到遠端';
+
+  @override
+  String get vault_encrypt_upload_desc => '選擇本機檔案，加密後上傳到遠端伺服器';
+
+  @override
+  String get vault_encrypt_uploading => '正在加密上傳…';
+
+  @override
+  String get vault_encrypt_upload_done => '加密上傳完成';
+
+  @override
+  String get vault_encrypt_upload_failed => '加密上傳失敗';
+
+  @override
+  String get crypt_remote_upload => '加密上傳';
+
+  @override
+  String get crypt_remote_download => '解密下載';
+
+  @override
+  String get crypt_remote_downloading => '正在解密下載…';
+
+  @override
+  String get crypt_remote_download_done => '解密下載完成';
+
+  @override
+  String get crypt_remote_download_failed => '解密下載失敗';
+
+  @override
+  String get vault_remote_crypt_open_failed => '開啟遠端加密檔案失敗';
+
+  @override
+  String get vault_remote_crypt_unsupported => '此型別暫不支援遠端加密串流播放';
+
+  @override
+  String get vault_link_remote_crypt => '關聯遠端加密目錄';
+
+  @override
+  String get vault_link_remote_crypt_success => '已關聯遠端加密目錄';
+
+  @override
+  String get vault_unlink_remote_crypt => '取消關聯';
+
+  @override
+  String get vault_exporting => '正在匯出...';
+
+  @override
+  String get vault_importing => '正在匯入...';
+
+  @override
+  String get vault_importing_backup => '正在匯入備份...';
+
+  @override
+  String get vault_restoring => '正在還原...';
+
+  @override
+  String get vault_decrypting => '正在解密...';
+
+  @override
+  String get vault_decrypt_open_progress => '正在解密並開啟...';
+
+  @override
+  String get crash_report_saved => '偵測到上次異常結束，診斷報告已儲存到 ZenFile/crash';
+
+  @override
+  String get vault_import_backup_confirm =>
+      '匯入將以備份內容覆蓋目前保險箱沙盒與加密配置（解鎖密碼不受影響）。是否繼續？';
+
+  @override
+  String vault_load_error(Object error) {
+    return '載入保險箱出錯：$error';
+  }
+
+  @override
+  String get vault_restore_folder_hint => '資料夾請長按後選擇「還原」到原始位置檢視';
+
+  @override
+  String vault_decrypt_open_failed(Object error) {
+    return '解密並開啟專案失敗：$error';
+  }
+
+  @override
+  String get vault_badge_inplace => '原地';
+
+  @override
+  String get vault_badge_sandbox => '沙盒';
+
+  @override
+  String get vault_item_folder => '資料夾';
+
+  @override
+  String get crypt_need_master_title => '尚未設定加密主密碼';
+
+  @override
+  String get crypt_need_master_body => '原地加密與沙盒加密都使用「加密設定」中的主密碼，請先前往設定。';
+
+  @override
+  String get crypt_master_banner =>
+      '此處配置的主密碼與加鹽用於原地加密和沙盒加密，請務必牢記；它與保險箱解鎖密碼相互獨立。';
+
+  @override
+  String get crypt_profile_name => '加密名稱';
+
+  @override
+  String get crypt_profile_name_hint => '例如：工作 / 私人';
+
+  @override
+  String get crypt_profile_name_required => '請輸入加密名稱';
+
+  @override
+  String get crypt_profile_name_duplicate => '此名稱已存在，請更換';
+
+  @override
+  String get crypt_profile_title_new => '新增加密配置';
+
+  @override
+  String get crypt_profile_title_edit => '編輯加密配置';
+
+  @override
+  String get crypt_profile_section => '密碼配置';
+
+  @override
+  String get crypt_profile_add => '新增配置';
+
+  @override
+  String get crypt_profile_default => '預設';
+
+  @override
+  String get crypt_profile_set_default => '設為預設配置';
+
+  @override
+  String get crypt_profile_set_default_desc => '未繫結配置的檔案將使用此配置';
+
+  @override
+  String get crypt_profile_default_done => '已更新預設配置';
+
+  @override
+  String get crypt_profile_delete_message => '刪除此配置後，使用它加密的檔案將無法解密。';
+
+  @override
+  String get crypt_profile_empty => '尚無加密配置';
+
+  @override
+  String get crypt_profile_action_config => '配置';
+
+  @override
+  String get crypt_profile_select_title => '選擇加密配置';
+
+  @override
+  String get crypt_profile_bound_done => '已繫結此加密配置';
+
+  @override
+  String get crypt_profile_credential_locked => '不可修改';
+
+  @override
+  String get crypt_profile_credential_locked_desc =>
+      '密碼與加鹽決定金鑰，修改後已加密檔案將無法解密；如需更換請新增配置。';
+
+  @override
+  String get crypt_profile_suffix_none => '無字尾';
+
+  @override
+  String get crypt_profile_sandbox_title => '切換沙盒配置';
+
+  @override
+  String get crypt_profile_sandbox_message =>
+      '沙盒整體只使用一套配置，切換後沙盒內其他檔案可能顯示為密文。是否繼續？';
+
+  @override
+  String get crypt_mount_section => '加密位置';
+
+  @override
+  String get crypt_settings_subtitle => '管理加密資料夾和掛載點';
+
+  @override
+  String get crypt_add_mount => '新增加密資料夾';
+
+  @override
+  String get crypt_edit_mount => '編輯加密資料夾';
+
+  @override
+  String get crypt_no_mounts_title => '暫無加密資料夾';
+
+  @override
+  String get crypt_no_mounts_subtitle => '點選下方按鈕新增第一個加密資料夾';
+
+  @override
+  String get crypt_field_name => '名稱';
+
+  @override
+  String get crypt_field_name_hint => '可選，留空則使用資料夾名';
+
+  @override
+  String get crypt_field_path => '資料夾路徑';
+
+  @override
+  String get crypt_field_path_hint => '選擇要加密的資料夾';
+
+  @override
+  String get crypt_field_password => '密碼';
+
+  @override
+  String get crypt_field_confirm_password => '確認密碼';
+
+  @override
+  String get crypt_error_path_required => '請選擇資料夾路徑';
+
+  @override
+  String get crypt_error_password_required => '請輸入密碼';
+
+  @override
+  String get crypt_error_password_short => '密碼至少4個字元';
+
+  @override
+  String get crypt_error_password_mismatch => '兩次輸入的密碼不一致';
+
+  @override
+  String get crypt_section_mode => '加密模式';
+
+  @override
+  String get crypt_mode_inplace => '原地加密';
+
+  @override
+  String get crypt_mode_inplace_desc => '檔案保留在原位置，檔名和內容被加密';
+
+  @override
+  String get crypt_mode_sandbox => '沙盒加密';
+
+  @override
+  String get crypt_mode_sandbox_desc => '檔案移動到沙盒目錄，更安全但訪問稍慢';
+
+  @override
+  String get crypt_section_advanced => '高階選項';
+
+  @override
+  String get crypt_advanced_toggle => '顯示高階加密選項';
+
+  @override
+  String get crypt_field_filename_enc => '檔名加密';
+
+  @override
+  String get crypt_field_dirname_enc => '加密目錄名';
+
+  @override
+  String get crypt_field_filename_encoding => '檔名編碼';
+
+  @override
+  String get crypt_field_suffix => '加密字尾';
+
+  @override
+  String get crypt_field_salt => '鹽（可選）';
+
+  @override
+  String get crypt_field_salt_hint => '留空則自動生成';
+
+  @override
+  String get crypt_action_browse => '瀏覽';
+
+  @override
+  String get crypt_delete_title => '刪除加密資料夾';
+
+  @override
+  String crypt_delete_message(Object name) {
+    return '確定要刪除\"$name\"的加密配置嗎？檔案本身不會被刪除。';
+  }
+
+  @override
+  String get crypt_filename_enc => '檔名加密';
+
+  @override
+  String get crypt_share_title => '分享加密資料夾';
+
+  @override
+  String get crypt_share_hint => '掃描二維碼可匯入加密配置，但需要手動輸入密碼才能解密檔案';
+
+  @override
+  String get crypt_action_share => '分享';
+
+  @override
+  String get crypt_share_password_note => '二維碼中不包含密碼，請透過安全渠道單獨告知密碼';
+
+  @override
+  String get crypt_action_encrypt => '立即加密';
+
+  @override
+  String get crypt_action_decrypt => '解密';
+
+  @override
+  String get crypt_encrypt_title => '加密確認';
+
+  @override
+  String get crypt_encrypt_message =>
+      '此操作將加密資料夾中的所有檔案和子資料夾。加密後，其他檔案管理器將無法檢視檔案內容和檔名。確定要繼續嗎？';
+
+  @override
+  String get crypt_encrypting => '正在加密...';
+
+  @override
+  String get crypt_encrypt_success => '加密完成';
+
+  @override
+  String crypt_encrypt_failed(Object error) {
+    return '加密失敗：$error';
+  }
+
+  @override
+  String get crypt_decrypt_title => '解密確認';
+
+  @override
+  String get crypt_decrypt_message =>
+      '此操作將解密資料夾中的所有檔案和子資料夾。解密後，檔案將恢復為普通檔案。確定要繼續嗎？';
+
+  @override
+  String get crypt_decrypting => '正在解密...';
+
+  @override
+  String get crypt_decrypt_success => '解密完成';
+
+  @override
+  String crypt_decrypt_failed(Object error) {
+    return '解密失敗：$error';
+  }
+
+  @override
+  String get crypt_filename_enc_off => '關閉';
+
+  @override
+  String get crypt_filename_enc_standard => '標準';
+
+  @override
+  String get crypt_filename_enc_obfuscate => '混淆';
+
+  @override
+  String get crypt_filename_enc_base64 => 'Base64';
+
+  @override
+  String get crypt_filename_enc_base32 => 'Base32';
+
+  @override
+  String get crypt_filename_enc_base32768 => 'Base32768';
+
+  @override
+  String get crypt_dirname_enc_yes => '是';
+
+  @override
+  String get crypt_dirname_enc_no => '否';
+
+  @override
+  String get crypt_params_locked_hint =>
+      '加密參數在建立後不可修改：改動會讓既有密文再也解不回明文名稱（磁碟上的密文名稱是依建立時的參數產生）。需要不同參數，請新建一份設定。';
+
+  @override
+  String get vault_encrypt_new_files => '加密新增檔案';
+
+  @override
+  String get vault_encrypt_new_files_none => '沒有發現需要加密的新檔案';
+
+  @override
+  String get vault_encrypt_new_files_done => '新增檔案已加密並合併進本目錄';
+
+  @override
+  String get vault_encrypt_files => '+ 加密檔案';
+
+  @override
+  String get vault_select_encryption_method => '選擇加密方式';
+
+  @override
+  String get vault_inplace_encrypt => '原地加密';
+
+  @override
+  String get vault_inplace_encrypt_desc => '檔案留在原目錄，加密後檔名變為加密格式，瀏覽頁顯示🔐圖徽';
+
+  @override
+  String get vault_sandbox_encrypt => '沙盒加密';
+
+  @override
+  String get vault_sandbox_encrypt_desc => '檔案移動到保險箱私有目錄，隱藏檔名，僅在保險箱頁面可見';
+
+  @override
+  String get vault_need_set_password => '需要先設定加密主密碼';
+
+  @override
+  String get vault_need_set_password_desc => '請先在加密設定中配置加密主密碼和加鹽，儲存後即可進行原地加密。';
+
+  @override
+  String get vault_go_set_password => '去設定主密碼';
+
+  @override
+  String get vault_encrypting => '正在加密...';
+
+  @override
+  String get vault_encrypting_desc => '正在加密選中的檔案/資料夾，請稍候...';
+
+  @override
+  String vault_inplace_encrypt_done(Object count) {
+    return '原地加密完成，共加密 $count 個檔案/資料夾';
+  }
+
+  @override
+  String vault_encrypt_failed(Object error) {
+    return '加密失敗: $error';
+  }
+
+  @override
+  String get vault_inplace_section => '原地加密';
+
+  @override
+  String get vault_open_location => '開啟位置';
+
+  @override
+  String get vault_decrypt_action => '解密';
+
+  @override
+  String get vault_decrypt_confirm_title => '解密檔案';
+
+  @override
+  String vault_decrypt_confirm_desc(Object name) {
+    return '確定要解密「$name」嗎？解密後檔案將恢復為普通檔案。';
+  }
+
+  @override
+  String get vault_decrypt_success => '解密成功';
+
+  @override
+  String vault_decrypt_failed(Object error) {
+    return '解密失敗: $error';
+  }
+
+  @override
+  String get crypt_set_master_password => '設定加密主密碼';
+
+  @override
+  String get vault_section_unencrypted => '未加密檔案';
+
+  @override
+  String get vault_section_inplace_files => '原地加密檔案';
+
+  @override
+  String get vault_section_sandbox_files => '沙盒加密檔案';
+
+  @override
+  String get vault_import_files => '匯入檔案/資料夾';
+
+  @override
+  String get vault_action_encrypt => '加密';
+
+  @override
+  String vault_import_done(Object enc, Object plain) {
+    return '匯入完成：未加密 $plain 項，已加密 $enc 項';
+  }
+
+  @override
+  String vault_import_partial(Object enc, Object failed, Object plain) {
+    return '匯入完成：未加密 $plain 項，已加密 $enc 項，失敗 $failed 項';
+  }
+
+  @override
+  String vault_import_failed_detail(Object error) {
+    return '匯入失敗：$error';
+  }
+
+  @override
+  String get vault_no_files => '暫無檔案';
+
+  @override
+  String get vault_decrypt_password_mismatch => '已設定的密碼或鹽無法解密此檔案，請輸入正確的主密碼和鹽。';
+
+  @override
+  String get vault_remove_from_list => '移除';
+
+  @override
+  String get security_vault_switch_desc => '啟用私人保險箱功能';
+
+  @override
+  String get security_verify_password_desc => '請輸入密碼以進入安全設定';
+
+  @override
+  String get vault_verify_password_title => '驗證密碼';
+
+  @override
+  String get vault_verify_password_hint => '請輸入安全設定密碼';
+
+  @override
+  String get vault_go_security_settings => '前往安全設定';
+
+  @override
+  String get security_settings_subtitle => '保險箱、遠端守衛、啟動應用保護與指紋解鎖';
+
+  @override
+  String get vault_disabled_hint => '保險箱已關閉，請在「設定 → 安全設定」中開啟';
+
+  @override
+  String get security_set_password_desc => '請設定安全設定密碼，用於進入安全設定與解鎖保險箱';
+
+  @override
+  String get security_confirm_password => '請再次輸入密碼以確認';
+
+  @override
+  String get biometric_reason_security_settings => '驗證指紋以進入安全設定';
+
+  @override
+  String get toolbox_scan => '掃一掃';
+
+  @override
+  String get scan_result_title => '掃描結果';
+
+  @override
+  String get scan_copy => '複製';
+
+  @override
+  String get scan_copied => '已複製到剪貼簿';
+
+  @override
+  String get scan_open_link => '開啟連結';
+
+  @override
+  String get scan_continue => '繼續掃描';
+
+  @override
+  String get scan_torch => '手電筒';
+
+  @override
+  String get scan_switch_camera => '切換攝影機';
+
+  @override
+  String get scan_camera_error => '無法存取相機，請檢查相機許可權';
+
+  @override
+  String get scan_hint => '將 QR Code/條碼放入框內即可自動掃描';
+
+  @override
+  String get scan_from_gallery => '從相簿選擇';
+
+  @override
+  String get scan_no_barcode => '未在圖片中偵測到 QR Code 或條碼';
+
+  @override
+  String get ui_backup_confirm_title => '確認備份';
+
+  @override
+  String ui_backup_confirm_message(String path) {
+    return '將備份到以下路徑：\n$path\n\n是否繼續？';
+  }
+
+  @override
+  String get ui_cancel_set_as_home => '取消設為首頁';
+
+  @override
+  String get ui_unpin => '取消置頂';
+
+  @override
+  String get decibel_meter_title => '分貝儀';
+
+  @override
+  String get decibel_meter_current => '目前分貝值';
+
+  @override
+  String get decibel_meter_verdict => '環境判定';
+
+  @override
+  String get decibel_meter_curve => '噪音曲線';
+
+  @override
+  String get decibel_meter_start => '開始測量';
+
+  @override
+  String get decibel_meter_stop => '停止測量';
+
+  @override
+  String get decibel_meter_level_quiet => '安靜';
+
+  @override
+  String get decibel_meter_level_normal => '一般';
+
+  @override
+  String get decibel_meter_level_noisy => '較吵';
+
+  @override
+  String get decibel_meter_level_very_noisy => '很吵';
+
+  @override
+  String get decibel_meter_level_dangerous => '危險';
+
+  @override
+  String get decibel_meter_health_impact => '對人體的影響';
+
+  @override
+  String get decibel_meter_health_safe => '正常環境，對人體無危害。';
+
+  @override
+  String get decibel_meter_health_moderate => '較嘈雜，長時間暴露可能影響聽力。';
+
+  @override
+  String get decibel_meter_health_harmful => '非常吵，長時間暴露會損傷聽力。';
+
+  @override
+  String get decibel_meter_health_dangerous => '危險等級，請立即遠離並保護聽力！';
+
+  @override
+  String get decibel_meter_examples => '常見場景舉例';
+
+  @override
+  String get decibel_meter_examples_safe => '普通室內談話（約50-60 dB）、安靜的辦公室、冰箱嗡嗡聲。';
+
+  @override
+  String get decibel_meter_examples_moderate => '吸塵器（約70 dB）、繁忙街道、嘈雜的餐廳或商店。';
+
+  @override
+  String get decibel_meter_examples_harmful => '摩托車（約90 dB）、工廠車間、割草機、繁忙交通路口。';
+
+  @override
+  String get decibel_meter_examples_dangerous =>
+      '電鋸（約110 dB）、搖滾音樂會前排、爆竹、噴射機起飛。';
+
+  @override
+  String get decibel_meter_perm_denied => '需要麥克風許可權才能測量環境音量，請在設定中開啟。';
+
+  @override
+  String get decibel_meter_perm_title => '需要麥克風許可權';
+
+  @override
+  String get decibel_meter_perm_settings =>
+      '麥克風許可權已被永久拒絕，請前往系統設定中為 ZenFile 開啟麥克風許可權後重試。';
+
+  @override
+  String get decibel_meter_perm_open_settings => '前往設定';
+
+  @override
+  String get msg_background_play => '背景播放';
+
+  @override
+  String get msg_sleep_timer => '定時關閉';
+
+  @override
+  String get msg_background_play_active => '已進入背景播放，可透過通知欄控制';
+
+  @override
+  String get ui_delete_confirm_enabled => '刪除檔案確認';
+
+  @override
+  String get ui_delete_confirm_subtitle => '刪除檔案時顯示二次確認彈窗，關閉後直接刪除';
+
+  @override
+  String get ui_delete_confirm_dont_ask => '刪除不再提示';
+
+  @override
+  String get video_auto_fallback_soft => '偵測到硬解異常，已自動切換為軟解';
+
+  @override
+  String get video_vo_compat => '影片渲染異常，已切換為相容渲染模式';
+
+  @override
+  String get audio_opensles_title => '音訊輸出（AO）模式';
+
+  @override
+  String get audio_opensles_desc =>
+      '音效類應用程式（如 RootlessJamesDSP）只能接管 AudioTrack 檔位；OpenSL ES 的工作階段 ID 由系統分配，音效軟體無法接管。切換立即生效。';
+
+  @override
+  String get ui_transfers => '連線';
+
+  @override
+  String get ui_profile => '我的';
+
+  @override
+  String get msg_coming_soon => '即將推出';
+
+  @override
+  String get toolbox_text_editor => '文字編輯器';
+
+  @override
+  String get ui_video_progress_always_show => '進度條常駐';
+
+  @override
+  String get video_playback_info => '播放資訊';
+
+  @override
+  String get ui_image_fit_width => '適應寬度';
+
+  @override
+  String get ui_image_fit_height => '適應高度';
+
+  @override
+  String get ui_image_fit_original => '原始大小';
+
+  @override
+  String get ui_image_fit_mode => '顯示模式';
+
+  @override
+  String get ui_text_editor_import => '匯入文字檔';
+
+  @override
+  String get ui_bottom_tab_bar => '導覽列';
+
+  @override
+  String get ui_persistent_tab_bar => '導覽列常駐其他頁面';
+
+  @override
+  String get ui_pick_bottom_tab => '自訂入口';
+
+  @override
+  String get ui_long_press_switch => '長按可替換';
+
+  @override
+  String ui_bottom_tab_slot(Object index) {
+    return '位置 $index';
+  }
+
+  @override
+  String get ui_bottom_tab_custom_hint => '底部入口可替換為任何快捷方式';
+
+  @override
+  String get app_icon_original => '經典圖示';
+
+  @override
+  String get cut_to_clipboard => '剪下到剪貼簿';
+
+  @override
+  String get cut_to_other_window => '剪下到另一視窗';
+
+  @override
+  String get auto_open_created_folder => '新建資料夾自動開啟';
+
+  @override
+  String get auto_open_created_folder_desc => '建立資料夾後自動進入該資料夾';
+
+  @override
+  String get paste_keep_clipboard => '貼上後保留剪貼簿內容';
+
+  @override
+  String get paste_keep_clipboard_desc => '未勾選時貼上完成後自動清空剪貼簿';
+
+  @override
+  String get netdisk => '網盤';
+
+  @override
+  String get netdisk_add => '新增網盤';
+
+  @override
+  String get netdisk_quark => '夸克網盤';
+
+  @override
+  String get netdisk_alipan => '阿里雲盤';
+
+  @override
+  String get netdisk_logged_in => '已登入';
+
+  @override
+  String get netdisk_empty => '尚未新增網盤';
+
+  @override
+  String get netdisk_empty_hint => '新增網盤後可瀏覽、下載及播放雲端檔案';
+
+  @override
+  String get netdisk_login_hint => '請於開啟的官方頁面完成登入，登入成功後自動返回';
+
+  @override
+  String get netdisk_login_loading => '正在載入登入頁面…';
+
+  @override
+  String get netdisk_auth_expired => '登入已過期，請重新登入';
+
+  @override
+  String get netdisk_unsupported => '此網盤暫不支援此操作';
+
+  @override
+  String get share_normal_share => '一般分享';
+
+  @override
+  String get share_normal_share_hint => '分享原始檔案，不做任何修改';
+
+  @override
+  String get share_safe_share => '安全分享';
+
+  @override
+  String get share_safe_share_hint => '移除拍攝地點、相機資訊、文件作者等隱私資料，不改動原檔案';
+
+  @override
+  String get share_nothing_found => '未找到可分享的項目。';
+
+  @override
+  String share_prepare_error(Object error) {
+    return '準備分享檔案時出錯：$error';
+  }
+
+  @override
+  String get share_preparing_title => '正在準備分享…';
+
+  @override
+  String get share_preparing_body => '正在處理檔案，請稍候';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return '有 $count 個檔案無法移除中繼資料（可能已加密），已改用一般分享送出';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP 密碼';
+
+  @override
+  String get ui_ftp_password_required => '請設定密碼，否則 FTP 伺服器將拒絕所有用戶端登入';
+
+  @override
+  String get ui_web_share_password => '存取密碼';
+
+  @override
+  String get ui_web_share_password_hint => '留空則不啟用驗證（僅建議在可信區域網路使用）';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return '已為網際網路存取自動產生密碼：$password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel => '網際網路分享必須設定存取密碼';
+
+  @override
+  String get crypt_auto_encrypt_section => '自動加密';
+
+  @override
+  String get crypt_auto_encrypt_title => '自動加密新增檔案';
+
+  @override
+  String get crypt_auto_encrypt_desc => '對已原地加密的目錄開啟即時監聽，新檔案寫入完成後自動加密（需常駐通知）';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '正在保護 $count 個目錄，新檔案將自動加密';
+  }
+}

@@ -1,0 +1,8470 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for German (`de`).
+class L10nDe extends L10n {
+  L10nDe([String locale = 'de']) : super(locale);
+
+  @override
+  String get msg6f3e533a => 'Gemeinsames Dokument wird geöffnet...';
+
+  @override
+  String get msgbca59325 => 'Sicheren Inhaltsstrom wird geparst';
+
+  @override
+  String get zenfile =>
+      'ZenFile benötigt Speicherberechtigung, um Ihre Mediendateien nahtlos zu verwalten, zu organisieren und anzuzeigen.';
+
+  @override
+  String e(Object e) {
+    return 'Cache-Verzeichnis konnte nicht geleert werden: $e';
+  }
+
+  @override
+  String get msg21cefa9b => 'Interner Speicher';
+
+  @override
+  String get smb => 'LAN/SMB';
+
+  @override
+  String get msg05d3c93c => 'Elemente erfolgreich verschoben';
+
+  @override
+  String get msgb7e3a1c2 => '成功复制项目';
+
+  @override
+  String e1(Object e) {
+    return 'Übertragung fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msga45bac47 => 'Vorgang abgebrochen';
+
+  @override
+  String e2(Object e) {
+    return 'Verbindung zum Remoteserver fehlgeschlagen: $e';
+  }
+
+  @override
+  String e3(Object e) {
+    return 'Fehler beim Erstellen des Ordners: $e';
+  }
+
+  @override
+  String get msg3df5ef6c => 'Komprimierungslimit überschritten';
+
+  @override
+  String get msg5e32276d => 'Unbekannter Künstler';
+
+  @override
+  String get msg497ec49d => 'Lokale Ordner';
+
+  @override
+  String e4(Object e) {
+    return 'Remote-Datei konnte nicht heruntergeladen werden: $e';
+  }
+
+  @override
+  String get msg6b9ca1dd =>
+      'Ordner kann nicht in sich selbst oder an denselben Speicherort verschoben werden';
+
+  @override
+  String e5(Object e) {
+    return 'Elemente konnten nicht verschoben werden: $e';
+  }
+
+  @override
+  String get msg5238524c =>
+      'Ordner kann nicht in sich selbst oder an denselben Speicherort kopiert werden';
+
+  @override
+  String e6(Object e) {
+    return 'Elemente konnten nicht kopiert werden: $e';
+  }
+
+  @override
+  String get msgc806d0fa => 'Archiv';
+
+  @override
+  String get msg03070d08 => 'APK';
+
+  @override
+  String get ftp => 'FTP-Freigabe';
+
+  @override
+  String get web => 'Web-Freigabe';
+
+  @override
+  String get msge86bd662 => 'Gerätegalerie (Automatisch)';
+
+  @override
+  String get msg16166a01 => 'Geräte-Audiothek (Automatisch)';
+
+  @override
+  String get msgbb34b7ec => 'Interner Speicher (Alle Ordner durchsuchen)';
+
+  @override
+  String get msg26a1f2d9 => 'Gerätegalerie (Screenshots)';
+
+  @override
+  String get msg39e11368 => 'APK-Paket wird extrahiert...';
+
+  @override
+  String get apk => 'Keine installierbare APK im Paket gefunden';
+
+  @override
+  String get apk1 =>
+      'Split-APK-Installationsprogramm kann nicht gestartet werden';
+
+  @override
+  String get msg2f0138ad => 'Dateien werden komprimiert';
+
+  @override
+  String get msga2292820 => 'Archiv erfolgreich erstellt';
+
+  @override
+  String get msg0683ca6b => 'Archiv wird extrahiert';
+
+  @override
+  String get msg1f216eda => 'Archiv erfolgreich extrahiert';
+
+  @override
+  String get msg5fa802be => 'Vorgang fehlgeschlagen';
+
+  @override
+  String get msg8fccf382 => 'Ja/Nein';
+
+  @override
+  String get msgc18fb099 => 'Extraktion erfolgreich. Speicherort öffnen?';
+
+  @override
+  String get msg_compress_open_location =>
+      'Komprimierung erfolgreich. Speicherort öffnen?';
+
+  @override
+  String get msg4367e85a => 'Keine komprimierbaren Dateien gefunden';
+
+  @override
+  String get msg60a4545d => 'Nicht unterstütztes Format';
+
+  @override
+  String get msg226519e7 => 'Keine Archivdateien gefunden';
+
+  @override
+  String get msg88d150c7 => 'Keine Elemente zum Teilen.';
+
+  @override
+  String e7(Object e) {
+    return 'Fehler beim Lesen der gemeinsamen Datei: $e';
+  }
+
+  @override
+  String get zenfilesmbvirtualstoragebridgen =>
+      'ZenFile LAN/SMB Virtuelle Speicherbrücke\n';
+
+  @override
+  String get msgf3a485df => 'Neuer Ordner';
+
+  @override
+  String get msge48a7157 => 'Neue Datei';
+
+  @override
+  String get zenfilebackupssettings =>
+      'Einstellungen gesichert unter ZenFile/Backups/Settings/';
+
+  @override
+  String get json =>
+      'Bitte wählen Sie eine gültige .json Einstellungs-Sicherungsdatei';
+
+  @override
+  String e8(Object e) {
+    return 'Einstellungswiederherstellung fehlgeschlagen: $e';
+  }
+
+  @override
+  String url(Object url) {
+    return 'Link $url kann nicht geöffnet werden';
+  }
+
+  @override
+  String get zenfile1 => 'Über ZenFile';
+
+  @override
+  String get v1041 => 'v1.0.43 (Anzeigen)';
+
+  @override
+  String get ui_view_update => 'Versionsupdates';
+
+  @override
+  String get update_github_check => 'GitHub-Versionsprüfung';
+
+  @override
+  String update_current_version(String version) {
+    return 'Aktuelle Version: $version';
+  }
+
+  @override
+  String get update_checking => 'Suche nach Updates…';
+
+  @override
+  String get update_latest => 'Sie verwenden die neueste Version';
+
+  @override
+  String update_new_version(String version) {
+    return 'Neue Version verfügbar: $version';
+  }
+
+  @override
+  String get update_check_failed =>
+      'Update-Prüfung fehlgeschlagen. Netzwerk prüfen und erneut versuchen.';
+
+  @override
+  String get update_retry => 'Wiederholen';
+
+  @override
+  String get update_dialog_ignore => 'Ignorieren';
+
+  @override
+  String get update_dialog_update => 'Aktualisieren';
+
+  @override
+  String get update_startup_prompt => 'Beim Start benachrichtigen';
+
+  @override
+  String get update_dialog_no_remind => 'Nicht mehr erinnern';
+
+  @override
+  String get update_prompt_off_hint =>
+      'Startbenachrichtigung deaktiviert. Auf der Seite Versionsupdate wieder aktivierbar.';
+
+  @override
+  String get update_changelog_empty =>
+      'Für diese Version ist kein Änderungsprotokoll verfügbar';
+
+  @override
+  String get update_ignored_hint =>
+      'Start-Hinweis für diese Version ist ignoriert';
+
+  @override
+  String get update_download_install => 'Herunterladen & installieren';
+
+  @override
+  String get update_downloading => 'Update wird heruntergeladen…';
+
+  @override
+  String get update_download_failed =>
+      'Download fehlgeschlagen. Bitte erneut versuchen.';
+
+  @override
+  String get update_view_github => 'Auf GitHub ansehen';
+
+  @override
+  String get zenfileflutter =>
+      'ZenFile ist ein schöner, flüssiger, quelloffener Dateimanager und Offline-Mediacenter, entwickelt mit Flutter. Entworfen für maximale Leistung, klare Glasmorphismus-Ästhetik und nahtloses Benutzererlebnis.';
+
+  @override
+  String get msga12ebf50 => 'Blitzschnell';
+
+  @override
+  String get msgfccb5a01 => 'Zustandsloses Caching & asynchrones Scannen';
+
+  @override
+  String get msg6d8fbdac => 'Verschlüsselter Sicherer Arbeitsbereich';
+
+  @override
+  String get ftpsftpwebdav => 'Unterstützt FTP, LAN, SFTP und WebDAV';
+
+  @override
+  String get msge8f352b9 => 'Schöne Benutzeroberfläche';
+
+  @override
+  String get amoled => 'AMOLED Rein Schwarz & Lebendige Themen';
+
+  @override
+  String get msge8069659 => 'Im Repository markieren';
+
+  @override
+  String get telegram => 'Telegram-Kanal beitreten';
+
+  @override
+  String get msg5f84adea => 'App mit Freunden teilen';
+
+  @override
+  String get zenfilehttpsgithubcoml930203811zenfilereleases =>
+      'ZenFile empfehlen, ein schöner Offline-Dateimanager und Mediacenter: https://github.com/l930203811/ZenFile/releases';
+
+  @override
+  String get github => 'GitHub-Quellcode anzeigen';
+
+  @override
+  String get sequeldpdnsorg => 'Kontakt: 1@sequel.dpdns.org';
+
+  @override
+  String get msged8518d7 => 'E-Mail in Zwischenablage kopiert';
+
+  @override
+  String get qq => 'QQ-Gruppennummer in Zwischenablage kopiert';
+
+  @override
+  String get bysequel => 'Erstellt mit ❤️ von Sequel';
+
+  @override
+  String get zenfile2 => 'Änderungen © 2026 ZenFile. Alle Rechte vorbehalten.';
+
+  @override
+  String get based_on_nfile =>
+      'Basiert auf NFile von Senzme. Ursprüngliches Copyright © 2026 NFile.';
+
+  @override
+  String get msg138d3725 => 'Ihre Unterstützung hält mich am Laufen ❤️';
+
+  @override
+  String get msgccd097a7 => 'Alipay';
+
+  @override
+  String get msgbffe28c8 => 'WeChat Pay';
+
+  @override
+  String get msg0537b04e =>
+      'Bild lange drücken, um in Galerie zu speichern. Vielen Dank für Ihre Unterstützung!';
+
+  @override
+  String get zenfilev1041 => 'ZenFile v1.0.43 herunterladen';
+
+  @override
+  String get msg9d287020 => '123 Cloud Drive';
+
+  @override
+  String get msgb2b41b6a => '115 Cloud Drive';
+
+  @override
+  String get msg77ee718b => 'Baidu Netdisk';
+
+  @override
+  String get msgbff1432a => 'Quark Cloud Drive';
+
+  @override
+  String get msge03395d0 => 'PikPak Cloud Drive';
+
+  @override
+  String get svg =>
+      'Vollständige SVG-Unterstützung hinzugefügt (Miniaturvorschau & Anzeige)';
+
+  @override
+  String get ziprar7ztargz =>
+      'Archivformat-Farbcodierung hinzugefügt (zip/rar/7z/tar/gz haben jeweils eigene Farben)';
+
+  @override
+  String get msg09a6e11b =>
+      'Download-vor-dem-Abspielen-Funktion für Remote-Dateien hinzugefügt';
+
+  @override
+  String get msg1c3206b8 =>
+      'Behoben: Sprung zur Browse-Seite von der Kategorieseite nach der Extraktion funktionierte nicht';
+
+  @override
+  String get msgb1e4da91 =>
+      'Behoben: Einfrieren der Seite bei \'Cache-Verzeichnis anzeigen\' und \'Speicherort nach Extraktion öffnen\'';
+
+  @override
+  String get yyyymmdd => 'Datumsformat auf yyyy-MM-dd optimiert';
+
+  @override
+  String get msg4c425252 => 'Standardmäßige 24-Stunden-Zeitanzeige optimiert';
+
+  @override
+  String get msg1eaf4abb =>
+      'Pfadleiste vollständig optimiert (kompaktere Breadcrumb-Schaltflächen und Pfeilstile)';
+
+  @override
+  String get msgd3381817 =>
+      'Tab-Leiste und Pfadleiste nach oben verschoben, um mehr Platz für die Dateiliste zu schaffen';
+
+  @override
+  String get msg342688b2 =>
+      'Doppelfenster-Kopfbereich optimiert (Höhe um 30% reduziert)';
+
+  @override
+  String get msg8954452f =>
+      'Remoteserver ersetzt inaktiven Tab im Doppelfenster-Modus';
+
+  @override
+  String get msgac5a0315 =>
+      'Zurück-Geste optimiert: löst Markierung auf statt Seite zu verlassen, wenn Elemente ausgewählt sind';
+
+  @override
+  String get msg1904388e =>
+      'Zweifinger-Wischen nach rechts öffnet Seitenleiste, Zweifinger-Wischen nach links wechselt Kategorie-/Browse-Seite';
+
+  @override
+  String get msg2762c070 =>
+      'Zweifinger-Wischen-Umschalter hinzugefügt (kann in Allgemein & Verhalten deaktiviert werden)';
+
+  @override
+  String get msg48dca69a =>
+      'Fortschrittsbalken in Ring-Stil mit Prozentanzeige in der Mitte geändert';
+
+  @override
+  String get windows =>
+      'Kompatibilitätsfix für Remote-Pfade (Windows-Plattform-Pfadtrennzeichen-Problem)';
+
+  @override
+  String get msg65eefc98 =>
+      'Adressleisten-Umschalter steuert jetzt gestaltete Pfad-Breadcrumbs';
+
+  @override
+  String get msg96a6856a =>
+      'Standard-Startseiteneinstellung (Kategorie- oder Browse-Seite als Startseite wählen)';
+
+  @override
+  String get msg250213fd =>
+      'Neues App-Installationsprogramm-Symbol (natürlicher Zen-Stil)';
+
+  @override
+  String get msg7f53e8b1 =>
+      'Kreisförmiger Prozent-Fortschrittsbalken (während Kopieren/Verschieben angezeigt)';
+
+  @override
+  String get msg051469b5 =>
+      'Fortschrittsbalken schließt sich nach erfolgreichem Vorgang automatisch, keine manuelle Bestätigung nötig';
+
+  @override
+  String get msge4c4d5e2 =>
+      'Datei-Vorgangsmenü in unteres Popup geändert (deckt Tab-Leiste nicht mehr ab)';
+
+  @override
+  String get msga33dbb51 =>
+      'Aktionsleiste der Auswahlmarkierung nach unten verschoben (mit Anzahl-Anzeige)';
+
+  @override
+  String get msge6c84f11 =>
+      'Behoben: Klick auf App-Details nach Symbolwechsel funktioniert jetzt';
+
+  @override
+  String get msg46b8ca8f =>
+      'Behoben: Abnormale lokale Seitenumschaltung nach Remote-Kopie';
+
+  @override
+  String get msgb3dea5f5 =>
+      'Textbetrachter-Langdruck-Menü unterstützt Kopieren und Alle auswählen';
+
+  @override
+  String get msga4c92214 => 'Drag-and-Drop-Popup-Layout optimiert (kompakter)';
+
+  @override
+  String get msg32854144 =>
+      'Kategorieseite-Symbole unterstützen Kreis/Quadrat-Hintergrund-Umschalter';
+
+  @override
+  String get msg3a93e257 =>
+      'Kategorie-Symbolform-Einstellung (Umschalter in Erscheinung & Thema)';
+
+  @override
+  String get zenfile3 => 'ZenFile Erste Veröffentlichung';
+
+  @override
+  String get msg47b760ed => 'Multi-Tab-Unterstützung';
+
+  @override
+  String get ftpsftpwebdavsmb =>
+      'Remoteserver-Verbindung (FTP/SFTP/WebDAV/SMB)';
+
+  @override
+  String get msg4b736dfb => 'Datei-Verschlüsselungs-Tresor';
+
+  @override
+  String get ftpwebdav => 'FTP/WebDAV-Server-Funktionen';
+
+  @override
+  String get msg03257c2d =>
+      'Benutzerdefiniertes Thema & Erscheinungseinstellungen';
+
+  @override
+  String get msg5cce42e6 =>
+      'Optimierung der Drag-and-Drop-Dateioperation auf dem Remoteserver';
+
+  @override
+  String get msg074f1ce7 =>
+      'Benutzerdefinierte App-Desktop-Symbolfunktion verbessert';
+
+  @override
+  String get msg5c66ffab =>
+      'Langes Drücken in der Remoteserver-Dateiliste kann Drag-and-Drop-Popup auslösen (wird in der nächsten Version behoben)';
+
+  @override
+  String get bug1sequeldpdnsorgqq792408214 =>
+      'Wenn Sie Vorschläge haben oder Fehler finden, geben Sie bitte Feedback per E-Mail an 1@sequel.dpdns.org oder QQ-Gruppe 792408214.';
+
+  @override
+  String get msgd054a84c => 'Lange drücken zum Speichern des Bildes';
+
+  @override
+  String get msgb3b83e12 => 'Bild laden fehlgeschlagen';
+
+  @override
+  String get msgc2790d54 =>
+      'Speicherberechtigung erforderlich zum Speichern des Bildes';
+
+  @override
+  String get msg1292d351 => 'Bild in Galerie gespeichert';
+
+  @override
+  String e9(Object e) {
+    return 'Speichern fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msg7a4ee0c7 => 'Keine Dateien zum Teilen';
+
+  @override
+  String get msg45326802 => 'Elemente erfolgreich gelöscht';
+
+  @override
+  String e10(Object e) {
+    return 'Fehler beim Teilen: $e';
+  }
+
+  @override
+  String get msg4fb42e6e => 'In Zwischenablage kopiert';
+
+  @override
+  String get msge5212c58 => 'In Zwischenablage ausgeschnitten';
+
+  @override
+  String get msgc8ce4b36 => 'Umbenennen';
+
+  @override
+  String get msgf139c5cf => 'Neuen Namen eingeben';
+
+  @override
+  String get msg_rename_extension_warning_title => 'Erweiterung ändern';
+
+  @override
+  String get msg_rename_extension_warning_content =>
+      'Sie ändern die Dateierweiterung, was verhindern kann, dass die Datei ordnungsgemäß geöffnet wird. Möchten Sie wirklich fortfahren?';
+
+  @override
+  String get msg_rename_extension_confirm => 'Änderung bestätigen';
+
+  @override
+  String get msg53518c22 => 'Datei löschen';
+
+  @override
+  String get msg47809e5d => 'Keine aktuellen Dateien';
+
+  @override
+  String get msg7a7e6c25 =>
+      'Neu erstellte oder heruntergeladene Dateien werden hier angezeigt.';
+
+  @override
+  String get msg765d1698 => 'Ausgewählte Elemente löschen';
+
+  @override
+  String get msg365f2f0a => 'Elemente erfolgreich gelöscht ✓';
+
+  @override
+  String successcount(Object successCount) {
+    return '$successCount Elemente erfolgreich zum Archiv hinzugefügt ✓';
+  }
+
+  @override
+  String count(Object count) {
+    return '$count Elemente in Archiv eingefügt ✓';
+  }
+
+  @override
+  String get msg39cb3352 => 'Archiv kann nicht gelesen werden';
+
+  @override
+  String get msg99abedc6 => 'In aktuellen Ordner extrahieren';
+
+  @override
+  String get msg8d0cfb58 => 'Dateien hinzufügen';
+
+  @override
+  String get msg5bf1fb72 => 'Verlustfreies Audio';
+
+  @override
+  String get msg47cab5ae => 'Sleep-Timer';
+
+  @override
+  String get msg50c1b248 => 'Hintergrundwiedergabe gestoppt';
+
+  @override
+  String get msg6d16d396 => 'Hintergrundwiedergabe aktiviert';
+
+  @override
+  String get msg3038d9b8 => 'Zufall: Aus';
+
+  @override
+  String get msg29eed1da => 'Hintergrundwiedergabe';
+
+  @override
+  String get msg4aa059f7 => 'Tippen, um Hintergrundwiedergabe zu stoppen';
+
+  @override
+  String get msg8f7f4490 => 'Benachrichtigung mit Steuerung anzeigen';
+
+  @override
+  String get msgb7c87215 => 'Soundeffekte & Equalizer';
+
+  @override
+  String get msgfc449780 => 'Audiodatei-Informationen';
+
+  @override
+  String get msgb4fbc92c => 'Sicherung & Wiederherstellung';
+
+  @override
+  String get zenfilebackupssettings1 =>
+      'Aktuelle Einstellungen in den ausgewählten Pfad sichern';
+
+  @override
+  String get json1 =>
+      'Wählen Sie eine Sicherungsdatei aus der Liste zur Wiederherstellung';
+
+  @override
+  String get msg534c621a => 'Sicherungsverzeichnis';
+
+  @override
+  String get msg396b7d3f => 'Dateigröße';
+
+  @override
+  String get msgc047ee32 => 'Letzte Sicherungszeit';
+
+  @override
+  String get msg917fd6ef => 'Keine Daten zum Exportieren.';
+
+  @override
+  String get sqlite => 'SQLite-Datenbankleser';
+
+  @override
+  String get msg03a0d224 => 'Tabellenstruktur';
+
+  @override
+  String get sql => 'SQL-Konsole';
+
+  @override
+  String get msge2f0fe67 => 'Datenbank konnte nicht geöffnet werden';
+
+  @override
+  String get msg8bb11da4 => 'Keine Tabellen in dieser Datenbank gefunden.';
+
+  @override
+  String get msg7796aa3e => 'Zeilen suchen...';
+
+  @override
+  String get msg15f26697 => 'Keine Zeilen gefunden';
+
+  @override
+  String get msg0eaa935b => 'Strukturdetails nicht geladen.';
+
+  @override
+  String get sql1 => 'SQL-Editor';
+
+  @override
+  String get select => 'SELECT-Vorlage';
+
+  @override
+  String get csv => 'Ergebnisse als CSV exportieren';
+
+  @override
+  String get select1 => 'SELECT-Abfrage ausführen, um Ergebnisse anzuzeigen.';
+
+  @override
+  String get msgd1ad9002 => 'Fehler bei der Abfrageausführung.';
+
+  @override
+  String targetpath(Object targetPath) {
+    return 'Pfad kopiert: $targetPath';
+  }
+
+  @override
+  String get msg6ed14da7 => 'Nächste Ebene';
+
+  @override
+  String get msgcd0b9aca => 'Auswahl löschen';
+
+  @override
+  String get msgee14ee27 =>
+      'Sind Sie sicher, dass Sie dieses Element löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.';
+
+  @override
+  String filenamecreatedname(Object createdName, Object fileName) {
+    return '\"$fileName\" existiert bereits, \"$createdName\" erstellt.';
+  }
+
+  @override
+  String foldernamecreatedname(Object createdName, Object folderName) {
+    return '\"$folderName\" existiert bereits, \"$createdName\" erstellt.';
+  }
+
+  @override
+  String get msgbd165c40 => 'Neues leeres Textdokument erstellen';
+
+  @override
+  String get msg68ac91eb => 'Neues Archiv';
+
+  @override
+  String get msg881f6a80 => 'Aktuelle Ordnerinhalte komprimieren';
+
+  @override
+  String get msg97301f64 => 'Anzeige- & Sortieroptionen';
+
+  @override
+  String get msg829cb1dd => 'Listenansicht';
+
+  @override
+  String get msg0a4ebb8d => 'Größe & Abstandsoptionen';
+
+  @override
+  String get msg88062f93 => 'Symbol- & Ordnergröße';
+
+  @override
+  String get msga7c781f5 => 'Größe & Abstand';
+
+  @override
+  String get msga2946a1a => 'Sortieren nach';
+
+  @override
+  String get za => 'Name (Z-A)';
+
+  @override
+  String get msg2e2a26bb => 'Größe (Groß)';
+
+  @override
+  String get msgf437ace4 => 'Nur dieser Ordner';
+
+  @override
+  String get msg551f98ba =>
+      'Dieses Verzeichnis enthält keine Dateien oder Unterordner.';
+
+  @override
+  String get ui_favorites => 'Favoriten';
+
+  @override
+  String get ui_favorites_swipe_hint =>
+      'Wischen Sie vom unteren Bildschirmrand nach oben, um die Favoriten zu öffnen';
+
+  @override
+  String get ui_new_favorite => 'Zu Favoriten hinzufügen';
+
+  @override
+  String get ui_favorite => 'Favorit';
+
+  @override
+  String msg_favorited(Object name) {
+    return '$name zu Favoriten hinzugefügt';
+  }
+
+  @override
+  String get ui_add_to_favorites => 'Zu Favoriten hinzufügen';
+
+  @override
+  String get ui_group => 'Gruppe';
+
+  @override
+  String get ui_new_group => 'Neue Gruppe';
+
+  @override
+  String get ui_group_name => 'Gruppenname';
+
+  @override
+  String get ui_default_group => 'Standard';
+
+  @override
+  String get ui_add => 'Hinzufügen';
+
+  @override
+  String get ui_edit_favorite => 'Favorit bearbeiten';
+
+  @override
+  String get ui_select_group => 'Gruppe auswählen';
+
+  @override
+  String get ui_save => 'Speichern';
+
+  @override
+  String get ui_rename_group => 'Gruppe umbenennen';
+
+  @override
+  String get ui_delete_group => 'Gruppe löschen';
+
+  @override
+  String msg_delete_group_confirm(Object name) {
+    return 'Das Löschen der Gruppe »$name« entfernt auch alle darin enthaltenen Favoriten. Dies kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get msg_please_enter_path => 'Bitte Pfad eingeben';
+
+  @override
+  String get msg_please_enter_name => 'Bitte Name eingeben';
+
+  @override
+  String get msg_please_enter_group_name => 'Bitte Gruppennamen eingeben';
+
+  @override
+  String get msg_favorite_exists => 'Dieser Pfad ist bereits ein Favorit';
+
+  @override
+  String get msg4dfc167a =>
+      'Benutzerdefinierte Sortierung für diesen Ordner aktivieren';
+
+  @override
+  String get msge4c84f81 => 'Verknüpfung hinzufügen';
+
+  @override
+  String get msgd730e478 => 'System-Root';
+
+  @override
+  String get msg35546526 => 'Netzwerkverbindungen';
+
+  @override
+  String get msg67a6ea5e => 'Netzwerkverbindung hinzufügen';
+
+  @override
+  String get msgcc51d6c2 => 'Verbindung entfernen';
+
+  @override
+  String get msg6e0f9cef => 'Startkategorien';
+
+  @override
+  String get msge9691076 => 'Leerer Ordner';
+
+  @override
+  String get msg17093362 => 'Vorgang abbrechen';
+
+  @override
+  String get msg681c0f39 => 'Globale Suche';
+
+  @override
+  String get msg0c36f64f => 'Nur Dokumente';
+
+  @override
+  String get msg26b041dd => 'Nur Audio';
+
+  @override
+  String get msge632ba85 => 'Nur Archive';
+
+  @override
+  String label(Object label) {
+    return '$label Filter aktiviert';
+  }
+
+  @override
+  String get msg0e77af8a => 'Versteckte Ordner';
+
+  @override
+  String e11(Object e) {
+    return 'Ladefehler: $e';
+  }
+
+  @override
+  String get msg5937f822 => '(Leere Folie)';
+
+  @override
+  String get msg360d0b37 => 'Erfolgreich gespeichert ✓';
+
+  @override
+  String get pdf => 'PDF-Anzeigeeinstellungen';
+
+  @override
+  String get msg09c933bf =>
+      'Rendering-Leistung für große, komplexe oder gescannte Dokumente optimieren.';
+
+  @override
+  String get msg701a85d4 => 'Standardmodus';
+
+  @override
+  String get msg2722d1a7 => 'Am besten für Textdokumente';
+
+  @override
+  String get msgb2b08d54 => 'Geeignet für Broschüren und Fotos';
+
+  @override
+  String get msg8b519c02 => 'Seitenlayout';
+
+  @override
+  String get msg7f2cd152 => 'Fortlaufend (vertikale Scrollliste)';
+
+  @override
+  String get msg151ea324 => 'Scrollrichtung';
+
+  @override
+  String get msg7d45ded6 => 'Vertikal (von oben nach unten scrollen)';
+
+  @override
+  String get msg176ef589 => 'Textauswahl aktivieren';
+
+  @override
+  String get msg864f8706 =>
+      'Deaktivierung kann die Seitenrendering-Geschwindigkeit erheblich verbessern und Scroll-Verzögerungen beseitigen.';
+
+  @override
+  String get msgd28847a2 => 'Neues Dokument';
+
+  @override
+  String get msg3007c452 => 'Weitere Optionen';
+
+  @override
+  String get msg452dba7c => 'Zeilenumbruch';
+
+  @override
+  String get msgc31f9440 => 'Zeilennummern anzeigen';
+
+  @override
+  String get msg1d93c30b => 'Mit anderer App öffnen';
+
+  @override
+  String get msgace80573 => '(Leere Datei)';
+
+  @override
+  String get msg030f48bd => 'Mit App öffnen';
+
+  @override
+  String get msgfd96af00 => 'Teilen-Funktion kommt bald';
+
+  @override
+  String get ui_share => 'Teilen';
+
+  @override
+  String get ftp1 => 'FTP-Server erfolgreich gestoppt';
+
+  @override
+  String ftpe(Object e) {
+    return 'Fehler beim Starten des FTP-Servers: $e';
+  }
+
+  @override
+  String get msg5c202e56 =>
+      'Bitte stoppen Sie den Server vor der Änderung der Konfiguration';
+
+  @override
+  String get msgfca29cb3 => 'Port ändern';
+
+  @override
+  String get msg8a0b5bf5 => 'Ungültige Portnummer';
+
+  @override
+  String get msg3bce2199 => 'Benutzername festlegen';
+
+  @override
+  String get msg0b62b5ce => 'Benutzername darf nicht leer sein';
+
+  @override
+  String get ftp2 => 'FTP-Server';
+
+  @override
+  String get msg5ab96a6d =>
+      'Bitte stoppen Sie den Server vor der Bearbeitung der Einstellungen';
+
+  @override
+  String get msgc400f106 => 'Verzeichnis ändern';
+
+  @override
+  String get msgb5eb59fc => 'Benutzer festlegen';
+
+  @override
+  String get msg70c53afb => 'Anonymer Zugriff';
+
+  @override
+  String get msg8e2021aa => 'Verknüpfung erstellen';
+
+  @override
+  String get msgd70e9bdf => 'Inaktiv';
+
+  @override
+  String get msg7ae644e4 => 'Netzwerkstatus';
+
+  @override
+  String get msg5d57821d => 'Serveradresse';
+
+  @override
+  String get msgfefea1b3 => 'Startverzeichnis';
+
+  @override
+  String get msg124d9054 => 'Versteckte Dateien anzeigen';
+
+  @override
+  String get tlsftp => 'Sichere FTP-Verbindung basierend auf explizitem TLS';
+
+  @override
+  String get msg1f4c1042 => 'Ordner';
+
+  @override
+  String get msgf2ef53c0 => 'In diesem Ordner suchen...';
+
+  @override
+  String get msgfff96ede => 'Weitere Aktionen';
+
+  @override
+  String get msg88e45bb8 => 'Durchsuchen Sie Ihren Speicher';
+
+  @override
+  String query(Object _query) {
+    return 'Keine Treffer für \"$_query\"';
+  }
+
+  @override
+  String get msge109d1ea => 'Dashboard erfolgreich aktualisiert';
+
+  @override
+  String get msg05cea075 => 'Erneut drücken, um App zu beenden';
+
+  @override
+  String get msg7498c202 => 'App beenden';
+
+  @override
+  String get msg03247b17 =>
+      'Sind Sie sicher, dass Sie beenden möchten? Drücken Sie Zurück oder tippen Sie auf Beenden, um die App zu schließen.';
+
+  @override
+  String get msg354c1c9a => 'Dashboard aktualisieren';
+
+  @override
+  String get msg19021d08 => 'Benutzerdefinierte Schnellkategorien';
+
+  @override
+  String get html => 'HTML-Vorschau';
+
+  @override
+  String get msgfba1f416 => 'Ordnernamen eingeben';
+
+  @override
+  String get msg33b0b21c => 'Ordner auswählen';
+
+  @override
+  String get msgff3200cc => 'Auswahl aufheben';
+
+  @override
+  String get msg4614630a => 'Ordner ist leer';
+
+  @override
+  String get msg5dc1fa7b => 'Diesen Ordner verwenden';
+
+  @override
+  String get selectStorageDrive => 'Speicherlaufwerk auswählen';
+
+  @override
+  String get markdown => 'Markdown-Vorschau';
+
+  @override
+  String get items => 'Elemente';
+
+  @override
+  String count1(Object count) {
+    return 'Sind Sie sicher, dass Sie $count ausgewählte Elemente dauerhaft löschen möchten?';
+  }
+
+  @override
+  String count2(Object count) {
+    return '$count Elemente erfolgreich gelöscht';
+  }
+
+  @override
+  String pastedcountdestdir(Object destDir, Object pastedCount) {
+    return '$pastedCount Elemente nach $destDir eingefügt';
+  }
+
+  @override
+  String get msgfadbb0bc => 'Keine Dateien zum Teilen.';
+
+  @override
+  String get msg3ad97542 => 'Keine physischen Dateien zum Umbenennen gefunden';
+
+  @override
+  String get msg1303e638 => 'Änderungsdatum';
+
+  @override
+  String get prop_created => 'Erstellungsdatum';
+
+  @override
+  String get msg5bab3781 => 'Medieninformationen';
+
+  @override
+  String get msg880a18f3 => 'Elemente ausgewählt';
+
+  @override
+  String get msgea9ecb93 => 'Gesamtgröße';
+
+  @override
+  String get msg5556baa3 => 'Lange drücken zum Öffnen mit...';
+
+  @override
+  String get msg631cd220 => 'Löschung bestätigen';
+
+  @override
+  String name(Object name) {
+    return '$name gelöscht';
+  }
+
+  @override
+  String get msgcd8264f1 => 'Im Speicherort anzeigen';
+
+  @override
+  String get msg2a4cfb07 => 'Öffnen mit...';
+
+  @override
+  String get msg8bf52387 =>
+      'Datei nicht gefunden oder kann nicht geteilt werden.';
+
+  @override
+  String get msg419be096 => 'Hier einfügen';
+
+  @override
+  String get msg5093bc80 => 'Neueste zuerst';
+
+  @override
+  String get msgbc74b5a8 => 'Nach Datum';
+
+  @override
+  String get msgef7ae768 => 'Neueste zuerst (nach Monat gruppiert)';
+
+  @override
+  String get msgb8140039 => 'Älteste zuerst (nach Monat gruppiert)';
+
+  @override
+  String ui_month_group_header(int year, int month) {
+    return '$month/$year';
+  }
+
+  @override
+  String get msg424a0110 => 'Unbekanntes Datum';
+
+  @override
+  String get msgb19671d6 => 'Alle Elemente';
+
+  @override
+  String get msg11fea612 => 'Datum & Uhrzeit';
+
+  @override
+  String get msg12e86877 => 'Dateigröße / Elementanzahl';
+
+  @override
+  String get msg7908038f => 'Keine / Versteckt';
+
+  @override
+  String get msg9136d4dc =>
+      'Keine zusätzlichen Informationen auf der rechten Seite anzeigen';
+
+  @override
+  String get msg84986f91 => 'Änderungsdatum und -uhrzeit anzeigen';
+
+  @override
+  String get msgfc000737 => 'Dateien zeigen Größe, Ordner zeigen Elementanzahl';
+
+  @override
+  String get msg83de16cc => 'Nachfolgende Informationsart wählen';
+
+  @override
+  String get msgaa2a18a1 =>
+      'Wählen Sie, was auf der rechten Seite von Dateien und Ordnern angezeigt wird, wenn der Drei-Punkte-Aktionsbutton versteckt ist.';
+
+  @override
+  String get msg26e4c5d6 => 'Adressleiste anzeigen';
+
+  @override
+  String get windows1 =>
+      'Bearbeitbare Windows-Explorer-Adressleiste oben in der Dateiliste anzeigen';
+
+  @override
+  String get msg74e86197 =>
+      'Bild-/Video-Verknüpfungen direkt im Ordner (Galerie) in bevorzugter Ansicht öffnen';
+
+  @override
+  String get msga1fbf3c6 => 'Android-Navigationsleiste ausblenden';
+
+  @override
+  String get msg02dddc02 =>
+      'Untere Navigationsleiste ausblenden, um Bildschirmplatz zu maximieren (nach oben wischen zum Anzeigen)';
+
+  @override
+  String get msg50923c95 =>
+      'Alle gespeicherten \'Öffnen mit\'-Zuordnungen löschen';
+
+  @override
+  String get msg6fdc09ac => '\'Öffnen mit\'-Dialog überspringen';
+
+  @override
+  String get msg0a4b0442 =>
+      'App-Auswahldialog überspringen, Dateien direkt mit Standardbetrachter öffnen';
+
+  @override
+  String get msge1157984 => 'Start in Kategorie- oder Browse-Seite wählen';
+
+  @override
+  String get msgae1854a2 =>
+      'Ein- oder Zweifinger-Wischen zum Seitenwechsel wählen';
+
+  @override
+  String get msg11b1ec65 =>
+      'Aktionsleiste auf der Browse-Seite anzeigen (Zurück, Vorwärts, Neu, Tab duplizieren, Hoch)';
+
+  @override
+  String get msg7e7765b6 =>
+      'Systemdateien und -ordner anzeigen, die mit Punkt(.) beginnen';
+
+  @override
+  String get msg86f3d70f => 'Ordner- und Dateianzahl-Kopfzeilen anzeigen';
+
+  @override
+  String get msg40e9c325 =>
+      'Gesamtordner- und Dateianzahl unter Speicherkopfzeile anzeigen';
+
+  @override
+  String get ampm24 =>
+      'Zwischen 12-Stunden (AM/PM) und 24-Stunden-Format in der Liste umschalten';
+
+  @override
+  String get msg25ee6612 => 'Zeit und Datum in der Liste ausblenden';
+
+  @override
+  String get msg337359a6 =>
+      'Änderungsdatum und -uhrzeit für Dateien und Ordner vollständig ausblenden';
+
+  @override
+  String get msga517863e =>
+      'Gesamtzahl der Dateien und Ordner im Verzeichnis berechnen und anzeigen';
+
+  @override
+  String get msg59a24fcb =>
+      'Gesamtgröße aller Dateien im Verzeichnis berechnen und anzeigen (kann Listenleistung beeinträchtigen)';
+
+  @override
+  String get msg309e2a28 => 'Navigationsleiste oben oder unten anzeigen';
+
+  @override
+  String get msge34c23ff => 'Oben';
+
+  @override
+  String get msg3341e3ed => 'Navigationsleiste oben auf der Seite angezeigt';
+
+  @override
+  String get msg8c414b06 => 'Unten';
+
+  @override
+  String get msg5d2c8e7f => 'Navigationsleiste unten auf der Seite angezeigt';
+
+  @override
+  String get msg9b7639ac =>
+      'Nur Symbole in der Auswahl-Aktionsleiste auf Browse- und Medienseiten anzeigen';
+
+  @override
+  String get msgdd69671b =>
+      'Kurzes Aufblitzen und Scrollen zum verlassen Ordner beim Zurückgehen';
+
+  @override
+  String get msg57736228 =>
+      'Tatsächliche Bild- und Video-Miniaturvorschaubilder anstelle generischer Dateisymbole anzeigen';
+
+  @override
+  String get msg1eda8a50 =>
+      'Dateinamen auf 3 Zeilen umbrechen zulassen, anstatt sie abzuschneiden';
+
+  @override
+  String get msgc7196afd =>
+      'Drei-Punkte-Menü-Schaltfläche neben Ordnern und Dateien ausblenden';
+
+  @override
+  String get msgad54815d =>
+      'Ordner oder Dateien lange drücken und ziehen, um sie in andere Ordner zu verschieben';
+
+  @override
+  String get msg5dff8f2d =>
+      'Options-Popup beim Drag-and-Drop von Dateien anzeigen (Kopieren, Verschieben, Komprimieren)';
+
+  @override
+  String get msg4b0a7063 =>
+      'Öffnen mehrerer Ordner in separaten Tabs für schnelle Navigation zulassen';
+
+  @override
+  String get msgf04ac00d =>
+      'Zwei Verzeichnisse nebeneinander durchsuchen und Dateien einfach übertragen';
+
+  @override
+  String get msgd1591ba4 =>
+      'Zuletzt durchsuchten Ordner beim Start der App öffnen';
+
+  @override
+  String get msg25792550 =>
+      'Gelöschte Dateien und Ordner in versteckten Papierkorb verschieben, anstatt sie dauerhaft zu löschen';
+
+  @override
+  String get msg1b9633fe => 'Themafarbe / Dynamisches Thema';
+
+  @override
+  String get msg64db4c2d => 'Ordnersymbol-Stil';
+
+  @override
+  String get msgece44aa5 => 'App-Seitenleisten-Schaltflächen-Stil';
+
+  @override
+  String get amoled1 => 'AMOLED Rein Schwarz Modus';
+
+  @override
+  String get amoled2 =>
+      'Rein schwarzen Hintergrund für AMOLED-Bildschirme im Dunkelmodus verwenden';
+
+  @override
+  String get msg5228b59f => 'App-Typografie / Schriftart';
+
+  @override
+  String get msge7d18d73 => 'Benutzerdefinierte Verknüpfungen';
+
+  @override
+  String get msg036fe6a4 =>
+      'Schnellkategorie-Elemente neu anordnen und Sichtbarkeit umschalten';
+
+  @override
+  String get msgead3e5c5 => 'Einstellungen suchen...';
+
+  @override
+  String get msg2590095f => 'Einstellungskategorien';
+
+  @override
+  String get msgfdae44c3 => 'Allgemein & Verhalten';
+
+  @override
+  String get msgeae34685 =>
+      'Standardbildschirm, Navigationssteuerung und Verknüpfungen';
+
+  @override
+  String get msg91b228b8 => 'Thema, App-Symbol, Ordnerstil und Typografie';
+
+  @override
+  String get msgad6e8bb8 => 'Dateibrowser-Optionen';
+
+  @override
+  String get msg8ddc4963 =>
+      'Adressleiste, versteckte Dateien, Tabs und Drag-and-Drop';
+
+  @override
+  String get msg45db4e2a => 'Ordnergröße, Anzahl und Zeit-/Datumsformat';
+
+  @override
+  String get msg09ca4d86 => 'Standardgalerieansicht und Miniaturvorschau';
+
+  @override
+  String get msgeb3693fb =>
+      'Öffnen-Aktionen und Standardbetrachter-Konfiguration';
+
+  @override
+  String get msg3a6a39ae => 'Papierkorb-Umschalter und automatische Löschdauer';
+
+  @override
+  String get msg9edfaff3 =>
+      'Alle Appeinstellungen sichern oder wiederherstellen';
+
+  @override
+  String get msg99c9cc56 => 'Versuchen Sie andere Suchbegriffe';
+
+  @override
+  String get msga432d127 => 'Standard-Startseite';
+
+  @override
+  String get msg226fc6ae => 'Kategorieseite';
+
+  @override
+  String get msgd48a082d => 'Wischen zum Seitenwechsel';
+
+  @override
+  String get msgaac01f32 => 'Einfinger-Wischen';
+
+  @override
+  String get msg59c7debc => 'Zuletzt geöffneten Ordner merken';
+
+  @override
+  String get msgce732d8a =>
+      'Textbeschriftungen in der unteren Leiste (Start/Browse) für ein saubereres, kompakteres Aussehen ausblenden';
+
+  @override
+  String get msg1cfeaace => 'Dateibrowser & Navigation';
+
+  @override
+  String get msgd33e3082 => 'Verlassenen Ordner hervorheben';
+
+  @override
+  String get msga4333788 => 'Medien & Standardaktionen';
+
+  @override
+  String get msg20c87c8e => 'Standardgalerie-Bevorzugte Ansicht';
+
+  @override
+  String get msg72b1f919 =>
+      'Alle Standardbetrachter-Auswahlen wurden zurückgesetzt';
+
+  @override
+  String get msge99f4762 => 'Papierkorb aktivieren';
+
+  @override
+  String get msg2c8a394a => 'Browse-Seite';
+
+  @override
+  String get msg2c3c5a35 => 'Symbolform';
+
+  @override
+  String get msg267fcd86 => 'Alle 3 Tage';
+
+  @override
+  String get msg9104c0c5 => 'Alle 2 Wochen';
+
+  @override
+  String days(Object days) {
+    return 'Alle $days Tage';
+  }
+
+  @override
+  String get msg673ad9d4 => 'Remoteserver-Cache geleert';
+
+  @override
+  String get msgd9f142c4 => 'Cache automatisch bereinigen';
+
+  @override
+  String get msg5472ef41 =>
+      'Zwischengespeicherte Dateien von Netzwerkservern sofort löschen';
+
+  @override
+  String get msgac7687d9 => 'Remoteserver-Cache-Dateiverzeichnis durchsuchen';
+
+  @override
+  String get msg225f6249 =>
+      'Miniaturvorschaubilder für Bilder und Videos auf Netzwerkservern anzeigen';
+
+  @override
+  String get materialyou => 'Material You (Dynamische Hintergrundfarbe)';
+
+  @override
+  String get msg05cff3ad => 'Lebhaftes Orange';
+
+  @override
+  String get msg5ed35657 => 'Königliches Lila';
+
+  @override
+  String get msge74a7283 => 'Bernstein-Gold';
+
+  @override
+  String get msg3904ba87 => 'Cyber-Pink';
+
+  @override
+  String get msgd58d230a => 'Saphir-Blau';
+
+  @override
+  String get msg508b005e => 'Limettengrün';
+
+  @override
+  String get msgefdde083 => 'Sonnenuntergang-Pfirsich';
+
+  @override
+  String get msg628e73a9 => 'Standard-Blau (Signatur-Blau)';
+
+  @override
+  String get msg8244d240 => 'Klassisch Einfarbig';
+
+  @override
+  String get msgf08d9b15 => 'Modern Abgerundet';
+
+  @override
+  String get msge5fba3dd => 'Stern Spezial';
+
+  @override
+  String get msgfe4254dc => 'Dokument-Fragment';
+
+  @override
+  String get msg84719fd5 => 'Minimalistisch Umriss';
+
+  @override
+  String get zenfile4 => 'Gestrichelte Linie Umriss';
+
+  @override
+  String get vuesax => 'Kategorie-Raster / Vuesax-Raster';
+
+  @override
+  String get msg5dc988f4 => 'Hamburger-Menü / Klassisches Menü';
+
+  @override
+  String get msgd06ba04f => 'M3 Expressiv 1';
+
+  @override
+  String get msg5090469e => 'M3 Expressiv 2';
+
+  @override
+  String get d => 'M3 Expressiv 3';
+
+  @override
+  String get msg67836b24 => 'Minimalistisch';
+
+  @override
+  String get msgf08c8dc4 => 'Glasmorphismus';
+
+  @override
+  String get msgdesign6 => 'Cyberpunk';
+
+  @override
+  String get msgdesign7 => 'Neumorphismus';
+
+  @override
+  String get msgdesign8 => 'Klassisch 2';
+
+  @override
+  String get msgdesign9 => 'Klassisch 3';
+
+  @override
+  String get msgdesign10 => 'Benutzerdesign 1';
+
+  @override
+  String get msgdesign11 => 'Benutzerdesign 2';
+
+  @override
+  String get msg7372dc9f => 'Benutzerdefiniertes Symbol';
+
+  @override
+  String get msg3004e40a => 'Standard-Logo (Natürliches Zen)';
+
+  @override
+  String get msgc540e940 => 'Punktmatrix & Sans Serif';
+
+  @override
+  String get msg00ea5776 => 'Ofit Modern Sans Serif';
+
+  @override
+  String get msg7bdbfaa5 => 'Jienao Tech Monospace';
+
+  @override
+  String get msgdcb4082d => 'Mont Urban Sans Serif';
+
+  @override
+  String get msg9d7001d9 => 'Benutzerdefinierte importierte Schriftart';
+
+  @override
+  String get msgc2f5e9e4 => 'Signatur-Standard';
+
+  @override
+  String get msg6a7c758f => 'Nie (Auto-Löschung deaktivieren)';
+
+  @override
+  String days1(Object days) {
+    return 'Nach $days Tagen';
+  }
+
+  @override
+  String get msgfe76ae54 => 'Standardseite beim Start der App wählen';
+
+  @override
+  String get msg8af2412a => 'Schnellkategorie-Seite beim Start anzeigen';
+
+  @override
+  String get msg245c3258 => 'Datei-Browse-Seite beim Start anzeigen';
+
+  @override
+  String get msg4439669d =>
+      'Ein- oder Zweifinger-Wischen zum Seitenwechsel wählen';
+
+  @override
+  String get msg46978666 =>
+      'Einfinger-Wischen zum Wechseln der Kategorie-/Browse-Seite oder Öffnen der Seitenleiste';
+
+  @override
+  String get msgbc9bf336 => 'Zweifinger-Wischen';
+
+  @override
+  String get msg563871d3 =>
+      'Zweifinger-Wischen zum Wechseln der Kategorie-/Browse-Seite oder Öffnen der Seitenleiste';
+
+  @override
+  String get msgca71ac0c => 'Themafarbe wählen';
+
+  @override
+  String get msg732630c1 => 'Ordnersymbol-Stil wählen';
+
+  @override
+  String get msgf9224d98 => 'Seitenleisten-Schaltflächen-Stil wählen';
+
+  @override
+  String get msgc337ecfa => 'Kategorie-Symbolform wählen';
+
+  @override
+  String get msgf18bc3d9 => 'App-Startprogramm-Symbol';
+
+  @override
+  String get logo =>
+      'Wählen Sie ein benutzerdefiniertes Logo für das App-Startprogramm-Symbol. Hinweis: Einige Startprogramme können einige Sekunden für die Aktualisierung benötigen.';
+
+  @override
+  String get msg64a6476a => 'Standard';
+
+  @override
+  String get app_icon_classic2 => 'Klassisch 2';
+
+  @override
+  String get app_icon_classic3 => 'Klassisch Gold';
+
+  @override
+  String get app_icon_cyberpunk => 'Cyberpunk';
+
+  @override
+  String get app_icon_glassmorphism => 'Glasmorphismus';
+
+  @override
+  String get app_icon_m3_expressive => 'M3 Expressiv';
+
+  @override
+  String get app_icon_minimal_flat => 'Minimal Flat';
+
+  @override
+  String get app_icon_neumorphism => 'Neumorphismus';
+
+  @override
+  String get app_icon_classic4 => 'Klassik 4';
+
+  @override
+  String get app_icon_3d_gradient => '3D-Verlauf';
+
+  @override
+  String get app_icon_glossy_blue => 'Glänzendes Blau';
+
+  @override
+  String get app_icon_paper_gray => 'Hellgrau';
+
+  @override
+  String get app_icon_metal_frost => 'Mattiertes Metall';
+
+  @override
+  String get app_icon_blue_folder => 'Blauer Ordner';
+
+  @override
+  String get app_icon_blue_gold => 'Tiefblau Gold';
+
+  @override
+  String get app_icon_blue_folder_white => 'Blau-Weißer Ordner';
+
+  @override
+  String get app_icon_blue_folder_gradient => 'Verlauf-blauer Ordner';
+
+  @override
+  String get app_icon_deep_blue_gold => 'Tiefblau-Gold-Ordner';
+
+  @override
+  String get app_icon_sunset_zf => 'Abendrot-Lila';
+
+  @override
+  String title(Object title) {
+    return 'App-Symbol gewechselt zu $title';
+  }
+
+  @override
+  String get msgad76161f => 'Benutzerdefiniertes Symbol wählen';
+
+  @override
+  String get pngjpgwebp => 'Bitte Bilddatei auswählen (PNG/JPG/WEBP)';
+
+  @override
+  String get msgb06c5c34 => 'Benutzerdefiniertes Symbol angewendet';
+
+  @override
+  String e12(Object e) {
+    return 'Benutzerdefiniertes Symbol konnte nicht angewendet werden: $e';
+  }
+
+  @override
+  String get msg375c9eb8 => 'Rohes minimalistisches geometrisches Design';
+
+  @override
+  String get msg817e321b => 'High-Tech Retro-Punktmatrix-Titel + Sauberer Text';
+
+  @override
+  String get msg3c2a24cc =>
+      'Ultra-glatt, minimalistisch und Premium-Geometrik-Ästhetik';
+
+  @override
+  String get msg978f8d11 =>
+      'Sauberer und futuristischer Entwickler-Monospace-Stil';
+
+  @override
+  String get msg93b657aa => 'Fette, moderne und auffällige Typografie';
+
+  @override
+  String get msg9db40ad6 => 'Ihre geladene benutzerdefinierte Schriftartdatei';
+
+  @override
+  String get zenfile5 =>
+      'Wählen Sie eine schöne Schriftart, um das visuelle Thema von ZenFile anzupassen';
+
+  @override
+  String get msg7372efa5 => 'Benutzerdefinierte Schriftartdatei ersetzen';
+
+  @override
+  String get msg3186839b =>
+      'Ausgewählte Schriftartdatei konnte nicht geladen werden.';
+
+  @override
+  String get opentypeotftruetypettf =>
+      'Bitte wählen Sie eine gültige OpenType (.otf) oder TrueType (.ttf) Schriftartdatei.';
+
+  @override
+  String get msgcf42dedc => 'Benutzerdefinierte Schriftart entfernen';
+
+  @override
+  String get msg2b9abfaa => 'Benutzerdefinierte Schriftart entfernt.';
+
+  @override
+  String get msgfdef8c23 => '7 Tage';
+
+  @override
+  String get msg25436ba3 => '15 Tage';
+
+  @override
+  String get msg85e7f60c => '30 Tage (Empfohlen)';
+
+  @override
+  String get msgd61e706f => 'Nie (Manuelle Bereinigung)';
+
+  @override
+  String get msgf0ef894a => 'Papierkorb Auto-Lösch-Dauer';
+
+  @override
+  String get msg1200d6b7 =>
+      'Elemente im Papierkorb werden nach dieser Dauer dauerhaft gelöscht.';
+
+  @override
+  String get msg432fbb31 => 'Verbindung löschen';
+
+  @override
+  String msgdeleteconn(Object name) {
+    return 'Sind Sie sicher, dass Sie \"$name\" löschen möchten?';
+  }
+
+  @override
+  String get msg3358aa10 => 'Verbindung hinzufügen';
+
+  @override
+  String get msgc9c900d0 => 'Noch keine Remote-Verbindungen';
+
+  @override
+  String get ftpsftpwebdavsmb1 =>
+      'FTP, SFTP, WebDAV oder SMB-Verbindung hinzufügen';
+
+  @override
+  String e13(Object e) {
+    return 'Verbindung fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msgb5bc0bf1 => 'Hostadresse wird aufgelöst...';
+
+  @override
+  String get msgc3d4e5f6 => 'Portstatus wird überprüft...';
+
+  @override
+  String get msg3005ba4d => 'Anmeldeinformationen werden überprüft...';
+
+  @override
+  String get msgab36a8c6 => 'Speichervolume wird eingebunden...';
+
+  @override
+  String name1(Object name) {
+    return '\"$name\" erfolgreich hinzugefügt!';
+  }
+
+  @override
+  String connectedtype(Object name) {
+    return '\"$name\" erfolgreich verbunden!';
+  }
+
+  @override
+  String get msgdf434415 => 'System-App deaktiviert';
+
+  @override
+  String get documentsui =>
+      'Auf Ihrem Gerät ist die Standard-System-Datei/Dokument-App (DocumentsUI) nicht aktiviert,';
+
+  @override
+  String get androidnn =>
+      'Dies ist erforderlich, damit Android Verzeichnisse auswählen und einbinden kann.\n\n';
+
+  @override
+  String get saf_enable_docs =>
+      'oder aktivieren Sie es, um die SAF-Ordnerfunktion zu nutzen.';
+
+  @override
+  String get msgb2af4e30 =>
+      'Bitte prüfen Sie, ob die \'Dateien\' oder \'Dokumente\' System-App in den Geräteeinstellungen deaktiviert ist,';
+
+  @override
+  String safe(Object e) {
+    return 'SAF-Ordner konnte nicht angefordert werden: $e';
+  }
+
+  @override
+  String get msg65c7ecb6 => 'Bitte Verbindungsname eingeben';
+
+  @override
+  String get msg69e3963c => 'Bitte Serveradresse/Hostname eingeben';
+
+  @override
+  String get msgce1ec2ce => 'Remote-Verbindung';
+
+  @override
+  String get msg25557d1f => 'Standard-Dateiübertragungsprotokoll';
+
+  @override
+  String get ssh => 'SSH Sicheres Dateiübertragungs-Server';
+
+  @override
+  String get http => 'HTTP Web Distributed Authoring';
+
+  @override
+  String get androidsd =>
+      'Android Storage Access Framework (SD-Karte / Externer Speicher)';
+
+  @override
+  String get msg8486035b => 'Netzwerkdienst wählen';
+
+  @override
+  String get naszenfile =>
+      'Remoteserver oder NAS-Freigabe als dynamisches Laufwerk in der ZenFile-Speicherliste einbinden.';
+
+  @override
+  String selectedtype(Object _selectedType) {
+    return '$_selectedType Einstellungen';
+  }
+
+  @override
+  String get msg5c808d9a =>
+      'Verbindungsdetails eingeben, um dieses Netzwerkspeicher-Volume zu verknüpfen.';
+
+  @override
+  String get nas => 'Beispiel: Büro-NAS, Heimfreigabe';
+
+  @override
+  String get dav => 'Beispiel: 192.168.1.100 oder 192.168.1.100/dav';
+
+  @override
+  String get naslocal => 'Beispiel: 192.168.1.100 oder nas.local';
+
+  @override
+  String get dav1 => 'Beispiel: /dav oder /';
+
+  @override
+  String get anonymousadmin => 'Beispiel: anonymous oder admin';
+
+  @override
+  String get msgeec70cd2 => 'Passwort (Optional)';
+
+  @override
+  String get msgf1fa9d44 => 'Einhängepunkt wird erstellt...';
+
+  @override
+  String selectedtype1(Object _selectedType) {
+    return 'Bitte warten, wir stellen eine zuverlässige Verbindung zum $_selectedType-Server her.';
+  }
+
+  @override
+  String e14(Object e) {
+    return 'Fehler beim Wiederherstellen des Elements: $e';
+  }
+
+  @override
+  String e15(Object e) {
+    return 'Fehler beim Löschen des Elements: $e';
+  }
+
+  @override
+  String get msg62187f1b =>
+      'Sind Sie sicher, dass Sie alle Elemente im Papierkorb dauerhaft löschen möchten? Dieser Vorgang ist irreversibel.';
+
+  @override
+  String get msg8cd6bc18 => 'Papierkorb leeren';
+
+  @override
+  String get msga4dfc0c6 => 'Papierkorb erfolgreich geleert';
+
+  @override
+  String get msg07d80ac5 => 'Gelöschte Dateien werden durchsucht...';
+
+  @override
+  String get msg96d2b75f => 'Dauerhaft löschen';
+
+  @override
+  String get msg0d824a24 => 'Papierkorb ist leer';
+
+  @override
+  String get msg4c478216 => 'Ursprünglicher Speicherort';
+
+  @override
+  String get msgc44a57b6 => 'Text wird heruntergeladen...';
+
+  @override
+  String get msgd6d8292d => 'Medien werden gepuffert...';
+
+  @override
+  String e16(Object e) {
+    return 'Download fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msg66d723c5 =>
+      'Puffer-Timeout, bitte Netzwerkverbindung überprüfen';
+
+  @override
+  String get msg53082c55 => 'Einfügen am selben Speicherort nicht möglich';
+
+  @override
+  String get msg108feeed => 'Kopieren...';
+
+  @override
+  String get msg2d4b44ec => 'Elemente erfolgreich eingefügt';
+
+  @override
+  String filenamee(Object e, Object fileName) {
+    return 'Upload von \"$fileName\" fehlgeschlagen: $e';
+  }
+
+  @override
+  String newname(Object newName) {
+    return 'Umbenannt in \"$newName\"';
+  }
+
+  @override
+  String get msg4b342999 => 'Element löschen';
+
+  @override
+  String e17(Object e) {
+    return 'Löschen fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msg79d7fef7 => 'Neuer Remote-Ordner';
+
+  @override
+  String get msga98473f2 => 'Ordnername';
+
+  @override
+  String e18(Object e) {
+    return 'Ordner konnte nicht erstellt werden: $e';
+  }
+
+  @override
+  String get msg5ca05a9b => 'Remote-Verzeichnis';
+
+  @override
+  String get msga636c09d => 'Auf lokales Gerät kopieren';
+
+  @override
+  String get msga4c461a4 => 'Datei in lokale Zwischenablage herunterladen';
+
+  @override
+  String get msg425502fa => 'Herunterladen und vom Server löschen';
+
+  @override
+  String get msgc2b9f4b9 => 'Stammverzeichnis';
+
+  @override
+  String get msg2f7cd487 => 'Lokale Zwischenablage auf Server hochladen';
+
+  @override
+  String get msg905c34fa => 'Remote-Zwischenablage einfügen';
+
+  @override
+  String get msg8439c155 => 'Verbindung getrennt';
+
+  @override
+  String get msgda43df27 => 'Verbindung wiederholen';
+
+  @override
+  String get msga21f6ab1 => 'Leeres Verzeichnis';
+
+  @override
+  String get msge1c538b8 => 'Zwischenablage-Inhalt hier hochladen';
+
+  @override
+  String e19(Object e) {
+    return 'Download fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msg50eaf94d => 'Löschbestätigung';
+
+  @override
+  String get msgcb0da17b => 'Löschen...';
+
+  @override
+  String get msg4805c385 => 'App-Verwaltung';
+
+  @override
+  String get msg93bc1f09 => 'Liste aktualisieren';
+
+  @override
+  String get msg32e490fe => 'Installierte Benutzer-Apps';
+
+  @override
+  String get apk2 => 'Gesicherte APKs';
+
+  @override
+  String get msg8936ded6 => 'Paketname oder App-Name suchen...';
+
+  @override
+  String get msgd8b3fc58 => 'Nach Größe sortieren';
+
+  @override
+  String get msgbe1399f0 => 'Alphabetisch sortieren';
+
+  @override
+  String get msg9ad67f11 => 'Nach Sicherungsdatum sortieren';
+
+  @override
+  String get msgb0681bd4 => 'Präzise Speicherberechnung';
+
+  @override
+  String get msg34cd846c => 'Zugriffsstatistik-Berechtigung erteilen';
+
+  @override
+  String get msga22ddaae => 'Speicheranalyse';
+
+  @override
+  String get msgaae779d4 => 'Speicher erneut scannen';
+
+  @override
+  String get msg7ae97495 => 'Gerätespeicher wird gescannt';
+
+  @override
+  String get msga5e5bf71 => 'Gesamtspeicher';
+
+  @override
+  String get msg652be256 => 'Kategorieaufschlüssel';
+
+  @override
+  String get msgb1a2c3d4 => 'Initializing...';
+
+  @override
+  String get msgc2d3e4f5 => 'Reading system memory...';
+
+  @override
+  String get msgd3e4f5a6 => 'Calculating app storage...';
+
+  @override
+  String get msge4f5a6b7 =>
+      'Analyzing files, categorizing assets, and reading installed apps space...';
+
+  @override
+  String msgf5a6b7c8(Object size) {
+    return '$size free';
+  }
+
+  @override
+  String msga6b7c8d9(Object size, Object percent) {
+    return '$size used ($percent%)';
+  }
+
+  @override
+  String msgb7c8d9e0(Object percent) {
+    return '$percent% of total storage';
+  }
+
+  @override
+  String get msgc8d9e0f1 => 'System / Other';
+
+  @override
+  String ui_drag_archive_created(Object name) {
+    return 'Archive \"$name\" created successfully';
+  }
+
+  @override
+  String ui_drag_archive_failed(Object error) {
+    return 'Failed to create archive: $error';
+  }
+
+  @override
+  String get ui_backup_success =>
+      'Einstellungen in ZenFile/Backups/Settings/ gesichert';
+
+  @override
+  String ui_backup_failed(Object error) {
+    return 'Sicherung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get ui_restore_invalid_file =>
+      'Bitte wählen Sie eine gültige .json Einstellungs-Sicherungsdatei aus';
+
+  @override
+  String get ui_restore_success =>
+      'Einstellungen erfolgreich wiederhergestellt!';
+
+  @override
+  String ui_restore_failed(Object error) {
+    return 'Wiederherstellung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get msgeb3d7d70 => 'App deinstallieren';
+
+  @override
+  String get msg6eb319a1 => 'Ausgewählte App wird gesichert...';
+
+  @override
+  String get msg7fbfdce6 => 'Keine Apps gefunden';
+
+  @override
+  String get msg753cdb55 => 'App starten';
+
+  @override
+  String get apk3 => 'APK sichern';
+
+  @override
+  String get apk4 => 'APK wird gesichert...';
+
+  @override
+  String get apk5 => 'APK-Sicherung fehlgeschlagen';
+
+  @override
+  String get apk6 => 'APK-Datei teilen';
+
+  @override
+  String get copy_package_name => 'Paketnamen kopieren';
+
+  @override
+  String get msga0b18169 => 'Sicherungsdatei teilen';
+
+  @override
+  String get msgb443cd06 => 'Sicherungsdatei löschen';
+
+  @override
+  String e20(Object e) {
+    return 'Fehler beim Laden der Datei: $e';
+  }
+
+  @override
+  String get msg24c6ab0f => 'Datei erfolgreich gespeichert';
+
+  @override
+  String count3(Object count) {
+    return '$count Vorkommen ersetzt';
+  }
+
+  @override
+  String get msgffb01e5b => 'Reintext';
+
+  @override
+  String get msg7902d9c0 => 'Syntax wählen';
+
+  @override
+  String get msgc856a077 => 'Suchen / Ersetzen';
+
+  @override
+  String get msg7f2c95cd => 'Datei speichern';
+
+  @override
+  String get msg084e9388 => 'Zoom entsperren';
+
+  @override
+  String get msgf387265a => 'Zeilenumbruch: Ein';
+
+  @override
+  String get msg1045ba75 => 'Zeilenumbruch: Aus';
+
+  @override
+  String get msg96f0ad7d => 'Bearbeitungssperre: Ein';
+
+  @override
+  String get msg349ab61d => 'Bearbeitungssperre: Aus';
+
+  @override
+  String get msg0cee3cd1 => 'Zeilennummern ausblenden';
+
+  @override
+  String selectedlanguage(Object _selectedLanguage) {
+    return 'Syntax ($_selectedLanguage)';
+  }
+
+  @override
+  String get msg0dac421f => 'Ersetzen durch...';
+
+  @override
+  String get msg52709ae1 => 'Alle ersetzen';
+
+  @override
+  String get msg4ecba8f6 => 'Tab';
+
+  @override
+  String e21(Object e) {
+    return 'Fehler beim Laden des Tresors: $e';
+  }
+
+  @override
+  String get msg4828116a => 'Versteckte Dateien';
+
+  @override
+  String get msg3bf31dfe => 'Passwort zum Entsperren eingeben';
+
+  @override
+  String get pin => 'PIN zum Entsperren der Wallet eingeben';
+
+  @override
+  String get pin1 => 'Legen Sie Ihre 4-stellige Wallet-PIN fest';
+
+  @override
+  String get pin2 => 'Bestätigen Sie Ihre 4-stellige PIN';
+
+  @override
+  String get msgbb590f19 => 'Privater Tresor';
+
+  @override
+  String get msgaa43fa46 => 'Alles löschen';
+
+  @override
+  String get msgc16eed0e => 'Wiedergabegeschwindigkeit';
+
+  @override
+  String get msg8f106217 => 'Steuerung sperren';
+
+  @override
+  String get msg1f41f25d => 'Wiederholungsmodus';
+
+  @override
+  String get msg4d2abc8c => 'Medienpfad in Zwischenablage kopiert.';
+
+  @override
+  String get http1 => 'Lokaler HTTP-Freigabeserver gestoppt.';
+
+  @override
+  String get msg2904d894 => 'Sicherer Proxy-Relay wird hergestellt...';
+
+  @override
+  String get msga1b2c3d4 => 'Zurück zum übergeordneten Ordner';
+
+  @override
+  String get msga1b2c3d5 => 'Wie richtet man Shizuku ein?';
+
+  @override
+  String get msga1b2c3d6 => 'Speicherberechtigung erforderlich';
+
+  @override
+  String get msga1b2c3d7 => 'Berechtigung erteilen';
+
+  @override
+  String get msg_media_only_permission_title => 'Nur Medien-Dateiberechtigung';
+
+  @override
+  String get msg_media_only_permission_desc =>
+      'Derzeit wurde nur der Zugriff auf Mediendateien gewährt. Der Dateimanager kann Funktionen wie Umbenennen, Ausschneiden, Löschen usw. nicht ordnungsgemäß verwenden. Bitte gewähren Sie \"Zugriff auf alle Dateien\" für volle Funktionalität.';
+
+  @override
+  String get msg_grant_full_storage_permission =>
+      'Vollen Speicherzugriff gewähren';
+
+  @override
+  String get msg_permission_request_title => '授权请求';
+
+  @override
+  String get msg_permission_request_desc =>
+      '为了访问您设备上的文件，您需要手动为 ZenFile 授予[所有文件访问]权限，点击确定后进入设置界面，选择[ZenFile]并开启授权。';
+
+  @override
+  String get ui_open_settings => 'Einstellungen öffnen';
+
+  @override
+  String get ui_open_settings_desc =>
+      'Die Speicherberechtigung wurde dauerhaft verweigert. Bitte gehen Sie zu den Systemeinstellungen, um die Dateiverwaltungsberechtigung manuell zu erteilen.';
+
+  @override
+  String get msg2c146598 =>
+      'Internet-Cloud-Tunnel online! Temporärer Link aktiviert.';
+
+  @override
+  String get msg4a5d26f4 => 'Link in Zwischenablage kopiert!';
+
+  @override
+  String type(Object type) {
+    return 'Mit einem anderen Gerät scannen, um $type sofort zu öffnen.';
+  }
+
+  @override
+  String get msgc8390d74 => 'Web-Freigabe-Zentrum';
+
+  @override
+  String get msg5345cdce => 'Internet-Freigabelink';
+
+  @override
+  String get http2 => 'HTTP Lokaler Freigabeserver';
+
+  @override
+  String get wifi =>
+      'Erlauben Sie anderen Geräten im selben WLAN, über Webbrowser auf Ihre Dateien zuzugreifen, sie anzuzeigen und zu streamen.';
+
+  @override
+  String get msg73c512df => 'Server online und streaming';
+
+  @override
+  String get url1 => 'URL kopieren';
+
+  @override
+  String get msg22b03c02 => 'QR-Code';
+
+  @override
+  String sharedir(Object shareDir) {
+    return 'Freigabeverzeichnis: $shareDir';
+  }
+
+  @override
+  String get msge6a29aa4 => 'Server im Leerlauf';
+
+  @override
+  String get wifi1 =>
+      'Bitte stellen Sie sicher, dass andere Geräte im selben WLAN-Netzwerk sind, und starten Sie dann den Server.';
+
+  @override
+  String get msg974465c1 => 'Webserver starten';
+
+  @override
+  String get msg27d5bd3c =>
+      'Generieren Sie einen sicheren temporären öffentlichen Tunnel-Link. Teilen Sie diesen Link mit jedem überall im Internet, damit sie Dateien mit hoher Geschwindigkeit herunterladen können, unabhängig von der Dateigröße.';
+
+  @override
+  String get msg66a09a42 => 'Temporärer Freigabelink (gültig für 24 Stunden):';
+
+  @override
+  String get msg879058ce => 'Link kopieren';
+
+  @override
+  String get msg7ed199f8 => 'Verbundene Browser-Clients';
+
+  @override
+  String get msgb77e4adf => 'Warten auf eingehende Internet-Downloads...';
+
+  @override
+  String get msga61778bc => 'Internetfreigabe nicht aktiviert';
+
+  @override
+  String get msga3c80551 => 'Cloud-Freigabe deaktivieren';
+
+  @override
+  String get msg6466e61e => 'Internet-Freigabelink aktivieren';
+
+  @override
+  String web_share_internet_failed(String error) {
+    return 'Aktivierung des Internet-Freigabelinks fehlgeschlagen: $error';
+  }
+
+  @override
+  String ui_remote_load_failed(String error) {
+    return 'Remoteverzeichnis konnte nicht geladen werden: $error';
+  }
+
+  @override
+  String get msg67bd9375 => 'Verarbeitung...';
+
+  @override
+  String get msg3fa72416 => 'Dateien werden umbenannt...';
+
+  @override
+  String get msg7dbbef0e => 'Bitte warten, Ordnerinhalt wird aktualisiert';
+
+  @override
+  String get msg1a2d9a44 => 'Originalname (%)';
+
+  @override
+  String get msgcb029197 => 'Fortlaufende Nummer (#)';
+
+  @override
+  String get msgb6d8a14f => 'Dreistellige fortlaufende Nummer (###)';
+
+  @override
+  String n(Object n) {
+    return 'Dateiname ohne Erweiterung ($n)';
+  }
+
+  @override
+  String de(Object de) {
+    return 'Erweiterung mit Punkt ($de)';
+  }
+
+  @override
+  String e22(Object e) {
+    return 'Erweiterung ohne Punkt ($e)';
+  }
+
+  @override
+  String n1(Object N) {
+    return 'Vollständiger Dateiname mit Erweiterung ($N)';
+  }
+
+  @override
+  String get msg0e9dc63a => 'Namensmuster';
+
+  @override
+  String get msg4a63edba => 'Erweiterung';
+
+  @override
+  String get msga420ad79 => 'Startnummer';
+
+  @override
+  String get msg9857973d => 'Text suchen';
+
+  @override
+  String get msg1605701e => 'Ersetzen durch';
+
+  @override
+  String get msgd35f80c8 => 'Inhalt ersetzen';
+
+  @override
+  String get msg32c61dab => 'Umbenennungs-Vorschau';
+
+  @override
+  String get msg92642e0e => 'Zurück zur Bearbeitung';
+
+  @override
+  String get msgde88d67a => 'Datei existiert bereits';
+
+  @override
+  String get msge59e35b5 => 'Auf alle verbleibenden Konflikte anwenden';
+
+  @override
+  String get msg27dfaae5 => 'Beide behalten';
+
+  @override
+  String get msg6cfbf05d => 'Datei umbenennen';
+
+  @override
+  String get msg25f747ce => 'Archiv erstellen';
+
+  @override
+  String get msged5f808e => 'Komprimierungsformat';
+
+  @override
+  String get mb => 'Teilgröße (MB, optional)';
+
+  @override
+  String get msgac52af6a => 'Leer lassen, um einzelnes Archiv zu erstellen';
+
+  @override
+  String get msgdf2ef7f5 => 'Separates Archiv für jede Datei erstellen';
+
+  @override
+  String get msgb52d4a73 => 'Neuer Tab';
+
+  @override
+  String get msg4e9c344a => 'Tab duplizieren';
+
+  @override
+  String get msg7716532d => 'Andere Tabs schließen';
+
+  @override
+  String get msgd78603eb => 'Doppeltippen zum Schließen des Tabs';
+
+  @override
+  String selectedcount(Object selectedCount) {
+    return '$selectedCount Elemente';
+  }
+
+  @override
+  String e23(Object e) {
+    return 'Archiv konnte nicht erstellt werden: $e';
+  }
+
+  @override
+  String get msgc4d7eece => 'Archiv extrahieren';
+
+  @override
+  String get msgf15821d0 => 'In Ordner extrahieren';
+
+  @override
+  String get msg_extract_to => 'Entpacken nach…';
+
+  @override
+  String get ui_current_directory => 'Aktuelles Verzeichnis';
+
+  @override
+  String get ui_custom_directory => 'Benutzerdefiniertes Verzeichnis';
+
+  @override
+  String get msgff69affd => 'Passwort (falls verschlüsselt)';
+
+  @override
+  String get msg67eda5e6 => 'Alle Dateien';
+
+  @override
+  String get msg8b2fcb31 =>
+      'Alle Dateien und Ordner in diesem Verzeichnis anzeigen';
+
+  @override
+  String get pdfword =>
+      'PDF, Word-Dokumente, Tabellenkalkulationen, Text und E-Books';
+
+  @override
+  String get jpegpngwebp => 'JPEG, PNG, WebP und Rohfotoformate';
+
+  @override
+  String get mp3wavaac => 'MP3, WAV, AAC und Hi-Fi-Audio';
+
+  @override
+  String get mp4mkvwebm => 'MP4, MKV, WebM und hochauflösende Videoclips';
+
+  @override
+  String get zip7zrar => 'ZIP, 7Z, RAR und andere komprimierte Dateien';
+
+  @override
+  String get msg6d3e48cc =>
+      'Kategorie wählen, um nur passende Dateien anzuzeigen';
+
+  @override
+  String e24(Object e) {
+    return 'Remote-Miniaturvorschaubild-Laden fehlgeschlagen: $e';
+  }
+
+  @override
+  String get msg32a1bd25 => '1 Element';
+
+  @override
+  String count4(Object count) {
+    return '$count Elemente';
+  }
+
+  @override
+  String get msg9d69d7a0 => 'Dateien werden verschoben...';
+
+  @override
+  String get ui_transferring_files => 'Dateien übertragen';
+
+  @override
+  String get ui_time_remaining => 'übrig';
+
+  @override
+  String get zenfile6 => 'ZenFile Benutzerdefiniertes Nativ-Erlebnis';
+
+  @override
+  String get built_in_zenfile_viewer => 'ZenFile eingebauter Viewer';
+
+  @override
+  String get msg42be43e6 => 'System-Externe App';
+
+  @override
+  String get msgd1fca831 => 'Mit Drittanbieter-App auf dem Gerät öffnen';
+
+  @override
+  String get msgdb75b769 => 'Nur einmal';
+
+  @override
+  String get msg959429a5 => 'Gerätedateien durchsuchen';
+
+  @override
+  String get msgc31116e3 => 'Neue Verbindung hinzufügen';
+
+  @override
+  String get msgf1d4ff50 => 'Benutzerdefiniert';
+
+  @override
+  String get msg490ac572 =>
+      'Keine angehefteten Verknüpfungen. Tippen Sie auf Anpassen, um welche hinzuzufügen.';
+
+  @override
+  String get msg445a43cb =>
+      'Ziehgriff (=) ziehen, um Startseiten-Symbole neu anzuordnen.';
+
+  @override
+  String get msg944d5ecd => 'Ordner-/Datei-Verknüpfung hinzufügen';
+
+  @override
+  String get msg4f356348 => 'Benutzerdefinierter Pfad';
+
+  @override
+  String get msg94733bec => 'Verknüpfung löschen';
+
+  @override
+  String get msg5c29ad2f => 'Speicherort wiederherstellen';
+
+  @override
+  String get msg21de5dd7 => 'Benutzerdefinierter Scan-Speicherort:';
+
+  @override
+  String get msg4bb81f99 => 'Keine benutzerdefinierten Pfade hinzugefügt.';
+
+  @override
+  String get msgf544c399 => 'Oktober';
+
+  @override
+  String get msgc0615eb3 => 'Dezember';
+
+  @override
+  String get msg54355dd8 => 'Aktuelle Dateien';
+
+  @override
+  String get msgd5eac3a3 => 'Eingeschränkte Systemordner';
+
+  @override
+  String get android11androiddataandroidobbzenfile =>
+      'Android 11+ schränkt den Standardzugriff auf Android/data und Android/obb Ordner ein, um App-Daten zu schützen. Um diese Dateien anzuzeigen und zu ändern, benötigt ZenFile erweiterte Berechtigungen.';
+
+  @override
+  String get root => 'Root-Zugriff verwenden (Superuser)';
+
+  @override
+  String get shizukuroot => 'Shizuku-Zugriff gewähren (Kein Root erforderlich)';
+
+  @override
+  String get fusebypass => '一键兼容访问';
+
+  @override
+  String selectedcount1(Object selectedCount) {
+    return '$selectedCount Elemente ausgewählt';
+  }
+
+  @override
+  String selectedcount2(Object selectedCount) {
+    return 'Sind Sie sicher, dass Sie $selectedCount Elemente löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get msga9b87614 => 'Ausgewählte Elemente losgelöst';
+
+  @override
+  String get msg84e4fac9 => 'Lösen';
+
+  @override
+  String get msg3be9abab => 'Größe wird berechnet...';
+
+  @override
+  String get msg7704aa2c => 'Ausgewählter Pfad:';
+
+  @override
+  String label1(Object label) {
+    return '$label in Zwischenablage kopiert';
+  }
+
+  @override
+  String selectedcount3(Object selectedCount) {
+    return '$selectedCount Elemente ausgewählt';
+  }
+
+  @override
+  String get msg8b73264b => 'Dateien (lange drücken, um Öffnen mit zu wählen)';
+
+  @override
+  String get msgc5c0646c => 'Auswahl kopieren';
+
+  @override
+  String get msg8e6d4604 => 'Auswahl ausschneiden';
+
+  @override
+  String get msg1058354c => 'Eigenschaften & Informationen';
+
+  @override
+  String usedstoragestr(Object usedStorageStr) {
+    return '$usedStorageStr verwendet';
+  }
+
+  @override
+  String freestoragestr(Object freeStorageStr) {
+    return '$freeStorageStr verfügbar';
+  }
+
+  @override
+  String get msgc823e21b => 'Tab lösen';
+
+  @override
+  String get msg7d6c1284 =>
+      'Keine übereinstimmenden Verzeichnisse oder Dateien gefunden';
+
+  @override
+  String path(Object path) {
+    return 'Pfad existiert nicht: $path';
+  }
+
+  @override
+  String get msg6cbbf7d9 => 'Absoluten Pfad eingeben...';
+
+  @override
+  String get msgf13fc21c => 'Remote';
+
+  @override
+  String get msg41e625d1 => 'Remote-Verbindung hinzufügen';
+
+  @override
+  String get msg8755e992 => 'Heller Modus';
+
+  @override
+  String get msg1cf6fcd3 => 'Weitere Einstellungen';
+
+  @override
+  String get msgeef7e30c => 'Premium-Medien-Suite';
+
+  @override
+  String msg2ad64aa7(Object urlString) {
+    return 'Link kann nicht geöffnet werden: $urlString';
+  }
+
+  @override
+  String get msg30d17f96 => 'Haupt-Highlights';
+
+  @override
+  String get msgaba638c4 => 'Tresor-Sicherheit';
+
+  @override
+  String get msgd309e9ea => 'Server-Zentrum';
+
+  @override
+  String get msg4a5f936c => 'Kontakt & Teilen';
+
+  @override
+  String get msg4d48a010 => 'ZenFile - Schöner Dateimanager';
+
+  @override
+  String get msg1f4c0192 => 'Dem Autor einen Kaffee spendieren';
+
+  @override
+  String get msg2eceaa85 => 'Autor bedanken';
+
+  @override
+  String get msg305734ce => 'Änderungsprotokoll';
+
+  @override
+  String get msg1c80891a =>
+      'Remote-Datei-Miniaturvorschau auf der Browse-Seite hinzugefügt';
+
+  @override
+  String get msg212f8f9e =>
+      'Behoben: Remote-Datei kann nicht geöffnet/abgespielt werden';
+
+  @override
+  String get msgd0cf310e =>
+      'Einheitliche Remote-Datei-Cache-Verzeichnisverwaltung optimiert';
+
+  @override
+  String get msg072f2022 =>
+      'Einfinger-Wischen in Zweifinger-Wischen geändert (um versehentliche Zurück-Geste zu vermeiden)';
+
+  @override
+  String get msg66517dc4 => 'Schriftart-Optionstitel vollständig lokalisiert';
+
+  @override
+  String get msgacad92c8 =>
+      'Funktion \'Verhindern, dass linke Zurück-Geste Seitenleiste öffnet\' entfernt';
+
+  @override
+  String get msg09d0e1b6 =>
+      'Behoben: Alternativer Symbolwechsel funktioniert nicht';
+
+  @override
+  String get msg2d1872c8 => 'Texteditor-Menü vollständig lokalisiert';
+
+  @override
+  String get msg2e35eef7 => 'Doppelpanel-Dateibrowser';
+
+  @override
+  String get msge96aa2cd => 'Integrierter Mediaplayer';
+
+  @override
+  String get msg49a6c41e => 'App-Symbol-Umschalter (mehrere Stile verfügbar)';
+
+  @override
+  String get msg4d82be7c => 'Plan für nächste Versionsaktualisierung';
+
+  @override
+  String get msg2c8957dd => 'Bekannte Probleme';
+
+  @override
+  String get msg11cb01fc => 'Remoteserver-Videowiedergabe während des Caching';
+
+  @override
+  String get msg60a4d643 =>
+      'Benutzerdefiniertes Symbol ändert Desktop-Symbol nach Upload nicht (wird in nächster Version verbessert)';
+
+  @override
+  String get msg9e68ea42 => 'Speichern fehlgeschlagen, bitte erneut versuchen';
+
+  @override
+  String get cat_images => 'Bilder';
+
+  @override
+  String get cat_videos => 'Videos';
+
+  @override
+  String get cat_audios => 'Audio';
+
+  @override
+  String get cat_documents => 'Dokumente';
+
+  @override
+  String get cat_downloads => 'Downloads';
+
+  @override
+  String get cat_screenshots => 'Bildschirmfotos';
+
+  @override
+  String get cat_recent => 'Aktuell';
+
+  @override
+  String get cat_network => 'Remote';
+
+  @override
+  String get cat_apps => 'Anwendungen';
+
+  @override
+  String get cat_settings => 'Einstellungen';
+
+  @override
+  String get cat_storage => 'Speicherplatz';
+
+  @override
+  String get cat_service => 'Dienst';
+
+  @override
+  String get cat_manage => 'Verwalten';
+
+  @override
+  String get cat_config => 'Konfiguration';
+
+  @override
+  String get cat_analyze => 'Analysieren';
+
+  @override
+  String get cat_clean => 'Aufräumen';
+
+  @override
+  String get junk_clean_title => 'Aufräumen';
+
+  @override
+  String get junk_clean_scanning => 'Junk-Dateien werden gescannt…';
+
+  @override
+  String junk_clean_scannable(Object size) {
+    return '$size freigebbar';
+  }
+
+  @override
+  String get junk_clean_button => 'Jetzt aufräumen';
+
+  @override
+  String get junk_clean_confirm_title => 'Junk-Dateien bereinigen';
+
+  @override
+  String junk_clean_confirm_body(Object size) {
+    return 'App-Cache und temporäre Dateien werden bereinigt und etwa $size freigegeben. Backups, Absturzberichte und empfangene Dateien bleiben erhalten.';
+  }
+
+  @override
+  String get junk_clean_cache_item =>
+      'App-Cache (Miniaturansichten, Remote-Cache)';
+
+  @override
+  String get junk_clean_temp_item => 'Temporäre Dateien (Download-Reste)';
+
+  @override
+  String junk_clean_done(Object size) {
+    return '$size freigegeben';
+  }
+
+  @override
+  String get junk_clean_none => 'Keine Junk-Dateien zu bereinigen';
+
+  @override
+  String get junk_clean_failed =>
+      'Bereinigung fehlgeschlagen, bitte später erneut versuchen';
+
+  @override
+  String get cat_vault => 'Tresor';
+
+  @override
+  String get cat_vault_desc => 'Sicherer Speicher';
+
+  @override
+  String get cat_quick_categories => 'Kategorien';
+
+  @override
+  String get ui_nav => 'Lokal';
+
+  @override
+  String get ui_backup_passphrase_title => 'Backup-Passphrase';
+
+  @override
+  String get ui_backup_passphrase_hint =>
+      'Geben Sie eine Passphrase ein, um vertrauliche Daten im Backup zu verschlüsseln (Remote-Passwörter, Tresor-Passwörter usw.). Leer lassen, um vertrauliche Daten auszuschließen; diese müssen nach der Wiederherstellung neu konfiguriert werden.';
+
+  @override
+  String get ui_restore_passphrase_title => 'Backup-Passphrase eingeben';
+
+  @override
+  String get ui_restore_passphrase_hint =>
+      'Dieses Backup enthält verschlüsselte vertrauliche Daten. Geben Sie die Passphrase ein, um sie wiederherzustellen; andernfalls müssen die Passwörter nach der Wiederherstellung manuell neu konfiguriert werden.';
+
+  @override
+  String get ui_backup_passphrase_wrong =>
+      'Falsche Passphrase, bitte erneut versuchen';
+
+  @override
+  String get ui_restore_secrets_skipped =>
+      'Vertrauliche Daten wurden nicht wiederhergestellt; Passwörter müssen manuell neu konfiguriert werden';
+
+  @override
+  String get update_err_network =>
+      'Keine Verbindung zum Server. Prüfe dein Netzwerk und versuche es erneut.';
+
+  @override
+  String get update_err_timeout =>
+      'Zeitüberschreitung. Prüfe Netzwerk oder Proxy und versuche es erneut.';
+
+  @override
+  String get update_err_rate_limit =>
+      'GitHub-Limit erreicht. Bitte später erneut versuchen.';
+
+  @override
+  String update_err_http(String code) {
+    return 'Der Server hat einen Fehler zurückgegeben (HTTP $code)';
+  }
+
+  @override
+  String get update_err_malformed =>
+      'Unerwartete Antwort vom Server. Bitte später erneut versuchen.';
+
+  @override
+  String get update_err_version_unknown =>
+      'Aktuelle Version nicht lesbar. Starte die App neu und versuche es erneut.';
+
+  @override
+  String update_remote_version(String version) {
+    return 'Neueste: $version';
+  }
+
+  @override
+  String update_checked_at(String time) {
+    return 'Geprüft um $time';
+  }
+
+  @override
+  String get update_degraded_hint =>
+      'Auf Web-Prüfung zurückgestuft – In-App-Download nicht möglich';
+
+  @override
+  String get update_source_label => 'Update-Quelle';
+
+  @override
+  String get update_source_default => 'GitHub offiziell';
+
+  @override
+  String get update_source_custom => 'Eigene Quelle';
+
+  @override
+  String get update_source_dialog_title => 'Eigene Update-Quelle';
+
+  @override
+  String get update_source_dialog_desc =>
+      'Leer lassen für die offizielle GitHub-API. Du kannst einen Mirror oder einen eigenen Endpunkt eintragen, der JSON in gleicher Struktur liefert; REPO in der URL steht für den Repository-Pfad.';
+
+  @override
+  String get update_source_hint => 'https://example.com/…/releases/latest';
+
+  @override
+  String get update_source_invalid =>
+      'Ungültige Adresse – sie muss mit http:// oder https:// beginnen';
+
+  @override
+  String get ui_paste_and_clear => 'Einfügen und leeren';
+
+  @override
+  String get ui_cut_paste_hint =>
+      'Ausschneiden = Verschieben; danach wird geleert';
+
+  @override
+  String get ui_search_in_settings => 'In den Einstellungen suchen';
+
+  @override
+  String get ui_search_group_nav => 'Navigation';
+
+  @override
+  String get ui_home => 'Start';
+
+  @override
+  String get ui_recycle_bin => 'Papierkorb';
+
+  @override
+  String get ui_dark_mode => 'Dunkler Modus';
+
+  @override
+  String get ui_personalize_settings => 'Einstellungen';
+
+  @override
+  String get ui_compress => 'Komprimieren';
+
+  @override
+  String get ui_copy => 'Kopieren';
+
+  @override
+  String get ui_cut => 'Ausschneiden';
+
+  @override
+  String get ui_move => 'Move';
+
+  @override
+  String get ui_apply => 'Apply';
+
+  @override
+  String get ui_delete => 'Löschen';
+
+  @override
+  String get ui_select_all => 'Alles auswählen';
+
+  @override
+  String get ui_cancel => 'Abbrechen';
+
+  @override
+  String get ui_confirm => 'Bestätigen';
+
+  @override
+  String get ui_move_here => 'Hierher verschieben';
+
+  @override
+  String get ui_properties => 'Eigenschaften';
+
+  @override
+  String get ui_info => 'Info';
+
+  @override
+  String get ui_open => 'Öffnen';
+
+  @override
+  String get ui_close => 'Schließen';
+
+  @override
+  String get ui_more => 'Mehr';
+
+  @override
+  String get ui_appearance_theme => 'Erscheinung & Thema';
+
+  @override
+  String get ui_list_layout_style => 'Listen- & Layout-Stil';
+
+  @override
+  String get ui_media_preferences => 'Medienpräferenzen';
+
+  @override
+  String get ui_file_actions_viewers => 'Dateiaktionen & Betrachter';
+
+  @override
+  String get ui_no_settings_found => 'Keine Einstellungen gefunden';
+
+  @override
+  String get ui_show_action_bar => 'Aktionsleiste anzeigen';
+
+  @override
+  String get ui_show_remote_cloud_badge =>
+      'Cloud-Symbol für Remote-Dateien anzeigen';
+
+  @override
+  String get msg_remote_cloud_badge =>
+      'Zeigt ein Cloud-Symbol auf entfernten Dateien und Ordnern, um sie von lokalen zu unterscheiden';
+
+  @override
+  String get ui_use_24h_format => '24-Stunden-Format verwenden';
+
+  @override
+  String get ui_show_folder_contents_count => 'Ordnerinhaltanzahl anzeigen';
+
+  @override
+  String get ui_set_as_home => 'Als Startseite festlegen';
+
+  @override
+  String get ui_show_folder_size => 'Ordnergröße anzeigen';
+
+  @override
+  String get ui_show_bottom_action_bar => 'Navigationsleistenposition';
+
+  @override
+  String get ui_hide_action_text =>
+      'Aktionsleisten-Textbeschriftungen ausblenden';
+
+  @override
+  String get ui_show_media_previews => 'Lokale Medien-Miniaturvorschaubilder';
+
+  @override
+  String get ui_adaptive_multiline_names => 'Adaptive mehrzeilige Dateinamen';
+
+  @override
+  String get ui_hide_action_menu_buttons =>
+      'Aktions-Menü-Schaltflächen ausblenden';
+
+  @override
+  String get ui_show_action_menu_buttons =>
+      'Aktions-Menü-Schaltflächen anzeigen';
+
+  @override
+  String get ui_action_menu_subtitle =>
+      'Anzeigemodus für die Drei-Punkte-Menütaste wählen. Bei Ausblendung wird kein Drei-Punkte-Knopf neben Dateien und Ordnern angezeigt.';
+
+  @override
+  String get ui_action_menu_mode_all => 'In allen Modi anzeigen';
+
+  @override
+  String get ui_action_menu_mode_single => 'Nur im Einzelfenstermodus';
+
+  @override
+  String get ui_action_menu_mode_dual => 'Nur im Doppel-Fenstermodus';
+
+  @override
+  String get ui_time_date_format => 'Datums- und Zeitanzeige';
+
+  @override
+  String get ui_select_time_date_format => 'Datums- und Zeitformat auswählen';
+
+  @override
+  String get ui_date_format => 'Datumsformat';
+
+  @override
+  String get ui_time_format => 'Zeitformat';
+
+  @override
+  String get ui_date_fmt_dmy => 'Tag/Monat/Jahr';
+
+  @override
+  String get ui_date_fmt_mdy => 'Monat/Tag/Jahr';
+
+  @override
+  String get ui_date_fmt_ymd => 'Jahr/Monat/Tag';
+
+  @override
+  String get ui_time_fmt_12h => '12 Stunden (AM/PM)';
+
+  @override
+  String get ui_time_fmt_24h => '24 Stunden';
+
+  @override
+  String get ui_select_action_menu_mode => 'Anzeigemodus auswählen';
+
+  @override
+  String get ui_enable_drag_drop => 'Drag & Drop aktivieren';
+
+  @override
+  String get ui_confirm_drag_drop => 'Drag & Drop bestätigen';
+
+  @override
+  String get ui_enable_multi_tabs => 'Mehrere Tabs aktivieren';
+
+  @override
+  String get ui_multi_tab_scope_title => 'Geltungsbereich für mehrere Tabs';
+
+  @override
+  String get ui_multi_tab_scope_single_only => 'Nur Einzelfenster';
+
+  @override
+  String get ui_multi_tab_scope_split_only => 'Nur Geteilter Bildschirm';
+
+  @override
+  String get ui_multi_tab_scope_all => 'Alle Fenster';
+
+  @override
+  String get ui_multi_tab_scope_split_only_desc =>
+      'Mehrere Tabs nur im Dual-Fenster-Modus aktivieren';
+
+  @override
+  String get ui_multi_tab_scope_all_desc =>
+      'Mehrere Tabs im Einzel- und Dual-Fenster-Modus aktivieren';
+
+  @override
+  String get ui_multi_tab_scope_subtitle =>
+      'Wählen Sie, wo mehrere Tabs gelten';
+
+  @override
+  String get ui_enable_split_screen => 'Geteilten Bildschirm aktivieren';
+
+  @override
+  String get ui_password_auth => 'Passwort-Authentifizierung';
+
+  @override
+  String get ui_ssh_key_auth => 'SSH-Schlüssel-Authentifizierung';
+
+  @override
+  String get ui_private_key_file => 'Privater Schlüsseldatei';
+
+  @override
+  String get ui_passphrase => 'Passphrase';
+
+  @override
+  String get ui_optional => 'Optional';
+
+  @override
+  String get ui_ssh_key_password_hint =>
+      'Nur erforderlich, wenn der private Schlüssel passphrasengeschützt ist';
+
+  @override
+  String get ui_single_window => 'Einzelnes Fenster';
+
+  @override
+  String get ui_dual_window => 'Doppeltes Fenster';
+
+  @override
+  String get ui_filter_by_category => 'Nach Kategorie filtern';
+
+  @override
+  String get ui_all_files => 'Alle';
+
+  @override
+  String get ui_filter_others => 'Sonstiges';
+
+  @override
+  String get ui_remember_filter => 'Filter merken';
+
+  @override
+  String get msg_remember_filter_desc =>
+      'Nur für diese Sitzung, wenn deaktiviert';
+
+  @override
+  String get ui_app_icon => 'App-Symbol';
+
+  @override
+  String get ui_emerald_green => 'Neon-Cyan';
+
+  @override
+  String get ui_deep_red => 'Dunkelrot';
+
+  @override
+  String get ui_square => 'Quadrat';
+
+  @override
+  String get ui_circle => 'Kreis';
+
+  @override
+  String get ui_1_day_after => '1 Tag später';
+
+  @override
+  String get ui_no_auto_clean => 'Keine automatische Bereinigung';
+
+  @override
+  String get ui_daily => 'Täglich';
+
+  @override
+  String get ui_weekly => 'Wöchentlich';
+
+  @override
+  String get ui_monthly => 'Monatlich';
+
+  @override
+  String ui_every_n_days(Object days) {
+    return 'Alle $days Tage';
+  }
+
+  @override
+  String ui_clear_cache_failed(Object e) {
+    return 'Cache konnte nicht geleert werden: $e';
+  }
+
+  @override
+  String get ui_clear_remote_cache => 'Remote-Cache leeren';
+
+  @override
+  String get ui_view_cache_dir => 'Cache-Verzeichnis anzeigen';
+
+  @override
+  String get ui_remote_media_thumbnail =>
+      'Remote-Medien-Miniaturvorschaubilder';
+
+  @override
+  String ui_auto_clean_remote_cache(Object label) {
+    return 'Remoteserver-Cache periodisch automatisch bereinigen: $label';
+  }
+
+  @override
+  String ui_custom_font_with_name(Object name) {
+    return 'Benutzerdefinierte Schriftart ($name)';
+  }
+
+  @override
+  String get ui_import_custom_font =>
+      'Benutzerdefinierte Schriftart importieren (.ttf/.otf)';
+
+  @override
+  String ui_custom_font_applied(Object name) {
+    return 'Benutzerdefinierte Schriftart \"$name\" erfolgreich angewendet!';
+  }
+
+  @override
+  String get ui_invalid_file_type => 'Ungültiger Dateityp';
+
+  @override
+  String get ui_language => 'Sprache';
+
+  @override
+  String get ui_follow_system => 'Automatisch (System folgen)';
+
+  @override
+  String get ui_hide_nav_labels =>
+      'Untere Navigationsbeschriftungen ausblenden';
+
+  @override
+  String get ui_reset_default_viewers => 'Standard-Betrachter zurücksetzen';
+
+  @override
+  String get ui_trailing_info_when_hidden =>
+      'Nachfolgende Informationen wenn Menü versteckt';
+
+  @override
+  String get ui_go_up => 'Nach oben';
+
+  @override
+  String ui_cut_copy_items(String prefix, int count) {
+    return '$prefix · $count Elemente';
+  }
+
+  @override
+  String get ui_clipboard => 'Zwischenablage';
+
+  @override
+  String get ui_clear => 'Leeren';
+
+  @override
+  String get ui_paste => 'Einfügen';
+
+  @override
+  String get ui_file_name => 'Dateiname';
+
+  @override
+  String get ui_create => 'Erstellen';
+
+  @override
+  String get ui_create_new_directory => 'Neues Verzeichnis erstellen';
+
+  @override
+  String get ui_layout_mode => 'Layout-Modus';
+
+  @override
+  String get ui_grid_view => 'Rasteransicht';
+
+  @override
+  String get ui_name_asc => 'Name (A-Z)';
+
+  @override
+  String get ui_newest => 'Neueste';
+
+  @override
+  String get ui_oldest => 'Älteste';
+
+  @override
+  String get ui_size_small => 'Größe (Klein)';
+
+  @override
+  String get ui_type => 'Typ';
+
+  @override
+  String get ui_storage_volume => 'Speichervolume';
+
+  @override
+  String get ui_browse => 'Durchsuchen';
+
+  @override
+  String get ui_new => 'Neu';
+
+  @override
+  String ui_folders_count(int count) {
+    return 'Ordner: $count';
+  }
+
+  @override
+  String ui_files_count(int count) {
+    return 'Dateien: $count';
+  }
+
+  @override
+  String get ui_selection_mode => 'Auswahlmodus';
+
+  @override
+  String get ui_storage_and_sd => 'Speicher & SD-Karte';
+
+  @override
+  String get ui_images_only => 'Nur Bilder';
+
+  @override
+  String get ui_videos_only => 'Nur Videos';
+
+  @override
+  String get ui_show_folders => 'Ordner anzeigen';
+
+  @override
+  String get ui_files => 'Dateien';
+
+  @override
+  String get ui_delete_file_confirm =>
+      'Sind Sie sicher, dass Sie diese Datei löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get ui_done => 'Fertig';
+
+  @override
+  String get ui_name => 'Name';
+
+  @override
+  String get ui_path => 'Pfad';
+
+  @override
+  String get ui_size => 'Größe';
+
+  @override
+  String get ui_permissions => 'Berechtigungen';
+
+  @override
+  String get ui_contains => 'Enthält';
+
+  @override
+  String get ui_extract => 'Entpacken';
+
+  @override
+  String get ui_pin_to_top => 'Oben anheften';
+
+  @override
+  String get msg_select_all => 'Alles auswählen';
+
+  @override
+  String get ui_pinned_selected => 'Ausgewählte Elemente angeheftet';
+
+  @override
+  String get ui_filter_by_type => 'Dateien nach Typ filtern';
+
+  @override
+  String get ui_default_scan_locations => 'Standard-Scan-Speicherorte:';
+
+  @override
+  String get ui_exclude_location => 'Speicherort ausschließen';
+
+  @override
+  String get ui_add_custom_path => 'Benutzerdefinierten Pfad hinzufügen';
+
+  @override
+  String ui_added_custom_paths(int count) {
+    return '$count benutzerdefinierte Pfade hinzugefügt';
+  }
+
+  @override
+  String get ui_close_tab => 'Tab schließen';
+
+  @override
+  String get ui_close_all_tabs => 'Alle Tabs schließen';
+
+  @override
+  String get ui_close_all_tabs_message =>
+      'Alle geöffneten Tabs schließen? Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String ui_not_found_title(String title) {
+    return 'Kein $title gefunden';
+  }
+
+  @override
+  String get ui_oldest_first => 'Älteste zuerst';
+
+  @override
+  String get ui_sort_options => 'Sortieroptionen';
+
+  @override
+  String get ui_show_player_controller => 'Player-Steuerung anzeigen';
+
+  @override
+  String get ui_hide_player_controller => 'Player-Steuerung ausblenden';
+
+  @override
+  String get ui_scanning_category =>
+      'Standardordner werden gescannt… Geladene Elemente bleiben bedienbar';
+
+  @override
+  String get ui_refresh => 'Aktualisieren';
+
+  @override
+  String get ui_refresh_done => 'Aktualisierung abgeschlossen';
+
+  @override
+  String ui_selected_count(int count) {
+    return '$count Ausgewählt';
+  }
+
+  @override
+  String ui_permanently_delete_name(String name) {
+    return '\"$name\" dauerhaft löschen?';
+  }
+
+  @override
+  String ui_copied_count(int count) {
+    return '$count Elemente in Zwischenablage kopiert';
+  }
+
+  @override
+  String ui_cut_count(int count) {
+    return '$count Elemente in Zwischenablage ausgeschnitten';
+  }
+
+  @override
+  String get ui_read => 'Lesen';
+
+  @override
+  String get ui_write => 'Schreiben';
+
+  @override
+  String get ui_file => 'Datei';
+
+  @override
+  String get ui_backup_settings => 'Sicherung starten';
+
+  @override
+  String get ui_restore_settings => 'Wiederherstellung starten';
+
+  @override
+  String get ui_backup_info => 'Sicherungsinformationen';
+
+  @override
+  String get ui_backup_file => 'Sicherungsdatei';
+
+  @override
+  String get ui_no_backup_file => 'Keine Sicherungsdatei';
+
+  @override
+  String get ui_remote_connection => 'Remote-Verbindung';
+
+  @override
+  String ui_step_n_of_3(Object step) {
+    return 'Schritt $step / 3';
+  }
+
+  @override
+  String get ui_choose_network_service => 'Netzwerkdienst wählen';
+
+  @override
+  String get ui_connection_name => 'Verbindungsname';
+
+  @override
+  String get ui_protocol => 'Protokoll';
+
+  @override
+  String get ui_port => 'Port';
+
+  @override
+  String get ui_path_label => 'Pfad';
+
+  @override
+  String get ui_username_optional => 'Benutzername (Optional)';
+
+  @override
+  String get ui_share_name_optional => 'Freigabename (optional)';
+
+  @override
+  String get ui_share_name_hint =>
+      'z.B. /Public oder leer lassen für automatische Erkennung';
+
+  @override
+  String get ui_smb_desc => 'Lokales Netzwerk & SMB NAS-Freigabe';
+
+  @override
+  String get ui_connection_suffix => 'Verbindung';
+
+  @override
+  String get ui_back => 'Zurück';
+
+  @override
+  String get ui_connect => 'Verbinden';
+
+  @override
+  String get ui_web_share => 'Web-Freigabe';
+
+  @override
+  String get ui_network => 'Remote';
+
+  @override
+  String get log_i18n_full =>
+      'Vollständige Internationalisierung für Chinesisch/Englisch-Benutzeroberfläche';
+
+  @override
+  String get log_fix_selection_count =>
+      'Behoben: Datei-Auswahlanzahl wird nicht angezeigt';
+
+  @override
+  String get log_fix_remote_title =>
+      'Behoben: Anzeigeproblem des Remote-Verbindungsseitentitels';
+
+  @override
+  String get log_svg_thumbnail_category =>
+      'SVG-Miniaturvorschaubilder werden jetzt auf Kategorieseiten angezeigt';
+
+  @override
+  String get log_language_btn_top =>
+      'Sprachumschalt-Schaltfläche oben in den Einstellungen verschoben';
+
+  @override
+  String get log_fix_category_missing =>
+      'Behoben: Einige Kategorien werden im Englisch-Modus nicht angezeigt';
+
+  @override
+  String get log_text_editor =>
+      'Neue Texteditor-Funktionen: Neue Datei, Speichern unter, Rückgängig/Wiederholen';
+
+  @override
+  String get log_text_editor_settings =>
+      'Texteditor-Einstellungen beibehalten (Zeilenumbruch, Zeilennummern, Lesemodus)';
+
+  @override
+  String get log_10_languages =>
+      'Unterstützung für 10 Sprachen (Chinesisch, Englisch, Japanisch, Koreanisch, Deutsch, Französisch, Spanisch, Russisch, Arabisch)';
+
+  @override
+  String get log_fix_l10n_hardcode => 'Mehrere l10n-Hardcode-Probleme behoben';
+
+  @override
+  String get log_language_scroll =>
+      'Sprachauswahldialog mit Bildlaufunterstützung optimiert';
+
+  @override
+  String get log_remote_media_cache =>
+      'Remote-Medien werden sofort im Player geöffnet mit Hintergrund-Caching-Fortschritt';
+
+  @override
+  String get log_remote_to_remote =>
+      'Kopieren/Ausschneiden zwischen Remote-Servern hinzugefügt';
+
+  @override
+  String get log_remote_cut_progress =>
+      'Fortschrittsanzeige für Remote-Ausschneiden behoben';
+
+  @override
+  String get log_audio_scan_stable =>
+      'Stabilität der Audio-Kategoriescanverbessert';
+
+  @override
+  String get log_extract_dialog_redesign =>
+      'Entpack-Dialog neu gestaltet mit aktueller/benutzerdefinierter Verzeichnisauswahl';
+
+  @override
+  String get log_vault_quick_category =>
+      'Tresor-Verknüpfung zu Schnellkategorien hinzugefügt (standardmäßig deaktiviert)';
+
+  @override
+  String get log_vault_l10n_fix =>
+      'Hardcodierte englische Texte und Einfrieren bei mehreren Dateien im Tresor behoben';
+
+  @override
+  String get log_compression_path_fix =>
+      'Komprimierungspfade für Drei-Punkte-Button und Langdruck-Menü vereinheitlicht';
+
+  @override
+  String get log_compression_progress =>
+      'Komprimierungsfortschritts-Dialog verbessert mit mehrstufiger Anzeige und zuverlässigem Auto-Schließen';
+
+  @override
+  String get log_web_share_category =>
+      'Web-Freigabe-Portal zeigt Dateien jetzt in Kategorien (Ordner, Videos, Audio, Bilder, Dokumente, Sonstiges)';
+
+  @override
+  String get log_web_share_l10n =>
+      'Web-Freigabe-Portal unterstützt jetzt mehrsprachige Anzeige basierend auf der App-Sprache';
+
+  @override
+  String get log_music_lyrics_fullscreen_removed =>
+      'Vollbild-Lyrics-Panel aus dem Musikplayer-Menü entfernt';
+
+  @override
+  String get log_music_lyrics_centered =>
+      'Aktuelle Liedtextanzeige im Musikplayer zentriert';
+
+  @override
+  String get log_music_player_button =>
+      'Musikplayer-Button oben in der Musik-Kategorie hinzugefügt';
+
+  @override
+  String get log_music_remember_progress =>
+      'Musikplayer merkt sich die Wiedergabeposition und setzt automatisch fort';
+
+  @override
+  String get log_image_icon_redesign =>
+      'Bild-Dateisymbole neu gestaltet mit Format-Label (jpg, png usw.)';
+
+  @override
+  String get log_doc_icon_redesign =>
+      'Dokument-Dateisymbole neu gestaltet mit Format-Label';
+
+  @override
+  String get log_archive_icon_redesign =>
+      'Archiv-Symbole neu gestaltet mit Format-Label (zip, 7z, rar usw.)';
+
+  @override
+  String get log_music_lrc_lyrics =>
+      'LRC-Lyrics werden automatisch geladen und manuelle Lyrics-Dateiauswahl unterstützt';
+
+  @override
+  String get log_remote_copy_paste_fix =>
+      'Behoben: Kopieren vom Remote-Server zeigt 0% Fortschritt und Dateien erscheinen nicht';
+
+  @override
+  String get log_navbar_position_setting =>
+      'Added navigation bar position setting, support top or bottom display';
+
+  @override
+  String get log_browse_top_area_optimize =>
+      'Optimized browse page top area layout when bottom navigation bar is enabled, increasing file list display space';
+
+  @override
+  String get log_thanks_feedback =>
+      'Danke an folgende Nutzer für Feedback und Vorschläge: 越界, 猕猴桃, Sir Jagadeesh Chandra Bose, Silence';
+
+  @override
+  String get log_smb_native_rewrite =>
+      'SMB-Client komplett neu geschrieben, verwendet native Android smbj-Bibliothek für echtes SMB-Protokoll, mit automatischer Share-Namenerkennung';
+
+  @override
+  String get log_ftp_sftp_streaming =>
+      'FTP/SFTP-Streaming-Wiedergabe repariert, verwendet rohes Socket mit unabhängiger Datenverbindung, unterstützt progressives Caching';
+
+  @override
+  String get log_remote_l10n_fix =>
+      'Hardcodierte Strings auf Remote-Verbindungsseite behoben, l10n-Keys für SMB-Protokollbeschreibung und Verbindungsnamenssuffix hinzugefügt';
+
+  @override
+  String get log_image_viewer_menu =>
+      'Bildbetrachter-Menü oben rechts in Bottom Sheet geändert, 9 Aktionen, schwarzer halbtransparenter Hintergrund für bessere Sichtbarkeit';
+
+  @override
+  String get log_breadcrumb_border =>
+      'V-förmigen kompletten Rahmen zu Breadcrumb-Buttons hinzugefügt, verwendet CustomPaint, nahtlose Verbindung und klare Grenzen';
+
+  @override
+  String get log_three_dot_button_position =>
+      'Datei/Ordner-Drei-Punkte-Aktionsbuttons in die obere rechte Ecke der Karten verschoben, um versehentliche Berührungen beim Ziehen zu vermeiden';
+
+  @override
+  String get log_three_dot_button_setting =>
+      'Drei-Punkte-Button-Einstellung in \'Drei-Punkte-Buttons anzeigen\' umbenannt, mit drei Modi: alle/nur Einzelfenster/nur Dual-Fenster';
+
+  @override
+  String get log_category_back_select =>
+      'Im Mehrfachauswahlmodus der Kategorie bricht die Zurück-Taste die Auswahl ab, anstatt die Kategorie zu verlassen';
+
+  @override
+  String get log_desktop_lyric =>
+      'Desktop-Lyric-Schwebefenster hinzugefügt, mit Berechtigungsprüfung, ziehbarer Position und Tippen zum Umschalten von Wiedergabe/Pause';
+
+  @override
+  String get log_notification_panel =>
+      'Behoben: Benachrichtigungsleiste zeigt keine Wiedergabesteuerung, Benachrichtigung bei Pause beibehalten, mit Berechtigungsablehnungs-Hinweisen';
+
+  @override
+  String get log_lyric_word_highlight =>
+      'Schwebender Lyric-Text unterstützt wortweises Hervorheben mit SpannableStringBuilder für Karaoke-Effekt';
+
+  @override
+  String get log_floating_window_resize =>
+      'Schwebendes Lyric-Fenster unterstützt Long-Press zum Anzeigen des Größenänderungsgriffs, Ziehen zum Anpassen von Fenster- und Textgröße';
+
+  @override
+  String get log_background_play_fix =>
+      'Problem behoben, dass Musik beim Aktivieren der Hintergrundwiedergabe pausiert, attach verwendet Player-Instanz ohne Unterbrechung';
+
+  @override
+  String get log_category_button_sync =>
+      'Behoben: Wiedergabe-Button auf Kategorie-Seite zeigt alte Audio-Info bei deaktivierter Hintergrundwiedergabe, wird bei Rückkehr aktualisiert';
+
+  @override
+  String get log_build_stability =>
+      'R8-Kompilierung OOM behoben, x86_64/armv7 Start-Bildschirm weiß, Gradle JVM-Speicher und ABI-Downloads angepasst';
+
+  @override
+  String get log_lyric_scale_animation =>
+      'Skalierungseffekt zur wortweisen Lyric-Übergangsanimation hinzugefügt, Sync-Probleme behoben, 300ms Übergangsdauer festgelegt';
+
+  @override
+  String get log_quick_action_panel => '重新调整了顶部导航栏按钮，新增快捷操作页面，在浏览页可左滑弹出快捷操作面板';
+
+  @override
+  String get log_favorites => '新增了收藏夹，用户可以收藏本地或远程文件/文件夹收藏到快捷操作面板的收藏夹中';
+
+  @override
+  String get log_drawer_redesign => '重构了抽屉页，抽屉页更加简洁美观，持久化记住抽屉页所有展开/折叠状态，操作更加便捷';
+
+  @override
+  String get log_video_player_rotation => '视频播放器新增了顺时针旋转画面，新增缩放比例';
+
+  @override
+  String get log_category_reorder =>
+      '优化了分类页可长按类别图标拖动调整位置顺序，新增每行 3 列/4 列可选，现在支持重命名类别名称';
+
+  @override
+  String get log_compression_fix => '修复了压缩一些问题';
+
+  @override
+  String get log_progress_bar_redesign => '重新设计了进度条窗口样式';
+
+  @override
+  String get log_dual_pane_status_bar => '双窗口模式顶部新增状态栏，显示激活窗口指示器和剪贴板内容摘要';
+
+  @override
+  String get log_transfer_fixes => '修复传输进度条不更新、无法取消、远程列表空白、传输速度不显示等问题';
+
+  @override
+  String get log_drawer_font_consistency => '修复了抽屉页「设置」按钮字体与其他栏目不一致的问题';
+
+  @override
+  String get log_landscape_layout => '优化平板/车机横屏模式下的文件网格布局';
+
+  @override
+  String get log_progress_i18n => '进度条窗口新增完整的多语言翻译支持';
+
+  @override
+  String get msg_remember_choice =>
+      'Diese Auswahl für zukünftige Vorgänge merken';
+
+  @override
+  String get ui_caching => 'Zwischenspeicherung, bitte warten...';
+
+  @override
+  String get ui_username => 'Benutzername';
+
+  @override
+  String get ui_anonymous => 'Anonym';
+
+  @override
+  String get ui_start => 'Starten';
+
+  @override
+  String get ui_stop => 'Stoppen';
+
+  @override
+  String get ui_connected => 'Verbunden';
+
+  @override
+  String get ui_activated => 'Aktiviert';
+
+  @override
+  String get ui_web_sharing_center => 'Web-Freigabe-Zentrum';
+
+  @override
+  String get ui_local_web_share => 'Lokale Web-Freigabe';
+
+  @override
+  String get ui_http_local_share_server => 'HTTP Lokaler Freigabeserver';
+
+  @override
+  String get ui_server_idle => 'Server im Leerlauf';
+
+  @override
+  String get ui_pick_files_folders => 'Dateien und Ordner auswählen';
+
+  @override
+  String get ui_secure_storage => 'Sicherer Speicher';
+
+  @override
+  String get ui_protected_total_space => 'Geschützter Gesamtspeicher';
+
+  @override
+  String get ui_hidden_files_count => 'Versteckte Dateien';
+
+  @override
+  String get ui_search_obfuscated => 'Verschlüsselte Dateien suchen...';
+
+  @override
+  String get ui_vault_empty => 'Ihr sicherer Tresor ist leer';
+
+  @override
+  String get ui_hide_files => 'Dateien verstecken';
+
+  @override
+  String get ui_global_search => 'Globale Suche';
+
+  @override
+  String get ui_all => 'Alle';
+
+  @override
+  String get ui_folders => 'Ordner';
+
+  @override
+  String get ui_images => 'Bilder';
+
+  @override
+  String get ui_videos => 'Videos';
+
+  @override
+  String get ui_audio => 'Audio';
+
+  @override
+  String get ui_documents => 'Dokumente';
+
+  @override
+  String get ui_no_matching_files => 'Keine übereinstimmenden Dateien gefunden';
+
+  @override
+  String get ui_try_modify_search =>
+      'Versuchen Sie, Ihren Suchtext zu ändern, um versteckte Elemente zu finden.';
+
+  @override
+  String get ui_vault_empty_desc =>
+      'AES-256-GCM-Verschlüsselung macht Dateien für das System oder andere Apps völlig unöffbar und versteckt sie vor dem Medien-Scanner. Tippe unten auf die Schaltfläche, um sie zu schützen.';
+
+  @override
+  String ui_copied_n_items(Object count) {
+    return '$count Element(e) in Zwischenablage kopiert';
+  }
+
+  @override
+  String ui_cut_n_items(Object count) {
+    return '$count Element(e) in Zwischenablage ausgeschnitten';
+  }
+
+  @override
+  String get ui_copy_tooltip => 'Kopieren';
+
+  @override
+  String get ui_cut_tooltip => 'Ausschneiden';
+
+  @override
+  String get ui_delete_tooltip => 'Löschen';
+
+  @override
+  String get ui_search_this_folder => 'Diesen Ordner durchsuchen';
+
+  @override
+  String ui_search_files_subfolders_in(Object path) {
+    return 'Dateien und Unterordner durchsuchen in: $path';
+  }
+
+  @override
+  String get ui_no_results => 'Keine Ergebnisse gefunden';
+
+  @override
+  String ui_no_match_for(Object query) {
+    return 'Keine Treffer für \"$query\"';
+  }
+
+  @override
+  String ui_n_selected(Object count, Object size) {
+    return '$count ausgewählt ($size)';
+  }
+
+  @override
+  String get ui_select_language_title => 'Sprache wählen';
+
+  @override
+  String get ui_select_language_desc =>
+      'Bitte wählen Sie Ihre bevorzugte Sprache';
+
+  @override
+  String get ui_language_chinese => '中文';
+
+  @override
+  String get ui_language_english => 'English';
+
+  @override
+  String msgDefaultZoom(Object fontSize) {
+    return 'Standard-Zoom (${fontSize}pt)';
+  }
+
+  @override
+  String get msgLockZoom => 'Zoom sperren';
+
+  @override
+  String get ui_background => 'Hintergrund';
+
+  @override
+  String get ui_overall_progress => 'Gesamtfortschritt';
+
+  @override
+  String get ui_archive_name => 'Archivname';
+
+  @override
+  String get ui_compression_level => 'Komprimierungsstufe';
+
+  @override
+  String get ui_delete_source_after => 'Quelldateien nach Abschluss löschen';
+
+  @override
+  String get ui_no_compression => 'Keine (Nur speichern)';
+
+  @override
+  String get ui_fast => 'Schnell';
+
+  @override
+  String get ui_standard => 'Standard';
+
+  @override
+  String get ui_maximum => 'Maximum';
+
+  @override
+  String get ui_new_txt => 'Neue Textdatei';
+
+  @override
+  String get ui_save_as => 'Speichern unter';
+
+  @override
+  String get ui_undo => 'Rückgängig';
+
+  @override
+  String get ui_redo => 'Wiederholen';
+
+  @override
+  String ui_add_selected(Object count) {
+    return 'Auswahl hinzufügen ($count)';
+  }
+
+  @override
+  String ui_pin_selected(Object count) {
+    return 'Auswahl verwenden ($count)';
+  }
+
+  @override
+  String get msg_file_exists => 'Datei existiert bereits';
+
+  @override
+  String msg_file_exists_desc(String fileName) {
+    return 'Im Zielordner existiert bereits eine Datei mit dem Namen \"$fileName\". Wie möchten Sie vorgehen?';
+  }
+
+  @override
+  String get msg_existing_file => 'Vorhandene Datei';
+
+  @override
+  String get msg_cancel_paste => 'Einfügen abbrechen';
+
+  @override
+  String get msg_skip_file => 'Überspringen';
+
+  @override
+  String get msg_overwrite_file => 'Ersetzen';
+
+  @override
+  String get msg_newer => 'Neuer';
+
+  @override
+  String get msg_new_file_name => 'Neuer Dateiname';
+
+  @override
+  String get msg_vault_choose_mode => 'Schutzmodus wählen';
+
+  @override
+  String get msg_vault_mode_desc =>
+      'Wähle, wie du deine ausgewählten Dateien schützen möchtest. Gesicherte Dateien werden mit AES-256-GCM verschlüsselt.';
+
+  @override
+  String get ui_secure_import => 'Sicherer Import (Sandbox)';
+
+  @override
+  String get ui_in_place_scramble => 'In-Place-Scramble (Schnell)';
+
+  @override
+  String get msg_scrambling => 'Scramble & Schutz...';
+
+  @override
+  String msg_protected_count(Object successCount) {
+    return '$successCount Elemente erfolgreich geschützt.';
+  }
+
+  @override
+  String msg_protect_failed_count(Object failCount) {
+    return 'Fehler beim Sperren von $failCount Elementen.';
+  }
+
+  @override
+  String msg_restored(Object name) {
+    return '「$name」wurde an den ursprünglichen Speicherort wiederhergestellt.';
+  }
+
+  @override
+  String msg_restore_failed(Object error) {
+    return 'Fehler beim Wiederherstellen der Datei: $error';
+  }
+
+  @override
+  String get msg_decrypting => 'Sichere Entschlüsselung...';
+
+  @override
+  String get msg_security_details => 'Sicherheitsdetails';
+
+  @override
+  String get ui_restore_unhide => 'Wiederherstellen (Einblenden)';
+
+  @override
+  String get msg_permanent_delete => 'Dauerhaft löschen?';
+
+  @override
+  String msg_permanent_delete_content(Object name) {
+    return 'Sind Sie sicher, dass Sie 「$name」dauerhaft löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get msg_file_deleted => 'Datei wurde dauerhaft gelöscht.';
+
+  @override
+  String msg_delete_failed(Object error) {
+    return 'Fehler beim Löschen der Datei: $error';
+  }
+
+  @override
+  String get msg_original_name => 'Ursprünglicher Name';
+
+  @override
+  String get msg_original_path => 'Ursprünglicher Pfad';
+
+  @override
+  String get msg_scrambled_path => 'Verschlüsselter Pfad';
+
+  @override
+  String get msg_size_label => 'Größe';
+
+  @override
+  String get msg_locked_at => 'Gesperrt am';
+
+  @override
+  String get msg_protection_mode => 'Schutzmodus';
+
+  @override
+  String get msg_in_place_scrambling => 'In-Place-Scramble';
+
+  @override
+  String get msg_isolated_move => 'Isolierte Verschiebung (Sandbox)';
+
+  @override
+  String get web_share_search => 'Dateien & Ordner suchen...';
+
+  @override
+  String get web_share_upload => 'Hochladen';
+
+  @override
+  String get web_share_drop_title => 'Dateien hier ablegen zum Hochladen';
+
+  @override
+  String get web_share_drop_desc =>
+      'Ihre Dateien werden sofort in diesen freigegebenen Ordner hochgeladen';
+
+  @override
+  String get web_share_empty_search => 'Keine Elemente entsprechen Ihrer Suche';
+
+  @override
+  String get web_share_empty_desc =>
+      'Überprüfen Sie die Schreibweise oder versuchen Sie einen anderen Suchbegriff';
+
+  @override
+  String get web_share_copy_link => 'Link kopieren';
+
+  @override
+  String get web_share_download => 'Herunterladen';
+
+  @override
+  String web_share_uploading(String name) {
+    return '$name wird hochgeladen...';
+  }
+
+  @override
+  String get web_share_upload_success => 'Upload erfolgreich abgeschlossen';
+
+  @override
+  String web_share_upload_failed(String name) {
+    return 'Hochladen von $name fehlgeschlagen';
+  }
+
+  @override
+  String get web_share_preview_unsupported =>
+      'Vorschau für diesen Dateityp nicht unterstützt';
+
+  @override
+  String get web_share_preview_download =>
+      'Klicken Sie unten auf Herunterladen, um es auf Ihrem Gerät zu speichern';
+
+  @override
+  String get web_share_footer =>
+      'Sicheres Teilen und Streamen von Dateien über ZenFile';
+
+  @override
+  String get web_share_parent_dir => 'Übergeordnetes Verzeichnis';
+
+  @override
+  String get web_share_go_up => 'Eine Ebene nach oben gehen';
+
+  @override
+  String web_share_items_count(int count) {
+    return '$count Elemente';
+  }
+
+  @override
+  String get web_share_link_copied => 'Link in die Zwischenablage kopiert';
+
+  @override
+  String get web_share_copy_failed => 'Link konnte nicht kopiert werden';
+
+  @override
+  String get web_share_local => 'Lokale Wi-Fi-Freigabe';
+
+  @override
+  String get web_share_internet => 'Internet-Freigabe';
+
+  @override
+  String get web_share_category_folders => 'Ordner';
+
+  @override
+  String get web_share_category_videos => 'Videos';
+
+  @override
+  String get web_share_category_audio => 'Audio';
+
+  @override
+  String get web_share_category_images => 'Bilder';
+
+  @override
+  String get web_share_category_documents => 'Dokumente';
+
+  @override
+  String get web_share_category_others => 'Sonstiges';
+
+  @override
+  String get web_share_loading_preview => 'Vorschau wird geladen...';
+
+  @override
+  String get web_share_preview_error =>
+      'Dokument kann nicht gestreamt werden. Sie können es direkt herunterladen.';
+
+  @override
+  String get msg_custom_shortcut => 'Benutzerdefiniertes Symbol';
+
+  @override
+  String get msg_add_custom_shortcut => 'Zum Startbildschirm hinzufügen';
+
+  @override
+  String get msg_shortcut_added => 'Zum Startbildschirm hinzugefügt';
+
+  @override
+  String get msg_shortcut_failed => 'Hinzufügen fehlgeschlagen';
+
+  @override
+  String get ui_lyrics_loaded => 'Liedtext geladen';
+
+  @override
+  String get ui_lyrics_load_failed =>
+      'Liedtextdatei kann nicht analysiert werden';
+
+  @override
+  String get ui_select_lyrics_file => 'Lokale Liedtexte importieren';
+
+  @override
+  String get ui_no_lyrics_found => 'Kein Liedtext gefunden';
+
+  @override
+  String get ui_lyrics_auto_load_hint =>
+      'Legen Sie die .lrc-Datei im selben Ordner wie die Audiodatei ab\n(mit dem gleichen Dateinamen) für automatisches Laden';
+
+  @override
+  String get ui_lyrics_panel => 'Liedtext-Panel';
+
+  @override
+  String get ui_show_lyrics => 'Liedtext anzeigen';
+
+  @override
+  String get ui_hide_lyrics => 'Liedtext ausblenden';
+
+  @override
+  String get ui_sound_effects_speed => 'Soundeffekte & Geschwindigkeit';
+
+  @override
+  String get ui_pitch_adjustment => 'Tonhöhenanpassung';
+
+  @override
+  String get ui_restore_default => 'Standard wiederherstellen';
+
+  @override
+  String get ui_sound_effects => 'Soundeffekte';
+
+  @override
+  String get eq_presets => 'EQ-Voreinstellungen';
+
+  @override
+  String get eq_custom => 'Benutzerdefiniert';
+
+  @override
+  String get eq_system => 'System-Equalizer';
+
+  @override
+  String get eq_unavailable => 'Equalizer auf diesem Gerät nicht verfügbar';
+
+  @override
+  String get eq_open_system => 'System-EQ öffnen';
+
+  @override
+  String get eq_system_hint =>
+      'Der integrierte Player verwendet libmpv für die Audioausgabe. Um EQ-Effekte anzuwenden, bitte den System-Equalizer verwenden.';
+
+  @override
+  String get eq_apply_hint =>
+      'Wählen Sie unten ein Preset und tippen Sie auf \"System-EQ öffnen\", um es anzuwenden.';
+
+  @override
+  String get eq_preset_flat => 'Flach';
+
+  @override
+  String get eq_preset_vocal => 'HD Stimme';
+
+  @override
+  String get eq_preset_bass => 'Bass';
+
+  @override
+  String get eq_preset_live => 'Live';
+
+  @override
+  String get eq_preset_jazz => 'Jazz';
+
+  @override
+  String get ui_playback_queue => 'Wiedergabeliste';
+
+  @override
+  String get ui_repeat_off => 'Wiederholen: Aus';
+
+  @override
+  String get ui_repeat_one => 'Wiederholen: Einzeln';
+
+  @override
+  String get ui_repeat_all => 'Wiederholen: Alle';
+
+  @override
+  String get ui_shuffle_on => 'Zufallswiedergabe: An';
+
+  @override
+  String get ui_play_mode_sequential => 'Sequenziell';
+
+  @override
+  String get ui_play_mode_list_loop => 'Liste wiederholen';
+
+  @override
+  String get ui_play_mode_single_loop => 'Titel wiederholen';
+
+  @override
+  String get ui_play_mode_shuffle => 'Zufallswiedergabe';
+
+  @override
+  String get ui_lyrics_mode_off => 'Liedtext aus';
+
+  @override
+  String get ui_lyrics_mode_single_line => 'Einzeiliger Liedtext';
+
+  @override
+  String get ui_lyrics_mode_multi_line => 'Mehrzeiliger Liedtext';
+
+  @override
+  String get ui_lyrics_mode_full_panel => 'Vollständiges Liedtext-Panel';
+
+  @override
+  String ui_minutes_format(int minutes) {
+    return '$minutes Minuten';
+  }
+
+  @override
+  String ui_sleep_timer_set(int minutes) {
+    return 'Schlaf-Timer auf $minutes Minuten eingestellt.';
+  }
+
+  @override
+  String get ui_enter_minutes => 'Minuten eingeben';
+
+  @override
+  String get ui_sleep_timer_end =>
+      'Schlaf-Timer abgelaufen, Wiedergabe pausiert';
+
+  @override
+  String get ui_close_player => 'Player schließen';
+
+  @override
+  String get ui_open_player => 'Player öffnen';
+
+  @override
+  String get ui_now_playing => 'Wird wiedergegeben';
+
+  @override
+  String get ui_resume_playback => 'Wiedergabe fortsetzen';
+
+  @override
+  String get ui_single => 'Single';
+
+  @override
+  String get ui_add_remote_path => 'Remote-Pfad hinzufügen';
+
+  @override
+  String get ui_select_remote_server => 'Remote-Server auswählen';
+
+  @override
+  String get ui_no_remote_connections =>
+      'Keine gespeicherten Remote-Verbindungen';
+
+  @override
+  String get ui_retry => 'Wiederholen';
+
+  @override
+  String get ui_media_load_failed =>
+      'Medien konnten nicht geladen werden. Bitte Speicherberechtigung prüfen und erneut versuchen';
+
+  @override
+  String get ui_no_subfolders => 'Keine Unterordner';
+
+  @override
+  String get ui_select_this_folder => 'Diesen Ordner auswählen';
+
+  @override
+  String ui_downloading_file(String file) {
+    return 'Wird heruntergeladen: $file';
+  }
+
+  @override
+  String ui_sent(String amount) {
+    return 'Gesendet: $amount';
+  }
+
+  @override
+  String ui_recycle_restore_success(int count) {
+    return '$count Element(e) erfolgreich wiederhergestellt';
+  }
+
+  @override
+  String ui_recycle_restore_failed(String error) {
+    return 'Fehler beim Wiederherstellen: $error';
+  }
+
+  @override
+  String get ui_recycle_perm_delete_title => 'Endgültig löschen?';
+
+  @override
+  String ui_recycle_perm_delete_message(int count) {
+    return 'Sind Sie sicher, dass Sie diese $count Element(e) endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String ui_recycle_perm_delete_success(int count) {
+    return '$count Element(e) endgültig gelöscht';
+  }
+
+  @override
+  String ui_recycle_perm_delete_failed(String error) {
+    return 'Fehler beim Löschen: $error';
+  }
+
+  @override
+  String get ui_recycle_empty_title => 'Papierkorb leeren?';
+
+  @override
+  String ui_recycle_empty_failed(String error) {
+    return 'Fehler beim Leeren des Papierkorbs: $error';
+  }
+
+  @override
+  String ui_recycle_selected_count(int count) {
+    return '$count ausgewählt';
+  }
+
+  @override
+  String ui_recycle_deleted_at(String date, String size) {
+    return 'Gelöscht: $date • $size';
+  }
+
+  @override
+  String get ui_recycle_restore => 'Wiederherstellen';
+
+  @override
+  String get ui_recycle_empty_hint =>
+      'Elemente, die Sie löschen, wenn der Papierkorb aktiviert ist, werden hier angezeigt. Sie können sie wiederherstellen oder endgültig löschen.';
+
+  @override
+  String get ui_recycle_disabled_hint =>
+      '回收站已关闭。开启后，删除的文件和文件夹将暂存到这里，可随时恢复或永久删除。';
+
+  @override
+  String get ui_recycle_deleted_date => 'Löschdatum';
+
+  @override
+  String get ui_recycle_type => 'Typ';
+
+  @override
+  String get ui_recycle_file => 'Datei';
+
+  @override
+  String get ui_db_browse_data => 'Daten durchsuchen';
+
+  @override
+  String get ui_db_table_schema => 'Tabellenstruktur';
+
+  @override
+  String get ui_db_sql_console => 'SQL-Konsole';
+
+  @override
+  String ui_db_export_success(String fileName) {
+    return 'Erfolgreich nach $fileName exportiert';
+  }
+
+  @override
+  String ui_db_export_failed(String error) {
+    return 'Export fehlgeschlagen: $error';
+  }
+
+  @override
+  String get ui_db_export_csv => 'Tabelle als CSV exportieren';
+
+  @override
+  String get ui_db_primary_key => 'PK';
+
+  @override
+  String get ui_db_not_null => 'NOT NULL';
+
+  @override
+  String ui_db_type(String type) {
+    return 'Typ: $type';
+  }
+
+  @override
+  String ui_db_default(String value) {
+    return 'Standard: $value';
+  }
+
+  @override
+  String get ui_db_execute_query => 'Abfrage ausführen';
+
+  @override
+  String get ui_db_enter_query => 'Geben Sie hier die SELECT-Abfrage ein...';
+
+  @override
+  String ui_db_showing_range(int start, int end) {
+    return 'Zeige $start - $end';
+  }
+
+  @override
+  String ui_db_query_returned(int count) {
+    return 'Abfrage ergab $count Zeilen';
+  }
+
+  @override
+  String get ui_app_installed_user_apps => 'Installierte Benutzeranwendungen';
+
+  @override
+  String get ui_app_system_packages => 'Systempakete';
+
+  @override
+  String get ui_app_backup_apk => 'Sicherte APKs';
+
+  @override
+  String get ui_app_precise_storage => 'Präzise Speicherberechnung';
+
+  @override
+  String get ui_app_grant_usage_access => 'Verwendungsdatenzugriff gewähren';
+
+  @override
+  String get ui_app_usage_access_description =>
+      'Um genaue App-Speichergrößen (APK + Daten + Cache) anstelle der reinen Installationsgröße anzuzeigen, aktivieren Sie bitte die Verwendungsdaten-Berechtigung für ZenFile in den Systemeinstellungen.';
+
+  @override
+  String get ui_backup_apk_open_folder => 'Sicherungsordner öffnen';
+
+  @override
+  String ui_backup_apk_success_with_path(String path) {
+    return 'Erfolgreich gesichert nach $path. Ordner öffnen?';
+  }
+
+  @override
+  String get ui_backup_apk_open => 'Öffnen';
+
+  @override
+  String get ui_clear_remote_cache_success => 'Remote-Cache geleert.';
+
+  @override
+  String get ui_clear_remote_cache_failed =>
+      'Remote-Cache konnte nicht geleert werden.';
+
+  @override
+  String get ui_app_system_settings => 'Systemeinstellungen / Details';
+
+  @override
+  String get ui_app_restore_install => 'Wiederherstellen / App installieren';
+
+  @override
+  String get ui_app_size_label => 'Größe:';
+
+  @override
+  String get ui_app_installed_label => 'Installiert:';
+
+  @override
+  String get ui_app_backup_date_label => 'Sicherungsdatum:';
+
+  @override
+  String get ui_batch_backup_progress => 'Ausgewählte Apps werden gesichert...';
+
+  @override
+  String ui_batch_backup_success(int count) {
+    return '$count App(s) erfolgreich in ZenFile/Backups/Apps/ gesichert';
+  }
+
+  @override
+  String ui_batch_backup_failed(String error) {
+    return 'Einige Apps konnten nicht gesichert werden: $error';
+  }
+
+  @override
+  String get ui_app_search_backup => 'Sicherungen durchsuchen...';
+
+  @override
+  String get ui_app_sort_by_install_date => 'Nach Installationsdatum sortieren';
+
+  @override
+  String get ui_app_no_backup_found => 'Keine Sicherungen gefunden';
+
+  @override
+  String get ui_app_backup_empty_subtitle =>
+      'Eine Liste Ihrer gesicherten APK- und APKS-Dateien wird hier angezeigt.';
+
+  @override
+  String ui_app_backup_search_not_found(String query) {
+    return 'Wir konnten keine Sicherungen finden, die mit \"$query\" übereinstimmen';
+  }
+
+  @override
+  String ui_app_backup_size_date(String size, String date) {
+    return 'Größe: $size • Sicherungsdatum: $date';
+  }
+
+  @override
+  String get ui_app_split_apk => 'Geteiltes APK (APKS)';
+
+  @override
+  String get ui_app_single_apk => 'Einzelnes APK';
+
+  @override
+  String get ui_desktop_lyric => 'Desktop-Text';
+
+  @override
+  String get msg_overlay_permission_required =>
+      'Für die Anzeige des Desktop-Textes ist die Berechtigung für schwebende Fenster erforderlich. Bitte erteilen Sie sie in den Einstellungen und versuchen Sie es erneut.';
+
+  @override
+  String get msg_notification_permission_denied =>
+      'Für die Anzeige des Wiedergabekontrollfelds ist die Berechtigung für Benachrichtigungen erforderlich. Einstellungen öffnen, um sie zu erteilen?';
+
+  @override
+  String get msg_open_settings => 'Zu den Einstellungen';
+
+  @override
+  String get msg_notification_not_granted =>
+      'Die Berechtigung für Benachrichtigungen wurde nicht erteilt, daher kann die Wiedergabesteuerung-Benachrichtigung nicht angezeigt werden. Bitte aktivieren Sie die Benachrichtigungsberechtigung in den Einstellungen.';
+
+  @override
+  String get msg_notification_blocked_hint =>
+      'Die Benachrichtigung wird nicht angezeigt. Möglicherweise ist der Benachrichtigungskanal deaktiviert oder die Akkuoptimierung schränkt die Hintergrundausführung ein. Bitte überprüfen Sie die Benachrichtigungsberechtigung und die Akkuoptimierungseinstellungen.';
+
+  @override
+  String get msg_audio_service_init_failed =>
+      'Die Hintergrundwiedergabe-Dienst konnte nicht initialisiert werden, daher können die Benachrichtigungs-Steuerungstasten nicht angezeigt werden. Bitte starten Sie die App neu; wenn das Problem besteht, löschen Sie die App-Daten in den Systemeinstellungen und öffnen Sie sie erneut.';
+
+  @override
+  String get msg_notification_channel_disabled =>
+      'Der Benachrichtigungskanal ist deaktiviert. Gehen Sie zu Einstellungen → App-Verwaltung → ZenFile → Benachrichtigungen, suchen Sie den Kanal \"ZenFile Audio Player\" und aktivieren Sie ihn.';
+
+  @override
+  String get ui_search_lyrics_online => 'Songtext online suchen';
+
+  @override
+  String get ui_lyrics_searching => '正在搜索歌词...';
+
+  @override
+  String get ui_lyrics_download_success_enhanced => '增强歌词下载成功！逐字显示已就绪';
+
+  @override
+  String get ui_lyrics_download_success => '歌词下载成功';
+
+  @override
+  String get ui_lyrics_not_found_online => '未找到匹配的歌词，试试调整歌曲信息后重试';
+
+  @override
+  String get ui_lyric_search_song_title => 'Songtitel';
+
+  @override
+  String get ui_lyric_search_artist => 'Künstler';
+
+  @override
+  String get msg_rotate_video => 'Video drehen';
+
+  @override
+  String get msg_aspect_fit => 'Originales Seitenverhältnis';
+
+  @override
+  String get msg_aspect_fill => 'Strecken und Füllen';
+
+  @override
+  String get msg_aspect_center => 'Zentriert';
+
+  @override
+  String get msg_aspect_16_9 => '16:9';
+
+  @override
+  String get msg_aspect_4_3 => '4:3';
+
+  @override
+  String get msg_aspect_custom => 'Benutzerdefiniert';
+
+  @override
+  String get msg_aspect_fill_screen => 'Bildschirm füllen';
+
+  @override
+  String get msg_custom_aspect_ratio => 'Benutzerdefiniertes Seitenverhältnis';
+
+  @override
+  String get drawer_tools => 'Werkzeuge';
+
+  @override
+  String get open_with_native => 'Mit dieser App öffnen';
+
+  @override
+  String get open_with_external => 'Mit externer App öffnen';
+
+  @override
+  String get open_once => 'Nur einmal';
+
+  @override
+  String get open_always => 'Immer';
+
+  @override
+  String get pick_file_type => 'Dateityp auswählen';
+
+  @override
+  String get file_type_text => 'Text';
+
+  @override
+  String get file_type_audio => 'Audio';
+
+  @override
+  String get file_type_video => 'Video';
+
+  @override
+  String get file_type_image => 'Bild';
+
+  @override
+  String get file_type_text_desc => 'Als Text öffnen';
+
+  @override
+  String get file_type_audio_desc => 'Als Audio abspielen';
+
+  @override
+  String get file_type_video_desc => 'Als Video abspielen';
+
+  @override
+  String get file_type_image_desc => 'Als Bild anzeigen';
+
+  @override
+  String get drawer_edit_connection => 'Bearbeiten';
+
+  @override
+  String get cat_system => 'System';
+
+  @override
+  String get cat_backup_restore => 'Sichern & Wiederherstellen';
+
+  @override
+  String get cat_backup_restore_desc => 'Sichern';
+
+  @override
+  String get cat_storage_volume => 'Speicher';
+
+  @override
+  String get ui_columns_per_row => 'Spalten pro Zeile';
+
+  @override
+  String get ui_2columns => '2 Spalten';
+
+  @override
+  String get ui_3columns => '3 Spalten';
+
+  @override
+  String get ui_4columns => '4 Spalten';
+
+  @override
+  String get ui_show_custom_entry => 'Benutzerdefiniert';
+
+  @override
+  String get msge8b8e9b3 => 'Schnellaktionen';
+
+  @override
+  String get msg04b7de53 => 'Schnellzugriff auf häufige Funktionen';
+
+  @override
+  String get prop_read => 'Read';
+
+  @override
+  String get prop_write => 'Write';
+
+  @override
+  String get prop_folder_directory => 'Folder / Directory';
+
+  @override
+  String get prop_file => 'File';
+
+  @override
+  String prop_contains_format(int folderCount, int fileCount) {
+    return '$folderCount subfolder(s), $fileCount file(s)';
+  }
+
+  @override
+  String get prop_bytes => 'bytes';
+
+  @override
+  String prop_items_selected(int count) {
+    return '$count items selected';
+  }
+
+  @override
+  String prop_items_summary(int count, int folderCount, int fileCount) {
+    return '$count items ($folderCount folder(s), $fileCount file(s))';
+  }
+
+  @override
+  String get prop_calc_hash => 'Hash berechnen';
+
+  @override
+  String get prop_md5 => 'MD5';
+
+  @override
+  String get prop_sha256 => 'SHA-256';
+
+  @override
+  String get prop_hashing => 'Hash wird berechnet…';
+
+  @override
+  String get prop_hash_failed => 'Hash-Berechnung fehlgeschlagen';
+
+  @override
+  String get msg_add_subtitle => 'Untertitel hinzufügen';
+
+  @override
+  String get msg_subtitle_menu => 'Untertitel';
+
+  @override
+  String get msg_subtitle_size => 'Untertitelgröße';
+
+  @override
+  String get msg_subtitle_position => 'Untertitelposition';
+
+  @override
+  String get msg_subtitle_pos_top => 'Oben';
+
+  @override
+  String get msg_subtitle_pos_bottom => 'Unten';
+
+  @override
+  String get msg_subtitle_no_background => 'Untertitelhintergrund entfernen';
+
+  @override
+  String get msg_auto_clean_cache => 'Cache automatisch bereinigen';
+
+  @override
+  String get msg_auto_clean_cache_hint =>
+      'Tippen, um Bereinigungsintervall festzulegen';
+
+  @override
+  String get msg_auto_clean_cache_picker_hint =>
+      'Wischen, um Bereinigungsintervall auszuwählen';
+
+  @override
+  String get msg_cache_clean_unit_day => 'Tage';
+
+  @override
+  String get msg_cache_clean_unit_hour => 'Stunden';
+
+  @override
+  String get msg_cache_clean_unit_minute => 'Minuten';
+
+  @override
+  String get msg_cache_clean_confirm => 'Bestätigen';
+
+  @override
+  String get msg_quick_actions => 'Schnellaktionen';
+
+  @override
+  String get msg_hwdec => 'HW';
+
+  @override
+  String get msg_swdec => 'SW';
+
+  @override
+  String get msg_toggle_decode => 'Hard-/Software-Dekodierung umschalten';
+
+  @override
+  String get msg_subtitle_on => 'Untertitel einschalten';
+
+  @override
+  String get msg_subtitle_off => 'Untertitel ausschalten';
+
+  @override
+  String get msg_no_subtitle => 'Kein Untertitel';
+
+  @override
+  String get msg_audio_track => 'Audiospur';
+
+  @override
+  String get msg_subtitle_track => 'Untertitelspur';
+
+  @override
+  String get msg_no_audio_track => 'Keine Audiospuren';
+
+  @override
+  String get msg_no_subtitle_track => 'Keine Untertitelspur';
+
+  @override
+  String get msg_playlist => 'Wiedergabeliste';
+
+  @override
+  String get msg_no_playlist => 'Keine Wiedergabeliste';
+
+  @override
+  String get msg_slide_to_unlock => 'Wischen / Tippen zum Entsperren';
+
+  @override
+  String get msg_seconds_short => 's';
+
+  @override
+  String get msg_speed_2x => 'Geschw. 2.0x';
+
+  @override
+  String get log_v1_1_1_line1 => '📹 视频播放器';
+
+  @override
+  String get log_v1_1_1_line2 =>
+      '支持外挂字幕：自动识别与视频同目录、同文件名的字幕文件（如 .srt、.ass），同时保留手动加载字幕文件的入口。';
+
+  @override
+  String get log_v1_1_1_line3 => '新增自定义画面缩放比例，可灵活适配各类异形屏及非标准比例屏幕。';
+
+  @override
+  String get log_v1_1_1_line4 => '🎵 音频播放器';
+
+  @override
+  String get log_v1_1_1_line5 => '修复了在平板、车机等横屏设备上的界面显示异常问题，提升大屏体验。';
+
+  @override
+  String get log_v1_1_1_line6 => '📂 文件浏览与操作';
+
+  @override
+  String get log_v1_1_1_line7 => '优化侧滑菜单与快捷操作弹窗的宽度一致性，视觉更统一。';
+
+  @override
+  String get log_v1_1_1_line8 => '快捷操作面板中的常用功能现支持折叠/展开，且状态会持久记忆，下次打开保留您的偏好。';
+
+  @override
+  String get log_v1_1_1_line9 =>
+      '调整文件打开逻辑：点击文件默认使用本应用直接打开；如需切换其他应用，可在选中文件后，通过顶部三点菜单或底部操作栏的\"更多\"选项选择\"打开方式\"。';
+
+  @override
+  String get log_v1_1_1_line10 => '🗂️ 分类页界面';
+
+  @override
+  String get log_v1_1_1_line11 => '默认布局改为每行4列，显示更紧凑高效。';
+
+  @override
+  String get log_v1_1_1_line12 => '您可在\"自定义快捷方式\"设置中自由切换每行3列或4列。';
+
+  @override
+  String get log_v1_1_1_line13 => '支持长按分类图标并拖拽，随意调整类别排列顺序。';
+
+  @override
+  String get ui_close_category => 'Kategorie deaktivieren';
+
+  @override
+  String get ui_open_category => 'Kategorie aktivieren';
+
+  @override
+  String get msg_custom_scan_paths => 'Benutzerdefinierte Scan-Pfade';
+
+  @override
+  String get notification_web_share_local_title =>
+      'ZenFile Lokale Web-Freigabe';
+
+  @override
+  String get notification_web_share_internet_title =>
+      'ZenFile Internet Web-Freigabe';
+
+  @override
+  String notification_web_share_running(Object url) {
+    return 'Läuft unter $url';
+  }
+
+  @override
+  String get notification_ftp_title => 'ZenFile FTP-Server';
+
+  @override
+  String notification_ftp_running(Object ip, Object port) {
+    return 'Läuft unter ftp://$ip:$port';
+  }
+
+  @override
+  String get ui_download_links => 'Download-Links';
+
+  @override
+  String get msg_editor_lines => 'Zeilen';
+
+  @override
+  String get msg_editor_modified => 'Geändert';
+
+  @override
+  String get go_to_path => 'Zum Pfad wechseln';
+
+  @override
+  String get copy_path => 'Pfad kopieren';
+
+  @override
+  String get enter_path_hint => 'Absoluten Pfad eingeben...';
+
+  @override
+  String get breadcrumb_context_title => 'Breadcrumb-Optionen';
+
+  @override
+  String get ui_instrumental_track_hint =>
+      'Dieser Titel enthält keinen Liedtext, genießen Sie die Musik.';
+
+  @override
+  String get changelog_section_new => '✨ New Features';
+
+  @override
+  String get changelog_section_optimizations => '🔧 Optimizations';
+
+  @override
+  String get changelog_section_fixes => '🐛 Bug Fixes';
+
+  @override
+  String get changelog_section_known_issues => '⚠️ Known Issues';
+
+  @override
+  String get changelog_v1127_new_1 =>
+      'Favoriten: \'+\'‑Button hinzugefügt, um benutzerdefinierte Pfade/Namen manuell als Favoriten hinzuzufügen, gruppiert nach Kategorie.';
+
+  @override
+  String get changelog_v1127_new_2 =>
+      'Favoriten: Favoriteneinträge können nun bearbeitet werden (Name/Pfad/Gruppe); Gruppen unterstützen Einklappen/Ausklappen mit Persistenz.';
+
+  @override
+  String get changelog_v1127_new_3 =>
+      'Favoriten: Alle Hinzufügen‑Einstiegspunkte (Drei‑Punkte‑Menü / Langdrücken / oberer \'+\'‑Button) können nun eine Gruppe wählen; Gruppe langdrücken zum Umbenennen/Löschen, Eintrag langdrücken zum Bearbeiten/Löschen.';
+
+  @override
+  String get changelog_v1127_opt_1 =>
+      'UI‑Ruckeln unter Android 15/16 systematisch behoben (Renderebene: Vermeidung des Impeller‑Fallbacks + IO‑Ebene + Dekodierungsebene, dreidimensionale Optimierung).';
+
+  @override
+  String get changelog_v1127_fix_1 =>
+      'Behoben, dass im Auswahlmodus die \'Favorisieren\'‑Aktion den Gruppenauswahldialog nicht anzeigte.';
+
+  @override
+  String get changelog_v1127_known_1 =>
+      'Die Wiedergabe von Remote‑Video über SMB / FTP / SFTP kann in einigen Fällen noch ruckeln; die Optimierung läuft weiter.';
+
+  @override
+  String get batch_rename_title => 'Batch Rename';
+
+  @override
+  String batch_rename_subtitle(Object count) {
+    return 'Configuring $count items';
+  }
+
+  @override
+  String get batch_rename_empty_preview => '(Empty)';
+
+  @override
+  String batch_rename_tooltip_basename(Object n) {
+    return 'Filename without extension ($n)';
+  }
+
+  @override
+  String batch_rename_tooltip_ext_with_dot(Object de) {
+    return 'Extension with dot ($de)';
+  }
+
+  @override
+  String batch_rename_tooltip_ext_no_dot(Object e) {
+    return 'Extension without dot ($e)';
+  }
+
+  @override
+  String batch_rename_tooltip_full_name(Object N) {
+    return 'Full filename with extension ($N)';
+  }
+
+  @override
+  String get batch_rename_hint_pattern => 'e.g.: Image_#';
+
+  @override
+  String get batch_rename_hint_extension => 'txt';
+
+  @override
+  String get batch_rename_label_padding => 'Padding';
+
+  @override
+  String get batch_rename_hint_padding => 'e.g.: 3';
+
+  @override
+  String get batch_rename_hint_start => 'e.g.: 1';
+
+  @override
+  String get batch_rename_hint_find => 'Search term';
+
+  @override
+  String get batch_rename_label_fewer_options => 'Fewer options';
+
+  @override
+  String get batch_rename_btn_preview => 'Preview';
+
+  @override
+  String get batch_rename_btn_cancel => 'Cancel';
+
+  @override
+  String get batch_rename_btn_confirm => 'Confirm';
+
+  @override
+  String batch_rename_preview_subtitle(Object count) {
+    return 'Viewing $count items';
+  }
+
+  @override
+  String get batch_rename_btn_apply => 'Apply Changes';
+
+  @override
+  String get msg_pdf_quick_presets => 'Schnelle Leistungsvoreinstellungen';
+
+  @override
+  String get msg_pdf_smooth_mode => 'Flüssiger Modus';
+
+  @override
+  String get msg_pdf_detail_tuning => 'Detaillierte Einstellungen';
+
+  @override
+  String get msg_pdf_single_page_scroll =>
+      'Einzelseite (Seite für Seite wischen)';
+
+  @override
+  String get msg_pdf_horizontal_scroll =>
+      'Horizontal (von links nach rechts wischen)';
+
+  @override
+  String get msg_pdf_continuous => 'Kontinuierlich';
+
+  @override
+  String get msg_pdf_single_page => 'Einzeln';
+
+  @override
+  String get msg_pdf_vertical => 'Vertikal';
+
+  @override
+  String get msg_pdf_horizontal => 'Horizontal';
+
+  @override
+  String get changelog_v1125_new_1 =>
+      'Die Songtext-Schaltfläche des Audioplayers wechselt jetzt zyklisch zwischen vier Zuständen; die Zufallswiedergabe wurde in die Wiedergabemodus-Schaltfläche integriert.';
+
+  @override
+  String get changelog_v1125_opt_1 =>
+      'Medienscan beim App-Start optimiert (Parallelität und Drosselung), um Einfrieren wenige Sekunden nach dem Start auf einigen Geräten zu mildern.';
+
+  @override
+  String get changelog_v1125_opt_2 =>
+      'Die Kategorie „Netzwerk“ zeigt jetzt die Anzahl der gespeicherten Server in Echtzeit an.';
+
+  @override
+  String get changelog_v1125_opt_3 =>
+      'Anzahl-Texte auf Kategorieseiten und der Titel „Speicherlaufwerk auswählen“ wurden lokalisiert.';
+
+  @override
+  String get changelog_v1125_fix_1 =>
+      'Behoben: Nach dem Löschen der App-Daten erschien die Berechtigungsabfrage „Zugriff auf alle Dateien“ nicht erneut, was beim Öffnen von Audiodateien zu Abstürzen führte.';
+
+  @override
+  String get changelog_v1125_fix_2 =>
+      'Behoben: Mediensteuerung in der Benachrichtigungsleiste wurde unter Android 13+ und Android 11 nicht angezeigt (Benachrichtigungskanal früher erstellen und Wiedergabestatus-Logik nach Systemversion verzweigen).';
+
+  @override
+  String get changelog_v1125_fix_3 =>
+      'Behoben: Ausgewählte Elemente in der Rasteransicht der Kategorieseite konnten nicht durch erneutes Tippen abgewählt werden.';
+
+  @override
+  String get changelog_v1125_fix_4 =>
+      'Stabilität des SMB-/FTP-/SFTP-Remote-Video-Streamings verbessert; behoben, dass das Bild nach wenigen Sekunden einfror und die App schließlich abstürzte.';
+
+  @override
+  String get changelog_v1125_known_1 =>
+      'SMB-/FTP-/SFTP-Remote-Videowiedergabe kann in einigen Szenarien weiterhin stocken; die Optimierung wird fortgesetzt.';
+
+  @override
+  String get changelog_v1126_opt_1 =>
+      'Beschleunigung von SMB-Downloads: Vorabruf mit Doppelpuffer entfernt und auf sequentielles Lesen/Schreiben mit einem Thread umgestellt, was die Übertragungsgeschwindigkeit großer Dateien deutlich erhöht.';
+
+  @override
+  String get changelog_v1126_opt_2 =>
+      'Das Reservikon-Set wurde entfernt, wodurch die Installationsgröße der App (APK) deutlich verringert wurde.';
+
+  @override
+  String get changelog_v1126_opt_3 =>
+      'Detailverbesserungen: Der Drei-Punkte-Button in der «Netzwerk»-Liste der Seitenleiste ist jetzt rechtsbündig, und Titel auf der Schnellaktionsseite werden automatisch umgebrochen.';
+
+  @override
+  String get changelog_v1126_fix_1 =>
+      'Behoben, dass die FTP-Downloadgeschwindigkeit fälschlicherweise auf 30-40 MB/s begrenzt war (Ursache: zu kurzes Schreib-Flush-Intervall).';
+
+  @override
+  String get changelog_v1126_fix_2 =>
+      'Drei Probleme der Remote-Clients (SMB/FTP/SFTP) behoben: Transferabbruch, Listen-Ruckeln und Seitenaktualisierung.';
+
+  @override
+  String get changelog_v1126_fix_3 =>
+      'Durch verbliebene openlist-Referenzen verursachte Fehler behoben.';
+
+  @override
+  String get changelog_v1126_known_1 =>
+      'Die Wiedergabe von Remote-Video über SMB / FTP / SFTP kann in einigen Fällen noch ruckeln; die Optimierung läuft weiter.';
+
+  @override
+  String get ui_select_backup_path => 'Eigenen Sicherungspfad wählen';
+
+  @override
+  String get ui_backup_path_local => 'Lokal';
+
+  @override
+  String get ui_backup_path_remote => 'Remote';
+
+  @override
+  String get ui_select_remote_connection => 'Remote-Verbindung auswählen';
+
+  @override
+  String get ui_no_backup_files => 'Keine Sicherungsdateien';
+
+  @override
+  String get ui_please_select_backup_file =>
+      'Bitte wählen Sie eine Sicherungsdatei zur Wiederherstellung';
+
+  @override
+  String get ui_restore_restart_title => 'Neustart erforderlich';
+
+  @override
+  String get ui_restore_restart_message =>
+      'Einige Einstellungen benötigen einen Neustart der App. Jetzt neu starten?';
+
+  @override
+  String get ui_restart => 'Neu starten';
+
+  @override
+  String get ui_later => 'Später';
+
+  @override
+  String get ui_parent_directory => 'Übergeordnetes Verzeichnis';
+
+  @override
+  String get ui_compress_progress => '正在压缩';
+
+  @override
+  String get ui_extract_progress => '正在解压';
+
+  @override
+  String get ui_speed => 'Geschwindigkeit';
+
+  @override
+  String get ui_file_size => 'Dateigröße';
+
+  @override
+  String get changelog_v1128_new_1 =>
+      'Schnellaktionen erhält Schalter für Einzel-/Doppelfenster, synchron mit Einstellungen → Dateibrowser → Geteiltes Fenster';
+
+  @override
+  String get changelog_v1128_new_2 =>
+      'Sortier- und Filteroptionen unterstützen Mehrfachauswahl nach Kategorie (Bilder/Videos/Audio/Dokumente/Archive/Pakete/anders kombinierbar) mit Filter-Merken';
+
+  @override
+  String get changelog_v1128_new_3 =>
+      'Kategorieseite erhält \'Backup/Wiederherstellen\'-Verknüpfung, standardmäßig aktiv';
+
+  @override
+  String get changelog_v1128_new_4 =>
+      'Remote-Dateien und -Ordner zeigen ein Cloud-Badge; Schalter \'Remote-Cloud-Badge anzeigen\' hinzugefügt';
+
+  @override
+  String get changelog_v1128_opt_1 =>
+      'Komprimieren großer oder vieler Dateien stürzt nicht mehr ab: Streaming-Kompression/-Extraktion (~1MB RAM), mit Speicher-Schwellenschutz und Split/Zusammenführen';
+
+  @override
+  String get changelog_v1128_opt_2 =>
+      'Flüssigere Remote-Videowiedergabe (SMB/FTP/SFTP), kein Stottern mehr';
+
+  @override
+  String get changelog_v1128_opt_3 =>
+      'Im Doppelfenster-Modus werden Sortierung, Größe/Abstand und Kategoriefilter auf beide Fenster angewendet';
+
+  @override
+  String get changelog_v1128_opt_4 =>
+      'Kategorie-Icons einheitlich in der Theme-Farbe; jede Kategorie zeigt die belegte Größe';
+
+  @override
+  String get changelog_v1128_opt_5 =>
+      'Globale Suche startet ab dem aktuellen Ordner (am Speicherstamm global)';
+
+  @override
+  String get changelog_v1128_fix_1 =>
+      'Filter blieb nach \'Filter merken\' ausgespeichert bestehen – behoben';
+
+  @override
+  String get changelog_v1128_known_1 =>
+      'Größe/Abstand lässt sich im Doppelfenster-Modus noch nicht anpassen (folgt später)';
+
+  @override
+  String get changelog_v1129_opt_1 =>
+      'Merged the separate \"Categories\" and \"Browse\" buttons in the category/browse page navigation into a single centered toggle (shows \"Browse\" on the categories page, \"Categories\" on the browse page).';
+
+  @override
+  String get changelog_v1129_opt_2 =>
+      'When renaming a file, the filename body (without extension) is now auto-selected with the cursor placed before the extension, preventing accidental extension changes. Covers all entry points: 3-dot menu, long-press menu, image viewer, global search, selection mode, remote, and conflict dialog.';
+
+  @override
+  String get changelog_v1129_opt_3 =>
+      'Fixed preview of large archive images (>4MB) and added swipe-to-switch between images; a single failed preview no longer breaks the whole group.';
+
+  @override
+  String get changelog_v1129_opt_4 =>
+      'Remote media thumbnails now use concurrency throttling and unique temp filenames for more stable loading without cross-mixing.';
+
+  @override
+  String get changelog_v1129_opt_5 =>
+      'Hide the remote cloud badge in split-screen (dual-pane) mode for a cleaner UI.';
+
+  @override
+  String get changelog_v1129_opt_6 =>
+      'Swapped the icons of the \"Images\" and \"Screenshots\" categories (Images now shows a camera icon, Screenshots shows an image icon).';
+
+  @override
+  String get changelog_v1129_fix_1 =>
+      'Fixed thumbnails not refreshing for same-named files, and cross-mixing of thumbnails between remote and local same-named files.';
+
+  @override
+  String get changelog_v1129_fix_2 =>
+      'Fixed the issue where tapping \"OK\" after extracting an archive did not navigate to the extracted folder.';
+
+  @override
+  String get changelog_v1129_fix_3 =>
+      'Fixed the remote folder \"item count\" always showing 0.';
+
+  @override
+  String get changelog_v1129_fix_4 =>
+      'Fixed single-pane mode overwriting an already-open remote connection when opening a new one, and the remote tab title not being fixed to the connection name.';
+
+  @override
+  String get changelog_v1129_fix_5 =>
+      'Fixed breadcrumb horizontal swipe accidentally triggering page switching in the browse page.';
+
+  @override
+  String get changelog_v1129_fix_6 =>
+      'Fixed long-press dragging of category tiles accidentally triggering left/right page switching.';
+
+  @override
+  String get changelog_v1129_fix_7 =>
+      'Fixed screenshots disappearing after drilling into a folder under the Images category\'s folder view.';
+
+  @override
+  String get changelog_v1129_fix_8 =>
+      'Fixed archive image preview failing entirely due to name normalization mismatch, and missing feedback on extraction failure.';
+
+  @override
+  String get changelog_v1129_fix_9 =>
+      'Global search empty state and delete confirmation texts now support multiple languages (removed hardcoded English).';
+
+  @override
+  String get changelog_v1129_known_1 =>
+      'SMB / FTP / SFTP remote video playback may still stutter in some scenarios; optimization is ongoing.';
+
+  @override
+  String get ui_global_search_hint => 'Dateien, Apps und Einstellungen suchen';
+
+  @override
+  String get ui_delete_item_confirm =>
+      'Möchten Sie dieses Element wirklich löschen? Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String ui_delete_items_confirm(int count) {
+    return 'Möchten Sie die ausgewählten $count Elemente wirklich löschen? Dies kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get changelog_v1130_new_1 =>
+      'Remote-Schutz-PIN: Nach dem Festlegen einer 4-stelligen PIN muss beim Zugriff auf gespeicherte Remote-Server, beim Betreten der Bearbeitungsseite und beim Wechsel der Kategorieseite zum Remote-Bereich zuerst entsperrt werden, um die Privatsphäre entfernter Daten zu schützen';
+
+  @override
+  String get changelog_v1130_new_2 =>
+      'Umschaltung Lokal/Remote auf der Kategorieseite: Alle Kategorien mit Remote-Unterstützung können zwischen lokalem und Remote-Inhalt umschalten';
+
+  @override
+  String get changelog_v1130_new_3 =>
+      'Backup-Funktion (lokal→remote): Unterstützt „Automatisches Backup“ und „Jetzt sichern“; Erkennung neuer Dateien löst automatisch aus, es werden nur Dateien des Kategorieformats gesichert';
+
+  @override
+  String get changelog_v1130_new_4 =>
+      'Remote-Verbindungsassistent: neuer „Testen“-Button, um die Verbindung vor dem Speichern zu prüfen';
+
+  @override
+  String get changelog_v1130_new_5 =>
+      'Video/Audio-Kategorienmenü: neuer Schalter „Player-Steuerung anzeigen“';
+
+  @override
+  String get changelog_v1130_new_6 =>
+      'Vereinheitlichter „Öffnen mit“-Dialog: Browse/Letzte/Kategorie-Seiten zeigen aus 3-Punkt- und Langdruck-Menüs den In-App-Auswahl-Dialog';
+
+  @override
+  String get changelog_v1130_new_7 =>
+      'Bei unbekannten Formaten erscheint nach „Mit dieser App öffnen“ ein Typ-Wähler (Text/Audio/Video/Bild) und öffnet im integrierten Betrachter';
+
+  @override
+  String get changelog_v1130_opt_1 =>
+      'Die Schaltflächen „Kategorien“ und „Durchsuchen“ sind vereint; Umschalten durch Tippen in der Mitte';
+
+  @override
+  String get changelog_v1130_opt_2 =>
+      'Umbenennen wählt automatisch den Dateinamen (ohne Erweiterung); Cursor steht vor der Erweiterung';
+
+  @override
+  String get changelog_v1130_opt_3 =>
+      'Umschaltung Raster/Liste in das Sortiermenü integriert';
+
+  @override
+  String get changelog_v1130_opt_4 =>
+      'Jede Kategorie merkt sich einzeln den Modus „Ordner/Alle Elemente“; Video/Audio standardmäßig Ordneransicht';
+
+  @override
+  String get changelog_v1130_opt_5 =>
+      'Download-Kategorie unterstützt Remote-Backup';
+
+  @override
+  String get changelog_v1130_opt_6 =>
+      'Remote-Vorschaubilder für Bilder/Videos werden bei Bedarf geladen';
+
+  @override
+  String get changelog_v1130_opt_7 =>
+      'Lokaler Scan schließt App-Cache-Verzeichnisse aus; Duplikate lokaler Bilder nach Remote-Vorschaubildern behoben';
+
+  @override
+  String get changelog_v1130_opt_8 =>
+      '3-Punkt- und Langdruck-Menü für Remote-Dateien: Massen-Löschen/Umbenennen/Kopieren/Ausschneiden/Standort funktional';
+
+  @override
+  String get changelog_v1130_opt_9 =>
+      'Beim Navigieren in Remote-Ordnern bleibt die Verzeichnisstruktur erhalten (Top-Verzeichnisse wie DCIM/Pictures)';
+
+  @override
+  String get changelog_v1130_fix_1 =>
+      'Behoben: MIUI-Speicherberechtigung falsch erkannt → Startdialog-Schleife';
+
+  @override
+  String get changelog_v1130_fix_2 =>
+      'Behoben: Langes Ziehen auf der Kategorieseite löste versehentlich Seitenwechsel aus';
+
+  @override
+  String get changelog_v1130_fix_3 =>
+      'Behoben: Screenshots verschwanden nach „Nach Ordner“-Navigation in der Bildkategorie';
+
+  @override
+  String get ui_remote_guard => 'Remote-Guard';
+
+  @override
+  String get ui_remote_guard_desc =>
+      'Set a password to protect remote server access. Enter it after app launch or manual lock.';
+
+  @override
+  String get ui_remote_guard_enabled => 'Aktiviert';
+
+  @override
+  String get ui_remote_guard_disabled => 'Deaktiviert';
+
+  @override
+  String get ui_remote_guard_set_pin => 'PIN festlegen';
+
+  @override
+  String get ui_remote_guard_enter_pin => 'PIN eingeben';
+
+  @override
+  String get ui_remote_guard_confirm_pin => 'PIN bestätigen';
+
+  @override
+  String get ui_remote_guard_pin_mismatch =>
+      'PINs stimmen nicht überein. Bitte erneut versuchen.';
+
+  @override
+  String get ui_remote_guard_wrong_pin =>
+      'Falsche PIN. Bitte erneut versuchen.';
+
+  @override
+  String get ui_remote_guard_change_pin => 'Passwort ändern';
+
+  @override
+  String get ui_remote_guard_pin_hint =>
+      'Passwort (Buchstaben, Ziffern oder Symbole)';
+
+  @override
+  String get ui_remote_guard_lock_now => 'Jetzt sperren';
+
+  @override
+  String get ui_remote_guard_lock_now_desc =>
+      'Nach der Sperre muss die PIN eingegeben werden, um auf Remote-Server zuzugreifen.';
+
+  @override
+  String get ui_security_settings => 'Sicherheitseinstellungen';
+
+  @override
+  String get ui_remote_guard_switch_desc =>
+      'Gespeicherte Remoteserver sind geschützt; PIN erforderlich vor dem Zugriff';
+
+  @override
+  String get ui_app_lock => 'App-Startschutz';
+
+  @override
+  String get ui_app_lock_desc =>
+      'Require your password to unlock the app each time it launches';
+
+  @override
+  String get ui_app_lock_set_pin_first => 'Set a password before enabling';
+
+  @override
+  String get ui_remote_guard_enter_current_pin => 'Aktuelle PIN eingeben';
+
+  @override
+  String get ui_remote_guard_reencrypting =>
+      'Versteckte Dateien werden neu verschlüsselt…';
+
+  @override
+  String get ui_remote_guard_pin_changed => 'PIN geändert';
+
+  @override
+  String get ui_remote_guard_change_pin_failed =>
+      'Einige Dateien konnten nicht neu verschlüsselt werden, PIN unverändert';
+
+  @override
+  String get ui_change_vault_pin_desc =>
+      'Sicherheits- und Tresor-Entsperrpasswort ändern. Verschlüsselte Dateien sind nicht betroffen';
+
+  @override
+  String get ui_auto_backup => 'Automatisches Backup';
+
+  @override
+  String get ui_backup => 'Backup';
+
+  @override
+  String get ui_backup_now => 'Jetzt sichern';
+
+  @override
+  String get ui_local => 'Lokal';
+
+  @override
+  String get ui_no_remote_path =>
+      'Kein benutzerdefinierter Remote-Pfad hinzugefügt';
+
+  @override
+  String get ui_remote => 'Remote';
+
+  @override
+  String get ui_sync_done => 'Backup abgeschlossen';
+
+  @override
+  String get ui_syncing => 'Backup läuft...';
+
+  @override
+  String get ui_test => 'Testen';
+
+  @override
+  String get ui_test_failed => 'Test fehlgeschlagen';
+
+  @override
+  String get ui_test_failed_reason => 'Fehlerursache';
+
+  @override
+  String get ui_test_success => 'Test erfolgreich';
+
+  @override
+  String get ui_test_success_desc =>
+      'Verbindung erfolgreich, Serverkonfiguration korrekt';
+
+  @override
+  String get ui_show_remote_files => 'Remote-Dateien anzeigen';
+
+  @override
+  String get ui_hide_remote_files => 'Remote-Dateien ausblenden';
+
+  @override
+  String get changelog_v1130_new_8 =>
+      'Der Videoplayer erhält einen Umschalter für Soft/Hard-Decoding, um Bildqualität und Leistung je nach Decodierfähigkeit des Geräts abzuwägen.';
+
+  @override
+  String get changelog_v1130_new_9 =>
+      'Die Kategorieseite zeigt nach dem Aktualisieren nun einen „Aktualisierung abgeschlossen“-Hinweis mit Mehrsprachigkeitsunterstützung.';
+
+  @override
+  String get changelog_v1130_opt_10 =>
+      'Bilder/Videos/Screenshots nutzen nun einen Festplatten-Cache: Kategorien erscheinen beim Start sofort, ohne die Mediathek jedes Mal neu zu scannen (behebt die ~1-minütige Wartezeit auf Geräten mit großem Speicher und vielen Dateien).';
+
+  @override
+  String get changelog_v1130_opt_11 =>
+      'Kategorie-Zähler sind nun sofort korrekt: Nach dem Cache-Wiederherstellen werden Zahlen und Listen sofort aktualisiert, ohne veraltete Werte vom vorherigen Start anzuzeigen.';
+
+  @override
+  String get changelog_v1130_opt_12 =>
+      'Audio-Laden ist nun exklusiv zuerst: Audio wird vor Videos/Bildern geladen, um zu verhindern, dass die Mediathek-Konkurrenz auf großen Geräten den Audio-Bestand auf null leert.';
+
+  @override
+  String get changelog_v1130_opt_13 =>
+      'Der Audio-Index-Cache nutzt nun atomares Schreiben + Decodierung in isoliertem Thread: Ein Abbruch mitten im Schreiben hinterlässt keine beschädigte Datei, und der Haupt-Thread ruckelt oder stirbt bei riesigen Caches nicht mehr durch OOM.';
+
+  @override
+  String get changelog_v1130_opt_14 =>
+      'Audio-Lade-Wiederholungen behalten nun die größte Ergebnismenge, um zu verhindern, dass ein Teilergebnis (bei beschäftigter Mediathek) bereits angezeigte Inhalte überschreibt.';
+
+  @override
+  String get changelog_v1130_fix_4 =>
+      'Behoben auf Geräten mit großem Speicher (z. B. 512 GB, Zehntausende MedienDateien), bei denen die Audio-Kategorie nach dem Start geleert wurde und nach dem Laden von Video/Bild verschwand.';
+
+  @override
+  String get changelog_v1130_fix_5 =>
+      'Behoben Compile-Fehler des Release-Builds (SongModel.getMap-Aufruf, VideoController hat kein dispose()).';
+
+  @override
+  String get changelog_v1131_fix_1 =>
+      'Fixed residual blank icons on category page after deleting files from browse page or other apps (new pruneDeletedMediaPaths + pruneDeletedMedia instant pruning mechanism)';
+
+  @override
+  String get changelog_v1131_fix_2 =>
+      'Fixed residual blank icons for non-media categories (Documents/Archives/Downloads/APKs) after delete or move in browse page';
+
+  @override
+  String get changelog_v1131_fix_3 =>
+      'Fixed category total size \"shows ~1 second → zeros out → reload restores\" flicker on startup';
+
+  @override
+  String get changelog_v1131_fix_4 =>
+      'Fixed category \"Select All\" mixing remote/local files (local page selects local only, remote page selects remote only)';
+
+  @override
+  String get changelog_v1131_fix_5 =>
+      'Fixed remote file deletion not refreshing the list';
+
+  @override
+  String get changelog_v1131_fix_6 =>
+      'Fixed image viewer residual siblingItems preview after delete, list not refreshing after 3-dot menu delete, and local delete thumbnail cache invalidation';
+
+  @override
+  String get changelog_v1131_fix_7 =>
+      'Fixed remote image residual thumbnail after delete, \"Show in Location\" navigating to local cache path instead of remote, and delete only removing local cache not remote original';
+
+  @override
+  String get changelog_v1131_fix_8 =>
+      'Fixed image viewer 3-dot menu \"Show in Location\" not navigating';
+
+  @override
+  String get changelog_v1131_fix_9 =>
+      'Fixed long-press batch backup APK SnackBar not showing, progress dialog stuck (multiple iterations, final solution uses rootNavigator + backupDialogOpen flag), and unable to cancel via back key';
+
+  @override
+  String get changelog_v1131_fix_10 =>
+      'Added \"Open Location\" button to backed-up APK popup; fixed issue requiring manual back press to see navigation (now popUntil(isFirst) then switch Tab)';
+
+  @override
+  String get changelog_v1131_fix_11 =>
+      'Changed batch action bar \"Clear\" button to \"Cancel\"; backup/share/uninstall buttons now use multilingual translations instead of hardcoded Chinese';
+
+  @override
+  String get changelog_v1131_fix_12 =>
+      'Fixed refresh button not scanning non-media files (APK not loading), corrected category branch logic and added onlyApk parameter for supplementary scan';
+
+  @override
+  String get changelog_v1131_fix_13 =>
+      'Simplified \"Change PIN\" entry: tap on vault home goes directly to number pad, removed redundant \"Remote Guard\" toggle and \"Lock Now\" from remote guard page';
+
+  @override
+  String get changelog_v1131_fix_14 =>
+      'Fixed auto-backup toggle not taking effect (new _autoSyncTriggered guard); fixed remote delete-then-backup falsely reporting success';
+
+  @override
+  String get changelog_v1131_fix_15 =>
+      'Fixed browse page Tab bar horizontal swipe accidentally triggering page switch (new tabBarInteracting flag + Listener protection)';
+
+  @override
+  String get changelog_v1131_fix_16 =>
+      'Added ui_app_open_location, ui_batch_backup, ui_batch_share, ui_batch_uninstall, ui_batch_uninstall_confirm translation keys, all 10 languages covered';
+
+  @override
+  String get changelog_v1132_new_1 =>
+      'Wake on LAN (WOL): New entry in Drawer → Tools. Add/Edit/Delete devices (name, MAC address, broadcast address, port), send magic packets to wake devices on LAN. Device list persisted locally. Full 10-language localization.';
+
+  @override
+  String get changelog_v1132_new_2 =>
+      'Image Editor: New \'Edit\' button on image viewer page (top toolbar + 3-dot menu). 5 editing tabs: Adjust (brightness/contrast/saturation), Filters (original/B&W/sepia/vintage/cool/warm), Resize (exact dimensions + lock aspect ratio + 6 ID-photo presets: Passport 413×531, 1-inch 295×413, 2-inch 413×579, Small 1-inch 260×378, Large 1-inch 390×567, US Visa 600×600), Rotate & Flip (90°/180°/270° + horizontal/vertical), Crop (handle gestures + aspect ratio constraints).';
+
+  @override
+  String get changelog_v1132_new_3 =>
+      'One-tap Metadata Removal: New \'Remove Metadata\' option in image viewer 3-dot menu. Re-encodes image stripping EXIF/GPS/ICC metadata, saves as new file.';
+
+  @override
+  String get changelog_v1132_new_4 =>
+      'Immersive Info Bar: Image viewer shows filename·dimensions·size·format on touch; Properties dialog adds Dimensions row.';
+
+  @override
+  String get changelog_v1132_fix_1 =>
+      'Fixed Select All button in category page cross-selecting files from other folders when browsing by folder: Images/Videos/Audios/Screenshots/Documents/Archives/Downloads/APKs — 8 categories now only select files within the current folder when in folder view; Select All selects all files only in \'All Items\' view.';
+
+  @override
+  String get changelog_v1132_fix_2 =>
+      'Fixed Select All button failing to select files in the Screenshots folder (DCIM/Screenshots) when browsing by folder in the Images category.';
+
+  @override
+  String get changelog_v1132_fix_3 =>
+      'Fixed \'Show in Location\' not navigating to the browse page for images/screenshots (works for both local and remote paths).';
+
+  @override
+  String get changelog_v1132_fix_4 =>
+      'Fixed batch operation backup button title showing \'Backing up...\' (changed to \'Backup\', updated across all 10 languages).';
+
+  @override
+  String get changelog_v1132_fix_5 =>
+      'Fixed image viewer Dismissible widget missing closing bracket causing compile errors.';
+
+  @override
+  String get changelog_v1132_fix_6 =>
+      'Fixed Select All in category page mixing remote/local files (now filters by current scope).';
+
+  @override
+  String get changelog_v1132_fix_7 =>
+      'Fixed residual blank icons on category page after deleting or moving files in non-media categories (Documents/Archives/Downloads/APKs).';
+
+  @override
+  String get changelog_v1132_fix_8 =>
+      'Fixed residual thumbnails and unsynchronized siblingItems after deleting remote images.';
+
+  @override
+  String get changelog_v1132_fix_9 =>
+      'Fixed category total size flickering \'shows ~1s → zeros out → reload restores\' on startup.';
+
+  @override
+  String get changelog_v1132_fix_10 =>
+      'Fixed tab bar horizontal swipe accidentally triggering page switch (new tabBarInteracting flag).';
+
+  @override
+  String get changelog_v1132_fix_11 =>
+      'Fixed auto-backup toggle not taking effect (new _autoSyncTriggered guard + isLoaded check).';
+
+  @override
+  String get changelog_v1132_fix_12 =>
+      'Fixed backup logic errors (re-uploads missing remote files instead of discarding records).';
+
+  @override
+  String get changelog_v1132_fix_13 =>
+      'Fixed \'Open Location\' requiring manual back press to see navigation (now uses popUntil(isFirst) to navigate home directly).';
+
+  @override
+  String get changelog_v1132_fix_14 =>
+      'Fixed refresh button not scanning non-media files (APKs not loading), corrected category branch logic and added onlyApk parameter.';
+
+  @override
+  String get changelog_v1132_fix_15 =>
+      'Fixed batch backup progress dialog stuck and not dismissing (switched to rootNavigator mode + backupDialogOpen flag).';
+
+  @override
+  String get ui_batch_backup => 'Sichern';
+
+  @override
+  String get ui_batch_share => 'Teilen';
+
+  @override
+  String get ui_batch_uninstall => 'Deinstallieren';
+
+  @override
+  String ui_batch_uninstall_confirm(Object count) {
+    return 'Möchten Sie die ausgewählten $count Apps wirklich deinstallieren?';
+  }
+
+  @override
+  String get ui_app_open_location => 'Ort öffnen';
+
+  @override
+  String get img_dimensions => 'Abmessungen';
+
+  @override
+  String get edit_image => 'Edit Image';
+
+  @override
+  String get editor_adjust => 'Adjust';
+
+  @override
+  String get editor_filters => 'Filters';
+
+  @override
+  String get editor_resize => 'Resize';
+
+  @override
+  String get editor_crop => 'Crop';
+
+  @override
+  String get ui_draw => 'Zeichnen';
+
+  @override
+  String get ui_edit => 'Bearbeiten';
+
+  @override
+  String get ui_color => 'Farbe';
+
+  @override
+  String get ui_width => 'Dicke';
+
+  @override
+  String get ui_text => 'Text';
+
+  @override
+  String get ui_rect => 'Rechteck';
+
+  @override
+  String get ui_ellipse => 'Ellipse';
+
+  @override
+  String get ui_line => 'Linie';
+
+  @override
+  String get ui_mosaic => 'Mosaik';
+
+  @override
+  String get ui_pen => 'Stift';
+
+  @override
+  String get ui_arrow => 'Pfeil';
+
+  @override
+  String get ui_brush_size => 'Pinselgröße';
+
+  @override
+  String get editor_rotate_flip => 'Rotate & Flip';
+
+  @override
+  String get editor_flip => 'Spiegeln';
+
+  @override
+  String get editor_brightness => 'Brightness';
+
+  @override
+  String get editor_contrast => 'Contrast';
+
+  @override
+  String get editor_saturation => 'Saturation';
+
+  @override
+  String get editor_exact_dimensions => 'Exact Dimensions';
+
+  @override
+  String get editor_width => 'Width';
+
+  @override
+  String get editor_height => 'Height';
+
+  @override
+  String get editor_lock_ratio => 'Lock aspect ratio';
+
+  @override
+  String get editor_passport_413_531 => 'Reisepass';
+
+  @override
+  String get editor_preset_1inch => '1 Zoll';
+
+  @override
+  String get editor_preset_2inch => '2 Zoll';
+
+  @override
+  String get editor_preset_small_1inch => 'Klein 1 Zoll';
+
+  @override
+  String get editor_preset_large_1inch => 'Groß 1 Zoll';
+
+  @override
+  String get editor_preset_us_visa => 'US-Visum';
+
+  @override
+  String get editor_id_presets => 'Foto-Vorgaben';
+
+  @override
+  String get editor_quality => 'Qualität (Dateigröße)';
+
+  @override
+  String get editor_mode_pixel => 'Pixel';
+
+  @override
+  String get editor_mode_physical => 'Physische Größe';
+
+  @override
+  String get editor_physical_title =>
+      'Physische Größe → Pixel (DPI-Umrechnung)';
+
+  @override
+  String get editor_width_mm => 'Breite (mm)';
+
+  @override
+  String get editor_height_mm => 'Höhe (mm)';
+
+  @override
+  String get editor_dpi => 'DPI';
+
+  @override
+  String get editor_preset_id_photo => 'Ausweisfoto 35×25mm';
+
+  @override
+  String get editor_preset_passport => 'Reisepass 35×45mm';
+
+  @override
+  String get editor_preset_us_visa_mm => 'US-Visum 51×51mm';
+
+  @override
+  String editor_pixel_auto(int w, int h) {
+    return '→ $w × $h px';
+  }
+
+  @override
+  String get editor_pixel_result => 'Pixel (automatisch)';
+
+  @override
+  String get editor_width_px => 'Breite (px)';
+
+  @override
+  String get editor_height_px => 'Höhe (px)';
+
+  @override
+  String get editor_file_size_limit_title => 'Dateigrößen-Limit (JPEG)';
+
+  @override
+  String get editor_file_size_limit_label =>
+      'Zielgröße (KB), leer = unbegrenzt';
+
+  @override
+  String get editor_strip_metadata => 'Remove all metadata (EXIF / GPS / ICC)';
+
+  @override
+  String get editor_save_as_copy => 'Save as copy';
+
+  @override
+  String get editor_overwrite_original => 'Overwrite original';
+
+  @override
+  String get editor_reset => 'Zurücksetzen';
+
+  @override
+  String get editor_exit_confirm_title => 'Bearbeitung beenden?';
+
+  @override
+  String get editor_exit_confirm_message =>
+      'Nicht gespeicherte Änderungen gehen verloren';
+
+  @override
+  String get editor_exit_discard => 'Beenden';
+
+  @override
+  String get editor_filter_original => 'Original';
+
+  @override
+  String get editor_filter_bw => 'B&W';
+
+  @override
+  String get editor_filter_sepia => 'Sepia';
+
+  @override
+  String get editor_filter_vintage => 'Vintage';
+
+  @override
+  String get editor_filter_cool => 'Cool';
+
+  @override
+  String get editor_filter_warm => 'Warm';
+
+  @override
+  String get editor_strip_only => 'Strip metadata only';
+
+  @override
+  String get editor_saved => 'Image saved';
+
+  @override
+  String editor_save_failed(Object e) {
+    return 'Save failed: $e';
+  }
+
+  @override
+  String get editor_processing => 'Processing...';
+
+  @override
+  String get editor_aspect_free => 'Free';
+
+  @override
+  String get editor_aspect_square => 'Square';
+
+  @override
+  String get editor_aspect_4_3 => '4:3';
+
+  @override
+  String get editor_aspect_3_4 => '3:4';
+
+  @override
+  String get editor_scale => 'Scale';
+
+  @override
+  String get menu_edit_image => 'Edit';
+
+  @override
+  String get img_rotate => 'Drehen';
+
+  @override
+  String get img_info_format => 'Format';
+
+  @override
+  String get img_info_file_time => 'Zeit';
+
+  @override
+  String get img_info_file_info => 'Dateiinfo';
+
+  @override
+  String get img_info_save_path => 'Speicherpfad';
+
+  @override
+  String get img_info_shoot_location => 'Aufnahmeort';
+
+  @override
+  String get img_info_camera_params => 'Kameraparameter';
+
+  @override
+  String get img_info_device => 'Gerät';
+
+  @override
+  String get img_info_shutter => 'Verschluss';
+
+  @override
+  String get img_info_iso => 'ISO';
+
+  @override
+  String get img_info_ev => 'EV';
+
+  @override
+  String get img_info_aperture => 'Blende';
+
+  @override
+  String get img_info_focal_length => 'Brennweite';
+
+  @override
+  String get img_info_flash => 'Blitz';
+
+  @override
+  String get img_info_histogram => 'Histogramm';
+
+  @override
+  String get img_info_no_exif => 'Keine EXIF-Info';
+
+  @override
+  String get img_info_no_location => 'Kein Standort';
+
+  @override
+  String get menu_remove_metadata => 'Remove Metadata';
+
+  @override
+  String get editor_downloading => 'Downloading image...';
+
+  @override
+  String get editor_unsupported => 'This image format cannot be edited';
+
+  @override
+  String editor_output_size(Object size) {
+    return 'Output: $size';
+  }
+
+  @override
+  String get quick_transfer => 'Schnellübertragung';
+
+  @override
+  String get quick_transfer_send => 'Senden';
+
+  @override
+  String get quick_transfer_receive => 'Empfangen';
+
+  @override
+  String get quick_transfer_send_hint =>
+      'Wähle einen Ordner zum Teilen; Geräte im gleichen Wi-Fi öffnen die Adresse im Browser zum Herunterladen.';
+
+  @override
+  String get quick_transfer_receive_hint =>
+      'Wähle einen Speicherordner; Geräte im gleichen Wi-Fi öffnen die Adresse im Browser und laden Dateien auf dieses Gerät hoch.';
+
+  @override
+  String get quick_transfer_share_dir => 'Freigabeordner';
+
+  @override
+  String get quick_transfer_save_dir => 'Speichern in';
+
+  @override
+  String get quick_transfer_default_share =>
+      'Standard: Stammverzeichnis des internen Speichers';
+
+  @override
+  String get quick_transfer_default_save =>
+      'Standard: Stammverzeichnis des internen Speichers';
+
+  @override
+  String get quick_transfer_online => 'Aktiv';
+
+  @override
+  String get quick_transfer_address => 'Adresse dieses Geräts';
+
+  @override
+  String get quick_transfer_copy => 'Kopieren';
+
+  @override
+  String get quick_transfer_copied => 'Adresse kopiert';
+
+  @override
+  String get quick_transfer_send_tip =>
+      'Sende die Adresse oben an die andere Person; sie öffnet sie im Browser und lädt Dateien aus dem gewählten Ordner herunter.';
+
+  @override
+  String get quick_transfer_receive_tip =>
+      'Sende die Adresse oben an die andere Person; sie öffnet sie im Browser und lädt Dateien in den gewählten Ordner auf diesem Gerät hoch.';
+
+  @override
+  String get quick_transfer_connected => 'Verbundene Geräte';
+
+  @override
+  String quick_transfer_started(Object url) {
+    return 'Schnellübertragung gestartet: $url';
+  }
+
+  @override
+  String get quick_transfer_stopped => 'Schnellübertragung gestoppt';
+
+  @override
+  String get quick_transfer_running =>
+      'Schnellübertragung läuft, bitte zuerst stoppen';
+
+  @override
+  String quick_transfer_running_at(Object url) {
+    return 'Läuft: $url';
+  }
+
+  @override
+  String quick_transfer_failed(Object error) {
+    return 'Schnellübertragung konnte nicht gestartet werden: $error';
+  }
+
+  @override
+  String get wol_title => 'Wake on LAN';
+
+  @override
+  String get wol_add_device => 'Gerät hinzufügen';
+
+  @override
+  String get wol_edit_device => 'Gerät bearbeiten';
+
+  @override
+  String get wol_name => 'Gerätename';
+
+  @override
+  String get wol_name_hint => 'z.B. Mein PC';
+
+  @override
+  String get wol_mac => 'MAC-Adresse';
+
+  @override
+  String get wol_broadcast => 'Broadcast-Adresse';
+
+  @override
+  String get wol_port => 'Port';
+
+  @override
+  String get wol_wake => 'Aufwecken';
+
+  @override
+  String get wol_sent => 'Wake-Paket gesendet';
+
+  @override
+  String get wol_send_failed =>
+      'Senden fehlgeschlagen, Netzwerkverbindung prüfen';
+
+  @override
+  String get wol_invalid_mac => 'Ungültiges MAC-Adressformat';
+
+  @override
+  String get wol_empty =>
+      'Noch keine Geräte. Über die Schaltfläche unten rechts hinzufügen';
+
+  @override
+  String wol_delete_confirm(Object name) {
+    return 'Gerät „$name\" löschen?';
+  }
+
+  @override
+  String get editor_undo => 'Rückgängig';
+
+  @override
+  String get editor_text_hint => 'Text eingeben';
+
+  @override
+  String get editor_font_bold => 'Fett';
+
+  @override
+  String get editor_font_italic => 'Kursiv';
+
+  @override
+  String get editor_font_underline => 'Unterstrichen';
+
+  @override
+  String get wol_port_hint => 'Optional';
+
+  @override
+  String get quick_transfer_nearby_devices => 'In der Nähe befindliche Geräte';
+
+  @override
+  String get quick_transfer_scanning => 'Suche nach Geräten in der Nähe…';
+
+  @override
+  String get quick_transfer_scan_hint =>
+      'Beide Geräte müssen Quick Transfer öffnen und diese Seite im Vordergrund halten';
+
+  @override
+  String get quick_transfer_tap_to_connect =>
+      'Gerätename antippen, um zu verbinden';
+
+  @override
+  String quick_transfer_connecting(Object name) {
+    return 'Verbinde mit $name…';
+  }
+
+  @override
+  String quick_transfer_connected_as(Object role) {
+    return 'Verbunden (dieses Gerät ist $role)';
+  }
+
+  @override
+  String get quick_transfer_role_owner => 'Sender';
+
+  @override
+  String get quick_transfer_role_client => 'Empfänger';
+
+  @override
+  String get quick_transfer_select_files =>
+      'Dateien / Ordner zum Senden auswählen';
+
+  @override
+  String quick_transfer_selected_summary(Object count, Object size) {
+    return '$count Elemente, insgesamt $size';
+  }
+
+  @override
+  String get quick_transfer_begin_send => 'Senden starten';
+
+  @override
+  String quick_transfer_incoming(Object name) {
+    return 'Eingehende Sendeanfrage von $name';
+  }
+
+  @override
+  String quick_transfer_incoming_files(Object count, Object size) {
+    return '$count Dateien, $size';
+  }
+
+  @override
+  String get quick_transfer_accept => 'Akzeptieren';
+
+  @override
+  String get quick_transfer_reject => 'Ablehnen';
+
+  @override
+  String get quick_transfer_sending => 'Wird gesendet…';
+
+  @override
+  String get quick_transfer_receiving => 'Wird empfangen…';
+
+  @override
+  String get quick_transfer_complete => 'Übertragung abgeschlossen';
+
+  @override
+  String get quick_transfer_waiting_peer =>
+      'Warte auf Verbindung des Gegenübers…';
+
+  @override
+  String get quick_transfer_connected_waiting_files =>
+      'Verbunden. Warte darauf, dass der Sender Dateien sendet…';
+
+  @override
+  String get quick_transfer_permission_why =>
+      'WiFi Direct-Scan benötigt Standort-/Nahegeräte-Berechtigung. Ihr Standort wird nicht erfasst.';
+
+  @override
+  String get quick_transfer_permission_required =>
+      'Quick Transfer benötigt Standort- / Nearby-Devices-Berechtigung, um Geräte zu finden';
+
+  @override
+  String get quick_transfer_not_supported =>
+      'Dieses Gerät unterstützt kein WiFi-Direct-Quick-Transfer';
+
+  @override
+  String get quick_transfer_disconnect => 'Trennen';
+
+  @override
+  String get quick_transfer_cancel => 'Abbrechen';
+
+  @override
+  String get quick_transfer_save_to => 'Speichern unter';
+
+  @override
+  String get quick_transfer_send_mode => 'Senden';
+
+  @override
+  String get quick_transfer_receive_mode => 'Empfangen';
+
+  @override
+  String get quick_transfer_device_name => 'Dieses Gerät';
+
+  @override
+  String get quick_transfer_retry => 'Wiederholen';
+
+  @override
+  String get quick_transfer_permission_grant => 'Gewähren & Fortfahren';
+
+  @override
+  String get quick_transfer_open_settings => 'Einstellungen öffnen';
+
+  @override
+  String get quick_transfer_wifi_required =>
+      'Bitte WLAN einschalten. Schnellübertragung benötigt WiFi Direct.';
+
+  @override
+  String get quick_transfer_create_group_failed =>
+      'Verbindungsaufbau fehlgeschlagen. Bitte WLAN einschalten und Berechtigungen gewähren.';
+
+  @override
+  String get quick_transfer_receive_path => 'Speicherpfad';
+
+  @override
+  String get quick_transfer_change_path => 'Ändern';
+
+  @override
+  String get quick_transfer_back => 'Zurück';
+
+  @override
+  String get quick_transfer_send_button => 'Senden';
+
+  @override
+  String get quick_transfer_receive_button => 'Empfangen';
+
+  @override
+  String get quick_transfer_open_location => 'Dateispeicherort öffnen';
+
+  @override
+  String get quick_transfer_receive_complete => 'Empfang abgeschlossen';
+
+  @override
+  String quick_transfer_files_saved_to(Object path) {
+    return 'Dateien gespeichert unter $path';
+  }
+
+  @override
+  String get quick_transfer_connect_btn => 'Verbinden';
+
+  @override
+  String get quick_transfer_connected_btn => 'Verbunden';
+
+  @override
+  String get quick_transfer_forget_device => 'Gerät entfernen';
+
+  @override
+  String get quick_transfer_peer_unreachable =>
+      'Verbindung zu diesem Gerät nicht möglich. Stellen Sie sicher, dass die andere Seite Schnellübertragung geöffnet hat und in der Nähe ist.';
+
+  @override
+  String get quick_transfer_available_peers => 'Verfügbare Geräte';
+
+  @override
+  String quick_transfer_selected_count(Object count) {
+    return '$count ausgewählt';
+  }
+
+  @override
+  String get changelog_v1133_new_1 =>
+      'Schnellübertragung (LAN): eigenständige Senden/Empfangen-Modi, Radar-Erkennung nahegelegener Geräte, Verbindungszustände, Bestätigung vor der Übertragung, Ein-Tipp-Öffnen im App-Browser nach dem Empfang, mit Berechtigungshinweisen. Vollständig in 10 Sprachen lokalisiert.';
+
+  @override
+  String get changelog_v1133_new_2 =>
+      'Umschalter für die Sichtbarkeit von Kategorie-Icon-Beschriftungen.';
+
+  @override
+  String get changelog_v1133_new_3 =>
+      'AMOLED-Design mit rein schwarzer Vollbildseite.';
+
+  @override
+  String get changelog_v1133_new_4 =>
+      'Hintergrundwiedergabe ohne Schlafmodus (Batterie-Optimierungs-Whitelist + Wake Lock).';
+
+  @override
+  String get changelog_v1133_new_5 =>
+      'Bildeditor: physische Abmessungen (mm + DPI), Vorlagen (Ausweisfoto / Reisepass / US-Visum), Dateigrößenbegrenzung.';
+
+  @override
+  String get changelog_v1133_new_6 =>
+      'Audio-Equalizer mit 5 Voreinstellungen (Original / HD-Stimmen / Bass / Live / Jazz).';
+
+  @override
+  String get changelog_v1133_new_7 =>
+      'Videoplayer: integrierte Auswahl mehrerer Audio-/Untertitel-Spuren; Gestenoptimierung (Doppeltippen zum Pausieren/Abspielen, Langdrücken für Tempo, Wischen links/rechts zum Spulen).';
+
+  @override
+  String get changelog_v1133_new_8 =>
+      'Schublade / Benutzerdefinierte Verknüpfungen: Eintrag „Schnellübertragung“ hinzugefügt.';
+
+  @override
+  String get changelog_v1133_opt_1 =>
+      'Bildbetrachter: obere Infoleiste neu aufgebaut (Abmessungen/Zeit/Format/Größe/EXIF), Drehen nur als Vorschau (ohne Speichern), Live-EXIF-Anzeige, Dateinamen-Titel wiederhergestellt.';
+
+  @override
+  String get changelog_v1133_opt_2 =>
+      'Videoplayer: Layout/Reihenfolge der unteren Buttons, Überlauf-Fix im Hochformat, automatische Querausrichtung bei Systemdrehung, Skalierung (Bildschirm füllen / cover), Fix schwarzer Kameraränder im Querformat-Vollbild.';
+
+  @override
+  String get changelog_v1133_opt_3 =>
+      'Audioplayer: Wechsel der Equalizer-Voreinstellung wirksam, Bass/Stimmen-Verzerrung behoben.';
+
+  @override
+  String get changelog_v1133_opt_4 =>
+      'Videolautstärke: Der Regler des Players synchronisiert sich jetzt in Echtzeit mit der System-Medienvolumen.';
+
+  @override
+  String get changelog_v1133_opt_5 =>
+      'Audio-Wiedergabemodus: bleibt nun nach App-Neustart erhalten.';
+
+  @override
+  String get changelog_v1133_opt_6 =>
+      'Bildbearbeitung: Fix des Zuschneideverhältnisses (Quadrat / 4:3 / 3:4 / Ausweisfoto).';
+
+  @override
+  String get changelog_v1133_fix_1 =>
+      'Texteditor: Hartcodierte Fehlermeldung beim Öffnen unbekannter Dateien über „Als Text öffnen“ ist nun lokalisiert.';
+
+  @override
+  String get changelog_v1133_fix_2 =>
+      'Desktop-Lyrics: Hartcodierter chinesischer Berechtigungs-Toast ist nun lokalisiert.';
+
+  @override
+  String get changelog_v1133_fix_3 =>
+      'Verzeichnisauswahl: Hartcodierter chinesischer Button „Auswahl anheften“ ist nun lokalisiert.';
+
+  @override
+  String get changelog_v1133_fix_4 =>
+      'Eingeschränkte Verzeichnisse (Android/data | obb): Fehler beim Kopieren nach lokal/remote behoben (zweiter Fix).';
+
+  @override
+  String get changelog_v1133_fix_5 =>
+      'Lange drücken-Menü: Anzeigestruktur von v1.1.32 wiederhergestellt mit kontrastreichem Hintergrund und Umrandung.';
+
+  @override
+  String get changelog_v1134_fix_1 =>
+      'Fixed the app UI freezing when Web Sharing was accessed by another device — the whole-storage scan is now asynchronous and no longer blocks the UI thread.';
+
+  @override
+  String get changelog_v1134_fix_2 =>
+      'Fixed FTP failing to connect or picking the wrong network interface — local IP selection now prefers wlan/eth and skips Docker/VPN/virtual adapters.';
+
+  @override
+  String get changelog_v1134_fix_3 =>
+      'FTP sharing now supports a custom port — configurable and persisted in settings, with live apply and auto-restart of the listener while running.';
+
+  @override
+  String get changelog_v1134_fix_4 =>
+      'Fixed FTP control-port binding & PASV: the control port is now bound to the concrete LAN IP and PASV resolution is simplified, fixing connection failures behind VPN/proxy.';
+
+  @override
+  String get changelog_v1134_fix_5 =>
+      'Added an \'FTP server stopped\' notification that replaces the previous incorrect \'port changed / not active\' message when the server stops.';
+
+  @override
+  String get changelog_v1134_fix_6 =>
+      'Text editor save/save-as merged into a single Save button that opens a menu to choose Save or Save As.';
+
+  @override
+  String get changelog_v1134_new_1 =>
+      'Added a Toolbox entry on the Categories page.';
+
+  @override
+  String get changelog_v1134_new_2 =>
+      'Consolidated the Encrypted Vault, Wake-on-LAN, and Quick Transfer into the Toolbox for centralized access.';
+
+  @override
+  String get changelog_v1134_new_3 =>
+      'Quick Transfer now remembers connected devices — reconnect with one tap next time, and remove a remembered device individually from the list.';
+
+  @override
+  String get changelog_v1134_opt_1 =>
+      'Quick Transfer is now symmetric — after connecting, either side can initiate sending; the send/receive mode toggle and top switch button were removed.';
+
+  @override
+  String get changelog_v1134_opt_2 =>
+      'Quick Transfer UI fully refreshed — section cards, device-row cards, icon badges, filled selection boxes, and a circular progress badge for a more unified look.';
+
+  @override
+  String get changelog_v1134_opt_3 =>
+      'Quick Transfer main screen tightened — reduced card padding and spacing to minimize first-screen scrolling so the radar/device list is visible immediately.';
+
+  @override
+  String get ftp_server_stopped => 'FTP-Server gestoppt';
+
+  @override
+  String get cat_toolbox => 'Werkzeugkasten';
+
+  @override
+  String get cat_toolbox_desc => 'Werkzeuge';
+
+  @override
+  String quick_transfer_waiting_for_x(Object name) {
+    return 'Warte darauf, dass $name auf Verbinden tippt…';
+  }
+
+  @override
+  String get quick_transfer_ask_peer_connect =>
+      'Bitten Sie das andere Gerät, in Quick Transfer ebenfalls die Schaltfläche „Verbinden“ für dieses Gerät zu tippen';
+
+  @override
+  String get ui_scan_shares => 'Freigaben scannen';
+
+  @override
+  String get ui_scanning_shares => 'Freigaben werden gescannt…';
+
+  @override
+  String get ui_select_share_to_fill =>
+      'Auf einen Freigabenamen tippen, um ihn einzufügen';
+
+  @override
+  String get ui_no_shares_found => 'Keine Freigaben gefunden';
+
+  @override
+  String get ui_anonymous_login => 'Anonyme Anmeldung';
+
+  @override
+  String ui_share_scan_failed(Object error) {
+    return 'Fehler beim Scannen der Freigaben: $error';
+  }
+
+  @override
+  String get ui_scan_lan_devices => 'LAN-Geräte scannen';
+
+  @override
+  String get ui_scanning_lan => 'LAN-Geräte werden gescannt…';
+
+  @override
+  String get ui_lan_no_devices => 'Keine SMB-Geräte im LAN gefunden';
+
+  @override
+  String get ui_lan_scan_hint =>
+      'Gerät antippen, um Adresse und Freigabenamen einzutragen';
+
+  @override
+  String get ui_enter_host_first =>
+      'Geben Sie zuerst Host-Adresse und Port ein';
+
+  @override
+  String get vault_enter_password => 'Passwort eingeben zum Entsperren';
+
+  @override
+  String get vault_set_password => 'Passwort festlegen';
+
+  @override
+  String get vault_confirm_password => 'Erneut eingeben zur Bestätigung';
+
+  @override
+  String get vault_pins_mismatch => 'Passwörter stimmen nicht überein';
+
+  @override
+  String get vault_incorrect_password => 'Falsches Passwort';
+
+  @override
+  String get vault_password_set => 'Passwort festgelegt';
+
+  @override
+  String get vault_next => 'Weiter';
+
+  @override
+  String get vault_unlock => 'Entsperren';
+
+  @override
+  String get vault_use_keypad => 'Numerische Tastatur verwenden';
+
+  @override
+  String get vault_use_text_input => 'Alphanumerisch verwenden';
+
+  @override
+  String get vault_fingerprint => 'Mit Fingerabdruck entsperren';
+
+  @override
+  String get vault_fingerprint_failed =>
+      'Fingerabdruck-Authentifizierung fehlgeschlagen';
+
+  @override
+  String get vault_min_length => 'Passwort muss mindestens 4 Zeichen lang sein';
+
+  @override
+  String get vault_pwd_alphanumeric =>
+      'Passwort (Buchstaben, Ziffern oder Symbole)';
+
+  @override
+  String get vault_enable_fingerprint => 'Fingerabdruck-Entsperrung aktivieren';
+
+  @override
+  String get vault_biometric_desc =>
+      'Nutzen Sie Ihren Fingerabdruck, um den Tresor schnell zu entsperren';
+
+  @override
+  String get vault_export_backup => 'Sicherung exportieren';
+
+  @override
+  String get vault_export_backup_desc =>
+      'Verschlüsselte Tresor-Sicherung exportieren (.zip)';
+
+  @override
+  String get vault_import_backup => 'Sicherung importieren';
+
+  @override
+  String get vault_backup_restore => 'Sichern / Wiederherstellen';
+
+  @override
+  String get vault_import_backup_desc =>
+      'Tresor aus Sicherung wiederherstellen (.zip)';
+
+  @override
+  String get vault_uninstall_warning_title => 'Deinstallationswarnung';
+
+  @override
+  String get vault_uninstall_warning =>
+      'Bei Deinstallation der App wird die Sandbox-Verschlüsselung gelöscht. Exportieren Sie zuerst eine Sicherung.';
+
+  @override
+  String get vault_backup_exported => 'Sicherung exportiert nach';
+
+  @override
+  String get vault_backup_imported => 'Elemente importiert';
+
+  @override
+  String get vault_export_failed => 'Sicherung export fehlgeschlagen';
+
+  @override
+  String get vault_import_failed => 'Sicherung import fehlgeschlagen';
+
+  @override
+  String get ui_font_size => 'Schrift';
+
+  @override
+  String get ui_line_width => 'Linienstärke';
+
+  @override
+  String archive_open_failed_with_reason(String e) {
+    return 'Öffnen fehlgeschlagen: $e';
+  }
+
+  @override
+  String archive_extract_failed_with_reason(String e) {
+    return 'Entpacken fehlgeschlagen: $e';
+  }
+
+  @override
+  String get archive_unsupported_format =>
+      'Datei ist leer oder kann nicht entpackt werden (möglicherweise zu groß, beschädigt oder in einem nicht unterstützten Format)';
+
+  @override
+  String get vault_export_backup_confirm =>
+      'Die Sicherungsdatei wird am folgenden Ort gespeichert:';
+
+  @override
+  String get vault_import_only_zip =>
+      'Nur .zip-Sicherungsdateien werden unterstützt';
+
+  @override
+  String get vault_import_password_hint =>
+      'Diese Sicherung verwendet ein anderes Passwort. Entsperre den Tresor mit dem Passwort, das beim Erstellen der Sicherung verwendet wurde';
+
+  @override
+  String get vault_open_backup_location =>
+      'Ordner öffnen, in dem die Sicherung gespeichert ist?';
+
+  @override
+  String get open_file => 'Open';
+
+  @override
+  String get open_in_location => 'Open file location';
+
+  @override
+  String get open_with_title => 'Open with';
+
+  @override
+  String get share_permission_title => 'Permission required';
+
+  @override
+  String get share_permission_message =>
+      'ZenFile does not have permission to access this file. Please share it again or grant permission and retry.';
+
+  @override
+  String get qqGroup => 'QQ-Gruppe: 792408214';
+
+  @override
+  String get emailCopied => 'E-Mail in die Zwischenablage kopiert';
+
+  @override
+  String get vt_scanning => 'VirusTotal-Scan läuft (Hash-Abfrage)...';
+
+  @override
+  String get vt_uploading =>
+      'Datei wird zu VirusTotal hochgeladen, Analyse dauert ca. 1-2 Minuten...';
+
+  @override
+  String get vt_safe_title => 'Scan-Ergebnis: Sicher';
+
+  @override
+  String get vt_risk_title => 'Scan-Ergebnis: Risiko erkannt';
+
+  @override
+  String get vt_unknown_title => 'Scan-Ergebnis: Nicht in Datenbank';
+
+  @override
+  String vt_malicious_count(Object n) {
+    return 'Schädlich erkannt: $n';
+  }
+
+  @override
+  String vt_suspicious_count(Object n) {
+    return 'Verdächtig: $n';
+  }
+
+  @override
+  String vt_harmless_count(Object n) {
+    return 'Harmlos: $n';
+  }
+
+  @override
+  String vt_undetected_count(Object n) {
+    return 'Nicht erkannt: $n';
+  }
+
+  @override
+  String get vt_not_found_msg =>
+      'Diese Datei ist noch nicht in der VirusTotal-Datenbank. Du kannst sie für einen vollständigen Scan hochladen oder überspringen und die Installation fortsetzen.';
+
+  @override
+  String vt_scan_failed(Object error) {
+    return 'Scan fehlgeschlagen: $error';
+  }
+
+  @override
+  String get vt_no_key_msg =>
+      'Kein VirusTotal-API-Key konfiguriert. Scan übersprungen und direkt installiert. Konfiguriere den Key in den Einstellungen, um das Scannen vor der Installation zu aktivieren.';
+
+  @override
+  String get vt_continue_install => 'Trotzdem installieren';
+
+  @override
+  String get vt_upload_scan => 'Für vollständigen Scan hochladen';
+
+  @override
+  String get vt_open_report => 'Vollständigen Bericht anzeigen';
+
+  @override
+  String get vt_apikey_title => 'VirusTotal-API-Key';
+
+  @override
+  String get vt_apikey_subtitle =>
+      'APKs vor der Installation automatisch prüfen (kostenloser Key auf virustotal.com)';
+
+  @override
+  String get vt_apikey_dialog_title => 'VirusTotal-API-Key konfigurieren';
+
+  @override
+  String get vt_apikey_hint => 'API-Key einfügen (kostenlos: 4 Anfragen/Min.)';
+
+  @override
+  String get vt_save => 'Speichern';
+
+  @override
+  String get vt_key_saved => 'VirusTotal-API-Key gespeichert';
+
+  @override
+  String get vt_key_invalid =>
+      'Ungültiger API-Key, bitte prüfen und erneut versuchen';
+
+  @override
+  String vt_key_masked(Object mask) {
+    return 'Konfiguriert ($mask)';
+  }
+
+  @override
+  String get vt_scan_before_install => 'APK wird mit VirusTotal gescannt...';
+
+  @override
+  String get vt_skip => 'Überspringen';
+
+  @override
+  String get vt_retry => 'Erneut versuchen';
+
+  @override
+  String get vt_cancel => 'Abbrechen';
+
+  @override
+  String get vt_analyzing => 'Warte auf VirusTotal-Analyse...';
+
+  @override
+  String get vt_settings_title => 'Sicherheitsscan bei APK-Installation';
+
+  @override
+  String get vt_settings_subtitle =>
+      'Erkennt Malware automatisch vor der APK-Installation (mit VirusTotal)';
+
+  @override
+  String get vt_what_is_title => 'Was ist das?';
+
+  @override
+  String get vt_what_is_desc =>
+      'Wenn aktiviert, werden Dateien vor der APK-Installation automatisch mit VirusTotal auf Malware geprüft. Ohne API-Key funktioniert die Installation wie zuvor und wird nicht beeinträchtigt.';
+
+  @override
+  String get vt_api_key_label => 'API-Key';
+
+  @override
+  String get vt_current_key_configured => 'Konfiguriert';
+
+  @override
+  String get vt_not_configured => 'Nicht konfiguriert';
+
+  @override
+  String get vt_api_key_hint => 'Füge deinen VirusTotal-API-Key ein';
+
+  @override
+  String get vt_save_key => 'Speichern & prüfen';
+
+  @override
+  String get vt_how_to_get_title => 'So erhälst du einen API-Key';
+
+  @override
+  String get vt_step_1 =>
+      '1. Öffne virustotal.com und melde dich an (kostenlose Registrierung mit Google)';
+
+  @override
+  String get vt_step_2 =>
+      '2. Tippe oben rechts auf dein Avatar und wähle „API key“';
+
+  @override
+  String get vt_step_3 =>
+      '3. Tippe auf das Kopiersymbol, um deinen API-Key zu kopieren';
+
+  @override
+  String get vt_step_4 =>
+      '4. Kehre zu dieser Seite zurück und füge ihn in das Feld oben ein';
+
+  @override
+  String get vt_step_5 =>
+      '5. Tippe auf „Speichern & prüfen“; ein ungültiger Key wird gemeldet';
+
+  @override
+  String get vt_open_vt => 'Website öffnen';
+
+  @override
+  String get vt_limit_note =>
+      'Limit des kostenlosen Accounts: 4 Anfragen/Min., reicht für alltägliche Installationsscans.';
+
+  @override
+  String get vt_privacy_note =>
+      'Datenschutz: Standardmäßig wird nur der Datei-Hash zur Abfrage hochgeladen, nicht die Datei selbst; Dateien werden nur hochgeladen, wenn du aktiv „Für vollständigen Scan hochladen“ wählst.';
+
+  @override
+  String get vt_silent_install => 'Stumme Installation';
+
+  @override
+  String get vt_silent_install_ready =>
+      'Root- oder Shizuku-Zugriff erkannt — Installationen erfolgen ohne Bestätigung';
+
+  @override
+  String get vt_silent_install_requires =>
+      'Erfordert Root- oder Shizuku-Berechtigung';
+
+  @override
+  String get vt_install_success => 'Installation erfolgreich';
+
+  @override
+  String get vt_keep_apk => 'APK nach Installation behalten';
+
+  @override
+  String get vt_keep_apk_desc =>
+      'Vor der Installation eine temporäre Kopie erstellen, damit der Systeminstaller die Quell-APK nicht automatisch löscht';
+
+  @override
+  String get apk_open_mode_title => 'APK-Öffnen';
+
+  @override
+  String get apk_open_mode_desc =>
+      'Den Systemauswähler zum Öffnen von APKs verwenden, damit Drittanbieter-Installer wie InstallerX sie übernehmen können; aus nutzt den eingebauten Installer.';
+
+  @override
+  String get vt_install => 'Installieren';
+
+  @override
+  String get vt_direct_install => 'Direkt installieren';
+
+  @override
+  String get biometric_verify_hint =>
+      'Bestätigen Sie Ihren Fingerabdruck, um fortzufahren';
+
+  @override
+  String get biometric_reason_vault =>
+      'Bestätigen Sie Ihren Fingerabdruck, um den Tresor zu entsperren';
+
+  @override
+  String get biometric_reason_remote_guard =>
+      'Bestätigen Sie Ihren Fingerabdruck für die Fernsicherung';
+
+  @override
+  String get biometric_reason_app_lock =>
+      'Bestätigen Sie Ihren Fingerabdruck, um die App zu öffnen';
+
+  @override
+  String get vt_install_settings_title => 'APK-Installationseinstellungen';
+
+  @override
+  String get vt_install_settings_subtitle =>
+      'Stumme Installation, Installer behalten, Sicherheitsscan';
+
+  @override
+  String get ui_noise_filter_images_subtitle =>
+      'Symbole und Mini-Bilder ausblenden (<30KB)';
+
+  @override
+  String get ui_noise_filter_videos_subtitle =>
+      'Kurze Clips und Fragmente ausblenden (<1MB)';
+
+  @override
+  String get ui_noise_filter_screenshots_subtitle =>
+      'Benachrichtigungs-/Verknüpfungssymbole ausblenden (<5KB)';
+
+  @override
+  String get ui_noise_filter_audios_subtitle =>
+      'Soundeffekte, Hinweise und Aufnahmen ausblenden (<60s)';
+
+  @override
+  String get ui_noise_filter_documents_subtitle =>
+      'Beschädigte/leere Dokumente ausblenden (0KB)';
+
+  @override
+  String get ui_noise_filter_archives_subtitle =>
+      'Beschädigte/leere Archive ausblenden (<100B)';
+
+  @override
+  String get ui_noise_filter_downloads_subtitle =>
+      'Beschädigte/leere Downloads ausblenden (0KB)';
+
+  @override
+  String get ui_noise_filter_apks_subtitle =>
+      'Beschädigte/zu kleine APKs ausblenden (<100KB)';
+
+  @override
+  String get ui_media_filter_title => 'Filtereinstellungen';
+
+  @override
+  String get ui_media_filter_description =>
+      'Filterbedingungen für diese Kategorie anpassen';
+
+  @override
+  String get ui_media_filter_master_switch => 'Intelligenten Filter Aktivieren';
+
+  @override
+  String get ui_media_filter_master_hint =>
+      'Bei Aktivierung werden kleine Dateien, kurze Videos/Audios und andere Störungen nach den untenstehenden Regeln gefiltert';
+
+  @override
+  String get ui_media_filter_rules => 'Filterregeln';
+
+  @override
+  String get ui_media_filter_restore_default => 'Standard Wiederherstellen';
+
+  @override
+  String get ui_category_settings_title => 'Kategorie-Einstellungen';
+
+  @override
+  String get ui_category_settings_description =>
+      'Filterregeln und Scan-Speicherorte dieser Kategorie verwalten';
+
+  @override
+  String get ui_excluded_folders_title => 'Blocked folders';
+
+  @override
+  String get ui_excluded_folders_empty =>
+      'No blocked folders yet. After adding, this category will no longer scan files in that folder';
+
+  @override
+  String get ui_add_excluded_folder => 'Add blocked folder';
+
+  @override
+  String get ui_remove_excluded_folder => 'Remove block';
+
+  @override
+  String get vt_extracting => 'Extrahiere…';
+
+  @override
+  String get vt_no_apk_in_bundle =>
+      'Kein installierbares APK im Bundle gefunden';
+
+  @override
+  String get vt_split_installer_launch_failed =>
+      'Geteilter APK-Installer konnte nicht gestartet werden';
+
+  @override
+  String get vt_extract_failed => 'Paket-Extraktion fehlgeschlagen: ';
+
+  @override
+  String get vt_open_report_failed =>
+      'Berichtslink konnte nicht geöffnet werden';
+
+  @override
+  String get vt_silent_fallback =>
+      'Stille Installation versucht, aber ohne Berechtigung; Systeminstaller wird verwendet';
+
+  @override
+  String get ui_nav_back => 'Zurück';
+
+  @override
+  String get ui_nav_forward => 'Weiter';
+
+  @override
+  String get ui_custom_theme => 'Benutzerdefiniert';
+
+  @override
+  String get ui_preset_colors => 'Voreingestellte Farben';
+
+  @override
+  String get crypt_settings_title => 'Passwortkonfiguration';
+
+  @override
+  String get vault_config_password => 'Passwortkonfiguration';
+
+  @override
+  String get cl211_features => 'Neu';
+
+  @override
+  String get cl211_feat_1 =>
+      'Eigenes Bild als App-Symbol: Einstellungen → Erscheinungsbild & Design → App-Symbol. Nach dem Auswählen eines Bildes kannst du es als Verknüpfung oder als 1×1-Widget auf den Startbildschirm legen. Behoben wurde zudem der Fall, dass \"hinzugefügt\" gemeldet wurde, ohne dass etwas passierte; falls dein Launcher Verknüpfungen blockiert, nutze das Widget.';
+
+  @override
+  String get cl211_feat_2 =>
+      'Die Löschbestätigung kann nun deaktiviert werden: Der Löschdialog hat ein Kontrollkästchen \"Nicht mehr fragen\", und unter Einstellungen → Dateioperationen & Betrachter gibt es den Schalter \"Vor dem Löschen bestätigen\".';
+
+  @override
+  String get cl211_ui => 'Oberfläche & Bedienung';
+
+  @override
+  String get cl211_ui_1 =>
+      'Alle Fortschrittsdialoge nutzen nun einen Doppelring: der äußere Ring zeigt den Gesamtfortschritt, der innere grüne Ring den Fortschritt der aktuellen Datei. Abgedeckt sind Kopieren/Ausschneiden, Komprimieren/Entpacken, Verschlüsseln/Entschlüsseln, Tresor-Import & -Wiederherstellung und Kategorie-Backup.';
+
+  @override
+  String get cl211_ui_2 =>
+      'Die Videosteuerungen sind kleiner und nach unten direkt über die Fortschrittsleiste verschoben, sodass sie die Bildmitte nicht mehr verdecken.';
+
+  @override
+  String get cl211_ui_3 =>
+      'Die Liste der direkten Verschlüsselung im Tresor erhält eine Aktion \"Entfernen\" — sie blendet nur den Eintrag aus, die verschlüsselte Datei auf der Festplatte bleibt unberührt.';
+
+  @override
+  String get cl211_fixes => 'Fehlerbehebungen';
+
+  @override
+  String get cl211_fix_1 =>
+      'Schwarzer Bildschirm (nur Ton, kein Bild) bei der Videowiedergabe auf einigen Geräten behoben, verursacht durch ein mit 1.1.42 eingeführtes Renderer-Kompatibilitätsproblem. Die Darstellung nutzt nun den universell kompatiblen Pfad, und bei Problemen mit der Hardware-Dekodierung wird automatisch auf Software-Dekodierung umgeschaltet.';
+
+  @override
+  String get cl211_fix_2 =>
+      'Behoben: Remote-Videowiedergabe über SMB / FTP / SFTP blieb alle paar Sekunden hängen, und die Fortschrittsleiste sprang nach dem Suchen wieder an den Anfang.';
+
+  @override
+  String get cl211_fix_3 =>
+      'Behoben: FTP brauchte beim Öffnen eines Verzeichnisses oder beim Zurückgehen manchmal sehr lange.';
+
+  @override
+  String get cl211_fix_4 =>
+      'Behoben: Komprimierung großer oder vieler Dateien blieb bei 100 % hängen. Die ZIP-Komprimierung erfolgt nun dateiweise im Stream, was den Speicherverbrauch stark senkt, während der Fortschritt weiterläuft.';
+
+  @override
+  String get cl211_fix_5 =>
+      'Behoben, dass der Musikplayer jeden Titel als \"FLAC • 24-bit\" anzeigte; nun wird das echte Format angezeigt, plus die tatsächliche Bit-Tiefe bei verlustfreien Formaten.';
+
+  @override
+  String get cl211_fix_6 =>
+      'Behoben: Nach dem Konfigurieren des Tresors oder dem Verschlüsseln am Ort verlangten unverschlüsselte Dateien fälschlicherweise das Tresor-Passwort.';
+
+  @override
+  String get cl211_fix_7 =>
+      'Zwei Tresor-Meldungen behoben: bei falschem Passwort erschien fälschlicherweise \"bitte zuerst das Master-Passwort festlegen\"; Ergebnis-Toasts für Verschlüsseln/Entschlüsseln waren in nicht-chinesischen Sprachen weiterhin auf Chinesisch.';
+
+  @override
+  String get cl212_features => 'Neu';
+
+  @override
+  String get cl212_feat_1 =>
+      'Umschaltbare APK-Öffnungsart: Unter Einstellungen → APK-Installationsoptionen gibt es neu „APK-Öffnen“ zum Wechseln zwischen dem eingebauten Installer und dem Systemauswähler. Mit dem Systemauswähler fängt ZenFile das Öffnen von APK nicht mehr ab, sodass Drittanbieter-Installer wie InstallerX und InstallWithOptions sie übernehmen können — beim Masseninstallieren muss nicht mehr lange auf jede Datei gedrückt werden, um „Öffnen mit“ zu wählen.';
+
+  @override
+  String get cl212_ui => 'Oberfläche & Interaktion';
+
+  @override
+  String get cl212_ui_1 =>
+      'Weiterer Bereich „Größe & Abstand“: die untere Grenze des Abstandsreglers zwischen Karten wurde von 40 % auf -50 % gesenkt; bei 0 % berühren sich die Kartenränder, und negative Werte lassen angrenzende Kartenränder zu einer Linie verschmelzen. Der Standardwert ist ebenfalls 0 % (neue Installationen sind direkt bündig; bestehende Einstellungen bleiben erhalten).';
+
+  @override
+  String get cl212_ui_2 =>
+      'Dialog für benutzerdefinierte Verknüpfungen: „Symbolform“ und „Spalten pro Zeile“ sind nun Dropdowns statt nebeneinanderliegender Buttons, was das Layout kompakter macht.';
+
+  @override
+  String get cl212_fixes => 'Fehlerbehebungen';
+
+  @override
+  String get cl212_fix_1 =>
+      'Entsperren per Fingerabdruck ist jetzt standardmäßig aus: nach der Installation bleibt die Fingerabdruck-Entsperrung unter Einstellungen → Sicherheit aus, bis du sie aktivierst — die biometrische Entsperrung wird nicht mehr automatisch aktiviert.';
+
+  @override
+  String get cl212_fix_2 =>
+      'Behoben, dass sich der API-Schlüssel der APK-Sicherheitsprüfung nicht neu konfigurieren ließ: früher öffnete das Aus- und Wiedereinschalten des Schalters nach dem Speichern des Schlüssels die Konfigurationsseite nicht erneut. Sie öffnet sich nun sowohl über den Schalter als auch durch Tippen auf die Karte.';
+
+  @override
+  String get cl212_fix_3 =>
+      'Behoben „Zugriff verweigert“ bei stiller Installation trotz autorisiertem Shizuku: der Shizuku-Pfad installiert nun über eine System-PackageInstaller-Sitzung statt dem auf manchen Systemen gesperrten Shell-Befehl; der Root-Pfad übergibt kein unnötiges Downgrade-Flag mehr.';
+
+  @override
+  String get cl213_fixes => 'Fehlerbehebungen';
+
+  @override
+  String get cl213_feat_2 =>
+      'Die Auswahl „Immer öffnen mit“ wird für Remote-Dateien gespeichert: Nach der Wahl dieser App oder einer externen App öffnen Dateien gleichen Typs direkt ohne Rückfrage.';
+
+  @override
+  String get cl213_fix_1 =>
+      'Behoben: Beim Wischen im Remote-Bildbetrachter wurden nur bereits heruntergeladene Bilder durchlaufen. Jetzt werden die weiteren Bilder des Remote-Ordners durchgeblättert und bei Bedarf geladen.';
+
+  @override
+  String get cl213_fix_2 =>
+      'Behoben: Einige Bildschirme (z. B. der Verbindungstest-Dialog) zeigten auf Koreanisch, Japanisch, Deutsch usw. chinesischen Text, da diese Werte nie übersetzt wurden. Alle sind nun übersetzt.';
+
+  @override
+  String get cl213_fix_3 =>
+      'Behoben: Im traditionellen Chinesisch (Taiwan) wurden viele Texte in Kurzzeichen angezeigt.';
+
+  @override
+  String get cl213_features => 'Remote-Browsing und Fehlermeldungen';
+
+  @override
+  String get cl213_feat_1 =>
+      'Fehler der Remote-Clients (FTP / WebDAV / SFTP / SMB) zeigen nun klare, lokalisierte Meldungen statt roher englischer Ausnahmen - z. B. Verbindung fehlgeschlagen, Anmeldung fehlgeschlagen, Timeout, Zugriff verweigert, Datei nicht gefunden.';
+
+  @override
+  String get remote_err_cancelled => 'Vorgang abgebrochen';
+
+  @override
+  String get remote_err_auth =>
+      'Anmeldung fehlgeschlagen: Benutzername oder Passwort falsch. Bei Schlüsselanmeldung private Schlüsseldatei und Passphrase prüfen.';
+
+  @override
+  String get remote_err_not_connected =>
+      'Nicht mit dem Server verbunden. Stelle zuerst die Verbindung her und versuche es erneut.';
+
+  @override
+  String get remote_err_not_found =>
+      'Datei oder Ordner existiert nicht (möglicherweise verschoben oder gelöscht).';
+
+  @override
+  String get remote_err_timeout =>
+      'Verbindungstimeout: Server antwortet zu langsam oder Netzwerk instabil. Bitte später erneut versuchen.';
+
+  @override
+  String get remote_err_connection =>
+      'Verbindung zum Server fehlgeschlagen: Adresse, Port, Netzwerk und dass der Server läuft prüfen.';
+
+  @override
+  String get remote_err_reconnect =>
+      'Die Verbindung zum Server wurde getrennt und es wird versucht, sie wiederherzustellen.';
+
+  @override
+  String get remote_err_download =>
+      'Download fehlgeschlagen. Netzwerk prüfen und erneut versuchen.';
+
+  @override
+  String get remote_err_upload =>
+      'Upload fehlgeschlagen. Netzwerk prüfen und erneut versuchen.';
+
+  @override
+  String get remote_err_delete => 'Löschen fehlgeschlagen. Erneut versuchen.';
+
+  @override
+  String get remote_err_rename =>
+      'Umbenennen fehlgeschlagen. Erneut versuchen.';
+
+  @override
+  String get remote_err_create_dir =>
+      'Ordner erstellen fehlgeschlagen. Erneut versuchen.';
+
+  @override
+  String get remote_err_dir_open =>
+      'Dieser Ordner kann nicht geöffnet werden. Stelle sicher, dass du Zugriff hast.';
+
+  @override
+  String remote_err_server(Object code) {
+    return 'Der Server lieferte einen Fehler (Statuscode $code). Kontaktiere den Server-Admin.';
+  }
+
+  @override
+  String get remote_err_generic => 'Vorgang fehlgeschlagen. Erneut versuchen.';
+
+  @override
+  String get app_icon_add_title => 'Zum Startbildschirm hinzufügen';
+
+  @override
+  String get app_icon_add_body =>
+      'Android erlaubt es nicht, das App-Symbol durch ein externes Bild zu ersetzen. Nutze eine der folgenden Optionen, um dein eigenes Bild auf den Startbildschirm zu legen:';
+
+  @override
+  String get app_icon_add_shortcut => 'Verknüpfung';
+
+  @override
+  String get app_icon_add_shortcut_desc =>
+      'Fügt ein Start-Symbol mit deinem eigenen Bild hinzu';
+
+  @override
+  String get app_icon_add_widget => 'Startbildschirm-Widget';
+
+  @override
+  String get app_icon_add_widget_desc =>
+      'Ein 1×1-Widget, funktioniert mit jedem Launcher';
+
+  @override
+  String get app_icon_add_change_image => 'Bild ändern';
+
+  @override
+  String get app_icon_add_change_image_desc =>
+      'Wähle ein anderes Bild als Symbol';
+
+  @override
+  String get app_icon_add_cancelled => 'Nicht hinzugefügt: abgebrochen';
+
+  @override
+  String get app_icon_add_unsupported =>
+      'Dein Launcher unterstützt das automatische Hinzufügen nicht – halte den Startbildschirm gedrückt, um es manuell hinzuzufügen';
+
+  @override
+  String get vault_encrypt_done => 'Verschlüsselung erfolgreich';
+
+  @override
+  String get vault_decrypt_done => 'Entschlüsselung erfolgreich';
+
+  @override
+  String vault_encrypt_partial(Object failed, Object success) {
+    return 'Verschlüsselung abgeschlossen: $success erfolgreich, $failed fehlgeschlagen';
+  }
+
+  @override
+  String vault_decrypt_partial(Object failed, Object success) {
+    return 'Entschlüsselung abgeschlossen: $success erfolgreich, $failed fehlgeschlagen';
+  }
+
+  @override
+  String get vault_no_encrypted_selected =>
+      'Keine verschlüsselten Elemente ausgewählt';
+
+  @override
+  String vault_decrypt_confirm_multi_desc(Object count) {
+    return 'Die $count ausgewählten Dateien entschlüsseln? Nach dem Entschlüsseln werden sie wieder normale Dateien.';
+  }
+
+  @override
+  String get vault_removed_from_list => 'Aus der Liste entfernt';
+
+  @override
+  String get cl210_feat_6 =>
+      'Schallpegelmesser: Über die Werkzeugsammlung oder das Seitenmenü zu öffnen; misst die Umgebungsgeräusche in Dezibel und zeigt den Verlauf, eine Bewertung der Umgebung und Hinweise auf die Wirkung auf das Gehör.';
+
+  @override
+  String get cl210_features => 'Neue Funktionen';
+
+  @override
+  String get cl210_feat_1 =>
+      'Video im Hintergrund abspielen: Ein neuer Eintrag lässt die Wiedergabe weiterlaufen, wenn du den Player verlässt; die Benachrichtigung steuert Start, Pause und Position.';
+
+  @override
+  String get cl210_feat_2 =>
+      'Abschalttimer für Videos: Wiedergabe nach 15, 30, 45 oder 60 Minuten beenden; ein gesetzter Timer lässt sich jederzeit abbrechen.';
+
+  @override
+  String get cl210_feat_3 =>
+      '„Öffnen mit\" für Ordner: Bisher gab es diesen Eintrag nur für Dateien; Raster-, Listen- und Doppelfensteransicht unterstützen ihn jetzt.';
+
+  @override
+  String get cl210_feat_4 =>
+      'Eigenschaften überall: Im Browser, unter „Zuletzt\" und in den Kategorien lassen sich die Eigenschaften von Dateien und Ordnern über das Drei-Punkte-Menü anzeigen.';
+
+  @override
+  String get cl210_feat_5 =>
+      'Startordner lässt sich aufheben: Ein bereits festgelegter Startordner bietet im Menü „Startordner aufheben\".';
+
+  @override
+  String get cl210_ui => 'Oberfläche und Bedienung';
+
+  @override
+  String get cl210_ui_1 =>
+      'Das Drei-Punkte-Menü ist jetzt ein Symbolraster: Das Symbol steht oben, die Beschriftung darunter, lange Texte laufen über zwei Zeilen, und je nach Anzahl erscheinen drei oder vier Spalten.';
+
+  @override
+  String get cl210_ui_2 =>
+      'Browser- und Kategoriemenü haben dieselbe Reihenfolge; „Als Startordner\" sitzt dort, wo „Im Ordner anzeigen\" steht.';
+
+  @override
+  String get cl210_ui_3 =>
+      'Bessere Ausrichtung im Symbolraster: Auch wenn lange übersetzte Beschriftungen umbrechen, bleiben die Symbole einer Zeile auf einer Höhe.';
+
+  @override
+  String get cl210_ui_4 =>
+      'Der Drei-Punkte-Knopf an Dateien und Ordnern ist jetzt senkrecht, in der Raster-, Listen- und Kompaktansicht.';
+
+  @override
+  String get cl210_ui_5 =>
+      'Videowiedergabe verbessert: Das Spulen durch Wischen unterbricht die Wiedergabe nicht mehr, und der Schlossknopf sitzt dauerhaft sichtbar in der Mitte des linken Rands.';
+
+  @override
+  String get cl210_fixes => 'Fehlerbehebungen';
+
+  @override
+  String get cl210_fix_1 =>
+      'Behoben: In eingeschränkten Ordnern wie Android/data und Android/obb ließen sich keine Dateien, Ordner oder Archive erstellen. Die Strategie für den Schreibpfad wurde korrigiert und die Berechtigung wird jetzt pro App-Ordner erteilt.';
+
+  @override
+  String get cl210_fix_2 =>
+      'Fehlschläge beim Erstellen sind nicht mehr still: Es wird der Grund angezeigt, und ein Versuch direkt in Android/data weist darauf hin, zuerst einen App-Ordner zu öffnen.';
+
+  @override
+  String get cl210_fix_3 =>
+      'Behoben: „Oben anheften\" im Mehrfachauswahlmenü der Kategorien wirkte nicht (die Markierung wurde gespeichert, die Liste aber nicht neu sortiert); außerdem heißt der Eintrag jetzt korrekt „Anheften aufheben\".';
+
+  @override
+  String get cl210_fix_4 =>
+      'Behoben: „Startordner aufheben\" wirkte nicht, weil die Einstellung nicht wirklich gelöscht wurde.';
+
+  @override
+  String get cl210_fix_5 =>
+      'Behoben: „Eigenschaften\" reagierte auf einigen Seiten nicht.';
+
+  @override
+  String get cl200_notice =>
+      'Änderung von Version und Paketnamen (bitte lesen)';
+
+  @override
+  String get cl200_notice_1 =>
+      'Die Version steigt auf 2.0.0 und der Paketname (Anwendungs-ID) wechselt von com.sequl.zenfile zu com.sequl.zenfile2. Version 2.0 wird als eigenständige App installiert und überschreibt 1.x nicht.';
+
+  @override
+  String get cl200_notice_2 =>
+      'Grund: Die Verschlüsselungsarchitektur des Tresors wurde überarbeitet und ist nicht mehr kompatibel mit Tresordaten aus älteren Versionen. Der neue Paketname lässt beide Versionen nebeneinander bestehen, damit eine überschreibende Installation keine alten Daten vernichtet.';
+
+  @override
+  String get cl200_notice_3 =>
+      'Sichere zuerst selbst: Öffne in der alten Version „Tresor → Sichern/Wiederherstellen → Backup exportieren\" und danach in der neuen Version „Tresor → Sichern/Wiederherstellen → Backup importieren\".';
+
+  @override
+  String get cl200_notice_4 =>
+      'Deinstalliere die alte Version erst, wenn du dich vergewissert hast, dass in der neuen alles vollständig ist. In der Sandbox verschlüsselte Dateien liegen im privaten App-Verzeichnis und werden beim Deinstallieren gelöscht, also niemals zuerst deinstallieren.';
+
+  @override
+  String get cl200_notice_5 =>
+      'Wegen des neuen Paketnamens müssen pro Paket erteilte Berechtigungen wie Shizuku in der neuen Version erneut erteilt werden.';
+
+  @override
+  String get cl200_vault => 'Tresor';
+
+  @override
+  String get cl200_vault_1 =>
+      'Mehrere Passwortprofile: Für jeden Ordner kann ein eigenes Passwortprofil gebunden werden. Ver- und Entschlüsselung laufen ausschließlich auf dem Gerät, Hauptpasswort und Salt bleiben dort.';
+
+  @override
+  String get cl200_vault_2 =>
+      'Entfernte verschlüsselte Ordner: Verknüpfe einen rclone-crypt-Ordner in der Cloud direkt; er wird auf dem Gerät entschlüsselt und mit Klarnamen gelistet. Audio und Video werden gestreamt, ein kompletter Download ist nicht nötig.';
+
+  @override
+  String get cl200_vault_3 =>
+      'Direkt am Ort verschlüsseln: Dateien werden an ihrem Platz verschlüsselt, Ort und Ordnerstruktur bleiben unverändert. Der Browser zeigt ein Schloss-Symbol, andere Apps sehen nur Chiffrenamen.';
+
+  @override
+  String get cl200_vault_4 =>
+      'Hilfeseite: Das Aktiviert-Abzeichen oben rechts im Tresor wurde durch einen Hilfe-Button ersetzt, der Funktionen, Bedienung und Kompatibilität erklärt.';
+
+  @override
+  String get cl200_settings => 'Änderungen in den Einstellungen';
+
+  @override
+  String get cl200_settings_1 =>
+      'Die Sicherheitseinstellungen der Tresor-Startseite sind in die Seite Einstellungen umgezogen.';
+
+  @override
+  String get cl200_fixes => 'Fehlerbehebungen und Verbesserungen';
+
+  @override
+  String get cl200_fix_1 =>
+      'Behoben: Im Browser wurden alle Dateien eines entfernten verschlüsselten Ordners mit dem Symbol für unbekanntes Format angezeigt.';
+
+  @override
+  String get cl200_fix_2 =>
+      'Behoben: Entfernt verschlüsselte Audio- und Videodateien ließen sich nicht streamen und Bilder nicht anzeigen, wenn ein Cloud-Dienst die Dateigröße nicht meldet und die entschlüsselte Größe dadurch 0 wurde.';
+
+  @override
+  String get cl200_fix_3 =>
+      'Behoben: In entfernten verschlüsselten Ordnern wurden keine Miniaturansichten geladen.';
+
+  @override
+  String get cl200_fix_4 =>
+      'Die Streaming-Leistung wurde verbessert, indem eine überflüssige Netzwerkanfrage pro Datenblock entfällt; Wiedergabe und Spulen von entfernt verschlüsselten Medien laufen deutlich flüssiger.';
+
+  @override
+  String get vault_help => 'Hilfe';
+
+  @override
+  String get vault_help_title => 'Tresor-Hilfe';
+
+  @override
+  String get vault_help_intro =>
+      'Der Tresor nutzt dasselbe crypt-Format wie rclone. Ver- und Entschlüsselung erfolgen ausschließlich auf diesem Gerät, der Schlüssel verlässt es nie.';
+
+  @override
+  String get vault_help_highlights => 'Funktions-Highlights';
+
+  @override
+  String get vault_help_hl1_title => 'Verschlüsselung ohne Wissen Dritter';
+
+  @override
+  String get vault_help_hl1_desc =>
+      'Hauptpasswort und Salt bleiben nur auf diesem Gerät, kein Cloud-Dienst und kein Dritter kann deine Dateien entschlüsseln.';
+
+  @override
+  String get vault_help_hl2_title => 'Kompatibel mit rclone und OpenList';
+
+  @override
+  String get vault_help_hl2_desc =>
+      'Es wird dasselbe crypt-Format verwendet, daher kann rclone am Computer dieselben Dateien entschlüsseln.';
+
+  @override
+  String get vault_help_hl3_title => 'Mehrere Passwörter, Direktzugriff';
+
+  @override
+  String get vault_help_hl3_desc =>
+      'Pro Ordner kann ein eigenes Passwortprofil gebunden werden; entfernte Verzeichnisse lassen sich ohne kompletten Download durchsuchen und abspielen.';
+
+  @override
+  String get vault_help_basics => 'Grundlegende Bedienung';
+
+  @override
+  String get vault_help_b1_title => '1. Zuerst Hauptpasswort festlegen';
+
+  @override
+  String get vault_help_b1_desc =>
+      'Lege das Hauptpasswort und das Salt unter „Passwortprofile“ fest und merke sie dir; sie sind unabhängig vom Tresor-Sperrcode.';
+
+  @override
+  String get vault_help_b2_title => '2. Dateien verschlüsseln';
+
+  @override
+  String get vault_help_b2_desc =>
+      'Dateien im Browser auswählen, auf Verschlüsseln tippen und „Direkt am Ort“ oder „Sandbox“ wählen.';
+
+  @override
+  String get vault_help_b3_title => '3. Ansehen und öffnen';
+
+  @override
+  String get vault_help_b3_desc =>
+      'Verschlüsselte Einträge werden im Tresor gelistet; antippen entschlüsselt sie temporär für die Vorschau.';
+
+  @override
+  String get vault_help_b4_title => '4. Entschlüsseln';
+
+  @override
+  String get vault_help_b4_desc =>
+      'Eintrag auswählen und Entschlüsseln tippen, um die Datei als normale Datei an ihren Ursprungsort zurückzuführen.';
+
+  @override
+  String get vault_help_b5_title => '5. Sichern und wiederherstellen';
+
+  @override
+  String get vault_help_b5_desc =>
+      'Exportiere unter „Sichern/Wiederherstellen“ ein Backup mit deinen Verschlüsselungsprofilen, bevor du die App deinstallierst.';
+
+  @override
+  String get vault_help_compat => 'Kompatibilität';
+
+  @override
+  String get vault_help_c1_title => 'Verschlüsselungsformat';
+
+  @override
+  String get vault_help_c1_desc =>
+      'Inhalte nutzen XSalsa20-Poly1305; Namen werden per EME verschlüsselt und base32/base64 kodiert, optional mit der Endung .bin.';
+
+  @override
+  String get vault_help_c2_title => 'Cloud und Synchronisation';
+
+  @override
+  String get vault_help_c2_desc =>
+      'Der Schlüsseltext lässt sich mit jedem Speicher oder Sync-Tool synchronisieren; der Server sieht nur Chiffre, nie die echten Dateinamen.';
+
+  @override
+  String get vault_help_c3_title => 'Bekannte Grenzen';
+
+  @override
+  String get vault_help_c3_desc =>
+      'Verschlüsselte Namen sind deutlich länger, sehr lange Namen können fehlschlagen. Umbenennen nur in dieser App, sonst ist die Datei nicht mehr entschlüsselbar.';
+
+  @override
+  String get vault_help_inplace => 'Direkt am Ort verschlüsseln';
+
+  @override
+  String get vault_help_inplace_intro =>
+      'Beim Verschlüsseln am Ort bleiben die Dateien im ursprünglichen Ordner: Inhalt und Name werden durch Chiffre ersetzt, die Datei wandert nicht in das private Tresorverzeichnis.';
+
+  @override
+  String get vault_help_ip1_title => 'Verhältnis zum Ursprungsordner';
+
+  @override
+  String get vault_help_ip1_desc =>
+      'Ort und Ordnerstruktur bleiben unverändert; verschlüsselte Dateien erhalten im Browser ein Schloss-Symbol.';
+
+  @override
+  String get vault_help_ip2_title => 'Was andere Apps sehen';
+
+  @override
+  String get vault_help_ip2_desc =>
+      'Andere Dateimanager und Player sehen nur bedeutungslose Chiffrenamen und können die Dateien nicht öffnen, genau das ist der Schutz.';
+
+  @override
+  String get vault_help_ip3_title => 'Wann sinnvoll';
+
+  @override
+  String get vault_help_ip3_desc =>
+      'Wenn die Ordnerstruktur erhalten bleiben und Cloud-Apps von Drittanbietern diese Dateien weiter synchronisieren sollen.';
+
+  @override
+  String get vault_help_ip4_title => 'Risiken und Empfehlung';
+
+  @override
+  String get vault_help_ip4_desc =>
+      'Die Verschlüsselung ersetzt die Originaldatei direkt, ein Abbruch kann Reste hinterlassen. Sichere Wichtiges vorher und prüfe beim Entschlüsseln die Schreibrechte.';
+
+  @override
+  String get vault_help_notice => 'Hinweise';
+
+  @override
+  String get vault_help_n1 =>
+      'Passwort und Salt bereits verschlüsselter Dateien sind nicht änderbar; erstelle bei Bedarf ein neues Profil.';
+
+  @override
+  String get vault_help_n2 =>
+      'In der Sandbox verschlüsselte Dateien liegen im privaten App-Verzeichnis und werden beim Deinstallieren gelöscht.';
+
+  @override
+  String get vault_help_n3 =>
+      'Bei vergessenem Hauptpasswort ist keine verschlüsselte Datei mehr rettbar, exportiere daher immer ein Backup.';
+
+  @override
+  String get vault_remote_encrypt => 'Remote-Verschlüsselung';
+
+  @override
+  String get vault_import_source_title => 'Verschlüsselungsquelle wählen';
+
+  @override
+  String get vault_import_source_remote => 'Remote';
+
+  @override
+  String get vault_import_source_remote_desc =>
+      'Remote-Ordner verknüpfen oder lokale Dateien verschlüsselt hochladen';
+
+  @override
+  String get vault_link_remote_crypt_desc =>
+      'Bestehenden rclone-crypt-Ordner auf dem Server verknüpfen (lokal entschlüsselt)';
+
+  @override
+  String get vault_encrypt_upload => 'Verschlüsselt auf Remote hochladen';
+
+  @override
+  String get vault_encrypt_upload_desc =>
+      'Lokale Dateien auswählen, verschlüsseln und auf den Remote-Server hochladen';
+
+  @override
+  String get vault_encrypt_uploading => 'Verschlüssele und lade hoch…';
+
+  @override
+  String get vault_encrypt_upload_done =>
+      'Verschlüsselter Upload abgeschlossen';
+
+  @override
+  String get vault_encrypt_upload_failed =>
+      'Verschlüsselter Upload fehlgeschlagen';
+
+  @override
+  String get crypt_remote_upload => 'Verschlüsselt hochladen';
+
+  @override
+  String get crypt_remote_download => 'Entschlüsselt herunterladen';
+
+  @override
+  String get crypt_remote_downloading => 'Entschlüssele und lade herunter…';
+
+  @override
+  String get crypt_remote_download_done =>
+      'Entschlüsselter Download abgeschlossen';
+
+  @override
+  String get crypt_remote_download_failed =>
+      'Entschlüsselter Download fehlgeschlagen';
+
+  @override
+  String get vault_remote_crypt_open_failed =>
+      'Verschlüsselte Remote-Datei konnte nicht geöffnet werden';
+
+  @override
+  String get vault_remote_crypt_unsupported =>
+      'Dieser Dateityp wird für verschlüsseltes Remote-Streaming nicht unterstützt';
+
+  @override
+  String get vault_link_remote_crypt =>
+      'Verschlüsselten Remote-Ordner verknüpfen';
+
+  @override
+  String get vault_link_remote_crypt_success =>
+      'Verschlüsselter Remote-Ordner verknüpft';
+
+  @override
+  String get vault_unlink_remote_crypt => 'Verknüpfung aufheben';
+
+  @override
+  String get vault_exporting => 'Wird exportiert...';
+
+  @override
+  String get vault_importing => 'Wird importiert...';
+
+  @override
+  String get vault_importing_backup => 'Backup wird importiert...';
+
+  @override
+  String get vault_restoring => 'Wird wiederhergestellt...';
+
+  @override
+  String get vault_decrypting => 'Wird entschlüsselt...';
+
+  @override
+  String get vault_decrypt_open_progress => 'Entschlüsseln und öffnen...';
+
+  @override
+  String get crash_report_saved =>
+      'Vorheriges abnormales Beenden erkannt. Diagnosebericht in ZenFile/crash gespeichert';
+
+  @override
+  String get vault_import_backup_confirm =>
+      'Beim Import werden die aktuelle Sandbox und die Verschlüsselungskonfiguration mit dem Backup-Inhalt überschrieben (das Entsperren-Passwort bleibt unberührt). Fortfahren?';
+
+  @override
+  String vault_load_error(Object error) {
+    return 'Fehler beim Laden des Tresors: $error';
+  }
+
+  @override
+  String get vault_restore_folder_hint =>
+      'Bei Ordnern lange drücken und „Wiederherstellen\" wählen, um sie am ursprünglichen Ort zu sehen';
+
+  @override
+  String vault_decrypt_open_failed(Object error) {
+    return 'Entschlüsseln und Öffnen fehlgeschlagen: $error';
+  }
+
+  @override
+  String get vault_badge_inplace => 'Vor Ort';
+
+  @override
+  String get vault_badge_sandbox => 'Sandbox';
+
+  @override
+  String get vault_item_folder => 'Ordner';
+
+  @override
+  String get crypt_need_master_title =>
+      'Verschlüsselungs-Masterpasswort nicht festgelegt';
+
+  @override
+  String get crypt_need_master_body =>
+      'Vor-Ort- und Sandbox-Verschlüsselung verwenden beide das Masterpasswort aus den Verschlüsselungseinstellungen. Bitte zuerst festlegen.';
+
+  @override
+  String get crypt_master_banner =>
+      'Das hier festgelegte Masterpasswort und Salz werden für Vor-Ort- und Sandbox-Verschlüsselung verwendet. Unbedingt merken; sie sind unabhängig vom Entsperren-Passwort des Tresors.';
+
+  @override
+  String get crypt_profile_name => 'Verschlüsselungsname';
+
+  @override
+  String get crypt_profile_name_hint => 'z. B. Arbeit / Privat';
+
+  @override
+  String get crypt_profile_name_required =>
+      'Bitte Verschlüsselungsnamen eingeben';
+
+  @override
+  String get crypt_profile_name_duplicate => 'Dieser Name existiert bereits';
+
+  @override
+  String get crypt_profile_title_new => 'Neues Verschlüsselungsprofil';
+
+  @override
+  String get crypt_profile_title_edit => 'Verschlüsselungsprofil bearbeiten';
+
+  @override
+  String get crypt_profile_section => 'Passwortkonfiguration';
+
+  @override
+  String get crypt_profile_add => 'Neues Profil';
+
+  @override
+  String get crypt_profile_default => 'Standard';
+
+  @override
+  String get crypt_profile_set_default => 'Als Standard festlegen';
+
+  @override
+  String get crypt_profile_set_default_desc =>
+      'Dateien ohne zugeordnetes Profil nutzen dieses';
+
+  @override
+  String get crypt_profile_default_done => 'Standardprofil aktualisiert';
+
+  @override
+  String get crypt_profile_delete_message =>
+      'Beim Löschen dieses Profils können damit verschlüsselte Dateien nicht mehr entschlüsselt werden.';
+
+  @override
+  String get crypt_profile_empty => 'Noch kein Verschlüsselungsprofil';
+
+  @override
+  String get crypt_profile_action_config => 'Profil';
+
+  @override
+  String get crypt_profile_select_title => 'Verschlüsselungsprofil wählen';
+
+  @override
+  String get crypt_profile_bound_done => 'Profil zugeordnet';
+
+  @override
+  String get crypt_profile_credential_locked => 'Gesperrt';
+
+  @override
+  String get crypt_profile_credential_locked_desc =>
+      'Passwort und Salt bestimmen den Schlüssel. Nach einer Änderung sind verschlüsselte Dateien nicht mehr lesbar - erstelle stattdessen ein neues Profil.';
+
+  @override
+  String get crypt_profile_suffix_none => 'kein Suffix';
+
+  @override
+  String get crypt_profile_sandbox_title => 'Sandbox-Profil wechseln';
+
+  @override
+  String get crypt_profile_sandbox_message =>
+      'Die Sandbox nutzt insgesamt ein Profil. Nach dem Wechsel können andere Dateien als Chiffre angezeigt werden. Fortfahren?';
+
+  @override
+  String get crypt_mount_section => 'Verschlüsselte Orte';
+
+  @override
+  String get crypt_settings_subtitle =>
+      'Verschlüsselte Ordner und Mount-Punkte verwalten';
+
+  @override
+  String get crypt_add_mount => 'Verschlüsselten Ordner hinzufügen';
+
+  @override
+  String get crypt_edit_mount => 'Verschlüsselten Ordner bearbeiten';
+
+  @override
+  String get crypt_no_mounts_title => 'Keine verschlüsselten Ordner';
+
+  @override
+  String get crypt_no_mounts_subtitle =>
+      'Tippe auf die Schaltfläche unten, um deinen ersten verschlüsselten Ordner hinzuzufügen';
+
+  @override
+  String get crypt_field_name => 'Name';
+
+  @override
+  String get crypt_field_name_hint =>
+      'Optional; bei leer wird der Ordnername verwendet';
+
+  @override
+  String get crypt_field_path => 'Ordnerpfad';
+
+  @override
+  String get crypt_field_path_hint => 'Zu verschlüsselnden Ordner auswählen';
+
+  @override
+  String get crypt_field_password => 'Passwort';
+
+  @override
+  String get crypt_field_confirm_password => 'Passwort bestätigen';
+
+  @override
+  String get crypt_error_path_required => 'Bitte Ordnerpfad auswählen';
+
+  @override
+  String get crypt_error_password_required => 'Bitte Passwort eingeben';
+
+  @override
+  String get crypt_error_password_short =>
+      'Das Passwort muss mindestens 4 Zeichen lang sein';
+
+  @override
+  String get crypt_error_password_mismatch =>
+      'Passwörter stimmen nicht überein';
+
+  @override
+  String get crypt_section_mode => 'Verschlüsselungsmodus';
+
+  @override
+  String get crypt_mode_inplace => 'Vor-Ort-Verschlüsselung';
+
+  @override
+  String get crypt_mode_inplace_desc =>
+      'Dateien bleiben an ihrem Platz; Namen und Inhalt werden verschlüsselt';
+
+  @override
+  String get crypt_mode_sandbox => 'Sandbox-Verschlüsselung';
+
+  @override
+  String get crypt_mode_sandbox_desc =>
+      'Dateien werden in die Sandbox verschoben; sicherer, aber etwas langsamer';
+
+  @override
+  String get crypt_section_advanced => 'Erweiterte Optionen';
+
+  @override
+  String get crypt_advanced_toggle =>
+      'Erweiterte Verschlüsselungsoptionen anzeigen';
+
+  @override
+  String get crypt_field_filename_enc => 'Dateinamen-Verschlüsselung';
+
+  @override
+  String get crypt_field_dirname_enc => 'Ordnernamen verschlüsseln';
+
+  @override
+  String get crypt_field_filename_encoding => 'Dateinamen-Kodierung';
+
+  @override
+  String get crypt_field_suffix => 'Verschlüsselungs-Suffix';
+
+  @override
+  String get crypt_field_salt => 'Salt (optional)';
+
+  @override
+  String get crypt_field_salt_hint => 'Bei leer automatisch erzeugt';
+
+  @override
+  String get crypt_action_browse => 'Durchsehen';
+
+  @override
+  String get crypt_delete_title => 'Verschlüsselten Ordner löschen';
+
+  @override
+  String crypt_delete_message(Object name) {
+    return 'Verschlüsselungskonfiguration für „$name\" löschen? Dateien werden nicht gelöscht.';
+  }
+
+  @override
+  String get crypt_filename_enc => 'Dateinamen';
+
+  @override
+  String get crypt_share_title => 'Verschlüsselten Ordner teilen';
+
+  @override
+  String get crypt_share_hint =>
+      'Scanne den QR-Code, um die Verschlüsselungskonfiguration zu importieren. Zum Entschlüsseln wird das Passwort benötigt.';
+
+  @override
+  String get crypt_action_share => 'Teilen';
+
+  @override
+  String get crypt_share_password_note =>
+      'Das Passwort ist NICHT im QR-Code enthalten. Teile es separat über einen sicheren Kanal.';
+
+  @override
+  String get crypt_action_encrypt => 'Jetzt verschlüsseln';
+
+  @override
+  String get crypt_action_decrypt => 'Entschlüsseln';
+
+  @override
+  String get crypt_encrypt_title => 'Verschlüsselung bestätigen';
+
+  @override
+  String get crypt_encrypt_message =>
+      'Alle Dateien und Unterordner werden verschlüsselt. Andere Dateimanager können Inhalte und Namen danach nicht sehen. Fortfahren?';
+
+  @override
+  String get crypt_encrypting => 'Wird verschlüsselt...';
+
+  @override
+  String get crypt_encrypt_success => 'Verschlüsselung abgeschlossen';
+
+  @override
+  String crypt_encrypt_failed(Object error) {
+    return 'Verschlüsselung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get crypt_decrypt_title => 'Entschlüsselung bestätigen';
+
+  @override
+  String get crypt_decrypt_message =>
+      'Alle Dateien und Unterordner werden entschlüsselt und danach wieder normal angezeigt. Fortfahren?';
+
+  @override
+  String get crypt_decrypting => 'Wird entschlüsselt...';
+
+  @override
+  String get crypt_decrypt_success => 'Entschlüsselung abgeschlossen';
+
+  @override
+  String crypt_decrypt_failed(Object error) {
+    return 'Entschlüsselung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get crypt_filename_enc_off => 'Aus';
+
+  @override
+  String get crypt_filename_enc_standard => 'Standard';
+
+  @override
+  String get crypt_filename_enc_obfuscate => 'Verschleiert';
+
+  @override
+  String get crypt_filename_enc_base64 => 'Base64';
+
+  @override
+  String get crypt_filename_enc_base32 => 'Base32';
+
+  @override
+  String get crypt_filename_enc_base32768 => 'Base32768';
+
+  @override
+  String get crypt_dirname_enc_yes => 'Ja';
+
+  @override
+  String get crypt_dirname_enc_no => 'Nein';
+
+  @override
+  String get crypt_params_locked_hint =>
+      'Verschlüsselungsparameter sind nach dem Erstellen gesperrt. Änderungen machen vorhandene verschlüsselte Dateien unlesbar, da die Namen auf dem Datenträger mit diesen Einstellungen erzeugt wurden. Erstellen Sie ein neues Profil, wenn Sie andere Parameter benötigen.';
+
+  @override
+  String get vault_encrypt_new_files => 'Neue Dateien verschlüsseln';
+
+  @override
+  String get vault_encrypt_new_files_none =>
+      'Keine neuen Dateien zu verschlüsseln';
+
+  @override
+  String get vault_encrypt_new_files_done =>
+      'Neue Dateien verschlüsselt und in diesen Ordner übernommen';
+
+  @override
+  String get vault_encrypt_files => '+ Dateien verschlüsseln';
+
+  @override
+  String get vault_select_encryption_method => 'Verschlüsselungsmethode wählen';
+
+  @override
+  String get vault_inplace_encrypt => 'Vor-Ort-Verschlüsselung';
+
+  @override
+  String get vault_inplace_encrypt_desc =>
+      'Dateien bleiben im ursprünglichen Ordner, Namen werden verschlüsselt, 🔐-Abzeichen im Browser';
+
+  @override
+  String get vault_sandbox_encrypt => 'Sandbox-Verschlüsselung';
+
+  @override
+  String get vault_sandbox_encrypt_desc =>
+      'Dateien werden in den privaten Tresor-Ordner verschoben, Namen versteckt, nur auf der Tresor-Seite sichtbar';
+
+  @override
+  String get vault_need_set_password => 'Zuerst Masterpasswort festlegen';
+
+  @override
+  String get vault_need_set_password_desc =>
+      'Bitte zuerst in den Verschlüsselungseinstellungen Masterpasswort und Salz festlegen, dann kann die Vor-Ort-Verschlüsselung genutzt werden.';
+
+  @override
+  String get vault_go_set_password => 'Passwort festlegen';
+
+  @override
+  String get vault_encrypting => 'Wird verschlüsselt...';
+
+  @override
+  String get vault_encrypting_desc =>
+      'Ausgewählte Dateien/Ordner werden verschlüsselt, bitte warten...';
+
+  @override
+  String vault_inplace_encrypt_done(Object count) {
+    return 'Vor-Ort-Verschlüsselung abgeschlossen, $count Dateien/Ordner verschlüsselt';
+  }
+
+  @override
+  String vault_encrypt_failed(Object error) {
+    return 'Verschlüsselung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get vault_inplace_section => 'Vor-Ort-Verschlüsselung';
+
+  @override
+  String get vault_open_location => 'Ort öffnen';
+
+  @override
+  String get vault_decrypt_action => 'Entschlüsseln';
+
+  @override
+  String get vault_decrypt_confirm_title => 'Datei entschlüsseln';
+
+  @override
+  String vault_decrypt_confirm_desc(Object name) {
+    return '„$name\" wirklich entschlüsseln? Die Datei ist danach wieder normal.';
+  }
+
+  @override
+  String get vault_decrypt_success => 'Erfolgreich entschlüsselt';
+
+  @override
+  String vault_decrypt_failed(Object error) {
+    return 'Entschlüsselung fehlgeschlagen: $error';
+  }
+
+  @override
+  String get crypt_set_master_password =>
+      'Verschlüsselungs-Masterpasswort festlegen';
+
+  @override
+  String get vault_section_unencrypted => 'Unverschlüsselte Dateien';
+
+  @override
+  String get vault_section_inplace_files => 'Vor-Ort-verschlüsselte Dateien';
+
+  @override
+  String get vault_section_sandbox_files => 'Sandbox-verschlüsselte Dateien';
+
+  @override
+  String get vault_import_files => 'Dateien/Ordner importieren';
+
+  @override
+  String get vault_action_encrypt => 'Verschlüsseln';
+
+  @override
+  String vault_import_done(Object enc, Object plain) {
+    return 'Importiert: $plain unverschlüsselt, $enc verschlüsselt';
+  }
+
+  @override
+  String vault_import_partial(Object enc, Object failed, Object plain) {
+    return 'Importiert: $plain unverschlüsselt, $enc verschlüsselt, $failed fehlgeschlagen';
+  }
+
+  @override
+  String vault_import_failed_detail(Object error) {
+    return 'Import fehlgeschlagen: $error';
+  }
+
+  @override
+  String get vault_no_files => 'Keine Dateien';
+
+  @override
+  String get vault_decrypt_password_mismatch =>
+      'Das konfigurierte Passwort oder Salt kann diese Datei nicht entschlüsseln. Bitte geben Sie das richtige Master-Passwort und Salt ein.';
+
+  @override
+  String get vault_remove_from_list => 'Entfernen';
+
+  @override
+  String get security_vault_switch_desc => 'Privaten Tresor aktivieren';
+
+  @override
+  String get security_verify_password_desc =>
+      'Geben Sie Ihr Passwort ein, um die Sicherheitseinstellungen zu öffnen';
+
+  @override
+  String get vault_verify_password_title => 'Passwort bestätigen';
+
+  @override
+  String get vault_verify_password_hint =>
+      'Geben Sie Ihr Sicherheitspasswort ein';
+
+  @override
+  String get vault_go_security_settings => 'Zu den Sicherheitseinstellungen';
+
+  @override
+  String get security_settings_subtitle =>
+      'Tresor, Remote Guard, App-Schutz und Fingerabdruck-Entsperrung';
+
+  @override
+  String get vault_disabled_hint =>
+      'Der Tresor ist deaktiviert. Aktivieren Sie ihn unter Einstellungen → Sicherheitseinstellungen';
+
+  @override
+  String get security_set_password_desc =>
+      'Legen Sie ein Sicherheitskennwort für den Zugriff auf die Sicherheitseinstellungen und die Entsperrung des Tresors fest';
+
+  @override
+  String get security_confirm_password =>
+      'Geben Sie das Kennwort zur Bestätigung erneut ein';
+
+  @override
+  String get biometric_reason_security_settings =>
+      'Fingerabdruck verifizieren, um auf die Sicherheitseinstellungen zuzugreifen';
+
+  @override
+  String get toolbox_scan => 'Scannen';
+
+  @override
+  String get scan_result_title => 'Scan-Ergebnis';
+
+  @override
+  String get scan_copy => 'Kopieren';
+
+  @override
+  String get scan_copied => 'In die Zwischenablage kopiert';
+
+  @override
+  String get scan_open_link => 'Link öffnen';
+
+  @override
+  String get scan_continue => 'Weiter';
+
+  @override
+  String get scan_torch => 'Taschenlampe';
+
+  @override
+  String get scan_switch_camera => 'Kamera wechseln';
+
+  @override
+  String get scan_camera_error =>
+      'Kann nicht auf die Kamera zugreifen. Bitte Kameraberechtigung prüfen.';
+
+  @override
+  String get scan_hint =>
+      'Platzieren Sie QR-Code/Barcode im Rahmen zum automatischen Scannen';
+
+  @override
+  String get scan_from_gallery => 'Aus Galerie';
+
+  @override
+  String get scan_no_barcode => 'Kein QR-Code oder Barcode im Bild erkannt';
+
+  @override
+  String get ui_backup_confirm_title => 'Backup bestätigen';
+
+  @override
+  String ui_backup_confirm_message(String path) {
+    return 'Sicherung in folgenden Pfad:\n$path\n\nFortfahren?';
+  }
+
+  @override
+  String get ui_cancel_set_as_home => 'Als Startseite entfernen';
+
+  @override
+  String get ui_unpin => 'Loslösen';
+
+  @override
+  String get decibel_meter_title => 'Schallpegelmesser';
+
+  @override
+  String get decibel_meter_current => 'Aktueller Pegel';
+
+  @override
+  String get decibel_meter_verdict => 'Bewertung';
+
+  @override
+  String get decibel_meter_curve => 'Pegelverlauf';
+
+  @override
+  String get decibel_meter_start => 'Starten';
+
+  @override
+  String get decibel_meter_stop => 'Stoppen';
+
+  @override
+  String get decibel_meter_level_quiet => 'Ruhig';
+
+  @override
+  String get decibel_meter_level_normal => 'Normal';
+
+  @override
+  String get decibel_meter_level_noisy => 'Laut';
+
+  @override
+  String get decibel_meter_level_very_noisy => 'Sehr laut';
+
+  @override
+  String get decibel_meter_level_dangerous => 'Gefährlich';
+
+  @override
+  String get decibel_meter_health_impact => 'Auswirkung auf die Gesundheit';
+
+  @override
+  String get decibel_meter_health_safe =>
+      'Normale Umgebung, unbedenklich für die Gesundheit.';
+
+  @override
+  String get decibel_meter_health_moderate =>
+      'Laut, längere Belastung kann das Gehör beeinträchtigen.';
+
+  @override
+  String get decibel_meter_health_harmful =>
+      'Sehr laut, längere Belastung kann das Gehör schädigen.';
+
+  @override
+  String get decibel_meter_health_dangerous =>
+      'Gefährlicher Pegel, entfernen Sie sich und schützen Sie Ihr Gehör!';
+
+  @override
+  String get decibel_meter_examples => 'Häufige Beispiele';
+
+  @override
+  String get decibel_meter_examples_safe =>
+      'Normales Gespräch (ca. 50-60 dB), ruhiges Büro, Kühlschrankbrummen.';
+
+  @override
+  String get decibel_meter_examples_moderate =>
+      'Staubsauger (ca. 70 dB), belebte Straße, lautes Restaurant.';
+
+  @override
+  String get decibel_meter_examples_harmful =>
+      'Motorrad (ca. 90 dB), Fabrikhalle, Rasenmäher, starker Verkehr.';
+
+  @override
+  String get decibel_meter_examples_dangerous =>
+      'Kettensäge (ca. 110 dB), Rockkonzert in erster Reihe, Feuerwerk, Jet-Start.';
+
+  @override
+  String get decibel_meter_perm_denied =>
+      'Zur Messung der Umgebungsgeräusche ist die Mikrofonberechtigung erforderlich. Bitte in den Einstellungen aktivieren.';
+
+  @override
+  String get decibel_meter_perm_title => 'Mikrofonberechtigung erforderlich';
+
+  @override
+  String get decibel_meter_perm_settings =>
+      'Die Mikrofonberechtigung wurde dauerhaft verweigert. Bitte aktivieren Sie sie für ZenFile in den Systemeinstellungen und versuchen Sie es erneut.';
+
+  @override
+  String get decibel_meter_perm_open_settings => 'Einstellungen öffnen';
+
+  @override
+  String get msg_background_play => 'Hintergrundwiedergabe';
+
+  @override
+  String get msg_sleep_timer => 'Sleep-Timer';
+
+  @override
+  String get msg_background_play_active =>
+      'Wiedergabe im Hintergrund. Steuerung über die Benachrichtigung';
+
+  @override
+  String get ui_delete_confirm_enabled => 'Löschbestätigung';
+
+  @override
+  String get ui_delete_confirm_subtitle =>
+      'Vor dem Löschen von Dateien einen Bestätigungsdialog anzeigen. Aus = direkt löschen.';
+
+  @override
+  String get ui_delete_confirm_dont_ask => 'Nicht erneut fragen';
+
+  @override
+  String get video_auto_fallback_soft =>
+      'Problem mit Hardware-Dekodierung erkannt. Automatisch auf Software-Dekodierung gewechselt.';
+
+  @override
+  String get video_vo_compat =>
+      'Problem bei der Videodarstellung erkannt. Auf Kompatibilitätsmodus umgeschaltet.';
+
+  @override
+  String get audio_opensles_title => 'Audioausgabe (AO)-Modus';
+
+  @override
+  String get audio_opensles_desc =>
+      'Sound-Apps wie RootlessJamesDSP können sich nur an AudioTrack-Modi anhängen; OpenSL ES nutzt eine vom System zugewiesene Session, an die sie sich nicht anhängen können. Umschalten wirkt sofort.';
+
+  @override
+  String get ui_transfers => 'Verbindungen';
+
+  @override
+  String get ui_profile => 'Profil';
+
+  @override
+  String get msg_coming_soon => 'Bald verfügbar';
+
+  @override
+  String get toolbox_text_editor => 'Texteditor';
+
+  @override
+  String get ui_video_progress_always_show =>
+      'Fortschrittsbalken immer anzeigen';
+
+  @override
+  String get video_playback_info => 'Wiedergabe-Info';
+
+  @override
+  String get ui_image_fit_width => 'An Breite anpassen';
+
+  @override
+  String get ui_image_fit_height => 'An Höhe anpassen';
+
+  @override
+  String get ui_image_fit_original => 'Originalgröße';
+
+  @override
+  String get ui_image_fit_mode => 'Anzeigemodus';
+
+  @override
+  String get ui_text_editor_import => 'Textdatei importieren';
+
+  @override
+  String get ui_bottom_tab_bar => 'Navigationsleiste';
+
+  @override
+  String get ui_persistent_tab_bar =>
+      'Navigationsleiste auf anderen Seiten beibehalten';
+
+  @override
+  String get ui_pick_bottom_tab => 'Einträge anpassen';
+
+  @override
+  String get ui_long_press_switch => 'Lange drücken zum Ändern';
+
+  @override
+  String ui_bottom_tab_slot(Object index) {
+    return 'Slot $index';
+  }
+
+  @override
+  String get ui_bottom_tab_custom_hint =>
+      'Untereinträge können durch beliebige Verknüpfungen ersetzt werden';
+
+  @override
+  String get app_icon_original => 'Klassisches Symbol';
+
+  @override
+  String get cut_to_clipboard => 'In die Zwischenablage ausschneiden';
+
+  @override
+  String get cut_to_other_window => 'In das andere Fenster ausschneiden';
+
+  @override
+  String get auto_open_created_folder => 'Erstellte Ordner automatisch öffnen';
+
+  @override
+  String get auto_open_created_folder_desc =>
+      'Nach der Erstellung automatisch in den Ordner wechseln';
+
+  @override
+  String get paste_keep_clipboard =>
+      'Zwischenablage nach dem Einfügen behalten';
+
+  @override
+  String get paste_keep_clipboard_desc =>
+      'Ohne Häkchen wird die Zwischenablage nach dem Einfügen geleert';
+
+  @override
+  String get netdisk => 'Netzlaufwerk';
+
+  @override
+  String get netdisk_add => 'Netzlaufwerk hinzufügen';
+
+  @override
+  String get netdisk_quark => 'Quark';
+
+  @override
+  String get netdisk_alipan => 'Aliyun Drive';
+
+  @override
+  String get netdisk_logged_in => 'Angemeldet';
+
+  @override
+  String get netdisk_empty => 'Kein Netzlaufwerk';
+
+  @override
+  String get netdisk_empty_hint =>
+      'Fügen Sie ein Netzlaufwerk hinzu, um Cloud-Dateien zu durchsuchen, herunterzuladen und abzuspielen';
+
+  @override
+  String get netdisk_login_hint =>
+      'Melden Sie sich auf der geöffneten offiziellen Seite an; nach der Anmeldung kehren Sie automatisch zurück';
+
+  @override
+  String get netdisk_login_loading => 'Anmeldeseite wird geladen…';
+
+  @override
+  String get netdisk_auth_expired =>
+      'Anmeldung abgelaufen. Bitte erneut anmelden';
+
+  @override
+  String get netdisk_unsupported =>
+      'Dieser Vorgang wird für dieses Netzlaufwerk nicht unterstützt';
+
+  @override
+  String get share_normal_share => 'Normale Freigabe';
+
+  @override
+  String get share_normal_share_hint => 'Originaldatei ohne Änderungen teilen';
+
+  @override
+  String get share_safe_share => 'Sichere Freigabe';
+
+  @override
+  String get share_safe_share_hint =>
+      'Entfernt Standort-, Kamera- und Dokumentdaten; die Originaldatei bleibt unverändert';
+
+  @override
+  String get share_nothing_found => 'Keine teilbaren Elemente gefunden.';
+
+  @override
+  String share_prepare_error(Object error) {
+    return 'Fehler beim Vorbereiten der Dateien: $error';
+  }
+
+  @override
+  String get share_preparing_title => 'Teilen wird vorbereitet…';
+
+  @override
+  String get share_preparing_body => 'Dateien werden verarbeitet, bitte warten';
+
+  @override
+  String share_safe_unsupported(Object count) {
+    return 'Bei $count Datei(en) konnten die Metadaten nicht entfernt werden (möglicherweise verschlüsselt); sie wurden unverändert geteilt';
+  }
+
+  @override
+  String get ui_ftp_password => 'FTP-Passwort';
+
+  @override
+  String get ui_ftp_password_required =>
+      'Bitte ein Passwort festlegen, sonst weist der FTP-Server alle Clients ab';
+
+  @override
+  String get ui_web_share_password => 'Zugriffspasswort';
+
+  @override
+  String get ui_web_share_password_hint =>
+      'Leer lassen, um die Authentifizierung zu deaktivieren (nur für vertrauenswürdige LANs empfohlen)';
+
+  @override
+  String ui_web_share_password_generated(Object password) {
+    return 'Automatisch generiertes Passwort für den Internetzugriff: $password';
+  }
+
+  @override
+  String get ui_web_share_password_required_for_tunnel =>
+      'Für das Internet-Sharing ist ein Zugriffspasswort erforderlich';
+
+  @override
+  String get crypt_auto_encrypt_section => 'Auto-Verschlüsselung';
+
+  @override
+  String get crypt_auto_encrypt_title =>
+      'Neue Dateien automatisch verschlüsseln';
+
+  @override
+  String get crypt_auto_encrypt_desc =>
+      'Überwacht direk-verschlüsselte Verzeichnisse und verschlüsselt neue Dateien automatisch nach dem Schreiben (dauerhafte Benachrichtigung erforderlich)';
+
+  @override
+  String crypt_auto_encrypt_watching(Object count) {
+    return '$count Verzeichnis(se) werden geschützt; neue Dateien werden automatisch verschlüsselt';
+  }
+}
