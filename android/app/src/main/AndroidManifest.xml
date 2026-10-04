@@ -487,16 +487,21 @@
              ⚠️ 代价：在只列根的抽屉里，点条目本体进的是 DocumentsUI 渲染的列表页；
                要点条目右侧的「↪（用应用打开）」才进 ZenFile 自家选择器。这是框架限制
                （provider 是后台 ContentProvider，无法跳转 Activity），只能靠根条目
-               的 summary 提示用户。 -->
-        <intent-filter>
-            <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
-        </intent-filter>
+               的 summary 提示用户。
+
+             ⚠️ `<intent-filter>` 必须是 `<provider>` 的**子元素**（写在 provider 外面
+             会挂在 <application> 下，AAPT 报 "unexpected element <intent-filter> found
+             in <manifest><application>" 直接构建失败 —— 2026-10-04 踩过）。 -->
         <provider
             android:name=".ZenFileDocumentsProvider"
             android:authorities="${applicationId}.documents"
             android:exported="true"
             android:grantUriPermissions="true"
-            android:permission="android.permission.MANAGE_DOCUMENTS" />
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
 
         <service
             android:name=".FtpForegroundService"
