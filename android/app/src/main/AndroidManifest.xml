@@ -469,39 +469,35 @@
                 android:resource="@xml/zenfile_icon_widget_info" />
         </receiver>
 
-        <!-- ZenFileDocumentsProvider：既承担「用户选完文件后把路径转成 document URI
-             回传给第三方 App」（grantUriPermissions 读写授权也靠它），也决定 ZenFile
-             是否出现在**只列 provider 根的那些抽屉**里（ACTION_OPEN_DOCUMENT 走的
-             DocumentsUI / vivo 定制「打开文档」页就是）。
+        <!-- ZenFileDocumentsProvider：**只**承担「用户选完文件后把路径转成 document URI
+             回传给第三方 App」（grantUriPermissions 读写授权也靠它），
+             **故意不声明 DOCUMENTS_PROVIDER 这个 intent-filter**。
 
-             ⭐ 2026-10-04 装机结论（**推翻**同日早先的「去掉 filter 会变成应用条目」假说）：
-             - 声明 DOCUMENTS_PROVIDER ⇒ 抽屉里出现「ZenFile Storage」根条目；
-               WorkBuddy 移动端「添加图片/视频/文件」的抽屉实测**大部分文件管理器都不出现，
-               只有猫头鹰文件等有 provider 的少数出现** ⇒ 该抽屉只列 provider 根。
-             - 不声明 ⇒ ZenFile 在那种抽屉里**整个消失**（不是变成应用条目）。
-               早先「去掉 filter 就变成 ZenFile 应用条目」的观察来自 GET_CONTENT 那条
-               完全不同的路 —— 那条路走 chooser，会列 Activity 候选（见下面 MainActivity
-               的 GET_CONTENT / OPEN_DOCUMENT / PICK filter）。
-             ⇒ 两条路要同时覆盖，这里的 DOCUMENTS_PROVIDER 与 MainActivity 上的
-               GET_CONTENT filter **必须并存**。
-             ⚠️ 代价：在只列根的抽屉里，点条目本体进的是 DocumentsUI 渲染的列表页；
-               要点条目右侧的「↪（用应用打开）」才进 ZenFile 自家选择器。这是框架限制
-               （provider 是后台 ContentProvider，无法跳转 Activity），只能靠根条目
-               的 summary 提示用户。
+             ⭐ 2026-10-04 装机定论（两张抽屉截图逐行对照得出）：
+             - 系统选择器里**同一个包只会出现一条记录**：声明 DOCUMENTS_PROVIDER ⇒ 只显示
+               「ZenFile Storage」根（点条目本体进 DocumentsUI 渲染的列表页，只有带 ↪ 的页面
+               才能跳自家选择器），应用条目被这条根吃掉，且不再出现；
+               不声明 ⇒ 才轮到「ZenFile」应用条目（点标题/图标都直接进 ZenFile 自家选择器）。
+             - 用户优先级裁定（2026-10-04 15:0x）：**要应用条目** —— QQ/微信那类会列应用的抽屉里
+               点一下直达自家文件浏览器。代价：WorkBuddy / Chrome 这类**只列 provider 根**的
+               抽屉里 ZenFile 不再出现（官方文档亦称 DocumentsProvider 与 ACTION_GET_CONTENT
+               应二选一，同时支持会让应用在选择器里出现两次、令用户困惑）。
+             - ⚠️ 框架限制：provider 是后台 ContentProvider，无法跳转 Activity ⇒ 那种只列根的
+               抽屉里「点条目本体直接进自家浏览器」**任何配置都做不到**。
 
-             ⚠️ `<intent-filter>` 必须是 `<provider>` 的**子元素**（写在 provider 外面
-             会挂在 <application> 下，AAPT 报 "unexpected element <intent-filter> found
-             in <manifest><application>" 直接构建失败 —— 2026-10-04 踩过）。 -->
+             要恢复「ZenFile Storage」根：把下面的 provider 改回成对标签，并在其**内部**加
+                 <intent-filter>
+                     <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+                 </intent-filter>
+             ⚠️ intent-filter 必须是 <provider> 的**子元素**：写在 provider 外面会挂到
+             <application> 下，AAPT 直接报 "unexpected element <intent-filter> found in
+             <manifest><application>" 构建失败（2026-10-04 踩过）。 -->
         <provider
             android:name=".ZenFileDocumentsProvider"
             android:authorities="${applicationId}.documents"
             android:exported="true"
             android:grantUriPermissions="true"
-            android:permission="android.permission.MANAGE_DOCUMENTS">
-            <intent-filter>
-                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
-            </intent-filter>
-        </provider>
+            android:permission="android.permission.MANAGE_DOCUMENTS" />
 
         <service
             android:name=".FtpForegroundService"
