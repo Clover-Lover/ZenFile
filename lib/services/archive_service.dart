@@ -5,6 +5,9 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:archive/archive_io.dart';
+// .7z / .rar 解码：package:archive 不支持这两种格式，改由纯 Dart 的 koni_archive 处理。
+// 与 package:archive 同名（Archive）故加前缀避免冲突。
+import 'package:koni_archive/io.dart' as koni;
 import 'package:dart_lz4/dart_lz4.dart';
 import 'package:charset/charset.dart';
 import 'package:just_zstd/just_zstd.dart';
@@ -510,6 +513,157 @@ class ArchiveService {
     return true;
   }
 
+  // ==================== .7z / .rar（koni_archive 纯 Dart 实现） ====================
+
+  /// 是否属于由 koni_archive 解码的格式（.7z / .rar）。
+  static bool isKoniArchivePath(String path) {
+    final lower = path.toLowerCase();
+    return lower.endsWith('.7z') || lower.endsWith('.rar');
+  }
+
+  /// 解压 .7z/.rar：支持 RAR4/RAR5、7z AES-256（含加密头）与中文密码。
+  ///
+  /// [wrapInSubfolder] 为 true 时沿用 ZIP 路径的「自动建子文件夹」策略：仅当压缩包
+  /// 只有一个根条目且该条目本身是目录时才直接解到 [destinationDir]，否则在
+  /// [destinationDir] 下创建与压缩包同名的子文件夹。
+  ///
+  /// [onProgress] 每写入一块内容回调一次，参数依次为：当前文件路径、已处理字节、
+  /// 总字节、当前文件已写字节、当前文件总大小、整体进度(0..1)。返回实际解压到的目录。
+  static Future<String> extractKoniArchive({
+    required String archivePath,
+    required String destinationDir,
+    String? password,
+    bool wrapInSubfolder = true,
+    void Function(String currentFile, int bytesProcessed, int totalBytes,
+            int currentFileBytes, int currentFileTotal, double progress)? onProgress,
+  }) async {
+    final pw = (password != null && password.isNotEmpty) ? password : null;
+    final archive = await koni.openArchiveFile(
+      archivePath,
+      options: koni.ArchiveReadOptions(password: pw),
+    );
+    try {
+      final all = archive.walk().toList();
+      final files = all.where((e) => e.isFile && e.path.isNotEmpty).toList();
+      final dirs = all.where((e) => e.isDirectory && e.path.isNotEmpty).toList();
+
+      var destDir = destinationDir;
+      if (wrapInSubfolder) {
+        final rootEntries = <String>{};
+        for (final e in all) {
+          final name = _normalizeForMatch(e.path);
+          if (name.isEmpty) continue;
+          final first = name.split('/').first;
+          if (first.isNotEmpty) rootEntries.add(first);
+        }
+        final bool shouldCreateFolder;
+        if (rootEntries.length == 1) {
+          final single = rootEntries.first;
+          final isFolder = all.any((e) {
+            final n = _normalizeForMatch(e.path);
+            return n == single || n.startsWith('$single/');
+          }) && all.any((e) => _normalizeForMatch(e.path).startsWith('$single/'));
+          shouldCreateFolder = !isFolder;
+        } else {
+          shouldCreateFolder = true;
+        }
+        if (shouldCreateFolder) {
+          destDir = p.join(destinationDir, p.basenameWithoutExtension(archivePath));
+          Directory(destDir).createSync(recursive: true);
+        }
+      }
+
+      // 目录条目（含空目录）先建，保证空目录也被还原
+      for (final d in dirs) {
+        Directory(p.join(destDir, d.path)).createSync(recursive: true);
+      }
+
+      final totalBytes = files.fold<int>(0, (s, e) => s + e.uncompressedSize);
+      var done = 0;
+      for (final e in files) {
+        final outFile = File(p.join(destDir, e.path));
+        outFile.parent.createSync(recursive: true);
+        final sink = outFile.openWrite();
+        var written = 0;
+        try {
+          await for (final chunk in archive.openRead(e)) {
+            sink.add(chunk);
+            written += chunk.length;
+            onProgress?.call(
+              e.path,
+              done + written,
+              totalBytes,
+              written,
+              e.uncompressedSize,
+              totalBytes <= 0 ? 0.0 : (done + written) / totalBytes,
+            );
+          }
+        } finally {
+          await sink.flush();
+          await sink.close();
+        }
+        done += e.uncompressedSize;
+      }
+      return destDir;
+    } finally {
+      await archive.close();
+    }
+  }
+
+  /// 用 koni_archive 列出 .7z/.rar 条目，构造 package:archive 的 [Archive]
+  /// （仅名称 + 大小，不含内容），供 ArchiveViewerScreen 浏览树使用。
+  static Future<Archive> _listKoniArchive(String archivePath, String? password) async {
+    final pw = (password != null && password.isNotEmpty) ? password : null;
+    final src = await koni.openArchiveFile(
+      archivePath,
+      options: koni.ArchiveReadOptions(password: pw),
+    );
+    try {
+      final out = Archive();
+      for (final e in src.entries) {
+        var name = _fixZipFilename(e.path);
+        if (name.isEmpty) continue;
+        if (e.isDirectory && !name.endsWith('/')) name = '$name/';
+        final af = ArchiveFile(name, e.uncompressedSize, null);
+        af.isFile = e.isFile;
+        out.addFile(af);
+      }
+      return out;
+    } finally {
+      await src.close();
+    }
+  }
+
+  /// 从 .7z/.rar 中读取指定内部路径的条目内容（隔离区内完成，只回传字节）。
+  static Future<Map<String, Uint8List?>> _extractKoniEntriesToBytes(
+      String archivePath, List<String> requested, String? password) async {
+    final result = <String, Uint8List?>{for (final p in requested) p: null};
+    final pw = (password != null && password.isNotEmpty) ? password : null;
+    final archive = await koni.openArchiveFile(
+      archivePath,
+      options: koni.ArchiveReadOptions(password: pw),
+    );
+    try {
+      final byPath = <String, koni.ArchiveEntry>{};
+      for (final e in archive.entries) {
+        if (!e.isFile || e.path.isEmpty) continue;
+        byPath[_normalizeForMatch(_fixZipFilename(e.path))] = e;
+      }
+      for (final p in requested) {
+        final entry = byPath[p];
+        if (entry == null) continue;
+        try {
+          result[p] = await archive.readBytes(entry);
+        } catch (_) {
+          result[p] = null;
+        }
+      }
+    } finally {
+      await archive.close();
+    }
+    return result;
+  }
+
   /// Extracts an archive to the specified destination directory.
   static Future<void> extractArchive({
     required String archivePath,
@@ -631,7 +785,7 @@ class ArchiveService {
     }
   }
 
-  static void _decodeArchiveTask(Map<String, dynamic> args) {
+  static Future<void> _decodeArchiveTask(Map<String, dynamic> args) async {
     String archivePath = args['archivePath'] as String;
     final destinationDir = args['destinationDir'] as String;
     final password = args['password'] as String?;
@@ -693,6 +847,17 @@ class ArchiveService {
         final raw = srcFile.readAsBytesSync();
         final decoded = const ZstdDecoder().decodeBytes(Uint8List.fromList(raw));
         _writeContentChunkedSync(decoded, destFile);
+        return;
+      }
+
+      // 2.5) .7z / .rar：koni_archive 纯 Dart 解码（支持密码）
+      if (isKoniArchivePath(lowerPath)) {
+        await extractKoniArchive(
+          archivePath: archivePath,
+          destinationDir: destinationDir,
+          password: password,
+          wrapInSubfolder: false,
+        );
         return;
       }
 
@@ -804,7 +969,8 @@ class ArchiveService {
     return name;
   }
 
-  static Map<String, Uint8List?> _extractEntriesToBytesTask(Map<String, dynamic> args) {
+  static Future<Map<String, Uint8List?>> _extractEntriesToBytesTask(
+      Map<String, dynamic> args) async {
     final archivePath = args['archivePath'] as String;
     final rawPaths = args['internalPaths'] as List;
     final password = args['password'] as String?;
@@ -817,6 +983,9 @@ class ArchiveService {
     }
 
     try {
+      if (isKoniArchivePath(archivePath)) {
+        return await _extractKoniEntriesToBytes(archivePath, requested, pwdStr);
+      }
       final input = InputFileStream(archivePath);
       try {
         final archive = decodeZip(input, pwdStr);
@@ -878,7 +1047,7 @@ class ArchiveService {
     }
   }
 
-  static Archive? _readArchiveTask(Map<String, dynamic> args) {
+  static Future<Archive?> _readArchiveTask(Map<String, dynamic> args) async {
     final archivePath = args['archivePath'] as String;
     final password = args['password'] as String?;
     final pwdStr = (password != null && password.isNotEmpty) ? password : null;
@@ -887,6 +1056,9 @@ class ArchiveService {
       final file = File(archivePath);
       if (!file.existsSync() || file.lengthSync() == 0) return Archive();
       final lowerPath = archivePath.toLowerCase();
+      if (isKoniArchivePath(lowerPath)) {
+        return await _listKoniArchive(archivePath, pwdStr);
+      }
 
       File? tempTar;
       try {

@@ -1193,6 +1193,29 @@ class BackgroundArchiveService {
         return;
       }
 
+      // ===== .7z / .rar：koni_archive 纯 Dart 解码（RAR4/RAR5、7z AES-256，支持密码） =====
+      if (ArchiveService.isKoniArchivePath(lowerPath)) {
+        t.send(0.05, 'Preparing to extract…', force: true);
+        await ArchiveService.extractKoniArchive(
+          archivePath: archivePath,
+          destinationDir: destinationDir,
+          password: password,
+          wrapInSubfolder: true,
+          onProgress: (currentFile, bytesProcessed, totalBytes, currentFileBytes,
+              currentFileTotal, progress) {
+            t.send(0.10 + progress * 0.90, currentFile,
+                bytesProcessed: bytesProcessed,
+                totalBytes: totalBytes,
+                currentFileBytes: currentFileBytes,
+                currentFileTotal: currentFileTotal);
+          },
+        );
+        t.send(1.0, 'Archive extracted successfully', force: true);
+        await Future.delayed(const Duration(milliseconds: 200));
+        sendPort.send({'status': 'completed'});
+        return;
+      }
+
       // ===== 归档类：ZIP / TAR / TAR.* =====
       t.send(0.05, 'Preparing to extract…', force: true);
 
