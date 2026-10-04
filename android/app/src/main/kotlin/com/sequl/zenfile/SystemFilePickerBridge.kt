@@ -67,7 +67,6 @@ object SystemFilePickerBridge {
     /** 主动把 picker 请求推给 Dart 侧；Dart 未注册处理器时静默忽略。 */
     private fun pushToDart() {
         val ch = channel
-        IntentProbe.note("push", if (ch == null) "channel=null（Dart 收不到，靠补查兜底）" else "sent")
         ch?.invokeMethod(
             "onPickerIntent",
             mapOf(
@@ -93,7 +92,6 @@ object SystemFilePickerBridge {
         val isPicker = action == Intent.ACTION_GET_CONTENT ||
             action == Intent.ACTION_PICK ||
             action == Intent.ACTION_OPEN_DOCUMENT
-        IntentProbe.note("classify", "action=$action isPicker=$isPicker")
         if (!isPicker) {
             // 🔴 这个 else 分支不能省：缓存引擎下 Dart isolate 会跨多次启动存活，
             // 若上一轮的选择器状态不复位，下次普通启动（点桌面图标 / 通知）就会被

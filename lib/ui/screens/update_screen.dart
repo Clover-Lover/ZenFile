@@ -927,10 +927,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.5.1';
+  static const String _latestChangelogVersion = 'v3.5.2';
 
   /// 全部版本的更新日志，**最新在最前**。
   static const List<_Changelog> _changelogs = <_Changelog>[
+    _v352,
     _v351,
     _v350,
     _v341,
@@ -939,8 +940,54 @@ class _UpdateScreenState extends State<UpdateScreen> {
     _v320,
   ];
 
-  /// ── 当前版本：v3.5.0 ────────────────────────────────────────────────
-  /// ── 当前版本：v3.5.1 ────────────────────────────────────────────────
+  /// ── 当前版本：v3.5.2 ────────────────────────────────────────────────
+  static const _Changelog _v352 = _Changelog(
+    version: 'v3.5.2',
+    date: '2026-10-04',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '第三方 App 选文件时可直接使用 ZenFile 自己的文件浏览器：在 QQ / 微信等应用的「发送文件」「添加图片/视频/文件」里选择 ZenFile，打开的就是与文件浏览器一致的界面（列表 / 网格、缩略图、压缩包格式图标、选中态），选完自动回传，起始目录默认停在内部存储',
+        '压缩包新增 .7z / .rar 支持：解压与内置浏览均可（纯 Dart 解码，无需额外组件），支持带密码（含中文密码）的压缩包',
+        '文件浏览页与分类页的安装包（.apk / .xapk / .apks / .apkm / .aab）在图标下方显示「已安装 / 未安装」，无需逐个点开查看',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        'ZenFile 自己的文件选择器界面与文件浏览器完全一致（复用同一套列表 / 网格条目、缩略图、文件类型图标与选中高亮），并新增列表 / 网格视图切换',
+        '系统文件选择器的抽屉里，ZenFile 重新以「ZenFile」应用条目与「ZenFile Storage」根并存出现；根条目提示改为引导语，降低误点',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复从 QQ 等第三方 App 调起 ZenFile 选文件时页面停在「文件夹为空」：起始目录现在按 指定目录 → 根目录 → 内部存储 依次回退，不再出现空白页（论坛反馈）',
+        '修复 ZenFile 在后台未关闭时被调起选文件却停在普通首页、无法选文件的问题（缓存引擎下回到前台会自动补查状态）',
+        '修复「打开文档」场景下 ZenFile 不出现在候选列表的问题（OPEN_DOCUMENT 过滤器缺少 CATEGORY_OPENABLE）',
+        '修复 ZenFile 已在后台时再次被第三方调起时不刷新选文件界面（新增 onNewIntent 处理）',
+        '修复 SMB 远程目录加载失败后路径错位（面包屑停在目标共享、内容却仍是上一层）且没有提示：现在失败即回滚并弹出真实错误（论坛反馈）',
+        '修复 SMB 共享列表少显示共享的问题：不再静默以匿名（guest）身份登录，未勾选「匿名登录」时必须填写用户名（论坛反馈）',
+        '修复远程媒体缩略图不全与播放卡顿：修复带宽令牌桶死循环导致的队列卡死，视频头部探测加宽（2MB → 8MB）、完整下载兜底放宽（100MB → 300MB），播放期间暂停缩略图下载以让出带宽（论坛反馈）',
+        '修复中文密码解压 ZIP 失败：密码候选改用 CRC32 校验判定，不再被错误的第一个候选误判命中',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'Third-party apps can now use ZenFile\'s own file browser when picking files: choose ZenFile in "Send file" / "Add photo, video or file" in QQ, WeChat and others and you get the full file-browser UI (list / grid, thumbnails, archive-format icons, selection state) with results returned automatically, starting in internal storage by default',
+        'Archive support for .7z / .rar: both extraction and in-app browsing work (pure-Dart decoders, no extra components), including password-protected archives (Chinese passwords supported)',
+        'Installation packages (.apk / .xapk / .apks / .apkm / .aab) in the file browser and category pages now show an "Installed / Not installed" badge under the icon, no need to open each one',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'ZenFile\'s own file picker now looks exactly like the file browser (same list / grid entries, thumbnails, file-type icons and selection highlight) and gains a list / grid view toggle',
+        'In the system file-picker drawer, ZenFile once again appears as both a "ZenFile" app entry and a "ZenFile Storage" root; the root entry hint is now a guidance line to reduce mistaps',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed the picker showing an empty folder when launched from QQ and other third-party apps: the start directory now falls back through requested path, root path and internal storage, so no more blank pages (forum feedback)',
+        'Fixed the picker landing on the normal home screen (with no way to pick a file) when ZenFile was still alive in the background (state is now re-checked on resume with the cached engine)',
+        'Fixed ZenFile not appearing as a candidate in the "Open document" flow (the OPEN_DOCUMENT filter was missing CATEGORY_OPENABLE)',
+        'Fixed the picker UI not refreshing when ZenFile was already in the background and got launched again (added onNewIntent handling)',
+        'Fixed SMB remote directories going out of sync after a failed load (breadcrumb at the target share while the list still showed the parent) with no error shown: failures now roll back the path and surface the real error (forum feedback)',
+        'Fixed some SMB shares missing from the share list: ZenFile no longer logs in silently as anonymous (guest); a username is now required unless "Anonymous login" is checked (forum feedback)',
+        'Fixed incomplete remote video thumbnails and playback stutter: a token-bucket deadlock that stalled the thumbnail queue, a wider video header probe (2MB to 8MB), a higher full-download fallback cap (100MB to 300MB), and thumbnails are paused during playback to free up bandwidth (forum feedback)',
+        'Fixed ZIP archives with a Chinese password failing to extract: password candidates are now validated by CRC32 instead of wrongly accepting the first candidate',
+      ]),
+    ],
+  );
+
   static const _Changelog _v351 = _Changelog(
     version: 'v3.5.1',
     date: '2026-10-03',
