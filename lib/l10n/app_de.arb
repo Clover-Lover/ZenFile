@@ -3233,6 +3233,14 @@
   "cat_vault_desc": "Sicherer Speicher",
   "cat_quick_categories": "Kategorien",
   "ui_nav": "Lokal",
+  "install_status_installed": "Installiert",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "Nicht installiert",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "Backup-Passphrase",
   "ui_backup_passphrase_hint": "Geben Sie eine Passphrase ein, um vertrauliche Daten im Backup zu verschlüsseln (Remote-Passwörter, Tresor-Passwörter usw.). Leer lassen, um vertrauliche Daten auszuschließen; diese müssen nach der Wiederherstellung neu konfiguriert werden.",
   "ui_restore_passphrase_title": "Backup-Passphrase eingeben",

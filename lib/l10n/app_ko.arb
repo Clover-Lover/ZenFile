@@ -3236,6 +3236,14 @@
   "cat_vault_desc": "안전 저장",
   "cat_quick_categories": "카테고리",
   "ui_nav": "로컬",
+  "install_status_installed": "설치됨",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "설치되지 않음",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "백업 암호",
   "ui_backup_passphrase_hint": "백업 중인 민감 정보(원격 연결 비밀번호, 금고 비밀번호 등)를 암호화할 암호를 입력하세요. 비워 두면 민감 정보가 백업되지 않으며 복원 후 수동으로 다시 설정해야 합니다.",
   "ui_restore_passphrase_title": "백업 암호 입력",

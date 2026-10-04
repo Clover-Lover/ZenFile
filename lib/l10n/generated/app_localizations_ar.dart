@@ -2829,6 +2829,12 @@ class L10nAr extends L10n {
   String get ui_nav => 'محلي';
 
   @override
+  String get install_status_installed => 'مثبّت';
+
+  @override
+  String get install_status_not_installed => 'غير مثبّت';
+
+  @override
   String get ui_backup_passphrase_title => 'كلمة مرور النسخ الاحتياطي';
 
   @override

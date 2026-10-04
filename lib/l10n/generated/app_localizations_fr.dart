@@ -2894,6 +2894,12 @@ class L10nFr extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String get install_status_installed => 'Installé';
+
+  @override
+  String get install_status_not_installed => 'Non installé';
+
+  @override
   String get ui_backup_passphrase_title => 'Phrase secrète de sauvegarde';
 
   @override

@@ -44,6 +44,7 @@ import 'services/update_check_service.dart';
 import 'ui/screens/update_screen.dart';
 import 'services/crypt_auto_encrypt_service.dart';
 import 'services/system_file_picker_service.dart';
+import 'services/install_status_service.dart';
 
 final GlobalKey<_ZenFileAppState> appStateKey = GlobalKey<_ZenFileAppState>();
 
@@ -652,6 +653,9 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
       // 被第三方 App 调起选文件时，回到前台补查一次（缓存引擎下 Dart 不重启，
       // 只靠 initState 那次查询会漏掉，详见 _refreshPickerInfoOnResume 注释）。
       unawaited(_refreshPickerInfoOnResume());
+      // 用户可能刚在系统安装器里装了 / 卸载了应用 ⇒ 安装包的「已安装」状态会变，
+      // 清掉缓存让列表在下次构建时重新查询。
+      InstallStatusCache.instance.invalidateAll();
     }
     // 首次启动（语言选择流程中）不触发权限检查，避免与语言选择器冲突
     if (state == AppLifecycleState.resumed && _hasPermission != true && !_isFirstLaunch) {

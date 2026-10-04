@@ -2745,6 +2745,12 @@ class L10nKo extends L10n {
   String get ui_nav => '로컬';
 
   @override
+  String get install_status_installed => '설치됨';
+
+  @override
+  String get install_status_not_installed => '설치되지 않음';
+
+  @override
   String get ui_backup_passphrase_title => '백업 암호';
 
   @override

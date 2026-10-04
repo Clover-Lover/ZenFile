@@ -3236,6 +3236,14 @@
   "cat_vault_desc": "Безопасное хранение",
   "cat_quick_categories": "Категории",
   "ui_nav": "Локальный",
+  "install_status_installed": "Установлено",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "Не установлено",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "Пароль резервной копии",
   "ui_backup_passphrase_hint": "Введите пароль для шифрования конфиденциальных данных в резервной копии (пароли удалённых подключений, хранилища и т.д.). Оставьте пустым, чтобы исключить их; после восстановления потребуется ручная настройка.",
   "ui_restore_passphrase_title": "Введите пароль резервной копии",

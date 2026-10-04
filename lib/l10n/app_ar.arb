@@ -3236,6 +3236,14 @@
   "cat_vault_desc": "تخزين آمن",
   "cat_quick_categories": "الفئات",
   "ui_nav": "محلي",
+  "install_status_installed": "مثبّت",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "غير مثبّت",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "كلمة مرور النسخ الاحتياطي",
   "ui_backup_passphrase_hint": "أدخل كلمة المرور لتشفير البيانات الحساسة في النسخة الاحتياطية (كلمات مرور الاتصالات البعيدة والخزنة وما إلى ذلك). اتركها فارغة لاستبعادها؛ وستحتاج إلى إعادة تهيئتها بعد الاستعادة.",
   "ui_restore_passphrase_title": "أدخل كلمة مرور النسخة الاحتياطية",

@@ -2883,6 +2883,12 @@ class L10nRu extends L10n {
   String get ui_nav => 'Локальный';
 
   @override
+  String get install_status_installed => 'Установлено';
+
+  @override
+  String get install_status_not_installed => 'Не установлено';
+
+  @override
   String get ui_backup_passphrase_title => 'Пароль резервной копии';
 
   @override

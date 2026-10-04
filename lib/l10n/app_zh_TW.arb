@@ -3307,6 +3307,14 @@
   "cat_vault_desc": "安全儲存",
   "cat_quick_categories": "分類",
   "ui_nav": "本地",
+  "install_status_installed": "已安裝",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "未安裝",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "備份密碼",
   "ui_backup_passphrase_hint": "輸入備份密碼以加密備份中的敏感資訊（遠端連線密碼、保險箱密碼等）。留空則不備份敏感資訊，還原後需手動重新設定。",
   "ui_restore_passphrase_title": "輸入備份密碼",

@@ -3236,6 +3236,14 @@
   "cat_vault_desc": "Almacenamiento seguro",
   "cat_quick_categories": "Categorías",
   "ui_nav": "Local",
+  "install_status_installed": "Instalada",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "No instalada",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "Frase de contraseña de copia",
   "ui_backup_passphrase_hint": "Introduzca una frase de contraseña para cifrar la información sensible de la copia (contraseñas de conexiones remotas, de la caja fuerte, etc.). Déjelo vacío para excluirla; deberá reconfigurarse tras la restauración.",
   "ui_restore_passphrase_title": "Introducir frase de contraseña",

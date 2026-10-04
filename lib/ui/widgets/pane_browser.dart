@@ -32,6 +32,7 @@ import 'file_operation_progress_dialog.dart';
 import 'file_action_dialogs.dart';
 import 'progress_overlay.dart';
 import 'remote_cloud_badge.dart';
+import 'install_status_badge.dart';
 import 'create_archive_dialog.dart';
 import 'batch_rename_dialog.dart';
 import 'bulk_crypt_actions.dart';
@@ -1645,6 +1646,22 @@ class _PaneBrowserState extends State<PaneBrowser> {
                                   letterSpacing: -0.2,
                                 ),
                               ),
+                              // 安装包：在大小后面追加「已安装 / 未安装」标识
+                              // （双栏图标只有 24px，放不下图标下方的标识）。
+                              if (!file.isEncrypted &&
+                                  !file.isRemote &&
+                                  FileUtils.isInstallPackage(displayPath)) ...[
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: InstallStatusBadge(
+                                    path: file.path,
+                                    size: file.size,
+                                    modifiedMs:
+                                        file.modified.millisecondsSinceEpoch,
+                                    compact: true,
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ],

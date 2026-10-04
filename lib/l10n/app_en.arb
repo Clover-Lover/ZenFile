@@ -3243,6 +3243,14 @@
   "cat_vault_desc": "Secure Storage",
   "cat_quick_categories": "Categories",
   "ui_nav": "Local",
+  "install_status_installed": "Installed",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "Not installed",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "Backup passphrase",
   "ui_backup_passphrase_hint": "Enter a passphrase to encrypt sensitive data in the backup (remote connection passwords, vault passwords, etc.). Leave empty to exclude sensitive data; you will need to reconfigure it after restore.",
   "ui_restore_passphrase_title": "Enter backup passphrase",

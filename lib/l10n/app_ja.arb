@@ -3240,6 +3240,14 @@
   "cat_vault_desc": "安全な保存",
   "cat_quick_categories": "カテゴリ",
   "ui_nav": "ローカル",
+  "install_status_installed": "インストール済み",
+  "@install_status_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
+  "install_status_not_installed": "未インストール",
+  "@install_status_not_installed": {
+    "description": "Install package status badge shown under the file icon"
+  },
   "ui_backup_passphrase_title": "バックアップパスワード",
   "ui_backup_passphrase_hint": "バックアップ内の機密情報（リモート接続のパスワード、保管庫のパスワードなど）を暗号化するパスワードを入力してください。空欄の場合、機密情報はバックアップされず、復元後に手動で再設定が必要です。",
   "ui_restore_passphrase_title": "バックアップパスワードを入力",

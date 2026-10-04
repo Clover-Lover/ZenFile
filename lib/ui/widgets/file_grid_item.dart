@@ -23,6 +23,7 @@ import 'archive_type_icon.dart';
 import 'file_type_icon.dart';
 import 'unknown_file_icon.dart';
 import 'remote_cloud_badge.dart';
+import 'install_status_badge.dart';
 
 class FileGridItem extends StatelessWidget {
   final FileItemModel file;
@@ -104,61 +105,79 @@ class FileGridItem extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: onIconTap ?? onLongPress,
-                        child: Stack(
-                          children: [
-                            if (file.isEncrypted)
-                              Positioned(
-                                left: 0,
-                                top: 0,
-                                child: Container(
-                                  padding: EdgeInsets.all(2 * (1 + (iconScale - 1) * 0.3)),
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.primary,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16),
-                                      bottomRight: Radius.circular(8),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: onIconTap ?? onLongPress,
+                            child: Stack(
+                              children: [
+                                if (file.isEncrypted)
+                                  Positioned(
+                                    left: 0,
+                                    top: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.all(2 * (1 + (iconScale - 1) * 0.3)),
+                                      decoration: BoxDecoration(
+                                        color: theme.colorScheme.primary,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          bottomRight: Radius.circular(8),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.lock,
+                                        size: 10 * (1 + (iconScale - 1) * 0.3),
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  child: Icon(
-                                    Icons.lock,
-                                    size: 10 * (1 + (iconScale - 1) * 0.3),
-                                    color: Colors.white,
+                                Container(
+                                  width: 48 * iconScale,
+                                  height: 48 * iconScale,
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? theme.colorScheme.primary
+                                        : iconColor.withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: _MediaThumbnail(
+                                      file: file,
+                                      iconScale: iconScale,
+                                      isSelected: isSelected,
+                                      iconColor: iconColor,
+                                      connection: connection,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            Container(
-                              width: 48 * iconScale,
-                              height: 48 * iconScale,
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? theme.colorScheme.primary
-                                    : iconColor.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: _MediaThumbnail(
-                                  file: file,
-                                  iconScale: iconScale,
-                                  isSelected: isSelected,
-                                  iconColor: iconColor,
-                                  connection: connection,
-                                ),
-                              ),
+                                if (file.isRemote &&
+                                    context.select<FileManagerProvider, bool>(
+                                      (p) => p.effectiveShowRemoteCloudBadge,
+                                    ))
+                                  RemoteCloudBadge(
+                                    size: 12 * (1 + (iconScale - 1) * 0.3),
+                                  ),
+                              ],
                             ),
-                            if (file.isRemote &&
-                                context.select<FileManagerProvider, bool>(
-                                  (p) => p.effectiveShowRemoteCloudBadge,
-                                ))
-                              RemoteCloudBadge(
-                                size: 12 * (1 + (iconScale - 1) * 0.3),
-                              ),
+                          ),
+                          // 安装包：图标正下方显示「已安装 / 未安装」标识。
+                          if (!file.isEncrypted &&
+                              !file.isRemote &&
+                              FileUtils.isInstallPackage(displayPath)) ...[
+                            const SizedBox(height: 3),
+                            InstallStatusBadge(
+                              path: file.path,
+                              size: file.size,
+                              modifiedMs: file.modified.millisecondsSinceEpoch,
+                              scale: iconScale,
+                              maxWidth: 48 * iconScale,
+                            ),
                           ],
-                        ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,

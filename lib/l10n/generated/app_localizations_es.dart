@@ -2896,6 +2896,12 @@ class L10nEs extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String get install_status_installed => 'Instalada';
+
+  @override
+  String get install_status_not_installed => 'No instalada';
+
+  @override
   String get ui_backup_passphrase_title => 'Frase de contraseña de copia';
 
   @override

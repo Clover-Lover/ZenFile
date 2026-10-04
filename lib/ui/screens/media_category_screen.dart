@@ -35,6 +35,7 @@ import '../widgets/batch_rename_dialog.dart';
 import '../widgets/create_archive_dialog.dart';
 import '../widgets/archive_type_icon.dart';
 import '../widgets/file_type_icon.dart';
+import '../widgets/install_status_badge.dart';
 import '../widgets/remote_path_picker.dart';
 import '../widgets/circular_progress_dialog.dart';
 import 'internal_file_picker_screen.dart';
@@ -5560,14 +5561,34 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontWeight: FontWeight.w500),
       ),
-      subtitle: Text(
-        showDate
-            ? '${FileUtils.formatBytes(size, 1)} • ${FileUtils.formatDate(modified)}'
-            : FileUtils.formatBytes(size, 1),
-        style: TextStyle(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-          fontSize: 11,
-        ),
+      subtitle: Row(
+        children: [
+          Flexible(
+            child: Text(
+              showDate
+                  ? '${FileUtils.formatBytes(size, 1)} • ${FileUtils.formatDate(modified)}'
+                  : FileUtils.formatBytes(size, 1),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                fontSize: 11,
+              ),
+            ),
+          ),
+          // 安装包：附加「已安装 / 未安装」标识（列表行内没有图标下方的空间）。
+          if (!path.startsWith('remote://') &&
+              !path.startsWith('cryptremote://') &&
+              FileUtils.isInstallPackage(path)) ...[
+            const SizedBox(width: 6),
+            InstallStatusBadge(
+              path: path,
+              size: size,
+              modifiedMs: modified.millisecondsSinceEpoch,
+              compact: true,
+            ),
+          ],
+        ],
       ),
       trailing: _isSelectionMode
           ? null
@@ -5739,7 +5760,19 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                // 安装包：图标正下方显示「已安装 / 未安装」标识。
+                if (!path.startsWith('remote://') &&
+                    !path.startsWith('cryptremote://') &&
+                    FileUtils.isInstallPackage(path)) ...[
+                  const SizedBox(height: 3),
+                  InstallStatusBadge(
+                    path: path,
+                    size: size,
+                    modifiedMs: modified.millisecondsSinceEpoch,
+                    maxWidth: 44,
+                  ),
+                ],
+                const SizedBox(height: 6),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Text(

@@ -2747,6 +2747,12 @@ class L10nJa extends L10n {
   String get ui_nav => 'ローカル';
 
   @override
+  String get install_status_installed => 'インストール済み';
+
+  @override
+  String get install_status_not_installed => '未インストール';
+
+  @override
   String get ui_backup_passphrase_title => 'バックアップパスワード';
 
   @override

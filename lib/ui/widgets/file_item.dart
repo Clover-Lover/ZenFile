@@ -23,6 +23,7 @@ import 'archive_type_icon.dart';
 import 'file_type_icon.dart';
 import 'unknown_file_icon.dart';
 import 'remote_cloud_badge.dart';
+import 'install_status_badge.dart';
 
 // SVG 缩略图缓存
 class FileItem extends StatelessWidget {
@@ -109,59 +110,78 @@ class FileItem extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: onIconTap ?? onLongPress,
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 48 * iconScale,
-                          height: 48 * iconScale,
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? theme.colorScheme.primary
-                                : iconColor.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: MediaThumbnail(
-                              file: file,
-                              iconScale: iconScale,
-                              isSelected: isSelected,
-                              iconColor: iconColor,
-                              connection: connection,
-                            ),
-                          ),
-                        ),
-                        if (file.isRemote &&
-                            context.select<FileManagerProvider, bool>(
-                              (p) => p.effectiveShowRemoteCloudBadge,
-                            ))
-                          RemoteCloudBadge(
-                            size: 12 * (1 + (iconScale - 1) * 0.3),
-                          ),
-                        if (file.isEncrypted)
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(2 * (1 + (iconScale - 1) * 0.3)),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: onIconTap ?? onLongPress,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 48 * iconScale,
+                              height: 48 * iconScale,
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  bottomRight: Radius.circular(8),
+                                color: isSelected
+                                    ? theme.colorScheme.primary
+                                    : iconColor.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: MediaThumbnail(
+                                  file: file,
+                                  iconScale: iconScale,
+                                  isSelected: isSelected,
+                                  iconColor: iconColor,
+                                  connection: connection,
                                 ),
                               ),
-                              child: Icon(
-                                Icons.lock,
-                                size: 10 * (1 + (iconScale - 1) * 0.3),
-                                color: Colors.white,
-                              ),
                             ),
-                          ),
+                            if (file.isRemote &&
+                                context.select<FileManagerProvider, bool>(
+                                  (p) => p.effectiveShowRemoteCloudBadge,
+                                ))
+                              RemoteCloudBadge(
+                                size: 12 * (1 + (iconScale - 1) * 0.3),
+                              ),
+                            if (file.isEncrypted)
+                              Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(2 * (1 + (iconScale - 1) * 0.3)),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.primary,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.lock,
+                                    size: 10 * (1 + (iconScale - 1) * 0.3),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      // 安装包：图标正下方显示「已安装 / 未安装」标识。
+                      // 加密文件读不到包内容、远程文件无法本地解析，故都跳过。
+                      if (!file.isEncrypted &&
+                          !file.isRemote &&
+                          FileUtils.isInstallPackage(displayPath)) ...[
+                        const SizedBox(height: 4),
+                        InstallStatusBadge(
+                          path: file.path,
+                          size: file.size,
+                          modifiedMs: file.modified.millisecondsSinceEpoch,
+                          scale: iconScale,
+                          maxWidth: 48 * iconScale,
+                        ),
                       ],
-                    ),
+                    ],
                   ),
                   const SizedBox(width: 16),
                   Expanded(

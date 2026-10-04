@@ -5218,6 +5218,18 @@ abstract class L10n {
   /// **'本地'**
   String get ui_nav;
 
+  /// Install package status badge shown under the file icon
+  ///
+  /// In zh, this message translates to:
+  /// **'已安装'**
+  String get install_status_installed;
+
+  /// Install package status badge shown under the file icon
+  ///
+  /// In zh, this message translates to:
+  /// **'未安装'**
+  String get install_status_not_installed;
+
   /// No description provided for @ui_backup_passphrase_title.
   ///
   /// In zh, this message translates to:

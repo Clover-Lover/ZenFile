@@ -2738,6 +2738,12 @@ class L10nZh extends L10n {
   String get ui_nav => '本地';
 
   @override
+  String get install_status_installed => '已安装';
+
+  @override
+  String get install_status_not_installed => '未安装';
+
+  @override
   String get ui_backup_passphrase_title => '备份口令';
 
   @override
@@ -10662,6 +10668,12 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_nav => '本地';
+
+  @override
+  String get install_status_installed => '已安裝';
+
+  @override
+  String get install_status_not_installed => '未安裝';
 
   @override
   String get ui_backup_passphrase_title => '備份密碼';
