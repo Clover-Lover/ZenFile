@@ -13,6 +13,7 @@ import 'package:just_zstd/just_zstd.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import '../providers/file_manager_provider.dart';
 import '../services/root_shizuku_service.dart';
+import 'archive_service.dart';
 import 'package:provider/provider.dart';
 import '../core/navigator_key.dart';
 import '../ui/widgets/background_operation_progress_dialog.dart';
@@ -1203,9 +1204,9 @@ class BackgroundArchiveService {
       if (lowerPath.endsWith('.zip') || lowerPath.contains('.zip.')) {
         final input = InputFileStream(archivePath);
         zipInputToClose = input;
-        archive = ZipDecoder().decodeBuffer(
+        archive = ArchiveService.decodeZip(
           input,
-          password: (password != null && password.isNotEmpty) ? password : null,
+          (password != null && password.isNotEmpty) ? password : null,
         );
       } else if (lowerPath.endsWith('.tar')) {
         final input = InputFileStream(archivePath);

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -170,7 +171,10 @@ class ArchiveService {
       final pw = args['password'] as String?;
       final List<int> encodedBytes;
       if (pw != null && pw.isNotEmpty) {
-        encodedBytes = ZipEncoder(password: pw).encode(archive, level: level) ?? <int>[];
+        // 密码转 UTF-8「字节串」再交给 ZipEncoder：archive 包用 codeUnits 作 AES
+        // 密钥字节，直接传中文会写出其他工具无法解开的密码。
+        encodedBytes =
+            ZipEncoder(password: zipEncodePassword(pw)).encode(archive, level: level) ?? <int>[];
       } else {
         encodedBytes = ZipEncoder().encode(archive, level: level) ?? <int>[];
       }
@@ -412,6 +416,100 @@ class ArchiveService {
     }
   }
 
+  // ---- 中文密码：ZIP 密码字节编码兼容 ----
+  //
+  // archive 包内部用 `password.codeUnits`（UTF-16）作为 ZIP 加密的密钥字节，而标准
+  // ZIP 的密码字节编码是：WinZip AES 固定 UTF-8；传统 ZipCrypto 用创建端系统 ANSI
+  // 码页（中文 Windows 即 GBK）或带 UTF-8 语言标志时的 UTF-8。中文密码直接传入
+  // 必然解不对，这里把密码按不同编码重编码成「codeUnits == 目标字节序列」的字符串。
+
+  /// 生成用于 archive 包解码的密码候选（按优先级）。
+  ///
+  /// 每个候选都是「codeUnits 恰好等于某种编码字节序列」的字符串：archive 包拿
+  /// `codeUnits` 当密钥字节，等价于用该编码的字节做密钥。
+  static List<String> zipPasswordCandidates(String password) {
+    final candidates = <String>[];
+    void add(List<int> bytes) {
+      final s = String.fromCharCodes(bytes);
+      if (!candidates.contains(s)) candidates.add(s);
+    }
+
+    // 1) UTF-8：AES 与带 UTF-8 语言标志的现代 ZIP。
+    add(utf8.encode(password));
+
+    // 2) GBK：中文 Windows 下 WinRAR / 7-Zip / 资源管理器传统 ZipCrypto。
+    try {
+      add(gbk.encode(password));
+    } catch (_) {}
+
+    // 3) 原始字符串：向后兼容本 App 旧版本（直接用 UTF-16 codeUnits 作密钥）。
+    if (!candidates.contains(password)) {
+      candidates.add(password);
+    }
+    return candidates;
+  }
+
+  /// 压缩时把密码转成 UTF-8「字节串」，使 ZipEncoder 写出标准 UTF-8 AES 密码，
+  /// WinZip / 7-Zip 等第三方工具也能正常解压。
+  static String zipEncodePassword(String password) =>
+      String.fromCharCodes(utf8.encode(password));
+
+  /// 用中文密码候选解码 ZIP（解码后做内容校验以确认密码正确）。
+  ///
+  /// archive 包对错误密码不会在 decodeBuffer 阶段立刻抛错：AES 的「password error /
+  /// macs don't match」与 ZipCrypto 的坏数据都延迟到读取条目内容时才抛。因此这里
+  /// 逐个候选解码并校验条目内容，失败则 reset 流换下一个候选。
+  ///
+  /// 注意 ZipCrypto 的特殊性：错误密码解出的乱码若恰好能通过 deflate（或被以 STORE
+  /// 存储）并不会抛异常，旧实现只「读一下内容」会把第一个候选误当正确密码返回——
+  /// 中文密码有 utf8/gbk 多个候选，一旦第一个（utf8）被误判命中，真正的 gbk 候选
+  /// 就永远不会被尝试，表现为「中文密码解压失败/解出乱码」。改用 CRC32 判定。
+  static Archive decodeZip(InputStreamBase input, String? password) {
+    if (password == null || password.isEmpty) {
+      return ZipDecoder().decodeBuffer(input);
+    }
+    final candidates = zipPasswordCandidates(password);
+    Object? lastError;
+    Archive? unverified;
+    for (final candidate in candidates) {
+      input.reset();
+      try {
+        final archive = ZipDecoder().decodeBuffer(input, password: candidate);
+        if (_verifyZipPassword(archive)) return archive;
+        // 能读通但 CRC 不符：先留作兜底，继续试下一个候选。
+        unverified ??= archive;
+      } catch (e) {
+        lastError = e;
+      }
+    }
+    // 所有候选都没通过 CRC：若某个候选至少能解出内容（CRC 字段不可信，如 WinZip
+    // AES AE-2 不写 CRC），退回它，避免把正确密码误判为错误。
+    if (unverified != null) return unverified;
+    throw Exception('Invalid zip password: $lastError');
+  }
+
+  /// 校验密码是否匹配：挑一个「有内容」的条目触发解密并比对 CRC32。
+  ///
+  /// - AES：错误密码会在读取内容时直接抛异常（由 [decodeZip] 捕获），CRC 校验是额外保险。
+  /// - ZipCrypto：错误密码不抛异常，只能靠 CRC 识别。
+  /// - 条目 CRC 为 0（AE-2 不写 CRC、或全空包）时无从校验，返回 true 放行。
+  static bool _verifyZipPassword(Archive archive) {
+    ArchiveFile? target;
+    for (final file in archive.files) {
+      if (!file.isFile || file.size <= 0) continue;
+      // 取最小的非空文件，校验成本最低。
+      if (target == null || file.size < target.size) target = file;
+    }
+    if (target == null) return true; // 没有可校验的条目
+    final content = target.content; // AES 错误密码在此抛异常
+    final expectedCrc = target.crc32;
+    if (expectedCrc == null || expectedCrc == 0) return true; // CRC 不可信
+    if (content is List<int>) {
+      return getCrc32(content) == expectedCrc;
+    }
+    return true;
+  }
+
   /// Extracts an archive to the specified destination directory.
   static Future<void> extractArchive({
     required String archivePath,
@@ -608,7 +706,7 @@ class ArchiveService {
       if (lowerPath.endsWith('.zip') || lowerPath.contains('.zip.')) {
         final input = InputFileStream(archivePath);
         zipInputToClose = input;
-        archive = ZipDecoder().decodeBuffer(input, password: pwdStr);
+        archive = decodeZip(input, pwdStr);
       } else if (lowerPath.endsWith('.tar')) {
         final input = InputFileStream(archivePath);
         archive = TarDecoder().decodeBuffer(input);
@@ -625,7 +723,7 @@ class ArchiveService {
           // fallback：走 InputFileStream + zip decoder
           final input = InputFileStream(archivePath);
           zipInputToClose = input;
-          archive = ZipDecoder().decodeBuffer(input, password: pwdStr);
+          archive = decodeZip(input, pwdStr);
         }
       }
 
@@ -721,7 +819,7 @@ class ArchiveService {
     try {
       final input = InputFileStream(archivePath);
       try {
-        final archive = ZipDecoder().decodeBuffer(input, password: pwdStr);
+        final archive = decodeZip(input, pwdStr);
         _fixArchiveFilenames(archive);
         for (final p in requested) {
           try {
@@ -796,7 +894,7 @@ class ArchiveService {
         if (lowerPath.endsWith('.zip') || lowerPath.contains('.zip.')) {
           final input = InputFileStream(archivePath);
           try {
-            archive = ZipDecoder().decodeBuffer(input, password: pwdStr);
+            archive = decodeZip(input, pwdStr);
           } finally { try { input.closeSync(); } catch (_) {} }
         } else if (lowerPath.endsWith('.tar')) {
           final input = InputFileStream(archivePath);
@@ -817,13 +915,13 @@ class ArchiveService {
           } else {
             final input = InputFileStream(archivePath);
             try {
-              archive = ZipDecoder().decodeBuffer(input, password: pwdStr);
+              archive = decodeZip(input, pwdStr);
             } finally { try { input.closeSync(); } catch (_) {} }
           }
         } else {
           final input = InputFileStream(archivePath);
           try {
-            archive = ZipDecoder().decodeBuffer(input, password: pwdStr);
+            archive = decodeZip(input, pwdStr);
           } finally { try { input.closeSync(); } catch (_) {} }
         }
 
