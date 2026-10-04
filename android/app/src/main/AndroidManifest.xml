@@ -469,16 +469,26 @@
                 android:resource="@xml/zenfile_icon_widget_info" />
         </receiver>
 
+        <!-- ZenFileDocumentsProvider 完整保留（Dart 侧选中的文件靠它转成 document URI
+             回传给第三方 App，grantUriPermissions 读写授权都依赖它），但**故意不声明
+             DOCUMENTS_PROVIDER 这个 intent-filter**。
+             DocumentsUI / vivo「打开文档」抽屉是靠 queryIntentContentProviders(
+             DOCUMENTS_PROVIDER) 枚举 provider 根的：一旦声明，抽屉里只会多出一个
+             「ZenFile Storage」根条目，点它是**系统 DocumentsUI 渲染的列表**（简陋，
+             且用户会误点）；不声明时 ZenFile 与 CX/ES/FX/NP 等文件管理器一样只以
+             「应用条目」出现，点标题或点右侧箭头都进入 ZenFile 自己的文件选择器。
+             ⚠️ 若发现抽屉里 ZenFile 整个消失（而不是变成应用条目），说明该 ROM 的抽屉
+             只列 provider 根 —— 把下面这段 intent-filter 加回来即可恢复原状。
+        <intent-filter>
+            <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+        </intent-filter>
+        -->
         <provider
             android:name=".ZenFileDocumentsProvider"
             android:authorities="${applicationId}.documents"
             android:exported="true"
             android:grantUriPermissions="true"
-            android:permission="android.permission.MANAGE_DOCUMENTS">
-            <intent-filter>
-                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
-            </intent-filter>
-        </provider>
+            android:permission="android.permission.MANAGE_DOCUMENTS" />
 
         <service
             android:name=".FtpForegroundService"

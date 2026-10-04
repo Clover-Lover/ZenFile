@@ -23,6 +23,9 @@ class FolderItem extends StatelessWidget {
   final double iconScale;
   final double itemPaddingMultiplier;
   final bool showShowInLocationOption;
+  // 是否渲染右上角「更多操作」按钮。文件选择器（InternalFilePickerScreen）
+  // 复用本组件时传 false —— 选择器没有重命名/删除/设为首页这些操作。
+  final bool showActionMenu;
 
   const FolderItem({
     super.key,
@@ -35,11 +38,18 @@ class FolderItem extends StatelessWidget {
     this.iconScale = 1.0,
     this.itemPaddingMultiplier = 1.0,
     this.showShowInLocationOption = false,
+    this.showActionMenu = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // showActionMenu=false（文件选择器复用本组件）时与用户设置
+    // hideActionMenuButtons 等价：不渲染「更多」按钮，改显示右侧信息区。
+    final hideActionMenu = !showActionMenu ||
+        context.select<FileManagerProvider, bool>(
+          (p) => p.hideActionMenuButtons,
+        );
     final isHighlighted = context.select<FileManagerProvider, bool>(
       (p) =>
           p.forceHighlightedPaths.contains(folder.path) ||
@@ -321,16 +331,11 @@ class FolderItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (!context.select<FileManagerProvider, bool>(
-                    (p) => p.hideActionMenuButtons,
-                  ))
-                    const SizedBox(width: 32),
+                  if (!hideActionMenu) const SizedBox(width: 32),
                 ],
               ),
             ),
-            if (!context.select<FileManagerProvider, bool>(
-              (p) => p.hideActionMenuButtons,
-            ))
+            if (!hideActionMenu)
               Positioned(
                 top: 0,
                 right: 0,

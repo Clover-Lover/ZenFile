@@ -9,7 +9,10 @@ import 'package:provider/provider.dart';
 import '../../providers/file_manager_provider.dart';
 import '../../services/root_shizuku_service.dart';
 import '../widgets/file_action_dialogs.dart';
-import '../widgets/archive_type_icon.dart';
+import '../widgets/file_item.dart';
+import '../widgets/folder_item.dart';
+import '../widgets/file_grid_item.dart';
+import '../widgets/folder_grid_item.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 
 class InternalFilePickerScreen extends StatefulWidget {
@@ -170,17 +173,17 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
         final provider = context.read<FileManagerProvider>();
         final isRestricted = provider.isRestrictedPath(_currentPath);
         final targetPath = p.join(_currentPath, newFolderName);
-        
+
         if (isRestricted) {
           await RootShizukuService.createFolder(
-            _currentPath, 
-            newFolderName, 
+            _currentPath,
+            newFolderName,
             useRoot: provider.useRootMode
           );
         } else {
           await Directory(targetPath).create();
         }
-        
+
         await _loadDirectory(_currentPath);
       } catch (e) {
         debugPrint('Error creating folder in picker: $e');
@@ -307,7 +310,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          trailing: isSelected 
+                          trailing: isSelected
                               ? Icon(Icons.check_circle, color: theme.colorScheme.primary, size: 24)
                               : null,
                           onTap: () {
@@ -362,7 +365,7 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           ),
                         ),
-                        trailing: _activeRootPath == '/' 
+                        trailing: _activeRootPath == '/'
                             ? Icon(Icons.check_circle, color: theme.colorScheme.primary, size: 24)
                             : null,
                         onTap: () {
@@ -385,9 +388,126 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
     );
   }
 
+  /// 单个条目（列表态）。直接复用「文件浏览器」的 FolderItem / FileItem，
+  /// 这样选择器与浏览器外观完全一致（同一套卡片、图标、缩略图、选中样式）。
+  /// showActionMenu: false —— 选择器不需要重命名/删除/设为首页等操作。
+  Widget _buildListItem(FileItemModel item, {required double iconScale, required double paddingMultiplier}) {
+    final isSelected = _selectedPaths.contains(item.path);
+    if (item.isDirectory) {
+      return FolderItem(
+        folder: item,
+        isSelected: isSelected,
+        iconScale: iconScale,
+        itemPaddingMultiplier: paddingMultiplier,
+        showActionMenu: false,
+        onTap: () => _loadDirectory(item.path),
+        onLongPress: () => _toggleSelect(item.path),
+        onIconTap: () => _loadDirectory(item.path),
+        onAction: (_) {},
+      );
+    }
+    return FileItem(
+      file: item,
+      isSelected: isSelected,
+      iconScale: iconScale,
+      itemPaddingMultiplier: paddingMultiplier,
+      showActionMenu: false,
+      onTap: () => _toggleSelect(item.path),
+      onLongPress: () => _toggleSelect(item.path),
+      onIconTap: () => _toggleSelect(item.path),
+      onAction: (_) {},
+    );
+  }
+
+  /// 单个条目（网格态），同样复用浏览器的 FolderGridItem / FileGridItem。
+  Widget _buildGridItem(FileItemModel item, {required double iconScale, required double paddingMultiplier}) {
+    final isSelected = _selectedPaths.contains(item.path);
+    if (item.isDirectory) {
+      return FolderGridItem(
+        folder: item,
+        isSelected: isSelected,
+        iconScale: iconScale,
+        itemPaddingMultiplier: paddingMultiplier,
+        showActionMenu: false,
+        onTap: () => _loadDirectory(item.path),
+        onLongPress: () => _toggleSelect(item.path),
+        onIconTap: () => _loadDirectory(item.path),
+        onAction: (_) {},
+      );
+    }
+    return FileGridItem(
+      file: item,
+      isSelected: isSelected,
+      iconScale: iconScale,
+      itemPaddingMultiplier: paddingMultiplier,
+      showActionMenu: false,
+      onTap: () => _toggleSelect(item.path),
+      onLongPress: () => _toggleSelect(item.path),
+      onIconTap: () => _toggleSelect(item.path),
+      onAction: (_) {},
+    );
+  }
+
+  Widget _buildBody(BuildContext context, {required bool isGrid, required double iconScale, required double paddingMultiplier}) {
+    final mediaQuery = MediaQuery.of(context);
+    // FAB 悬浮在 body 之上，会给列表末尾的条目留出可点区域，
+    // 否则最底部的文件/文件夹会被「添加所选」按钮遮挡，无法选中。
+    final hasFab = widget.pickDirectory || _selectedPaths.isNotEmpty;
+    final bottomPadding = hasFab
+        ? mediaQuery.padding.bottom + 88 // FAB 高 56 + 边距 16 + 缓冲
+        : mediaQuery.padding.bottom + 8;
+
+    return CustomScrollView(
+      controller: _scrollController,
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.only(
+            top: 8,
+            bottom: bottomPadding,
+            left: isGrid ? 16 : 0,
+            right: isGrid ? 16 : 0,
+          ),
+          sliver: isGrid
+              ? SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: (mediaQuery.size.width / (110 * iconScale)).floor().clamp(2, 10),
+                    mainAxisSpacing: (12 * paddingMultiplier).clamp(4.0, 24.0),
+                    crossAxisSpacing: (12 * paddingMultiplier).clamp(4.0, 24.0),
+                    childAspectRatio: 0.75,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _buildGridItem(
+                      _items[index],
+                      iconScale: iconScale,
+                      paddingMultiplier: paddingMultiplier,
+                    ),
+                    childCount: _items.length,
+                  ),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _buildListItem(
+                      _items[index],
+                      iconScale: iconScale,
+                      paddingMultiplier: paddingMultiplier,
+                    ),
+                    childCount: _items.length,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // 视图状态与「文件浏览器」共用（网格/列表、图标缩放、条目间距），
+    // 选择器因此和浏览器长得一模一样；用户在这里切换视图，浏览器也会跟着切。
+    final isGrid = context.select<FileManagerProvider, bool>((p) => p.isGridView);
+    final iconScale = context.select<FileManagerProvider, double>((p) => p.iconScale);
+    final paddingMultiplier = context.select<FileManagerProvider, double>((p) => p.itemPaddingMultiplier);
 
     return PopScope(
       canPop: _currentPath == _activeRootPath || _currentPath == '/',
@@ -415,13 +535,21 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
           ),
           actions: [
             IconButton(
+              icon: Icon(isGrid ? Broken.row_vertical : Broken.element_3),
+              tooltip: L10n.of(context).ui_layout_mode,
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                context.read<FileManagerProvider>().setGridView(!isGrid);
+              },
+            ),
+            IconButton(
               icon: const Icon(Broken.folder_add),
               tooltip: L10n.of(context).msgf3a485df,
               onPressed: _createFolder,
             ),
             IconButton(
               icon: const Icon(Icons.sd_storage_rounded),
-              tooltip: '选择存储',
+              tooltip: L10n.of(context).selectStorageDrive,
               onPressed: () => _showStorageVolumeModal(context),
             ),
             if (_selectedPaths.isNotEmpty)
@@ -436,108 +564,12 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
             ? const Center(child: CircularProgressIndicator())
             : _items.isEmpty
                 ? Center(child: Text(L10n.of(context).msg4614630a))
-                : Builder(builder: (context) {
-                    // FAB 悬浮在 body 之上，会给列表末尾的条目留出可点区域，
-                    // 否则最底部的文件/文件夹会被「添加所选」按钮遮挡，无法选中。
-                    // pickDirectory 模式的 FAB 常驻；文件选择模式仅在有选中项时出现。
-                    final mediaQuery = MediaQuery.of(context);
-                    final hasFab =
-                        widget.pickDirectory || _selectedPaths.isNotEmpty;
-                    final bottomPadding = hasFab
-                        ? mediaQuery.padding.bottom + 88 // FAB 高 56 + 边距 16 + 缓冲
-                        : mediaQuery.padding.bottom + 8;
-                    return ListView.builder(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.fromLTRB(12, 8, 12, bottomPadding),
-                    itemCount: _items.length,
-                    itemBuilder: (context, index) {
-                      final item = _items[index];
-                      final isSelected = _selectedPaths.contains(item.path);
-                      final iconColor = item.isDirectory ? theme.colorScheme.primary : FileUtils.getColorForFile(item.name, context);
-
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 4),
-                        color: isSelected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5) : theme.colorScheme.surface,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: isSelected ? theme.colorScheme.primary : theme.dividerColor.withValues(alpha: 0.1),
-                            width: isSelected ? 1.5 : 1.0,
-                          ),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            if (item.isDirectory) {
-                              _loadDirectory(item.path);
-                            } else {
-                              _toggleSelect(item.path);
-                            }
-                          },
-                          onLongPress: () => _toggleSelect(item.path),
-                          borderRadius: BorderRadius.circular(12),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () => _toggleSelect(item.path),
-                                  child: Container(
-                                    width: 48,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? theme.colorScheme.primary : (item.isDirectory ? theme.colorScheme.primary.withValues(alpha: 0.1) : iconColor.withValues(alpha: 0.1)),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: (!isSelected && !item.isDirectory && FileUtils.isArchive(item.name))
-                                      ? ArchiveTypeIcon(label: FileUtils.getArchiveTypeLabel(item.name), color: iconColor)
-                                      : Icon(
-                                          isSelected ? Broken.tick_circle : (item.isDirectory ? FileUtils.getFolderIcon(context.read<FileManagerProvider>().folderIconOption) : FileUtils.getIconForFile(item.name)),
-                                          color: isSelected ? theme.colorScheme.onPrimary : iconColor,
-                                          size: 28,
-                                        ),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.name,
-                                        style: theme.textTheme.titleMedium?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      if (!item.isDirectory) ...[
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          FileUtils.formatBytes(item.size, 2),
-                                          style: theme.textTheme.bodySmall?.copyWith(
-                                            color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.6),
-                                          ),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                                Checkbox(
-                                  value: isSelected,
-                                  onChanged: (_) => _toggleSelect(item.path),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    );
-                  }),
+                : _buildBody(
+                    context,
+                    isGrid: isGrid,
+                    iconScale: iconScale,
+                    paddingMultiplier: paddingMultiplier,
+                  ),
         floatingActionButton: widget.pickDirectory
             ? _selectedPaths.isNotEmpty
                 ? FloatingActionButton.extended(

@@ -36,6 +36,9 @@ class FileItem extends StatelessWidget {
   final double itemPaddingMultiplier;
   final bool showShowInLocationOption;
   final bool showOpenWithOption;
+  // 是否渲染右上角「更多操作」按钮。文件选择器（InternalFilePickerScreen）
+  // 复用本组件时传 false —— 选择器没有重命名/删除/设为首页这些操作。
+  final bool showActionMenu;
   final NetworkConnectionModel? connection;
 
   const FileItem({
@@ -50,6 +53,7 @@ class FileItem extends StatelessWidget {
     this.itemPaddingMultiplier = 1.0,
     this.showShowInLocationOption = false,
     this.showOpenWithOption = false,
+    this.showActionMenu = true,
     this.connection,
   });
 
@@ -58,6 +62,13 @@ class FileItem extends StatelessWidget {
     final theme = Theme.of(context);
     final displayPath = file.displayPath;
     final iconColor = FileUtils.getColorForFile(displayPath, context);
+    // showActionMenu=false（文件选择器复用本组件）时与用户设置
+    // hideActionMenuButtons 等价：不渲染「更多」按钮，改显示右侧信息区。
+    final hideActionMenu = !showActionMenu ||
+        context.select<FileManagerProvider, bool>(
+          (p) => p.hideActionMenuButtons,
+        );
+
     final isArchive = FileUtils.isArchive(displayPath);
     final isHighlighted = context.select<FileManagerProvider, bool>(
       (p) =>
@@ -225,9 +236,7 @@ class FileItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (!context.select<FileManagerProvider, bool>(
-                    (p) => p.hideActionMenuButtons,
-                  ))
+                  if (!hideActionMenu)
                     const SizedBox(width: 32)
                   else
                     _TrailingInfoWidget(
@@ -238,9 +247,7 @@ class FileItem extends StatelessWidget {
                 ],
               ),
             ),
-            if (!context.select<FileManagerProvider, bool>(
-              (p) => p.hideActionMenuButtons,
-            ))
+            if (!hideActionMenu)
               Positioned(
                 top: 0,
                 right: 0,

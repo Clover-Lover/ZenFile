@@ -33,6 +33,9 @@ class FileGridItem extends StatelessWidget {
   final bool isSelected;
   final double iconScale;
   final double itemPaddingMultiplier;
+  // 是否渲染右上角「更多操作」按钮。文件选择器（InternalFilePickerScreen）
+  // 复用本组件时传 false —— 选择器没有重命名/删除/设为首页这些操作。
+  final bool showActionMenu;
   final NetworkConnectionModel? connection;
 
   const FileGridItem({
@@ -45,6 +48,7 @@ class FileGridItem extends StatelessWidget {
     this.isSelected = false,
     this.iconScale = 1.0,
     this.itemPaddingMultiplier = 1.0,
+    this.showActionMenu = true,
     this.connection,
   });
 
@@ -53,6 +57,13 @@ class FileGridItem extends StatelessWidget {
     final theme = Theme.of(context);
     final displayPath = file.displayPath;
     final iconColor = FileUtils.getColorForFile(displayPath, context);
+    // showActionMenu=false（文件选择器复用本组件）时与用户设置
+    // hideActionMenuButtons 等价：不渲染「更多」按钮，改显示右侧信息区。
+    final hideActionMenu = !showActionMenu ||
+        context.select<FileManagerProvider, bool>(
+          (p) => p.hideActionMenuButtons,
+        );
+
     final isArchive = FileUtils.isArchive(displayPath);
     final isHighlighted = context.select<FileManagerProvider, bool>(
       (p) =>
@@ -227,10 +238,7 @@ class FileGridItem extends StatelessWidget {
                   ),
                 ),
               ),
-            if (!isSelected &&
-                !context.select<FileManagerProvider, bool>(
-                  (p) => p.hideActionMenuButtons,
-                ))
+            if (!isSelected && !hideActionMenu)
               Positioned(
                 top: 0,
                 right: 0,
