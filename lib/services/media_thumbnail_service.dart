@@ -72,12 +72,48 @@ class MediaThumbnailService {
   /// 缩略图全部拖到超时/卡住——这是「开了缩略图却显示不出来」的主要根因。
   static const int kRemoteThumbMaxBytes = 8 * 1024 * 1024; // 8MB
 
+  /// 远程视频缩略图的头部探测字节数。
+  ///
+  /// faststart 编码的 MP4/MOV 把 moov 元数据放在文件开头，首帧关键帧通常也
+  /// 在前几 MB 内；此前固定只取 2MB，导致「moov 稍大 / 首帧靠后」的视频
+  /// 拿不到首帧（用户反馈：大部分远程视频不显示缩略图）。提高到 8MB 可覆盖
+  /// 绝大多数 faststart 视频，同时仍远小于整文件，带宽代价可控。
+  static const int kVideoHeaderBytes = 8 * 1024 * 1024; // 8MB
+
+  /// 远程视频完整下载兜底的大小上限。
+  ///
+  /// 头部拿不到首帧（moov 在文件尾部的非 faststart 视频）时，仅对不超过此
+  /// 大小的文件做完整下载重试；更大的文件放弃，避免为一张缩略图下载整部
+  /// 电影、长时间占用下载队列与带宽。
+  static const int kVideoFullDownloadMaxBytes = 300 * 1024 * 1024; // 300MB
+
   /// 远程缩略图任务队列（FIFO）。任务按加入顺序出队，但最多同时执行
   /// [_remoteMaxConcurrent] 个（而不是严格串行）：小缩略图不会被前面一个大
   /// 文件堵死；总带宽仍受全局令牌桶限制（约 5MB/s），不会打满网络。
   static final _remoteTaskQueue = <Future<void> Function()>[];
   static int _remoteActiveCount = 0;
   static const int _remoteMaxConcurrent = 3;
+
+  /// 是否有媒体正在播放。为 true 时暂停新的远程缩略图任务（并跳过视频的
+  /// 完整下载兜底），把带宽让给播放流——「边播边下缩略图」是远程视频卡顿的
+  /// 主要诱因之一。用引用计数避免多播放器叠加时被提前复位。
+  static bool _playbackActive = false;
+  static int _playbackRefCount = 0;
+
+  /// 播放开始前调用：暂停远程缩略图队列，释放带宽给播放流。
+  static void beginPlayback() {
+    _playbackRefCount++;
+    _playbackActive = true;
+  }
+
+  /// 播放结束后调用：引用计数归零时恢复远程缩略图队列。
+  static void endPlayback() {
+    if (_playbackRefCount > 0) _playbackRefCount--;
+    if (_playbackRefCount == 0) {
+      _playbackActive = false;
+      _drainRemoteQueue();
+    }
+  }
 
   /// 将远程缩略图任务加入全局 FIFO 队列并限并发执行。
   ///
@@ -103,7 +139,8 @@ class MediaThumbnailService {
   }
 
   static void _drainRemoteQueue() {
-    while (_remoteActiveCount < _remoteMaxConcurrent &&
+    while (!_playbackActive &&
+        _remoteActiveCount < _remoteMaxConcurrent &&
         _remoteTaskQueue.isNotEmpty) {
       final next = _remoteTaskQueue.removeAt(0);
       _remoteActiveCount++;
@@ -126,8 +163,16 @@ class MediaThumbnailService {
   static const double _bandwidthMaxTokens = 5 * 1024 * 1024; // 桶容量 = 1 秒量
 
   /// 获取 [bytes] 字节的带宽令牌；令牌按 5MB/s 速率补充，不足则等待。
+  ///
+  /// 注意：令牌桶容量（[_bandwidthMaxTokens]）只有 1 秒量（约 5MB），而单次
+  /// 请求可能远超该值（图片上限 8MB、视频头部 8MB）。旧实现要求一次性凑齐
+  /// [bytes] 个令牌，但令牌桶封顶 5MB 永远凑不齐，导致 >5MB 的缩略图任务
+  /// 死循环、永久占用并发槽，把整个缩略图队列拖死（用户反馈：照片缩略图
+  /// 不全、大部分视频无缩略图）。这里改为「按桶容量分批取」，令牌随补随取，
+  /// 总速率仍被约束在 5MB/s。
   static Future<void> _acquireBandwidth(int bytes) async {
-    while (true) {
+    double remaining = bytes.toDouble();
+    while (remaining > 0) {
       final now = DateTime.now();
       final elapsedMs = now.difference(_bandwidthLastRefill).inMilliseconds;
       _bandwidthLastRefill = now;
@@ -135,11 +180,13 @@ class MediaThumbnailService {
         _bandwidthMaxTokens,
         _bandwidthTokens + elapsedMs / 1000 * _bandwidthBytesPerSec,
       );
-      if (_bandwidthTokens >= bytes) {
-        _bandwidthTokens -= bytes;
-        return;
+      if (_bandwidthTokens <= 0) {
+        await Future.delayed(const Duration(milliseconds: 100));
+        continue;
       }
-      await Future.delayed(const Duration(milliseconds: 100));
+      final take = math.min(_bandwidthTokens, remaining);
+      _bandwidthTokens -= take;
+      remaining -= take;
     }
   }
 
@@ -170,6 +217,64 @@ class MediaThumbnailService {
         await client.downloadFile(remotePath, localPath, (_) {});
       }
     }, bytes: useRange ? math.min(fileSize, rangeBytes) : fileSize);
+  }
+
+  /// 生成远程视频缩略图（统一入口，供列表 / 网格 / 紧凑三种视图复用，避免
+  /// 三处各自维护一份逻辑导致行为漂移）。
+  ///
+  /// 策略：
+  /// 1. 先下载文件头部 [kVideoHeaderBytes]（约 8MB，覆盖 faststart 视频的
+  ///    moov 与首帧关键帧），用原生 MediaMetadataRetriever 提取首帧；
+  /// 2. 头部拿不到首帧（通常是 moov 在文件尾部的非 faststart 视频）且文件
+  ///    不超过 [kVideoFullDownloadMaxBytes] 时，完整下载重试一次；
+  /// 3. 播放器正在播放（[beginPlayback] 已调用）或文件过大时放弃完整下载，
+  ///    避免与播放流抢带宽、也避免为一张缩略图下载整部电影。
+  ///
+  /// 返回 JPEG 缩略图字节；失败返回 null（由调用方回退到占位图标）。
+  static Future<Uint8List?> generateRemoteVideoThumbnail({
+    required RemoteClient client,
+    required String remotePath,
+    required int fileSize,
+    required String ext,
+  }) async {
+    final tempDir = await getTempDir();
+    final headerPath = p.join(tempDir.path, uniqueTempName(ext));
+    try {
+      // 头部探测（受全局队列 + 带宽令牌桶约束）
+      await downloadThumbnailFile(
+        client: client,
+        remotePath: remotePath,
+        localPath: headerPath,
+        fileSize: fileSize,
+        useRange: true,
+        rangeBytes: kVideoHeaderBytes,
+      );
+      var bytes = await generateVideoThumbnail(headerPath);
+      if (bytes != null && bytes.length > 20) {
+        return bytes;
+      }
+
+      // 头部拿不到首帧：通常是 moov 在尾部的非 faststart 视频。
+      if (_playbackActive || fileSize > kVideoFullDownloadMaxBytes) {
+        return null;
+      }
+      try {
+        // 完整下载兜底（只受并发上限约束；带宽由调用方通过队列间接控制）。
+        await withRemoteThrottle(() async {
+          await client.downloadFile(remotePath, headerPath, (_) {});
+        });
+        bytes = await generateVideoThumbnail(headerPath);
+        if (bytes != null && bytes.length > 20) {
+          return bytes;
+        }
+      } catch (_) {}
+      return null;
+    } finally {
+      try {
+        final f = File(headerPath);
+        if (f.existsSync()) await f.delete();
+      } catch (_) {}
+    }
   }
 
   /// 将已下载的远程图片压缩为最长边 [maxDim] 的 JPEG 缩略图并写入 [thumbPath]。

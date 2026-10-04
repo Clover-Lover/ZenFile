@@ -1934,52 +1934,38 @@ class _CompactMediaThumbnailState extends State<_CompactMediaThumbnail> {
         MediaThumbnailService.uniqueTempName(ext),
       );
 
-      // 远程连接已建立，直接下载
+      // 远程连接已建立
       final isVideo = FileUtils.isVideo(_displayPath);
       final isAudio = FileUtils.isAudio(_displayPath);
-      if (isVideo || isAudio) {
-        // 视频/音频只需头部 2MB 即可提取缩略图/封面。
-        // 统一走串行队列 + 约 2MB/s 带宽限速，避免打开远程目录时
-        // 多个文件并发完整下载打满带宽导致卡顿。
-        await MediaThumbnailService.downloadThumbnailFile(
+
+      // 视频缩略图：走统一入口（头部探测 + 可选完整下载兜底），列表 / 网格 /
+      // 紧凑三处视图共用同一套逻辑，避免行为漂移。
+      if (isVideo) {
+        final vBytes = await MediaThumbnailService.generateRemoteVideoThumbnail(
           client: client,
           remotePath: dlPath,
-          localPath: tempPath,
           fileSize: widget.file.size,
-          useRange: true,
+          ext: ext,
         );
-      } else {
-        // 图片等完整下载（同样受串行队列与带宽限速约束）
-        await MediaThumbnailService.downloadThumbnailFile(
-          client: client,
-          remotePath: dlPath,
-          localPath: tempPath,
-          fileSize: widget.file.size,
-          useRange: false,
-        );
+        if (vBytes != null && vBytes.length > 20) {
+          await thumbFile.writeAsBytes(vBytes);
+          if (mounted) setState(() => _videoThumb = vBytes);
+        }
+        return;
       }
+
+      // 音频只取头部；图片完整下载（统一受串行队列与带宽限速约束）。
+      await MediaThumbnailService.downloadThumbnailFile(
+        client: client,
+        remotePath: dlPath,
+        localPath: tempPath,
+        fileSize: widget.file.size,
+        useRange: isAudio,
+      );
 
       // 生成缩略图
       Uint8List? thumbBytes;
-      if (isVideo) {
-        // 少部分视频的 moov 元数据在文件尾部（非 faststart 编码），
-        // 仅头部 2MB 解析失败 → 完整下载重试一次，仍失败才放弃。
-        thumbBytes = await MediaThumbnailService.withRemoteThrottle(() async {
-          var tb = await MediaThumbnailService.generateVideoThumbnail(tempPath);
-          if ((tb == null || tb.length <= 20) &&
-              widget.file.size <= 100 * 1024 * 1024) {
-            try {
-              await client.downloadFile(dlPath, tempPath, (_) {});
-              tb = await MediaThumbnailService.generateVideoThumbnail(tempPath);
-            } catch (_) {}
-          }
-          return tb;
-        });
-        if (thumbBytes != null && thumbBytes.length > 20) {
-          await thumbFile.writeAsBytes(thumbBytes);
-          if (mounted) setState(() => _videoThumb = thumbBytes);
-        }
-      } else if (isAudio) {
+      if (isAudio) {
         thumbBytes = await MediaThumbnailService.generateAudioThumbnail(
           tempPath,
         );

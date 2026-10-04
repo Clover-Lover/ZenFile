@@ -470,18 +470,33 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
       );
 
       try {
-        // 视频/音频只需下载头部 2MB 即可由 MediaMetadataRetriever 提取缩略图/封面
-        // 图片/SVG 需要完整文件用于直接显示
         final isVideo = FileUtils.isVideo(_displayPath);
         final isAudio = FileUtils.isAudio(_displayPath);
-        // 统一走串行队列 + 约 2MB/s 带宽限速：打开远程目录时多个文件
-        // 按顺序逐个下载，避免并发完整下载打满带宽导致卡顿。
+
+        // 视频缩略图：走统一入口（头部探测 + 可选完整下载兜底），列表 / 网格 /
+        // 紧凑三处视图共用同一套逻辑，避免行为漂移。
+        if (isVideo) {
+          final thumbBytes =
+              await MediaThumbnailService.generateRemoteVideoThumbnail(
+            client: client,
+            remotePath: dlPath,
+            fileSize: widget.file.size,
+            ext: ext,
+          );
+          if (thumbBytes != null && thumbBytes.isNotEmpty) {
+            await thumbFile.writeAsBytes(thumbBytes, flush: true);
+            if (mounted) setState(() => _videoThumb = thumbBytes);
+          }
+          return;
+        }
+
+        // 图片/SVG 完整下载；音频只取头部（内嵌封面通常在前几 KB~几 MB）。
         await MediaThumbnailService.downloadThumbnailFile(
           client: client,
           remotePath: dlPath,
           localPath: tempPath,
           fileSize: widget.file.size,
-          useRange: isVideo || isAudio,
+          useRange: isAudio,
         );
 
         // SVG 文件：读取字节内容用于 SvgPicture.memory 渲染
@@ -519,32 +534,7 @@ class _MediaThumbnailState extends State<MediaThumbnail> {
             setState(() => _remoteThumb = bytes);
           }
           return;
-        } else if (isVideo) {
-          // 视频缩略图：通过原生 MediaMetadataRetriever 生成。
-          // 少部分视频的 moov 元数据在文件尾部（非 faststart 编码），
-          // 仅头部 2MB 解析失败返回 null → 完整下载重试一次，仍失败才放弃。
-          final thumbBytes = await MediaThumbnailService.withRemoteThrottle(
-            () async {
-              var tb = await MediaThumbnailService.generateVideoThumbnail(
-                tempPath,
-              );
-              if ((tb == null || tb.isEmpty) &&
-                  widget.file.size <= 100 * 1024 * 1024) {
-                try {
-                  await client.downloadFile(dlPath, tempPath, (_) {});
-                  tb = await MediaThumbnailService.generateVideoThumbnail(
-                    tempPath,
-                  );
-                } catch (_) {}
-              }
-              return tb;
-            },
-          );
-          if (thumbBytes != null && thumbBytes.isNotEmpty) {
-            await thumbFile.writeAsBytes(thumbBytes, flush: true);
-            if (mounted) setState(() => _videoThumb = thumbBytes);
-          }
-        } else if (FileUtils.isAudio(_displayPath)) {
+        } else if (isAudio) {
           // 音频缩略图：通过原生 MediaMetadataRetriever 提取内嵌封面
           final thumbBytes = await MediaThumbnailService.generateAudioThumbnail(
             tempPath,

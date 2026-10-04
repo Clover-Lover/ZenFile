@@ -18,6 +18,7 @@ import 'package:zenfile/services/audio_background_handler.dart';
 import 'package:zenfile/services/background_play_permission.dart';
 import 'package:zenfile/services/audio_equalizer_service.dart';
 import 'package:zenfile/services/mpv_audio_output_service.dart';
+import 'package:zenfile/services/media_thumbnail_service.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:zenfile/providers/file_manager_provider.dart';
 import 'package:provider/provider.dart';
@@ -495,6 +496,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _startPlayback() async {
+    // 暂停远程缩略图队列：远程视频流式播放与缩略图下载共享同一网络带宽，
+    // 边播边下缩略图是远程视频卡顿的主要诱因之一，这里把带宽优先让给播放流。
+    MediaThumbnailService.beginPlayback();
     // 视频开始播放时，立即暂停后台音频，避免两路声音混在一起
     try {
       getAudioHandler().pauseForVideo();
@@ -3043,6 +3047,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     // 若日志停在这一行之后没有更多内容，则崩溃发生在释放链里（见
     // `_disposePlayerAfterEqDetach` 与 `MpvAudioOutputService.abandon`）。
     WebdavDebugLog.log('[vp] dispose 开始（bgMode=$_isBackgroundMode）');
+    // 恢复远程缩略图队列（与 _startPlayback 里的 beginPlayback 成对）。
+    MediaThumbnailService.endPlayback();
     _hideTimer?.cancel();
     _positionSub?.cancel();
     _tracksSub?.cancel();
