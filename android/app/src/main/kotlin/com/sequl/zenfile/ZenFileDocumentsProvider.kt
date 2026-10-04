@@ -55,7 +55,12 @@ class ZenFileDocumentsProvider : DocumentsProvider() {
         row.add(DocumentsContract.Root.COLUMN_MIME_TYPES, "*/*")
         row.add(DocumentsContract.Root.COLUMN_FLAGS, flags)
         row.add(DocumentsContract.Root.COLUMN_TITLE, "ZenFile Storage")
-        row.add(DocumentsContract.Root.COLUMN_SUMMARY, "Internal storage via ZenFile")
+        // 副标题同时兼作引导语：抽屉里点条目本体进的是 DocumentsUI 渲染的列表，
+        // 点右侧「↪（用应用打开）」才进 ZenFile 自家选择器，用一句提示降低误点。
+        row.add(
+            DocumentsContract.Root.COLUMN_SUMMARY,
+            context?.getString(R.string.picker_root_summary) ?: "Internal storage"
+        )
         row.add(DocumentsContract.Root.COLUMN_ICON, android.R.drawable.sym_def_app_icon)
         
         try {

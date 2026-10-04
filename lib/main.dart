@@ -1637,6 +1637,15 @@ class _SystemFilePickerHostState extends State<_SystemFilePickerHost> {
     if (_opened) return;
     _opened = true;
     final provider = context.read<FileManagerProvider>();
+    // 选择器宿主不走首页那条初始化链路（provider.init() 在 DirectoryScreen 里才调用），
+    // 此时 storageVolumes 只有构造时塞的默认「内部存储」一条 ⇒ 右上角驱动选择器里
+    // 看不到 SD 卡/U 盘。这里主动刷一次真实卷列表（失败不致命，选择器有兜底路径）。
+    try {
+      await provider.refreshStorageVolumes();
+    } catch (e) {
+      debugPrint('[file_picker] refreshStorageVolumes failed: $e');
+    }
+    if (!mounted) return;
     final picked = await InternalFilePickerScreen.show(
       context,
       rootPath: provider.rootPath,

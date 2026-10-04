@@ -7,4 +7,8 @@
     <string name="zenfile_icon_widget_description">App icon made from your imported image</string>
     <!-- 系统文件选择器：选中的文件不在 provider 暴露的内部存储 root 下时的提示 -->
     <string name="picker_only_internal_storage">仅支持内部存储（/storage/emulated/0）下的文件</string>
+    <!-- 系统文件选择器：provider 根条目的副标题。只列 provider 根的抽屉里（DocumentsUI /
+         vivo「打开文档」）点条目本体进的是系统渲染的列表，点右侧「↪」才进 ZenFile
+         自家选择器 —— 用这句提示把用户引到箭头。 -->
+    <string name="picker_root_summary">内部存储 · 点右侧箭头用 ZenFile 选择</string>
 </resources>

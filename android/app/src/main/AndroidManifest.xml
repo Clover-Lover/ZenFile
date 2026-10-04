@@ -469,20 +469,28 @@
                 android:resource="@xml/zenfile_icon_widget_info" />
         </receiver>
 
-        <!-- ZenFileDocumentsProvider 完整保留（Dart 侧选中的文件靠它转成 document URI
-             回传给第三方 App，grantUriPermissions 读写授权都依赖它），但**故意不声明
-             DOCUMENTS_PROVIDER 这个 intent-filter**。
-             DocumentsUI / vivo「打开文档」抽屉是靠 queryIntentContentProviders(
-             DOCUMENTS_PROVIDER) 枚举 provider 根的：一旦声明，抽屉里只会多出一个
-             「ZenFile Storage」根条目，点它是**系统 DocumentsUI 渲染的列表**（简陋，
-             且用户会误点）；不声明时 ZenFile 与 CX/ES/FX/NP 等文件管理器一样只以
-             「应用条目」出现，点标题或点右侧箭头都进入 ZenFile 自己的文件选择器。
-             ⚠️ 若发现抽屉里 ZenFile 整个消失（而不是变成应用条目），说明该 ROM 的抽屉
-             只列 provider 根 —— 把下面这段 intent-filter 加回来即可恢复原状。
+        <!-- ZenFileDocumentsProvider：既承担「用户选完文件后把路径转成 document URI
+             回传给第三方 App」（grantUriPermissions 读写授权也靠它），也决定 ZenFile
+             是否出现在**只列 provider 根的那些抽屉**里（ACTION_OPEN_DOCUMENT 走的
+             DocumentsUI / vivo 定制「打开文档」页就是）。
+
+             ⭐ 2026-10-04 装机结论（**推翻**同日早先的「去掉 filter 会变成应用条目」假说）：
+             - 声明 DOCUMENTS_PROVIDER ⇒ 抽屉里出现「ZenFile Storage」根条目；
+               WorkBuddy 移动端「添加图片/视频/文件」的抽屉实测**大部分文件管理器都不出现，
+               只有猫头鹰文件等有 provider 的少数出现** ⇒ 该抽屉只列 provider 根。
+             - 不声明 ⇒ ZenFile 在那种抽屉里**整个消失**（不是变成应用条目）。
+               早先「去掉 filter 就变成 ZenFile 应用条目」的观察来自 GET_CONTENT 那条
+               完全不同的路 —— 那条路走 chooser，会列 Activity 候选（见下面 MainActivity
+               的 GET_CONTENT / OPEN_DOCUMENT / PICK filter）。
+             ⇒ 两条路要同时覆盖，这里的 DOCUMENTS_PROVIDER 与 MainActivity 上的
+               GET_CONTENT filter **必须并存**。
+             ⚠️ 代价：在只列根的抽屉里，点条目本体进的是 DocumentsUI 渲染的列表页；
+               要点条目右侧的「↪（用应用打开）」才进 ZenFile 自家选择器。这是框架限制
+               （provider 是后台 ContentProvider，无法跳转 Activity），只能靠根条目
+               的 summary 提示用户。 -->
         <intent-filter>
             <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
         </intent-filter>
-        -->
         <provider
             android:name=".ZenFileDocumentsProvider"
             android:authorities="${applicationId}.documents"

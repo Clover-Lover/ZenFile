@@ -34,6 +34,14 @@ class InternalFilePickerScreen extends StatefulWidget {
 }
 
 class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
+  /// 兜底起始目录：Android 内部存储。
+  ///
+  /// 被第三方 App 调起时不会走首页那条初始化链路（`DirectoryScreen.initState` 里才会
+  /// 调 `provider.init()`），此时 `provider.rootPath` 仍是空串 ⇒ 直接拿它当起始目录会
+  /// 打开一个「文件夹为空」的页面，用户必须自己点右上角驱动选择器切到内部存储才能用。
+  /// 所以这里统一兜底：起始目录不可用时一律落到内部存储。
+  static const String _internalStoragePath = '/storage/emulated/0';
+
   late String _activeRootPath;
   late String _currentPath;
   bool _isLoading = true;
@@ -42,11 +50,28 @@ class _InternalFilePickerScreenState extends State<InternalFilePickerScreen> {
   final Map<String, double> _scrollOffsets = {};
   final ScrollController _scrollController = ScrollController();
 
+  static bool _isUsableDir(String? path) =>
+      path != null && path.isNotEmpty && Directory(path).existsSync();
+
+  /// 选择器的起始目录：`initialPath` → `rootPath` → 内部存储卷 → 内部存储常量。
+  /// 任一为空串或目录已不存在就往下退，绝不让用户停在「文件夹为空」。
+  String _resolveStartPath(FileManagerProvider provider) {
+    if (_isUsableDir(widget.initialPath)) return widget.initialPath!;
+    if (_isUsableDir(widget.rootPath)) return widget.rootPath;
+    for (final vol in provider.storageVolumes) {
+      if (vol.isInternal && _isUsableDir(vol.path)) return vol.path;
+    }
+    if (_isUsableDir(_internalStoragePath)) return _internalStoragePath;
+    // 极端情况（卷也没枚举出来）：保留原值，由 _loadDirectory 呈现空态。
+    return widget.initialPath ?? widget.rootPath;
+  }
+
   @override
   void initState() {
     super.initState();
-    _activeRootPath = widget.rootPath;
-    _currentPath = widget.initialPath ?? widget.rootPath;
+    final start = _resolveStartPath(context.read<FileManagerProvider>());
+    _activeRootPath = start;
+    _currentPath = start;
     _scrollController.addListener(() {
       _scrollOffsets[_currentPath] = _scrollController.offset;
     });
