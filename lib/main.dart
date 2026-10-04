@@ -523,6 +523,11 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   // 查询完成前 _pickerInfoChecked 为 false，首页保持空屏等待结果。
   SystemFilePickerInfo _pickerInfo = SystemFilePickerInfo.none;
   bool _pickerInfoChecked = false;
+  // 选择器模式会话号：每次进入选择器模式自增，作为 _SystemFilePickerHost 的 key，
+  // 强制重建它的 State（重置内部的 _opened 一次性闸门，允许重复进入选择器）。
+  int _pickerSession = 0;
+  // 防止 resumed 抖动导致重复补查 picker 状态。
+  bool _pickerInfoRefreshing = false;
 
   @override
   void initState() {
@@ -556,13 +561,19 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
     SystemFilePickerService.setIntentHandler(_onSystemPickerIntent);
   }
 
-  /// 原生侧 onNewIntent 主动推送的选文件请求（ZenFile 已在后台运行的场景）。
-  void _onSystemPickerIntent(SystemFilePickerInfo info) {
-    if (!mounted || !info.isPicker) return;
+  /// 切换到「选文件」界面并开启一个新的选择器会话。
+  void _enterPickerMode(SystemFilePickerInfo info) {
     setState(() {
       _pickerInfo = info;
       _pickerInfoChecked = true;
+      _pickerSession++;
     });
+  }
+
+  /// 原生侧 onNewIntent 主动推送的选文件请求（ZenFile 仍在后台、Activity 实例存活时）。
+  void _onSystemPickerIntent(SystemFilePickerInfo info) {
+    if (!mounted || !info.isPicker || _pickerInfo.isPicker) return;
+    _enterPickerMode(info);
   }
 
   /// 查询本次是否为「系统文件选择器」启动（被第三方 App 调起选文件）。
@@ -571,10 +582,45 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
   Future<void> _loadSystemPickerInfo() async {
     final info = await SystemFilePickerService.getInfo();
     if (!mounted) return;
+    // 若原生推送已先一步把状态置为 picker，这一次（可能因通道未就绪而拿到 none 的）
+    // 查询不得把它回退掉 —— 两者存在竞态。
+    if (_pickerInfo.isPicker && !info.isPicker) return;
     setState(() {
       _pickerInfo = info;
       _pickerInfoChecked = true;
     });
+  }
+
+  /// 回到前台时主动补查一次 picker 状态 —— **这条才是「ZenFile 在后台被第三方调起
+  /// 选文件」的主通路**，不能只依赖原生推送：
+  /// ZenFile 用的是 audio_service 的缓存引擎（FlutterEngineCache /
+  /// shouldDestroyEngineWithHost=false）。后台被调起时：
+  ///   - 若 Activity 实例还活着 ⇒ 走 onNewIntent，原生会主动推送；
+  ///   - 若 Activity 已被系统销毁、但进程与 Dart isolate 都还在（很常见，缓存引擎会
+  ///     让进程常驻）⇒ **Flutter 对 cached engine 会跳过 Dart 入口**，Dart 不会重新
+  ///     执行 main()/initState，initState 里那次查询永远不再发生；而重建的 Activity
+  ///     走的是 onCreate，不回调 onNewIntent ⇒ 没有任何推送。
+  /// 所以每次回到前台都补查一次，任何一种情况都能正确切进选择器。
+  Future<void> _refreshPickerInfoOnResume() async {
+    if (_pickerInfoRefreshing) return;
+    _pickerInfoRefreshing = true;
+    try {
+      final info = await SystemFilePickerService.getInfo();
+      if (!mounted || info.isPicker == _pickerInfo.isPicker) return;
+      if (info.isPicker) {
+        _enterPickerMode(info);
+      } else {
+        // 原生侧已复位（上一轮选文件已结束，本次是普通启动）⇒ 必须退回普通首页。
+        // 缓存引擎下 Dart 状态会跨启动存活，少了这一步就会出现「点桌面图标却停在
+        // 选择器宿主页」的死状态。
+        setState(() {
+          _pickerInfo = SystemFilePickerInfo.none;
+          _pickerInfoChecked = true;
+        });
+      }
+    } finally {
+      _pickerInfoRefreshing = false;
+    }
   }
 
   /// 读取「启动应用保护」开关，决定是否在冷启动时显示 PIN 闸门
@@ -603,6 +649,9 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
       if (_cachedOverlayStyle != null) {
         SystemChrome.setSystemUIOverlayStyle(_cachedOverlayStyle!);
       }
+      // 被第三方 App 调起选文件时，回到前台补查一次（缓存引擎下 Dart 不重启，
+      // 只靠 initState 那次查询会漏掉，详见 _refreshPickerInfoOnResume 注释）。
+      unawaited(_refreshPickerInfoOnResume());
     }
     // 首次启动（语言选择流程中）不触发权限检查，避免与语言选择器冲突
     if (state == AppLifecycleState.resumed && _hasPermission != true && !_isFirstLaunch) {
@@ -1592,7 +1641,9 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
                               onUnlocked: _onAppUnlocked,
                             )
                           : (_pickerInfo.isPicker
-                              ? _SystemFilePickerHost(info: _pickerInfo)
+                              ? _SystemFilePickerHost(
+                                  key: ValueKey('picker-session-$_pickerSession'),
+                                  info: _pickerInfo)
                               : HomeScreen(toggleTheme: _toggleTheme)))
                       : _StoragePermissionShield(
                               onRequestPermission: _requestStoragePermission,
@@ -1617,7 +1668,7 @@ class _ZenFileAppState extends State<ZenFileApp> with WidgetsBindingObserver {
 class _SystemFilePickerHost extends StatefulWidget {
   final SystemFilePickerInfo info;
 
-  const _SystemFilePickerHost({required this.info});
+  const _SystemFilePickerHost({super.key, required this.info});
 
   @override
   State<_SystemFilePickerHost> createState() => _SystemFilePickerHostState();

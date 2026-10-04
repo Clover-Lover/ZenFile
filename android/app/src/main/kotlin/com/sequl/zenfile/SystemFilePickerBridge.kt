@@ -22,30 +22,53 @@ import java.io.File
  * 4. Dart 调 finishPick(paths) → 这里把路径转成 ZenFileDocumentsProvider 的
  *    document URI 回传给调起方，并结束本页。
  *
- * 之所以把逻辑放在独立文件：MainActivity.kt 是 3000+ 行的大文件且 classpath 凑不齐，
- * 只能做语法检查；独立文件可被 scripts/check_kotlin.py **真编译**，能提前打掉
- * API 不存在 / 参数个数不符这类「只在用户真机构建时才炸」的错误。
+ * 🔴 必须是**进程级单例（object）**，不能像早期版本那样按 Activity 实例持有状态。
+ * 原因：MainActivity 继承 audio_service 的 AudioServiceFragmentActivity，后者用
+ * **缓存引擎**（getCachedEngineId() = "audio_service_engine"，shouldDestroyEngineWithHost()
+ * 返回 false）。于是「ZenFile 在后台未关闭」时系统会销毁 Activity，但进程、FlutterEngine
+ * 与 Dart isolate 全部存活：
+ *   - Flutter 对 cached engine 会**跳过 Dart 入口**（doInitialFlutterViewRun 直接 return），
+ *     ⇒ Dart **不会**重新执行 main() / initState，只在 initState 里查一次 picker 状态的
+ *     写法会永远停在上一次的结果。这就是「冷启动能进选择器、后台复用却进不去」的根因。
+ *   - 新的 MainActivity 实例会重新走 onCreate / configureFlutterEngine，它写下的状态必须
+ *     能被 Dart 立刻读到；而注册 channel 的可能是旧实例、读状态的可能是新实例，
+ *     所以状态与 channel 必须共享（静态）。
+ * Dart 侧配合：回到前台（AppLifecycleState.resumed）时主动补查一次 getPickerInfo。
  */
-class SystemFilePickerBridge(private val activity: Activity) {
+object SystemFilePickerBridge {
+
+    /** 当前活跃的 Activity 实例（setResult / finish 用）。随每个实例的 onCreate 更新。 */
+    @Volatile
+    private var activity: Activity? = null
+
+    @Volatile
+    private var channel: MethodChannel? = null
 
     /** 本次是否由第三方 App 以「选文件」为目的调起。 */
+    @Volatile
     var isPickerLaunch = false
         private set
 
     /** 调起方是否允许多选（Intent.EXTRA_ALLOW_MULTIPLE）。 */
+    @Volatile
     var allowMultiple = false
         private set
 
     /** 调起方要求的 MIME 类型（可能是通配类型或 null，即不限制）。 */
+    @Volatile
     var mimeType: String? = null
         private set
 
-    /** 供原生主动推送「新的 picker 请求」给 Dart 侧（onNewIntent 场景）。 */
-    private var channel: MethodChannel? = null
+    /** 登记当前 Activity 实例，保证 setResult / finish 打到最新的那个。 */
+    fun attach(activity: Activity) {
+        this.activity = activity
+    }
 
     /** 主动把 picker 请求推给 Dart 侧；Dart 未注册处理器时静默忽略。 */
     private fun pushToDart() {
-        channel?.invokeMethod(
+        val ch = channel
+        IntentProbe.note("push", if (ch == null) "channel=null（Dart 收不到，靠补查兜底）" else "sent")
+        ch?.invokeMethod(
             "onPickerIntent",
             mapOf(
                 "isPicker" to true,
@@ -56,24 +79,42 @@ class SystemFilePickerBridge(private val activity: Activity) {
     }
 
     /**
-     * 读取启动 intent，判定是否为系统文件选择器模式。
-     * 必须在 Activity 的 super.onCreate() **之前**调用 —— Dart 侧启动后会异步查询本状态。
+     * 读取 intent，判定是否为系统文件选择器模式。
      *
      * [notifyDart] 为 true 时，若 Dart 侧已经注册了处理器，还会主动把这次的 picker
      * 请求推给它。用于 `onNewIntent`：MainActivity 是 singleTask，ZenFile 已在后台时
      * 第三方调起不会走 onCreate，只有靠主动推送才能让 Dart 侧切到选文件界面。
+     * ⚠️ 推送只是「快一步」的优化，**不是**唯一通路 —— Activity 被系统销毁后重建时
+     * 不会回调 onNewIntent，只能靠 Dart 回到前台时补查（见文件头说明）。
      */
-    fun onLaunchIntent(intent: Intent?, notifyDart: Boolean = false) {
+    fun onLaunchIntent(activity: Activity, intent: Intent?, notifyDart: Boolean = false) {
+        attach(activity)
         val action = intent?.action
-        if (action == Intent.ACTION_GET_CONTENT ||
+        val isPicker = action == Intent.ACTION_GET_CONTENT ||
             action == Intent.ACTION_PICK ||
             action == Intent.ACTION_OPEN_DOCUMENT
-        ) {
-            isPickerLaunch = true
-            allowMultiple = intent?.getBooleanExtra(Intent.EXTRA_ALLOW_MULTIPLE, false) ?: false
-            mimeType = intent?.type
-            if (notifyDart) pushToDart()
+        IntentProbe.note("classify", "action=$action isPicker=$isPicker")
+        if (!isPicker) {
+            // 🔴 这个 else 分支不能省：缓存引擎下 Dart isolate 会跨多次启动存活，
+            // 若上一轮的选择器状态不复位，下次普通启动（点桌面图标 / 通知）就会被
+            // Dart 的补查误判成「又来选文件了」，界面卡在选择器宿主页。
+            resetLaunchState()
+            return
         }
+        isPickerLaunch = true
+        allowMultiple = intent?.getBooleanExtra(Intent.EXTRA_ALLOW_MULTIPLE, false) ?: false
+        mimeType = intent?.type
+        if (notifyDart) pushToDart()
+    }
+
+    /**
+     * 选文件流程结束后复位，避免「已完成的请求」被下一次补查误判成仍在进行中
+     * （Dart 侧回到前台会补查 getPickerInfo）。
+     */
+    private fun resetLaunchState() {
+        isPickerLaunch = false
+        allowMultiple = false
+        mimeType = null
     }
 
     /** 注册供 Dart 侧调用的通道。 */
@@ -95,8 +136,9 @@ class SystemFilePickerBridge(private val activity: Activity) {
                     result.success(deliverPickedFiles(paths))
                 }
                 "cancelPick" -> {
-                    activity.setResult(Activity.RESULT_CANCELED)
-                    activity.finish()
+                    activity?.setResult(Activity.RESULT_CANCELED)
+                    resetLaunchState()
+                    activity?.finish()
                     result.success(true)
                 }
                 else -> result.notImplemented()
@@ -110,13 +152,15 @@ class SystemFilePickerBridge(private val activity: Activity) {
      * @return 是否成功回传；false 表示没有任何可用 URI（已按「取消」处理）。
      */
     private fun deliverPickedFiles(paths: List<String>): Boolean {
+        val act = activity ?: return false
         val limited = if (allowMultiple) paths else paths.take(1)
-        val uris = limited.mapNotNull { path -> buildDocumentUriForPath(path) }
+        val uris = limited.mapNotNull { path -> buildDocumentUriForPath(act, path) }
         if (uris.isEmpty()) {
             // 选中的文件不在 provider 暴露的内部存储 root 下，无法回传可读取的 URI。
-            Toast.makeText(activity, R.string.picker_only_internal_storage, Toast.LENGTH_LONG).show()
-            activity.setResult(Activity.RESULT_CANCELED)
-            activity.finish()
+            Toast.makeText(act, R.string.picker_only_internal_storage, Toast.LENGTH_LONG).show()
+            act.setResult(Activity.RESULT_CANCELED)
+            resetLaunchState()
+            act.finish()
             return false
         }
         val data = Intent()
@@ -125,7 +169,7 @@ class SystemFilePickerBridge(private val activity: Activity) {
         } else {
             // 多选：ClipData 承载全部 URI，同时保留 data 指向第一个
             // （兼容只读 Intent.data 的老调用方）。
-            val clip = ClipData.newUri(activity.contentResolver, "ZenFile", uris[0])
+            val clip = ClipData.newUri(act.contentResolver, "ZenFile", uris[0])
             for (i in 1 until uris.size) {
                 clip.addItem(ClipData.Item(uris[i]))
             }
@@ -137,8 +181,9 @@ class SystemFilePickerBridge(private val activity: Activity) {
         // GET_CONTENT 场景带上也无害。
         data.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         data.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-        activity.setResult(Activity.RESULT_OK, data)
-        activity.finish()
+        act.setResult(Activity.RESULT_OK, data)
+        resetLaunchState()
+        act.finish()
         return true
     }
 
@@ -146,20 +191,18 @@ class SystemFilePickerBridge(private val activity: Activity) {
      * 文件路径 → ZenFileDocumentsProvider 的 document URI。
      * docId 规则与 ZenFileDocumentsProvider.getDocIdForFile() 严格一致（rootId = "primary"）。
      */
-    private fun buildDocumentUriForPath(path: String): Uri? {
+    private fun buildDocumentUriForPath(act: Activity, path: String): Uri? {
         val abs = File(path).absolutePath
         if (!abs.startsWith(ROOT)) return null
         var rel = abs.substring(ROOT.length)
         if (rel.startsWith("/")) rel = rel.substring(1)
         if (rel.isEmpty()) return null
-        val authority = "${activity.packageName}$DOCUMENTS_AUTHORITY_SUFFIX"
+        val authority = "${act.packageName}$DOCUMENTS_AUTHORITY_SUFFIX"
         return DocumentsContract.buildDocumentUri(authority, "primary:$rel")
     }
 
-    private companion object {
-        const val CHANNEL = "com.sequl.zenfile/file_picker"
-        const val ROOT = "/storage/emulated/0"
-        // 与 AndroidManifest 中 provider 的 android:authorities="${applicationId}.documents" 一致
-        const val DOCUMENTS_AUTHORITY_SUFFIX = ".documents"
-    }
+    private const val CHANNEL = "com.sequl.zenfile/file_picker"
+    private const val ROOT = "/storage/emulated/0"
+    // 与 AndroidManifest 中 provider 的 android:authorities="${applicationId}.documents" 一致
+    private const val DOCUMENTS_AUTHORITY_SUFFIX = ".documents"
 }

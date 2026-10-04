@@ -73,7 +73,9 @@ class MainActivity : AudioServiceFragmentActivity() {
 
     // 系统文件选择器（ACTION_GET_CONTENT / ACTION_PICK）桥接：第三方 App 调起选文件时，
     // 由它把 Dart 侧选中的文件转成 document URI 回传。实现见 SystemFilePickerBridge.kt。
-    private val systemFilePickerBridge by lazy { SystemFilePickerBridge(this) }
+    // ⚠️ 它现在是**进程级单例（object）**，不再按 Activity 实例持有状态 —— 本 Activity
+    // 用的是 audio_service 的缓存引擎，后台被调起时 Activity 会被销毁重建而 Dart
+    // 不会重启，状态必须跨实例共享（详见 SystemFilePickerBridge.kt 文件头）。
 
     private val ACTION_CANCEL_OPERATION = "com.sequl.zenfile.ACTION_CANCEL_OPERATION"
     private var notificationsChannel: MethodChannel? = null
@@ -172,7 +174,19 @@ class MainActivity : AudioServiceFragmentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         IntentProbe.record("onNewIntent", intent)
-        systemFilePickerBridge.onLaunchIntent(intent, notifyDart = true)
+        SystemFilePickerBridge.onLaunchIntent(this, intent, notifyDart = true)
+    }
+
+    /**
+     * 每次回到前台都登记当前 Activity 实例。
+     * - 缓存引擎（audio_service）下 Activity 会被销毁重建，setResult/finish 必须打到最新实例；
+     * - 是否要进入选文件界面由 Dart 侧在 resumed 时补查 getPickerInfo 决定（见
+     *   lib/main.dart 的 _refreshPickerInfoOnResume），这里不重复判定。
+     */
+    override fun onResume() {
+        super.onResume()
+        IntentProbe.record("onResume", intent)
+        SystemFilePickerBridge.attach(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -183,7 +197,7 @@ class MainActivity : AudioServiceFragmentActivity() {
         // 系统文件选择器入口：必须在 super.onCreate() **之前**读取 intent —— Dart 侧
         // 启动后会异步查询该状态（getPickerInfo），晚于 onCreate 返回。
         IntentProbe.record("onCreate", intent)
-        systemFilePickerBridge.onLaunchIntent(intent)
+        SystemFilePickerBridge.onLaunchIntent(this, intent)
         super.onCreate(savedInstanceState)
         try {
             Shizuku.addBinderReceivedListenerSticky {
@@ -361,7 +375,7 @@ class MainActivity : AudioServiceFragmentActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         storageEventChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, STORAGE_CHANNEL)
-        systemFilePickerBridge.registerChannel(flutterEngine.dartExecutor.binaryMessenger)
+        SystemFilePickerBridge.registerChannel(flutterEngine.dartExecutor.binaryMessenger)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "checkStatus" -> {

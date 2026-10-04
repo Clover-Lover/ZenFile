@@ -26,19 +26,33 @@ object IntentProbe {
     private const val FILE_NAME = "intent_probe.log"
 
     fun record(tag: String, intent: Intent?) {
-        try {
-            val dir = File(Environment.getExternalStorageDirectory(), DIR_NAME)
-            if (!dir.exists() && !dir.mkdirs()) return
-            val line = StringBuilder()
-                .append(SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US).format(Date()))
-                .append(" [").append(tag).append(']')
-                .append(" action=").append(intent?.action)
+        append(
+            tag,
+            StringBuilder()
+                .append("action=").append(intent?.action)
                 .append(" comp=").append(intent?.component?.flattenToShortString())
                 .append(" type=").append(intent?.type)
                 .append(" cat=").append(intent?.categories?.joinToString(","))
                 .append(" data=").append(intent?.dataString)
                 .append(" flags=0x").append(Integer.toHexString(intent?.flags ?: 0))
                 .append(" extras=").append(intent?.extras?.keySet()?.joinToString(","))
+                .toString()
+        )
+    }
+
+    /** 记录一行纯文本备注（如「推送时 channel 是否为 null」）。 */
+    fun note(tag: String, text: String) {
+        append(tag, text)
+    }
+
+    private fun append(tag: String, body: String) {
+        try {
+            val dir = File(Environment.getExternalStorageDirectory(), DIR_NAME)
+            if (!dir.exists() && !dir.mkdirs()) return
+            val line = StringBuilder()
+                .append(SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US).format(Date()))
+                .append(" [").append(tag).append("] ")
+                .append(body)
                 .append('\n')
                 .toString()
             File(dir, FILE_NAME).appendText(line)
