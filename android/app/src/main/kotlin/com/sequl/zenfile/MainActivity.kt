@@ -171,6 +171,7 @@ class MainActivity : AudioServiceFragmentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        IntentProbe.record("onNewIntent", intent)
         systemFilePickerBridge.onLaunchIntent(intent, notifyDart = true)
     }
 
@@ -181,6 +182,7 @@ class MainActivity : AudioServiceFragmentActivity() {
         CrashForensics.captureOnStartup(this)
         // 系统文件选择器入口：必须在 super.onCreate() **之前**读取 intent —— Dart 侧
         // 启动后会异步查询该状态（getPickerInfo），晚于 onCreate 返回。
+        IntentProbe.record("onCreate", intent)
         systemFilePickerBridge.onLaunchIntent(intent)
         super.onCreate(savedInstanceState)
         try {
