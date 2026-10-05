@@ -927,10 +927,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.5.2';
+  static const String _latestChangelogVersion = 'v3.5.3';
 
   /// 全部版本的更新日志，**最新在最前**。
   static const List<_Changelog> _changelogs = <_Changelog>[
+    _v353,
     _v352,
     _v351,
     _v350,
@@ -940,7 +941,41 @@ class _UpdateScreenState extends State<UpdateScreen> {
     _v320,
   ];
 
-  /// ── 当前版本：v3.5.2 ────────────────────────────────────────────────
+  /// ── 当前版本：v3.5.3 ────────────────────────────────────────────────
+  static const _Changelog _v353 = _Changelog(
+    version: 'v3.5.3',
+    date: '2026-10-05',
+    zh: [
+      _ChangeSection('✨ 新功能', [
+        '多文件操作新增进度计数器：复制 / 剪切、压缩 / 解压、加密 / 解密、云备份同步现在会显示「3/10」形式的进度（当前第几个 / 共几个文件）；复制 / 剪切弹窗中位于文件总大小与剩余时间之间，单文件操作不显示',
+      ]),
+      _ChangeSection('🎨 界面与交互', [
+        '四类进度弹窗（复制剪切 / 压缩解压 / 加密解密 / 云备份同步）统一为同一个圆环进度组件，外观与布局完全一致，后续调整只需改一处',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '安装包的「已安装」判定改为严格匹配：包名、版本号、架构三者必须全部一致才显示「已安装」。同一应用的不同架构分包（arm64-v8a / armeabi-v7a / x86_64）或不同版本不再被统统判为已安装，只有与设备上实际安装的那一个相符才会亮起',
+        '修复分类页的安装包、文档、压缩包、下载等类别扫不到深层文件的问题（例如放在 ZenFile/Backups/Apps 里的安装包），现在会扫描到更深的子目录',
+        '修复从图片 / 视频 / 音频等分类页打开查看器后按返回直接跳回分类页网格的问题：现在按层级逐层返回，在文件夹视图里也能正常退回文件列表',
+        '修复底部导航栏同时高亮多个标签的问题：打开自定义槽位页面（最近页 / 分类快捷入口）后，内置标签的高亮会自动熄灭，任意时刻只有一个高亮',
+      ]),
+    ],
+    en: [
+      _ChangeSection('✨ New Features', [
+        'Multi-file operations now show a progress counter: copy / cut, compress / extract, encrypt / decrypt and cloud backup sync display progress in the form "3/10" (current file / total files). In the copy / cut dialog it sits between the total size and the estimated time; single-file operations do not show it',
+      ]),
+      _ChangeSection('🎨 UI & Interaction', [
+        'The four progress dialogs (copy/cut, compress/extract, encrypt/decrypt, cloud backup sync) now share a single ring-progress component, so their appearance and layout are fully consistent and future tweaks only need one change',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'The "Installed" check for packages now matches strictly: package name, version and CPU architecture must all match before a package shows as installed. The per-architecture builds of the same app (arm64-v8a / armeabi-v7a / x86_64) or a different version are no longer all marked as installed - only the one that actually matches the device lights up',
+        'Fixed category pages (packages, documents, archives, downloads, etc.) not finding deeply nested files such as packages inside ZenFile/Backups/Apps; scanning now reaches deeper folders',
+        'Fixed pressing Back after opening the media viewer from a category page (photos / videos / audio) jumping straight back to the category grid; navigation now goes back one level at a time and works correctly inside the folder view too',
+        'Fixed the bottom navigation bar highlighting several tabs at once: after opening a custom slot page (Recent / Categories shortcut) the built-in tab highlight now turns off, so only one item is highlighted at any time',
+      ]),
+    ],
+  );
+
+  /// ── v3.5.2 ──────────────────────────────────────────────────────────
   static const _Changelog _v352 = _Changelog(
     version: 'v3.5.2',
     date: '2026-10-04',
