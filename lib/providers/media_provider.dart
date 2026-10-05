@@ -31,10 +31,21 @@ enum MediaSortOrder {
   sizeSmallest,
 }
 
-/// 本应用自身的缓存/缩略图目录前缀：本地递归扫描时应跳过这些目录，
-/// 避免把远程媒体下载缓存、远程缩略图缓存等再次当成用户媒体收录（导致「同一图片显示两张」）。
+/// 本应用自身的缓存/临时目录：本地递归扫描时应跳过这些目录，避免把远程媒体
+/// 下载缓存、解密副本、安装中间产物等再次当成用户文件收录（导致重复条目）。
+///
+/// 注意：**不可整目录屏蔽 `/storage/emulated/0/ZenFile`** —— 用户数据就在其下：
+/// 安装包备份 `ZenFile/Backups/Apps`、保险箱导出 `ZenFile/Backups/safe`、
+/// 快传接收 `ZenFile/Receive`。整目录屏蔽会让这些用户文件（尤其安装包）永远
+/// 扫不到（表现为「安装包类别里看不到自己备份的 apk」）。此处只精确屏蔽
+/// 真正的缓存/中间目录；隐藏缓存目录（`.remote_cache`/`.crypt_tmp`/`.temp_*`）
+/// 已由扫描器的「跳过隐藏目录」规则排除，无需在此列出。
 const List<String> _kAppCacheExcludeDirs = [
-  '/storage/emulated/0/ZenFile',
+  '/storage/emulated/0/ZenFile/cache',
+  '/storage/emulated/0/ZenFile/RemoteDecrypted',
+  '/storage/emulated/0/ZenFile/apk_install',
+  '/storage/emulated/0/ZenFile/apk_extract',
+  '/storage/emulated/0/ZenFile/crash',
 ];
 
 /// 判断路径是否落在本应用缓存目录下（供 isolate 与主线程扫描共用）。
@@ -3583,20 +3594,24 @@ static const int _kMinAudioDurationMs = 60 * 1000; // 60 秒
   /// 返回非媒体扫描的「热点根 + 每根最大深度」。
   /// 不再对整棵 /storage/emulated/0 做无深度限制的全量递归（那是「打开应用后
   /// 要等很久才显示」的主因，且在切换/后台时扫描常被丢弃导致「时有时无」）。
-  /// 改为：主目录仅扫 1 层（兜住散落的松散文件），其余标准/常见目录按 4 层深扫。
-  /// 覆盖文档/压缩包/安装包/下载的绝大多数真实位置，扫描量从全树降到极小。
+  /// 改为：主目录扫 3 层（兜住散落文件以及「放在二级子目录里」的常见情形），
+  /// 其余标准/常见目录按 4 层深扫。覆盖文档/压缩包/安装包/下载的绝大多数真实
+  /// 位置（含 ZenFile/Backups/Apps、tencent/MicroMsg/Download 等），扫描量从
+  /// 全树降到极小，且始终为限深扫描、不做无界递归。
   Future<List<_ScanRoot>> _getUserSearchDirs() async {
     final roots = <_ScanRoot>[];
     try {
       final rootDir = Directory('/storage/emulated/0');
       if (await rootDir.exists()) {
-        // 主目录 depth 2 兜底：一级子目录及其下的二级子目录。覆盖「音乐文件不在
-        // /Music 等标准目录、用户随手丢在某个应用目录（如 com.tencent.mm/...）」的
-        // 场景；与下方限深 4 的热点目录互补，扫描量增量为「主目录多一层 list」，对
-        // 大存储设备的影响忽略不计（IO 主要来自热点目录与 dart:io 共享带宽），却
-        // 让「音乐文件未被 MediaStore 索引」的用户也能扫到——这是「只看到录音、
-        // 加自定义路径后才看到音乐」现象的根治：默认扫描根本就覆盖不到默认深度。
-        roots.add(const _ScanRoot('/storage/emulated/0', 2));
+        // 主目录 depth 3 兜底：一级、二级子目录及其下的三级子目录。既覆盖
+        // 「音乐文件不在 /Music 等标准目录、用户随手丢在某个应用目录」的场景，
+        // 也覆盖「文件放在二级子目录里」的常见情形——例如用户备份的安装包
+        // `/storage/emulated/0/ZenFile/Backups/Apps`、微信接收文件
+        // `/storage/emulated/0/tencent/MicroMsg/Download` 等；depth 2 时这些均
+        // 漏扫（表现为「安装包类别只能看到最外层散落的 apk」）。仍为限深扫描、
+        // 不做无界递归，配合下方 4 层热点目录，大存储下扫描量依然可控（增量
+        // 仅为「主目录多进一层 list」，IO 主要来自热点目录）。
+        roots.add(const _ScanRoot('/storage/emulated/0', 3));
         // 热点深扫（depth 4）：文档/压缩包/安装包/下载绝大多数位于这些标准目录。
         const hotspots = [
           '/storage/emulated/0/Download',
@@ -3613,6 +3628,12 @@ static const int _kMinAudioDurationMs = 60 * 1000; // 60 秒
           '/storage/emulated/0/QuarkDownloads',
           '/storage/emulated/0/apk',
           '/storage/emulated/0/APK',
+          // 本应用自己的备份/接收目录（depth 4）：安装包备份
+          // ZenFile/Backups/Apps、保险箱导出 ZenFile/Backups/safe、快传接收
+          // ZenFile/Receive 都在其下，用户会期望这些文件出现在对应分类里。
+          // 缓存/中间目录已由 _kAppCacheExcludeDirs 剪枝、隐藏目录自动跳过，
+          // 因此这棵子树实际很小，深扫成本可忽略。
+          '/storage/emulated/0/ZenFile',
           // 标准音乐/录音目录（depth 4）：on_audio_query 的 querySongs 在部分
           // ROM/大存储设备上仅返回 MediaStore 音频表子集（如只剩录音机），
           // 用户音乐库未被索引导致「音频加载后莫名消失、刷新救不回」。文件系统
