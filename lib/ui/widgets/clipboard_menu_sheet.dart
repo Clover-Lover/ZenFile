@@ -36,7 +36,10 @@ Future<void> showClipboardMenuSheet(
   final theme = Theme.of(context);
   // 勾选态直接挂在 ClipboardTask.keepAfterPaste 上（随任务对象保留，
   // 关闭再打开弹窗不丢、多任务各自独立），不再用弹窗局部 map。
-  const maxPanelHeight = 340.0;
+  // 面板列表最大高度：随屏幕自适应（大屏可显示更多任务，小屏也保证内容可滚动），
+  // 避免写死高度在「多任务多文件」时把后面的任务挤出可见区域。
+  final maxPanelHeight =
+      (MediaQuery.sizeOf(context).height * 0.7).clamp(240.0, 560.0).toDouble();
 
   return showDialog<void>(
     context: context,
@@ -73,9 +76,7 @@ Future<void> showClipboardMenuSheet(
                     // 任务列表（多任务：任务间分割线 + 每任务独立粘贴/勾选/清除）
                     Flexible(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: maxPanelHeight,
-                        ),
+                        constraints: BoxConstraints(maxHeight: maxPanelHeight),
                         child: ListView.builder(
                           shrinkWrap: true,
                           padding: const EdgeInsets.symmetric(
@@ -215,6 +216,10 @@ Future<void> showClipboardMenuSheet(
   );
 }
 
+/// 单个任务区块内最多展示的文件条目数：超出部分以「+N」收敛，避免超大选择
+/// 把单个任务区块撑得过高（面板整体随屏幕缩放，此上限保证滚动流畅）。
+const int _kMaxVisibleTaskItems = 8;
+
 /// 剪贴板里的一条内容（只取展示所需字段）。
 class _ClipboardEntry {
   final String name;
@@ -323,17 +328,24 @@ class _ClipboardTaskBlock extends StatelessWidget {
             ),
           ],
         ),
-        // 文件列表（任务内条目多时可内部滚动）
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 110),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (_, i) => _ClipboardItemRow(
-              item: items[i],
-              folderIconOption: folderIconOption,
-            ),
-          ),
+        // 文件列表：**刻意不使用可滚动的内层 ListView** —— 内层纵向滚动会与外层
+        // 任务列表争夺竖直手势，导致外层无法滚动、后面任务的「粘贴」按钮永远划
+        // 不到（多任务多文件时只能退而用底部「粘贴全部」）。改为非滚动的 Column，
+        // 让整块内容随外层列表一起滚动；单任务只展示前 N 项、其余以「+N」收敛，
+        // 既避免超大选择把面板撑高/卡顿，又保证每个任务的粘贴按钮都可达。
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final item in items.take(_kMaxVisibleTaskItems))
+              _ClipboardItemRow(
+                item: item,
+                folderIconOption: folderIconOption,
+              ),
+            if (items.length > _kMaxVisibleTaskItems)
+              _ClipboardMoreRow(
+                count: items.length - _kMaxVisibleTaskItems,
+              ),
+          ],
         ),
         // 底部操作行：该任务的勾选框（复制）或提示（剪切）+ 独立粘贴按钮
         Padding(
@@ -448,6 +460,37 @@ class _ClipboardItemRow extends StatelessWidget {
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 任务内文件列表被截断时的「+N」收敛行（展示上限之外的文件数）。
+class _ClipboardMoreRow extends StatelessWidget {
+  final int count;
+
+  const _ClipboardMoreRow({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        children: [
+          Icon(
+            Icons.more_horiz,
+            size: 16,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '+$count',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ),
         ],
