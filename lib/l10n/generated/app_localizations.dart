@@ -5374,7 +5374,6 @@ abstract class L10n {
   /// **'悬浮窗显示失败：{e}'**
   String desktop_lyric_overlay_failed(Object e);
 
-
   /// Install package status badge shown under the file icon
   ///
   /// In zh, this message translates to:
