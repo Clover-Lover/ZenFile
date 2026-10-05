@@ -92,6 +92,8 @@ class BulkCryptActions {
           failed++;
           continue;
         }
+        // 文件计数器（「3/10」）：批量多选时按「第几个选中项」显示。
+        ctl.setCounter(i + 1, selectedPaths.length);
         try {
           if (mode == 'inplace') {
             await VaultCryptService.instance.encryptInPlace(
@@ -222,6 +224,8 @@ class BulkCryptActions {
     try {
       for (int i = 0; i < encryptedPaths.length; i++) {
         final path = encryptedPaths[i];
+        // 文件计数器（「3/10」）：批量多选时按「第几个选中项」显示。
+        ctl.setCounter(i + 1, encryptedPaths.length);
         try {
           await VaultCryptService.instance.decryptInPlace(
             encryptedPath: path,

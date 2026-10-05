@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'progress_ring_shell.dart';
 
-/// 保险箱加密/解密进度数据：整体进度 + 当前文件字节进度。
+/// 保险箱加密/解密进度数据：整体进度 + 当前文件字节进度 + 文件计数器。
 class CryptProgressData {
   /// 整体进度（0.0 ~ 1.0）
   final double overall;
@@ -12,10 +13,18 @@ class CryptProgressData {
   /// 当前文件总字节；0 表示未知/未开始（内圈显示空环）
   final int fileTotal;
 
+  /// 当前处理到第几个文件（1 基）；0 表示未知
+  final int fileIndex;
+
+  /// 本次操作涉及的文件总数；0 表示未知
+  final int fileCount;
+
   const CryptProgressData({
     required this.overall,
     this.fileBytes = 0,
     this.fileTotal = 0,
+    this.fileIndex = 0,
+    this.fileCount = 0,
   });
 }
 
@@ -27,16 +36,28 @@ class CryptProgressController {
   double _overall = 0;
   int _fileBytes = 0;
   int _fileTotal = 0;
+  int _fileIndex = 0;
+  int _fileCount = 0;
 
   /// 对应加密/解密目录的 onProgress(processed, total) 回调（文件数粒度）
   void onOverall(int processed, int total) {
     _overall = total > 0 ? processed / total : 0;
+    // 顺带记录文件计数器（目录级操作时 total 即文件总数）
+    _fileIndex = processed;
+    _fileCount = total;
     _push();
   }
 
   /// 直接设置整体进度（0.0 ~ 1.0），用于批量场景自定义折算公式
   void setOverall(double value) {
     _overall = value;
+    _push();
+  }
+
+  /// 设置文件计数器（如「3/10」）。批量多选时 index 为「第几个选中项」。
+  void setCounter(int index, int count) {
+    _fileIndex = index;
+    _fileCount = count;
     _push();
   }
 
@@ -52,6 +73,8 @@ class CryptProgressController {
       overall: _overall.clamp(0.0, 1.0),
       fileBytes: _fileBytes,
       fileTotal: _fileTotal,
+      fileIndex: _fileIndex,
+      fileCount: _fileCount,
     );
   }
 
@@ -77,127 +100,64 @@ class CryptProgressDialog extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final p = progress;
     final overall = (p?.overall ?? 0).clamp(0.0, 1.0);
-    final circleBgColor = isDark
-        ? const Color(0xFF1E1E2E)
-        : theme.colorScheme.surface;
 
     final fileBytesText = (p != null && p.fileTotal > 0)
         ? '${(p.fileBytes / p.fileTotal).clamp(0.0, 1.0) * 100}%'
         : '';
 
+    // 文件计数器（如「3/10」）：仅在多文件操作时显示。
+    final fileCount = p?.fileCount ?? 0;
+    final showCounter = fileCount > 1;
+    final counterIndex = (p?.fileIndex ?? 0).clamp(1, fileCount);
+
     return Center(
-      child: Container(
-        width: 300,
-        height: 300,
-        decoration: BoxDecoration(
-          color: circleBgColor,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
-              blurRadius: 30,
-              spreadRadius: 2,
-              offset: const Offset(0, 12),
+      child: ProgressRingShell(
+        overall: overall,
+        inner: (p != null && p.fileTotal > 0)
+            ? (p.fileBytes / p.fileTotal).clamp(0.0, 1.0)
+            : 0.0,
+        children: [
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface,
             ),
-          ],
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // 环形进度条（外圈=整体进度：淡底环 + 主题色进度环）
-            // padding=strokeWidth/2（4px）：环外缘与圆形背景边缘完全对齐。
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: CircularProgressIndicator(
-                value: 1.0,
-                strokeWidth: 8,
-                backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  theme.colorScheme.primary.withValues(alpha: 0.08),
-                ),
-              ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '${(overall * 100).toStringAsFixed(0)}%',
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.primary,
             ),
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: CircularProgressIndicator(
-                value: overall,
-                strokeWidth: 8,
-                backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  theme.colorScheme.primary,
-                ),
-                strokeCap: StrokeCap.round,
-              ),
-            ),
-
-            // 环形进度条（内圈=当前文件进度，绿色系区分整体）
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: CircularProgressIndicator(
-                value: 1.0,
-                strokeWidth: 5,
-                backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  (isDark ? const Color(0xFF81C784) : const Color(0xFF43A047))
-                      .withValues(alpha: 0.10),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: CircularProgressIndicator(
-                value: (p != null && p.fileTotal > 0)
-                    ? (p.fileBytes / p.fileTotal).clamp(0.0, 1.0)
-                    : 0.0,
-                strokeWidth: 5,
-                backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  isDark ? const Color(0xFF81C784) : const Color(0xFF43A047),
-                ),
-                strokeCap: StrokeCap.round,
-              ),
-            ),
-
-            // 内部内容区域
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 34),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    message,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    '${(overall * 100).toStringAsFixed(0)}%',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    fileBytesText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? const Color(0xFF81C784)
-                          : const Color(0xFF43A047),
-                    ),
-                  ),
-                ],
+          ),
+          if (showCounter) ...[
+            const SizedBox(height: 4),
+            Text(
+              '$counterIndex/$fileCount',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
-        ),
+          const SizedBox(height: 6),
+          Text(
+            fileBytesText,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: isDark
+                  ? const Color(0xFF81C784)
+                  : const Color(0xFF43A047),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -528,14 +528,16 @@ class ArchiveService {
   /// [destinationDir] 下创建与压缩包同名的子文件夹。
   ///
   /// [onProgress] 每写入一块内容回调一次，参数依次为：当前文件路径、已处理字节、
-  /// 总字节、当前文件已写字节、当前文件总大小、整体进度(0..1)。返回实际解压到的目录。
+  /// 总字节、当前文件已写字节、当前文件总大小、整体进度(0..1)、当前文件序号(1基)、
+  /// 文件总数。返回实际解压到的目录。
   static Future<String> extractKoniArchive({
     required String archivePath,
     required String destinationDir,
     String? password,
     bool wrapInSubfolder = true,
     void Function(String currentFile, int bytesProcessed, int totalBytes,
-            int currentFileBytes, int currentFileTotal, double progress)? onProgress,
+            int currentFileBytes, int currentFileTotal, double progress,
+            int currentIndex, int totalFiles)? onProgress,
   }) async {
     final pw = (password != null && password.isNotEmpty) ? password : null;
     final archive = await koni.openArchiveFile(
@@ -580,7 +582,9 @@ class ArchiveService {
 
       final totalBytes = files.fold<int>(0, (s, e) => s + e.uncompressedSize);
       var done = 0;
+      var idx = 0;
       for (final e in files) {
+        idx++;
         final outFile = File(p.join(destDir, e.path));
         outFile.parent.createSync(recursive: true);
         final sink = outFile.openWrite();
@@ -596,6 +600,8 @@ class ArchiveService {
               written,
               e.uncompressedSize,
               totalBytes <= 0 ? 0.0 : (done + written) / totalBytes,
+              idx,
+              files.length,
             );
           }
         } finally {

@@ -34,6 +34,7 @@ class _ProgressThrottler {
   int _lastSentMs = 0;
   double _lastProgress = -1;
   String _lastFile = '';
+  int _lastIndex = -1;
   int _lastBytes = -1;
   int _lastFileBytes = -1;
   _ProgressThrottler(this.sendPort);
@@ -43,10 +44,13 @@ class _ProgressThrottler {
       int bytesProcessed = 0,
       int totalBytes = 0,
       int currentFileBytes = 0,
-      int currentFileTotal = 0}) {
+      int currentFileTotal = 0,
+      int currentIndex = 0,
+      int totalFiles = 0}) {
     final now = DateTime.now().millisecondsSinceEpoch;
     final bool changed = (progress - _lastProgress).abs() > 0.001 ||
         currentFile != _lastFile ||
+        currentIndex != _lastIndex ||
         (bytesProcessed - _lastBytes).abs() > 1024 * 1024 ||
         (currentFileBytes - _lastFileBytes).abs() > 256 * 1024;
     if (!force && !changed) return;
@@ -54,6 +58,7 @@ class _ProgressThrottler {
     _lastSentMs = now;
     _lastProgress = progress;
     _lastFile = currentFile;
+    _lastIndex = currentIndex;
     _lastBytes = bytesProcessed;
     _lastFileBytes = currentFileBytes;
     sendPort.send({
@@ -64,6 +69,8 @@ class _ProgressThrottler {
       'totalBytes': totalBytes,
       'currentFileBytes': currentFileBytes,
       'currentFileTotal': currentFileTotal,
+      'currentIndex': currentIndex,
+      'totalFiles': totalFiles,
     });
   }
 }
@@ -246,6 +253,9 @@ class BackgroundOperation {
   int currentFileBytes;
   // 当前文件总字节数（内圈进度环；0 表示未知/未开始）
   int currentFileTotal;
+  // 当前处理到第几个文件（1 基；0 表示未知）+ 本次操作的文件总数（0 表示未知）
+  int currentFileIndex;
+  int totalFiles;
 
   /// 受限目录（纯 Shizuku 无 root）下，压缩结果需经 SAF 上传：先写到本地临时文件，
   /// 完成后由 _onOperationComplete 经 DocumentsContract 上传到目标目录（shell 无写权限）。
@@ -269,6 +279,8 @@ class BackgroundOperation {
     this.totalBytes = 0,
     this.currentFileBytes = 0,
     this.currentFileTotal = 0,
+    this.currentFileIndex = 0,
+    this.totalFiles = 0,
     this.safLocalPath,
     this.safParentDir,
     this.safFileName,
@@ -421,6 +433,8 @@ class BackgroundArchiveService {
           final totalBytes = message['totalBytes'] as int? ?? 0;
           final currentFileBytes = message['currentFileBytes'] as int? ?? 0;
           final currentFileTotal = message['currentFileTotal'] as int? ?? 0;
+          final currentIndex = message['currentIndex'] as int? ?? 0;
+          final totalFiles = message['totalFiles'] as int? ?? 0;
 
           // 计算速度（字节/秒）
           final now = DateTime.now().millisecondsSinceEpoch;
@@ -441,6 +455,8 @@ class BackgroundArchiveService {
           operation.totalBytes = totalBytes;
           operation.currentFileBytes = currentFileBytes;
           operation.currentFileTotal = currentFileTotal;
+          operation.currentFileIndex = currentIndex;
+          operation.totalFiles = totalFiles;
           activeOperation.value = operation;
           // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
           activeOperation.notifyListeners();
@@ -503,6 +519,8 @@ class BackgroundArchiveService {
           final totalBytes = message['totalBytes'] as int? ?? 0;
           final currentFileBytes = message['currentFileBytes'] as int? ?? 0;
           final currentFileTotal = message['currentFileTotal'] as int? ?? 0;
+          final currentIndex = message['currentIndex'] as int? ?? 0;
+          final totalFiles = message['totalFiles'] as int? ?? 0;
 
           // 计算速度（字节/秒）
           final now = DateTime.now().millisecondsSinceEpoch;
@@ -523,6 +541,8 @@ class BackgroundArchiveService {
           operation.totalBytes = totalBytes;
           operation.currentFileBytes = currentFileBytes;
           operation.currentFileTotal = currentFileTotal;
+          operation.currentFileIndex = currentIndex;
+          operation.totalFiles = totalFiles;
           activeOperation.value = operation;
           // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
           activeOperation.notifyListeners();
@@ -816,14 +836,18 @@ class BackgroundArchiveService {
                 bytesProcessed: compressedBytes,
                 totalBytes: totalBytes,
                 currentFileBytes: 0,
-                currentFileTotal: fileSize);
+                currentFileTotal: fileSize,
+                currentIndex: i + 1,
+                totalFiles: plan.files.length);
             await enc.addFile(src, entry.relPath);
             compressedBytes += fileSize;
             t.send(prog, entry.relPath,
                 bytesProcessed: compressedBytes,
                 totalBytes: totalBytes,
                 currentFileBytes: fileSize,
-                currentFileTotal: fileSize);
+                currentFileTotal: fileSize,
+                currentIndex: i + 1,
+                totalFiles: plan.files.length);
           }
           for (final d in plan.emptyDirs) {
             final normalized = d.endsWith('/') ? d : '$d/';
@@ -844,12 +868,14 @@ class BackgroundArchiveService {
         final output = OutputFileStream(destinationPath);
         final enc = TarEncoder();
         enc.start(output);
-        for (final entry in plan.files) {
+        for (int i = 0; i < plan.files.length; i++) {
+          final entry = plan.files[i];
           final src = File(entry.fullPath);
           if (!src.existsSync()) continue;
           final size = src.lengthSync();
           t.send(0.10 + (processedBytes / totalBytes) * 0.88, entry.relPath,
-              currentFileBytes: 0, currentFileTotal: size);
+              currentFileBytes: 0, currentFileTotal: size,
+              currentIndex: i + 1, totalFiles: plan.files.length);
           final fileStream = InputFileStream(src.path);
           final af = ArchiveFile.stream(entry.relPath, size, fileStream);
           af.lastModTime = src.lastModifiedSync().millisecondsSinceEpoch ~/ 1000;
@@ -858,7 +884,8 @@ class BackgroundArchiveService {
           fileStream.closeSync();
           processedBytes += size;
           t.send(0.10 + (processedBytes / totalBytes) * 0.88, entry.relPath,
-              currentFileBytes: size, currentFileTotal: size);
+              currentFileBytes: size, currentFileTotal: size,
+              currentIndex: i + 1, totalFiles: plan.files.length);
           await Future<void>.delayed(Duration.zero);
         }
         for (final d in plan.emptyDirs) {
@@ -879,12 +906,14 @@ class BackgroundArchiveService {
           final output = OutputFileStream(tarTmp.path);
           final enc = TarEncoder();
           enc.start(output);
-          for (final entry in plan.files) {
+          for (int i = 0; i < plan.files.length; i++) {
+            final entry = plan.files[i];
             final src = File(entry.fullPath);
             if (!src.existsSync()) continue;
             final size = src.lengthSync();
             t.send(0.10 + (processedBytes / totalBytes) * 0.45, entry.relPath,
-                currentFileBytes: 0, currentFileTotal: size);
+                currentFileBytes: 0, currentFileTotal: size,
+                currentIndex: i + 1, totalFiles: plan.files.length);
             final fileStream = InputFileStream(src.path);
             final af = ArchiveFile.stream(entry.relPath, size, fileStream);
             af.lastModTime = src.lastModifiedSync().millisecondsSinceEpoch ~/ 1000;
@@ -893,7 +922,8 @@ class BackgroundArchiveService {
             fileStream.closeSync();
             processedBytes += size;
             t.send(0.10 + (processedBytes / totalBytes) * 0.45, entry.relPath,
-                currentFileBytes: size, currentFileTotal: size);
+                currentFileBytes: size, currentFileTotal: size,
+                currentIndex: i + 1, totalFiles: plan.files.length);
             await Future<void>.delayed(Duration.zero);
           }
           for (final d in plan.emptyDirs) {
@@ -1202,12 +1232,14 @@ class BackgroundArchiveService {
           password: password,
           wrapInSubfolder: true,
           onProgress: (currentFile, bytesProcessed, totalBytes, currentFileBytes,
-              currentFileTotal, progress) {
+              currentFileTotal, progress, currentIndex, totalFiles) {
             t.send(0.10 + progress * 0.90, currentFile,
                 bytesProcessed: bytesProcessed,
                 totalBytes: totalBytes,
                 currentFileBytes: currentFileBytes,
-                currentFileTotal: currentFileTotal);
+                currentFileTotal: currentFileTotal,
+                currentIndex: currentIndex,
+                totalFiles: totalFiles);
           },
         );
         t.send(1.0, 'Archive extracted successfully', force: true);
@@ -1297,7 +1329,9 @@ class BackgroundArchiveService {
               bytesProcessed: extractedBytes,
               totalBytes: totalExtractBytes,
               currentFileBytes: 0,
-              currentFileTotal: fileTotal);
+              currentFileTotal: fileTotal,
+              currentIndex: i + 1,
+              totalFiles: totalFiles);
 
           final outPath = p.join(actualDestDir, filename);
           if (fileEntry.isFile) {
@@ -1310,7 +1344,9 @@ class BackgroundArchiveService {
                   bytesProcessed: extractedBytes + written,
                   totalBytes: totalExtractBytes,
                   currentFileBytes: written,
-                  currentFileTotal: fileTotal);
+                  currentFileTotal: fileTotal,
+                  currentIndex: i + 1,
+                  totalFiles: totalFiles);
             });
             extractedBytes += fileEntry.size;
           } else {

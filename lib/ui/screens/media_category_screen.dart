@@ -530,6 +530,8 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       0,
       (sum, p) => sum + p.localFiles.length,
     );
+    // 文件计数器（「3/10」）：仅在多文件时显示。
+    final counterNotifier = ValueNotifier<String>('');
     void updateProgress(String name, double prog) {
       if (name != currentName) {
         currentName = name;
@@ -542,6 +544,9 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         overall: overall.clamp(0.0, 1.0),
         inner: prog.clamp(0.0, 1.0),
       );
+      counterNotifier.value = totalFiles > 1
+          ? '${processed.clamp(1, totalFiles)}/$totalFiles'
+          : '';
     }
 
     // 点击「后台」后的最小化逻辑：关闭弹窗并注册重新打开回调，
@@ -555,6 +560,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           title: L10n.of(context).ui_backup,
           statusNotifier: statusNotifier,
           progressNotifier: progressNotifier,
+          counterNotifier: counterNotifier,
           onCancel: () {
             if (Navigator.canPop(context)) Navigator.of(context).pop();
           },
@@ -570,6 +576,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           title: L10n.of(context).ui_backup,
           statusNotifier: statusNotifier,
           progressNotifier: progressNotifier,
+          counterNotifier: counterNotifier,
           onCancel: () {
             // 取消：通过 pop 关闭对话框，syncCategoryPairs 内部会捕获中断
             if (Navigator.canPop(context)) Navigator.of(context).pop();
