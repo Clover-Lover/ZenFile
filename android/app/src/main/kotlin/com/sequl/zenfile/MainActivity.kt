@@ -2306,19 +2306,13 @@ class MainActivity : AudioServiceFragmentActivity() {
                 }
                 // 批量判定安装包文件的安装状态（供文件浏览器 / 分类页在安装包
                 // 图标下方显示「已安装 / 未安装」标识）。返回值：path -> 1已安装 / 0未安装 / -1无法判定。
+                // 严格口径（包名 + 版本号 + 架构）与全部实现见 InstallStatusResolver.kt。
                 "getInstallStatus" -> {
                     executor.execute {
                         try {
                             val paths = call.argument<List<String>>("paths") ?: emptyList()
                             val pm = applicationContext.packageManager
-                            val installed = HashSet<String>()
-                            for (ai in pm.getInstalledApplications(0)) {
-                                installed.add(ai.packageName)
-                            }
-                            val out = HashMap<String, Int>()
-                            for (path in paths) {
-                                out[path] = resolveInstallStatus(pm, installed, path)
-                            }
+                            val out = InstallStatusResolver.resolveAll(pm, paths)
                             runOnUiThread { result.success(out) }
                         } catch (e: Exception) {
                             runOnUiThread { result.error("ERROR", e.message, null) }
@@ -2921,97 +2915,7 @@ class MainActivity : AudioServiceFragmentActivity() {
         return path.substring(0, dot)
     }
 
-    /** bundle（.xapk/.apks/.apkm/.aab）内可能出现包名明文的小元数据条目（一律小写比较）。 */
-    private val bundleMetaEntries = arrayOf(
-        "manifest.json",
-        "info.json",
-        "meta.json",
-        "toc.pb",
-        "bundleconfig.pb",
-        "base/manifest/androidmanifest.xml",
-        "androidmanifest.xml",
-    )
-
-    /** 形如 com.example.app 的包名 token。 */
-    private val packageTokenRegex =
-        Regex("[A-Za-z][A-Za-z0-9_]*(?:\\.[A-Za-z][A-Za-z0-9_]*)+")
-
-    /**
-     * 判定安装包文件的安装状态：1 = 已安装，0 = 未安装，-1 = 无法判定。
-     *
-     * - `.apk`：用 [PackageManager.getPackageArchiveInfo] 读出包名再核对已安装集合，精确可靠。
-     * - `.xapk/.apks/.apkm/.aab`：这些容器的**包名以明文出现在容器内的小元数据文件**里
-     *   （manifest.json / info.json / toc.pb / base/manifest/AndroidManifest.xml 等）。
-     *   因此直接扫描这些条目、看是否出现「已安装的包名」，**无需解压出 base.apk**（快得多，
-     *   对几百 MB 的 xapk 尤其重要）。扫描不到元数据则返回 -1，调用方不显示标识。
-     */
-    private fun resolveInstallStatus(
-        pm: PackageManager,
-        installed: Set<String>,
-        path: String,
-    ): Int {
-        return try {
-            if (!File(path).exists()) return -1
-            val lower = stripImAppendedSuffix(path.lowercase())
-            val dot = lower.lastIndexOf('.')
-            if (dot < 0) return -1
-            when (lower.substring(dot + 1)) {
-                "apk" -> {
-                    val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        pm.getPackageArchiveInfo(path, PackageManager.PackageInfoFlags.of(0))
-                    } else {
-                        @Suppress("DEPRECATION")
-                        pm.getPackageArchiveInfo(path, 0)
-                    }
-                    val pkg = info?.packageName
-                    if (pkg.isNullOrEmpty()) -1 else if (installed.contains(pkg)) 1 else 0
-                }
-                "xapk", "apks", "apkm", "aab" -> when (
-                    scanBundleForInstalledPackage(path, installed)
-                ) {
-                    true -> 1
-                    false -> 0
-                    null -> -1
-                }
-                else -> -1
-            }
-        } catch (e: Exception) {
-            -1
-        }
-    }
-
-    /**
-     * 扫 bundle 容器内的小元数据条目，看是否出现「已安装的包名」token。
-     * @return true=命中（已安装）；false=读到元数据但未命中（未安装）；null=读不到（无法判定）。
-     */
-    private fun scanBundleForInstalledPackage(
-        path: String,
-        installed: Set<String>,
-    ): Boolean? {
-        if (installed.isEmpty()) return null
-        return try {
-            java.util.zip.ZipFile(path).use { zip ->
-                var readAny = false
-                val entries = zip.entries()
-                while (entries.hasMoreElements()) {
-                    val entry = entries.nextElement()
-                    if (entry.name.lowercase() !in bundleMetaEntries) continue
-                    if (entry.size > 4L * 1024 * 1024) continue
-                    readAny = true
-                    // ISO-8859-1 是字节的 1:1 映射，ASCII 包名 token 原样保留，不会因编码丢失。
-                    val text = zip.getInputStream(entry).use {
-                        it.readBytes().toString(Charsets.ISO_8859_1)
-                    }
-                    for (m in packageTokenRegex.findAll(text)) {
-                        if (installed.contains(m.value)) return true
-                    }
-                }
-                if (readAny) false else null
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
+    // 安装包安装状态判定已迁到 InstallStatusResolver.kt（严格口径：包名 + 版本号 + 架构）。
 
     private fun getApkIcon(apkPath: String): ByteArray? {
         // bundle（.xapk/.apks/.apkm）靠扩展名分流到「解压取 icon.png / base.apk」分支；

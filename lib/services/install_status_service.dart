@@ -5,9 +5,16 @@ import 'package:flutter/services.dart';
 
 /// 安装包「已安装 / 未安装」状态查询。
 ///
-/// 原生侧实现见 `MainActivity.kt` 的 `getInstallStatus`
-/// （`.apk` 用 `getPackageArchiveInfo` 读包名核对；`.xapk/.apks/.apkm/.aab`
-/// 扫容器内的小元数据条目里是否出现已安装包名）。
+/// 原生侧实现见 `InstallStatusResolver.kt`（`MainActivity.kt` 的 `getInstallStatus`
+/// 只做一行转发）。判定口径是**严格**的：**包名 + 版本号 + 架构** 三者同时一致
+/// 才算「已安装」——
+///  - `.apk`：`getPackageArchiveInfo` 取包名 / versionName / versionCode，
+///    并从 zip 内 `lib/<abi>/` 目录名取 ABI；
+///  - `.xapk/.apks/.apkm/.aab`：扫容器内的小元数据条目里是否出现已安装包名，
+///    ABI 线索取自容器内 split 文件名（`.apks/.apkm` 的版本号拿不到，属已知限制）。
+///
+/// 之所以要「版本 + 架构」：`--split-per-abi` 会产出同包名、同 versionName、
+/// 仅 ABI 不同的多个 APK，只比包名会让它们**全部**显示「已安装」。
 class InstallStatusService {
   static const MethodChannel _channel = MethodChannel(
     'com.sequl.zenfile/apk_editor',
