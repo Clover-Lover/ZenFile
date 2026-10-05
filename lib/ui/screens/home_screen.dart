@@ -560,6 +560,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
                         onNavigateTab: (index) => _switchTab(index),
                         onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
                         onRefresh: () => _handleRefresh(),
+                        // IndexedStack 会构建全部子页，浏览页的 PopScope 也会注册到
+                        // 本页同一个 route 上并被返回键触发；必须告诉它「现在是不是
+                        // 当前显示页」，否则在分类页按返回时它会把壳内页面的返回当作
+                        // 浏览页后退，走到 _switchTab(0) → ShellNavigator.popAll()，
+                        // 直接清空壳内栈（从查看器返回却跳回分类页）。
+                        isActive: _currentIndex == 1,
                       ),
                       TransfersScreen(onNavigateTab: (index) => _switchTab(index)),
                       // 第 4 页「设置」：内嵌渲染（不再 push 全屏路由）。

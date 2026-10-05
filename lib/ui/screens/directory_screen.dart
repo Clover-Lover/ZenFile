@@ -43,12 +43,27 @@ class DirectoryScreen extends StatefulWidget {
   final Function(int)? onNavigateTab;
   final VoidCallback? onRefresh;
   final VoidCallback? onOpenDrawer;
+
+  /// 本页是否为 HomeScreen 的 IndexedStack 中**当前显示**的那一页。
+  ///
+  /// ⚠️ 必须区分：IndexedStack 会构建**全部**子页，它们的 `PopScope` 都注册在
+  /// HomeScreen 所属的同一个 route 上，而 Flutter 处理返回键时会**依次调用该 route
+  /// 内所有 PopScope 的回调**（`routes.dart` 中 `ModalRoute.onPopInvokedWithResult`
+  /// 遍历 `_popEntries`）。所以停留在分类页/设置页时，本页的 PopScope 同样会被触发。
+  /// 不加这道闸，就会把「壳内页面（媒体分类页 / 图片·视频·音频查看器）的返回」
+  /// 误当成「浏览页后退」：在本地根目录时一路走到 `onNavigateTab(0)` →
+  /// `home_screen._switchTab(0)` → `ShellNavigator.popAll()`，一次性清空整个壳内栈
+  /// —— 表现为「从查看器按返回却直接跳回分类页」。
+  /// 非当前显示页一律让行，返回交由 home_screen 统一处理。
+  final bool isActive;
+
   const DirectoryScreen({
     super.key,
     required this.toggleTheme,
     this.onNavigateTab,
     this.onRefresh,
     this.onOpenDrawer,
+    this.isActive = true,
   });
 
   @override
@@ -1418,6 +1433,11 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
           canPop: false,
           onPopInvoked: (didPop) {
             if (didPop) return;
+            // 本页不是当前显示页（用户停留在分类页/设置页等）时不处理返回：
+            // 否则会把壳内页面（媒体分类页 / 查看器）的返回当作「浏览页后退」，
+            // 在本地根目录时触发 onNavigateTab(0) → ShellNavigator.popAll()，
+            // 一次性清空壳内栈。详见 isActive 字段注释。
+            if (!widget.isActive) return;
             // 编辑路径态下，返回键优先退出编辑而非导航。
             // 注意：此处只清除本地编辑态，共享标记 provider.isPathEditing 交由 home_screen 的
             // PopScope 统一处理，避免嵌套 PopScope 调用顺序导致返回键仍切到分类页。
