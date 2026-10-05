@@ -411,7 +411,7 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('保存文件出错：$e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).e9(e))));
       }
     } finally {
       if (mounted) {
@@ -623,7 +623,7 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
     final count = query.allMatches(text).length;
     if (count > 0) {
       _controller.text = text.replaceAll(query, replacement);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('已替换 {count} 处')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).count3(count))));
     }
   }
 
@@ -867,9 +867,9 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
                 ),
               ),
               if (isHtml)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'html_preview',
-                  child: Row(children: [Icon(Broken.global, size: 18, color: Colors.blueAccent), SizedBox(width: 12), Text('HTML 预览', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent))]),
+                  child: Row(children: [Icon(Broken.global, size: 18, color: Colors.blueAccent), SizedBox(width: 12), Text(L10n.of(context).html, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent))]),
                 ),
               if (isMd)
                 PopupMenuItem(
@@ -920,8 +920,8 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
                                 height: 36,
                                 child: TextField(
                                   controller: _findController,
-                                  decoration: const InputDecoration(
-                                    hintText: '查找...',
+                                  decoration: InputDecoration(
+                                    hintText: L10n.of(context).find_hint,
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                                   ),
@@ -943,8 +943,8 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
                                   height: 36,
                                   child: TextField(
                                     controller: _replaceController,
-                                    decoration: const InputDecoration(
-                                      hintText: '替换为...',
+                                    decoration: InputDecoration(
+                                      hintText: L10n.of(context).msg0dac421f,
                                       border: OutlineInputBorder(),
                                       contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                                     ),
@@ -952,7 +952,7 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              ElevatedButton(onPressed: _replace, child: const Text('替换')),
+                              ElevatedButton(onPressed: _replace, child: Text(L10n.of(context).msg_overwrite_file)),
                               const SizedBox(width: 6),
                               ElevatedButton(onPressed: _replaceAll, child: Text(L10n.of(context).msg52709ae1)),
                             ],

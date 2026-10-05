@@ -333,7 +333,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
             if (mounted) {
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text('重命名失败: $e')));
+              ).showSnackBar(SnackBar(content: Text(L10n.of(context).e25(e))));
             }
             return;
           }
@@ -353,7 +353,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
             if (mounted) {
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text('删除失败: $e')));
+              ).showSnackBar(SnackBar(content: Text(L10n.of(context).e17(e))));
             }
           }
         }
@@ -436,14 +436,22 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
     if (mode == null) return;
     final ctl = CryptProgressController();
     if (!context.mounted) return;
+    // 弹窗推在**根** Navigator，而「最近页」跑在壳内嵌套 Navigator（ShellNavigator）
+    // 里 ⇒ 关弹窗必须用句柄走弹窗自己的 context，否则会弹掉本页、弹窗留在屏上。
+    final dialogHandle = ProgressDialogHandle();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => ValueListenableBuilder<CryptProgressData?>(
-        valueListenable: ctl.notifier,
-        builder: (_, v, __) =>
-            CryptProgressDialog(message: L10n.of(context).vault_encrypting, progress: v),
-      ),
+      builder: (dialogContext) {
+        dialogHandle.attach(dialogContext);
+        return ValueListenableBuilder<CryptProgressData?>(
+          valueListenable: ctl.notifier,
+          builder: (_, v, __) => CryptProgressDialog(
+            message: L10n.of(context).vault_encrypting,
+            progress: v,
+          ),
+        );
+      },
     );
     try {
       if (mode == 'inplace') {
@@ -460,7 +468,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
         );
       }
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         _loadRecentFiles();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).vault_encrypt_done)),
@@ -468,7 +476,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).vault_encrypt_failed(e.toString()))),
         );
@@ -483,14 +491,22 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
     if (!await _ensureMasterPassword(context)) return;
     final ctl = CryptProgressController();
     if (!context.mounted) return;
+    // 弹窗推在**根** Navigator，而「最近页」跑在壳内嵌套 Navigator（ShellNavigator）
+    // 里 ⇒ 关弹窗必须用句柄走弹窗自己的 context，否则会弹掉本页、弹窗留在屏上。
+    final dialogHandle = ProgressDialogHandle();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => ValueListenableBuilder<CryptProgressData?>(
-        valueListenable: ctl.notifier,
-        builder: (_, v, __) =>
-            CryptProgressDialog(message: L10n.of(context).vault_decrypting, progress: v),
-      ),
+      builder: (dialogContext) {
+        dialogHandle.attach(dialogContext);
+        return ValueListenableBuilder<CryptProgressData?>(
+          valueListenable: ctl.notifier,
+          builder: (_, v, __) => CryptProgressDialog(
+            message: L10n.of(context).vault_decrypting,
+            progress: v,
+          ),
+        );
+      },
     );
     try {
       await VaultCryptService.instance.decryptInPlace(
@@ -499,7 +515,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
         onFileProgress: ctl.onFile,
       );
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         _loadRecentFiles();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).vault_decrypt_done)),
@@ -507,7 +523,7 @@ class _AllRecentFilesScreenState extends State<AllRecentFilesScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).vault_decrypt_failed(e.toString()))),
         );

@@ -97,7 +97,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('加载出错：$e')),
+          SnackBar(content: Text(L10n.of(context).e11(e))),
         );
       }
     } finally {
@@ -228,9 +228,9 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
       await file.writeAsString(_textController.text);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('保存成功 ✓'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(L10n.of(context).msg360d0b37),
+            duration: const Duration(seconds: 2),
           ),
         );
         setState(() => _isEditing = false);
@@ -238,7 +238,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('保存出错：$e')),
+          SnackBar(content: Text(L10n.of(context).e9(e))),
         );
       }
     } finally {
@@ -691,12 +691,12 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
                       });
                     }
                   },
-                  tooltip: '撤销',
+                  tooltip: L10n.of(context).ui_undo,
                 ),
                 IconButton(
                   icon: const Icon(Icons.save_rounded),
                   onPressed: _saveFile,
-                  tooltip: '保存',
+                  tooltip: L10n.of(context).ui_save,
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -706,7 +706,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
                       _textController.text = _textContent;
                     });
                   },
-                  tooltip: '取消',
+                  tooltip: L10n.of(context).ui_cancel,
                 ),
               ],
             ] else
@@ -720,7 +720,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
             IconButton(
               icon: const Icon(Icons.tune_rounded),
               onPressed: _showPdfSettings,
-              tooltip: '显示设置',
+              tooltip: L10n.of(context).display_settings,
             ),
           if (_isText)
             PopupMenuButton<String>(
@@ -874,7 +874,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
           ),
         Expanded(
           child: rows.isEmpty
-              ? const Center(child: Text('空白表格'))
+              ? Center(child: Text(L10n.of(context).empty_table))
               : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),

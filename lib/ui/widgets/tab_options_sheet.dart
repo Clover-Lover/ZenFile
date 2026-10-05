@@ -133,7 +133,7 @@ class TabOptionsSheet extends StatelessWidget {
               context: context,
               icon: tab.isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
               iconColor: tab.isPinned ? Colors.orange : null,
-              label: tab.isPinned ? L10n.of(context).msgc823e21b : '固定标签页',
+              label: tab.isPinned ? L10n.of(context).msgc823e21b : L10n.of(context).pin_tab,
               onTap: () {
                 Navigator.pop(context);
                 provider.togglePinTab(tabIndex);
@@ -153,7 +153,7 @@ class TabOptionsSheet extends StatelessWidget {
               _buildMenuItem(
                 context: context,
                 icon: Broken.trash,
-                label: '关闭标签页',
+                label: L10n.of(context).ui_close_tab,
                 color: Colors.redAccent,
                 onTap: () {
                   Navigator.pop(context);

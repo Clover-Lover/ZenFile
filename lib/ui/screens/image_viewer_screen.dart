@@ -1018,18 +1018,18 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
         : (widget.siblingAssets != null
               ? widget.siblingAssets!.length
               : _imageList.length);
-    String currentTitle = 'Image';
+    String currentTitle = L10n.of(context).image_fallback_title;
     if (widget.siblingItems != null &&
         _currentIndex < widget.siblingItems!.length) {
       final item = widget.siblingItems![_currentIndex];
       if (item is AssetEntity) {
-        currentTitle = item.title ?? 'Image';
+        currentTitle = item.title ?? L10n.of(context).image_fallback_title;
       } else if (item is FileSystemEntity) {
         currentTitle = item.path.split('/').last.split('\\').last;
       }
     } else if (widget.siblingAssets != null &&
         _currentIndex < widget.siblingAssets!.length) {
-      currentTitle = widget.siblingAssets![_currentIndex].title ?? 'Image';
+      currentTitle = widget.siblingAssets![_currentIndex].title ?? L10n.of(context).image_fallback_title;
     } else if (_imageList.isNotEmpty && _currentIndex < _imageList.length) {
       currentTitle = _imageList[_currentIndex].split('/').last.split('\\').last;
     }

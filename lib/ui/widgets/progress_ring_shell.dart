@@ -30,6 +30,18 @@ class ProgressRingShell extends StatelessWidget {
     required this.children,
   });
 
+  /// 生成「3/10」形式的文件计数器文本；不需要显示时返回 null。
+  ///
+  /// **所有弹窗都必须用它算计数器**，别各自写 `index.clamp(1, total)`：
+  /// Dart 的 `num.clamp` 在 `lowerLimit > upperLimit` 时**抛 ArgumentError**，
+  /// 而 `total == 0` 是常态（进度消息没带文件数、加解密只回调了当前文件字节、
+  /// 弹窗首帧还没拿到数据）。build 一旦抛异常，Flutter 会把整个弹窗换成
+  /// `RenderErrorBox` —— release 下它是 `0xF0C0C0C0` 的浅灰整屏，且**不再订阅
+  /// 任何 Notifier** ⇒ 看不到圆环、点不到按钮、操作结束时也不会自动关闭，
+  /// 表现为「白色透明层 + 卡死，只能重启应用」。
+  static String? counterLabel(int index, int total) =>
+      total > 1 ? '${index.clamp(1, total)}/$total' : null;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -40,6 +52,12 @@ class ProgressRingShell extends StatelessWidget {
     final innerGreen = isDark
         ? const Color(0xFF81C784)
         : const Color(0xFF43A047);
+    // 防御 NaN / Infinity：`num.clamp` 对 NaN 无效（原值返回），一个 NaN 会让
+    // 进度环静默不画（只剩背景圆），这类「进度条消失」排查成本极高。
+    final safeOverall = overall.isFinite ? overall.clamp(0.0, 1.0) : 0.0;
+    final safeInner = inner == null
+        ? null
+        : (inner!.isFinite ? inner!.clamp(0.0, 1.0) : 0.0);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -89,10 +107,7 @@ class ProgressRingShell extends StatelessWidget {
                     )
                   : (animateOverall
                         ? TweenAnimationBuilder<double>(
-                            tween: Tween<double>(
-                              begin: 0,
-                              end: overall.clamp(0.0, 1.0),
-                            ),
+                            tween: Tween<double>(begin: 0, end: safeOverall),
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeOut,
                             builder: (context, value, child) {
@@ -108,7 +123,7 @@ class ProgressRingShell extends StatelessWidget {
                             },
                           )
                         : CircularProgressIndicator(
-                            value: overall.clamp(0.0, 1.0),
+                            value: safeOverall,
                             strokeWidth: 8,
                             backgroundColor: Colors.transparent,
                             valueColor: AlwaysStoppedAnimation<Color>(
@@ -119,7 +134,7 @@ class ProgressRingShell extends StatelessWidget {
             ),
 
             // 环形进度条（内圈=当前文件进度，绿色系区分整体）
-            if (inner != null) ...[
+            if (safeInner != null) ...[
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: CircularProgressIndicator(
@@ -134,7 +149,7 @@ class ProgressRingShell extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: CircularProgressIndicator(
-                  value: inner!.clamp(0.0, 1.0),
+                  value: safeInner!,
                   strokeWidth: 5,
                   backgroundColor: Colors.transparent,
                   valueColor: AlwaysStoppedAnimation<Color>(innerGreen),

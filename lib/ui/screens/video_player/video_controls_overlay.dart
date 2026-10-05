@@ -598,7 +598,7 @@ class VideoControlsOverlay extends StatelessWidget {
                       IconButton(
                         padding: const EdgeInsets.all(6),
                         icon: Icon(isMuted ? Broken.volume_slash : Broken.volume_high, color: itemsColor, size: 22),
-                        tooltip: isMuted ? '取消静音' : '静音',
+                        tooltip: isMuted ? L10n.of(context).unmute : L10n.of(context).mute,
                         onPressed: () {
                           onInteract();
                           onToggleMute();
@@ -618,7 +618,7 @@ class VideoControlsOverlay extends StatelessWidget {
                       IconButton(
                         padding: const EdgeInsets.all(6),
                         icon: Icon(isFullScreen ? Icons.fullscreen_exit_rounded : Icons.fullscreen_rounded, color: itemsColor, size: 28),
-                        tooltip: isFullScreen ? '退出全屏' : '全屏',
+                        tooltip: isFullScreen ? L10n.of(context).exit_fullscreen : L10n.of(context).fullscreen,
                         onPressed: () {
                           onInteract();
                           onToggleFullScreen();

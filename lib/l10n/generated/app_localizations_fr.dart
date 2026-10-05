@@ -2894,6 +2894,98 @@ class L10nFr extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String e25(Object e) {
+    return 'Échec du renommage : $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return 'Échec de l\'ouverture : $e';
+  }
+
+  @override
+  String get rename_failed => 'Échec du renommage';
+
+  @override
+  String get delete_failed => 'Échec de la suppression';
+
+  @override
+  String get reload_page => 'Recharger';
+
+  @override
+  String get display_settings => 'Paramètres d\'affichage';
+
+  @override
+  String get empty_table => 'Tableau vide';
+
+  @override
+  String get find_hint => 'Rechercher...';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get mute => 'Couper le son';
+
+  @override
+  String get unmute => 'Activer le son';
+
+  @override
+  String get fullscreen => 'Plein écran';
+
+  @override
+  String get exit_fullscreen => 'Quitter le plein écran';
+
+  @override
+  String get pin_tab => 'Épingler l\'onglet';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'Coller ici ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '$count éléments copiés dans le presse-papiers ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return 'Impossible de prévisualiser l\'image : $e';
+  }
+
+  @override
+  String get delete_items_failed => 'Échec de la suppression des éléments';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      'Impossible d\'accéder aux fichiers du répertoire restreint sélectionné. Vérifiez que l\'accès à Android/data est autorisé.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'Les formats TAR.ZSTD et TAR.LZ4 consomment beaucoup de mémoire et sont optimisés pour les fichiers de moins de 600 Mo. Utilisez ZIP ou TAR pour les fichiers plus volumineux.';
+
+  @override
+  String get port_label => 'Port';
+
+  @override
+  String get port_range_hint => 'Plage : 1024 - 65535';
+
+  @override
+  String get image_fallback_title => 'Image';
+
+  @override
+  String get video_fallback_title => 'Vidéo';
+
+  @override
+  String get external_subtitle_track => 'Externe';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'Échec de l\'affichage de la superposition : $e';
+  }
+
+  @override
   String get install_status_installed => 'Installé';
 
   @override

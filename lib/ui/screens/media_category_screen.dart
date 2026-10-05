@@ -43,6 +43,7 @@ import 'media_category_settings_screen.dart';
 import '../navigation/shell_navigator.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
 import '../widgets/progress_overlay.dart';
+import '../widgets/progress_ring_shell.dart';
 import '../../services/crypt/crypt_operations.dart';
 import '../../services/crypt/vault_crypt_service.dart';
 import '../widgets/bulk_crypt_actions.dart';
@@ -523,7 +524,6 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       overall: 0,
       inner: null,
     ));
-    var wentBackground = false;
     var processed = 0;
     var currentName = '';
     final totalFiles = pairs.fold<int>(
@@ -532,6 +532,10 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     );
     // 文件计数器（「3/10」）：仅在多文件时显示。
     final counterNotifier = ValueNotifier<String>('');
+    // 进度弹窗句柄：弹窗由 showDialog 推在**根** Navigator，而分类页可能是
+    // 「壳内嵌套 Navigator」里的页面（ShellNavigator.push）⇒ 关弹窗必须走句柄，
+    // 不能用页面 context（详见 progress_overlay.dart 的 ProgressDialogHandle）。
+    final dialogHandle = ProgressDialogHandle();
     void updateProgress(String name, double prog) {
       if (name != currentName) {
         currentName = name;
@@ -544,16 +548,25 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         overall: overall.clamp(0.0, 1.0),
         inner: prog.clamp(0.0, 1.0),
       );
-      counterNotifier.value = totalFiles > 1
-          ? '${processed.clamp(1, totalFiles)}/$totalFiles'
-          : '';
+      // 复用统一计数器（total <= 1 时返回 null ⇒ 不显示）。
+      counterNotifier.value =
+          ProgressRingShell.counterLabel(processed, totalFiles) ?? '';
+    }
+
+    // 关闭进度弹窗（幂等，可重复调用；弹窗已关时什么都不会做）。
+    void closeDialog() => dialogHandle.close();
+
+    // 取消 = 真的中断同步（syncCategoryPairs 的每个文件循环都会检查该标志），
+    // 再关掉弹窗 —— 只关弹窗的话「取消」看起来像什么都没发生。
+    void onCancel() {
+      fm.cancelOperation();
+      closeDialog();
     }
 
     // 点击「后台」后的最小化逻辑：关闭弹窗并注册重新打开回调，
     // 由分类页工具栏浮窗按钮（排序按钮左侧）调用 fm.resumeProgress() 重新打开。
     void onBg() {
-      wentBackground = true;
-      if (Navigator.canPop(context)) Navigator.of(context).pop();
+      closeDialog();
       fm.minimizeProgress(() {
         CircularProgressDialog.show(
           context: context,
@@ -561,9 +574,8 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           statusNotifier: statusNotifier,
           progressNotifier: progressNotifier,
           counterNotifier: counterNotifier,
-          onCancel: () {
-            if (Navigator.canPop(context)) Navigator.of(context).pop();
-          },
+          handle: dialogHandle,
+          onCancel: onCancel,
           onBackground: onBg,
         );
       });
@@ -577,10 +589,8 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
           statusNotifier: statusNotifier,
           progressNotifier: progressNotifier,
           counterNotifier: counterNotifier,
-          onCancel: () {
-            // 取消：通过 pop 关闭对话框，syncCategoryPairs 内部会捕获中断
-            if (Navigator.canPop(context)) Navigator.of(context).pop();
-          },
+          handle: dialogHandle,
+          onCancel: onCancel,
           onBackground: onBg,
         ),
       );
@@ -598,7 +608,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       if (mounted) {
         progressNotifier.value = (overall: 1.0, inner: null);
         fm.clearMinimizedProgress();
-        if (Navigator.canPop(context)) Navigator.of(context).pop();
+        closeDialog();
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(L10n.of(context).ui_sync_done)));
@@ -612,10 +622,15 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     } catch (e) {
       if (mounted) {
         fm.clearMinimizedProgress();
-        if (Navigator.canPop(context)) Navigator.of(context).pop();
+        closeDialog();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(L10n.of(context).ui_backup_failed(e.toString())),
+            // 用户自己点了「取消」不算失败，给中性提示
+            content: Text(
+              fm.isOperationCancelled
+                  ? L10n.of(context).msga45bac47
+                  : L10n.of(context).ui_backup_failed(e.toString()),
+            ),
           ),
         );
       }
@@ -1255,7 +1270,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
             if (!ok && mounted) {
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(const SnackBar(content: Text('重命名失败')));
+              ).showSnackBar(SnackBar(content: Text(L10n.of(context).rename_failed)));
               return;
             }
           } else {
@@ -1268,7 +1283,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               if (mounted) {
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(SnackBar(content: Text('重命名失败: $e')));
+                ).showSnackBar(SnackBar(content: Text(L10n.of(context).e25(e))));
               }
               return;
             }
@@ -1799,7 +1814,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
               } else if (mounted) {
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(SnackBar(content: Text('删除失败')));
+                ).showSnackBar(SnackBar(content: Text(L10n.of(context).delete_failed)));
               }
               return;
             }
@@ -1868,7 +1883,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   } else if (mounted) {
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('重命名失败')));
+                    ).showSnackBar(SnackBar(content: Text(L10n.of(context).rename_failed)));
                   }
                 }
                 return;
@@ -1891,7 +1906,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
                   if (mounted) {
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('重命名失败: $e')));
+                    ).showSnackBar(SnackBar(content: Text(L10n.of(context).e25(e))));
                   }
                   return;
                 }
@@ -2074,16 +2089,22 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     if (mode == null) return;
     final ctl = CryptProgressController();
     if (!context.mounted) return;
+    // 弹窗推在**根** Navigator，而分类页可能跑在壳内嵌套 Navigator（ShellNavigator）
+    // 里 ⇒ 关弹窗必须用句柄走弹窗自己的 context，否则会弹掉分类页、弹窗留在屏上。
+    final dialogHandle = ProgressDialogHandle();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => ValueListenableBuilder<CryptProgressData?>(
-        valueListenable: ctl.notifier,
-        builder: (_, v, __) => CryptProgressDialog(
-          message: L10n.of(context).vault_encrypting,
-          progress: v,
-        ),
-      ),
+      builder: (dialogContext) {
+        dialogHandle.attach(dialogContext);
+        return ValueListenableBuilder<CryptProgressData?>(
+          valueListenable: ctl.notifier,
+          builder: (_, v, __) => CryptProgressDialog(
+            message: L10n.of(context).vault_encrypting,
+            progress: v,
+          ),
+        );
+      },
     );
     try {
       if (mode == 'inplace') {
@@ -2100,7 +2121,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         );
       }
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         context.read<MediaProvider>().loadMedia(forceRefresh: true);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).vault_encrypt_done)),
@@ -2108,7 +2129,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context).vault_encrypt_failed(e.toString())),
@@ -2125,16 +2146,22 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
     if (!await _ensureMasterPassword(context)) return;
     final ctl = CryptProgressController();
     if (!context.mounted) return;
+    // 弹窗推在**根** Navigator，而分类页可能跑在壳内嵌套 Navigator（ShellNavigator）
+    // 里 ⇒ 关弹窗必须用句柄走弹窗自己的 context，否则会弹掉分类页、弹窗留在屏上。
+    final dialogHandle = ProgressDialogHandle();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => ValueListenableBuilder<CryptProgressData?>(
-        valueListenable: ctl.notifier,
-        builder: (_, v, __) => CryptProgressDialog(
-          message: L10n.of(context).vault_decrypting,
-          progress: v,
-        ),
-      ),
+      builder: (dialogContext) {
+        dialogHandle.attach(dialogContext);
+        return ValueListenableBuilder<CryptProgressData?>(
+          valueListenable: ctl.notifier,
+          builder: (_, v, __) => CryptProgressDialog(
+            message: L10n.of(context).vault_decrypting,
+            progress: v,
+          ),
+        );
+      },
     );
     try {
       await VaultCryptService.instance.decryptInPlace(
@@ -2143,7 +2170,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
         onFileProgress: ctl.onFile,
       );
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         context.read<MediaProvider>().loadMedia(forceRefresh: true);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(L10n.of(context).vault_decrypt_done)),
@@ -2151,7 +2178,7 @@ class _MediaCategoryScreenState extends State<MediaCategoryScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.pop(context);
+        dialogHandle.close();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L10n.of(context).vault_decrypt_failed(e.toString())),

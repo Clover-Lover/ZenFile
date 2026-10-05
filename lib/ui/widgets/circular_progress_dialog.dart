@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenfile/l10n/generated/app_localizations.dart';
+import 'progress_overlay.dart';
 import 'progress_ring_shell.dart';
 
 /// 通用圆形进度对话框（双层圆环，与复制/剪切、压缩/解压、保险箱加解密一致）。
@@ -45,6 +46,7 @@ class CircularProgressDialog extends StatelessWidget {
     double? percentage,
     ValueNotifier<({double overall, double? inner})>? progressNotifier,
     ValueNotifier<String>? counterNotifier,
+    ProgressDialogHandle? handle,
     VoidCallback? onCancel,
     String? cancelLabel,
     VoidCallback? onBackground,
@@ -53,9 +55,13 @@ class CircularProgressDialog extends StatelessWidget {
     return showDialog<void>(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder: (dialogContext) => PopScope(
-        canPop: false,
-        child: counterNotifier == null
+      builder: (dialogContext) {
+        // 记下弹窗**自己**的 context：调用方之后用 `handle.close()` 关弹窗时
+        // 必须落到弹窗所在的（根）Navigator，而不是页面所在的嵌套栈 ——
+        // 否则 pop 会把页面自己弹掉、弹窗原地不动，表现为「取消 / 后台无响应、
+        // 只能重启应用」（详见 progress_overlay.dart 的 ProgressDialogHandle）。
+        handle?.attach(dialogContext);
+        final dialog = counterNotifier == null
             ? CircularProgressDialog(
                 title: title,
                 statusNotifier: statusNotifier,
@@ -77,8 +83,9 @@ class CircularProgressDialog extends StatelessWidget {
                   cancelLabel: cancelLabel,
                   onBackground: onBackground,
                 ),
-              ),
-      ),
+              );
+        return PopScope(canPop: false, child: dialog);
+      },
     );
   }
 
@@ -90,9 +97,17 @@ class CircularProgressDialog extends StatelessWidget {
         isDark ? const Color(0xFF81C784) : const Color(0xFF43A047);
 
     return Center(
-      child: ValueListenableBuilder<String>(
-        valueListenable: statusNotifier,
-        builder: (context, status, _) {
+      // ⚠️ 必须**同时**订阅 progressNotifier：此前这里只订阅 statusNotifier，而
+      // `progressNotifier?.value` 只是「读一次」，并不在依赖树里 ⇒ 一旦同一文件内
+      // 文件名不变（ValueNotifier 同值不 notify），整个文件处理期间圆环纹丝不动，
+      // 只有切换到下一个文件时才顺带跳一下 —— 表现为「内圈和外圈都不滚动」
+      //（云备份到远程时尤其明显）。
+      child: ListenableBuilder(
+        listenable: progressNotifier == null
+            ? statusNotifier
+            : Listenable.merge([statusNotifier, progressNotifier!]),
+        builder: (context, _) {
+          final status = statusNotifier.value;
           final progress = progressNotifier?.value;
           final percent =
               (progress?.overall ?? percentage ?? 0).clamp(0.0, 1.0);

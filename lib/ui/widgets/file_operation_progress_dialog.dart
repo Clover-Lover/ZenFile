@@ -43,9 +43,13 @@ class FileOperationProgressDialog extends StatelessWidget {
 
           // 文件计数器（如「3/10」）：仅在多文件操作时显示，单文件无意义。
           // 放在「文件总大小」与「剩余时间」之间。
-          final showCounter = progress.totalFiles > 1;
-          final counterIndex =
-              progress.currentFileIndex.clamp(1, progress.totalFiles);
+          // ⚠️ 必须走 [ProgressRingShell.counterLabel]：total 为 0 时返回 null；
+          // 直接写 `clamp(1, total)` 会抛 ArgumentError，把整个弹窗顶成浅灰
+          // 错误块（「白色透明层、没有进度条」，且不会再自动关闭）。
+          final counterLabel = ProgressRingShell.counterLabel(
+            progress.currentFileIndex,
+            progress.totalFiles,
+          );
 
           return ProgressRingShell(
             overall: progress.percentage,
@@ -142,14 +146,17 @@ class FileOperationProgressDialog extends StatelessWidget {
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
-                  if (showCounter) ...[
+                  if (counterLabel != null) ...[
                     const SizedBox(height: 3),
                     Text(
-                      '$counterIndex/${progress.totalFiles}',
+                      counterLabel,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.primary,
+                        // 与其它进度弹窗统一：计数器用常规文字色，不做主题色高亮
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],

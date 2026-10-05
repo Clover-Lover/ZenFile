@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../ui/screens/audio_player/audio_artwork_widget.dart';
+import '../core/navigator_key.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'desktop_lyric_controller.dart';
 import 'mpv_audio_output_service.dart';
 import 'preferences_service.dart';
@@ -632,15 +634,20 @@ class ZenFileAudioHandler extends BaseAudioHandler
     }
     _lastEmittedPlaying = playing;
     _lastEmittedPosition = currentPos;
+    // 通知「停止」按钮的无障碍文案随应用语言变化；拿不到 context 时回落中文，
+    // 避免在 runApp 之前/无 Navigator 的场景抛异常。
+    final stopLabelCtx = navigatorKey.currentContext;
     playbackState.add(
       PlaybackState(
         controls: [
           MediaControl.skipToPrevious,
           playing ? MediaControl.pause : MediaControl.play,
           MediaControl.skipToNext,
-          const MediaControl(
+          MediaControl(
             androidIcon: 'drawable/audio_service_stop',
-            label: '关闭',
+            label: stopLabelCtx == null
+                ? '关闭'
+                : L10n.of(stopLabelCtx).ui_close,
             action: MediaAction.stop,
           ),
         ],

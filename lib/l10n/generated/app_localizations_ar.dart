@@ -2829,6 +2829,98 @@ class L10nAr extends L10n {
   String get ui_nav => 'محلي';
 
   @override
+  String e25(Object e) {
+    return 'فشل إعادة التسمية: $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return 'فشل الفتح: $e';
+  }
+
+  @override
+  String get rename_failed => 'فشل إعادة التسمية';
+
+  @override
+  String get delete_failed => 'فشل الحذف';
+
+  @override
+  String get reload_page => 'إعادة التحميل';
+
+  @override
+  String get display_settings => 'إعدادات العرض';
+
+  @override
+  String get empty_table => 'جدول فارغ';
+
+  @override
+  String get find_hint => 'بحث...';
+
+  @override
+  String get volume => 'مستوى الصوت';
+
+  @override
+  String get mute => 'كتم الصوت';
+
+  @override
+  String get unmute => 'إلغاء كتم الصوت';
+
+  @override
+  String get fullscreen => 'ملء الشاشة';
+
+  @override
+  String get exit_fullscreen => 'الخروج من ملء الشاشة';
+
+  @override
+  String get pin_tab => 'تثبيت علامة التبويب';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'لصق هنا ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return 'تم نسخ $count عنصرًا إلى الحافظة ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return 'تعذّر معاينة الصورة: $e';
+  }
+
+  @override
+  String get delete_items_failed => 'فشل حذف العناصر';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      'تعذّر الوصول إلى ملفات الدليل المقيّد المحددة. تأكد من منح إذن الوصول إلى Android/data.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'صيغتا TAR.ZSTD و TAR.LZ4 تستهلكان ذاكرة كبيرة ومحسّنتان للملفات الأقل من 600 ميغابايت. استخدم ZIP أو TAR للملفات الأكبر.';
+
+  @override
+  String get port_label => 'المنفذ';
+
+  @override
+  String get port_range_hint => 'النطاق: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => 'صورة';
+
+  @override
+  String get video_fallback_title => 'فيديو';
+
+  @override
+  String get external_subtitle_track => 'خارجي';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'فشل عرض النافذة العائمة: $e';
+  }
+
+  @override
   String get install_status_installed => 'مثبّت';
 
   @override

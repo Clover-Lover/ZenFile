@@ -3236,6 +3236,136 @@
   "cat_vault_desc": "تخزين آمن",
   "cat_quick_categories": "الفئات",
   "ui_nav": "محلي",
+  "e25": "فشل إعادة التسمية: {e}",
+  "@e25": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "e26": "فشل الفتح: {e}",
+  "@e26": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "rename_failed": "فشل إعادة التسمية",
+  "@rename_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "delete_failed": "فشل الحذف",
+  "@delete_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "reload_page": "إعادة التحميل",
+  "@reload_page": {
+    "description": "ui\\screens\\html_viewer_screen.dart",
+    "type": "text"
+  },
+  "display_settings": "إعدادات العرض",
+  "@display_settings": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "empty_table": "جدول فارغ",
+  "@empty_table": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "find_hint": "بحث...",
+  "@find_hint": {
+    "description": "ui\\screens\\text_editor_screen.dart",
+    "type": "text"
+  },
+  "volume": "مستوى الصوت",
+  "@volume": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "mute": "كتم الصوت",
+  "@mute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "unmute": "إلغاء كتم الصوت",
+  "@unmute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "fullscreen": "ملء الشاشة",
+  "@fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "exit_fullscreen": "الخروج من ملء الشاشة",
+  "@exit_fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "pin_tab": "تثبيت علامة التبويب",
+  "@pin_tab": {
+    "description": "ui\\widgets\\tab_options_sheet.dart",
+    "type": "text"
+  },
+  "paste_here_count": "لصق هنا ({count})",
+  "@paste_here_count": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "items_copied_to_clipboard": "تم نسخ {count} عنصرًا إلى الحافظة ✓",
+  "@items_copied_to_clipboard": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "preview_image_failed": "تعذّر معاينة الصورة: {e}",
+  "@preview_image_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "delete_items_failed": "فشل حذف العناصر",
+  "@delete_items_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "restricted_dir_unauthorized": "تعذّر الوصول إلى ملفات الدليل المقيّد المحددة. تأكد من منح إذن الوصول إلى Android/data.",
+  "@restricted_dir_unauthorized": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "tar_zstd_size_warning": "صيغتا TAR.ZSTD و TAR.LZ4 تستهلكان ذاكرة كبيرة ومحسّنتان للملفات الأقل من 600 ميغابايت. استخدم ZIP أو TAR للملفات الأكبر.",
+  "@tar_zstd_size_warning": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "port_label": "المنفذ",
+  "@port_label": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "port_range_hint": "النطاق: 1024 - 65535",
+  "@port_range_hint": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "image_fallback_title": "صورة",
+  "@image_fallback_title": {
+    "description": "ui\\screens\\image_viewer_screen.dart",
+    "type": "text"
+  },
+  "video_fallback_title": "فيديو",
+  "@video_fallback_title": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "external_subtitle_track": "خارجي",
+  "@external_subtitle_track": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "desktop_lyric_overlay_failed": "فشل عرض النافذة العائمة: {e}",
+  "@desktop_lyric_overlay_failed": {
+    "description": "android\\DesktopLyricService.kt",
+    "type": "text"
+  },
   "install_status_installed": "مثبّت",
   "@install_status_installed": {
     "description": "Install package status badge shown under the file icon"

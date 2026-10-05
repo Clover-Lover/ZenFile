@@ -378,7 +378,7 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('路径不存在: {path}'),
+                content: Text(L10n.of(context).path(path)),
                 behavior: SnackBarBehavior.floating,
                 backgroundColor: Theme.of(context).colorScheme.error,
               ),
@@ -453,11 +453,11 @@ class _ZenFileAddressBarState extends State<ZenFileAddressBar> {
                       focusNode: _focusNode,
                       controller: _controller,
                       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.symmetric(vertical: 12),
-                        hintText: '输入绝对路径...',
+                        hintText: L10n.of(context).msg6cbbf7d9,
                       ),
                       textInputAction: TextInputAction.go,
                       keyboardType: TextInputType.text,

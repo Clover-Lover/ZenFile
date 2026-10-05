@@ -554,7 +554,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('取消'),
+            child: Text(L10n.of(context).ui_cancel),
           ),
           FilledButton(
             onPressed: () {

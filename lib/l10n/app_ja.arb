@@ -3240,6 +3240,136 @@
   "cat_vault_desc": "安全な保存",
   "cat_quick_categories": "カテゴリ",
   "ui_nav": "ローカル",
+  "e25": "名前の変更に失敗しました：{e}",
+  "@e25": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "e26": "開けませんでした：{e}",
+  "@e26": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "rename_failed": "名前の変更に失敗しました",
+  "@rename_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "delete_failed": "削除に失敗しました",
+  "@delete_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "reload_page": "再読み込み",
+  "@reload_page": {
+    "description": "ui\\screens\\html_viewer_screen.dart",
+    "type": "text"
+  },
+  "display_settings": "表示設定",
+  "@display_settings": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "empty_table": "空の表",
+  "@empty_table": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "find_hint": "検索...",
+  "@find_hint": {
+    "description": "ui\\screens\\text_editor_screen.dart",
+    "type": "text"
+  },
+  "volume": "音量",
+  "@volume": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "mute": "ミュート",
+  "@mute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "unmute": "ミュート解除",
+  "@unmute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "fullscreen": "全画面",
+  "@fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "exit_fullscreen": "全画面を終了",
+  "@exit_fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "pin_tab": "タブを固定",
+  "@pin_tab": {
+    "description": "ui\\widgets\\tab_options_sheet.dart",
+    "type": "text"
+  },
+  "paste_here_count": "ここに貼り付け ({count})",
+  "@paste_here_count": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "items_copied_to_clipboard": "{count} 個の項目をクリップボードにコピーしました ✓",
+  "@items_copied_to_clipboard": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "preview_image_failed": "画像をプレビューできません: {e}",
+  "@preview_image_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "delete_items_failed": "項目の削除に失敗しました",
+  "@delete_items_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "restricted_dir_unauthorized": "選択した制限付きディレクトリのファイルにアクセスできません。Android/data へのアクセスが許可されているか確認してください。",
+  "@restricted_dir_unauthorized": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "tar_zstd_size_warning": "TAR.ZSTD と TAR.LZ4 はメモリ消費が非常に大きく、600MB 以下のファイル向けに最適化されています。それより大きいファイルには ZIP または TAR 形式をご利用ください。",
+  "@tar_zstd_size_warning": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "port_label": "ポート",
+  "@port_label": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "port_range_hint": "範囲: 1024 - 65535",
+  "@port_range_hint": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "image_fallback_title": "画像",
+  "@image_fallback_title": {
+    "description": "ui\\screens\\image_viewer_screen.dart",
+    "type": "text"
+  },
+  "video_fallback_title": "動画",
+  "@video_fallback_title": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "external_subtitle_track": "外部",
+  "@external_subtitle_track": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "desktop_lyric_overlay_failed": "オーバーレイを表示できません：{e}",
+  "@desktop_lyric_overlay_failed": {
+    "description": "android\\DesktopLyricService.kt",
+    "type": "text"
+  },
   "install_status_installed": "インストール済み",
   "@install_status_installed": {
     "description": "Install package status badge shown under the file icon"

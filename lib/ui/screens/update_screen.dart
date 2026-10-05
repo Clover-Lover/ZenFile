@@ -927,10 +927,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
   // ② 把 [_latestChangelogVersion] 改成新版本号。其余卡片会自动变为折叠态。
 
   /// 当前版本（那张始终展开、不可折叠的卡片）的版本号。
-  static const String _latestChangelogVersion = 'v3.5.3';
+  static const String _latestChangelogVersion = 'v3.5.4';
 
   /// 全部版本的更新日志，**最新在最前**。
   static const List<_Changelog> _changelogs = <_Changelog>[
+    _v354,
     _v353,
     _v352,
     _v351,
@@ -941,7 +942,45 @@ class _UpdateScreenState extends State<UpdateScreen> {
     _v320,
   ];
 
-  /// ── 当前版本：v3.5.3 ────────────────────────────────────────────────
+  /// ── 当前版本：v3.5.4 ────────────────────────────────────────────────
+  static const _Changelog _v354 = _Changelog(
+    version: 'v3.5.4',
+    date: '2026-10-05',
+    zh: [
+      _ChangeSection('🎨 界面与交互', [
+        '「打开方式」系统选择器（安装包、未知类型文件弹出的应用选择框）的标题改为跟随应用语言，此前固定显示中文',
+        '压缩 / 解压的后台通知按钮「打开 / 取消」改为跟随应用语言',
+        '补齐大量此前写死在代码里的界面文案多语言：音量、亮度、静音 / 取消静音、全屏 / 退出全屏、重命名失败、删除失败、重新加载、显示设置、查找、端口、固定标签页 / 关闭标签页等（新增 26 条文案 × 10 种语言）',
+        '进度弹窗的文件计数器改用常规文字色，不再使用主题色高亮',
+      ]),
+      _ChangeSection('🐛 问题修复', [
+        '修复压缩 / 解压、加密 / 解密进度弹窗偶发变成「浅灰蒙层 + 没有进度环 + 按钮全部点不动 + 只能重启应用」的问题：根因是总文件数为 0 时进度计数计算抛异常，整个弹窗被替换成了错误占位块',
+        '修复云端备份卡在 100% 时「取消 / 后台 / 返回」全部无响应的问题：弹窗与页面分属不同导航栈，关闭动作弹错了对象；现在「取消」会真正中断同步并关闭弹窗',
+        '修复云端备份到远程时内圈、外圈进度条都不滚动的问题',
+        '修复加密 / 解密时外圈进度条不滚动的问题',
+        '修复多处界面把占位符原样显示出来的问题（如「打开失败：{e}」「路径不存在: {path}」「已替换 {count} 处」）',
+        '修复本地复制 / 剪切到远程时外圈整体进度条偶发回退闪烁、以及目录粘贴计数器错位（第一个文件显示成 2/N）的问题',
+      ]),
+    ],
+    en: [
+      _ChangeSection('🎨 UI & Interaction', [
+        'The title of the system "Open with" chooser (shown for packages and unknown file types) now follows the app language; it used to be hardcoded in Chinese',
+        'The background notification buttons for compression / extraction ("Open" / "Cancel") now follow the app language',
+        'Localised a large set of UI strings that were hardcoded in code: Volume, Brightness, Mute / Unmute, Fullscreen / Exit fullscreen, Rename failed, Delete failed, Reload, Display settings, Find, Port, Pin tab / Close tab and more (26 new strings x 10 languages)',
+        'The file counter in the progress dialogs now uses the regular text colour instead of the accent colour',
+      ]),
+      _ChangeSection('🐛 Bug Fixes', [
+        'Fixed the compress / extract and encrypt / decrypt progress dialogs occasionally turning into a "grey overlay with no progress ring, unresponsive buttons, app restart required": when the total file count was 0 the counter calculation threw an exception and the whole dialog was replaced by an error placeholder',
+        'Fixed cloud backup getting stuck at 100% with Cancel / Send to background / Back all unresponsive: the dialog and the page live on different navigator stacks, so the close action popped the wrong route; Cancel now really aborts the sync and closes the dialog',
+        'Fixed both the inner and outer progress rings not moving when backing up to a remote server',
+        'Fixed the outer progress ring not moving during encryption / decryption',
+        'Fixed several places showing raw placeholders on screen (e.g. "Open failed: {e}", "Path not found: {path}", "Replaced {count} occurrence(s)")',
+        'Fixed the outer overall progress ring occasionally flickering backwards, and a wrong file counter (the first file in a folder shown as 2/N) when copying / cutting from local to a remote server',
+      ]),
+    ],
+  );
+
+  /// ── v3.5.3 ──────────────────────────────────────────────────────────
   static const _Changelog _v353 = _Changelog(
     version: 'v3.5.3',
     date: '2026-10-05',

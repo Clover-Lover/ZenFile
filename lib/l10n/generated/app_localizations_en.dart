@@ -2835,6 +2835,98 @@ class L10nEn extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String e25(Object e) {
+    return 'Rename failed: $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return 'Failed to open: $e';
+  }
+
+  @override
+  String get rename_failed => 'Rename failed';
+
+  @override
+  String get delete_failed => 'Delete failed';
+
+  @override
+  String get reload_page => 'Reload';
+
+  @override
+  String get display_settings => 'Display settings';
+
+  @override
+  String get empty_table => 'Empty table';
+
+  @override
+  String get find_hint => 'Find...';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get mute => 'Mute';
+
+  @override
+  String get unmute => 'Unmute';
+
+  @override
+  String get fullscreen => 'Fullscreen';
+
+  @override
+  String get exit_fullscreen => 'Exit fullscreen';
+
+  @override
+  String get pin_tab => 'Pin tab';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'Paste here ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return 'Copied $count items to clipboard ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return 'Failed to preview image: $e';
+  }
+
+  @override
+  String get delete_items_failed => 'Failed to delete items';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      'Cannot access the selected restricted-directory files. Please make sure Android/data access is authorized.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'TAR.ZSTD and TAR.LZ4 are highly memory-intensive and optimized for files under 600MB. Please use ZIP or TAR for larger files.';
+
+  @override
+  String get port_label => 'Port';
+
+  @override
+  String get port_range_hint => 'Range: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => 'Image';
+
+  @override
+  String get video_fallback_title => 'Video';
+
+  @override
+  String get external_subtitle_track => 'External';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'Failed to show overlay: $e';
+  }
+
+  @override
   String get install_status_installed => 'Installed';
 
   @override

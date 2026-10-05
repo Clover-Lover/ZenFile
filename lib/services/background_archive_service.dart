@@ -599,6 +599,9 @@ class BackgroundArchiveService {
     if (!Platform.isAndroid) return;
     try {
       final progressInt = (operation.progress * 100).toInt();
+      // 通知动作按钮文案随应用内语言变化（原生侧没有 locale 变体资源）。
+      final notifCtx = navigatorKey.currentContext;
+      final notifL10n = notifCtx == null ? null : L10n.of(notifCtx);
       await _channel.invokeMethod('showProgressNotification', {
         'id': operation.id.hashCode,
         'title': operation.title,
@@ -606,6 +609,8 @@ class BackgroundArchiveService {
         'progress': progressInt,
         'max': 100,
         'indeterminate': operation.progress <= 0.0,
+        if (notifL10n != null) 'openLabel': notifL10n.ui_open,
+        if (notifL10n != null) 'cancelLabel': notifL10n.ui_cancel,
       });
     } catch (e) {
       debugPrint('Error updating notification: $e');

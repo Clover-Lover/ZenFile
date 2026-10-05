@@ -108,14 +108,14 @@ class _WebSharingScreenState extends State<WebSharingScreen> with SingleTickerPr
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Port'),
+          title: Text(L10n.of(context).port_label),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: '8080',
-              helperText: 'Range: 1024 - 65535',
+              helperText: L10n.of(context).port_range_hint,
             ),
             autofocus: true,
           ),

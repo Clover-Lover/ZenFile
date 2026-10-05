@@ -406,7 +406,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
-                'ZenFile v3.5.3',
+                'ZenFile v3.5.4',
                 style: TextStyle(fontSize: 11.5, color: theme.colorScheme.onSurface.withValues(alpha: 0.4), fontWeight: FontWeight.w600),
               ),
             ),
@@ -655,7 +655,7 @@ class _ZenFileDrawerState extends State<ZenFileDrawer> {
             } catch (e) {
               if (scaffoldMessenger.mounted) {
                 scaffoldMessenger.showSnackBar(
-                  SnackBar(content: Text('连接失败：$e'), backgroundColor: Colors.redAccent),
+                  SnackBar(content: Text(L10n.of(context).e13(e)), backgroundColor: Colors.redAccent),
                 );
               }
             }

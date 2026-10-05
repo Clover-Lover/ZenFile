@@ -2883,6 +2883,98 @@ class L10nRu extends L10n {
   String get ui_nav => 'Локальный';
 
   @override
+  String e25(Object e) {
+    return 'Не удалось переименовать: $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return 'Не удалось открыть: $e';
+  }
+
+  @override
+  String get rename_failed => 'Не удалось переименовать';
+
+  @override
+  String get delete_failed => 'Не удалось удалить';
+
+  @override
+  String get reload_page => 'Перезагрузить';
+
+  @override
+  String get display_settings => 'Настройки отображения';
+
+  @override
+  String get empty_table => 'Пустая таблица';
+
+  @override
+  String get find_hint => 'Найти...';
+
+  @override
+  String get volume => 'Громкость';
+
+  @override
+  String get mute => 'Без звука';
+
+  @override
+  String get unmute => 'Включить звук';
+
+  @override
+  String get fullscreen => 'Полный экран';
+
+  @override
+  String get exit_fullscreen => 'Выйти из полноэкранного режима';
+
+  @override
+  String get pin_tab => 'Закрепить вкладку';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'Вставить сюда ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '$count элементов скопировано в буфер обмена ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return 'Не удалось просмотреть изображение: $e';
+  }
+
+  @override
+  String get delete_items_failed => 'Не удалось удалить элементы';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      'Нет доступа к выбранным файлам в ограниченном каталоге. Подтвердите доступ к Android/data.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'Форматы TAR.ZSTD и TAR.LZ4 очень требовательны к памяти и оптимизированы для файлов до 600 МБ. Для больших файлов используйте ZIP или TAR.';
+
+  @override
+  String get port_label => 'Порт';
+
+  @override
+  String get port_range_hint => 'Диапазон: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => 'Изображение';
+
+  @override
+  String get video_fallback_title => 'Видео';
+
+  @override
+  String get external_subtitle_track => 'Внешние';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'Не удалось показать окно: $e';
+  }
+
+  @override
   String get install_status_installed => 'Установлено';
 
   @override

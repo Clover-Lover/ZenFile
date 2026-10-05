@@ -2896,6 +2896,98 @@ class L10nEs extends L10n {
   String get ui_nav => 'Local';
 
   @override
+  String e25(Object e) {
+    return 'Error al renombrar: $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return 'Error al abrir: $e';
+  }
+
+  @override
+  String get rename_failed => 'Error al renombrar';
+
+  @override
+  String get delete_failed => 'Error al eliminar';
+
+  @override
+  String get reload_page => 'Recargar';
+
+  @override
+  String get display_settings => 'Ajustes de pantalla';
+
+  @override
+  String get empty_table => 'Tabla vacía';
+
+  @override
+  String get find_hint => 'Buscar...';
+
+  @override
+  String get volume => 'Volumen';
+
+  @override
+  String get mute => 'Silenciar';
+
+  @override
+  String get unmute => 'Activar sonido';
+
+  @override
+  String get fullscreen => 'Pantalla completa';
+
+  @override
+  String get exit_fullscreen => 'Salir de pantalla completa';
+
+  @override
+  String get pin_tab => 'Fijar pestaña';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'Pegar aquí ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '$count elementos copiados al portapapeles ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return 'No se pudo previsualizar la imagen: $e';
+  }
+
+  @override
+  String get delete_items_failed => 'Error al eliminar los elementos';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      'No se puede acceder a los archivos del directorio restringido seleccionado. Confirma que el acceso a Android/data esté autorizado.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'Los formatos TAR.ZSTD y TAR.LZ4 consumen mucha memoria y están optimizados para archivos de menos de 600 MB. Para archivos más grandes usa ZIP o TAR.';
+
+  @override
+  String get port_label => 'Puerto';
+
+  @override
+  String get port_range_hint => 'Rango: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => 'Imagen';
+
+  @override
+  String get video_fallback_title => 'Vídeo';
+
+  @override
+  String get external_subtitle_track => 'Externo';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'No se pudo mostrar la ventana flotante: $e';
+  }
+
+  @override
   String get install_status_installed => 'Instalada';
 
   @override

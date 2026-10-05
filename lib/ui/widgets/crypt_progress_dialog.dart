@@ -39,18 +39,33 @@ class CryptProgressController {
   int _fileIndex = 0;
   int _fileCount = 0;
 
+  /// 是否已有「显式整体进度」来源（[setOverall]，即批量多选的自定义折算）。
+  /// 批量场景由调用方把「第 i 个文件 + 其内部进度」折算成全局比例，优先级最高，
+  /// 不能被下面的字节兜底覆盖。
+  bool _explicitOverall = false;
+
+  /// 是否收到过字节级进度（[onFile]）。
+  /// 字节进度来自 `CryptBatchRunner.onBytes`，是**全批次已处理 / 全批次总字节**
+  /// （单调递增），因此无论单文件还是目录级它都是一个完整、连续的整体进度。
+  bool _byteDriven = false;
+
   /// 对应加密/解密目录的 onProgress(processed, total) 回调（文件数粒度）
   void onOverall(int processed, int total) {
-    _overall = total > 0 ? processed / total : 0;
-    // 顺带记录文件计数器（目录级操作时 total 即文件总数）
+    // 文件计数器（目录级操作时 total 即文件总数）
     _fileIndex = processed;
     _fileCount = total;
+    // 整体进度优先用字节（连续、精确）；只有拿不到字节时才退回文件数粒度
+    //（少数路径如远程加密只给文件数）。
+    if (!_byteDriven && !_explicitOverall) {
+      _overall = total > 0 ? processed / total : 0;
+    }
     _push();
   }
 
   /// 直接设置整体进度（0.0 ~ 1.0），用于批量场景自定义折算公式
   void setOverall(double value) {
-    _overall = value;
+    _explicitOverall = true;
+    _overall = value.clamp(0.0, 1.0);
     _push();
   }
 
@@ -65,6 +80,16 @@ class CryptProgressController {
   void onFile(int bytes, int total) {
     _fileBytes = bytes;
     _fileTotal = total;
+    // 🔴 单文件加密/解密**没有** onProgress 回调（`CryptOperations.encryptFile` /
+    // `decryptFile` 根本没有该参数）⇒ 外圈 `_overall` 恒为 0 ⇒ 表现为
+    //「外圈不滚动、只有内圈在滚动」。这里用字节进度驱动整体进度：
+    // - 单文件时「整体进度」本就等于该文件的进度；
+    // - 目录级时 onBytes 是**全批次**字节，也是正确的整体进度。
+    // 批量自定义折算（[setOverall]）优先，一旦用过就不再被字节覆盖。
+    if (total > 0 && !_explicitOverall) {
+      _byteDriven = true;
+      _overall = (bytes / total).clamp(0.0, 1.0);
+    }
     _push();
   }
 
@@ -106,9 +131,13 @@ class CryptProgressDialog extends StatelessWidget {
         : '';
 
     // 文件计数器（如「3/10」）：仅在多文件操作时显示。
-    final fileCount = p?.fileCount ?? 0;
-    final showCounter = fileCount > 1;
-    final counterIndex = (p?.fileIndex ?? 0).clamp(1, fileCount);
+    // ⚠️ 必须走 [ProgressRingShell.counterLabel]：弹窗首帧 progress 还是 null、
+    // 单文件路径只回调 onFile（不记文件数）时 fileCount 都是 0，直接 clamp 会抛
+    // ArgumentError ⇒ 整个弹窗变成浅灰错误块（「白色透明层 + 没有进度条」）。
+    final counterLabel = ProgressRingShell.counterLabel(
+      p?.fileIndex ?? 0,
+      p?.fileCount ?? 0,
+    );
 
     return Center(
       child: ProgressRingShell(
@@ -135,10 +164,10 @@ class CryptProgressDialog extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
           ),
-          if (showCounter) ...[
+          if (counterLabel != null) ...[
             const SizedBox(height: 4),
             Text(
-              '$counterIndex/$fileCount',
+              counterLabel,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

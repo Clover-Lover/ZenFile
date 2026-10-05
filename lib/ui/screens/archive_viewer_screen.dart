@@ -266,7 +266,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
       debugPrint('Error opening archive image: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('无法预览图片: ${e.toString()}')),
+          SnackBar(content: Text(L10n.of(context).preview_image_failed(e))),
         );
       }
     }
@@ -399,7 +399,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
       });
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${physicalPaths.length} 个项目已复制到剪贴板 ✓')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).items_copied_to_clipboard(physicalPaths.length))));
       }
     } catch (e) {
       debugPrint('Error copying to clipboard: $e');
@@ -415,13 +415,13 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: Text(L10n.of(context).msg765d1698, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-        content: Text('确定要删除选中的 ${_selectedInternalPaths.length} 个项目吗？此操作无法撤销。'),
+        content: Text(L10n.of(context).ui_delete_items_confirm(_selectedInternalPaths.length)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('取消')),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(L10n.of(context).ui_cancel)),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('删除'),
+            child: Text(L10n.of(context).ui_delete),
           ),
         ],
       ),
@@ -441,7 +441,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).msg365f2f0a)));
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('删除项目失败')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).delete_items_failed)));
         }
       }
     }
@@ -454,6 +454,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
     if (selectedPaths != null && selectedPaths.isNotEmpty) {
       setState(() => _isLoading = true);
 
+      var addedCount = 0;
       for (final path in selectedPaths) {
         final type = FileSystemEntity.typeSync(path);
         if (type == FileSystemEntityType.directory) {
@@ -465,19 +466,21 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
             if (entity is File) {
               final relPath = entity.path.substring(path.length + 1);
               final targetInternalPath = p.join(_currentInternalPath, folderBaseName, p.dirname(relPath)).replaceAll('\\', '/');
-              await ArchiveService.addFileToArchive(
+              final ok = await ArchiveService.addFileToArchive(
                 archivePath: widget.archivePath,
                 filePathToAdd: entity.path,
                 internalPath: targetInternalPath == '.' ? '' : '$targetInternalPath/',
               );
+              if (ok) addedCount++;
             }
           }
         } else {
-          await ArchiveService.addFileToArchive(
+          final ok = await ArchiveService.addFileToArchive(
             archivePath: widget.archivePath,
             filePathToAdd: path,
             internalPath: _currentInternalPath,
           );
+          if (ok) addedCount++;
         }
       }
 
@@ -485,7 +488,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('已成功添加 {successCount} 个项目到压缩包 ✓'),
+          content: Text(L10n.of(context).successcount(addedCount)),
         ));
       }
     }
@@ -497,6 +500,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
 
     setState(() => _isLoading = true);
 
+    var pastedCount = 0;
     for (final path in provider.clipboardPaths) {
       final success = await ArchiveService.addFileToArchive(
         archivePath: widget.archivePath,
@@ -504,6 +508,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
         internalPath: _currentInternalPath,
       );
       if (success) {
+        pastedCount++;
         if (provider.isCut) {
           try {
             await File(path).delete();
@@ -516,7 +521,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
     await _loadArchive();
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('已粘贴 {count} 个项目到压缩包 ✓')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).count(pastedCount))));
     }
   }
 
@@ -545,27 +550,27 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
                   icon: const Icon(Broken.close_square),
                   onPressed: () => setState(() => _selectedInternalPaths.clear()),
                 ),
-                title: Text('${_selectedInternalPaths.length} selected', style: TextStyle(color: theme.colorScheme.onPrimaryContainer, fontWeight: FontWeight.bold, fontSize: 18)),
+                title: Text(L10n.of(context).ui_selected_count(_selectedInternalPaths.length), style: TextStyle(color: theme.colorScheme.onPrimaryContainer, fontWeight: FontWeight.bold, fontSize: 18)),
                 actions: [
                   IconButton(
                     icon: const Icon(Broken.document_copy),
-                    tooltip: '复制',
+                    tooltip: L10n.of(context).ui_copy,
                     onPressed: () => _copySelectedToClipboard(isCut: false),
                   ),
                   IconButton(
                     icon: const Icon(Broken.scissor),
-                    tooltip: '剪切',
+                    tooltip: L10n.of(context).ui_cut,
                     onPressed: () => _copySelectedToClipboard(isCut: true),
                   ),
                   IconButton(
                     icon: const Icon(Broken.trash),
                     color: Colors.redAccent,
-                    tooltip: '删除',
+                    tooltip: L10n.of(context).ui_delete,
                     onPressed: _deleteSelectedInternalItems,
                   ),
                   IconButton(
                     icon: const Icon(Broken.task_square),
-                    tooltip: '全选',
+                    tooltip: L10n.of(context).ui_select_all,
                     onPressed: () {
                       setState(() {
                         for (final item in items) {
@@ -589,12 +594,12 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
                   IconButton(
                     icon: const Icon(Broken.refresh),
                     onPressed: _loadArchive,
-                    tooltip: '刷新',
+                    tooltip: L10n.of(context).ui_refresh,
                   ),
                   if (items.isNotEmpty)
                     IconButton(
                       icon: const Icon(Broken.task_square),
-                      tooltip: '全选',
+                      tooltip: L10n.of(context).ui_select_all,
                       onPressed: () {
                         setState(() {
                           for (final item in items) {
@@ -724,7 +729,7 @@ class _ArchiveViewerScreenState extends State<ArchiveViewerScreen> {
                 backgroundColor: theme.colorScheme.primaryContainer,
                 foregroundColor: theme.colorScheme.onPrimaryContainer,
                 icon: const Icon(Broken.document_download),
-                label: Text('在此粘贴 (${provider.clipboardPaths.length})'),
+                label: Text(L10n.of(context).paste_here_count(provider.clipboardPaths.length)),
               )
             : FloatingActionButton.extended(
                 onPressed: _addNewFile,

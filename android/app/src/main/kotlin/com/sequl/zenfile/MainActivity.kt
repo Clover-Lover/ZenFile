@@ -1125,6 +1125,9 @@ class MainActivity : AudioServiceFragmentActivity() {
                 "openWithChooser" -> {
                     val path = call.argument<String>("path") ?: ""
                     val mimeType = call.argument<String>("mimeType") ?: ""
+                    // 选择器标题由 Dart 侧按「应用内语言」传入（应用语言只作用于 Flutter 层，
+                    // 原生拿不到）。为空则交给系统使用其自带的本地化标题。
+                    val chooserTitle = call.argument<String>("title")
                     executor.execute {
                         try {
                             val intent = Intent(Intent.ACTION_VIEW)
@@ -1155,7 +1158,7 @@ class MainActivity : AudioServiceFragmentActivity() {
 
                             // 使用 Intent.createChooser 强制弹出系统选择器
                             // 即使已设默认应用也会弹出，让用户从所有可用应用中选择
-                            val chooser = Intent.createChooser(intent, "打开方式").apply {
+                            val chooser = Intent.createChooser(intent, chooserTitle).apply {
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             }
                             startActivity(chooser)
@@ -2110,6 +2113,9 @@ class MainActivity : AudioServiceFragmentActivity() {
                     val progress = call.argument<Int>("progress") ?: 0
                     val max = call.argument<Int>("max") ?: 100
                     val indeterminate = call.argument<Boolean>("indeterminate") ?: false
+                    // 通知动作按钮文案由 Dart 侧按应用内语言传入（原生无 locale 变体资源）
+                    val openLabel = call.argument<String>("openLabel") ?: "Open"
+                    val cancelLabel = call.argument<String>("cancelLabel") ?: "Cancel"
 
                     var iconId = applicationContext.resources.getIdentifier("ic_launcher", "mipmap", packageName)
                     if (iconId == 0) {
@@ -2145,8 +2151,8 @@ class MainActivity : AudioServiceFragmentActivity() {
                         .setContentIntent(openPendingIntent)
 
                     if (progress < max) {
-                        builder.addAction(android.R.drawable.ic_menu_view, "Open", openPendingIntent)
-                        builder.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Cancel", cancelPendingIntent)
+                        builder.addAction(android.R.drawable.ic_menu_view, openLabel, openPendingIntent)
+                        builder.addAction(android.R.drawable.ic_menu_close_clear_cancel, cancelLabel, cancelPendingIntent)
                     }
 
                     if (indeterminate) {

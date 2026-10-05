@@ -509,7 +509,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).msg45326802)));
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('删除失败: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).e17(e))));
         }
       }
     }
@@ -584,7 +584,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
               await provider.renameFile(path, newName);
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('重命名失败: $e')));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).e25(e))));
               }
               return;
             }
@@ -623,7 +623,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
             }
           } catch (e) {
             if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('删除失败: $e')));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(L10n.of(context).e17(e))));
             }
           }
         }

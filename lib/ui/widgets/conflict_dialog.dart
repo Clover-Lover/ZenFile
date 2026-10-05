@@ -450,7 +450,7 @@ class _ConflictDialogState extends State<ConflictDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('取消'),
+              child: Text(L10n.of(context).ui_cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, controller.text.trim()),

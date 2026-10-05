@@ -77,9 +77,15 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
           final bytesText = '${FileUtils.formatBytes(operation.bytesProcessed, 1)} / ${FileUtils.formatBytes(operation.totalBytes, 1)}';
 
           // 文件计数器（如「3/10」）：仅在多文件操作时显示。
-          final showCounter = operation.totalFiles > 1;
-          final counterIndex =
-              operation.currentFileIndex.clamp(1, operation.totalFiles);
+          // ⚠️ 必须走 [ProgressRingShell.counterLabel]：压缩/解压有大量
+          // `send(...)`（扫描 / 编码 / 收尾阶段）**不带 totalFiles**，此时
+          // totalFiles == 0，直接 clamp 会抛 ArgumentError ⇒ 弹窗被换成浅灰
+          // 错误块（「白色透明层 + 没有进度条」），而且因为 build 已抛异常、
+          // 没装上 Notifier 订阅，操作结束后它也不会自动关闭。
+          final counterLabel = ProgressRingShell.counterLabel(
+            operation.currentFileIndex,
+            operation.totalFiles,
+          );
 
           return ProgressRingShell(
             overall: percent,
@@ -171,14 +177,17 @@ class BackgroundOperationProgressDialog extends StatelessWidget {
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
-                  if (showCounter) ...[
+                  if (counterLabel != null) ...[
                     const SizedBox(height: 3),
                     Text(
-                      '$counterIndex/${operation.totalFiles}',
+                      counterLabel,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.primary,
+                        // 与其它进度弹窗统一：计数器用常规文字色，不做主题色高亮
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],

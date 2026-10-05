@@ -5218,6 +5218,163 @@ abstract class L10n {
   /// **'本地'**
   String get ui_nav;
 
+  /// ui\screens\media_category_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'重命名失败：{e}'**
+  String e25(Object e);
+
+  /// providers\file_manager_provider.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'打开失败：{e}'**
+  String e26(Object e);
+
+  /// ui\screens\media_category_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'重命名失败'**
+  String get rename_failed;
+
+  /// ui\screens\media_category_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'删除失败'**
+  String get delete_failed;
+
+  /// ui\screens\html_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'重新加载'**
+  String get reload_page;
+
+  /// ui\screens\document_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'显示设置'**
+  String get display_settings;
+
+  /// ui\screens\document_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'空白表格'**
+  String get empty_table;
+
+  /// ui\screens\text_editor_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'查找...'**
+  String get find_hint;
+
+  /// ui\screens\video_player\video_player_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'音量'**
+  String get volume;
+
+  /// ui\screens\video_player\video_controls_overlay.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'静音'**
+  String get mute;
+
+  /// ui\screens\video_player\video_controls_overlay.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'取消静音'**
+  String get unmute;
+
+  /// ui\screens\video_player\video_controls_overlay.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'全屏'**
+  String get fullscreen;
+
+  /// ui\screens\video_player\video_controls_overlay.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'退出全屏'**
+  String get exit_fullscreen;
+
+  /// ui\widgets\tab_options_sheet.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'固定标签页'**
+  String get pin_tab;
+
+  /// ui\screens\archive_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'在此粘贴 ({count})'**
+  String paste_here_count(Object count);
+
+  /// ui\screens\archive_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'已复制 {count} 个项目到剪贴板 ✓'**
+  String items_copied_to_clipboard(Object count);
+
+  /// ui\screens\archive_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'无法预览图片: {e}'**
+  String preview_image_failed(Object e);
+
+  /// ui\screens\archive_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'删除项目失败'**
+  String get delete_items_failed;
+
+  /// providers\file_manager_provider.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'无法访问所选受限目录文件，请确认已授权 Android/data 访问'**
+  String get restricted_dir_unauthorized;
+
+  /// providers\file_manager_provider.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'TAR.ZSTD 与 TAR.LZ4 格式内存占用极高，仅针对 600MB 以下的文件做了优化。更大的文件请改用 ZIP 或 TAR 格式。'**
+  String get tar_zstd_size_warning;
+
+  /// ui\screens\web_sharing_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'端口'**
+  String get port_label;
+
+  /// ui\screens\web_sharing_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'范围：1024 - 65535'**
+  String get port_range_hint;
+
+  /// ui\screens\image_viewer_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'图片'**
+  String get image_fallback_title;
+
+  /// ui\screens\video_player\video_player_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'视频'**
+  String get video_fallback_title;
+
+  /// ui\screens\video_player\video_player_screen.dart
+  ///
+  /// In zh, this message translates to:
+  /// **'外部'**
+  String get external_subtitle_track;
+
+  /// android\DesktopLyricService.kt
+  ///
+  /// In zh, this message translates to:
+  /// **'悬浮窗显示失败：{e}'**
+  String desktop_lyric_overlay_failed(Object e);
+
+
   /// Install package status badge shown under the file icon
   ///
   /// In zh, this message translates to:

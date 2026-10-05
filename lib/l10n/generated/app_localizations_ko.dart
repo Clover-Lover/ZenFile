@@ -2745,6 +2745,98 @@ class L10nKo extends L10n {
   String get ui_nav => '로컬';
 
   @override
+  String e25(Object e) {
+    return '이름 바꾸기 실패: $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return '열기 실패: $e';
+  }
+
+  @override
+  String get rename_failed => '이름 바꾸기 실패';
+
+  @override
+  String get delete_failed => '삭제 실패';
+
+  @override
+  String get reload_page => '새로 고침';
+
+  @override
+  String get display_settings => '표시 설정';
+
+  @override
+  String get empty_table => '빈 표';
+
+  @override
+  String get find_hint => '찾기...';
+
+  @override
+  String get volume => '볼륨';
+
+  @override
+  String get mute => '음소거';
+
+  @override
+  String get unmute => '음소거 해제';
+
+  @override
+  String get fullscreen => '전체 화면';
+
+  @override
+  String get exit_fullscreen => '전체 화면 종료';
+
+  @override
+  String get pin_tab => '탭 고정';
+
+  @override
+  String paste_here_count(Object count) {
+    return '여기에 붙여넣기 ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '$count개 항목을 클립보드에 복사했습니다 ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return '이미지를 미리 볼 수 없습니다: $e';
+  }
+
+  @override
+  String get delete_items_failed => '항목 삭제 실패';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      '선택한 제한 디렉터리 파일에 접근할 수 없습니다. Android/data 접근이 허용되었는지 확인하세요.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'TAR.ZSTD 및 TAR.LZ4 형식은 메모리 사용량이 매우 높아 600MB 이하 파일에 최적화되어 있습니다. 더 큰 파일에는 ZIP 또는 TAR 형식을 사용하세요.';
+
+  @override
+  String get port_label => '포트';
+
+  @override
+  String get port_range_hint => '범위: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => '이미지';
+
+  @override
+  String get video_fallback_title => '동영상';
+
+  @override
+  String get external_subtitle_track => '외부';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return '오버레이 표시 실패: $e';
+  }
+
+  @override
   String get install_status_installed => '설치됨';
 
   @override

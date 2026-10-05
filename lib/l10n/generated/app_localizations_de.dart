@@ -2876,6 +2876,98 @@ class L10nDe extends L10n {
   String get ui_nav => 'Lokal';
 
   @override
+  String e25(Object e) {
+    return 'Umbenennen fehlgeschlagen: $e';
+  }
+
+  @override
+  String e26(Object e) {
+    return 'Öffnen fehlgeschlagen: $e';
+  }
+
+  @override
+  String get rename_failed => 'Umbenennen fehlgeschlagen';
+
+  @override
+  String get delete_failed => 'Löschen fehlgeschlagen';
+
+  @override
+  String get reload_page => 'Neu laden';
+
+  @override
+  String get display_settings => 'Anzeigeeinstellungen';
+
+  @override
+  String get empty_table => 'Leere Tabelle';
+
+  @override
+  String get find_hint => 'Suchen...';
+
+  @override
+  String get volume => 'Lautstärke';
+
+  @override
+  String get mute => 'Stumm';
+
+  @override
+  String get unmute => 'Ton an';
+
+  @override
+  String get fullscreen => 'Vollbild';
+
+  @override
+  String get exit_fullscreen => 'Vollbild beenden';
+
+  @override
+  String get pin_tab => 'Tab anheften';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'Hier einfügen ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '$count Elemente in die Zwischenablage kopiert ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return 'Bildvorschau fehlgeschlagen: $e';
+  }
+
+  @override
+  String get delete_items_failed => 'Löschen der Elemente fehlgeschlagen';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      'Auf die ausgewählten Dateien im eingeschränkten Verzeichnis kann nicht zugegriffen werden. Bitte bestätigen Sie die Android/data-Berechtigung.';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'TAR.ZSTD und TAR.LZ4 sind sehr speicherintensiv und für Dateien unter 600 MB optimiert. Verwenden Sie für größere Dateien bitte ZIP oder TAR.';
+
+  @override
+  String get port_label => 'Port';
+
+  @override
+  String get port_range_hint => 'Bereich: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => 'Bild';
+
+  @override
+  String get video_fallback_title => 'Video';
+
+  @override
+  String get external_subtitle_track => 'Extern';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'Overlay-Anzeige fehlgeschlagen: $e';
+  }
+
+  @override
   String get install_status_installed => 'Installiert';
 
   @override

@@ -78,6 +78,53 @@ class ProgressOverlay extends StatelessWidget {
   }
 }
 
+/// 进度弹窗句柄：缓存弹窗**自己的** context，用来安全地关闭它（幂等）。
+///
+/// 为什么不能拿页面的 context 直接 pop：
+/// - `showDialog` 默认 `useRootNavigator: true` ⇒ 弹窗挂在**根** Navigator；
+/// - 而「分类页 / 最近页」这类页面是 `ShellNavigator.push` 进 **HomeScreen body
+///   里的嵌套 Navigator** 的，页面 context 解析出来的是**嵌套栈**。
+///   此时 `Navigator.of(context).pop()` 会把**页面自己**弹掉、弹窗原地不动；
+///   之后的回调里 context 已经失效（`Navigator.canPop` 会抛异常，并被手势回调
+///   静默吞掉）⇒ 表现为「点取消 / 后台毫无反应、返回键又被 PopScope 挡住，
+///   只能重启应用」。
+///
+/// 用法：
+/// ```dart
+/// final handle = ProgressDialogHandle();
+/// showDialog(
+///   context: context,
+///   builder: (dialogContext) {
+///     handle.attach(dialogContext);
+///     return MyProgressDialog(...);
+///   },
+/// );
+/// ...
+/// handle.close(); // 成功 / 失败 / 取消都能调；弹窗已被返回键关掉时是空操作
+/// ```
+class ProgressDialogHandle {
+  BuildContext? _ctx;
+
+  /// 在 `showDialog` 的 builder 里调用，记下弹窗自己的 context
+  /// （重新弹窗时再调一次即可覆盖，句柄可复用）。
+  void attach(BuildContext dialogContext) => _ctx = dialogContext;
+
+  /// 弹窗是否还在屏幕上。
+  bool get isOpen {
+    final ctx = _ctx;
+    return ctx != null && ctx.mounted;
+  }
+
+  /// 关闭弹窗（幂等）。弹窗已经不在了就什么都不做，**绝不会误 pop 掉页面**。
+  void close() {
+    final ctx = _ctx;
+    _ctx = null;
+    if (ctx == null || !ctx.mounted) return;
+    final navigator = Navigator.of(ctx);
+    if (navigator.canPop()) navigator.pop();
+  }
+}
+
 /// 压入一个不遮挡底层页面的「处理中」遮罩路由（替代全黑的全屏路由）
 ///
 /// 传入 [progress] 可在卡片上显示百分比进度（配合加解密的 onProgress 回调）。

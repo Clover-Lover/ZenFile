@@ -3236,6 +3236,136 @@
   "cat_vault_desc": "안전 저장",
   "cat_quick_categories": "카테고리",
   "ui_nav": "로컬",
+  "e25": "이름 바꾸기 실패: {e}",
+  "@e25": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "e26": "열기 실패: {e}",
+  "@e26": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "rename_failed": "이름 바꾸기 실패",
+  "@rename_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "delete_failed": "삭제 실패",
+  "@delete_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "reload_page": "새로 고침",
+  "@reload_page": {
+    "description": "ui\\screens\\html_viewer_screen.dart",
+    "type": "text"
+  },
+  "display_settings": "표시 설정",
+  "@display_settings": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "empty_table": "빈 표",
+  "@empty_table": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "find_hint": "찾기...",
+  "@find_hint": {
+    "description": "ui\\screens\\text_editor_screen.dart",
+    "type": "text"
+  },
+  "volume": "볼륨",
+  "@volume": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "mute": "음소거",
+  "@mute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "unmute": "음소거 해제",
+  "@unmute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "fullscreen": "전체 화면",
+  "@fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "exit_fullscreen": "전체 화면 종료",
+  "@exit_fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "pin_tab": "탭 고정",
+  "@pin_tab": {
+    "description": "ui\\widgets\\tab_options_sheet.dart",
+    "type": "text"
+  },
+  "paste_here_count": "여기에 붙여넣기 ({count})",
+  "@paste_here_count": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "items_copied_to_clipboard": "{count}개 항목을 클립보드에 복사했습니다 ✓",
+  "@items_copied_to_clipboard": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "preview_image_failed": "이미지를 미리 볼 수 없습니다: {e}",
+  "@preview_image_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "delete_items_failed": "항목 삭제 실패",
+  "@delete_items_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "restricted_dir_unauthorized": "선택한 제한 디렉터리 파일에 접근할 수 없습니다. Android/data 접근이 허용되었는지 확인하세요.",
+  "@restricted_dir_unauthorized": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "tar_zstd_size_warning": "TAR.ZSTD 및 TAR.LZ4 형식은 메모리 사용량이 매우 높아 600MB 이하 파일에 최적화되어 있습니다. 더 큰 파일에는 ZIP 또는 TAR 형식을 사용하세요.",
+  "@tar_zstd_size_warning": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "port_label": "포트",
+  "@port_label": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "port_range_hint": "범위: 1024 - 65535",
+  "@port_range_hint": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "image_fallback_title": "이미지",
+  "@image_fallback_title": {
+    "description": "ui\\screens\\image_viewer_screen.dart",
+    "type": "text"
+  },
+  "video_fallback_title": "동영상",
+  "@video_fallback_title": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "external_subtitle_track": "외부",
+  "@external_subtitle_track": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "desktop_lyric_overlay_failed": "오버레이 표시 실패: {e}",
+  "@desktop_lyric_overlay_failed": {
+    "description": "android\\DesktopLyricService.kt",
+    "type": "text"
+  },
   "install_status_installed": "설치됨",
   "@install_status_installed": {
     "description": "Install package status badge shown under the file icon"

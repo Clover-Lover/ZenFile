@@ -3236,6 +3236,136 @@
   "cat_vault_desc": "Безопасное хранение",
   "cat_quick_categories": "Категории",
   "ui_nav": "Локальный",
+  "e25": "Не удалось переименовать: {e}",
+  "@e25": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "e26": "Не удалось открыть: {e}",
+  "@e26": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "rename_failed": "Не удалось переименовать",
+  "@rename_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "delete_failed": "Не удалось удалить",
+  "@delete_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "reload_page": "Перезагрузить",
+  "@reload_page": {
+    "description": "ui\\screens\\html_viewer_screen.dart",
+    "type": "text"
+  },
+  "display_settings": "Настройки отображения",
+  "@display_settings": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "empty_table": "Пустая таблица",
+  "@empty_table": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "find_hint": "Найти...",
+  "@find_hint": {
+    "description": "ui\\screens\\text_editor_screen.dart",
+    "type": "text"
+  },
+  "volume": "Громкость",
+  "@volume": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "mute": "Без звука",
+  "@mute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "unmute": "Включить звук",
+  "@unmute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "fullscreen": "Полный экран",
+  "@fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "exit_fullscreen": "Выйти из полноэкранного режима",
+  "@exit_fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "pin_tab": "Закрепить вкладку",
+  "@pin_tab": {
+    "description": "ui\\widgets\\tab_options_sheet.dart",
+    "type": "text"
+  },
+  "paste_here_count": "Вставить сюда ({count})",
+  "@paste_here_count": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "items_copied_to_clipboard": "{count} элементов скопировано в буфер обмена ✓",
+  "@items_copied_to_clipboard": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "preview_image_failed": "Не удалось просмотреть изображение: {e}",
+  "@preview_image_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "delete_items_failed": "Не удалось удалить элементы",
+  "@delete_items_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "restricted_dir_unauthorized": "Нет доступа к выбранным файлам в ограниченном каталоге. Подтвердите доступ к Android/data.",
+  "@restricted_dir_unauthorized": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "tar_zstd_size_warning": "Форматы TAR.ZSTD и TAR.LZ4 очень требовательны к памяти и оптимизированы для файлов до 600 МБ. Для больших файлов используйте ZIP или TAR.",
+  "@tar_zstd_size_warning": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "port_label": "Порт",
+  "@port_label": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "port_range_hint": "Диапазон: 1024 - 65535",
+  "@port_range_hint": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "image_fallback_title": "Изображение",
+  "@image_fallback_title": {
+    "description": "ui\\screens\\image_viewer_screen.dart",
+    "type": "text"
+  },
+  "video_fallback_title": "Видео",
+  "@video_fallback_title": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "external_subtitle_track": "Внешние",
+  "@external_subtitle_track": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "desktop_lyric_overlay_failed": "Не удалось показать окно: {e}",
+  "@desktop_lyric_overlay_failed": {
+    "description": "android\\DesktopLyricService.kt",
+    "type": "text"
+  },
   "install_status_installed": "Установлено",
   "@install_status_installed": {
     "description": "Install package status badge shown under the file icon"

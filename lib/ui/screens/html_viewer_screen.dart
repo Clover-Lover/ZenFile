@@ -65,7 +65,7 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
         actions: [
           IconButton(
             icon: const Icon(Broken.refresh_2),
-            tooltip: '重新加载',
+            tooltip: L10n.of(context).reload_page,
             onPressed: () {
               setState(() => _isLoading = true);
               _loadHtml();

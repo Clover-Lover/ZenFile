@@ -374,6 +374,10 @@ class FileManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 当前操作是否已被「取消」中断（长任务据此抛 `Cancelled`）。
+  /// 调用方可用它把「备份失败」提示换成中性的「操作已取消」。
+  bool get isOperationCancelled => _isOperationCancelled;
+
   void cancelOperation() {
     _isOperationCancelled = true;
     // 调用当前活跃客户端的 cancel() 中断进行中的传输
@@ -8090,7 +8094,7 @@ class FileManagerProvider extends ChangeNotifier {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('连接远程服务器失败：{e}'),
+            content: Text(L10n.of(context).e2(e)),
             backgroundColor: Colors.redAccent,
             behavior: SnackBarBehavior.floating,
           ),
@@ -8381,6 +8385,11 @@ class FileManagerProvider extends ChangeNotifier {
       int processedFileCount = 0;
       int bytesDone = 0;
       int previousFilesBytes = 0;
+      // 进度单调化：客户端可能重复 / 乱序回调（分块重试、收尾再报一次 1.0），
+      // 直接透传会让圆环来回闪。记住「当前文件 + 该文件已上报的最大进度」，
+      // 同一文件内只增不减；文件切换或重新从 0 开始时复位。
+      String currentEmitName = '';
+      double currentEmitProg = 0.0;
       // 滑动窗口实时速率：避免累计平均速率在文件间停顿时持续衰减。
       final speedTracker = _TransferSpeedTracker(window: const Duration(seconds: 2));
       // 节流：WebDAV/FTP 的 onProgress 每 64KB 调用一次（千兆下每秒约 16000 次），
@@ -8392,7 +8401,16 @@ class FileManagerProvider extends ChangeNotifier {
 
       // 统一构造进度通知，保证 percentage / bytesProcessed / speed / eta 一致。
       void emitProgress(String fileName, int currentFileSize, double currentFileProg) {
-        final newBytesDone = previousFilesBytes + (currentFileSize * currentFileProg).round();
+        // ⚠️ 上报值必须夹到 [0,1] 且同文件内单调（见 currentEmitName 注释）：
+        // 客户端给的 prog 若是 NaN / >1 / 中途回退，圆环会闪、甚至提前冲到 100%。
+        final rawProg = currentFileProg.isFinite ? currentFileProg : 0.0;
+        if (fileName != currentEmitName || rawProg == 0.0) {
+          currentEmitName = fileName;
+          currentEmitProg = 0.0;
+        }
+        if (rawProg > currentEmitProg) currentEmitProg = rawProg;
+        final prog = currentEmitProg.clamp(0.0, 1.0);
+        final newBytesDone = previousFilesBytes + (currentFileSize * prog).round();
         if (newBytesDone > bytesDone) {
           pendingSpeedDelta += newBytesDone - bytesDone;
           bytesDone = newBytesDone;
@@ -8417,7 +8435,7 @@ class FileManagerProvider extends ChangeNotifier {
           eta: Duration(seconds: etaSeconds.round()),
           totalBytes: totalBytesAll,
           bytesProcessed: bytesDone,
-          currentFileBytes: (currentFileSize * currentFileProg).round(),
+          currentFileBytes: (currentFileSize * prog).round(),
           currentFileTotal: currentFileSize,
         );
       }
@@ -8471,15 +8489,16 @@ class FileManagerProvider extends ChangeNotifier {
             srcPath,
             destPath,
             bypassUseRoot: bypassUseRoot,
-            onFileStart: (fileName) {
-              processedFileCount++;
-            },
+            // 计数改在「文件完成」时推进（原先放在 onFileStart）：emitProgress 里
+            // 用 `processedFileCount + 1` 表示当前文件序号，若提前自增，目录里的
+            // 第一个文件会显示成 2/N。单文件分支本来就是完成后自增，两处必须一致。
             onFileProgress: (fileName, fileSize, prog) {
               emitProgress(fileName, fileSize, prog);
               // 文件完成时，把真实大小累加到 previousFilesBytes，
               // 使下一个文件的 bytesDone 基线正确。
               if (prog >= 1.0) {
                 previousFilesBytes += fileSize;
+                processedFileCount++;
               }
             },
           );
@@ -10448,7 +10467,7 @@ class FileManagerProvider extends ChangeNotifier {
         if (effectivePaths.isEmpty) {
           if (context != null && context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('无法访问所选受限目录文件，请确认已授权 Android/data 访问')),
+              SnackBar(content: Text(L10n.of(context).restricted_dir_unauthorized)),
             );
           }
           selectedPaths.clear();
@@ -10465,8 +10484,8 @@ class FileManagerProvider extends ChangeNotifier {
         if (context != null && context.mounted) {
           await FileActionDialogs.showWarningDialog(
             context,
-            title: '压缩超出限制',
-            content: 'TAR.ZSTD and TAR.LZ4 formats are highly memory-intensive and optimized for files under 600MB. Please use the ZIP or TAR format for larger files.',
+            title: L10n.of(context).msg3df5ef6c,
+            content: L10n.of(context).tar_zstd_size_warning,
           );
         }
         selectedPaths.clear();
@@ -11338,9 +11357,14 @@ class FileManagerProvider extends ChangeNotifier {
     try {
       // IM 追加后缀（`app.apk.1`）也要给出正确的系统 MIME，否则系统选择器认不出。
       final mime = mimeType ?? lookupMimeType(FileUtils.stripImAppendedSuffix(path)) ?? '*/*';
+      // 系统选择器是原生 UI，拿不到「应用内语言」（该语言只作用于 Flutter 层），
+      // 标题必须由这里传入，否则永远是硬编码中文。取不到 context 时传 null，
+      // 由系统使用自带的本地化标题兜底。
+      final chooserCtx = navigatorKey.currentContext;
       await _platformChannel.invokeMethod('openWithChooser', {
         'path': path,
         'mimeType': mime,
+        if (chooserCtx != null) 'title': L10n.of(chooserCtx).open_with_title,
       });
     } catch (e) {
       debugPrint('openWithSystemChooser 失败: $e');
@@ -12190,7 +12214,7 @@ class FileManagerProvider extends ChangeNotifier {
             await remoteClient.disconnect();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('打开失败：$e')),
+                SnackBar(content: Text(L10n.of(context).e26(e))),
               );
             }
             return;
@@ -12442,7 +12466,7 @@ class FileManagerProvider extends ChangeNotifier {
             debugPrint('远程非媒体文件下载/打开失败: $e');
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('打开失败：$e')),
+                SnackBar(content: Text(L10n.of(context).e26(e))),
               );
             }
             return;
@@ -12624,7 +12648,7 @@ class FileManagerProvider extends ChangeNotifier {
       debugPrint('Error moving item: $e');
       if (showToast) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('移动项目失败：{e}')),
+          SnackBar(content: Text(L10n.of(context).e5(e))),
         );
       }
     }
@@ -12738,7 +12762,7 @@ class FileManagerProvider extends ChangeNotifier {
       debugPrint('Error copying item: $e');
       if (showToast) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('复制项目失败：{e}')),
+          SnackBar(content: Text(L10n.of(context).e6(e))),
         );
       }
     }

@@ -2747,6 +2747,98 @@ class L10nJa extends L10n {
   String get ui_nav => 'ローカル';
 
   @override
+  String e25(Object e) {
+    return '名前の変更に失敗しました：$e';
+  }
+
+  @override
+  String e26(Object e) {
+    return '開けませんでした：$e';
+  }
+
+  @override
+  String get rename_failed => '名前の変更に失敗しました';
+
+  @override
+  String get delete_failed => '削除に失敗しました';
+
+  @override
+  String get reload_page => '再読み込み';
+
+  @override
+  String get display_settings => '表示設定';
+
+  @override
+  String get empty_table => '空の表';
+
+  @override
+  String get find_hint => '検索...';
+
+  @override
+  String get volume => '音量';
+
+  @override
+  String get mute => 'ミュート';
+
+  @override
+  String get unmute => 'ミュート解除';
+
+  @override
+  String get fullscreen => '全画面';
+
+  @override
+  String get exit_fullscreen => '全画面を終了';
+
+  @override
+  String get pin_tab => 'タブを固定';
+
+  @override
+  String paste_here_count(Object count) {
+    return 'ここに貼り付け ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '$count 個の項目をクリップボードにコピーしました ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return '画像をプレビューできません: $e';
+  }
+
+  @override
+  String get delete_items_failed => '項目の削除に失敗しました';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      '選択した制限付きディレクトリのファイルにアクセスできません。Android/data へのアクセスが許可されているか確認してください。';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'TAR.ZSTD と TAR.LZ4 はメモリ消費が非常に大きく、600MB 以下のファイル向けに最適化されています。それより大きいファイルには ZIP または TAR 形式をご利用ください。';
+
+  @override
+  String get port_label => 'ポート';
+
+  @override
+  String get port_range_hint => '範囲: 1024 - 65535';
+
+  @override
+  String get image_fallback_title => '画像';
+
+  @override
+  String get video_fallback_title => '動画';
+
+  @override
+  String get external_subtitle_track => '外部';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return 'オーバーレイを表示できません：$e';
+  }
+
+  @override
   String get install_status_installed => 'インストール済み';
 
   @override

@@ -2738,6 +2738,98 @@ class L10nZh extends L10n {
   String get ui_nav => '本地';
 
   @override
+  String e25(Object e) {
+    return '重命名失败：$e';
+  }
+
+  @override
+  String e26(Object e) {
+    return '打开失败：$e';
+  }
+
+  @override
+  String get rename_failed => '重命名失败';
+
+  @override
+  String get delete_failed => '删除失败';
+
+  @override
+  String get reload_page => '重新加载';
+
+  @override
+  String get display_settings => '显示设置';
+
+  @override
+  String get empty_table => '空白表格';
+
+  @override
+  String get find_hint => '查找...';
+
+  @override
+  String get volume => '音量';
+
+  @override
+  String get mute => '静音';
+
+  @override
+  String get unmute => '取消静音';
+
+  @override
+  String get fullscreen => '全屏';
+
+  @override
+  String get exit_fullscreen => '退出全屏';
+
+  @override
+  String get pin_tab => '固定标签页';
+
+  @override
+  String paste_here_count(Object count) {
+    return '在此粘贴 ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '已复制 $count 个项目到剪贴板 ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return '无法预览图片: $e';
+  }
+
+  @override
+  String get delete_items_failed => '删除项目失败';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      '无法访问所选受限目录文件，请确认已授权 Android/data 访问';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'TAR.ZSTD 与 TAR.LZ4 格式内存占用极高，仅针对 600MB 以下的文件做了优化。更大的文件请改用 ZIP 或 TAR 格式。';
+
+  @override
+  String get port_label => '端口';
+
+  @override
+  String get port_range_hint => '范围：1024 - 65535';
+
+  @override
+  String get image_fallback_title => '图片';
+
+  @override
+  String get video_fallback_title => '视频';
+
+  @override
+  String get external_subtitle_track => '外部';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return '悬浮窗显示失败：$e';
+  }
+
+  @override
   String get install_status_installed => '已安装';
 
   @override
@@ -10668,6 +10760,98 @@ class L10nZhTw extends L10nZh {
 
   @override
   String get ui_nav => '本地';
+
+  @override
+  String e25(Object e) {
+    return '重新命名失敗：$e';
+  }
+
+  @override
+  String e26(Object e) {
+    return '開啟失敗：$e';
+  }
+
+  @override
+  String get rename_failed => '重新命名失敗';
+
+  @override
+  String get delete_failed => '刪除失敗';
+
+  @override
+  String get reload_page => '重新載入';
+
+  @override
+  String get display_settings => '顯示設定';
+
+  @override
+  String get empty_table => '空白表格';
+
+  @override
+  String get find_hint => '尋找...';
+
+  @override
+  String get volume => '音量';
+
+  @override
+  String get mute => '靜音';
+
+  @override
+  String get unmute => '取消靜音';
+
+  @override
+  String get fullscreen => '全螢幕';
+
+  @override
+  String get exit_fullscreen => '退出全螢幕';
+
+  @override
+  String get pin_tab => '固定分頁';
+
+  @override
+  String paste_here_count(Object count) {
+    return '在此貼上 ($count)';
+  }
+
+  @override
+  String items_copied_to_clipboard(Object count) {
+    return '已複製 $count 個項目到剪貼簿 ✓';
+  }
+
+  @override
+  String preview_image_failed(Object e) {
+    return '無法預覽圖片: $e';
+  }
+
+  @override
+  String get delete_items_failed => '刪除項目失敗';
+
+  @override
+  String get restricted_dir_unauthorized =>
+      '無法存取所選受限目錄檔案，請確認已授權 Android/data 存取';
+
+  @override
+  String get tar_zstd_size_warning =>
+      'TAR.ZSTD 與 TAR.LZ4 格式記憶體佔用極高，僅針對 600MB 以下的檔案做了最佳化。更大的檔案請改用 ZIP 或 TAR 格式。';
+
+  @override
+  String get port_label => '連接埠';
+
+  @override
+  String get port_range_hint => '範圍：1024 - 65535';
+
+  @override
+  String get image_fallback_title => '圖片';
+
+  @override
+  String get video_fallback_title => '影片';
+
+  @override
+  String get external_subtitle_track => '外部';
+
+  @override
+  String desktop_lyric_overlay_failed(Object e) {
+    return '懸浮窗顯示失敗：$e';
+  }
 
   @override
   String get install_status_installed => '已安裝';

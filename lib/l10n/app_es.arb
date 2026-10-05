@@ -3236,6 +3236,136 @@
   "cat_vault_desc": "Almacenamiento seguro",
   "cat_quick_categories": "Categorías",
   "ui_nav": "Local",
+  "e25": "Error al renombrar: {e}",
+  "@e25": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "e26": "Error al abrir: {e}",
+  "@e26": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "rename_failed": "Error al renombrar",
+  "@rename_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "delete_failed": "Error al eliminar",
+  "@delete_failed": {
+    "description": "ui\\screens\\media_category_screen.dart",
+    "type": "text"
+  },
+  "reload_page": "Recargar",
+  "@reload_page": {
+    "description": "ui\\screens\\html_viewer_screen.dart",
+    "type": "text"
+  },
+  "display_settings": "Ajustes de pantalla",
+  "@display_settings": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "empty_table": "Tabla vacía",
+  "@empty_table": {
+    "description": "ui\\screens\\document_viewer_screen.dart",
+    "type": "text"
+  },
+  "find_hint": "Buscar...",
+  "@find_hint": {
+    "description": "ui\\screens\\text_editor_screen.dart",
+    "type": "text"
+  },
+  "volume": "Volumen",
+  "@volume": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "mute": "Silenciar",
+  "@mute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "unmute": "Activar sonido",
+  "@unmute": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "fullscreen": "Pantalla completa",
+  "@fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "exit_fullscreen": "Salir de pantalla completa",
+  "@exit_fullscreen": {
+    "description": "ui\\screens\\video_player\\video_controls_overlay.dart",
+    "type": "text"
+  },
+  "pin_tab": "Fijar pestaña",
+  "@pin_tab": {
+    "description": "ui\\widgets\\tab_options_sheet.dart",
+    "type": "text"
+  },
+  "paste_here_count": "Pegar aquí ({count})",
+  "@paste_here_count": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "items_copied_to_clipboard": "{count} elementos copiados al portapapeles ✓",
+  "@items_copied_to_clipboard": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "preview_image_failed": "No se pudo previsualizar la imagen: {e}",
+  "@preview_image_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "delete_items_failed": "Error al eliminar los elementos",
+  "@delete_items_failed": {
+    "description": "ui\\screens\\archive_viewer_screen.dart",
+    "type": "text"
+  },
+  "restricted_dir_unauthorized": "No se puede acceder a los archivos del directorio restringido seleccionado. Confirma que el acceso a Android/data esté autorizado.",
+  "@restricted_dir_unauthorized": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "tar_zstd_size_warning": "Los formatos TAR.ZSTD y TAR.LZ4 consumen mucha memoria y están optimizados para archivos de menos de 600 MB. Para archivos más grandes usa ZIP o TAR.",
+  "@tar_zstd_size_warning": {
+    "description": "providers\\file_manager_provider.dart",
+    "type": "text"
+  },
+  "port_label": "Puerto",
+  "@port_label": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "port_range_hint": "Rango: 1024 - 65535",
+  "@port_range_hint": {
+    "description": "ui\\screens\\web_sharing_screen.dart",
+    "type": "text"
+  },
+  "image_fallback_title": "Imagen",
+  "@image_fallback_title": {
+    "description": "ui\\screens\\image_viewer_screen.dart",
+    "type": "text"
+  },
+  "video_fallback_title": "Vídeo",
+  "@video_fallback_title": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "external_subtitle_track": "Externo",
+  "@external_subtitle_track": {
+    "description": "ui\\screens\\video_player\\video_player_screen.dart",
+    "type": "text"
+  },
+  "desktop_lyric_overlay_failed": "No se pudo mostrar la ventana flotante: {e}",
+  "@desktop_lyric_overlay_failed": {
+    "description": "android\\DesktopLyricService.kt",
+    "type": "text"
+  },
   "install_status_installed": "Instalada",
   "@install_status_installed": {
     "description": "Install package status badge shown under the file icon"

@@ -18,7 +18,7 @@ class AboutZenFileScreen extends StatelessWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('无法打开链接：{urlString}')),
+          SnackBar(content: Text(L10n.of(context).msg2ad64aa7(urlString))),
         );
       }
     }
@@ -184,7 +184,7 @@ class AboutZenFileScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   // 版本号文本（硬编码，无需 l10n；以后升级版本只改这里）
                   Text(
-                    'v3.5.3',
+                    'v3.5.4',
                     style: TextStyle(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       fontSize: 13,
@@ -656,13 +656,13 @@ class AboutZenFileScreen extends StatelessWidget {
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
                     debugPrint('Image preview error: $error');
-                    return const Center(
+                    return Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.broken_image, color: Colors.white54, size: 64),
-                          SizedBox(height: 16),
-                          Text('图片加载失败', style: TextStyle(color: Colors.white54)),
+                          const Icon(Icons.broken_image, color: Colors.white54, size: 64),
+                          const SizedBox(height: 16),
+                          Text(L10n.of(context).msgb3b83e12, style: const TextStyle(color: Colors.white54)),
                         ],
                       ),
                     );
@@ -700,8 +700,8 @@ class AboutZenFileScreen extends StatelessWidget {
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('图片已保存到相册'),
+          SnackBar(
+            content: Text(L10n.of(context).msg1292d351),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -711,7 +711,7 @@ class AboutZenFileScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('保存失败: {e}'),
+            content: Text(L10n.of(context).e9(e)),
             behavior: SnackBarBehavior.floating,
           ),
         );

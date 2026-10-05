@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import '../core/navigator_key.dart';
+import '../l10n/generated/app_localizations.dart';
 
 /// 桌面歌词悬浮窗服务（Flutter 端封装）
 ///
@@ -74,12 +76,16 @@ class DesktopLyricService {
   /// [normalColor] 未唱部分颜色。
   Future<bool> show(String text, {int x = 0, int y = 200, int? highlightColor, int? normalColor}) async {
     try {
+      // 原生 `addView` 失败时会用 Toast 提示「悬浮窗显示失败：…」——原生没有 locale
+      // 变体资源，所以把模板（`%s` 占位）按应用内语言传下去，否则该提示永远是中文。
+      final ctx = navigatorKey.currentContext;
       final result = await _channel.invokeMethod<bool>('show', {
         'text': text,
         'x': x,
         'y': y,
         if (highlightColor != null) 'highlightColor': highlightColor,
         if (normalColor != null) 'normalColor': normalColor,
+        if (ctx != null) 'errorTemplate': L10n.of(ctx).desktop_lyric_overlay_failed('%s'),
       });
       return result ?? false;
     } catch (e) {

@@ -824,11 +824,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
         _externalCues = const [];
         _activeCueIndex = -1;
         player.setSubtitleTrack(
-          SubtitleTrack.uri(subtitlePath, title: 'External'),
+          SubtitleTrack.uri(subtitlePath, title: L10n.of(context).external_subtitle_track),
         );
         // 关键修复：开启 mpv 原生渲染，否则位图字幕解码后不显示
         _syncSubVisibilityForTrack(
-          SubtitleTrack.uri(subtitlePath, title: 'External'),
+          SubtitleTrack.uri(subtitlePath, title: L10n.of(context).external_subtitle_track),
         );
         if (!_subtitleEnabled) {
           player.setSubtitleTrack(SubtitleTrack.no());
@@ -861,11 +861,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       }
       // 解析失败兜底：仍用 mpv 渲染
       player.setSubtitleTrack(
-        SubtitleTrack.uri(subtitlePath, title: 'External'),
+        SubtitleTrack.uri(subtitlePath, title: L10n.of(context).external_subtitle_track),
       );
       // 文本兜底字幕走 SubtitleView，同步关闭 mpv 原生渲染
       _syncSubVisibilityForTrack(
-        SubtitleTrack.uri(subtitlePath, title: 'External'),
+        SubtitleTrack.uri(subtitlePath, title: L10n.of(context).external_subtitle_track),
       );
       if (!_subtitleEnabled) {
         player.setSubtitleTrack(SubtitleTrack.no());
@@ -952,11 +952,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       if (_externalCues.isNotEmpty) return;
       if (_subtitleEnabled && _subtitlePath != null) {
         player.setSubtitleTrack(
-          SubtitleTrack.uri(_subtitlePath!, title: 'External'),
+          SubtitleTrack.uri(_subtitlePath!, title: L10n.of(context).external_subtitle_track),
         );
         // 按字幕类型同步 mpv 原生渲染开关（位图开、文本关）
         _syncSubVisibilityForTrack(
-          SubtitleTrack.uri(_subtitlePath!, title: 'External'),
+          SubtitleTrack.uri(_subtitlePath!, title: L10n.of(context).external_subtitle_track),
         );
         _applySubtitleFontSize(_subtitleFontSize);
         _applySubtitlePosition(_subtitlePosition);
@@ -3141,10 +3141,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       } else if (item is FileSystemEntity) {
         currentPath = item.path;
       } else if (item is AssetEntity) {
-        currentPath = item.title ?? 'Video';
+        currentPath = item.title ?? L10n.of(context).video_fallback_title;
       }
     } else if (widget.assetPlaylist != null && _currentIndex < widget.assetPlaylist!.length) {
-      currentPath = widget.assetPlaylist![_currentIndex].title ?? 'Video';
+      currentPath = widget.assetPlaylist![_currentIndex].title ?? L10n.of(context).video_fallback_title;
     }
     final name = currentPath.split('/').last.split('\\').last;
     return name.length > 40 ? '${name.substring(0, 37)}...' : name;
@@ -3964,7 +3964,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                       : _volume > 0.5
                           ? Broken.volume_high
                           : Broken.volume_low,
-                  label: '音量',
+                  label: L10n.of(context).volume,
                 ),
               ),
             ),
@@ -3977,7 +3977,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                 child: VerticalSliderWidget(
                   value: _brightness,
                   icon: Broken.sun_1,
-                  label: '亮度',
+                  label: L10n.of(context).editor_brightness,
                 ),
               ),
             ),

@@ -61,7 +61,7 @@ class IntentHandlerService {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('读取共享文件出错：$e')),
+            SnackBar(content: Text(L10n.of(context).e7(e))),
           );
         }
         return;
@@ -69,7 +69,7 @@ class IntentHandlerService {
         debugPrint('Error resolving content URI: $e');
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('读取共享文件出错：$e')),
+            SnackBar(content: Text(L10n.of(context).e7(e))),
           );
         }
         return;

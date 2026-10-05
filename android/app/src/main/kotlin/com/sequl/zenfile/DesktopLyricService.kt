@@ -81,6 +81,10 @@ object DesktopLyricService {
     /** 当前普通色（未唱部分） */
     private var normalColor = 0xCCFFFFFF.toInt()
 
+    /** 「悬浮窗显示失败」Toast 模板（`%s` 由异常信息替换）。由 Dart 侧按应用内语言传入，
+     *  拿不到时回落到中文 —— 避免这里的用户可见文案写死为单一语言。 */
+    private var overlayErrorTemplate: String = "悬浮窗显示失败：%s"
+
     /** 当前歌词文本 */
     private var currentText: String = ""
 
@@ -107,6 +111,7 @@ object DesktopLyricService {
                     val y = (call.argument<Number>("y")?.toInt()) ?: 200
                     (call.argument<Number>("highlightColor")?.toInt())?.let { highlightColor = it }
                     (call.argument<Number>("normalColor")?.toInt())?.let { normalColor = it }
+                    call.argument<String>("errorTemplate")?.let { overlayErrorTemplate = it }
                     initX = x
                     initY = y
                     show(activity, text)
@@ -309,7 +314,11 @@ object DesktopLyricService {
             lyricTextView = null
             resizeHandle = null
             layoutParams = null
-            Toast.makeText(context, "悬浮窗显示失败：${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                overlayErrorTemplate.replace("%s", e.message ?: ""),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

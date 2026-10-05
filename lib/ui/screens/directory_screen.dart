@@ -730,7 +730,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
             } catch (e) {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('重命名失败: $e')),
+                  SnackBar(content: Text(L10n.of(context).e25(e))),
                 );
               }
               return;
