@@ -29,8 +29,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   int _currentIndex = 0;
-  // 最近点击的自定义底部槽位（槽 2/3 被替换入口后用于高亮）；-1 = 无
+  // 当前高亮的「自定义底部槽位」（承载页面的槽位，如最近页 / 分类入口页）；-1 = 无。
+  // 内置 tab 的高亮由 _currentIndex 决定；两者互斥 —— 只要 _activeBottomSlot != -1，
+  // 内置 tab 一律不高亮（见 _buildTabItem），避免同时出现两个高亮 tab。
   int _activeBottomSlot = -1;
+  // 由底部槽位打开的壳内页面栈（存槽位号）：打开时入栈、返回时出栈，高亮始终等于栈顶
+  // 槽位。用于「从槽位 A 的页面里再打开槽位 B 的页面」时把高亮让给 B，B 退出后再还给 A。
+  final List<int> _slotPageStack = <int>[];
   DateTime? _lastBackPressTime;
   late AnimationController _refreshIconController;
   bool _isRefreshing = false;
@@ -145,9 +150,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     if (index < 0 || index > _settingsTabIndex) return;
     // 标记设置页已激活：让 IndexedStack 在该槽位换成真正的设置页（惰性构建）。
     if (index == _settingsTabIndex) _settingsTabBuilt = true;
-    if (_currentIndex == index) return;
+    if (_currentIndex == index) {
+      // 同一内置页：仍要清掉「自定义槽位页面」的残留高亮（壳内页面已在上方 popAll 收起），
+      // 否则会出现内置 tab 与自定义槽位同时高亮。
+      if (_activeBottomSlot != -1 || _slotPageStack.isNotEmpty) {
+        _slotPageStack.clear();
+        setState(() => _activeBottomSlot = -1);
+      }
+      return;
+    }
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    // 切到内置页时清除自定义槽位高亮
+    // 切到内置页：清空「槽位页面栈」与自定义槽位高亮，高亮交还内置 tab。
+    _slotPageStack.clear();
     _activeBottomSlot = -1;
     setState(() => _currentIndex = index);
   }
@@ -925,10 +939,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     int slot = -1,
   }) {
     final theme = Theme.of(context);
-    // 自定义槽位：点击后保持高亮（_activeBottomSlot）；内置页按 _currentIndex 高亮
+    // 自定义槽位：打开其页面时保持高亮（_activeBottomSlot）；内置页按 _currentIndex 高亮。
+    // 两者互斥：只要有自定义槽位的页面处于打开状态（_activeBottomSlot != -1），内置 tab
+    // 一律不高亮，避免「进入一个 tab 页面后再点别的高亮」变成多个 tab 同时高亮。
     final selected = isCustomEntry
         ? _activeBottomSlot == slot
-        : _currentIndex == index;
+        : _activeBottomSlot == -1 && _currentIndex == index;
     return InkWell(
       onTap: () {
         if (isCustomEntry) {
@@ -967,29 +983,46 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     );
   }
 
+  /// 打开由底部槽位承载的**页面**（最近页 / 分类·快捷入口页）。
+  ///
+  /// 先高亮该槽位并入栈；页面退出后出栈，把高亮还给栈顶槽位（栈空则清除）。
+  /// 用栈是为了保证任意时刻只有一个槽位高亮：从槽位 A 的页面里再打开槽位 B 的页面时，
+  /// A 让位给 B；B 退出后高亮回到 A。
+  void _pushSlotPage(int slot, Widget Function() builder) {
+    setState(() {
+      _slotPageStack.add(slot);
+      _activeBottomSlot = slot;
+    });
+    ShellNavigator.push<void>(
+      context,
+      MaterialPageRoute<void>(builder: (_) => builder()),
+    ).then((_) {
+      if (!mounted) return;
+      setState(() {
+        _slotPageStack.remove(slot);
+        _activeBottomSlot = _slotPageStack.isEmpty ? -1 : _slotPageStack.last;
+      });
+    });
+  }
+
   /// 打开被自定义的底部槽位：内置页切 IndexedStack；快捷入口执行与分类页网格一致的 action。
   void _openBottomTabEntry(int slot) {
     final cfg = PreferencesService.getBottomTabSlotConfig(slot);
     if (cfg == null) {
       // 默认槽位：第 4 槽默认「最近」（v3.4b2 起替换设置）
       if (slot == 3) {
-        setState(() => _activeBottomSlot = slot);
         // 「最近」页走壳内导航：保留底部 4-tab（与分类页入口一致）。
-        ShellNavigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AllRecentFilesScreen(
-              onNavigateTab: (i) => _switchTab(i),
-            ),
-          ),
+        _pushSlotPage(
+          slot,
+          () => AllRecentFilesScreen(onNavigateTab: (i) => _switchTab(i)),
         );
       }
       return;
     }
-    setState(() => _activeBottomSlot = slot);
     final type = cfg['type'];
     final key = cfg['key'];
     if (type == 'builtin') {
+      // 内置页：切 IndexedStack 即可，高亮由 _currentIndex 决定（不占用槽位高亮）。
       switch (key) {
         case 'tab_categories':
           _switchTab(0);
@@ -1002,13 +1035,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
           _switchTab(_settingsTabIndex);
           return;
         case 'tab_recent':
-          ShellNavigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AllRecentFilesScreen(
-                onNavigateTab: (i) => _switchTab(i),
-              ),
-            ),
+          // 最近页走壳内导航（与默认 slot3 一致）。
+          _pushSlotPage(
+            slot,
+            () => AllRecentFilesScreen(onNavigateTab: (i) => _switchTab(i)),
           );
           return;
         default:
@@ -1033,6 +1063,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver, Si
     );
     final entry = map[key];
     if (entry == null) return;
+    // 页面型入口（图片 / 视频 / 压缩包等分类）：打开壳内页面并高亮本槽位。
+    final pageBuilder = entry['pageBuilder'];
+    if (pageBuilder is Widget Function()) {
+      _pushSlotPage(slot, pageBuilder);
+      return;
+    }
+    // 动作型入口（系统 / 存储跳浏览页、文件 / 文件夹快捷方式）：不占用槽位高亮，
+    // 最终高亮由 action 自身的 _switchTab / openFile 决定，避免与内置 tab 双高亮。
     final action = entry['action'] as VoidCallback?;
     if (action != null) action();
   }
